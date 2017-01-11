@@ -1,0 +1,44 @@
+<!-- INCLUDE dl_header.html -->
+
+<br />
+
+<div class="panel">
+	<div class="inner">
+
+	<form action="{S_CONFIRM_ACTION}" method="post" id="confirm">
+
+	<fieldset>
+
+		<h2 class="solo">{MESSAGE_TITLE}</h2>
+
+		<dl>
+			<dt>{MESSAGE_TEXT}</dt>
+			<dd><input type="submit" name="confirm" value="{L_YES}" class="button1" />&nbsp;&nbsp;<input type="submit" name="cancel" value="{L_NO}" class="button2" /></dd>
+		</dl>
+
+		<!-- IF S_DELETE_FILES_CONFIRM -->
+		<dl>
+			<dt><label>{L_DL_DELETE_FILE_CONFIRM}</label></dt>
+			<dd><input type="checkbox" class="permissions-checkbox" name="del_file" value="1" /></dd>
+		</dl>
+		<!-- ENDIF -->
+		<!-- IF S_CHOOSE_NEW_CAT -->
+		<dl>
+			<dt>{L_SWITCH_CAT}</dt>
+			<dd>{S_SWITCH_CAT}</dd>
+		</dl>
+		<!-- ENDIF -->
+
+		{S_FORM_TOKEN}
+		{S_HIDDEN_FIELDS}
+
+		</fieldset>
+
+		</form>
+
+		</div>
+	</div>
+
+<br />
+
+<!-- INCLUDE dl_footer.html -->

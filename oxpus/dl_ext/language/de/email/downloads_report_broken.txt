@@ -1,0 +1,13 @@
+Subject: Defekter Download
+
+Hallo {USERNAME},
+
+du bekommst diese Email, weil {REPORTER} einen defekten Download auf {SITENAME} gemeldet hat.
+Verwende den nachfolgenen Link, um der Meldung nachzugehen:
+
+---------------------------
+{U_DOWNLOAD}
+{REPORT_NOTIFY_TEXT}
+---------------------------
+
+{BOARD_EMAIL}

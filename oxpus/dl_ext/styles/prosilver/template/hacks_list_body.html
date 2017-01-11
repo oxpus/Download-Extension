@@ -1,0 +1,88 @@
+<!-- INCLUDE dl_header.html -->
+
+	<br />
+
+	<h2>{L_DL_HACKS_LIST}</h2>
+
+	<!-- IF .pagination or TOTAL_DL -->
+		<div class="pagination">
+			{TOTAL_DL}
+			<!-- IF .pagination -->
+				<!-- INCLUDE pagination.html -->
+			<!-- ELSE -->
+				&bull; {PAGE_NUMBER}
+			<!-- ENDIF -->
+		</div>
+	<!-- ENDIF -->
+
+	<div class="forabg">
+
+		<div class="inner">
+		<ul class="topiclist">
+			<li class="header">
+				<dl>
+					<dd style="width: 40%; display: block;">{L_DL_NAME}</dd>
+					<dd style="width: 40%; display: block;">{L_DL_FILE_DESCRIPTION}</dd>
+					<dd style="width: 20%; display: block;">{L_DL_HACK_AUTOR}</dd>
+				</dl>
+			</li>
+		</ul>
+		<ul class="topiclist topics">
+		<!-- BEGIN listrow -->
+			<li class="row<!-- IF listrow.S_ROW_COUNT is even --> bg1<!-- ELSE --> bg2<!-- ENDIF -->">
+				<dl>
+					<dd style="width: 40%; display: block;"><b>{listrow.HACK_NAME}</b><div class="notice"><strong>{L_DL_CAT_NAME}:</strong> {listrow.CAT_NAME}</div></dd>
+					<dd style="width: 40%; display: block;">{listrow.HACK_DESCRIPTION}</dd>
+					<dd style="width: 20%; display: block;">
+						{listrow.HACK_AUTHOR}
+						<br />
+						{listrow.HACK_AUTHOR_WEBSITE}
+						<!-- IF listrow.HACK_AUTHOR_WEBSITE && listrow.HACK_DL_URL --><br /><!-- ENDIF -->
+						{listrow.HACK_DL_URL}</dd>
+				</dl>
+			</li>
+		<!-- END listrow -->
+		</ul>
+
+		</div>
+	</div>
+
+	<form action="{S_FORM_ACTION}" method="post">
+
+	<fieldset class="display-options">
+			<label>{L_SORT_BY}</label>
+				<label>
+					<select name="sort_by" onchange="forms['hacklist'].submit()">
+					<option value="0"{SELECTED_0}>{L_DL_DEFAULT_SORT}</option>
+					<option value="1"{SELECTED_1}>{L_DL_FILE_DESCRIPTION}</option>
+					<option value="2"{SELECTED_2}>{L_DL_HACK_AUTOR}</option>
+					</select>
+				</label>
+				<label>{L_DL_ORDER}</label>
+				<label>
+					<select name="order" onchange="forms['hacklist'].submit()">
+					<option value="ASC"{SELECTED_SORT_0}>{L_ASCENDING}</option>
+					<option value="DESC"{SELECTED_SORT_1}>{L_DESCENDING}</option>
+					</select>
+				</label>
+			<label><input type="submit" class="button2" value="{L_GO}" /></label>
+	</fieldset>
+
+	</form>
+
+	<hr />
+
+	<!-- IF .pagination or TOTAL_DL -->
+		<div class="pagination">
+			{TOTAL_DL}
+			<!-- IF .pagination -->
+				<!-- INCLUDE pagination.html -->
+			<!-- ELSE -->
+				&bull; {PAGE_NUMBER}
+			<!-- ENDIF -->
+		</div>
+	<!-- ENDIF -->
+
+<!-- INCLUDE jumpbox.html -->
+
+<!-- INCLUDE overall_footer.html -->

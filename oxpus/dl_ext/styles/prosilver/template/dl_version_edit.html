@@ -1,0 +1,111 @@
+<!-- INCLUDE dl_header.html -->
+
+<!-- IF S_CAT_RULE -->
+<div class="rules">
+	<div class="inner">
+
+	<span>{CAT_RULE}</span>
+
+	</div>
+</div>
+<!-- ENDIF -->
+
+<h2>{STATUS} <label>{DESCRIPTION}{HACK_VERSION} {MINI_IMG}</label></h2>
+
+<form action="{S_FORM_ACTION}" method="post" {ENCTYPE} name="ver_edit" id="ver_edit">
+
+<div class="panel bg2">
+	<div class="panel">
+		<fieldset>
+			<legend><h3>{L_DL_VERSION}</h3></legend>
+
+			<dl>
+				<dt><label>{L_DL_FILE_DESCRIPTION}</label></dt>
+				<dd><textarea name="ver_text" rows="4" cols="100" class="inputbox">{VER_TEXT}</textarea></dd>
+			</dl>
+			<dl>
+				<dt><label>{L_DL_HACK_VERSION}</label></dt>
+				<dd><input type="text" name="ver_version" size="10" maxlength="32" class="inputbox_autosize" value="{VER_VERSION}" /></dd>
+			</dl>
+			<dl>
+				<dt><label>{L_DL_APPROVE}</label></dt>
+				<dd><input type="checkbox" name="ver_active" value="1" {VER_ACTIVE} class="permissions_checkbox" /></dd>
+			</dl>
+
+		</fieldset>
+	</div>
+
+	<div class="panel">
+		<fieldset>
+			<legend><h3>{L_DL_IMAGES}</h3></legend>
+
+			<!-- BEGIN images -->
+			<dl<!-- IF images.S_ROW_COUNT is even --> class="row bg2"<!-- ENDIF -->>
+				<dt>
+					<a href="{images.LINK}" title="{images.NAME}" rel="prettyPhoto[pp_gal]"><img src="{images.LINK}" alt="{images.NAME}" title="{images.NAME}" style="max-weight: 150px; max-height: 100px;" /></a>
+				</dt>
+				<dd>
+					<input type="text" maxlength="255" name="ver_title[{images.VER_FILE_ID}]" value="{images.NAME}" class="inputbox autowidth" />
+					 &nbsp; <input type="checkbox" value="{images.VER_FILE_ID}" name="ver_title_del[]" /> {L_DL_DELETE}
+				</dd>
+			</dl>
+			<!-- END images -->
+
+			<hr />
+
+			<dl>
+				<dt><label>{L_DL_THUMB}</label></dt>
+				<dd><input type="file" size="46" name="ver_new_image" class="inputbox" /></dd>
+			</dl>
+			<dl>
+				<dt><label>{L_DL_FILE_DESCRIPTION}</label></dt>
+				<dd>
+					<input type="text" maxlength="255" name="ver_new_image_title" value="" class="inputbox autowidth" />
+				</dd>
+			</dl>
+		</fieldset>
+	</div>
+
+	<div class="panel">
+		<fieldset>
+			<legend><h3>{L_DL_FILES_TITLE}</h3></legend>
+
+			<!-- BEGIN files -->
+			<dl<!-- IF files.S_ROW_COUNT is even --> class="row bg2"<!-- ENDIF -->>
+				<dt>{L_DL_FILE_NAME}: {files.FILE_NAME}</dt>				
+				<dd>
+					<input type="text" maxlength="255" name="ver_title[{files.VER_FILE_ID}]" value="{files.NAME}" class="inputbox autowidth" />
+					 &nbsp; <input type="checkbox" value="{files.VER_FILE_ID}" name="ver_title_del[]" /> {L_DL_DELETE}
+				</dd>
+			</dl>
+			<!-- END files -->
+
+			<hr />
+
+			<dl>
+				<dt><label>{L_DL_FILE_NAME}</label></dt>
+				<dd>
+					<input type="file" size="46" name="ver_new_file" class="inputbox" />
+				</dd>
+			</dl>
+			<dl>
+				<dt><label>{L_DL_FILE_DESCRIPTION}</label></dt>
+				<dd>
+					<input type="text" maxlength="255" name="ver_new_file_title" value="" class="inputbox autowidth" />
+				</dd>
+			</dl>
+		</fieldset>
+
+		<fieldset class="submit-buttons">
+			<input type="submit" name="submit" value="{L_SUBMIT}" style="height: 28px;" class="button icon-button" />&nbsp;&nbsp;
+			<input type="reset" name="reset" value="{L_RESET}" style="height: 28px;" class="button icon-button" />
+		</fieldset>
+
+	</div>
+</div>
+
+<div class="clearfix"></div>
+
+<br />
+
+<!-- INCLUDE dl_footer.html -->

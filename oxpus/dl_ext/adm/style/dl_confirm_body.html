@@ -1,0 +1,45 @@
+<!-- IF S_DELETE_VERSIONS -->
+	<!-- INCLUDE overall_header.html -->
+<!-- ENDIF -->
+
+<h1>{MESSAGE_TITLE}</h1>
+
+<form action="{S_CONFIRM_ACTION}" method="post">
+
+<fieldset>
+
+	<h3>{MESSAGE_TEXT}</h3>
+
+	<!-- IF S_DELETE_FILES_CONFIRM -->
+	<br />
+
+	<dl>
+		<dt><label>{L_DL_DELETE_FILE_CONFIRM}</label></dt>
+		<dd><input type="checkbox" class="permissions-checkbox" name="del_file" value="1" /></dd>
+	</dl>
+	<!-- ENDIF -->
+
+	<!-- IF S_CHOOSE_NEW_CAT -->
+	<br />
+
+	<dl>
+		<dt>{L_SWITCH_CAT}</dt>
+		<dd>{S_SWITCH_CAT}</dd>
+	</dl>
+	<!-- ENDIF -->
+
+	<br />
+
+	<p class="submit-buttons">
+		<span><input type="submit" name="confirm" value="{L_YES}" class="button1" />&nbsp;&nbsp;<input type="submit" name="cancel" value="{L_NO}" class="button2" /></span>
+		{S_FORM_TOKEN}
+		{S_HIDDEN_FIELDS}
+	</p>
+
+</fieldset>
+
+</form>
+
+<!-- IF S_DELETE_VERSIONS -->
+	<!-- INCLUDE overall_footer.html -->
+<!-- ENDIF -->

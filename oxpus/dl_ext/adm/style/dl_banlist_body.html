@@ -1,0 +1,102 @@
+<script type="text/javascript">
+// <![CDATA[
+function select_switch(status)
+{
+	for (i = 0; i < document.forms.banlist.length; i++)
+	{
+		document.forms.banlist.elements[i].checked = status;
+	}
+}
+// ]]>
+</script>
+
+<h1>{L_DL_ACP_BANLIST}</h1>
+
+<p>{L_DL_ACP_BANLIST_EXPLAIN}</p>
+
+<form action="{S_DOWNLOADS_ACTION}" method="post" id="add_ban">
+
+<fieldset>
+
+	<legend>{BANLIST_ACTION}</legend>
+
+	<table width="100%" cellpadding="2" cellspacing="1">
+	<thead>
+	<tr>
+		<th>{L_DL_USER_ID}</th>
+		<th>{L_DL_IP}</th>
+		<th>{L_DL_BROWSER}</th>
+		<th>{L_USERNAME}</th>
+		<th>{L_GUEST}</th>
+	</tr>
+	</thead>
+	<tbody>
+	<tr>
+		<td><input type="text" size="5" maxlength="8" name="user_id" value="{DL_USER_ID}" /></td>
+		<td><input type="text" size="15" maxlength="15" name="user_ip" value="{DL_USER_IP}" /></td>
+		<td><input type="text" size="25" maxlength="50" name="user_agent" value="{DL_USER_AGENT}" /></td>
+		<td><input type="text" size="25" maxlength="25" name="username" value="{DL_USERNAME}" /></td>
+		<td><span><input type="radio" class="radio" name="guests" value="1" {CHECKED_YES} />&nbsp;{L_YES}&nbsp;<input type="radio" class="radio" name="guests" value="0" {CHECKED_NO} />&nbsp;{L_NO}</span></td>
+	</tr>
+	</tbody>
+	</table>
+
+</fieldset>
+
+<fieldset class="quick">
+	<input type="submit" class="button1" name="submit" value="{L_SUBMIT}" />
+	{S_HIDDEN_FIELDS}
+	{S_FORM_TOKEN}
+</fieldset>
+
+</form>
+
+<!-- IF S_BAN_LIST -->
+<form action="{S_DOWNLOADS_ACTION}" method="post" id="banlist">
+
+<fieldset>
+
+	<table width="100%" cellpadding="2" cellspacing="1">
+	<thead>
+	<tr>
+		<th>{L_DL_USER_ID}</th>
+		<th>{L_DL_IP}</th>
+		<th>{L_DL_BROWSER}</th>
+		<th>{L_USERNAME}</th>
+		<th>{L_GUEST}</th>
+		<th>&nbsp;</th>
+	</tr>
+	</thead>
+	<tbody>
+	<!-- BEGIN banlist_row -->
+	<tr>
+		<td><span class="genmed">&nbsp;{banlist_row.USER_ID}&nbsp;</span></td>
+		<td><span class="genmed">&nbsp;{banlist_row.USER_IP}&nbsp;</span></td>
+		<td><span class="genmed">&nbsp;{banlist_row.USER_AGENT}&nbsp;</span></td>
+		<td><span class="genmed">&nbsp;{banlist_row.USERNAME}&nbsp;</span></td>
+		<td><span class="genmed">&nbsp;{banlist_row.GUESTS}&nbsp;</span></td>
+		<td><input type="checkbox" class="permissions-checkbox" name="ban_id[]" value="{banlist_row.BAN_ID}" /></td>
+	</tr>
+	<!-- END banlist_row -->
+	<tr>
+		<td></td>
+	</tr>
+	</tbody>
+	</table>
+
+	<p style="text-align: right;">
+		<span><a href="javascript:select_switch(true);" class="small">{L_MARK_ALL}</a> :: <a href="javascript:select_switch(false);" class="small">{L_UNMARK_ALL}</a></span>
+	</p>
+
+</fieldset>
+
+<fieldset class="quick">
+	<input type="submit" name="edit_banlist" class="button1" value="{L_EDIT}" />&nbsp;
+	<input type="submit" name="delete_banlist" class="button2" value="{L_DL_DELETE}" />
+	{S_HIDDEN_FIELDS}
+	{S_FORM_TOKEN}
+</fieldset>
+
+</form>
+
+<!-- ENDIF -->

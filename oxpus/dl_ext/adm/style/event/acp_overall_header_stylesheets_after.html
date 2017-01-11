@@ -1,0 +1,45 @@
+<style>
+#dl_help_bg {
+    display:none;
+    z-index:1;
+    position: fixed;
+    height:100%;
+    width:100%;
+    top:0px;
+    left:0px;
+    background:#000000;
+}
+
+#dl_help_popup {
+    display: none;
+    z-index: 2;
+    position: fixed;
+    width:450px;
+    top: 20%;
+    left: 50%;
+    margin-left: -250px;
+    background: none repeat scroll 0 0 #FFFFFF;
+    border: 1px solid #ccc;
+    font-size: 12px;
+    color: #000;
+}
+
+div.dl_help_close {
+    position: relative;
+    height: 16px;
+    width: 16px;
+    left: 8px;
+    bottom: 8px;
+    background: url("./../adm/images/alert_close.png") no-repeat scroll 0 0 transparent;
+    float: right;
+    cursor: pointer;
+}
+
+div.dl_help_close:hover {
+	background-position: 0 -16px;
+}
+
+#dl_help_content {
+    margin: 8px 14px;
+}
+</style>

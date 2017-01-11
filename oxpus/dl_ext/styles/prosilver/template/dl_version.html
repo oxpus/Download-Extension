@@ -1,0 +1,72 @@
+<!-- INCLUDE dl_header.html -->
+
+<!-- IF S_CAT_RULE -->
+<div class="rules">
+	<div class="inner">
+
+	<span>{CAT_RULE}</span>
+
+	</div>
+</div>
+<!-- ENDIF -->
+
+<h2>{STATUS} <label>{DESCRIPTION} {MINI_IMG}</label></h2>
+
+<div class="panel bg1">
+	<div class="tablewrap">
+		<div class="panel">
+
+			<div class="postbody" style="min-width: 100%;">
+				<h3>{L_DL_HACK_VERSION}: {VER_VERSION}</h3>
+				<!-- IF not S_ACTIVE --><br /><div class="rules">{L_DL_NOT_ACTIVE}</div><!-- ENDIF -->
+				<!-- IF U_VER_EDIT -->
+				<ul class="post-buttons">
+					<li class="rightside">
+                        <a href="{U_VER_EDIT}" title="{L_DL_EDIT_FILE}" class="button button-icon-only">
+                            <i class="icon fa-pencil fa-fw"></i><span>{L_DL_EDIT_FILE}</span>
+                        </a>
+                    </li>
+				</ul>
+				<!-- ENDIF -->
+				<div class="content">{VER_DESC}</div>
+			</div>
+
+			<div class="notice" style="text-align: center;"><strong>{L_DL_FILE_NAME}:</strong> {FILE_NAME}<!-- IF FILE_SIZE -->, <strong>{L_DL_FILE_SIZE}:</strong> {FILE_SIZE}<!-- ENDIF --></div>
+
+			<!-- BEGIN images -->
+			<!-- IF images.S_FIRST_ROW -->
+			<br />
+			<h3>{L_DL_IMAGES}:</h3>
+			<dl>
+				<ul style="list-style-type: none; overflow: hidden;">
+			<!-- ENDIF -->
+					<li style="float: left; margin-right: 2px;"><!-- IF S_DL_POPUPIMAGE --><a href="{images.LINK}" title="{images.NAME}" rel="prettyPhoto[pp_gal]"><!-- ENDIF --><img src="{images.LINK}" alt="{images.NAME}" title="{images.NAME}" style="max-weight: 150px; max-height: 100px;" /><!-- IF S_DL_POPUPIMAGE --></a><!-- ENDIF --></li>
+			<!-- IF images.S_LAST_ROW -->
+				</ul>
+			</dl>
+			<!-- ENDIF -->
+			<!-- END images -->
+
+			<!-- BEGIN files -->
+			<!-- IF files.S_FIRST_ROW -->
+			<br />
+			<h3>{L_DL_FILES_TITLE}:</h3>
+			<dl>
+				<ul style="list-style-type: none; overflow: hidden;">
+			<!-- ENDIF -->
+					<li style="float: left; margin-right: 2px;"><!-- IF files.S_AUTH --><a href="{files.LINK}" title="{files.NAME}"><!-- ENDIF -->{files.NAME}<!-- IF files.S_AUTH --></a><!-- ENDIF --></li>
+			<!-- IF files.S_LAST_ROW -->
+				</ul>
+			</dl>
+			<!-- ENDIF -->
+			<!-- END files -->
+
+		</div>
+	</div>
+</div>
+
+<div class="clearfix"></div>
+
+<br />
+
+<!-- INCLUDE dl_footer.html -->

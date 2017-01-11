@@ -1,0 +1,59 @@
+<!-- IF S_DL_POPUPIMAGE-->
+<link rel="stylesheet" href="{EXT_DL_PATH_WEB}includes/js/prettyPhoto/css/prettyPhoto.css" type="text/css" media="screen" />
+<script src="{EXT_DL_PATH_WEB}includes/js/prettyPhoto/js/jquery.prettyPhoto.js" type="text/javascript"></script>
+<!-- ENDIF -->
+<script type="text/javascript">
+// <![CDATA[
+function help_popup(help_key) {
+	$.ajax({
+        url: '{U_HELP_POPUP}&help_key=' + help_key,
+        type: "GET",
+        success: function (data) { AJAXDLHelpDisplay(data); }
+    });
+}
+function AJAXDLHelpDisplay(data) {
+	var obj = $.parseJSON( data );
+    $("#dl_help_title").html(obj.title);
+    $("#dl_help_option").html(obj.option);
+    $("#dl_help_string").html(obj.string);
+
+    $("#dl_help_popup").fadeIn("fast");
+    $("#dl_help_bg").css("opacity", "0.7");
+    $("#dl_help_bg").fadeIn("fast");
+    
+    $(".dl_help_close").click(function() {
+    $("#dl_help_popup").fadeOut("fast");
+    $("#dl_help_bg").fadeOut("fast");
+    });
+}
+<!-- IF S_TOTAL_IMAGES or S_DL_POPUPIMAGE -->
+$(document).ready(function() {
+	<!-- IF S_DL_POPUPIMAGE -->
+	$("a[rel^='prettyPhoto']").prettyPhoto({
+		slideshow: false,
+		social_tools: false
+	});
+	<!-- ENDIF -->
+});
+<!-- ENDIF -->
+$("#dl_new_popup").fadeIn("fast");
+$("#dl_new_bg").css("opacity", "0.7");
+$("#dl_new_bg").fadeIn("fast");
+
+$(".dl_new_close").click(function() {
+$("#dl_new_popup").fadeOut("fast");
+$("#dl_new_bg").fadeOut("fast");
+});
+function show_area(area, status)
+{
+	if (status == true)
+	{
+		$("#" + area).fadeIn("slow");
+	}
+	else
+	{
+		$("#" + area).fadeOut("fast");
+	}
+}	
+// ]]>
+</script>

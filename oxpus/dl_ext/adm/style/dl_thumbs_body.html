@@ -1,0 +1,38 @@
+<script type="text/javascript">
+// <![CDATA[
+function select_switch(status)
+{
+	doc_length = document.forms.thumbnails.length;
+	for (i = 0; i < doc_length; i++)
+	{
+		document.forms.thumbnails.elements[i].checked = status;
+	}
+}
+// ]]>
+</script>
+
+<h1>{L_DL_THUMB}</h1>
+
+<form action="{S_MANAGE_ACTION}" method="post" id="thumbnails">
+
+<fieldset>
+
+	<!-- BEGIN thumbnails -->
+	<dl>
+		<dt><label><a href="{thumbnails.U_REAL_FILE}" class="genmed">{thumbnails.REAL_FILE}</a></label></dt>
+		<dd>{thumbnails.CHECKBOX}&nbsp;<span>{thumbnails.FILE_SIZE}</span></dd>
+	</dl>
+	<!-- END thumbnails -->
+
+	<p>
+		<a href="javascript:select_switch(true);" class="small">{L_DL_MARK_ALL}</a> :: <a href="javascript:select_switch(false);" class="small">{L_DL_UNMARK}</a>
+	</p>
+
+	<p class="submit-buttons">
+		<input type="submit" class="button1" name="del_real_thumbs" value="{L_DELETE}" /><br /><br />
+		{S_FORM_TOKEN}
+	</p>
+
+</fieldset>
+
+</form>

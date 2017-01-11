@@ -1,0 +1,95 @@
+<!-- INCLUDE dl_header.html -->
+
+<script type="text/javascript">
+// <![CDATA[
+function select_switch(status)
+{
+	doc_length = {MAX_DOWNLOADS};
+
+	for (i = 0; i < doc_length; i++)
+	{
+		dl_file = document.getElementById('dlo_id_' + i);
+		if (status)
+		{
+			dl_file.checked = 'checked';
+		}
+		else
+		{
+			dl_file.checked = '';
+		}
+	}
+}
+// ]]>
+</script>
+
+<form method="post" id="dl_modcp" action="{S_DL_MODCP_ACTION}" >
+
+<h2>{L_DL_MODCP_MANAGE}</h2>
+
+<div class="forabg">
+	<div class="inner">
+
+	<ul class="topiclist">
+		<li class="header">
+			<dl>
+				<dt>{L_DL_DOWNLOAD}</dt>
+				<dd class="options" style="display: block;">&nbsp;</dd>
+				<dd class="time" style="display: block;">{L_OPTIONS}</dd>
+			</dl>
+		</li>
+	</ul>
+	<ul class="topiclist forums">
+	<!-- BEGIN manage_row -->
+		<li class="row<!-- IF manage_row.S_ROW_COUNT is even --> bg1<!-- ELSE --> bg2<!-- ENDIF -->">
+			<dl>
+				<dt>{manage_row.MINI_ICON}&nbsp;<a href="{manage_row.U_DOWNLOAD}" class="forumtitle">{manage_row.DESCRIPTION}</a></dt>
+				<dd class="options" style="display: block;">&nbsp;<input type="checkbox" class="permissions-checkbox" name="dlo_id[]" id="dlo_id_{manage_row.S_ROW_COUNT}" value="{manage_row.FILE_ID}" />&nbsp;</dd>
+				<dd class="time" style="display: block;">
+					&nbsp;<!-- IF SORT --><a href="{manage_row.U_UP}" class="gensmall">{DL_UP}</a>&nbsp;&bull;&nbsp;<a href="{manage_row.U_DOWN}" class="gensmall">{DL_DOWN}</a>&nbsp;&bull;&nbsp;<!-- ENDIF --><a href="{manage_row.U_EDIT}">{L_DL_EDIT_FILE}</a>
+				</dd>
+ 			</dl>
+ 		</li>
+	<!-- END manage_row -->
+	</ul>
+
+	{S_HIDDEN_FIELDS}
+
+	</div>
+</div>
+
+<div class="panel">
+	<div class="inner">
+
+	<fieldset class="submit-buttons">
+		<!-- IF S_ORDER_BUTTON --><input type="submit" name="sort" value="{L_DL_ORDER}" style="height: 28px;" class="button icon-button" />&nbsp;&nbsp;<!-- ENDIF -->
+		<!-- IF S_MODCP_BUTTON --><input type="submit" value="{L_PREVIOUS_STEP}" style="height: 28px;" class="button icon-button" />&nbsp;&nbsp;<!-- ENDIF -->
+		<input type="submit" name="move" value="{L_DL_MOVE}" style="height: 28px;" class="button icon-button" />&nbsp;{S_CAT_SELECT}&nbsp;&nbsp;
+		<input type="submit" name="delete" value="{L_DL_DELETE}" style="height: 28px;" class="button icon-button" />&nbsp;&nbsp;
+		<input type="submit" name="lock" value="{L_DL_LOCK}" style="height: 28px;" class="button icon-button" />
+	</fieldset>
+
+	</div>
+</div>
+
+</form>
+
+<!-- IF .pagination or TOTAL_DL -->
+	<div class="pagination">
+		{TOTAL_DL}
+		<!-- IF .pagination -->
+			<!-- INCLUDE pagination.html -->
+		<!-- ELSE -->
+			&bull; {PAGE_NUMBER}
+		<!-- ENDIF -->
+	</div>
+<!-- ENDIF -->
+
+<ul class="linklist">
+	<li class="rightside">
+		<span><!-- IF S_SORT_ASC --><a href="{U_SORT_ASC}">{DL_ABC}</a> :: <!-- ENDIF --><a href="javascript:select_switch(true);">{L_DL_MARK_ALL}</a> :: <a href="javascript:select_switch(false);">{L_DL_UNMARK}</a></span>
+	</li>
+</ul>
+
+<br />
+
+<!-- INCLUDE dl_footer.html -->

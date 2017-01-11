@@ -1,0 +1,72 @@
+<h1>{L_DL_USER_AGENTS}</h1>
+
+<!-- IF S_LIST_AGENTS -->
+
+	<br /><p>{L_DL_USER_AGENTS_LIST}</p><br />
+
+	<form action="{S_FORM_ACTION}" method="post" id="add_browser">
+	<p style="text-align: right">
+		<input type="text" size="20" name="agent_title" class="inputbox autowidth" value="" />&nbsp;
+		<input type="submit" name="submit" class="button1" value="{L_DL_ADD_BROWSER}" />&nbsp;
+		<input type="hidden" name="new_browser" value="1" />
+		{S_FORM_TOKEN}
+	</p>
+	</form>
+
+	<table width="100%" cellpadding="2" cellspacing="1">
+	<thead>
+	<tr>
+		<th>{L_DL_USER_AGENT_TITLE}</th>
+		<th>{L_OPTIONS}</th>
+	</tr>
+	</thead>
+	<tbody>
+	<!-- BEGIN user_agents -->
+	<tr class="row<!-- IF user_agents.S_ROW_COUNT is even -->1<!-- ELSE -->2<!-- ENDIF -->">
+		<td>{user_agents.AGENT_NAME}</td>
+		<td style="width: 10%;"><a href="{user_agents.U_EDIT}">{ICON_EDIT}</a>&nbsp;<a href="{user_agents.U_DELETE}">{ICON_DELETE}</a></td>
+	</tr>
+	<!-- END user_agents -->
+	</tbody>
+	</table>
+
+	<!-- IF .pagination or TOTAL_DL -->
+		<div class="pagination">
+			{TOTAL_DL}
+			<!-- IF .pagination -->
+				<!-- INCLUDE pagination.html -->
+			<!-- ELSE -->
+				&bull; {PAGE_NUMBER}
+			<!-- ENDIF -->
+		</div>
+	<!-- ENDIF -->
+
+<!-- ELSE -->
+
+	<br /><p>{L_DL_USER_AGENTS_EDIT}</p><br />
+
+	<form action="{S_FORM_ACTION}" method="post" id="edit_browser">
+
+	<fieldset>
+
+		<dl>
+			<dt><label>{L_DL_USER_AGENT_TITLE}</label><br /><span class="small">{L_DL_USER_AGENT_EXPLAIN}</span></dt>
+			<dd><input type="text" size="20" class="inputbox autowidth" name="agent_title" value="{AGENT_TITLE}" /></dd>
+		</dl>
+		<dl>
+			<dt><label>{L_DL_USER_AGENTS}</label><br /><span class="small">{L_DL_USER_AGENTS_EXPLAIN}</span></dt>
+			<dd><textarea cols="50" rows="10" class="inputbox autowidth" name="agent_browser">{AGENT_BROWSER}</textarea></dd>
+		</dl>
+
+		<p class="submit-buttons">
+			<input type="submit" name="submit" value="{L_SUBMIT}" class="button1" />
+			<input type="hidden" name="agent_id" value="{AGENT_ID}" />
+			{S_FORM_TOKEN}
+		</p>
+	</fieldset>
+
+	</form>
+
+<!-- ENDIF -->
+
+<br />

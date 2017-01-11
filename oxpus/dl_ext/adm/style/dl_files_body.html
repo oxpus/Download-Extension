@@ -1,0 +1,72 @@
+<h1>{L_DL_FILES_TITLE}</h1>
+
+<br />
+
+<form method="post" action="{S_DOWNLOADS_ACTION}" id="add_dl">
+
+	<p class="submit-buttons">
+		<input type="submit" class="button1" name="submit" value="{L_ADD_NEW_DOWNLOAD}" />
+		<input type="hidden" name="action" value="add" />
+		{S_HIDDEN_FIELDS}
+	</p>
+
+</form>
+
+<form action="{S_DOWNLOADS_ACTION}" method="post" id="cat_id" onsubmit="if(this.options[this.selectedIndex].value == -1){ return false; }">
+
+<fieldset>
+
+	<dl>
+		<dt><label>{CATEGORIES}</label>&nbsp;<input type="submit" value="{L_GO}" class="button1" /><!-- IF S_LIST_DOWNLOADS -->&nbsp;<span>{DL_COUNT}</span><!-- ENDIF --></dt>
+		<dd><!-- IF S_LIST_DOWNLOADS --><a href="{U_DOWNLOAD_ORDER_ALL}">{SORT}</a><!-- ELSE --><span>{L_DL_EMPTY_CATEGORY}</span><!-- ENDIF --></dd>
+	</dl>
+
+</fieldset>
+
+</form>
+
+<!-- IF S_LIST_DOWNLOADS -->
+<table width="100%" cellpadding="3" cellspacing="1" border="0" class="forumline">
+<thead>
+<tr>
+	<th>#</th>
+	<th>{L_DL_NAME}<br />{L_DL_FILE_NAME}</th>
+	<th>{DL_FILE_SIZE}</th>
+	<th>{L_DL_IS_FREE}<br />{L_DL_EXTERN}</th>
+	<th>{L_DL_KLICKS}<br />{L_DL_OVERALL_KLICKS}</th>
+	<th>{L_DL_TRAFFIC}<br />{L_DL_HACKS_LIST}</th>
+	<th>{L_ACTION}</th>
+</tr>
+</thead>
+<tbody>
+<!-- BEGIN downloads -->
+<tr>
+	<td><span>{downloads.FILE_ID}</span></td>
+	<td><span>{downloads.TEST} <b>{downloads.DESCRIPTION}</b>&nbsp;{downloads.VERSION}</span><br /><span>{downloads.FILE_NAME}</span><br /><span>{downloads.UNAPPROVED}</span></td>
+	<td><span>{downloads.FILE_SIZE}</span></td>
+	<td><span>{downloads.FILE_FREE_EXTERN}</span></td>
+	<td><span>{downloads.FILE_KLICKS}<br />{downloads.FILE_OVERALL_KLICKS}</span></td>
+	<td><span>{downloads.FILE_TRAFFIC}<br />{downloads.HACKLIST}</span></td>
+	<td>
+		<!-- IF downloads.S_FIRST_ROW && not downloads.S_LAST_ROW -->
+		{ICON_MOVE_UP_DISABLED}
+		<a href="{downloads.U_DOWNLOAD_MOVE_DOWN}" class="gensmall">{ICON_MOVE_DOWN}</a>
+		<!-- ELSEIF not downloads.S_FIRST_ROW && not downloads.S_LAST_ROW-->
+		<a href="{downloads.U_DOWNLOAD_MOVE_UP}" class="gensmall">{ICON_MOVE_UP}</a>
+		<a href="{downloads.U_DOWNLOAD_MOVE_DOWN}" class="gensmall">{ICON_MOVE_DOWN}</a>
+		<!-- ELSEIF downloads.S_LAST_ROW && not downloads.S_FIRST_ROW -->
+		<a href="{downloads.U_DOWNLOAD_MOVE_UP}" class="gensmall">{ICON_MOVE_UP}</a>
+		{ICON_MOVE_DOWN_DISABLED}
+		<!-- ELSE -->
+		{ICON_MOVE_UP_DISABLED}
+		{ICON_MOVE_DOWN_DISABLED}
+		<!-- ENDIF -->
+		<a href="{downloads.U_FILE_EDIT}">{ICON_EDIT}</a>
+		<a href="{downloads.U_FILE_DELETE}" class="gensmall">{ICON_DELETE}</a>
+	</td>
+</tr>
+<!-- END downloads -->
+</tbody>
+</table>
+<br />
+<!-- ENDIF -->

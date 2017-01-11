@@ -1,0 +1,18 @@
+Subject: Neuer Download Kommentar
+
+Hallo {USERNAME},
+
+du bekommst diese Email, weil auf {SITENAME} einen neuer Kommentar zu einem deiner favorisierten Downloads veröffentlicht wurde:
+
+---------------------------
+Kategorie {CATEGORY} 
+Download {DOWNLOAD}
+---------------------------
+
+Wenn du diesen Kommentar ansehen willst, dann klicke auf folgenden Link:
+
+{U_DOWNLOAD}
+
+Wenn du zukünftig keine Benachrichtigungen hierüber erhalten willst, dann kannst du die Einstellungen in deinem Download Profil ändern.
+
+{BOARD_EMAIL}

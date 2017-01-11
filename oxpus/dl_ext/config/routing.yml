@@ -1,0 +1,6 @@
+dl_ext_controller:
+    path: /dl_ext/
+    defaults: { _controller: oxpus.dl_ext.controller:handle }
+dl_ext_page_controller:
+    path: /dl_ext/
+    defaults: { _controller: oxpus.dl_ext.controller:handle }

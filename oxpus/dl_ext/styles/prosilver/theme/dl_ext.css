@@ -1,0 +1,92 @@
+
+.dlext
+{
+    background-color: #fafafa;
+    border: 1px #555555 solid;
+}
+
+.dlext2
+{
+    background-color: #f0f0f0;
+    border: 1px #555555 solid;
+}
+
+.dlext3
+{
+    background-color: #fafafa;
+    border: 1px #aaaaaa solid;
+}
+
+.dlext4
+{
+    background-color: #f5f5f5;
+    border: 1px #aaaaaa solid;
+}
+
+.dlbutton1
+{
+    background-color: #fafafa;
+    float: left !important;
+    border: 2px #555555 solid;
+    width: 40% !important;
+    text-align: center;
+}
+.dlbutton2
+{
+    background-color: #fafafa;
+    float: right !important;
+    border: 2px #555555 solid;
+    width: 40% !important;
+    text-align: center;
+}
+
+.noshow
+{
+    display: none;
+}
+
+#dl_new_bg, #dl_help_bg {
+    display:none;
+    z-index:1;
+    position: fixed;
+    height:100%;
+    width:100%;
+    top:0px;
+    left:0px;
+    background:#000000;
+}
+
+#dl_new_popup, #dl_help_popup {
+    display: none;
+    z-index: 2;
+    position: fixed;
+    width:450px;
+    top: 20%;
+    left: 50%;
+    margin-left: -250px;
+    background: none repeat scroll 0 0 #FFFFFF;
+    border: 1px solid #ccc;
+    font-size: 12px;
+    color: #000;
+}
+
+div.dl_new_close, div.dl_help_close {
+	display: block;
+	float: right;
+    height: 16px;
+    width: 16px;
+	overflow: hidden;
+	text-decoration: none !important;
+	background: transparent url("./images/alert_close.png") 0 0 no-repeat;
+	margin-top: -7px;
+	margin-right: -7px;
+    cursor: pointer;
+}
+
+div.dl_new_close:hover, div.dl_help_close:hover {
+    background-position: 0 -16px;
+}
+
+#dl_new_content, #dl_help_content {
+    margin: 8px 14px;
+}

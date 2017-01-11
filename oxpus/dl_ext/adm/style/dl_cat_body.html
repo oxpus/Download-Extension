@@ -1,0 +1,72 @@
+<h1>{L_DL_CAT_TITLE}</h1>
+
+<p>{L_DL_CAT_EDIT_EXPLAIN}</p>
+
+<div>{U_CAT_NAV}</div>
+
+<fieldset class="quick">
+	<a href="{U_IDX_ACTION}<!-- IF S_IDX_TYPE == 'c' -->f<!-- ELSE -->c<!-- ENDIF -->" alt="" title=""><!-- IF S_IDX_TYPE == 'c' -->{L_DL_ACP_IDX_TYPE_F}<!-- ELSE -->{L_DL_ACP_IDX_TYPE_C}<!-- ENDIF --></a>
+</fieldset>
+
+<form action="{S_CATEGORY_ACTION}" method="post" id="dl_cat">
+
+<table width="100%" cellpadding="3" cellspacing="1" class="table1">
+<thead>
+<tr>
+	<th colspan="2">{L_DL_CAT_NAME}</th>
+	<th colspan="2">{L_ACTION}</th>
+</tr>
+</thead>
+<tbody>
+<!-- BEGIN categories -->
+<tr valign="top" class="row1">
+	<td style="width: 30px;"><img src="{categories.CAT_FOLDER}" alt="{categories.CAT_NAME}" title="{categories.CAT_NAME}" /></td>
+	<td><div class="forumtitle"><!-- IF categories.CAT_ICON --><img src="{categories.CAT_ICON}" alt="{categories.CAT_NAME}" title="{categories.CAT_NAME}" />&nbsp;<!-- ENDIF -->
+		<!-- IF categories.U_CAT_OPEN --><a href="{categories.U_CAT_OPEN}" title=""><!-- ENDIF --><strong>{categories.CAT_NAME}</strong><!-- IF categories.U_CAT_OPEN --></a><!-- ENDIF --></div><!-- IF categories.CAT_DESCRIPTION --><br /><span>{categories.CAT_DESCRIPTION}</span><!-- ENDIF --></td>
+	<td style="text-align: center;">
+		<!-- IF categories.S_FIRST_ROW && not categories.S_LAST_ROW -->
+		{ICON_MOVE_UP_DISABLED}
+		<a href="{categories.U_CATEGORY_MOVE_DOWN}">{ICON_MOVE_DOWN}</a>
+		<!-- ELSEIF not categories.S_FIRST_ROW && not categories.S_LAST_ROW-->
+		<a href="{categories.U_CATEGORY_MOVE_UP}">{ICON_MOVE_UP}</a>
+		<a href="{categories.U_CATEGORY_MOVE_DOWN}">{ICON_MOVE_DOWN}</a>
+		<!-- ELSEIF categories.S_LAST_ROW && not categories.S_FIRST_ROW -->
+		<a href="{categories.U_CATEGORY_MOVE_UP}">{ICON_MOVE_UP}</a>
+		{ICON_MOVE_DOWN_DISABLED}
+		<!-- ELSE -->
+		{ICON_MOVE_UP_DISABLED}
+		{ICON_MOVE_DOWN_DISABLED}
+		<!-- ENDIF -->
+		<a href="{categories.U_CAT_EDIT}">{ICON_EDIT}</a>
+		<!-- IF categories.U_CAT_DELETE -->
+			<a href="{categories.U_CAT_DELETE}">{ICON_DELETE}</a>
+		<!-- ELSE -->
+			{ICON_DELETE_DISABLED}
+		<!-- ENDIF -->
+	</td>
+	<td>
+		<!-- IF categories.L_DELETE_STATS -->&nbsp;&bull;&nbsp;<a href="{categories.U_DELETE_STATS}">{categories.L_DELETE_STATS}</a> <!-- ENDIF -->
+		<!-- IF categories.L_DELETE_COMMENTS -->&nbsp;&bull;&nbsp;<a href="{categories.U_DELETE_COMMENTS}">{categories.L_DELETE_COMMENTS}</a><!-- ENDIF -->
+		<!-- IF categories.L_SORT_ASC --><!-- IF categories.L_DELETE_STATS or categories.L_DELETE_COMMENTS --><br /><!-- ENDIF -->&nbsp;&bull;&nbsp;<a href="{categories.U_CATEGORY_ASC_SORT}">{categories.L_SORT_ASC}</a> <!-- ENDIF -->
+	&nbsp;</td>
+</tr>
+<!-- END categories -->
+</tbody>
+</table>
+
+<!-- IF S_SORT_MAIN or S_TOTAL_STATS or S_TOTAL_COMMENTS -->
+<fieldset>
+	<!-- IF S_SORT_MAIN --><a href="{U_SORT_LEVEL_ZERO}" class="button2">{L_DL_SUB_SORT_ASC_ZERO}</a><!-- ENDIF -->
+	<!-- IF S_TOTAL_STATS --><a href="{U_DELETE_STATS_ALL}" class="button2">{L_DELETE_STATS_ALL}</a><!-- ENDIF -->
+	<!-- IF S_TOTAL_COMMENTS --><a href="{U_DELETE_COMMENTS_ALL}" class="button2">{L_DELETE_COMMENTS_ALL}</a><!-- ENDIF -->
+</fieldset>
+<!-- ENDIF -->
+
+<fieldset class="quick">
+	<input type="hidden" name="action" value="add" />
+	<input type="text" name="cat_name" size="40" maxlength="255" value="" />&nbsp;
+	<input type="submit" class="button1" name="submit" value="{L_DL_ADD_CATEGORY}" />
+</fieldset>
+
+</form>
+<br />

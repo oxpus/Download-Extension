@@ -1,0 +1,81 @@
+<!-- INCLUDE dl_header.html -->
+
+<h2>{L_DL_CAT_TITLE}</h2>
+
+<br />
+
+<div style="margin-top: -30px;" class="action-bar top">
+	<div style="float: right;" class="buttons"><a href="{U_DL_SEARCH}" class="button icon-button">{L_DL_SEARCH_DOWNLOAD}</a></div>
+</div>
+<br />
+
+<div class="forabg">
+	<div class="inner">
+	<ul class="topiclist">
+		<li class="header">
+			<dl>
+				<dt style="min-width: 60%;">{L_DL_CAT_NAME} / {L_DL_FILE_DESCRIPTION}</dt>
+				<dd style="display: block;">{L_DL_DETAIL}</dd>
+			</dl>
+		</li>
+	</ul>
+	<ul class="topiclist forums">
+		<!-- IF S_NO_CATEGORY -->
+		<li class="row">
+			<dl>
+				<dt>{L_DL_NO_CATEGORY_INDEX}</dt>
+			</dl>
+		</li>
+		<!-- ELSE -->
+		<!-- BEGIN downloads -->
+		<li class="row">
+			<dl>
+				<dd style="width: 60%; display: block;">
+					<span class="forum-image">{downloads.MINI_IMG}</span>
+					<!-- IF downloads.CAT_ICON --><span class="forum-image"><img src="{downloads.CAT_ICON}" alt="" title="{downloads.CAT_NAME}" /></span><!-- ENDIF -->
+					<a href="{downloads.U_CAT_VIEW}" class="forumtitle">{downloads.CAT_NAME}</a><br />
+					<span class="small">{downloads.CAT_DESC}</span>
+					<!-- IF .downloads.pagination -->
+					<div class="pagination">
+						<ul>
+						<!-- BEGIN pagination -->
+							<!-- IF downloads.pagination.S_IS_PREV -->
+							<!-- ELSEIF downloads.pagination.S_IS_CURRENT --><li class="active"><span>{downloads.pagination.PAGE_NUMBER}</span></li>
+							<!-- ELSEIF downloads.pagination.S_IS_ELLIPSIS --><li class="ellipsis"><span>{L_ELLIPSIS}</span></li>
+							<!-- ELSEIF downloads.pagination.S_IS_NEXT -->
+							<!-- ELSE --><li><a href="{downloads.pagination.PAGE_URL}">{downloads.pagination.PAGE_NUMBER}</a></li>
+							<!-- ENDIF -->
+						<!-- END pagination -->
+						</ul>
+					</div>
+					<!-- ENDIF -->
+					<!-- IF S_SUB_ON_INDEX -->
+					<!-- BEGIN sub -->
+					<hr />
+					<!-- BEGIN sublevel_row -->
+					<div>
+						{downloads.sub.sublevel_row.M_SUBLEVEL}<!-- IF downloads.sub.sublevel_row.M_SUBLEVEL_ICON --><img src="{downloads.sub.sublevel_row.M_SUBLEVEL_ICON}" alt="" title="{downloads.sub.sublevel_row.L_SUBLEVEL}" style="max-height: 12px; max-width: 12px;" /><!-- ENDIF --> &nbsp; <a href="{downloads.sub.sublevel_row.U_SUBLEVEL}" class="small"><strong>{downloads.sub.sublevel_row.L_SUBLEVEL}</strong></a><!-- IF downloads.sub.sublevel_row.SUBLEVEL_COUNT --> &nbsp; <span class="small">{downloads.sub.sublevel_row.SUBLEVEL_COUNT} {L_DL_CAT_FILES}</span><!-- ENDIF -->
+					</div>
+					<!-- END sublevel_row -->
+					<!-- END sub -->
+					<!-- ENDIF -->
+				</dd>
+				<dd style="display: block;">
+					<div><strong>{downloads.CAT_DL}</strong> {L_DL_CAT_FILES}</div>
+				<!-- IF downloads.CAT_LAST_DL -->
+                    <div><strong>{L_DL_LATEST_DOWNLOAD}</strong> <a href="{downloads.U_CAT_LAST_LINK}">{downloads.CAT_LAST_DL}</a></div>
+                    <div><a href="{downloads.U_CAT_LAST_USER}">{downloads.CAT_LAST_USER}</a><!-- IF downloads.CAT_LAST_TIME -->&nbsp;&bull;&nbsp;{downloads.CAT_LAST_TIME}<!-- ENDIF --></div>
+                </dd>
+                <!-- ENDIF -->
+			</dl>
+		</li>
+		<!-- END downloads -->
+		<!-- ENDIF -->
+	</ul>
+
+	</div>
+</div>
+
+<br />
+
+<!-- INCLUDE dl_footer.html -->

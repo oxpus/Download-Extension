@@ -1,0 +1,88 @@
+<script type="text/javascript">
+// <![CDATA[
+function select_switch(status)
+{
+	doc_length = document.forms.create_dir.length;
+	for (i = 0; i < doc_length; i++)
+	{
+		if (!document.forms.create_dir.elements[i].disabled)
+		{
+			document.forms.create_dir.elements[i].checked = status;
+		}
+	}
+}
+// ]]>
+</script>
+
+<h1>{L_DL_MANAGE}</h1>
+
+<p>{L_DL_MANAGE_EXPLAIN}</p>
+
+<form action="{S_MANAGE_ACTION}" method="post" id="create_dir">
+
+<fieldset class="quick">
+	<input type="button" onclick="javascript:window.open('{U_DOWNLOADS_CHECK_FILES}', '_self');" class="button1" value="{L_DL_CHECK_FILE_SIZES}" />
+	<!-- IF S_CREATE_DIR_COMMAND -->&nbsp;&nbsp;&nbsp;<input type="submit" name="dircreate" class="button2" value="{L_DL_MANAGE_CREATE_DIR}:" />&nbsp;<input type="text" name="dir_name" size="30" maxlength="200" /><!-- ENDIF -->
+	<!-- IF S_UNASSIGNED_FILES -->&nbsp;&nbsp;&nbsp;<input type="button" onclick="javascript:window.open('{U_UNASSIGNED_FILES}', '_self');" class="button1" value="{L_DL_UNASSIGNED_FILES}" /><!-- ENDIF -->
+	<!-- IF S_THUMBNAIL_CHECK -->&nbsp;&nbsp;&nbsp;<input type="button" onclick="javascript:window.open('{U_DOWNLOADS_CHECK_THUMB}', '_self');" class="button1" value="{L_DL_CHECK_THUMBNAILS}" /><!-- ENDIF -->
+</fieldset>
+
+<fieldset>
+
+	<legend>{DL_NAVI}</legend>
+
+	<!-- BEGIN dirs_row -->
+	<dl>
+		<dt><label>{dirs_row.DIR_LINK}</label></dt>
+		<dd><label>{dirs_row.DIR_DELETE_LINK}</label></dd>
+	</dl>
+	<!-- END dirs_row -->
+
+	<!-- BEGIN files_row -->
+	<dl>
+		<dt><label>{files_row.FILE_EXIST}&nbsp;<!-- IF files_row.S_UNKNOWN_FILE -->{L_DL_UNKNOWN_FILE} <!-- ENDIF -->{files_row.FILE_NAME}</label></dt>
+		<dd><span>{files_row.FILE_SIZE}&nbsp;{files_row.FILE_SIZE_RANGE}<!-- IF files_row.FILE_NAME_REAL --><br />{files_row.FILE_NAME_REAL}<!-- ENDIF --></span></dd>
+	</dl>
+	<!-- END files_row -->
+
+	<!-- IF files_row.S_ROW_COUNT -->
+	<p>
+		<span><a href="javascript:select_switch(true);" class="small">{L_MARK_ALL}</a> :: <a href="javascript:select_switch(false);" class="small">{L_UNMARK_ALL}</a></span>
+	</p>
+	<!-- ENDIF -->
+
+</fieldset>
+
+<!-- BEGIN overall_size -->
+<fieldset>
+
+	<dl>
+		<dt><label>{L_DL_ALL}</label></dt>
+		<dd><span>{overall_size.OVERALL_SIZE}&nbsp;{overall_size.OVERALL_SIZE_RANGE}</span></dd>
+	</dl>
+
+</fieldset>
+<!-- END overall_size -->
+
+<!-- IF S_EMPTY_FOLDER -->
+<fieldset>
+
+	<p class="submit-buttons">
+		<span>{L_DL_MANAGE_EMPTY_FOLDER}</span>
+	</p>
+
+</fieldset>
+<!-- ENDIF -->
+
+<!-- BEGIN file_move_delete -->
+<fieldset>
+
+	<dl>
+		<dt><label>{L_DL_UNASSIGNED_FILES}</label></dt>
+		<dd>{file_move_delete.S_FILE_ACTION}&nbsp;&nbsp;<input type="submit" class="button2" name="file_action" value="{L_DL_GO}" />{S_FORM_TOKEN}</dd>
+	</dl>
+
+</fieldset>
+<!-- END file_move_delete -->
+
+</form>

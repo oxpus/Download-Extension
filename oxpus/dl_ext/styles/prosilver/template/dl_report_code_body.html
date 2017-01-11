@@ -1,0 +1,39 @@
+<!-- INCLUDE dl_header.html -->
+
+<h2>{STATUS} <label>{DESCRIPTION}{HACK_VERSION} {MINI_IMG}</label></h2>
+
+<div class="panel">
+	<div class="inner">
+
+	<form action="{S_CONFIRM_ACTION}" method="post" id="confirm_broken_dl">
+
+	<fieldset>
+
+		<h2 class="solo">{MESSAGE_TITLE}</h2>
+
+		<dl>
+			<dt><b>{L_DL_REPORT_REASON}:</b></dt>
+			<dd class="lastpost"><textarea class="inputbox autowidth" rows="5" cols="50" name="report_notify_text"></textarea></dd>
+		</dl>
+		<!-- IF CAPTCHA_TEMPLATE -->
+				<!-- DEFINE $CAPTCHA_TAB_INDEX = 8 -->
+				<br />{L_DL_CONFIRM_EXPLAIN}<br /><br />
+				<!-- INCLUDE {CAPTCHA_TEMPLATE} -->
+		<!-- ENDIF -->
+
+	</fieldset>
+
+	<fieldset class="submit-buttons">
+		<input type="submit" name="submit" value="{L_SUBMIT}" style="height: 28px;" class="button icon-button" />
+		{S_FORM_TOKEN}
+		{S_HIDDEN_FIELDS}
+	</fieldset>
+
+	</form>
+
+	</div>
+</div>
+
+<br />
+
+<!-- INCLUDE dl_footer.html -->

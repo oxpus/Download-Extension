@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="{S_CONTENT_ENCODING}"?>
+<rss version="2.0">
+
+	<channel>
+
+		<title>{SITENAME} :: {L_DL_ACP_CONF_RSS} {L_DOWNLOADS}</title>
+		<link>{BOARD_URL}</link>
+		<description>{SITE_DESCRIPTION}</description>
+		<pubDate>{DL_RSS_TIME_TMP}</pubDate>
+
+		<!-- BEGIN dl_rss_feed -->
+		<item>
+			<title>{dl_rss_feed.DL_RSS_TITLE} {dl_rss_feed.DL_RSS_MINI_S}</title>
+				<!-- IF dl_rss_feed.DL_RSS_DESC -->
+				<description>{dl_rss_feed.DL_RSS_DESC}</description>
+				<!-- ENDIF -->
+				<pubDate>{dl_rss_feed.DL_RSS_TIME}</pubDate>
+				<link>{dl_rss_feed.U_DL_RSS}</link>
+				<guid>{dl_rss_feed.U_DL_RSS}</guid>
+		</item>
+		<!-- END dl_rss_feed -->
+
+	</channel>
+
+</rss>

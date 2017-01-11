@@ -1,0 +1,205 @@
+<h1>{L_DL_ACP_PERMISSIONS}</h1>
+
+<form action="{S_PERM_ACTION}" method="post" id="dl_edit_perm">
+
+<fieldset>
+
+	<legend>{L_DL_SELECT_CAT}</legend>
+
+	<dl>
+		<dt><label>{L_DL_SELECT_CATS}</label></dt>
+		<dd>
+			<!-- IF not S_GROUP_SELECT -->{S_CAT_SELECT}<!-- ELSE -->
+			<!-- BEGIN preselected_cats -->
+			{preselected_cats.CAT_TITLE}<br />
+			<!-- END preselected_cats -->
+			<!-- ENDIF -->
+		</dd>
+	</dl>
+</fieldset>
+
+<!-- IF S_SHOW_PERMS -->
+<fieldset>
+
+	<legend>{L_DL_ALL}</legend>
+
+	<table cellspacing="1">
+	<thead>
+	<tr>
+		<th><strong>{L_DL_AUTH_VIEW}</strong></th>
+		<th><strong>{L_DL_AUTH_DL}</strong></th>
+		<th><strong>{L_DL_AUTH_UP}</strong></th>
+		<th><strong>{L_DL_AUTH_MOD}</strong></th>
+		<th><strong>{L_DL_AUTH_CREAD}</strong></th>
+		<th><strong>{L_DL_AUTH_CPOST}</strong></th>
+	</tr>
+	</thead>
+	<tbody>
+	<tr class="row4">
+		<td class="row4">{AUTH_VIEW}</td>
+		<td class="row3">{AUTH_DL}</td>
+		<td class="row4">{AUTH_UP}</td>
+		<td class="row3">{AUTH_MOD}</td>
+		<td class="row4">{AUTH_CREAD}</td>
+		<td class="row3">{AUTH_CPOST}</td>
+	</tr>
+	</tbody>
+	</table>
+
+</fieldset>
+
+<fieldset>
+
+	<legend>{L_DL_SELECT_GROUP}</legend>
+
+	<table cellspacing="1">
+	<thead>
+	<tr>
+		<th><strong>{L_GROUPS}</strong></th>
+		<th><strong>{L_DL_AUTH_VIEW}</strong></th>
+		<th><strong>{L_DL_AUTH_DL}</strong></th>
+		<th><strong>{L_DL_AUTH_UP}</strong></th>
+		<th><strong>{L_DL_AUTH_MOD}</strong></th>
+	</tr>
+	</thead>
+	<tbody>
+	<!-- BEGIN perm_row -->
+	<tr class="row<!-- IF perm_row.S_ROW_COUNT is even -->4<!-- ELSE -->3<!-- ENDIF -->">
+		<td>{perm_row.GROUP_NAME}</td>
+		<td>{perm_row.AUTH_VIEW}</td>
+		<td>{perm_row.AUTH_DL}</td>
+		<td>{perm_row.AUTH_UP}</td>
+		<td>{perm_row.AUTH_MOD}</td>
+	</tr>
+	<!-- END perm_row -->
+	</tbody>
+	</table>
+
+</fieldset>
+<!-- ENDIF -->
+
+<!-- IF S_GROUP_SELECT -->
+<fieldset>
+
+	<legend>{L_DL_SELECT_GROUP}</legend>
+
+	<dl>
+		<dt><label>{L_DL_SELECT_GROUPS}</label></dt>
+		<dd>
+			<!-- IF not S_AUTH_ALL_USERS and not S_AUTH_GROUPS -->{S_GROUP_SELECT}<!-- ELSE -->
+			<!-- BEGIN preselected_groups -->
+			{preselected_groups.GROUP_NAME}<br />
+			<!-- END preselected_groups -->
+			<!-- ENDIF -->
+		</dd>
+	</dl>
+
+</fieldset>
+<!-- ENDIF -->
+
+<!-- IF S_AUTH_ALL_USERS -->
+<fieldset class="permissions">
+
+	<table id="all_users" cellspacing="1">
+	<thead>
+	<tr>
+		<th class="name" scope="col"><strong>{L_DL_ACP_PERMISSIONS}</strong></th>
+		<th>{L_OPTIONS}</th>
+	</tr>
+	</thead>
+	<tbody>
+	<tr class="row4">
+		<td class="row4">{L_DL_AUTH_VIEW}</td>
+		<td class="row4">{S_AUTH_VIEW}</td>
+	</tr>
+	<tr class="row3">
+		<td class="row3">{L_DL_AUTH_DL}</td>
+		<td class="row3">{S_AUTH_DL}</td>
+	</tr>
+	<tr class="row4">
+		<td class="row4">{L_DL_AUTH_UP}</td>
+		<td class="row4">{S_AUTH_UP}</td>
+	</tr>
+	<tr class="row3">
+		<td class="row3">{L_DL_AUTH_MOD}</td>
+		<td class="row3">{S_AUTH_MOD}</td>
+	</tr>
+	<tr class="row4">
+		<td class="row4">{L_DL_AUTH_CREAD}</td>
+		<td class="row4">{S_AUTH_CREAD}</td>
+	</tr>
+	<tr class="row3">
+		<td class="row3">{L_DL_AUTH_CPOST}</td>
+		<td class="row3">{S_AUTH_CPOST}</td>
+	</tr>
+	</tbody>
+	</table>
+
+	<fieldset class="submit-buttons">{L_AUTH_EXPL}</fieldset>
+
+</fieldset>
+<!-- ENDIF -->
+
+<!-- IF S_AUTH_GROUPS -->
+<fieldset class="permissions">
+
+	<table id="all_users" cellspacing="1">
+	<thead>
+	<tr>
+		<th class="name" scope="col"><strong>{L_DL_ACP_PERMISSIONS}</strong></th>
+		<th>{L_YES}</th>
+		<th>{L_NO}</th>
+	</tr>
+	</thead>
+	<tbody>
+	<tr class="row4">
+		<td class="row4">{L_DL_AUTH_VIEW}</td>
+		<td class="row4"><input type="radio" class="radio" name="auth_view" value="1" {S_AUTH_VIEW_YES} /></td>
+		<td class="row4"><input type="radio" class="radio" name="auth_view" value="0" {S_AUTH_VIEW_NO} /></td>
+	</tr>
+	<tr class="row3">
+		<td class="row3">{L_DL_AUTH_DL}</td>
+		<td class="row3"><input type="radio" class="radio" name="auth_dl" value="1" {S_AUTH_DL_YES} /></td>
+		<td class="row3"><input type="radio" class="radio" name="auth_dl" value="0" {S_AUTH_DL_NO} /></td>
+	</tr>
+	<tr class="row4">
+		<td class="row4">{L_DL_AUTH_UP}</td>
+		<td class="row4"><input type="radio" class="radio" name="auth_up" value="1" {S_AUTH_UP_YES} /></td>
+		<td class="row4"><input type="radio" class="radio" name="auth_up" value="0" {S_AUTH_UP_NO} /></td>
+	</tr>
+	<tr class="row3">
+		<td class="row3">{L_DL_AUTH_MOD}</td>
+		<td class="row3"><input type="radio" class="radio" name="auth_mod" value="1" {S_AUTH_MOD_YES} /></td>
+		<td class="row3"><input type="radio" class="radio" name="auth_mod" value="0" {S_AUTH_MOD_NO} /></td>
+	</tr>
+	</tbody>
+	</table>
+
+</fieldset>
+<!-- ENDIF -->
+
+<!-- IF not S_GROUP_SELECT -->
+<fieldset>
+
+	<legend>{L_OPTIONS}</legend>
+
+	<dl>
+		<dt><label>{L_DL_DROP_PERMISSIONS}</label></dt>
+		<dd>
+			<p><label><input type="radio" class="radio" name="view_perm" value="1" checked="checked" /> {L_DL_VIEW_PERM}</label></p>
+			<p><label><input type="radio" class="radio" name="view_perm" value="0" /> {L_DL_PERM_DROP_NO}</label></p>
+			<p><label><input type="radio" class="radio" name="view_perm" value="2" /> {L_DL_PERM_DROP_CATS}</label></p>
+			<p><label><input type="radio" class="radio" name="view_perm" value="3" /> {L_DL_PERM_DROP_ALL}</label></p>
+		</dd>
+	</dl>
+
+</fieldset>
+<!-- ENDIF -->
+
+<fieldset class="quick">
+	<input type="submit" name="submit" class="button1" value="<!-- IF not S_AUTH_ALL_USERS and not S_AUTH_GROUPS -->{L_SELECT}<!-- ELSE -->{L_DL_SET}<!-- ENDIF -->" />
+	{S_HIDDEN_FIELDS}
+	{S_FORM_TOKEN}
+</fieldset>
+
+</form>
