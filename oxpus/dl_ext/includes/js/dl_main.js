@@ -8,6 +8,11 @@ function swap_options(cat)
 {
 	active_option = active_cat;
 
+	if (cat == active_option)
+	{
+		return;
+	}
+
 	var	old_tab = document.getElementById('tab_' + active_option);
 	var new_tab = document.getElementById('tab_' + cat);
 
@@ -18,21 +23,17 @@ function swap_options(cat)
 	}
 
 	// set active tab
-	old_tab.className = old_tab.className.replace(/\activetab/g, '');
-	new_tab.className = new_tab.className + 'activetab';
-
-	if (cat == active_option)
-	{
-		return;
-	}
+	old_tab.className = old_tab.className = "icon";
+	new_tab.className = new_tab.className += " fa-eye fa-fw";
 
 	document.getElementById('options' + active_option).className += " noshow";
 
-	document.getElementById('options' + cat).className =
-		document.getElementById('options' + cat).className.replace
-		( /(?:^|\s)noshow(?!\S)/g , '' )
+	document.getElementById('options' + cat).className = 
+		document.getElementById('options' + cat).className.replace(/(?:^|\s)noshow(?!\S)/g , '')
 
 	active_cat = cat;
+
+	return;
 }
 
 function hide_dl_button()

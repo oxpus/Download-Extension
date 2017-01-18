@@ -31,11 +31,11 @@ var dl_ajax_url = '{U_DL_AJAX}';
 			<!-- BEGIN downloads -->
 			<li class="row">
 				<dl>
-					<dt style="display: block;">{downloads.STATUS} <a href="{downloads.U_DL_LINK}" class="forumtitle">{downloads.DESCRIPTION}</a>&nbsp;<span>{downloads.HACK_VERSION}</span><br />{L_DL_CAT_NAME}: <a href="{downloads.U_CAT_VIEW}">{downloads.CAT_NAME}</a></dt>
+					<dt>{downloads.STATUS} <a href="{downloads.U_DL_LINK}"><label>{downloads.DESCRIPTION}</label></a> <span>{downloads.HACK_VERSION}</span><br />{L_DL_CAT_NAME}: <a href="{downloads.U_CAT_VIEW}">{downloads.CAT_NAME}</a></dt>
 					<dd class="topics">{downloads.FILE_SIZE}</dd>
 					<dd class="posts">{downloads.FILE_KLICKS} | {downloads.FILE_OVERALL_KLICKS}</dd>
 					<!-- IF S_ENABLE_RATE -->
-					<dd class="lastpost" style="display: block;"><!-- IF downloads.RATING_IMG --><div id="rating_{downloads.DF_ID}">{downloads.RATING_IMG}</div>&nbsp;{downloads.RATINGS}<!-- ENDIF --></dd>
+					<dd class="lastpost"><!-- IF downloads.RATING_IMG --><div id="rating_{downloads.DF_ID}">{downloads.RATING_IMG}</div>&nbsp;{downloads.RATINGS}<!-- ENDIF --></dd>
 					<!-- ENDIF -->
 				</dl>
 			</li>

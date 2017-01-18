@@ -121,19 +121,10 @@ class main_module
 		/*
 		* initiate the help system
 		*/
+		$helper = $phpbb_container->get('controller.helper');
 		$template->assign_vars(array(
-			'U_HELP_POPUP' => str_replace('&amp;', '&', $this->u_action . '&amp;action=help'),
+			'U_HELP_POPUP' => $helper->route('dl_ext_controller', array('view' => 'help')),
 		));
-
-		/*
-		* start the help popup if wanted
-		*/		
-		if ($action == 'help')
-		{
-			$this->user = $user;
-			$this->request = $request;
-			include_once($ext_path . 'includes/helpers/dl_help.' . $phpEx);
-		}
 
 		/*
 		* include and create the main class

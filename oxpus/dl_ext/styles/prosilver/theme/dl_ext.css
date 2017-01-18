@@ -90,3 +90,16 @@ div.dl_new_close:hover, div.dl_help_close:hover {
 #dl_new_content, #dl_help_content {
     margin: 8px 14px;
 }
+
+@media (max-width: 950px) {
+	.dlbutton1
+	{
+	    clear: both;
+	    width: auto !important;
+	}
+	.dlbutton2
+	{
+	    clear: both;
+	    width: auto !important;
+	}
+}

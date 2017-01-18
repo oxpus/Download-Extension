@@ -1,11 +1,9 @@
 <!-- INCLUDE dl_header.html -->
 
 <script type="text/javascript">
-// <![CDATA[
 var phpEx = '{PHPEX}';
 var dl_ajax_url = '{U_DL_AJAX}';
 var active_cat = 0;
-// ]]>
 </script>
 <!-- IF S_ENABLE_RATE -->
 <script type="text/javascript" src="{EXT_DL_PATH_AJAX}ajax_dl.js"></script>
@@ -33,22 +31,18 @@ var active_cat = 0;
 <!-- ENDIF -->
 
 <!-- BEGIN downloads -->
-<h2>{downloads.STATUS} <label>{downloads.DESCRIPTION}{downloads.HACK_VERSION} {downloads.MINI_IMG}</label></h2>
-
-<div class="action-bar"><div style="float: right;" class="buttons"><a href="{U_DL_SEARCH}" class="button icon-button">{L_DL_SEARCH_DOWNLOAD}</a></div></div>
+<h2 style="float: left;">{downloads.STATUS} {downloads.DESCRIPTION}{downloads.HACK_VERSION} {downloads.MINI_IMG}</h2>
+<div style="float: right;"><a href="{U_DL_SEARCH}" class="button icon-button">{L_DL_SEARCH_DOWNLOAD}</a></div>
+<br style="clear: both;" /><br /><br />
 <!-- END downloads -->
 
+<div class="action-bar bar-top">
 <!-- BEGIN category -->
-<!-- IF category.S_FIRST_ROW -->
-<div id ="tabs" class="tabs">
-	<ul>
-<!-- ENDIF -->
-		<li class="tab <!-- IF category.S_FIRST_ROW -->activetab<!-- ENDIF -->" id="tab_{category.CAT_ID}"><a href="#" onclick="swap_options('{category.CAT_ID}'); return false;"><div style="border: none;">{category.CAT_NAME}</div></a></li>
-<!-- IF category.S_LAST_ROW -->
-	</ul>
-</div>
-<!-- ENDIF -->
+<a onclick="swap_options('{category.CAT_ID}');" class="button">
+	<span>{category.CAT_NAME}</span> <i id="tab_{category.CAT_ID}" class="icon<!-- IF category.S_FIRST_ROW --> fa-eye fa-fw<!-- ENDIF -->" aria-hidden="true"></i>
+</a>
 <!-- END category -->
+</div>
 
 <div class="panel dlext" id="options0">
 	
@@ -82,7 +76,6 @@ var active_cat = 0;
 		<!-- END downloads -->
 
 	</div>
-
 	
 </div>
 
@@ -93,77 +86,59 @@ var active_cat = 0;
 		<!-- BEGIN downloads -->
 		<br />
 
-		<ul class="topiclist">
-		<li class="panel dlext2">
+		<fieldset>
 			<dl>
 				<dt><label>{L_DL_FILE_NAME}</label></dt>
 				<dd class="lastpost" style="display: block;"><label>{downloads.FILE_NAME}</label></dd>
 			</dl>
-		</li>
 		<!-- BEGIN real_filetime -->
-		<li class="panel dlext2">
 			<dl>
 				<dt><label>{L_DL_REAL_FILETIME}</label></dt>
 				<dd class="lastpost" style="display: block;"><label>{downloads.real_filetime.REAL_FILETIME}</label></dd>
 			</dl>
-		</li>
 		<!-- END real_filetime -->
     	<!-- END downloads -->
 		<!-- BEGIN hacklist -->
-		<li class="panel dlext2">
 			<dl>
 				<dt><label>{L_DL_HACK_AUTOR}</label></dt>
 				<dd class="lastpost" style="display: block;"><label>{hacklist.HACK_AUTHOR}{hacklist.HACK_AUTHOR_WEBSITE}</label></dd>
 			</dl>
-		</li>
 		<!-- END hacklist -->
 		<!-- BEGIN downloads -->
 		<!-- BEGIN bug_tracker -->
-		<li class="panel dlext2">
 			<dl>
 				<dt><label>{L_DL_BUG_TRACKER}</label></dt>
 				<dd class="lastpost" style="display: block;"><label><a href="{downloads.bug_tracker.U_BUG_TRACKER}">{L_DL_BUG_TRACKER_FILE}</a></label></dd>
 			</dl>
-		</li>
 		<!-- END bug_tracker -->
 		<!-- IF S_SHOW_TOPIC_LINK -->
-		<li class="panel dlext2">
 			<dl>
 				<dt><label>{L_TOPIC}</label></dt>
 				<dd class="lastpost" style="display: block;"><label><a href="{U_TOPIC}">{L_VIEW_TOPIC}</a></label></dd>
 			</dl>
-		</li>
 		<!-- ENDIF -->
-		<li class="panel dlext2">
 			<dl>
 				<dt><label>{L_DL_FILE_SIZE}</label></dt>
 				<dd class="lastpost" style="display: block;"><label>{downloads.FILE_SIZE}</label></dd>
 			</dl>
-		</li>
-		<li class="panel dlext2">
 			<dl>
 				<dt><label>{L_DL_KLICKS} / {L_DL_OVERALL_KLICKS}</label></dt>
 				<dd class="lastpost" style="display: block;"><label>{downloads.FILE_KLICKS} / {downloads.FILE_OVERALL_KLICKS}</label></dd>
 			</dl>
-		</li>
 		<!-- END downloads -->
 		<!-- BEGIN hacklist -->
-		<li class="panel dlext2">
 			<dl>
 				<dt><label>{L_DL_HACK_DL_URL}</label></dt>
 				<dd class="lastpost" style="display: block;"><label>{hacklist.HACK_DL_URL}</label></dd>
 			</dl>
-		</li>
 		<!-- END hacklist -->
 		<!-- IF S_ENABLE_RATE -->
-		<li class="panel dlext2">
 			<dl>
 				<dt><label>{L_DL_RATING}</label></dt>
 				<dd class="lastpost" style="display: block;"><div id="rating_{DF_ID}">{RATING_IMG}</div><div>{RATINGS}</div></dd>
 			</dl>
-		</li>
 		<!-- ENDIF -->
-		</ul>
+		</fieldset>
 
 	</div>
 
@@ -175,6 +150,8 @@ var active_cat = 0;
 <div class="panel dlext3 noshow" id="options2">
 
 	<div class="tablewrap">
+
+		<br />
 
 		<!-- BEGIN ver_cell -->
 		<!-- IF ver_cell.S_ROW_COUNT is even -->
@@ -378,20 +355,18 @@ var active_cat = 0;
 <ul class="linklist navlinks">
 <!-- IF S_VC -->
 <li class="panel dlbutton1">
-	<span class="crumb">
-		<!-- IF CAPTCHA_TEMPLATE -->
-				<!-- DEFINE $CAPTCHA_TAB_INDEX = 8 -->
-				<!-- INCLUDE {CAPTCHA_TEMPLATE} -->
-		<!-- ENDIF -->
-	</span>
+<!-- IF CAPTCHA_TEMPLATE -->
+		<!-- DEFINE $CAPTCHA_TAB_INDEX = 8 -->
+		<!-- INCLUDE {CAPTCHA_TEMPLATE} -->
+<!-- ENDIF -->
 </li>
 <!-- ENDIF -->
 <li class="panel dlbutton2">
-	<span class="crumb">
-		{download_button.S_DL_VERSION}&nbsp;<input type="image" src="{IMG_DL_BUTTON}" name="submit" id="submit" alt="{L_DL_DOWNLOAD}" title="{L_DL_DOWNLOAD}" value="1" />
+	<div>
+		{download_button.S_DL_VERSION}&nbsp;<input type="image" src="{IMG_DL_BUTTON}" name="submit" id="submit" alt="{L_DL_DOWNLOAD}" title="{L_DL_DOWNLOAD}" />
 		<input type="hidden" name="hotlink_id" value="{download_button.S_HOTLINK_ID}" />
 		{download_button.S_HIDDEN_FIELDS}{S_HIDDEN_FIELDS}{S_FORM_TOKEN}
-	</span>
+	</div>
 </li>
 </ul>
 

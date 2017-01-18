@@ -10,14 +10,12 @@ var dl_ajax_url = '{U_DL_AJAX}';
 <script type="text/javascript" src="{EXT_DL_PATH_AJAX}ajax_dl.js"></script>
 <!-- ENDIF -->
 
-<h2>{INDEX_CAT_TITLE}</h2>
+<h2 style="float: left;">{INDEX_CAT_TITLE}</h2>
 
-<p><strong><!-- IF DL_MODCP -->{L_MODERATORS}<!-- ENDIF --></strong> {DL_MODCP}</p>
+<div style="float: right;">&nbsp;<a href="{U_DL_SEARCH}" class="button icon-button">{L_DL_SEARCH_DOWNLOAD}</a></div>
+<div style="float: right;"><!-- IF S_DL_UPLOAD --><a href="{DL_UPLOAD}" class="button icon-button reply-icon">{L_DL_UPLOAD}</a><!-- ENDIF --></div>
 
-<div class="action-bar top">
-	<div class="buttons"><!-- IF S_DL_UPLOAD --><a href="{DL_UPLOAD}" class="button icon-button reply-icon">{L_DL_UPLOAD}</a><!-- ENDIF --></div>
-	<div style="float: right;" class="buttons"><a href="{U_DL_SEARCH}" class="button icon-button">{L_DL_SEARCH_DOWNLOAD}</a></div>
-</div>
+<p style="clear: both;"><strong><!-- IF DL_MODCP -->{L_MODERATORS}<!-- ENDIF --></strong> {DL_MODCP}</p>
 
 <!-- IF S_CAT_TRAFFIC -->
 <div class="panel bg3">
@@ -63,21 +61,32 @@ var dl_ajax_url = '{U_DL_AJAX}';
 		<!-- BEGIN downloads -->
 		<li class="row">
 			<dl>
-				<dt><div class="postbody">{downloads.STATUS}&nbsp;<a href="{downloads.U_FILE}" class="forumtitle">{downloads.DESCRIPTION}</a>&nbsp;{downloads.HACK_VERSION}&nbsp;{downloads.MINI_IMG}
+				<dt><div class="list-inner">{downloads.STATUS}&nbsp;<a href="{downloads.U_FILE}" class="forumtitle">{downloads.DESCRIPTION}</a>&nbsp;{downloads.HACK_VERSION}&nbsp;{downloads.MINI_IMG}
 					<!-- IF downloads.U_DIRECT_EDIT -->&nbsp;[ <a href="{downloads.U_DIRECT_EDIT}">{L_DL_EDIT_FILE}</a> ]<!-- ENDIF -->
-					<div class="notice">{downloads.LONG_DESC}</div>
-					</div>
+					<br />{downloads.LONG_DESC}</div>
 				</dt>
 				<dd class="topics">{downloads.FILE_SIZE}</dd>
 				<dd class="posts"><div>{downloads.FILE_KLICKS} &bull; {downloads.FILE_OVERALL_KLICKS}</div></dd>
-				<dd class="lastposts" style="display: block;">
+				<dd class="lastposts">
 					<!-- IF S_ENABLE_RATE and downloads.RATING_IMG --><div id="rating_{downloads.DF_ID}">{downloads.RATING_IMG}<br />{downloads.RATINGS}</div><!-- ENDIF -->
     				<!-- BEGIN comments -->
 					<br />
-                    <ul class="postbuttons">
+                    <ul class="post-buttons">
 						<li><strong>{L_DL_COMMENTS}</strong> &nbsp; </li> 
-						<!-- IF downloads.comments.U_COMMENT_POST --><li><a href="{downloads.comments.U_COMMENT_POST}" class="button icon-button edit-icon" title="{L_DL_POST_COMMENT}"><span>{L_DL_POST_COMMENT}</span></a></li><!-- ENDIF -->
-						<!-- IF downloads.comments.U_COMMENT_SHOW --><li><a href="{downloads.comments.U_COMMENT_SHOW}" class="button icon-button info-icon" title="{L_DL_VIEW_COMMENTS}"><span>{L_DL_VIEW_COMMENTS}</span></a></li><!-- ENDIF -->
+						<!-- IF downloads.comments.U_COMMENT_POST -->
+						<li>
+							<a href="{downloads.comments.U_COMMENT_POST}" title="{L_DL_POST_COMMENT}" class="button button-icon-only">
+								<i class="icon fa-pencil fa-fw" aria-hidden="true"></i><span class="sr-only">{L_DL_POST_COMMENT}</span>
+							</a>
+						</li>
+						<!-- ENDIF -->
+						<!-- IF downloads.comments.U_COMMENT_SHOW -->
+						<li>
+							<a href="{downloads.comments.U_COMMENT_SHOW}" title="{L_DL_VIEW_COMMENTS}" class="button button-icon-only">
+								<i class="icon fa-info fa-fw" aria-hidden="true"></i><span class="sr-only">{L_DL_VIEW_COMMENTS}</span>
+							</a>
+						</li>
+						<!-- ENDIF -->
 					</ul>
     				<!-- END comments -->
 				</dd>

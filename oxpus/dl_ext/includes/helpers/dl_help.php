@@ -8,7 +8,7 @@
 *
 */
 
-$this->language->add_lang('oxpus/dl_ext', 'help');
+$this->language->add_lang('help', 'oxpus/dl_ext');
 
 $help_key	= $this->request->variable('help_key', '');
 $value		= $this->request->variable('value', '');
@@ -17,7 +17,7 @@ $value = ($value == 'undefined') ? '' : $value;
 //
 // Pull all user config data
 //
-if ($help_key && isset($this->language->lang('HELP_' . $help_key)))
+if ($help_key && $this->language->lang('HELP_' . $help_key) != 'HELP_' . $help_key)
 {
 	$help_string = $this->language->lang('HELP_' . $help_key);
 }
@@ -35,7 +35,7 @@ if ($value)
 {
 	$help_option = $help_key;
 }
-else if (isset($this->language->lang($help_key)))
+else if ($this->language->lang($help_key) != $help_key)
 {
 	$help_option = $this->language->lang($help_key);
 }
