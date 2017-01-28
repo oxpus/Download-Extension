@@ -111,7 +111,7 @@ class dl_email extends dl_mod
 			'BOARD_EMAIL'	=> $config['board_email_sig'],
 			'USERNAME'		=> $user->data['username'],
 			'REPORT_TITLE'	=> htmlspecialchars_decode($mail_data['report_title']),
-			'STATUS'		=> htmlspecialchars_decode($language->lang('DL_REPORT_STATUS_' . $mail_data['report_status']),
+			'STATUS'		=> htmlspecialchars_decode($language->lang('DL_REPORT_STATUS_' . $mail_data['report_status'])),
 			'STATUS_TEXT'	=> htmlspecialchars_decode($status_text),
 			'U_BUG_REPORT'	=> generate_board_url(true) . $helper->route('dl_ext_controller', array('view' => 'bug_tracker', 'action' => 'detail', 'fav_id' => (int) $mail_data['fav_id']), false, ''), 
 		));
