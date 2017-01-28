@@ -516,7 +516,7 @@ class main_listener implements EventSubscriberInterface
 		include_once($ext_path . '/includes/helpers/dl_constants.' . $this->php_ext);
 
 		$sql = 'SELECT description, desc_uid, desc_bitfield, desc_flags FROM ' . DOWNLOADS_TABLE . '
-			WHERE id = ' . (int) $part[3];
+			WHERE id = ' . (int) $part[4];
 		$result = $this->db->sql_query($sql);
 		$row = $this->db->sql_fetchrow($result);
 		$title = $row['description'];
@@ -529,11 +529,11 @@ class main_listener implements EventSubscriberInterface
 
 		if ($title)
 		{
-			return $title . '</a>';
+			return '">' . $title . '</URL>';
 		}
 		else
 		{
-			return $part[0] . '</a>';
+			return $part[0];
 		}
 	}
 
@@ -543,7 +543,7 @@ class main_listener implements EventSubscriberInterface
 		$replacements = array('&amp;', '?');
 		$placeholders = array('--AMPERSAND--', '--QUESTIONAIRE--');
 		$content = str_replace($replacements, $placeholders, $content);
-		$content = preg_replace_callback("#(app\." . $this->php_ext . ")(\/dl_ext\/--QUESTIONAIRE--view=detail--AMPERSAND--df_id=)(\d+)(<\/a>)#i", array('self', 'dl_mod_callback'), $content);
+		$content = preg_replace_callback('#(">)(.*?)(\/dl_ext\/--QUESTIONAIRE--view=detail--AMPERSAND--df_id=)(\d+)(<\/URL>)#i', array('self', 'dl_mod_callback'), $content);
 		$content = str_replace($placeholders, $replacements, $content);
 		$event['text'] = $content;
 	}
