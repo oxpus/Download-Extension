@@ -237,7 +237,7 @@ class dl_topic extends dl_mod
 			$topic_title = utf8_normalize_nfc($language->lang('DL_TOPIC_SUBJECT', $dl_title));
 		}
 
-		$topic_text .= "\n\n[b]" . $language->lang('DL_VIEW_LINK') . ':[/b] <!-- l --><a class="postlink-local" href="' . $helper->route('dl_ext_controller', array('view' => 'detail', 'df_id' => $dl_id), true, '') . '">' . $dl_title . '</a><!-- l -->';
+		$topic_text .= "\n\n[b]" . $language->lang('DL_VIEW_LINK') . ':[/b] [url=' . $helper->route('dl_ext_controller', array('view' => 'detail', 'df_id' => $dl_id), true, '') . ']' . $dl_title . '[/url]';
 
 		$poll			= array();
 		$update_message	= false;
@@ -552,7 +552,7 @@ class dl_topic extends dl_mod
 		{
 			$topic_title = utf8_normalize_nfc($language->lang('DL_TOPIC_SUBJECT', $dl_title));
 		}
-		$topic_text .= "\n\n[b]" . $language->lang('DL_VIEW_LINK') . ':[/b] <!-- l --><a class="postlink-local" href="' . $helper->route('dl_ext_controller', array('view' => 'detail', 'df_id' => $dl_id), true, '') . '">' . $dl_title . '</a><!-- l -->';
+		$topic_text .= "\n\n[b]" . $language->lang('DL_VIEW_LINK') . ':[/b] [url=' . $helper->route('dl_ext_controller', array('view' => 'detail', 'df_id' => $dl_id), true, '') . ']' . $dl_title . '[/url]';
 
 		$poll = $forum_data = $post_data = array();
 		$update_message	= true;
