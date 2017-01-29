@@ -872,7 +872,7 @@ else if($action == 'save')
 		
 				$form_name = 'thumb_name';
 
-				$upload_file = $this->request->file($form_name);
+				$upload_file = $request->file($form_name);
 				unset($upload_file['local_mode']);
 				$thumb_file = $upload->handle_upload('files.types.form', $form_name);
 		
