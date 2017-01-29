@@ -529,7 +529,7 @@ class main_listener implements EventSubscriberInterface
 
 		if ($title)
 		{
-			return '">' . $title . $part[5] . '</URL>';
+			return '">' . $title . '</URL>';
 		}
 		else
 		{
