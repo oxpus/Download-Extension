@@ -529,7 +529,7 @@ class main_listener implements EventSubscriberInterface
 
 		if ($title)
 		{
-			return '">' . $title . '</URL>';
+			return '">' . $title . $part[5] . '</URL>';
 		}
 		else
 		{
@@ -543,7 +543,7 @@ class main_listener implements EventSubscriberInterface
 		$replacements = array('&amp;', '?');
 		$placeholders = array('--AMPERSAND--', '--QUESTIONAIRE--');
 		$content = str_replace($replacements, $placeholders, $content);
-		$content = preg_replace_callback('#(">)(.*?)(\/dl_ext\/--QUESTIONAIRE--view=detail--AMPERSAND--df_id=)(\d+)(<\/URL>)#i', array('self', 'dl_mod_callback'), $content);
+		$content = preg_replace_callback('#(">)(.*?)(\/dl_ext\/--QUESTIONAIRE--view=detail--AMPERSAND--df_id=)(\d+)(.*?)(<\/URL>)#i', array('self', 'dl_mod_callback'), $content);
 		$content = str_replace($placeholders, $replacements, $content);
 		$event['text'] = $content;
 	}
