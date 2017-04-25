@@ -137,20 +137,40 @@ else
  	$result = $this->db->sql_query($sql);
 
 	$total_possible_todo = $this->db->sql_affectedrows($result);
+	$dl_select = array();
 
 	while ($row = $this->db->sql_fetchrow($result))
 	{
-		$description	= $row['description'];
-		$desc_uid		= $row['desc_uid'];
-		$desc_flags		= $row['desc_flags'];
-
-		$text_ary		= generate_text_for_edit($description, $desc_uid, $desc_flags);
-		$description	= $text_ary['text'];
-
-		$s_downloads .= '<option value="' . $row['id'] . '">' . $row['cat_name'] . ' &bull; ' . $description . '</option>';
+		$dl_select[$row['cat_name']][] = $row;
 	}
 
 	$this->db->sql_freeresult($result);
+
+	$cur_cat = '';
+
+	foreach($dl_select as $category => $row)
+	{
+		if ($cur_cat <> $category)
+		{
+			$s_downloads .= '<optgroup label="' . $category . '">';
+
+			foreach($dl_select[$category] as $row)
+			{
+				$description	= $row['description'];
+				$desc_uid		= $row['desc_uid'];
+				$desc_flags		= $row['desc_flags'];
+		
+				$text_ary		= generate_text_for_edit($description, $desc_uid, $desc_flags);
+				$description	= $text_ary['text'];
+		
+				$s_downloads .= '<option value="' . $row['id'] . '">' . $description . '</option>';
+			}
+
+			$s_downloads .= '</optgroup>';
+			$cur_cat = $category;
+		}
+	}
+
 
 	$s_downloads .= '</select>';
 

@@ -4,7 +4,7 @@
 <script type="text/javascript">
 // <![CDATA[
 var phpEx = '{PHPEX}';
-var dl_ajax_url = '{U_DL_AJAX}';
+var dlAjaxUrl = '{U_DL_AJAX}';
 // ]]>
 </script>
 <script type="text/javascript" src="{EXT_DL_PATH_AJAX}ajax_dl.js"></script>
@@ -57,14 +57,14 @@ var dl_ajax_url = '{U_DL_AJAX}';
 	<!-- ENDIF -->
 
 	<!-- IF S_SORT_OPTIONS -->
-	<form action="{S_FORM_ACTION}" method="post">
+	<form action="{S_FORM_ACTION}" method="post" name="dl_mod">
 
 	<fieldset>
 
 	<p style="text-align: center;">
 		{L_SORT_BY}
 		&nbsp;
-		<select name="sort_by" onchange="forms['dl_mod'].submit()">
+		<select name="sort_by" onchange="forms['dl_mod'].submit();">
 		<option value="0"{SELECTED_0}>{L_DL_DEFAULT_SORT}</option>
 		<option value="1"{SELECTED_1}>{L_DL_FILE_DESCRIPTION}</option>
 		<option value="2"{SELECTED_2}>{L_DL_FILE_NAME}</option>

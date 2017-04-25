@@ -396,6 +396,8 @@ $s_user_single_range	= '<select name="x">' . $s_user_range;
 $s_user_all_range		= '<select name="y">' . $s_user_range;
 $s_user_group_range		= '<select name="z">' . $s_user_range;
 
+$u_user_select = append_sid("{$phpbb_root_path}memberlist.$phpEx", "mode=searchuser&amp;form=user_traffic&amp;field=username&amp;select_single=true");
+
 $template->assign_vars(array(
 	'USER_DL_AUTO_TRAFFIC'		=> $user_traffic,
 
@@ -405,11 +407,13 @@ $template->assign_vars(array(
 	'S_USER_ALL_RANGE'			=> $s_user_all_range,
 	'S_USER_GROUP_RANGE'		=> $s_user_group_range,
 
-	'S_PROFILE_ACTION_ALL'		=> "{$basic_link}&amp;action=all",
-	'S_PROFILE_ACTION_USER'		=> "{$basic_link}&amp;action=single",
-	'S_PROFILE_ACTION_GROUP'	=> "{$basic_link}&amp;action=group",
-	'S_CONFIG_ACTION'			=> "{$basic_link}&amp;action=auto")
-);
+	'S_PROFILE_ACTION_ALL'		=> $basic_link . '&amp;action=all',
+	'S_PROFILE_ACTION_USER'		=> $basic_link . '&amp;action=single',
+	'S_PROFILE_ACTION_GROUP'	=> $basic_link . '&amp;action=group',
+	'S_CONFIG_ACTION'			=> $basic_link . '&amp;action=auto',
+
+	'U_FIND_USERNAME'			=> $u_user_select,
+));
 
 $acl_cat_names = array(
 	0 => $language->lang('DL_ACP_TRAF_AUTO'),

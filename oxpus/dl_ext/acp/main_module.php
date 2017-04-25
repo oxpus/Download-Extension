@@ -82,7 +82,6 @@ class main_module
 		$ext_path					= $phpbb_extension_manager->get_extension_path('oxpus/dl_ext', true);
 		$ext_path_web				= $phpbb_path_helper->update_web_root_path($ext_path);
 		$ext_path_ajax				= $ext_path_web . 'includes/js/ajax/';
-		$ext_path_images			= $ext_path_web . 'includes/images/';
 
 		// Define the basic file storage placement
 		if ($config['dl_download_dir'] == 2)
@@ -123,7 +122,8 @@ class main_module
 		*/
 		$helper = $phpbb_container->get('controller.helper');
 		$template->assign_vars(array(
-			'U_HELP_POPUP' => $helper->route('dl_ext_controller', array('view' => 'help')),
+			'ICON_DL_HELP'	=> '<i class="icon fa-info-circle fa-fw"></i>',
+			'U_HELP_POPUP'	=> $helper->route('dl_ext_controller', array('view' => 'help')),
 		));
 
 		/*
@@ -361,6 +361,11 @@ class main_module
 				$this->page_title = 'DL_ACP_BROWSER';
 
 				include($ext_path . "includes/admin/dl_admin_browser.$phpEx");
+			break;
+			case 'perm_check':
+				$this->page_title = 'DL_ACP_PERM_CHECK';
+
+				include($ext_path . "includes/admin/dl_admin_perm_check.$phpEx");
 			break;
 		}
 

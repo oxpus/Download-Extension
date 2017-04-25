@@ -20,16 +20,6 @@ if (!defined('IN_PHPBB'))
 
 class dl_physical extends dl_mod
 {
-	public function __construct()
-	{
-		return;
-	}
-
-	public function __destruct()
-	{
-		return;
-	}
-
 	public static function read_exist_files()
 	{
 		global $db;
@@ -201,7 +191,7 @@ class dl_physical extends dl_mod
 
 		$post_max_size		= $post_max_value * $unit_factor[$post_max_unit];
 		$upload_max_size	= $upload_max_value * $unit_factor[$upload_max_unit];
-		
+
 		$max_upload_size = min($post_max_size, $upload_max_size);
 
 		return dl_format::dl_size($max_upload_size, 0, 'combine');
@@ -298,10 +288,10 @@ class dl_physical extends dl_mod
 	* Regard:
 	* The normal way is to host all files outside the extension folder, so updating the
 	* extension can be done as written in the ACP or within other extensions like the
-	* "Upload Extension".				
+	* "Upload Extension".
 	* This will be used on ACP config module while changing the folder base
 	* The folder name will not longer be aviable for edit by an admin and is now fix setted.
-	*/	
+	*/
 	public static function switch_ext_file_path($source_path, $dest_path, $cur_dl_dir, $phpbb_root_path, $ext_path)
 	{
 		// disable the board to avoid new/edit downloads while moving the file base!!
@@ -374,7 +364,7 @@ class dl_physical extends dl_mod
 	/*
 	* Read the existing downloads folder tree to select a path within the categories management
 	* instead enter the complete path "old school" manually.
-	*/	
+	*/
 	public static function get_file_base_tree($file_base, $path, $level = 0)
 	{
 		$tree = array();
@@ -418,9 +408,9 @@ class dl_physical extends dl_mod
 				$level--;
 
 				if (is_array($tmp_tree))
-				{								
+				{
 					$tree = array_merge($tree, $tmp_tree);
-				}					
+				}
 			}
 		}
 

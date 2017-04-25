@@ -20,16 +20,6 @@ if (!defined('IN_PHPBB'))
 
 class dl_nav extends dl_mod
 {
-	public function __construct(\phpbb\controller\helper $helper)
-	{
-		return;
-	}
-
-	public function __destruct()
-	{
-		return;
-	}
-
 	public static function nav($helper = '', $parent, $disp_art, &$tmp_nav, $basic_link = '')
 	{
 		static $dl_index, $dl_auth, $user_admin;

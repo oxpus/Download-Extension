@@ -76,7 +76,7 @@ if ($total_files > $this->config['dl_links_per_page'])
 			),
 			'params' => array('view' => 'overall', 'sort_by' => $sort_by, 'order' => $order),
 		), 'pagination', 'start', $total_files, $this->config['dl_links_per_page'], $page_start);
-		
+
 	$this->template->assign_vars(array(
 		'PAGE_NUMBER'	=> $pagination->on_page($total_files, $this->config['dl_links_per_page'], $page_start),
 		'TOTAL_DL'		=> $this->language->lang('VIEW_DOWNLOADS', $total_files),
@@ -103,7 +103,7 @@ if (sizeof($dl_files))
 			$cat_view = $index[$cat_id]['nav_path'];
 
 			$file_id = $dl_files[$i]['id'];
-			$mini_file_icon = \oxpus\dl_ext\includes\classes\ dl_status::mini_status_file($cat_id, $file_id, $ext_path_images);
+			$mini_file_icon = \oxpus\dl_ext\includes\classes\ dl_status::mini_status_file($cat_id, $file_id);
 
 			$description = $dl_files[$i]['description'];
 			$desc_uid = $dl_files[$i]['desc_uid'];
@@ -117,7 +117,7 @@ if (sizeof($dl_files))
 			$hack_version = '&nbsp;'.$dl_files[$i]['hack_version'];
 
 			$dl_status = array();
-			$dl_status = \oxpus\dl_ext\includes\classes\ dl_status::status($file_id, $this->helper, $ext_path_images);
+			$dl_status = \oxpus\dl_ext\includes\classes\ dl_status::status($file_id, $this->helper);
 			$status = $dl_status['status'];
 
 			if ($dl_files[$i]['file_size'])
@@ -164,7 +164,7 @@ if (sizeof($dl_files))
 				'FILE_OVERALL_KLICKS'	=> $file_overall_klicks,
 				'FILE_SIZE'				=> $file_size,
 				'HACK_VERSION'			=> $hack_version,
-				'RATING_IMG'			=> \oxpus\dl_ext\includes\classes\ dl_format::rating_img($rating_points, $s_rating_perm, $file_id, $ext_path_images),
+				'RATING_IMG'			=> \oxpus\dl_ext\includes\classes\ dl_format::rating_img($rating_points, $s_rating_perm, $file_id),
 				'RATINGS'				=> $rating_count_text,
 				'STATUS'				=> $status,
 				'DF_ID'					=> $file_id,

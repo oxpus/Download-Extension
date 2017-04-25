@@ -1,0 +1,92 @@
+<h1>{L_DL_ACP_PERM_CHECK}</h1>
+
+<!-- IF S_DISPLAY_PERMS -->
+
+<h2>{L_USERS}{L_COLON} {CHECK_USERNAME}</h2>
+
+<table cellspacing="1">
+	<col class="col1" /><col class="col2" /><col class="col1" /><col class="col2" />
+<thead>
+<tr>
+	<th>{L_STATISTIC}</th>
+	<th>{L_VALUE}</th>
+	<th>{L_STATISTIC}</th>
+	<th>{L_VALUE}</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+    <td>{L_DL_PC_ADMIN}{L_COLON}</td>
+    <td><!-- IF USER_IS_ADMIN -->{L_YES}<!-- ELSE -->{L_NO}<!-- ENDIF --></td>
+    <td>{L_DL_PC_BANNED}{L_COLON}</td>
+    <td><!-- IF USER_IS_BANNED -->{L_YES}<!-- ELSE -->{L_NO}<!-- ENDIF --></td>
+</tr>
+<tr>
+    <td>{L_DL_PC_VIEW_STATS}{L_COLON}</td>
+    <td><!-- IF USER_CAN_VIEW_STATS -->{L_YES}<!-- ELSE -->{L_NO}<!-- ENDIF --></td>
+    <td>{L_DL_PC_VIEW_TRACKER}{L_COLON}</td>
+    <td><!-- IF USER_CAN_SEE_TRACKER -->{L_YES}<!-- ELSE -->{L_NO}<!-- ENDIF --></td>
+</tr>
+<tr>
+    <td>{L_DL_PC_HAVE_TRAFFIC}{L_COLON}</td>
+    <td>{USER_HAVE_TRAFFIC}</td>
+    <td>{L_DL_PC_HAVE_POSTS}{L_COLON}</td>
+    <td>{USER_HAVE_POSTS}</td>
+</tr>
+</tbody>
+</table>
+
+<h2>{L_DL_CAT_TITLE}</h2>
+
+<table cellspacing="1">
+	<col class="col1" /><col class="col2" /><col class="col2" /><col class="col2" /><col class="col2" /><col class="col2" /><col class="col2" />
+<thead>
+<tr>
+	<th>{L_DL_CAT_NAME}</th>
+	<th>{L_DL_AUTH_VIEW}</th>
+	<th>{L_DL_AUTH_DL}</th>
+	<th>{L_DL_AUTH_UP}</th>
+    <th>{L_DL_AUTH_MOD}</th>
+	<th>{L_DL_AUTH_CREAD}</th>
+    <th>{L_DL_AUTH_CPOST}</th>
+</tr>
+</thead>
+<tbody>
+<!-- BEGIN cat_row -->
+<tr>
+    <td>{cat_row.CAT_NAME}</td>
+	<td><!-- IF cat_row.CAT_VIEW -->{L_YES}<!-- ELSE -->{L_NO}<!-- ENDIF --></td>
+	<td><!-- IF cat_row.CAT_DL -->{L_YES}<!-- ELSE -->{L_NO}<!-- ENDIF --></td>
+	<td><!-- IF cat_row.CAT_UP -->{L_YES}<!-- ELSE -->{L_NO}<!-- ENDIF --></td>
+    <td><!-- IF cat_row.CAT_MOD -->{L_YES}<!-- ELSE -->{L_NO}<!-- ENDIF --></td>
+	<td><!-- IF cat_row.CAT_CREAD -->{L_YES}<!-- ELSE -->{L_NO}<!-- ENDIF --></td>
+    <td><!-- IF cat_row.CAT_CPOST -->{L_YES}<!-- ELSE -->{L_NO}<!-- ENDIF --></td>
+</tr>
+<!-- END cat_row -->
+</tbody>
+</table>
+
+<!-- ELSE -->
+
+<form action="{S_FORM_ACTION}" id="select_user" method="post">
+
+    <fieldset>
+
+        <dl>
+            <dt><label>{L_USERNAME}</label></dt>
+            <dd>
+                <input type="text medium" name="check_user" id="check_user" size="20" maxlength="32" value="" />
+                <br />
+                [ <a href="{U_FIND_USERNAME}" onclick="find_username(this.href); return false;">{L_FIND_USERNAME}</a> ]
+            </dd>
+        </dl>
+
+    </fieldset>
+
+    <fieldset class="quick">
+        <input type="submit" name="submit" value="{L_SUBMIT}" class="button1" />
+    </fieldset>
+
+    </form>
+
+<!-- ENDIF -->

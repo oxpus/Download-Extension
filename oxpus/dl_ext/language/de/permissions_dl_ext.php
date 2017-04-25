@@ -25,10 +25,6 @@ if (empty($lang) || !is_array($lang))
 	$lang = array();
 }
 
-// Adding new category
-$lang = array_merge($lang, array(
-));
-
 // Download MOD Permissions
 $lang = array_merge($lang, array(
 	'ACP_DOWNLOADS'			=> 'Download Bereich',
@@ -45,4 +41,5 @@ $lang = array_merge($lang, array(
 	'ACL_A_DL_TOOLBOX'		=> 'Kann die Toolbox verwenden',
 	'ACL_A_DL_FIELDS'		=> 'Kann benutzerdefinierte Felder verwalten',
 	'ACL_A_DL_BROWSER'		=> 'Kann User Agents verwalten',
+	'ACL_A_DL_PERM_CHECK'	=> 'Kann Benutzerberechtigungen überprüfen',
 ));

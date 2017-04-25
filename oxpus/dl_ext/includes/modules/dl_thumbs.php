@@ -29,7 +29,7 @@ $dl_files = \oxpus\dl_ext\includes\classes\ dl_files::all_files(0, '', 'ASC', ''
 * check the permissions
 */
 $check_status = array();
-$check_status = \oxpus\dl_ext\includes\classes\ dl_status::status($df_id, $this->helper, $ext_path_images);
+$check_status = \oxpus\dl_ext\includes\classes\ dl_status::status($df_id, $this->helper);
 
 if (!$dl_files['id'])
 {

@@ -2,7 +2,11 @@
 
 <h2 class="solo">{L_DL_MOD_TODO}</h2>
 
-<!-- IF S_TODO_EDIT --><ul style="margin-top: -30px;" class="linklist"><li class="rightside"><a href="{U_TODO_EDIT}" style="height: 25px;" class="button icon-button">{L_DL_EDIT_FILE}</a></li></ul><br /><!-- ENDIF -->
+<!-- IF S_TODO_EDIT --><ul style="margin-top: -30px;" class="linklist"><li class="rightside"><a href="{U_TODO_ADD}" class="button icon-button">{L_DL_TODO_ADD}</a></li></ul><br /><!-- ENDIF -->
+
+<!-- IF S_NO_TODOLIST -->
+<div class="panel"><strong>{L_DL_NO_MOD_TODO}</strong></div>
+<!-- ELSE -->
 
 <div class="forabg">
 	<div class="inner">
@@ -20,16 +24,26 @@
 			<li class="row">
 				<dl>
 					<dt><a href="{todolist_row.FILE_LINK}" class="forumtitle">{todolist_row.FILENAME}</a>&nbsp;<span>{todolist_row.HACK_VERSION}</span><br /><div class="postbody"><div class="notice">{todolist_row.TODO}</div></div></dt>
+					<ul class="post-buttons">
+						<li>
+							<a href="{todolist_row.U_TODO_EDIT}" title="{L_DL_EDIT_FILE}" class="button button-icon-only">
+								<i class="icon fa-pencil fa-fw" aria-hidden="true"></i><span class="sr-only">{L_DL_EDIT_FILE}</span>
+							</a>
+						</li>
+						<li>
+							<a href="{todolist_row.U_TODO_DELETE}" title="{L_DL_DELETE}" class="button button-icon-only">
+								<i class="icon fa-times fa-fw" aria-hidden="true"></i><span class="sr-only">{L_DL_DELETE}</span>
+							</a>
+						</li>
+					</ul>
 				</dl>
 			</li>
 		<!-- END todolist_row -->
-		<!-- IF S_NO_TODOLIST -->
-			<li class="row"><dl><dt><span>{L_DL_NO_MOD_TODO}</span></dt></dl></li>
-		<!-- ENDIF -->
 		</ul>
 
 	</div>
 </div>
+<!-- ENDIF -->
 
 <br />
 

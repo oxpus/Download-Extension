@@ -40,12 +40,55 @@
     text-align: center;
 }
 
+.downloadbtn
+{
+    display: block;
+    background-color: #005500;
+    font-size: 3em;
+    text-align: center;
+    margin: 10px auto;
+    padding: 10px;
+    border-right: 3px #aaaaaa solid;
+    border-bottom: 3px #aaaaaa solid;
+    border-radius: 10px;
+    color: #ffffff;
+}
+
+.downloadbtn:hover
+{
+    background-color: #00aa00;
+    border-left: 3px #444444 solid;
+    border-top: 3px #444444 solid;
+    border-right: none;
+    border-bottom: none;
+}
+
+.downloadbtn>i
+{
+    font-size: 1em;
+}
+
 .noshow
 {
     display: none;
 }
 
-#dl_new_bg, #dl_help_bg {
+.footer-box
+{
+    display: block;
+    z-index: 2;
+    width: 75%;
+    position: fixed;
+    top: 80%;
+    margin-left: 30% auto;
+    border: 1px solid #ccc;
+    background: none repeat scroll 0 0 #FFFFFF;
+    font-size: 12px;
+    color: #000000;
+}
+
+#dl_new_bg, #dl_help_bg
+{
     display:none;
     z-index:1;
     position: fixed;
@@ -56,7 +99,8 @@
     background:#000000;
 }
 
-#dl_new_popup, #dl_help_popup {
+#dl_new_popup, #dl_help_popup
+{
     display: none;
     z-index: 2;
     position: fixed;
@@ -67,10 +111,11 @@
     background: none repeat scroll 0 0 #FFFFFF;
     border: 1px solid #ccc;
     font-size: 12px;
-    color: #000;
+    color: #000000;
 }
 
-div.dl_new_close, div.dl_help_close {
+div.dl_new_close, div.dl_help_close
+{
 	display: block;
 	float: right;
     height: 16px;
@@ -83,15 +128,114 @@ div.dl_new_close, div.dl_help_close {
     cursor: pointer;
 }
 
-div.dl_new_close:hover, div.dl_help_close:hover {
+div.dl_new_close:hover, div.dl_help_close:hover, .dl-close-footer:hover
+{
     background-position: 0 -16px;
 }
 
-#dl_new_content, #dl_help_content {
+.dl-close-footer
+{
+    display: block;
+	float: right;
+    height: 16px;
+    width: 16px;
+	overflow: hidden;
+	text-decoration: none !important;
+	background: transparent url("./images/alert_close.png") 0 0 no-repeat;
+	margin-top: -7px;
+	margin-right: -7px;
+    cursor: pointer;
+}
+
+#dl_new_content, #dl_help_content
+{
     margin: 8px 14px;
 }
 
-@media (max-width: 950px) {
+#legend, #footer
+{
+    margin-bottom: 2%;
+}
+
+.dl-red
+{
+    color: #ff0000;
+}
+
+.dl-green
+{
+    color: #009900;
+}
+
+.dl-blue
+{
+    color: #0000ff;
+}
+
+.dl-yellow
+{
+    color: #aaaa00;
+}
+
+.dl-grey
+{
+    color: #666666;
+}
+
+.dl-big
+{
+    font-size: 2em;
+}
+
+.ui-tooltip
+{
+    display:none;
+	position:absolute;
+	border:1px #aaaaaa solid;
+	background-color:#ffffff;
+	border-radius:5px;
+	padding: 1em;
+	color:#000000;
+    white-space: pre-wrap;
+}
+
+.ui-tooltip:after, .ui-tooltip:before
+{
+	bottom: 100%;
+	left: 5%;
+	border: solid transparent;
+	content: " ";
+	height: 0;
+	width: 0;
+	position: absolute;
+	pointer-events: none;
+}
+
+.ui-tooltip:after
+{
+	border-color: rgba(255, 255, 255, 0);
+	border-bottom-color: #ffffff;
+	border-width: 10px;
+	margin-left: -10px;
+}
+
+.ui-tooltip:before
+{
+	border-color: rgba(170, 170, 170, 0);
+	border-bottom-color: #aaaaaa;
+	border-width: 11px;
+	margin-left: -11px;
+}
+
+@media only screen and (max-width: 1220px), only screen and (max-device-width: 1220px) {
+	.footer-box {
+        width: 95%;
+        margin-left: 2% auto;
+	}
+}
+
+@media (max-width: 950px)
+{
 	.dlbutton1
 	{
 	    clear: both;
@@ -102,4 +246,12 @@ div.dl_new_close:hover, div.dl_help_close:hover {
 	    clear: both;
 	    width: auto !important;
 	}
+}
+
+@media (max-width: 750px)
+{
+    .footer-box
+    {
+        top: 60%;
+    }
 }

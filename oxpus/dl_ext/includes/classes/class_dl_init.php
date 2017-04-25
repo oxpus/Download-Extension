@@ -20,16 +20,6 @@ if (!defined('IN_PHPBB'))
 
 class dl_init extends dl_mod
 {
-	public function __construct()
-	{
-		return;
-	}
-
-	public function __destruct()
-	{
-		return;
-	}
-
 	public static function phpbb_root_path()
 	{
 		global $phpbb_root_path;
@@ -98,7 +88,7 @@ class dl_init extends dl_mod
 		$dl_users_traffics = false;
 		$dl_overall_traffics_groups = explode(',', $config['dl_traffics_overall_groups']);
 		$dl_users_traffics_groups = explode(',', $config['dl_traffics_users_groups']);
-	
+
 		// check the several settings for the traffic management
 		if (!$config['dl_traffic_off'])
 		{

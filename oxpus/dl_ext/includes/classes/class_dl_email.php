@@ -20,23 +20,13 @@ if (!defined('IN_PHPBB'))
 
 class dl_email extends dl_mod
 {
-	public function __construct()
-	{
-		return;
-	}
-
-	public function __destruct()
-	{
-		return;
-	}
-
 	/**
 	* Send user information about a new/updated download
 	* Used in
 	*  dl_ext/includes/admin/dl_admin_files.php	(add/update)
 	*  dl_ext/includes/modules/dl_modcp.php		(update)
-	*  dl_ext/includes/modules/dl_upload.php	(add)	
-	*/	 	
+	*  dl_ext/includes/modules/dl_upload.php	(add)
+	*/
 	public static function send_dl_notify($mail_data, $helper, $ext_path)
 	{
 		global $db, $config, $user;
@@ -76,8 +66,8 @@ class dl_email extends dl_mod
 	/**
 	* Send user new status about a bug tracker entry
 	* Used in
-	*  dl_ext/includes/modules/dl_bug_tracker.php	
-	*/	 	
+	*  dl_ext/includes/modules/dl_bug_tracker.php
+	*/
 	public static function send_bt_status($mail_data, $helper, $ext_path)
 	{
 		global $db, $config, $user;
@@ -113,7 +103,7 @@ class dl_email extends dl_mod
 			'REPORT_TITLE'	=> htmlspecialchars_decode($mail_data['report_title']),
 			'STATUS'		=> htmlspecialchars_decode($language->lang('DL_REPORT_STATUS_' . $mail_data['report_status'])),
 			'STATUS_TEXT'	=> htmlspecialchars_decode($status_text),
-			'U_BUG_REPORT'	=> generate_board_url(true) . $helper->route('dl_ext_controller', array('view' => 'bug_tracker', 'action' => 'detail', 'fav_id' => (int) $mail_data['fav_id']), false, ''), 
+			'U_BUG_REPORT'	=> generate_board_url(true) . $helper->route('dl_ext_controller', array('view' => 'bug_tracker', 'action' => 'detail', 'fav_id' => (int) $mail_data['fav_id']), false, ''),
 		));
 
 		$messenger->send(NOTIFY_EMAIL);
@@ -123,8 +113,8 @@ class dl_email extends dl_mod
 	/**
 	* Send user the assignment to a bug tracker entry
 	* Used in
-	*  dl_ext/includes/modules/dl_bug_tracker.php	
-	*/	 	
+	*  dl_ext/includes/modules/dl_bug_tracker.php
+	*/
 	public static function send_bt_assign($mail_data, $helper, $ext_path)
 	{
 		global $db, $config, $user;
@@ -150,8 +140,8 @@ class dl_email extends dl_mod
 	/**
 	* Send user notification about new comment to approve or just for information
 	* Used in
-	*  dl_ext/includes/modules/dl_comments.php	
-	*/	 	
+	*  dl_ext/includes/modules/dl_comments.php
+	*/
 	public static function send_comment_notify($mail_data, $helper, $ext_path)
 	{
 		global $db, $config, $user;
@@ -190,8 +180,8 @@ class dl_email extends dl_mod
 	/**
 	* Send user notification to report a broken download
 	* Used in
-	*  dl_ext/controller/main.php	
-	*/	 	
+	*  dl_ext/controller/main.php
+	*/
 	public static function send_report($mail_data, $helper, $ext_path)
 	{
 		global $db, $config, $user;

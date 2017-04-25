@@ -81,7 +81,7 @@ if ($this->config['dl_rss_enable'])
 		$sql_where_cats = ' AND ' . $this->db->sql_in_set('cat', $access_cats);
 
 		$rss_cats_ary = array_map('intval', explode(',', $this->config['dl_rss_cats_select']));
-		
+
 		switch ($this->config['dl_rss_cats'])
 		{
 			case 1:
@@ -170,7 +170,7 @@ if ($this->config['dl_rss_enable'])
 
 				if ($this->config['dl_rss_new_update'])
 				{
-					$mini_status = \oxpus\dl_ext\includes\classes\ dl_status::mini_status_file($dl_cat, $dl_id, $ext_path_images, $rss);
+					$mini_status = \oxpus\dl_ext\includes\classes\ dl_status::mini_status_file($dl_cat, $dl_id, $rss);
 				}
 				else
 				{

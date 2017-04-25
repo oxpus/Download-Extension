@@ -63,7 +63,7 @@ if($action == 'add')
 			'username'		=> $username,
 			'guests'		=> $guests));
 
-		$phpbb_log->add('admin', $user->data['user_id'], $user->ip, 'DL_LOG_BAN_ADD', array($user_id . ' ~ ' . $username, $user_ip, $user_agent, $guests));
+		$phpbb_log->add('admin', $user->data['user_id'], $user->ip, 'DL_LOG_BAN_ADD', false, array($user_id . ' ~ ' . $username, $user_ip, $user_agent, $guests));
 	}
 
 	$db->sql_query($sql);

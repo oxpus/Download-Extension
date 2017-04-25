@@ -20,16 +20,6 @@ if (!defined('IN_PHPBB'))
 
 class dl_auth extends dl_mod
 {
-	public function __construct()
-	{
-		return;
-	}
-
-	public function __destruct()
-	{
-		return;
-	}
-
 	public static function dl_cat_auth($cat_id)
 	{
 		static $dl_auth;
@@ -319,7 +309,7 @@ class dl_auth extends dl_mod
 				$bug_tracker = false;
 			}
 		}
-		
+
 		return $bug_tracker;
 	}
 }

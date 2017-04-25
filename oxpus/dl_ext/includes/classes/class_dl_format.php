@@ -20,16 +20,6 @@ if (!defined('IN_PHPBB'))
 
 class dl_format extends dl_mod
 {
-	public function __construct()
-	{
-		return;
-	}
-
-	public function __destruct()
-	{
-		return;
-	}
-
 	public static function dl_size($input_value, $rnd = 2, $out_type = 'combine')
 	{
 		global $phpbb_container;
@@ -91,7 +81,7 @@ class dl_format extends dl_mod
 		return $data_out;
 	}
 
-	public static function rating_img($rating_points, $rate = false, $df_id = 0, $ext_path_images)
+	public static function rating_img($rating_points, $rate = false, $df_id = 0)
 	{
 		global $user, $config, $phpbb_container;
 		$language = $phpbb_container->get('language');
@@ -103,6 +93,8 @@ class dl_format extends dl_mod
 
 		$rate_points = ceil($rating_points);
 		$rate_image = '';
+		$rate_yes = '<i class="icon fa-star fa-fw dl-green" title=""></i>';
+		$rate_no = '<i class="icon fa-star-o fa-fw dl-yellow" title=""></i>';
 
 		for ($i = 0; $i < $config['dl_rate_points']; $i++)
 		{
@@ -111,12 +103,12 @@ class dl_format extends dl_mod
 			if ($rate)
 			{
 				$ajax = 'onclick="AJAXDLVote(' . $df_id . ', ' . $j . '); return false;"';
-				$rate_image .= ($j <= $rate_points ) ? '<a href="#" ' . $ajax . '>' . '<img src="' . $ext_path_images . 'dl_rate_yes.png" alt="' . $language->lang('IMG_DL_RATE_YES') . '" />' . '</a>' : '<a href="#" ' . $ajax . '>' . '<img src="' . $ext_path_images . 'dl_rate_no.png" alt="' . $language->lang('IMG_DL_RATE_NO') . '" />' . '</a>';
+				$rate_image .= ($j <= $rate_points ) ? '<a href="#" ' . $ajax . '>' . $rate_yes . '</a>' : '<a href="#" ' . $ajax . '>' . $rate_no . '</a>';
 
 			}
 			else
 			{
-				$rate_image .= ($j <= $rate_points ) ? '<img src="' . $ext_path_images . 'dl_rate_yes.png" alt="' . $language->lang('IMG_DL_RATE_YES') . '" />' : '<img src="' . $ext_path_images . 'dl_rate_no.png" alt="' . $language->lang('IMG_DL_RATE_NO') . '" />';
+				$rate_image .= ($j <= $rate_points ) ? $rate_yes : $rate_no;
 			}
 		}
 
@@ -139,16 +131,16 @@ class dl_format extends dl_mod
 			case 'dl_extern_size':				$quote = 'dl_e_quote';	break;
 			case 'dl_file_traffic':				$quote = 'dl_t_quote';	break;
 		}
-	
+
 		$x = $request->variable($quote, '');
-	
+
 		switch($x)
 		{
 			case 'kb': $config_value = floor($config_value * 1024);			break;
 			case 'mb': $config_value = floor($config_value * 1048576);		break;
 			case 'gb': $config_value = floor($config_value * 1073741824);	break;
 		}
-	
+
 		return $config_value;
 	}
 }

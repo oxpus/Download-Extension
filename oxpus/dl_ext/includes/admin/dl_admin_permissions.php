@@ -329,6 +329,7 @@ if($action == 'save_perm')
 		break;
 		default:
 			$log_auth_cread = $language->lang('DL_STAT_PERM_ALL');
+			$auth_cread = 0;
 		break;
 	}
 
@@ -345,6 +346,7 @@ if($action == 'save_perm')
 		break;
 		default:
 			$log_auth_cpost = $language->lang('DL_STAT_PERM_ALL');
+			$auth_cpost = 0;
 		break;
 	}
 

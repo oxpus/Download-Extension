@@ -23,17 +23,6 @@ if (!defined('IN_PHPBB'))
 */
 class dl_cache extends dl_mod
 {
-	public function __construct()
-	{
-		
-		return;
-	}
-
-	public function __destruct()
-	{
-		return;
-	}
-
 	/**
 	 * Download MOD Category Cache
 	*/

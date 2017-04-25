@@ -23,25 +23,27 @@ if ($df_id && $rate_point)
 		'user_id'		=> $this->user->data['user_id'],
 		'dl_id'			=> $df_id));
 	$this->db->sql_query($sql);
-	
+
 	$sql = 'SELECT AVG(rate_point) AS rating FROM ' . DL_RATING_TABLE . '
 		WHERE dl_id = ' . (int) $df_id . '
 		GROUP BY dl_id';
 	$result = $this->db->sql_query($sql);
 	$new_rating = ceil($this->db->sql_fetchfield('rating'));
 	$this->db->sql_freeresult($result);
-	
+
 	$sql = 'UPDATE ' . DOWNLOADS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', array(
 		'rating' => $new_rating)) . ' WHERE id = ' . (int) $df_id;
 	$this->db->sql_query($sql);
-	
+
 	$rate_img = '';
-	
+	$rate_yes = '<i class="icon fa-star fa-fw dl-green" title=""></i>';
+	$rate_no = '<i class="icon fa-star-o fa-fw dl-yellow" title=""></i>';
+
 	for ($i = 0; $i < $this->config['dl_rate_points']; $i++)
 	{
 		$j = $i + 1;
-	
-		$rate_img .= ($j <= $new_rating ) ? '<img src="' . $ext_path_images . 'dl_rate_yes.png" alt="' . $this->language->lang('IMG_DL_RATE_YES') . '" />' : '<img src="' . $ext_path_images . 'dl_rate_no.png" alt="' . $this->language->lang('IMG_DL_RATE_NO') . '" />';
+
+		$rate_img .= ($j <= $new_rating ) ? $rate_yes : $rate_no;
 	}
 
 	$json_out = json_encode(array('rate_img' => $rate_img, 'df_id' => $df_id));

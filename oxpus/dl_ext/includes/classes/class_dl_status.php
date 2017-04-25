@@ -20,17 +20,7 @@ if (!defined('IN_PHPBB'))
 
 class dl_status extends dl_mod
 {
-	public function __construct()
-	{
-		return;
-	}
-
-	public function __destruct()
-	{
-		return;
-	}
-
-	public static function mini_status_file($parent, $file_id, $ext_path_images, $rss = false)
+	public static function mini_status_file($parent, $file_id, $rss = false)
 	{
 		static $dl_file_icon;
 
@@ -40,11 +30,11 @@ class dl_status extends dl_mod
 
 		if (isset($dl_file_icon['new'][$parent][$file_id]) && $dl_file_icon['new'][$parent][$file_id] == true)
 		{
-			$mini_icon_img = ($rss) ? $language->lang('DL_FILE_NEW') : '<img src="' . $ext_path_images . 'dl_file_new.png" alt="' . $language->lang('IMG_DL_FILE_NEW') . '" />';
+			$mini_icon_img = ($rss) ? $language->lang('DL_FILE_NEW') : '<i class="icon fa-comment-o fa-fw dl-red"></i>';
 		}
 		else if (isset($dl_file_icon['edit'][$parent][$file_id]) && $dl_file_icon['edit'][$parent][$file_id] == true)
 		{
-			$mini_icon_img = ($rss) ? $language->lang('DL_FILE_EDIT') : '<img src="' . $ext_path_images . 'dl_file_edit.png" alt="' . $language->lang('IMG_DL_FILE_EDIT') . '" />';
+			$mini_icon_img = ($rss) ? $language->lang('DL_FILE_EDIT') : '<i class="icon fa-edit fa-fw dl-blue"></i>';
 		}
 		else
 		{
@@ -111,7 +101,7 @@ class dl_status extends dl_mod
 		return $mini_status_icon;
 	}
 
-	public static function status($df_id, $helper, $ext_path_images)
+	public static function status($df_id, $helper)
 	{
 		static $dl_file_p, $user_banned, $user_logged_in, $user_traffic, $user_posts, $user_admin, $language;
 
@@ -122,7 +112,7 @@ class dl_status extends dl_mod
 
 		if (!isset($dl_file_p[$df_id]['cat']))
 		{
-			return array('status' => '', 'file_name' => '', 'auth_dl' => 0, 'file_detail' => '', 'status_detail' => '<img src="' . $ext_path_images . 'dl_red.png" alt="' . $language->lang('DL_RED_EXPLAIN_ALT', $config['dl_posts']) . '" />');
+			return array('status' => '', 'file_name' => '', 'auth_dl' => 0, 'file_detail' => '', 'status_detail' => '<i class="icon fa-ban fa-fw dl-red"></i>');
 		}
 
 		$cat_id = $dl_file_p[$df_id]['cat'];
@@ -131,7 +121,7 @@ class dl_status extends dl_mod
 		$index = array();
 		$index = dl_main::full_index($helper, $cat_id);
 		$status = '';
-		$status_detail = '<img src="' . $ext_path_images . 'dl_red.png" alt="' . $language->lang('DL_RED_EXPLAIN_ALT', $config['dl_posts']) . '" />';
+		$status_detail = '<i class="icon fa-ban fa-fw dl-red"></i>';
 		$file_name = '';
 		$auth_dl = 0;
 
@@ -140,7 +130,7 @@ class dl_status extends dl_mod
 
 		if ($user_banned)
 		{
-			$status_detail = '<img src="' . $ext_path_images . 'dl_red.png" alt="' . $language->lang('DL_BANNED') . '" />';
+			$status_detail = '<i class="icon fa-ban fa-fw dl-red"></i>';
 			$status = '<a href="' . $helper->route('dl_ext_controller', array('view' => 'detail', 'df_id' => $df_id)) . '">' . $status_detail . '</a>';
 			$auth_dl = 0;
 			return array('status' => $status, 'file_name' => $file_detail, 'auth_dl' => $auth_dl, 'file_detail' => $file_detail, 'status_detail' => $status_detail);
@@ -150,47 +140,47 @@ class dl_status extends dl_mod
 		{
 			if (FOUNDER_TRAFFICS_OFF == true)
 			{
-				$status_detail = '<img src="' . $ext_path_images . 'dl_yellow.png" alt="' . $language->lang('DL_YELLOW_EXPLAIN') . '" />';
+				$status_detail = '<i class="icon fa-download fa-fw dl-yellow"></i>';
 				$status = '<a href="' . $helper->route('dl_ext_controller', array('view' => 'detail', 'df_id' => $df_id)) . '">' . $status_detail . '</a>';
 				$auth_dl = true;
 			}
 			else if ($user_logged_in && intval($user_traffic) >= $dl_file_p[$df_id]['file_size'] && !$dl_file_p[$df_id]['extern'])
 			{
-				$status_detail = '<img src="' . $ext_path_images . 'dl_yellow.png" alt="' . $language->lang('DL_YELLOW_EXPLAIN') . '" />';
+				$status_detail = '<i class="icon fa-download fa-fw dl-yellow"></i>';
 				$status = '<a href="' . $helper->route('dl_ext_controller', array('view' => 'detail', 'df_id' => $df_id)) . '">' . $status_detail . '</a>';
 				$auth_dl = true;
 			}
 			else if ($user_logged_in && intval($user_traffic) < $dl_file_p[$df_id]['file_size'] && !$dl_file_p[$df_id]['extern'])
 			{
-				$status_detail = '<img src="' . $ext_path_images . 'dl_red.png" alt="' . $language->lang('DL_RED_EXPLAIN_ALT', $config['dl_posts']) . '" />';
+				$status_detail = '<i class="icon fa-ban fa-fw dl-red"></i>';
 				$status = '<a href="' . $helper->route('dl_ext_controller', array('view' => 'detail', 'df_id' => $df_id)) . '">' . $status_detail . '</a>';
 				$auth_dl = 0;
 			}
 		}
 		else
 		{
-			$status_detail = '<img src="' . $ext_path_images . 'dl_white.png" alt="' . $language->lang('DL_WHITE_EXPLAIN') . '" />';
+			$status_detail = '<i class="icon fa-download fa-fw dl-grey"></i>';
 			$status = '<a href="' . $helper->route('dl_ext_controller', array('view' => 'detail', 'df_id' => $df_id)) . '">' . $status_detail . '</a>';
 			$auth_dl = true;
 		}
 
 		if ($user_posts < $config['dl_posts'] && !$dl_file_p[$df_id]['extern'] && !$dl_file_p[$df_id]['free'])
 		{
-			$status_detail = '<img src="' . $ext_path_images . 'dl_red.png" alt="' . $language->lang('DL_RED_EXPLAIN_ALT', $config['dl_posts']) . '" />';
+			$status_detail = '<i class="icon fa-ban fa-fw dl-red"></i>';
 			$status = '<a href="' . $helper->route('dl_ext_controller', array('view' => 'detail', 'df_id' => $df_id)) . '">' . $status_detail . '</a>';
 			$auth_dl = 0;
 		}
 
 		if (!$user_logged_in && !$dl_file_p[$df_id]['extern'] && !$dl_file_p[$df_id]['free'])
 		{
-			$status_detail = '<img src="' . $ext_path_images . 'dl_red.png" alt="' . $language->lang('DL_RED_EXPLAIN_ALT', $config['dl_posts']) . '" />';
+			$status_detail = '<i class="icon fa-ban fa-fw dl-red"></i>';
 			$status = '<a href="' . $helper->route('dl_ext_controller', array('view' => 'detail', 'df_id' => $df_id)) . '">' . $status_detail . '</a>';
 			$auth_dl = 0;
 		}
 
 		if ($dl_file_p[$df_id]['free'] == 1)
 		{
-			$status_detail = '<img src="' . $ext_path_images . 'dl_green.png" alt="' . $language->lang('DL_GREEN_EXPLAIN') . '" />';
+			$status_detail = '<i class="icon fa-download fa-fw dl-green"></i>';
 			$status = '<a href="' . $helper->route('dl_ext_controller', array('view' => 'detail', 'df_id' => $df_id)) . '">' . $status_detail . '</a>';
 			$auth_dl = true;
 		}
@@ -199,7 +189,7 @@ class dl_status extends dl_mod
 		{
 			if (($config['dl_icon_free_for_reg'] && !$user_logged_in) || (!$config['dl_icon_free_for_reg'] && $user_logged_in))
 			{
-				$status_detail = '<img src="' . $ext_path_images . 'dl_white.png" alt="' . $language->lang('DL_WHITE_EXPLAIN') . '" />';
+				$status_detail = '<i class="icon fa-download fa-fw dl-grey"></i>';
 				$status = '<a href="' . $helper->route('dl_ext_controller', array('view' => 'detail', 'df_id' => $df_id)) . '">' . $status_detail . '</a>';
 			}
 
@@ -215,14 +205,14 @@ class dl_status extends dl_mod
 
 		if (!$cat_auth['auth_dl'] && !$index[$cat_id]['auth_dl'] && !$user_admin)
 		{
-			$status_detail = '<img src="' . $ext_path_images . 'dl_red.png" alt="' . $language->lang('DL_RED_EXPLAIN_PERM') . '" />';
+			$status_detail = '<i class="icon fa-ban fa-fw dl-red"></i>';
 			$status = '<a href="' . $helper->route('dl_ext_controller', array('view' => 'detail', 'df_id' => $df_id)) . '">' . $status_detail . '</a>';
 			$auth_dl = 0;
 		}
 
 		if ($dl_file_p[$df_id]['file_traffic'] && $dl_file_p[$df_id]['klicks'] * $dl_file_p[$df_id]['file_size'] >= $dl_file_p[$df_id]['file_traffic'] && !$config['dl_traffic_off'])
 		{
-			$status_detail = '<img src="' . $ext_path_images . 'dl_blue.png" alt="' . $language->lang('DL_BLUE_EXPLAIN_FILE') . '" />';
+			$status_detail = '<i class="icon fa-info-circle fa-fw dl-blue"></i>';
 			$status = '<a href="' . $helper->route('dl_ext_controller', array('view' => 'detail', 'df_id' => $df_id)) . '">' . $status_detail . '</a>';
 
 			if (FOUNDER_TRAFFICS_OFF == true)
@@ -247,10 +237,10 @@ class dl_status extends dl_mod
 			$overall_traffic = $config['dl_overall_guest_traffic'];
 			$remain_traffic = $config['dl_remain_guest_traffic'];
 		}
-		
+
 		if (($overall_traffic - $remain_traffic <= $dl_file_p[$df_id]['file_size']) && !$config['dl_traffic_off'] && $load_limit == true)
 		{
-			$status_detail = '<img src="' . $ext_path_images . 'dl_blue.png" alt="' . $language->lang('DL_BLUE_EXPLAIN') . '" />';
+			$status_detail = '<i class="icon fa-info-circle fa-fw dl-blue"></i>';
 			$status = '<a href="' . $helper->route('dl_ext_controller', array('view' => 'detail', 'df_id' => $df_id)) . '">' . $status_detail . '</a>';
 
 			if (FOUNDER_TRAFFICS_OFF == true)
@@ -265,7 +255,7 @@ class dl_status extends dl_mod
 
 		if (($index[$cat_id]['cat_traffic'] && ($index[$cat_id]['cat_traffic'] - $index[$cat_id]['cat_traffic_use'] <= 0)) && !$config['dl_traffic_off'])
 		{
-			$status_detail = '<img src="' . $ext_path_images . 'dl_blue.png" alt="' . $language->lang('DL_BLUE_EXPLAIN') . '" />';
+			$status_detail = '<i class="icon fa-info-circle fa-fw dl-blue"></i>';
 			$status = '<a href="' . $helper->route('dl_ext_controller', array('view' => 'detail', 'df_id' => $df_id)) . '">' . $status_detail . '</a>';
 
 			if (FOUNDER_TRAFFICS_OFF == true)
@@ -280,7 +270,7 @@ class dl_status extends dl_mod
 
 		if ($dl_file_p[$df_id]['extern'])
 		{
-			$status_detail = '<img src="' . $ext_path_images . 'dl_grey.png" alt="' . $language->lang('DL_GREY_EXPLAIN') . '" />';
+			$status_detail = '<i class="icon fa-download fa-fw dl-green"></i>';
 			$status = '<a href="' . $helper->route('dl_ext_controller', array('view' => 'detail', 'df_id' => $df_id)) . '">' . $status_detail . '</a>';
 			$file_name = '<a href="' . $helper->route('dl_ext_controller', array('view' => 'detail', 'df_id' => $df_id)) . '">' . $language->lang('DL_EXTERN') . '</a>';
 			$auth_dl = true;

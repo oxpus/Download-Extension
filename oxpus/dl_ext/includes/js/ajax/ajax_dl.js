@@ -7,7 +7,7 @@
 */
 
 function AJAXDLVote(df_id, points) {
-	var dl_url	= dl_ajax_url;
+	var dl_url	= dlAjaxUrl;
 	var dl_par = '&df_id=' + df_id + '&rate_point=' + points;
 	$.ajax({
         url: dl_url + dl_par,

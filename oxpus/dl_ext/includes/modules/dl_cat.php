@@ -112,6 +112,10 @@ if (sizeof($index) > 0)
 		{
 			$cat_desc = censor_text($cat_desc);
 			$cat_desc = generate_text_for_display($cat_desc, $cat_uid, $cat_bitfield, $cat_flags);
+
+			$cat_desc = str_replace('<br>', "\n", $cat_desc);
+			$cat_desc = str_replace('<br />', "\n", $cat_desc);
+			$cat_desc = str_replace("\n\n", "\n", $cat_desc);
 		}
 
 		$mini_icon = array();
@@ -119,19 +123,19 @@ if (sizeof($index) > 0)
 
 		if ($mini_icon[$cat_id]['new'] && !$mini_icon[$cat_id]['edit'])
 		{
-			$mini_cat_icon = '<img src="' . $ext_path_images . 'dl_new.png" alt="" />';
+			$mini_cat_icon = '<i class="icon fa-folder fa-fw dl-red dl-big"></i>';
 		}
 		else if (!$mini_icon[$cat_id]['new'] && $mini_icon[$cat_id]['edit'])
 		{
-			$mini_cat_icon = '<img src="' . $ext_path_images . 'dl_edit.png" alt="" />';
+			$mini_cat_icon = '<i class="icon fa-folder fa-fw dl-blue dl-big"></i>';
 		}
 		else if ($mini_icon[$cat_id]['new'] && $mini_icon[$cat_id]['edit'])
 		{
-			$mini_cat_icon = '<img src="' . $ext_path_images . 'dl_new_edit.png" alt="" />';
+			$mini_cat_icon = '<i class="icon fa-folder fa-fw dl-yellow dl-big"></i>';
 		}
 		else
 		{
-			$mini_cat_icon = '<img src="' . $ext_path_images . 'dl_default.png" alt="" />';
+			$mini_cat_icon = '<i class="icon fa-folder fa-fw dl-big"></i>';
 		}
 
 		$last_dl_time = \oxpus\dl_ext\includes\classes\ dl_main::find_latest_dl($last_dl, $cat_id, $cat_id, array());
@@ -160,7 +164,7 @@ if (sizeof($index) > 0)
 			$block = 'downloads';
 		}
 
-		if (isset($index[$cat_id]['total']) && $index[$cat_id]['total'] > $this->config['posts_per_page'])
+		if (isset($index[$cat_id]['total']) && $index[$cat_id]['total'] > $this->config['dl_links_per_page'])
 		{
 			$pagination = $this->phpbb_container->get('pagination');
 			$pagination->generate_template_pagination(
@@ -171,7 +175,7 @@ if (sizeof($index) > 0)
 					),
 					'params' => array('cat' => $cat_id),
 				), $block . 'pagination', 'start', $index[$cat_id]['total'], $this->config['dl_links_per_page'], $page_start);
-				
+
 			$cat_pages = true;
 		}
 
@@ -204,19 +208,19 @@ if (sizeof($index) > 0)
 
 				if ($mini_icon[$sub_id]['new'] && !$mini_icon[$sub_id]['edit'])
 				{
-					$mini_cat_icon = '<img src="' . $ext_path_images . 'dl_new.png" alt="" style="max-height: 12px; max-width: 12px;" />';
+					$mini_cat_icon = '<i class="icon fa-folder fa-fw dl-red"></i>';
 				}
 				else if (!$mini_icon[$sub_id]['new'] && $mini_icon[$sub_id]['edit'])
 				{
-					$mini_cat_icon = '<img src="' . $ext_path_images . 'dl_edit.png" alt="" style="max-height: 12px; max-width: 12px;" />';
+					$mini_cat_icon = '<i class="icon fa-folder fa-fw dl-blue"></i>';
 				}
 				else if ($mini_icon[$sub_id]['new'] && $mini_icon[$sub_id]['edit'])
 				{
-					$mini_cat_icon = '<img src="' . $ext_path_images . 'dl_new_edit.png" alt="" style="max-height: 12px; max-width: 12px;" />';
+					$mini_cat_icon = '<i class="icon fa-folder fa-fw dl-yellow"></i>';
 				}
 				else
 				{
-					$mini_cat_icon = '<img src="' . $ext_path_images . 'dl_default.png" alt="" style="max-height: 12px; max-width: 12px;" />';
+					$mini_cat_icon = '<i class="icon fa-folder fa-fw"></i>';
 				}
 
 				$this->template->assign_block_vars($block.'.sub.sublevel_row', array(
@@ -356,7 +360,7 @@ if ($cat && $total_downloads)
 	for ($i = 0; $i < sizeof($dl_files); $i++)
 	{
 		$file_id = $dl_files[$i]['id'];
-		$mini_file_icon = \oxpus\dl_ext\includes\classes\ dl_status::mini_status_file($cat, $file_id, $ext_path_images);
+		$mini_file_icon = \oxpus\dl_ext\includes\classes\ dl_status::mini_status_file($cat, $file_id);
 
 		$description = $dl_files[$i]['description'];
 		$file_url = $this->helper->route('dl_ext_controller', array('view' => 'detail', 'df_id' => $file_id));
@@ -383,7 +387,7 @@ if ($cat && $total_downloads)
 		}
 
 		$dl_status = array();
-		$dl_status = \oxpus\dl_ext\includes\classes\ dl_status::status($file_id, $this->helper, $ext_path_images);
+		$dl_status = \oxpus\dl_ext\includes\classes\ dl_status::status($file_id, $this->helper);
 		$status = $dl_status['status'];
 
 		if ($dl_files[$i]['file_size'])
@@ -460,7 +464,7 @@ if ($cat && $total_downloads)
 			'MINI_IMG'				=> $mini_file_icon,
 			'HACK_VERSION'			=> $hack_version,
 			'LONG_DESC'				=> $long_desc,
-			'RATING_IMG'			=> \oxpus\dl_ext\includes\classes\ dl_format::rating_img($rating_points, $s_rating_perm, $file_id, $ext_path_images),
+			'RATING_IMG'			=> \oxpus\dl_ext\includes\classes\ dl_format::rating_img($rating_points, $s_rating_perm, $file_id),
 			'RATINGS'				=> $rating_count_text,
 			'STATUS'				=> $status,
 			'FILE_SIZE'				=> $file_size,

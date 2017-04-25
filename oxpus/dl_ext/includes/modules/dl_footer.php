@@ -158,12 +158,12 @@ if (sizeof($index) || $cat)
 	*/
 	$check_add_time		= time() - ($this->config['dl_new_time'] * 86400);
 	$check_edit_time	= time() - ($this->config['dl_edit_time'] * 86400);
-	
+
 	$sql_latest_where = 'AND (add_time >= ' . (int) $check_add_time . ' OR change_time >= ' . (int) $check_edit_time . ')';
-	
+
 	$dl_latest_files = array();
 	$dl_latest_files = \oxpus\dl_ext\includes\classes\ dl_files::all_files(0, '', '', $sql_latest_where, 0, 0, 'id');
-	
+
 	if (sizeof($dl_latest_files))
 	{
 		$this->template->assign_var('U_LATEST_DOWNLOADS', $this->helper->route('dl_ext_controller', array('view' => 'latest')));
@@ -304,7 +304,7 @@ if (sizeof($index) || $cat)
 		$this->template->assign_var('S_DL_TRAFFIC_OFF', true);
 	}
 
-	if ($this->config['dl_show_footer_legend'] && (!($view == 'search' && $submit) && !(in_array($view, array('user_config', 'todo', 'stat', 'upload', 'comment', 'bug_tracker'))) || $cat))
+	if ($this->config['dl_show_footer_legend'] && (!($view == 'search' && $submit) && !(in_array($view, array('user_config', 'todo', 'stat', 'upload', 'bug_tracker'))) || $cat))
 	{
 		$this->template->assign_var('S_FOOTER_LEGEND', true);
 	}

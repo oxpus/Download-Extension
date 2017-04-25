@@ -32,7 +32,6 @@ class main_module
 		$ext_path					= $phpbb_extension_manager->get_extension_path('oxpus/dl_ext', true);
 		$ext_path_web				= $phpbb_path_helper->update_web_root_path($ext_path);
 		$ext_path_ajax				= $ext_path_web . 'includes/js/ajax/';
-		$ext_path_images			= $ext_path_web . 'includes/images/';
 
 		include_once($ext_path . '/includes/helpers/dl_constants.' . $phpEx);
 

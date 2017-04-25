@@ -28,14 +28,14 @@ $search_in_fields	= $this->request->variable('search_fields', 'all');
 $search_author		= $this->request->variable('search_author', '', true);
 
 $search_fnames		= array(
-	$this->language->lang('DL_ALL'), 
-	$this->language->lang('DL_FILE_NAME'), 
-	$this->language->lang('DL_FILE_DESCRIPTION'), 
-	$this->language->lang('DL_DETAIL'), 
-	$this->language->lang('DL_MOD_TEST'), 
-	$this->language->lang('DL_MOD_DESC'), 
-	$this->language->lang('DL_MOD_WARNING'), 
-	$this->language->lang('DL_MOD_TODO'), 
+	$this->language->lang('DL_ALL'),
+	$this->language->lang('DL_FILE_NAME'),
+	$this->language->lang('DL_FILE_DESCRIPTION'),
+	$this->language->lang('DL_DETAIL'),
+	$this->language->lang('DL_MOD_TEST'),
+	$this->language->lang('DL_MOD_DESC'),
+	$this->language->lang('DL_MOD_WARNING'),
+	$this->language->lang('DL_MOD_TODO'),
 	$this->language->lang('DL_MOD_REQUIRE')
 );
 $search_fields		= array('all', 'file_name', 'description', 'long_desc', 'test', 'mod_desc', 'warning', 'todo', 'req');
@@ -151,7 +151,7 @@ if ($search_keywords != '' && !$search_author)
 				),
 				'params' => array('view' => 'search', 'search_keywords' => $search_keywords, 'search_cat' => $search_cat, 'sort_dir' => $sort_dir),
 			), 'pagination', 'start', $search_counter, $this->config['dl_links_per_page'], $page_start);
-			
+
 		$this->template->assign_vars(array(
 			'PAGE_NUMBER'	=> $pagination->on_page($search_counter, $this->config['dl_links_per_page'], $page_start),
 			'TOTAL_DL'		=> $this->language->lang('VIEW_DOWNLOADS', $search_counter),
@@ -176,14 +176,14 @@ if ($search_keywords != '' && !$search_author)
 			$u_file_link	= $this->helper->route('dl_ext_controller', array('view' => 'detail', 'df_id' => $file_id));
 
 			$dl_status		= array();
-			$dl_status		= \oxpus\dl_ext\includes\classes\ dl_status::status($file_id, $this->helper, $ext_path_images);
+			$dl_status		= \oxpus\dl_ext\includes\classes\ dl_status::status($file_id, $this->helper);
 
 			$status			= $dl_status['status'];
 			$file_name		= $dl_status['file_name'];
 
 			if (isset($index[$cat_id]['parent']))
 			{
-				$mini_icon = \oxpus\dl_ext\includes\classes\ dl_status::mini_status_file($index[$cat_id]['parent'], $file_id, $ext_path_images);
+				$mini_icon = \oxpus\dl_ext\includes\classes\ dl_status::mini_status_file($index[$cat_id]['parent'], $file_id);
 			}
 			else
 			{
@@ -292,7 +292,7 @@ else if ($search_author)
 				),
 				'params' => array('view' => 'search', 'search_author' => $search_author, 'search_cat' => $search_cat, 'sort_dir' => $sort_dir),
 			), 'pagination', 'start', $total_found_dl, $this->config['dl_links_per_page'], $page_start);
-			
+
 		$this->template->assign_vars(array(
 			'PAGE_NUMBER'	=> $pagination->on_page($total_found_dl, $this->config['dl_links_per_page'], $page_start),
 			'TOTAL_DL'		=> $this->language->lang('VIEW_DOWNLOADS', $total_found_dl),
@@ -321,12 +321,12 @@ else if ($search_author)
 			$u_file_link	= $this->helper->route('dl_ext_controller', array('view' => 'detail', 'df_id' => $file_id));
 
 			$dl_status		= array();
-			$dl_status		= \oxpus\dl_ext\includes\classes\ dl_status::status($file_id, $this->helper, $ext_path_images);
+			$dl_status		= \oxpus\dl_ext\includes\classes\ dl_status::status($file_id, $this->helper);
 
 			$status			= $dl_status['status'];
 			$file_name		= $dl_status['file_name'];
 
-			$mini_icon		= (isset($index[$cat_id]['parent'])) ? \oxpus\dl_ext\includes\classes\ dl_status::mini_status_file($index[$cat_id]['parent'], $file_id, $ext_path_images) : '';
+			$mini_icon		= (isset($index[$cat_id]['parent'])) ? \oxpus\dl_ext\includes\classes\ dl_status::mini_status_file($index[$cat_id]['parent'], $file_id) : '';
 
 			$cat_name		= $row['cat_name'];
 			$u_cat_link		= $this->helper->route('dl_ext_controller', array('cat' => $cat_id));

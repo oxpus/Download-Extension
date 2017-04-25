@@ -2,6 +2,10 @@
 
 <h2 class="solo">{L_DL_MOD_TODO}</h2>
 
+<!-- IF S_NO_TODOLIST -->
+<div class="panel"><strong>{L_DL_NO_MOD_TODO}</strong></div>
+<!-- ELSE -->
+
 <div class="forabg">
 	<div class="inner">
 
@@ -38,13 +42,11 @@
 				</dl>
 			</li>
 		<!-- END todolist_row -->
-		<!-- IF S_NO_TODOLIST -->
-		<div ><span>{L_DL_NO_MOD_TODO}</span></div>
-		<!-- ENDIF -->
 		</ul>
 
 	</div>
 </div>
+<!-- ENDIF -->
 
 <!-- IF S_TODO_ADD -->
 <br />
@@ -54,7 +56,7 @@
 	<div class="panel">
 		<div class="inner">
 
-		<h3><!-- IF S_ADD_TODO -->{L_DL_NEW}<!-- ELSE -->{L_DL_EDIT_FILE}<!-- ENDIF --></h3>
+		<h3><!-- IF S_ADD_TODO -->{L_DL_TODO_ADD}<!-- ELSE -->{L_DL_TODO_EDIT}<!-- ENDIF --></h3>
 
 		<fieldset>
 

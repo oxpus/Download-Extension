@@ -49,42 +49,40 @@
 <!-- END approve_comments -->
 
 <!-- IF S_FOOTER_LEGEND -->
-<h3 onmouseover="javascript: show_area('legend', true);" style="float: left;">{L_LEGEND}</h3>
-<div id="legend" style="display: none;"><input type="button" style="height: 25px; margin: 15px 0px 0px 20px;" class="button icon" onclick="javascript:show_area('legend', false);" value="X" />
-<br />
-<table style="margin-top: 10px;">
+<div class="button legend-footer" id="legend-footer">{L_LEGEND}</div>
+<div id="legend" style="display: none" class="footer-box"><a class="icon dl-close-footer" onclick="javascript:show_area('legend', false);"></a>
+<div style="padding: 1em;"><div><strong>{L_LEGEND}</strong></div>
 <!-- IF S_DL_TRAFFIC_OFF -->
-<tr>
-	<td style="width: 3%;"><img src="{IMG_DL_RED}" alt="{L_DL_RED_EXPLAIN}" /></td><td style="width: 14%;">{L_DL_RED_EXPLAIN}</td><td>&nbsp;</td>
-	<td style="width: 3%;"><img src="{IMG_DL_GREEN}" alt="{L_DL_GREEN_EXPLAIN}" /></td><td style="width: 14%;">{L_DL_GREEN_EXPLAIN}</td><td>&nbsp;</td>
-	<td style="width: 3%;"><img src="{IMG_DL_GREY}" alt="{L_DL_GREY_EXPLAIN}" /></td><td style="width: 14%;">{L_DL_GREY_EXPLAIN}</td><td>&nbsp;</td>
-	<td style="width: 3%;"><img src="{IMG_DL_WHITE}" alt="{L_DL_WHITE_EXPLAIN}" /></td><td style="width: 14%;">{L_DL_WHITE_EXPLAIN}</td><td>&nbsp;</td>
-	<td style="width: 3%;"><img src="{IMG_DL_FILE_NEW}" alt="{L_DL_NEW}" /></td><td style="width: 14%;">{L_DL_NEW}</td><td>&nbsp;</td>
-	<td style="width: 3%;"><img src="{IMG_DL_FILE_EDIT}" alt="{L_DL_EDIT}" /></td><td style="width: 14%;">{L_DL_EDIT}</td><td>&nbsp;</td>
+<dl>
+	<dt>
+		<i class="icon fa-ban fa-fw dl-red"></i> {L_DL_RED_EXPLAIN}<br />
+		<i class="icon fa-download fa-fw dl-green"></i> {L_DL_GREEN_EXPLAIN}<br />
+		<i class="icon fa-globe fa-fw dl-blue"></i> {L_DL_GREY_EXPLAIN}<br />
+		<i class="icon fa-download fa-fw dl-grey"></i> {L_DL_WHITE_EXPLAIN}<br />
+		<i class="icon fa-comment-o fa-fw dl-red"></i> {L_DL_NEW}<br />
+		<i class="icon fa-edit fa-fw dl-blue"></i> {L_DL_EDIT}<br />
+	</dt>
 </dl>
 <!-- ELSE -->
-<tr>
-	<td style="width: 3%;"><img src="{IMG_DL_BLUE}" alt="{L_DL_BLUE_EXPLAIN_FOOT}" /></td><td style="width: 22%;">{L_DL_BLUE_EXPLAIN_FOOT}</td><td>&nbsp;</td>
-	<td style="width: 3%;"><img src="{IMG_DL_RED}" alt="{l_DL_RED_EXPLAIN}" /></td><td style="width: 22%;">{L_DL_RED_EXPLAIN}</td><td>&nbsp;</td>
-	<td style="width: 3%;"><img src="{IMG_DL_GREY}" alt="{L_DL_GREY_EXPLAIN}" /></td><td style="width: 22%;">{L_DL_GREY_EXPLAIN}</td><td>&nbsp;</td>
-	<td style="width: 3%;"><img src="{IMG_DL_WHITE}" alt="{L_DL_WHITE_EXPLAIN}" /></td><td style="width: 22%;">{L_DL_WHITE_EXPLAIN}</td><td>&nbsp;</td>
-</tr>
-<tr>
-	<td style="width: 3%;"><img src="{IMG_DL_YELLOW}" alt="{L_DL_YELLOW_EXPLAIN}" /></td><td style="width: 22%;">{L_DL_YELLOW_EXPLAIN}</td><td>&nbsp;</td>
-	<td style="width: 3%;"><img src="{IMG_DL_GREEN}" alt="{L_DL_GREEN_EXPLAIN}" /></td><td style="width: 22%;">{L_DL_GREEN_EXPLAIN}</td><td>&nbsp;</td>
-	<td style="width: 3%;"><img src="{IMG_DL_FILE_NEW}" alt="{L_DL_NEW}" /></td><td style="width: 22%;">{L_DL_NEW}</td><td>&nbsp;</td>
-	<td style="width: 3%;"><img src="{IMG_DL_FILE_EDIT}" alt="{L_DL_EDIT}" /></td><td style="width: 22%;">{L_DL_EDIT}</td><td>&nbsp;</td>
-</tr>
+<dl>
+	<dt>
+		<i class="icon fa-info-circle fa-fw dl-blue"></i> {L_DL_BLUE_EXPLAIN_FOOT}<br />
+		<i class="icon fa-ban fa-fw dl-red"></i> {L_DL_RED_EXPLAIN}<br />
+		<i class="icon fa-globe fa-fw dl-blue"></i> {L_DL_GREY_EXPLAIN}<br />
+		<i class="icon fa-download fa-fw dl-grey"></i> {L_DL_WHITE_EXPLAIN}<br />
+		<i class="icon fa-download fa-fw dl-yellow"></i> {L_DL_YELLOW_EXPLAIN}<br />
+		<i class="icon fa-download fa-fw dl-green"></i> {L_DL_GREEN_EXPLAIN}<br />
+		<i class="icon fa-comment-o fa-fw dl-red"></i> {L_DL_NEW}<br />
+		<i class="icon fa-edit fa-fw dl-blue"></i> {L_DL_EDIT}<br />
+	</dt>
+</dl>
 <!-- ENDIF -->
-</table>
-</div>
+</div></div>
 <!-- ENDIF -->
 
-<br class="clear" />
-
-<h3 onmouseover="javascript: show_area('footer', true);" style="float: left;">{L_DL_FOOTER}</h3>
-<div id="footer" style="display: none; float: left; margin-left: 20px;"><input type="button" style="height: 25px; margin-top: 15px;" class="button icon" onclick="javascript:show_area('footer', false);" value="X" />
-<div style="margin: 10px 0px 0px 0px;" class="small">
+<div class="button stats-footer" id="stats-footer">{L_DL_FOOTER}</div>
+<div id="footer" style="display: none" class="footer-box"><a class="icon dl-close-footer" onclick="javascript:show_area('footer', false);"></a>
+<div class="small" style="padding: 1em;">
 	<!-- IF L_CAN_DOWNLOAD_AGAIN -->{L_CAN_DOWNLOAD_AGAIN}<br /><!-- ENDIF -->
 	<!-- BEGIN userdata -->{userdata.ACCOUNT_TRAFFIC}<br /><!-- END userdata -->
 	<!-- BEGIN remain_traffic -->{remain_traffic.REMAIN_TRAFFIC}<br /><!-- END remain_traffic -->
@@ -98,11 +96,15 @@
     <!-- IF EXT_STATS_OVERALL_GUESTS_TRAFFIC -->{EXT_STATS_OVERALL_GUESTS_TRAFFIC}<br /><!-- ENDIF -->
     <!-- IF EXT_STATS_MONTH_CLICKS -->{EXT_STATS_MONTH_CLICKS}<br /><!-- ENDIF -->
   	<!-- IF not S_HIDE_FOOTER_DATA --><br /><!-- ENDIF -->
-	<strong>{DL_MOD_RELEASE}</strong>&nbsp;&bull;&nbsp;
-	<!-- IF S_DL_TRANSLATION -->{L_DL_TRANSLATION}&nbsp;&bull;&nbsp;<!-- ENDIF -->
-	<!-- IF U_DL_RSS_FEED --><a href="{U_DL_RSS_FEED}">{L_DL_ACP_CONF_RSS}</a><!-- ENDIF -->
 </div>
 </div>
-<br style="clear: both" />
+
+<div class="clear"></div>
+
+<div class="copyright">
+	<strong>{DL_MOD_RELEASE}</strong>
+	<!-- IF S_DL_TRANSLATION -->&bull;&nbsp;{L_DL_TRANSLATION}<!-- ENDIF -->
+	<!-- IF U_DL_RSS_FEED -->&bull;&nbsp;<a href="{U_DL_RSS_FEED}">{L_DL_ACP_CONF_RSS}</a><!-- ENDIF -->
+</div>
 
 <!-- INCLUDE overall_footer.html -->

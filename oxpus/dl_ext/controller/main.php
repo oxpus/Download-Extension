@@ -117,7 +117,6 @@ class main
 		$this->phpbb_path_helper	= $this->phpbb_container->get('path_helper');
 		$ext_path_web				= $this->phpbb_path_helper->update_web_root_path($ext_path);
 		$ext_path_ajax				= $ext_path_web . 'includes/js/ajax/';
-		$ext_path_images			= $ext_path_web . 'includes/images/';
 
 		$table_prefix = $this->table_prefix;
 		include_once($ext_path . '/includes/helpers/dl_constants.' . $this->php_ext);
@@ -147,20 +146,7 @@ class main
 		$this->template->assign_vars(array(
 			'EXT_DL_PATH_WEB'	=> $ext_path_web,
 			'EXT_DL_PATH_AJAX'	=> $ext_path_ajax,
-			'ICON_DL_HELP'		=> '<img src="' . $ext_path_web . 'styles/' . rawurlencode($this->user->style['style_path']) . '/theme/images/dl_help.gif" alt="" />',
-			'IMG_DL_BLUE'		=> $ext_path_images . 'dl_blue.png',
-			'IMG_DL_BUTTON'		=> $ext_path_images . 'dl_button.png',
-			'IMG_DL_DEFAULT'	=> $ext_path_images . 'dl_default.png',
-			'IMG_DL_EDIT'		=> $ext_path_images . 'dl_edit.png',
-			'IMG_DL_FILE_EDIT'	=> $ext_path_images . 'dl_file_edit.png',
-			'IMG_DL_FILE_NEW'	=> $ext_path_images . 'dl_file_new.png',
-			'IMG_DL_GREEN'		=> $ext_path_images . 'dl_green.png',
-			'IMG_DL_GREY'		=> $ext_path_images . 'dl_grey.png',
-			'IMG_DL_NEW'		=> $ext_path_images . 'dl_new.png',
-			'IMG_DL_NEW_EDIT'	=> $ext_path_images . 'dl_new_edit.png',
-			'IMG_DL_RED'		=> $ext_path_images . 'dl_red.png',
-			'IMG_DL_WHITE'		=> $ext_path_images . 'dl_white.png',
-			'IMG_DL_YELLOW'		=> $ext_path_images . 'dl_yellow.png',
+			'ICON_DL_HELP'		=> '<i class="icon fa-info-circle fa-fw dl-yellow"></i>',
 		));
 
 		/*
@@ -201,6 +187,7 @@ class main
 		$del_file	= $this->request->variable('del_file', 0);
 		$bt_filter	= $this->request->variable('bt_filter', -1);
 		$modcp		= $this->request->variable('modcp', 0);
+		$next_id	= $this->request->variable('next_id', 0);
 
 		$file_option	= $this->request->variable('file_ver_opt', 0);
 		$file_version	= $this->request->variable('file_version', 0);
@@ -402,14 +389,14 @@ class main
 			$desc_bitfield		= $row['desc_bitfield'];
 			$desc_flags			= $row['desc_flags'];
 			$description		= generate_text_for_display($description, $desc_uid, $desc_bitfield, $desc_flags);
-			
-			$mini_icon			= \oxpus\dl_ext\includes\classes\ dl_status::mini_status_file($cat_id, $df_id, $ext_path_images);
-			
+
+			$mini_icon			= \oxpus\dl_ext\includes\classes\ dl_status::mini_status_file($cat_id, $df_id);
+
 			$hack_version		= '&nbsp;'.$row['hack_version'];
-			
+
 			$file_status	= array();
-			$file_status	= \oxpus\dl_ext\includes\classes\ dl_status::status($df_id, $this->helper, $ext_path_images);
-			
+			$file_status	= \oxpus\dl_ext\includes\classes\ dl_status::status($df_id, $this->helper);
+
 			$status			= $file_status['status_detail'];
 
 			$this->db->sql_freeresult($result);
@@ -429,7 +416,7 @@ class main
 				redirect($this->helper->route('dl_ext_controller'));
 			}
 		}
-				
+
 		if ($cat_id)
 		{
 			$cat_auth = \oxpus\dl_ext\includes\classes\ dl_auth::user_auth($cat_id, 'auth_view');
@@ -465,6 +452,7 @@ class main
 			case 'version':
 			case 'detail':
 			case 'broken':
+			case 'comment':
 				$nav_string['link'][] = array('view' => 'detail', 'df_id' => $df_id);
 				$nav_string['name'][] = $this->language->lang('DL_DETAIL') . ': ' . $description;
 			break;
@@ -473,10 +461,6 @@ class main
 				$nav_string['name'][] = $this->language->lang('DL_DETAIL') . ': ' . $description;
 				$nav_string['link'][] = array('view' => 'thumbs', 'df_id' => $df_id, 'cat_id' => $cat_id);
 				$nav_string['name'][] = $this->language->lang('DL_EDIT_THUMBS');
-			break;
-			case 'comment':
-				$nav_string['link'][] = array('view' => 'detail', 'df_id' => $df_id);
-				$nav_string['name'][] = $this->language->lang('DL_DETAIL') . ': ' . $description;
 			break;
 			case 'upload':
 				$nav_string['link'][] = array('view' => 'upload', 'cat_id' => $cat_id);
@@ -586,7 +570,7 @@ class main
 		if ($view == 'hacks')
 		{
 			include($ext_path . '/includes/modules/dl_hacks_list.' . $this->php_ext);
-		}		
+		}
 
 		if ($view != 'load' && $view != 'broken')
 		{
@@ -652,7 +636,7 @@ class main
 				);
 
 				$this->template->assign_vars(array(
-					'U_TODO_EDIT'	=> $this->helper->route('dl_ext_controller', array('view' => 'todo', 'action' => 'edit')),
+					'U_TODO_ADD'	=> $this->helper->route('dl_ext_controller', array('view' => 'todo', 'action' => 'edit')),
 					'U_DL_TOP'		=> $ext_path,
 				));
 
@@ -669,8 +653,11 @@ class main
 							'FILENAME'		=> $dl_todo['file_name'][$i],
 							'FILE_LINK'		=> $this->helper->route('dl_ext_controller', array('view' => 'detail', 'df_id' => $dl_todo['df_id'][$i])),
 							'HACK_VERSION'	=> $dl_todo['hack_version'][$i],
-							'TODO'			=> $dl_todo['todo'][$i])
-						);
+							'TODO'			=> $dl_todo['todo'][$i],
+
+							'U_TODO_EDIT'	=> $this->helper->route('dl_ext_controller', array('view' => 'todo', 'action' => 'edit', 'edit' => true, 'df_id' => $dl_todo['df_id'][$i])),
+							'U_TODO_DELETE'	=> $this->helper->route('dl_ext_controller', array('view' => 'todo', 'action' => 'edit', 'delete' => true, 'submit' => true, 'df_id' => $dl_todo['df_id'][$i])),
+						));
 					}
 				}
 				else
@@ -977,7 +964,7 @@ class main
 			page_header($this->language->lang('DL_CONFIG'));
 			include($ext_path . '/includes/modules/dl_user_config.' . $this->php_ext);
 		}
-		else if ($view == 'detail')
+		else if ($view == 'detail' || $view == 'comment')
 		{
 			include($ext_path . '/includes/modules/dl_details.' . $this->php_ext);
 		}
@@ -1009,10 +996,6 @@ class main
 		{
 			include($ext_path . '/includes/modules/dl_load.' . $this->php_ext);
 		}
-		else if ($view == 'comment')
-		{
-			include($ext_path . '/includes/modules/dl_comments.' . $this->php_ext);
-		}
 		else if ($view == 'upload')
 		{
 			$inc_module = true;
@@ -1021,7 +1004,14 @@ class main
 		}
 		else if ($view == 'modcp')
 		{
-			include($ext_path . '/includes/modules/dl_modcp.' . $this->php_ext);
+			if (isset($index[$cat_id]['total']) && $index[$cat_id]['total'])
+			{
+				include($ext_path . '/includes/modules/dl_modcp.' . $this->php_ext);
+			}
+			else
+			{
+				redirect($this->helper->route('dl_ext_controller', array('cat' => $cat_id)));
+			}
 		}
 
 		/*

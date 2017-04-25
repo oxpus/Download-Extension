@@ -94,7 +94,7 @@ else
 }
 
 $check_status = array();
-$check_status = \oxpus\dl_ext\includes\classes\ dl_status::status($df_id, $this->helper, $ext_path_images);
+$check_status = \oxpus\dl_ext\includes\classes\ dl_status::status($df_id, $this->helper);
 
 if (!$dl_file['id'] || !$auth_view)
 {
@@ -134,11 +134,11 @@ if (($user_is_mod || $user_is_admin || $user_is_founder) || ($this->config['dl_e
 * prepare the download version for displaying
 */
 $description	= generate_text_for_display($dl_file['description'], $dl_file['desc_uid'], $dl_file['desc_bitfield'], $dl_file['desc_flags']) . '&nbsp;' . $dl_file['hack_version'];
-$mini_icon		= \oxpus\dl_ext\includes\classes\ dl_status::mini_status_file($cat_id, $df_id, $ext_path_images);
+$mini_icon		= \oxpus\dl_ext\includes\classes\ dl_status::mini_status_file($cat_id, $df_id);
 $ver_version	= '&nbsp;' . $ver_data['ver_version'];
 $ver_desc		= generate_text_for_display($ver_data['ver_text'], $ver_data['ver_uid'], $ver_data['ver_bitfield'], $ver_data['ver_flags']);
 $file_status	= array();
-$file_status	= \oxpus\dl_ext\includes\classes\ dl_status::status($df_id, $this->helper, $ext_path_images);
+$file_status	= \oxpus\dl_ext\includes\classes\ dl_status::status($df_id, $this->helper);
 $status			= $file_status['status_detail'];
 $file_name		= $ver_data['ver_file_name'];
 $file_load		= $file_status['auth_dl'];
@@ -171,7 +171,7 @@ if ($action == 'load' && $ver_id && $ver_file_id && $auth_dl)
 	{
 		$dl_file_url = DL_EXT_VER_FILES_FOLDER . $row['real_name'];
 		$dl_file_size = sprintf("%u", @filesize($dl_file_url));
-	
+
 		header("Content-Disposition: attachment; filename=" . $row['file_name']);
 		header("Content-Type: application/octet-stream");
 		header("Content-Description: File Transfer");
@@ -179,7 +179,7 @@ if ($action == 'load' && $ver_id && $ver_file_id && $auth_dl)
 		header("Cache-Control: ");
 		header("Pragma: ");
 		header("Connection: close");
-	
+
 		$fp = fopen($dl_file_url, "rb");
 		while (!feof($fp))
 		{
@@ -415,7 +415,7 @@ if ($submit && $action == 'save' && $ver_can_edit && $ver_id)
 	);
 
 	$s_redirect = $this->helper->route('dl_ext_controller', $s_redirect_params);
-	redirect($s_redirect);	
+	redirect($s_redirect);
 }
 
 /*
@@ -448,7 +448,7 @@ if ($action == 'edit' && $ver_can_edit)
 				$file_path = $row['real_name'];
 				$tpl_block = 'files';
 		}
-	
+
 		$this->template->assign_block_vars($tpl_block, array(
 			'LINK'			=> $file_path,
 			'FILE_NAME'		=> $row['file_name'],
@@ -456,7 +456,7 @@ if ($action == 'edit' && $ver_can_edit)
 			'VER_FILE_ID'	=> $row['ver_file_id'],
 		));
 	}
-	
+
 	$this->db->sql_freeresult($result);
 
 	$s_form_ary = array(
@@ -524,7 +524,7 @@ while ($row = $this->db->sql_fetchrow($result))
 				'ver_id'		=> $ver_id,
 				'ver_file_id'	=> $row['ver_file_id'],
 				'df_id'			=> $df_id,
-			);					
+			);
 			$file_path = $this->helper->route('dl_ext_controller', $load_link_ary);
 			$tpl_block = 'files';
 	}

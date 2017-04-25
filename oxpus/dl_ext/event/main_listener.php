@@ -48,7 +48,7 @@ class main_listener implements EventSubscriberInterface
 
 	/* @var \phpbb\extension\manager */
 	protected $phpbb_extension_manager;
-	
+
 	/* @var \phpbb\path_helper */
 	protected $phpbb_path_helper;
 
@@ -69,7 +69,7 @@ class main_listener implements EventSubscriberInterface
 
 	/* @var \phpbb\template\template */
 	protected $template;
-	
+
 	/* @var \phpbb\user */
 	protected $user;
 
@@ -109,7 +109,7 @@ class main_listener implements EventSubscriberInterface
 	}
 
 	public function load_language_on_setup($event)
-	{	
+	{
 		$lang_set_ext = $event['lang_set_ext'];
 		$lang_set_ext[] = array(
 			'ext_name' => 'oxpus/dl_ext',
@@ -157,7 +157,7 @@ class main_listener implements EventSubscriberInterface
 
 		$dl_mod_is_active = true;
 		$dl_mod_link_show = true;
-	
+
 		$this->template->assign_vars(array(
 			'EXT_DL_PATH'			=> $ext_path,
 			'EXT_DL_PATH_WEB'		=> $ext_path_web,
@@ -176,7 +176,7 @@ class main_listener implements EventSubscriberInterface
 					$curr_time = (date('H', time()) * 60) + date('i', time());
 					$off_from = (substr($this->config['dl_off_from'], 0, 2) * 60) + (substr($this->config['dl_off_from'], -2));
 					$off_till = (substr($this->config['dl_off_till'], 0, 2) * 60) + (substr($this->config['dl_off_till'], -2));
-	
+
 					if ($curr_time >= $off_from && $curr_time < $off_till)
 					{
 						$dl_mod_is_active = false;
@@ -184,12 +184,12 @@ class main_listener implements EventSubscriberInterface
 				}
 			}
 		}
-	
+
 		if (!$dl_mod_is_active && isset($this->config['dl_off_hide']) && $this->config['dl_off_hide'])
 		{
 			$dl_mod_link_show = false;
 		}
-	
+
 		if (!$dl_mod_is_active && $this->auth->acl_get('a_') && isset($this->config['dl_on_admins']) && $this->config['dl_on_admins'])
 		{
 			$dl_mod_link_show = true;
@@ -202,18 +202,18 @@ class main_listener implements EventSubscriberInterface
 			$this->template->assign_vars(array(
 				'U_DL_NAVI'		=> $dl_main_link,
 			));
-		
+
 			if (isset($this->config['dl_use_hacklist']) && $this->config['dl_use_hacklist'])
 			{
 				$sql = 'SELECT COUNT(id) AS total FROM ' . DOWNLOADS_TABLE . '
 					WHERE hacklist = 1';
 				$result = $this->db->sql_query($sql);
-		
+
 				if ($result)
 				{
 					$row = $this->db->sql_fetchrow($result);
 					$total = $row['total'];
-		
+
 					if ($total)
 					{
 						$dl_hacks_link = $this->helper->route('dl_ext_controller', array('view' => 'hacks'));
@@ -225,20 +225,20 @@ class main_listener implements EventSubscriberInterface
 				}
 				$this->db->sql_freeresult($result);
 			}
-		
+
 			if ($this->user->data['is_registered'])
 			{
 				$sql = 'SELECT count(d.id) as total FROM ' . DOWNLOADS_TABLE . ' d, ' . DL_CAT_TABLE . ' c
 					WHERE c.id = d.cat
 						AND c.bug_tracker = 1';
 				$result = $this->db->sql_query($sql);
-		
+
 				if ($result)
 				{
 					$row = $this->db->sql_fetchrow($result);
 				}
 				$this->db->sql_freeresult($result);
-		
+
 				if (isset($row) && $row['total'] != 0)
 				{
 					$dl_bt_link = $this->helper->route('dl_ext_controller', array('view' => 'bug_tracker'));
@@ -260,21 +260,21 @@ class main_listener implements EventSubscriberInterface
 			if (strpos($event['row']['session_page'], '/dl_ext/?view=hacks') !== false)
 			{
 				$dl_hacks_link = $this->helper->route('dl_ext_controller', array('view' => 'hacks'));
-	
+
 				$event['location'] = $this->language->lang('DL_PAGE_DL_HACKSLIST');
 				$event['location_url'] = $dl_hacks_link;
 			}
 			else if (strpos($event['row']['session_page'], '/dl_ext/?view=bug_tracker') !== false)
 			{
 				$dl_main_link = $this->helper->route('dl_ext_controller', array('view' => 'bug_tracker'));
-	
+
 				$event['location'] = $this->language->lang('DL_PAGE_BUG_TRACKER');
 				$event['location_url'] = $dl_main_link;
 			}
 			else
 			{
 				$dl_main_link = $this->helper->route('dl_ext_controller');
-	
+
 				$event['location'] = $this->language->lang('DL_PAGE_DOWNLOADS');
 				$event['location_url'] = $dl_main_link;
 			}
@@ -331,7 +331,7 @@ class main_listener implements EventSubscriberInterface
 				SET username = '" . $this->db->sql_escape($event['new_name']) . "'
 				WHERE username = '" . $this->db->sql_escape($event['old_name']) . "'";
 			$this->db->sql_query($sql);
-		}	
+		}
 	}
 
 	public function delete_user($event)
@@ -341,7 +341,7 @@ class main_listener implements EventSubscriberInterface
 		include_once($ext_path . '/includes/helpers/dl_constants.' . $this->php_ext);
 
 		$table_ary = array(DL_NOTRAF_TABLE);
-	
+
 		// Delete the miscellaneous (non-post) data for the user
 		foreach ($table_ary as $table)
 		{
@@ -352,7 +352,7 @@ class main_listener implements EventSubscriberInterface
 
 		$sql = 'DELETE FROM ' . DL_FAVORITES_TABLE . '
 			WHERE ' . $this->db->sql_in_set('fav_user_id', $event['user_ids']);
-		$this->db->sql_query($sql);	
+		$this->db->sql_query($sql);
 	}
 
 	public function add_user_traffic_for_post($event)
@@ -375,7 +375,7 @@ class main_listener implements EventSubscriberInterface
 				$filebase_prefix = $ext_path . 'files/';
 				$filebase_web_prefix = $ext_path_web . 'files/';
 			}
-	
+
 			define('DL_EXT_CACHE_FOLDER',		$filebase_prefix . 'cache/');
 			define('DL_EXT_THUMBS_FOLDER',		$filebase_prefix . 'thumbs/');
 			define('DL_EXT_THUMBS_WEB_FOLDER',	$filebase_web_prefix . 'thumbs/');
@@ -391,13 +391,13 @@ class main_listener implements EventSubscriberInterface
 		$founder_traffics_off = FOUNDER_TRAFFICS_OFF;
 		$dl_mod->unregister();
 		unset($dl_mod);
-	
+
 		if ($this->config['dl_enable_post_dl_traffic'] && !$this->config['dl_traffic_off'] && $user_traffics_on && !$founder_traffics_off)
 		{
 			if (!$this->config['dl_delay_post_traffic'] || ((time() - $this->user->data['user_regdate']) / 84600) > $this->config['dl_delay_post_traffic'])
 			{
 				$dl_traffic = 0;
-	
+
 				if ($event['mode'] == 'post')
 				{
 					$dl_traffic = $this->config['dl_newtopic_traffic'];
@@ -406,7 +406,7 @@ class main_listener implements EventSubscriberInterface
 				{
 					$dl_traffic = $this->config['dl_reply_traffic'];
 				}
-	
+
 				if (intval($dl_traffic) > 0)
 				{
 					$sql = 'UPDATE ' . USERS_TABLE . '
@@ -438,7 +438,7 @@ class main_listener implements EventSubscriberInterface
 				$filebase_prefix = $ext_path . 'files/';
 				$filebase_web_prefix = $ext_path_web . 'files/';
 			}
-	
+
 			define('DL_EXT_CACHE_FOLDER',		$filebase_prefix . 'cache/');
 			define('DL_EXT_THUMBS_FOLDER',		$filebase_prefix . 'thumbs/');
 			define('DL_EXT_THUMBS_WEB_FOLDER',	$filebase_web_prefix . 'thumbs/');
@@ -454,7 +454,7 @@ class main_listener implements EventSubscriberInterface
 		$founder_traffics_off = FOUNDER_TRAFFICS_OFF;
 		$dl_mod->unregister();
 		unset($dl_mod);
-	
+
 		if ($this->config['dl_drop_traffic_postdel'] && !$this->config['dl_traffic_off'] && $user_traffics_on && !$founder_traffics_off)
 		{
 			if ($event['mode'] == 'delete')
@@ -473,7 +473,7 @@ class main_listener implements EventSubscriberInterface
 				else if ($event['post_id'])
 				{
 					$drop_traffic_amount = $this->config['dl_reply_traffic'];
-	
+
 					$sql = 'SELECT poster_id
 						FROM ' . POSTS_TABLE . '
 						WHERE post_id = ' . $post_id;
@@ -490,7 +490,7 @@ class main_listener implements EventSubscriberInterface
 					$row = $this->db->sql_fetchrow($result);
 					$user_traffic = $row['user_traffic'];
 					$this->db->sql_freeresult($result);
-			
+
 					if ($user_traffic < $drop_traffic_amount)
 					{
 						$user_traffic = 0;
@@ -499,7 +499,7 @@ class main_listener implements EventSubscriberInterface
 					{
 						$user_traffic -= $drop_traffic_amount;
 					}
-			
+
 					$sql = 'UPDATE ' . USERS_TABLE . '
 						SET user_traffic = ' . (int) $user_traffic . '
 						WHERE user_id = ' . (int) $poster_id;
@@ -567,6 +567,7 @@ class main_listener implements EventSubscriberInterface
 		$permission['a_dl_toolbox']		= array('lang' => 'ACL_A_DL_TOOLBOX',		'cat' => 'downloads');
 		$permission['a_dl_fields']		= array('lang' => 'ACL_A_DL_FIELDS',		'cat' => 'downloads');
 		$permission['a_dl_browser']		= array('lang' => 'ACL_A_DL_BROWSER',		'cat' => 'downloads');
+		$permission['a_dl_perm_check']	= array('lang' => 'ACL_A_DL_PERM_CHECK',	'cat' => 'downloads');
 		$event['permissions'] = $permission;
 	}
 }

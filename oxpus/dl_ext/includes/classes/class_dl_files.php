@@ -20,16 +20,6 @@ if (!defined('IN_PHPBB'))
 
 class dl_files extends dl_mod
 {
-	public function __construct()
-	{
-		return;
-	}
-
-	public function __destruct()
-	{
-		return;
-	}
-
 	public static function files($cat_id, $sql_sort_by, $sql_order, $start, $limit, $sql_fields = '*')
 	{
 		global $db;

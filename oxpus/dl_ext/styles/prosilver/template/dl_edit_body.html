@@ -12,7 +12,7 @@
 	<h3>{DL_FILES_TITLE}</h3>
 
 	<!-- IF S_UPLOAD_TRAFFIC -->
-	<p><span class="small">{L_DL_UPLOAD_TRAFFIC_COUNT}</span></p>
+	<div class="rules"><span class="small">{L_DL_UPLOAD_TRAFFIC}</span></div>
 	<!-- ENDIF -->
 
 	<fieldset>
@@ -76,16 +76,18 @@
 		</dd>
 	</dl>
 	<!-- IF S_VERSION_ON -->
-	<dl>
+	<dl style="background-color: #ffeeee;">
 		<dt><label>{L_DL_VERSION}</label></dt>
 		<dd>
-			<label><input type="radio" name="file_ver_opt" class="radio" value="0" checked="checked" />&nbsp;{L_DL_VERSION_ADD_NEW}</label><br />
-			<label><input type="radio" name="file_ver_opt" class="radio" value="1" />&nbsp;{L_DL_VERSION_ADD_OLD}</label><br />
-			<label><input type="radio" name="file_ver_opt" class="radio" value="2" />&nbsp;{L_DL_VERSION_REPLACE}</label><br /><span class="small">{L_DL_VERSION_REPLACE_EXPLAIN}</span><br />
-			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&raquo;&nbsp;{S_SELECT_VERSION}<br /><br />
+			<label class="dl-green"><input type="radio" name="file_ver_opt" class="radio" value="0" checked="checked" />&nbsp;{L_DL_VERSION_ADD_NEW}</label><br />
+			<label class="dl-blue"><input type="radio" name="file_ver_opt" class="radio" value="1" />&nbsp;{L_DL_VERSION_ADD_OLD}</label><br />
+			<label class="dl-yellow"><input type="radio" name="file_ver_opt" class="radio" value="2" />&nbsp;{L_DL_VERSION_REPLACE}</label><br />
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&raquo;&nbsp;{S_SELECT_VERSION}<br />
+			<span class="small">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{L_DL_VERSION_REPLACE_EXPLAIN}</span><br />
 			<!-- IF S_SELECT_VER_DEL -->
-			<label><input type="radio" name="file_ver_opt" class="radio" value="3" />&nbsp;{L_DL_VERSION_DELETE}</label><br />
-			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&raquo;&nbsp;{S_SELECT_VER_DEL}<br /><div class="notice">{L_DL_VERSION_DELETE_EXPLAIN}</div>
+			<br />
+			<label class="dl-red"><input type="radio" name="file_ver_opt" class="radio" value="3" />&nbsp;{L_DL_VERSION_DELETE}</label><br />
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&raquo;&nbsp;{S_SELECT_VER_DEL}<br /><div class="notice">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{L_DL_VERSION_DELETE_EXPLAIN}</div>
 			<!-- ENDIF -->
 		</dd>
 	</dl>

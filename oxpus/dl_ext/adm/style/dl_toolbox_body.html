@@ -33,14 +33,14 @@ function select_switch(status)
 
 	<!-- BEGIN dirs_row -->
 	<dl>
-		<dt><label>{dirs_row.DIR_LINK}</label></dt>
+		<dt><i class="icon fa-folder fa-fw"></i>&nbsp;<label>{dirs_row.DIR_LINK}</label></dt>
 		<dd><label>{dirs_row.DIR_DELETE_LINK}</label></dd>
 	</dl>
 	<!-- END dirs_row -->
 
 	<!-- BEGIN files_row -->
 	<dl>
-		<dt><label>{files_row.FILE_EXIST}&nbsp;<!-- IF files_row.S_UNKNOWN_FILE -->{L_DL_UNKNOWN_FILE} <!-- ENDIF -->{files_row.FILE_NAME}</label></dt>
+		<dt><label>{files_row.FILE_EXIST}&nbsp;<!-- IF files_row.S_UNKNOWN_FILE --><span style="color: red;"><i class="icon fa-file-o fa-fw"></i>&nbsp;{L_DL_UNKNOWN_FILE}</span>&nbsp;<!-- ELSE --><i class="icon fa-file fa-fw"></i>&nbsp;<!-- ENDIF -->{files_row.FILE_NAME}</label></dt>
 		<dd><span>{files_row.FILE_SIZE}&nbsp;{files_row.FILE_SIZE_RANGE}<!-- IF files_row.FILE_NAME_REAL --><br />{files_row.FILE_NAME_REAL}<!-- ENDIF --></span></dd>
 	</dl>
 	<!-- END files_row -->

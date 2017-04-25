@@ -4,41 +4,53 @@
 * adv = we are opening advanced permissions
 * view = called from view permissions
 */
-function swap_options(cat)
+function swapOptions(cat)
 {
-	active_option = active_cat;
+	activeOption = activeCat;
 
-	if (cat == active_option)
+	if (cat == activeOption)
 	{
 		return;
 	}
 
-	var	old_tab = document.getElementById('tab_' + active_option);
-	var new_tab = document.getElementById('tab_' + cat);
+	var	oldTab = document.getElementById('tab_' + activeOption);
+	var newTab = document.getElementById('tab_' + cat);
 
 	// no need to set anything if we are clicking on the same tab again
-	if (new_tab == old_tab)
+	if (newTab == oldTab)
 	{
 		return;
 	}
 
 	// set active tab
-	old_tab.className = old_tab.className = "icon";
-	new_tab.className = new_tab.className += " fa-eye fa-fw";
+	oldTab.className = oldTab.className = "icon";
+	newTab.className = newTab.className += " fa-eye fa-fw";
 
-	document.getElementById('options' + active_option).className += " noshow";
+	document.getElementById('options' + activeOption).className += " noshow";
 
-	document.getElementById('options' + cat).className = 
+	document.getElementById('options' + cat).className =
 		document.getElementById('options' + cat).className.replace(/(?:^|\s)noshow(?!\S)/g , '')
 
-	active_cat = cat;
+	activeCat = cat;
 
 	return;
 }
 
-function hide_dl_button()
+function hideDlButton()
 {
-	var button = getElementById('dl_mod_button');
-	button.style.display = 'none';
-	return;
+	$('#dl_mod_button').fadeOut('fast');
+}
+
+function pageToggle(page, status, openString, closeString)
+{
+	if (status == true)
+	{
+		$('#' + page).fadeIn("slow");
+		$('#' + page + '_open').html('<a href="#" onclick="pageToggle(\'' + page + '\', false, \'' + openString + '\', \'' + closeString + '\')"><i class="icon fa-eye-slash fa-fw" aria-hidden="true"></i> <span>' + closeString + '</span></a>');
+	}
+	else
+	{
+		$('#' + page).fadeOut("fast");
+		$('#' + page + '_open').html('<a href="#" onclick="pageToggle(\'' + page + '\', true, \'' + openString + '\', \'' + closeString + '\')"><i class="icon fa-eye fa-fw" aria-hidden="true"></i> <span>' + openString + '</span></a>');
+	}
 }

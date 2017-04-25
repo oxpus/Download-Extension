@@ -71,6 +71,7 @@ $topic_user			= $request->variable('dl_topic_user', $config['dl_topic_user']);
 $topic_more_details	= $request->variable('topic_more_details', 1);
 $show_file_hash		= $request->variable('show_file_hash', 0);
 $idx_type			= $request->variable('type', 'c');
+$topic_type			= $request->variable('topic_type', POST_NORMAL);
 
 $error = false;
 $error_msg = '';
@@ -122,6 +123,8 @@ if($action == 'edit' || $action == 'add')
 		$topic_user			= $index[$cat_id]['topic_user'];
 		$show_file_hash		= $index[$cat_id]['show_file_hash'];
 		$cat_icon			= $index[$cat_id]['cat_icon'];
+		$topic_type			= $index[$cat_id]['dl_topic_type'];
+
 		$perms_copy_from	= '<select name="perms_copy_from">';
 		$perms_copy_from	.= '<option value="-1">&nbsp;»&nbsp;'.$language->lang('DL_NO_PERMS_COPY').'</option>';
 		$perms_copy_from	.= '<option value="0">&nbsp;»&nbsp;'.$language->lang('DL_CAT_PARENT').'</option>';
@@ -168,6 +171,7 @@ if($action == 'edit' || $action == 'add')
 	$t_path_select = \oxpus\dl_ext\includes\classes\ dl_physical::get_file_base_tree(DL_EXT_FILES_WEBFOLDER, $cat_path);
 	$s_path_select = '<select name="path">';
 	$s_path_select .= '<option value="/">' . $language->lang('DL_CAT_PATH_SELECT') . '</option>';
+
 	sort($t_path_select);
 	foreach ($t_path_select as $key => $value)
 	{
@@ -238,6 +242,16 @@ if($action == 'edit' || $action == 'add')
 
 	$show_file_hash_yes	= ($show_file_hash) ? 'checked="checked"' : '';
 	$show_file_hash_no	= (!$show_file_hash) ? 'checked="checked"' : '';
+
+	$language->add_lang('posting');
+
+	$s_topic_type = '<select name="topic_type">';
+	$s_topic_type .= '<option value="' . POST_NORMAL . '">' . $language->lang('POST_NORMAL') . '</option>';
+	$s_topic_type .= '<option value="' . POST_STICKY . '">' . $language->lang('POST_STICKY') . '</option>';
+	$s_topic_type .= '<option value="' . POST_ANNOUNCE . '">' . $language->lang('POST_ANNOUNCEMENT') . '</option>';
+	$s_topic_type .= '<option value="' . POST_GLOBAL . '">' . $language->lang('POST_GLOBAL') . '</option>';
+	$s_topic_type .= '</select>';
+	$s_topic_type = str_replace('value="' . $topic_type . '">', 'value="' . $topic_type . '" selected="selected">', $s_topic_type);
 
 	$template->set_filenames(array(
 		'category' => 'dl_cat_edit_body.html')
@@ -324,6 +338,7 @@ if($action == 'edit' || $action == 'add')
 		'L_DL_TOPIC_USER_EXPLAIN'		=> 'DL_TOPIC_USER',
 		'L_DL_UCONF_LINK_EXPLAIN'		=> 'DL_UCONF_LINK',
 		'L_DL_SHOW_FILE_HASH_EXPLAIN'	=> 'DL_SHOW_FILE_HASH',
+		'L_DL_TOPIC_TYPE_EXPLAIN'		=> 'DL_TOPIC_TYPE',
 
 		'ERROR_MSG'				=> $error_msg,
 		'CATEGORY'				=> (isset($index[$cat_id]['cat_name'])) ? $language->lang('DL_PERMISSIONS', $index[$cat_id]['cat_name']) : '',
@@ -354,6 +369,7 @@ if($action == 'edit' || $action == 'add')
 		'SHOW_FILE_HASH_YES'	=> $show_file_hash_yes,
 		'SHOW_FILE_HASH_NO'		=> $show_file_hash_no,
 
+		'S_TOPIC_TYPE'			=> $s_topic_type,
 		'S_CAT_PATH'			=> $s_path_select,
 		'S_DL_TOPIC_FORUM'		=> $s_forum_select,
 		'S_CAT_TRAFFIC_RANGE'	=> $cat_traffic_range,
@@ -390,8 +406,15 @@ else if($action == 'save_cat')
 	$desc_uid		= $desc_bitfield = $rules_uid = $rules_bitfield = '';
 	$desc_flags		= $rules_flags = 0;
 
-	generate_text_for_storage($description, $desc_uid, $desc_bitfield, $desc_flags, $allow_bbcode, true, $allow_smilies);
-	generate_text_for_storage($rules, $rules_uid, $rules_bitfield, $rules_flags, $allow_bbcode, true, $allow_smilies);
+	if ($description)
+	{
+		generate_text_for_storage($description, $desc_uid, $desc_bitfield, $desc_flags, $allow_bbcode, true, $allow_smilies);
+	}
+
+	if ($rules)
+	{
+		generate_text_for_storage($rules, $rules_uid, $rules_bitfield, $rules_flags, $allow_bbcode, true, $allow_smilies);
+	}
 
 	if ($cat_traffic_range == 'KB')
 	{
@@ -463,7 +486,7 @@ else if($action == 'save_cat')
 			$result = $db->sql_query($sql);
 			$user_exists = $db->sql_affectedrows($result);
 			$db->sql_freeresult($result);
-	
+
 			if (!$user_exists)
 			{
 				$topic_user = $user->data['user_id'];
@@ -501,7 +524,8 @@ else if($action == 'save_cat')
 			'topic_user'			=> $topic_user,
 			'topic_more_details'	=> $topic_more_details,
 			'show_file_hash'		=> $show_file_hash,
-			'bug_tracker'			=> $bug_tracker)) . " WHERE id = $cat_id";
+			'bug_tracker'			=> $bug_tracker,
+			'dl_topic_type'			=> $topic_type)) . ' WHERE id = ' . (int) $cat_id;
 
 		$message = $language->lang('DL_CATEGORY_UPDATED');
 
@@ -535,7 +559,8 @@ else if($action == 'save_cat')
 			'topic_user'			=> $topic_user,
 			'topic_more_details'	=> $topic_more_details,
 			'show_file_hash'		=> $show_file_hash,
-			'bug_tracker'			=> $bug_tracker));
+			'bug_tracker'			=> $bug_tracker,
+			'dl_topic_type'			=> $topic_type));
 
 		$message = $language->lang('DL_CATEGORY_ADDED');
 
@@ -1063,12 +1088,12 @@ if (!$dl_template_in_use)
 			$cat_name = ($idx_type == 'c') ? $index[$cat_id]['cat_name_nav'] : $index[$cat_id]['cat_name'];
 			$cat_description = nl2br($index[$cat_id]['description']);
 			$cat_icon = $index[$cat_id]['cat_icon'];
-	
+
 			$cat_edit = "{$basic_link}&amp;action=edit&amp;cat_id=$cat_id";
-	
+
 			$cat_sub = \oxpus\dl_ext\includes\classes\ dl_main::get_sublevel_count($cat_id);
 			$cat_sub_count = \oxpus\dl_ext\includes\classes\ dl_main::count_sublevel($cat_id);
-	
+
 			if ($cat_sub)
 			{
 				$cat_delete = '';
@@ -1077,7 +1102,7 @@ if (!$dl_template_in_use)
 			{
 				$cat_delete = "{$basic_link}&amp;action=delete&amp;cat_id=$cat_id";
 			}
-	
+
 			$dl_move_up = "{$basic_link}&amp;action=category_order&amp;move=0&amp;cat_id=$cat_id";
 			$dl_move_down = "{$basic_link}&amp;action=category_order&amp;move=1&amp;cat_id=$cat_id";
 
@@ -1097,36 +1122,36 @@ if (!$dl_template_in_use)
 				$l_sort_asc = '';
 				$dl_sort_asc = '';
 			}
-	
+
 			$l_delete_stats = '';
 			$l_delete_comments = '';
 			$u_delete_stats = '';
 			$u_delete_comments = '';
-	
+
 			if (isset($stats_cats[$cat_id]))
 			{
 				$l_delete_stats = $language->lang('DL_STATS_DELETE');
 				$u_delete_stats = "{$basic_link}&amp;action=delete_stats&amp;cat_id=$cat_id";
 				$stats_total++;
 			}
-	
+
 			if (isset($comments_cats[$cat_id]))
 			{
 				$l_delete_comments = $language->lang('DL_COMMENTS_DELETE');
 				$u_delete_comments = "{$basic_link}&amp;action=delete_comments&amp;cat_id=$cat_id";
 				$comments_total++;
 			}
-	
+
 			$template->assign_block_vars('categories', array(
 				'L_DELETE_STATS'		=> $l_delete_stats,
 				'L_DELETE_COMMENTS'		=> $l_delete_comments,
 				'L_SORT_ASC'			=> $l_sort_asc,
-	
+
 				'CAT_NAME'				=> $cat_name,
 				'CAT_DESCRIPTION'		=> $cat_description,
 				'CAT_FOLDER'			=> $cat_folder,
 				'CAT_ICON'				=> $cat_icon,
-	
+
 				'U_CAT_EDIT'			=> $cat_edit,
 				'U_CAT_DELETE'			=> $cat_delete,
 				'U_CATEGORY_MOVE_UP'	=> $dl_move_up,
@@ -1137,7 +1162,7 @@ if (!$dl_template_in_use)
 				'U_CAT_OPEN'			=> ($cat_sub_count && $idx_type == 'c') ? str_replace('#CAT#', $cat_id, $basic_link_open) : '',
 			));
 		}
-	
+
 		if ($stats_total)
 		{
 			$l_delete_stats_all = $language->lang('DL_STATS_DELETE_ALL');
@@ -1149,7 +1174,7 @@ if (!$dl_template_in_use)
 			$l_delete_stats_all = '';
 			$u_delete_stats_all = '';
 		}
-	
+
 		if ($comments_total)
 		{
 			$l_delete_comments_all = $language->lang('DL_COMMENTS_DELETE_ALL');
@@ -1169,7 +1194,7 @@ if (!$dl_template_in_use)
 		$tmp_nav = array();
 		$cat_navi = \oxpus\dl_ext\includes\classes\ dl_nav::nav($helper, $cat_parent, 'acp', $tmp_nav, $basic_link_open);
 	}
-	
+
 	$template->assign_vars(array(
 		'L_DELETE_STATS_ALL'	=> $l_delete_stats_all,
 		'L_DELETE_COMMENTS_ALL'	=> $l_delete_comments_all,

@@ -20,16 +20,6 @@ if (!defined('IN_PHPBB'))
 
 class dl_topic extends dl_mod
 {
-	public function __construct()
-	{
-		return;
-	}
-
-	public function __destruct()
-	{
-		return;
-	}
-
 	public static function gen_dl_topic($dl_id, $helper, $force = false)
 	{
 		static $dl_index;
@@ -140,8 +130,9 @@ class dl_topic extends dl_mod
 
 		if ($config['dl_topic_forum'] == -1)
 		{
-			$topic_forum		= $dl_index[$cat_id]['dl_topic_forum'];
-			$topic_text			= $dl_index[$cat_id]['dl_topic_text'];
+			$topic_forum	= $dl_index[$cat_id]['dl_topic_forum'];
+			$topic_text		= $dl_index[$cat_id]['dl_topic_text'];
+			$topic_type		= $dl_index[$cat_id]['dl_topic_type'];
 
 			if ($dl_index[$cat_id]['topic_more_details'] == 1)
 			{
@@ -154,8 +145,9 @@ class dl_topic extends dl_mod
 		}
 		else
 		{
-			$topic_forum		= $config['dl_topic_forum'];
-			$topic_text			= $config['dl_topic_text'];
+			$topic_forum	= $config['dl_topic_forum'];
+			$topic_text		= $config['dl_topic_text'];
+			$topic_type		= $config['dl_topic_type'];
 
 			if ($config['dl_topic_more_details'] == 1)
 			{
@@ -308,7 +300,7 @@ class dl_topic extends dl_mod
 		{
 			include(dl_init::phpbb_root_path() . 'includes/functions_posting' . dl_init::phpEx());
 		}
-		submit_post('post', $topic_title, $user->data['username'], POST_NORMAL, $poll, $data, $update_message, true);
+		submit_post('post', $topic_title, $user->data['username'], $topic_type, $poll, $data, $update_message, true);
 
 		$dl_topic_id = (int) $data['topic_id'];
 
@@ -458,6 +450,7 @@ class dl_topic extends dl_mod
 		{
 			$topic_forum		= $dl_index[$cat_id]['dl_topic_forum'];
 			$topic_text			= $dl_index[$cat_id]['dl_topic_text'];
+			$topic_type			= $dl_index[$cat_id]['dl_topic_type'];
 
 			if ($dl_index[$cat_id]['topic_more_details'] == 1)
 			{
@@ -472,6 +465,7 @@ class dl_topic extends dl_mod
 		{
 			$topic_forum		= $config['dl_topic_forum'];
 			$topic_text			= $config['dl_topic_text'];
+			$topic_type			= $config['dl_topic_type'];
 
 			if ($config['dl_topic_more_details'] == 1)
 			{
@@ -633,7 +627,7 @@ class dl_topic extends dl_mod
 		{
 			include(dl_init::phpbb_root_path() . 'includes/functions_posting' . dl_init::phpEx());
 		}
-		submit_post('edit', $topic_title, $user->data['username'], POST_NORMAL, $poll, $data, $update_message, true);
+		submit_post('edit', $topic_title, $user->data['username'], $topic_type, $poll, $data, $update_message, true);
 
 		// We need to sync the forum if we changed from current user to user id and back to get the correct colour, so do this for every updated download
 		if (!function_exists('sync'))
@@ -664,9 +658,7 @@ class dl_topic extends dl_mod
 		{
 			case 'replace':
 
-				$bkup_data = array(
-					'user_backup'	=> $user->data,
-				);
+				$bkup_data['user_backup'] = $user->data;
 
 				// sql to get the users info
 				$sql = 'SELECT *
@@ -680,6 +672,7 @@ class dl_topic extends dl_mod
 				$user->data = array_merge($user->data, $row);
 
 				unset($row);
+				$bkup_data['user_new'] = $user->data;
 
 				return $bkup_data;
 

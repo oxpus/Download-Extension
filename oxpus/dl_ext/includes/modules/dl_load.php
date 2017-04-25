@@ -91,7 +91,7 @@ else
 * check the permissions
 */
 $check_status = array();
-$check_status = \oxpus\dl_ext\includes\classes\ dl_status::status($df_id, $this->helper, $ext_path_images);
+$check_status = \oxpus\dl_ext\includes\classes\ dl_status::status($df_id, $this->helper);
 $status = $check_status['auth_dl'];
 $cat_auth = array();
 $cat_auth = \oxpus\dl_ext\includes\classes\ dl_auth::dl_cat_auth($cat_id);
@@ -271,7 +271,7 @@ if ($check_status['auth_dl'] && $dl_file['id'])
 		else if (!$dl_ver_active && !$ver_can_load)
 		{
 			trigger_error('DL_NO_ACCESS');
-		}			
+		}
 		else
 		{
 			if ($dl_file['extern'])
@@ -375,7 +375,7 @@ if ($check_status['auth_dl'] && $dl_file['id'])
 				else
 				{
 					$cat_traffic_use += $dl_file['file_size'];
-	
+
 					$sql = 'UPDATE ' . DL_CAT_TRAF_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', array(
 						'cat_traffic_use' => $cat_traffic_use)) . ' WHERE cat_id = ' . (int) $cat_id;
 					$this->db->sql_query($sql);

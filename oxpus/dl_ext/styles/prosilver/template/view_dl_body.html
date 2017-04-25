@@ -1,116 +1,75 @@
 <!-- INCLUDE dl_header.html -->
 
 <script type="text/javascript">
-var phpEx = '{PHPEX}';
-var dl_ajax_url = '{U_DL_AJAX}';
-var active_cat = 0;
+var phpEx					= '{PHPEX}';
+var dlAjaxUrl				= '{U_DL_AJAX}';
+var activeCat				= {S_OPEN_PANEL};
+var LANG_TOO_FEW_CHARS 		= '{L_TOO_FEW_CHARS}';
+var LANG_L_NO_TEXT_SELECTED	= '{L_NO_TEXT_SELECTED}';
+var	form_name 				= 'postform';
+var	text_name 				= 'message';
 </script>
+<script type="text/javascript" src="{T_SUPER_TEMPLATE_PATH}/editor.js" ></script>
+<script type="text/javascript" src="{EXT_DL_PATH_WEB}includes/js/dl_main.js"></script>
 <!-- IF S_ENABLE_RATE -->
 <script type="text/javascript" src="{EXT_DL_PATH_AJAX}ajax_dl.js"></script>
 <!-- ENDIF -->
-<script type="text/javascript" src="{EXT_DL_PATH_WEB}includes/js/dl_main.js"></script>
 
 <!-- IF S_CAT_TRAFFIC -->
-<div class="panel bg3">
-	<div class="inner">
-
-	<span><strong>{CAT_TRAFFIC}</strong></span>
-
-	</div>
-</div>
+<div class="panel bg3"><div class="inner"><span><strong>{CAT_TRAFFIC}</strong></span></div></div>
 <!-- ENDIF -->
 
 <!-- IF S_CAT_RULE -->
-<div class="rules">
-	<div class="inner">
-
-	<span>{CAT_RULE}</span>
-
-	</div>
-</div>
+<div class="rules"><div class="inner"><span>{CAT_RULE}</span></div></div>
 <!-- ENDIF -->
 
-<!-- BEGIN downloads -->
-<h2 style="float: left;">{downloads.STATUS} {downloads.DESCRIPTION}{downloads.HACK_VERSION} {downloads.MINI_IMG}</h2>
+<h2 style="float: left;">{STATUS} {DESCRIPTION}{HACK_VERSION} {MINI_IMG}</h2>
 <div style="float: right;"><a href="{U_DL_SEARCH}" class="button icon-button">{L_DL_SEARCH_DOWNLOAD}</a></div>
 <br style="clear: both;" /><br /><br />
-<!-- END downloads -->
 
 <div class="action-bar bar-top">
 <!-- BEGIN category -->
-<a onclick="swap_options('{category.CAT_ID}');" class="button">
-	<span>{category.CAT_NAME}</span> <i id="tab_{category.CAT_ID}" class="icon<!-- IF category.S_FIRST_ROW --> fa-eye fa-fw<!-- ENDIF -->" aria-hidden="true"></i>
+<a onclick="swapOptions('{category.CAT_ID}');" class="button">
+	<span>{category.CAT_NAME}</span> <i id="tab_{category.CAT_ID}" class="icon<!-- IF S_OPEN_PANEL == category.CAT_ID --> fa-eye fa-fw<!-- ENDIF -->" aria-hidden="true"></i>
 </a>
 <!-- END category -->
 </div>
 
-<div class="panel dlext" id="options0">
-	
-	<div class="tablewrap">
+<div class="panel dlext<!-- IF S_OPEN_PANEL <> 0 --> noshow<!-- ENDIF -->" id="options0">
 
-		<!-- BEGIN downloads -->
+	<div style="width: 50%; float: left;">
 
-		<!-- IF downloads.LONG_DESC -->
-		<br />
-		<div class="postbody"><div class="content">{downloads.LONG_DESC}<br /><br /></div></div>
+		<!-- IF LONG_DESC -->
+		<div class="postbody"><div class="content">{LONG_DESC}<br /><br /></div></div>
 		<!-- ENDIF -->
-
-		<div class="notice" style="text-align: center;">{downloads.ADD_USER} {downloads.CHANGE_USER}&nbsp;&bull;{downloads.LAST_TIME}</div>
-
-		<!-- BEGIN thumbnail -->
-		<!-- IF thumbnail.S_FIRST_ROW -->
-		<br />
-		<h3>{L_DL_IMAGES}:</h3>
-		<ul style="list-style-type: none; overflow: hidden;">
-		<!-- ENDIF -->
-			<!-- IF S_DL_POPUPIMAGE -->
-			<li style="float: left; margin-right: 2px;"><a href="{downloads.thumbnail.THUMBNAIL_LINK}" title="{downloads.thumbnail.THUMBNAIL_NAME}" rel="prettyPhoto[pp_gal]"><img src="{downloads.thumbnail.THUMBNAIL_LINK}" alt="{downloads.thumbnail.THUMBNAIL_NAME}" title="{downloads.thumbnail.THUMBNAIL_NAME}" style="max-weight: 150px; max-height: 100px;" /></a></li>
-			<!-- ELSE -->
-			<img src="{downloads.thumbnail.THUMBNAIL_LINK}" alt="{downloads.thumbnail.THUMBNAIL_NAME}" title="{L_DLdownloads.thumbnail.THUMBNAIL_NAME}" style="max-weight: 150px; max-height: 100px;" />
-			<!-- ENDIF -->
-		<!-- IF thumbnail.S_LAST_ROW -->
-		</ul>
-		<!-- ENDIF -->
-		<!-- END thumbnail -->
-
-		<!-- END downloads -->
 
 	</div>
-	
-</div>
 
-<div class="panel dlext noshow" id="options1">
-	
-	<div class="tablewrap">
-
-		<!-- BEGIN downloads -->
-		<br />
+	<div style="width: 50%; float: left;">
 
 		<fieldset>
 			<dl>
 				<dt><label>{L_DL_FILE_NAME}</label></dt>
-				<dd class="lastpost" style="display: block;"><label>{downloads.FILE_NAME}</label></dd>
+				<dd class="lastpost" style="display: block;"><label>{FILE_NAME}</label></dd>
 			</dl>
-		<!-- BEGIN real_filetime -->
+		<!-- IF S_REAL_FILENAME -->
 			<dl>
 				<dt><label>{L_DL_REAL_FILETIME}</label></dt>
-				<dd class="lastpost" style="display: block;"><label>{downloads.real_filetime.REAL_FILETIME}</label></dd>
+				<dd class="lastpost" style="display: block;"><label>{REAL_FILETIME}</label></dd>
 			</dl>
-		<!-- END real_filetime -->
-    	<!-- END downloads -->
-		<!-- BEGIN hacklist -->
+		<!-- ENDIF -->
+		<!-- IF S_HACKLIST -->
 			<dl>
 				<dt><label>{L_DL_HACK_AUTOR}</label></dt>
-				<dd class="lastpost" style="display: block;"><label>{hacklist.HACK_AUTHOR}{hacklist.HACK_AUTHOR_WEBSITE}</label></dd>
+				<dd class="lastpost" style="display: block;"><label>{HACK_AUTHOR}{HACK_AUTHOR_WEBSITE}</label></dd>
 			</dl>
-		<!-- END hacklist -->
-		<!-- BEGIN downloads -->
-		<!-- BEGIN bug_tracker -->
+		<!-- ENDIF -->
+		<!-- IF S_BUG_TRACKER -->
 			<dl>
 				<dt><label>{L_DL_BUG_TRACKER}</label></dt>
-				<dd class="lastpost" style="display: block;"><label><a href="{downloads.bug_tracker.U_BUG_TRACKER}">{L_DL_BUG_TRACKER_FILE}</a></label></dd>
+				<dd class="lastpost" style="display: block;"><label><a href="{U_BUG_TRACKER}">{L_DL_BUG_TRACKER_FILE}</a></label></dd>
 			</dl>
-		<!-- END bug_tracker -->
+		<!-- ENDIF -->
 		<!-- IF S_SHOW_TOPIC_LINK -->
 			<dl>
 				<dt><label>{L_TOPIC}</label></dt>
@@ -119,19 +78,18 @@ var active_cat = 0;
 		<!-- ENDIF -->
 			<dl>
 				<dt><label>{L_DL_FILE_SIZE}</label></dt>
-				<dd class="lastpost" style="display: block;"><label>{downloads.FILE_SIZE}</label></dd>
+				<dd class="lastpost" style="display: block;"><label>{FILE_SIZE}</label></dd>
 			</dl>
 			<dl>
 				<dt><label>{L_DL_KLICKS} / {L_DL_OVERALL_KLICKS}</label></dt>
-				<dd class="lastpost" style="display: block;"><label>{downloads.FILE_KLICKS} / {downloads.FILE_OVERALL_KLICKS}</label></dd>
+				<dd class="lastpost" style="display: block;"><label>{FILE_KLICKS} / {FILE_OVERALL_KLICKS}</label></dd>
 			</dl>
-		<!-- END downloads -->
-		<!-- BEGIN hacklist -->
+		<!-- IF S_HACKLIST -->
 			<dl>
 				<dt><label>{L_DL_HACK_DL_URL}</label></dt>
-				<dd class="lastpost" style="display: block;"><label>{hacklist.HACK_DL_URL}</label></dd>
+				<dd class="lastpost" style="display: block;"><label>{HACK_DL_URL}</label></dd>
 			</dl>
-		<!-- END hacklist -->
+		<!-- ENDIF -->
 		<!-- IF S_ENABLE_RATE -->
 			<dl>
 				<dt><label>{L_DL_RATING}</label></dt>
@@ -142,12 +100,29 @@ var active_cat = 0;
 
 	</div>
 
-    <br />
-	
+	<div class="clearfix"></div>
+
+	<div class="notice" style="text-align: center;">{ADD_USER} {CHANGE_USER}&nbsp;&bull;{LAST_TIME}</div>
+
+	<!-- BEGIN thumbnail -->
+	<!-- IF thumbnail.S_FIRST_ROW -->
+	<h3>{L_DL_IMAGES}:</h3>
+	<ul style="list-style-type: none; overflow: hidden;">
+	<!-- ENDIF -->
+		<!-- IF S_DL_POPUPIMAGE -->
+		<li style="float: left; margin-right: 2px;"><a href="{thumbnail.THUMBNAIL_LINK}" title="{thumbnail.THUMBNAIL_NAME}" rel="prettyPhoto[pp_gal]"><img src="{thumbnail.THUMBNAIL_LINK}" alt="{thumbnail.THUMBNAIL_NAME}" title="{thumbnail.THUMBNAIL_NAME}" style="max-weight: 150px; max-height: 100px;" /></a></li>
+		<!-- ELSE -->
+		<img src="{thumbnail.THUMBNAIL_LINK}" alt="{thumbnail.THUMBNAIL_NAME}" title="{thumbnail.THUMBNAIL_NAME}" style="max-weight: 150px; max-height: 100px;" />
+		<!-- ENDIF -->
+	<!-- IF thumbnail.S_LAST_ROW -->
+	</ul>
+	<!-- ENDIF -->
+	<!-- END thumbnail -->
+
 </div>
 
 <!-- IF VER_TAB -->
-<div class="panel dlext3 noshow" id="options2">
+<div class="panel dlext3<!-- IF S_OPEN_PANEL <> 1 --> noshow<!-- ENDIF -->" id="options1">
 
 	<div class="tablewrap">
 
@@ -174,7 +149,7 @@ var active_cat = 0;
     					<!-- ENDIF -->
 					</ul>
 					<div class="small-icon icon-mark"><a href="{ver_cell.U_VERSION}" class="forumtitle">{ver_cell.VER_TITLE}</a>
-					<!-- IF not ver_cell.VER_ACTIVE and ver_cell.S_USER_PERM --> 
+					<!-- IF not ver_cell.VER_ACTIVE and ver_cell.S_USER_PERM -->
 					&nbsp;<span style="color: #ff0000;" class="small"> &raquo; {L_DL_NOT_ACTIVE} &laquo; </span>
 					<!-- ENDIF -->
                     </div>
@@ -193,75 +168,157 @@ var active_cat = 0;
 </div>
 <!-- ENDIF -->
 
+<!-- IF S_COMMENTS_TAB -->
+<div class="panel dlext3<!-- IF S_OPEN_PANEL <> 2 --> noshow<!-- ENDIF -->" id="options2">
+
+	<!-- IF S_POST_COMMENT -->
+	<h3>{L_DL_COMMENT_WRITE}</h3>
+
+	<form action="{S_COMMENT_POST_ACTION}" method="post" id="postform" onsubmit="return checkQuickForm(this)">
+
+	<div class="panel" id="postingbox">
+		<div class="inner">
+
+			<fieldset>
+				<div><!-- INCLUDE posting_buttons.html --></div>
+				<!-- IF .smiley -->
+				<div id="smiley-box">
+					<strong>{L_SMILIES}</strong><br />
+					<!-- BEGIN smiley -->
+						<a href="#" onclick="insert_text('{smiley.A_SMILEY_CODE}', true); return false;"><img src="{smiley.SMILEY_IMG}" width="{smiley.SMILEY_WIDTH}" height="{smiley.SMILEY_HEIGHT}" alt="{smiley.SMILEY_CODE}" title="{smiley.SMILEY_DESC}" /></a>
+					<!-- END smiley -->
+					<br /><a href="{U_MORE_SMILIES}" onclick="window.open('{U_MORE_SMILIES}', '_blank', 'HEIGHT=200,resizable=yes,scrollbars=yes,WIDTH=400'); return false;">{L_MORE_SMILIES}</a>
+				</div>
+				<!-- ENDIF -->
+				<br />
+				<div id="message-box">
+					<textarea name="message" id="message" rows="5" cols="76" tabindex="3" onselect="storeCaret(this);" onclick="storeCaret(this);" onkeyup="storeCaret(this);" class="inputbox">{COMMENT_TEXT}</textarea>
+				</div>
+			</fieldset>
+
+			<fieldset class="submit-buttons">
+				<input type="submit" name="post" value="{L_SUBMIT}" style="height: 28px;" class="button icon-button" />
+				{S_FORM_TOKEN_COMMENT}
+				{S_HIDDEN_POST_FIELDS}
+			</fieldset>
+		</div>
+
+	</div>
+
+	</form>
+
+	<br />
+	<!-- ENDIF -->
+
+	<!-- BEGIN comment_row -->
+	<!-- IF comment_row.S_FIRST_ROW -->
+	<h3>{L_DL_COMMENTS}</h3>
+	<!-- ENDIF -->
+
+	<div style="background-color: #fafafa; border: 1px #555555 solid;" class="panel">
+		<div class="inner">
+			<div class="posts">
+				<dl class="postprofile">
+					<dt>
+						<div class="avatar-container">{comment_row.POSTER_AVATAR}</div>
+					</dt>
+					<dd class="profile-contact">
+						{comment_row.POSTER}<br /><span class="small">{comment_row.POST_TIME}</span>
+					</dd>
+				</dl>
+				<div class="postbody">
+					<!-- BEGIN action_button -->
+					<ul class="post-buttons">
+							<li><a class="button button-icon-only" href="{comment_row.U_EDIT_COMMENT}" title="{L_EDIT_POST}"><i class="icon fa-pencil fa-fw" aria-hidden="true"></i><span>{L_EDIT_POST}</span></a></li>
+							<li><a class="button button-icon-only" href="{comment_row.U_DELETE_COMMENT}" title="{L_DELETE_POST}"><i class="icon fa-times fa-fw" aria-hidden="true"></i><span>{L_DELETE}</span></a></li>
+					</ul>
+					<!-- END action_button -->
+					<div class="content">{comment_row.MESSAGE}</div>
+					<!-- IF comment_row.EDITED_BY --><div class="notice">{comment_row.EDITED_BY}</div><!-- ENDIF -->
+				</div>
+			</div>
+		</div>
+	</div>
+	<!-- END comment_row -->
+
+	<!-- IF .pagination or TOTAL_DL -->
+	<div class="pagination">
+		{TOTAL_DL}
+		<!-- IF .pagination -->
+			<!-- INCLUDE pagination.html -->
+		<!-- ELSE -->
+			&bull; {PAGE_NUMBER}
+		<!-- ENDIF -->
+	</div>
+
+	<br /><br />
+	<!-- ENDIF -->
+
+</div>
+<!-- ENDIF -->
+
+<div class="clearfix"></div>
+
+<!-- IF S_FAV_BLOCK or S_EDIT_BUTTON or S_DL_BROKEN_CUR or S_REPORT_BROKEN or S_DL_BROKEN_MOD or S_EDIT_THUMBS or S_MOD_LIST or S_MOD_TODO or S_DL_FIELDS or HASH_TAB -->
+<div class="panel dlext4">
+    <ul id="nav-breadcrumbs_detail" class="nav-breadcrumbs linklist" role="menubar">
+    	<!-- IF S_FAV_BLOCK --><li data-last-responsive="true" class="leftside"><a href="{U_FAVORITE}"><i class="icon fa-bookmark<!-- IF not S_FAV_ACTIVE -->-o<!-- ENDIF --> fa-fw" aria-hidden="true"></i> <span>{FAVORITE}</span></a></li><!-- ENDIF -->
+    	<!-- IF S_EDIT_BUTTON --><li data-last-responsive="true" class="rightside"><a href="{U_EDIT}"><i class="icon fa-edit fa-fw" aria-hidden="true"></i> <span>{L_DL_EDIT_FILE}</span></a></li><!-- ENDIF -->
+    	<!-- IF S_EDIT_THUMBS --><li data-last-responsive="true" class="rightside"><a href="{U_EDIT_THUMBS}"><i class="icon fa-photo fa-fw" aria-hidden="true"></i> <span>{L_DL_EDIT_THUMBS}</span></a></li><!-- ENDIF -->
+    </ul>
+	<ul id="nav-breadcrumbs_detail" class="nav-breadcrumbs linklist" role="menubar">
+    	<!-- IF S_REPORT_BROKEN --><li data-last-responsive="true" class="leftside"><a href="{U_BROKEN_DOWNLOAD}"><i class="icon fa-bell fa-fw" aria-hidden="true"></i> <span>{L_DL_BROKEN}</span></a></li><!-- ENDIF -->
+    	<!-- IF S_DL_BROKEN_CUR --><li data-last-responsive="true" class="leftside"><b style="color: #FF0000">&nbsp;{L_DL_BROKEN_CUR}</b></li><!-- ENDIF -->
+    	<!-- IF S_DL_BROKEN_MOD --><li data-last-responsive="true" class="leftside"><a href="{U_REPORT}"><i class="icon fa-bell-slash fa-fw" aria-hidden="true"></i> <span>{L_DL_BROKEN_MOD}</span></a></li><!-- ENDIF -->
+		<!-- IF S_MOD_LIST or S_MOD_TODO or S_DL_FIELDS --><li data-last-responsive="true" class="rightside" id="extra_page_open"><a href="#" onclick="pageToggle('extra_page', true, '{L_DL_MOD_LIST}', '{L_DL_MOD_LIST_CLOSE}');"><i class="icon fa-eye fa-fw" aria-hidden="true"></i> <span>{L_DL_MOD_LIST}</span></a></li><!-- ENDIF -->
+		<!-- IF HASH_TAB --><li data-last-responsive="true" class="rightside" id="hash_page_open"><a href="#" onclick="pageToggle('hash_page', true, '{L_DL_MOD_FILE_HASH_OPEN}', '{L_DL_MOD_FILE_HASH_CLOSE}');"><i class="icon fa-eye fa-fw" aria-hidden="true"></i> <span>{L_DL_MOD_FILE_HASH_OPEN}</span></a></li><!-- ENDIF -->
+    </ul>
+</div>
+<!-- ENDIF -->
+
 <!-- IF S_MOD_LIST or S_MOD_TODO or S_DL_FIELDS -->
-<div class="panel dlext3 noshow" id="options3">
-	
+<div class="panel dlext3 noshow" id="extra_page">
+	<h3>{L_DL_MOD_LIST_SHORT}</h3>
 	<div class="tablewrap">
-
-		<!-- BEGIN modwarning -->
-		<h3>{L_DL_MOD_WARNING}</h3>
-
-		<p>{modwarning.MOD_WARNING}</p>
-		<!-- END modwarning -->
-		<!-- BEGIN modlisttest -->
-
+		<!-- IF MOD_WARNING -->
+		<div class="rules"><strong>{L_DL_MOD_WARNING}</strong><br />{MOD_WARNING}</div>
+		<!-- ENDIF -->
+		<!-- IF MOD_TEST -->
 		<br />
-
 		<h3>{L_DL_MOD_TEST}</h3>
-
-		<p>{modlisttest.MOD_TEST}</p>
-		<!-- END modlisttest -->
-		<!-- BEGIN modrequire -->
-
+		<p>{MOD_TEST}</p>
+		<!-- ENDIF -->
+		<!-- IF MOD_REQUIRE -->
 		<br />
-
 		<h3>{L_DL_MOD_REQUIRE}</h3>
-
-		<p>{modrequire.MOD_REQUIRE}</p>
-		<!-- END modrequire -->
-		<!-- BEGIN modtodo -->
-
+		<p>{MOD_REQUIRE}</p>
+		<!-- ENDIF -->
+		<!-- IF S_MOD_TODO -->
 		<br />
-
 		<h3>{L_DL_MOD_TODO}</h3>
-
-		<p>{modtodo.MOD_TODO}</p>
-		<!-- END modtodo -->
-		<!-- BEGIN modlistdesc -->
-
+		<p>{MOD_TODO}</p>
+		<!-- ENDIF -->
+		<!-- IF MOD_DESC -->
 		<br />
-
 		<h3>{L_DL_MOD_DESC}</h3>
-
-		<p>{modlistdesc.MOD_DESC}</p>
-		<!-- END modlistdesc -->
-
+		<p>{MOD_DESC}</p>
+		<!-- ENDIF -->
     	<!-- IF S_DL_FIELDS -->
 		<br />
 		<!-- BEGIN custom_fields -->
-
 		<h3>{custom_fields.DL_FIELD_NAME}:</h3>
-
 		<p>{custom_fields.DL_FIELD_VALUE}</p>
-
 		<br />
 		<!-- END custom_fields -->
     	<!-- ENDIF -->
-
 	</div>
-	
 </div>
 <!-- ENDIF -->
 
 <!-- IF HASH_TAB -->
-<div class="panel dlext3 noshow" id="options4">
-	
+<div class="panel dlext3 noshow" id="hash_page">
+	<h3>{L_DL_MOD_FILE_HASH_TABLE}</h3>
 	<div class="tablewrap">
-
-    	<br />
-    
-    	<h3>{L_DL_MOD_FILE_HASH_TABLE}</h3>
-    
     	<table class="table1">
     		<!-- BEGIN hash_row -->
     		<tr style="border: none;" class="row">
@@ -271,86 +328,14 @@ var active_cat = 0;
     		</tr>
     		<!-- END hash_row -->
     	</table>
-
 	</div>
-	
-</div>
-<!-- ENDIF -->
-
-<!-- IF S_COMMENTS_TAB -->
-<div class="panel dlext3 noshow" id="options5">
-	
-	<div class="tablewrap">
-
-		<br />
-
-		<form action="{S_COMMENT_ACTION}" method="post">
-
-		<fieldset>
-
-			<!-- BEGIN comment_row -->
-			<!-- IF comment_row.S_FIRST_ROW -->
-			<ul class="topiclist">
-			<!-- ENDIF -->
-				<li style="border-right: 1px #aaaaaa solid; border-bottom: 1px #aaaaaa solid; padding: 5px 5px 10px 5px; background-color: #fafafa;" class="panel">
-					<div>{comment_row.POSTER}<br />{comment_row.POST_TIME}</div>
-                    <br />
-					<div class="small">{comment_row.MESSAGE}</div>
-					<!-- IF comment_row.EDITED_BY -->
-					<div class="notice">{comment_row.EDITED_BY}</div>
-                    <!-- ENDIF -->
-				</li>
-			<!-- IF comment_row.S_LAST_ROW -->
-			</ul>
-			<!-- ENDIF -->
-			<!-- END comment_row -->
-
-			<!-- IF S_VIEW_COMMENTS -->
-			<fieldset style="text-align: right;" class="submit-buttons">
-				<input type="submit" name="show" value="{L_DL_COMMENT_SHOW}" style="height: 28px;" class="button icon-button" />
-				{S_HIDDEN_COMMENT_FIELDS}
-			</fieldset>
-			<!-- ENDIF -->
-
-		</fieldset>
-
-		</form>
-
-		<!-- IF S_POST_COMMENT -->
-		<form action="{S_COMMENT_POST_ACTION}" method="post">
-		<fieldset style="text-align: right;" class="submit-buttons">
-			<input type="submit" name="post" value="{L_DL_COMMENT_WRITE}" style="height: 28px;" class="button icon-button" />
-			{S_HIDDEN_POST_FIELDS}
-		</fieldset>
-		</form>
-		<!-- ENDIF -->
-
-		<br />
-
-	</div>
-	
-</div>
-<!-- ENDIF -->
-
-<div class="clearfix"></div>
-
-<!-- IF S_FAV_BLOCK or S_EDIT_BUTTON or S_DL_BROKEN_CUR or S_REPORT_BROKEN_DL or S_DL_BROKEN_MOD -->
-<div class="panel dlext4">
-    <ul id="nav-breadcrumbs_detail" class="nav-breadcrumbs linklist" role="menubar">
-    	<!-- IF S_FAV_BLOCK --><li data-last-responsive="true" class="leftside"><a href="{U_FAVORITE}"><i class="icon fa-bookmark<!-- IF not S_FAV_ACTIVE -->-o<!-- ENDIF --> fa-fw" aria-hidden="true"></i> <span>{FAVORITE}</span></a></li><!-- ENDIF -->
-    	<!-- BEGIN report_broken_dl --><li data-last-responsive="true" class="leftside"><a href="{report_broken_dl.U_BROKEN_DOWNLOAD}"><i class="icon fa-bell fa-fw" aria-hidden="true"></i> <span>{L_DL_BROKEN}</span></a></li><!-- END report_broken_dl -->
-    	<!-- IF S_DL_BROKEN_CUR --><li data-last-responsive="true" class="leftside"><b style="color: #FF0000">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{L_DL_BROKEN_CUR}</b></li><!-- ENDIF -->
-    	<!-- BEGIN dl_broken_mod --><li data-last-responsive="true" class="leftside"><a href="{dl_broken_mod.U_REPORT}"><i class="icon fa-bell-slash fa-fw" aria-hidden="true"></i> <span>{L_DL_BROKEN_MOD}</span></a></li><!-- END dl_broken_mod -->
-    	<!-- IF S_EDIT_BUTTON --><li data-last-responsive="true" class="rightside"><a href="{U_EDIT}"><i class="icon fa-edit fa-fw" aria-hidden="true"></i> <span>{L_DL_EDIT_FILE}</span></a></li><!-- ENDIF -->
-    	<!-- IF S_EDIT_THUMBS_BUTTON --><li data-last-responsive="true" class="rightside"><a href="{U_EDIT_THUMBS}"><i class="icon fa-photo fa-fw" aria-hidden="true"></i> <span>{L_DL_EDIT_THUMBS}</span></a></li><!-- ENDIF -->
-    </ul>
 </div>
 <!-- ENDIF -->
 
 <!-- BEGIN download_button -->
 <br />
 <div id="dl_mod_button">
-<form action="{download_button.U_DOWNLOAD}" method="post" id="download" {download_button.S_DL_WINDOW} onsubmit="hide_dl_button();">
+<form action="{download_button.U_DOWNLOAD}" method="post" id="download" {download_button.S_DL_WINDOW} onsubmit="hideDlButton();">
 
 <ul class="linklist navlinks">
 <!-- IF S_VC -->
@@ -363,14 +348,14 @@ var active_cat = 0;
 <!-- ENDIF -->
 <li class="panel dlbutton2">
 	<div>
-		{download_button.S_DL_VERSION}&nbsp;<input type="image" src="{IMG_DL_BUTTON}" name="submit" id="submit" alt="{L_DL_DOWNLOAD}" title="{L_DL_DOWNLOAD}" />
+		{download_button.S_DL_VERSION}<br /><button type="submit" name="submit" id="submit" class="downloadbtn"><i class="icon fa-download fa-fw" area-hidden="true"></i> {L_DL_DOWNLOAD}</button>
 		<input type="hidden" name="hotlink_id" value="{download_button.S_HOTLINK_ID}" />
-		{download_button.S_HIDDEN_FIELDS}{S_HIDDEN_FIELDS}{S_FORM_TOKEN}
+		{download_button.S_HIDDEN_FIELDS}{S_HIDDEN_FIELDS}{S_FORM_TOKEN_DOWNLOAD}
 	</div>
 </li>
 </ul>
 
-<!-- IF S_ALLOW_TRAFFICFREE_DOWNLOAD --><p style="text-align: center"><span style="color: #FF0000;">{L_DL_CAN_DOWNLOAD_TRAFFIC}</span></p><!-- ENDIF -->
+<!-- IF S_TRAFFICFREE_DL --><p style="text-align: center"><span style="color: #FF0000;">{L_DL_CAN_DOWNLOAD_TRAFFIC}</span></p><!-- ENDIF -->
 
 </form>
 </div>

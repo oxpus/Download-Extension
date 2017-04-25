@@ -12,6 +12,8 @@
 
 <h2>{STATUS} <label>{DESCRIPTION}{HACK_VERSION} {MINI_IMG}</label></h2>
 
+<br />
+
 <form action="{S_FORM_ACTION}" method="post" {ENCTYPE} name="ver_edit" id="ver_edit">
 
 <div class="panel bg2">
@@ -72,7 +74,7 @@
 
 			<!-- BEGIN files -->
 			<dl<!-- IF files.S_ROW_COUNT is even --> class="row bg2"<!-- ENDIF -->>
-				<dt>{L_DL_FILE_NAME}: {files.FILE_NAME}</dt>				
+				<dt>{L_DL_FILE_NAME}: {files.FILE_NAME}</dt>
 				<dd>
 					<input type="text" maxlength="255" name="ver_title[{files.VER_FILE_ID}]" value="{files.NAME}" class="inputbox autowidth" />
 					 &nbsp; <input type="checkbox" value="{files.VER_FILE_ID}" name="ver_title_del[]" /> {L_DL_DELETE}

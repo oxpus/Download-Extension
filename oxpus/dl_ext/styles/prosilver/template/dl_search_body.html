@@ -1,14 +1,18 @@
 <!-- INCLUDE dl_header.html -->
 
+<h2>{L_DL_SEARCH_DOWNLOAD}</h2>
+
+<br />
+
 <form action="{S_DL_SEARCH_ACTION}" method="post" >
 
 	<div class="panel">
 		<div class="inner">
 
 			<h3>{L_SEARCH_FOR}</h3>
-	
+
 			<fieldset>
-	
+
 				<dl>
 					<dt>{L_SEARCH_KEYWORDS}</dt>
 					<dd class="time"><input type="text" class="inputbox" name="search_keywords" size="50" maxlength="255" value="" /></dd>
@@ -17,7 +21,7 @@
 					<dt>{L_DL_SEARCH_AUTHOR}</dt>
 					<dd class="time"><input type="text" class="inputbox" name="search_author" size="50" maxlength="255" value="" /></dd>
 				</dl>
-	
+
 			</fieldset>
 
 		</div>
@@ -27,9 +31,9 @@
 		<div class="inner">
 
 			<h3>{L_SEARCH_OPTIONS}</h3>
-	
+
 			<fieldset>
-	
+
 				<dl>
 					<dt>{L_DL_CAT_NAME}</dt>
 					<dd class="time">{S_DL_CATEGORY_OPTIONS}</dd>
@@ -49,14 +53,14 @@
 						<label><input type="radio" name="search_type" value="1" /> {L_DL_SEARCH_TYPE_SINGLE}</label>
 					</dd>
 				</dl>
-	
+
 			</fieldset>
-	
+
 			<fieldset class="submit-buttons">
 				<input type="submit" name="submit" value="{L_SEARCH}" style="height: 28px;" class="button icon-button" />
 				{S_FORM_TOKEN}
 			</fieldset>
-	
+
 			</div>
 
 	</div>

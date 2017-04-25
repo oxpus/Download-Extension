@@ -71,6 +71,11 @@ if ($submit)
 	$hack_version			= $this->request->variable('hack_version', '', true);
 	$hack_dl_url			= $this->request->variable('hack_dl_url', '', true);
 
+	if (!$description)
+	{
+		trigger_error($this->language->lang('NO_SUBJECT'), E_USER_WARNING);
+	}
+
 	$allow_bbcode		= ($this->config['allow_bbcode']) ? true : false;
 	$allow_urls			= true;
 	$allow_smilies		= ($this->config['allow_smilies']) ? true : false;
@@ -90,16 +95,26 @@ if ($submit)
 	$warn_flags			= 0;
 	$todo_flags			= 0;
 
-	generate_text_for_storage($description, $desc_uid, $desc_bitfield, $desc_flags, $allow_bbcode, $allow_urls, $allow_smilies);
-	generate_text_for_storage($long_desc, $long_desc_uid, $long_desc_bitfield, $long_desc_flags, $allow_bbcode, $allow_urls, $allow_smilies);
-	generate_text_for_storage($mod_desc, $mod_desc_uid, $mod_desc_bitfield, $mod_desc_flags, $allow_bbcode, $allow_urls, $allow_smilies);
-	generate_text_for_storage($warning, $warn_uid, $warn_bitfield, $warn_flags, $allow_bbcode, $allow_urls, $allow_smilies);
-	generate_text_for_storage($todo, $todo_uid, $todo_bitfield, $todo_flags, $allow_bbcode, $allow_urls, $allow_smilies);
-	
-	if (!$description)
+	if ($description)
 	{
-		trigger_error($this->language->lang('NO_SUBJECT'), E_USER_WARNING);
-	}		
+		generate_text_for_storage($description, $desc_uid, $desc_bitfield, $desc_flags, $allow_bbcode, $allow_urls, $allow_smilies);
+	}
+	if ($long_desc)
+	{
+		generate_text_for_storage($long_desc, $long_desc_uid, $long_desc_bitfield, $long_desc_flags, $allow_bbcode, $allow_urls, $allow_smilies);
+	}
+	if ($mod_desc)
+	{
+		generate_text_for_storage($mod_desc, $mod_desc_uid, $mod_desc_bitfield, $mod_desc_flags, $allow_bbcode, $allow_urls, $allow_smilies);
+	}
+	if ($warning)
+	{
+		generate_text_for_storage($warning, $warn_uid, $warn_bitfield, $warn_flags, $allow_bbcode, $allow_urls, $allow_smilies);
+	}
+	if ($todo)
+	{
+		generate_text_for_storage($todo, $todo_uid, $todo_bitfield, $todo_flags, $allow_bbcode, $allow_urls, $allow_smilies);
+	}
 
 	if ($file_extern)
 	{
@@ -293,7 +308,7 @@ if ($submit)
 
 			$hash_method = $this->config['dl_file_hash_algo'];
 			$func_hash = $hash_method . '_file';
-			$file_hash = $func_hash(DL_EXT_FILES_FOLDER . $dl_path . $real_file);		
+			$file_hash = $func_hash(DL_EXT_FILES_FOLDER . $dl_path . $real_file);
 		}
 		else
 		{
@@ -473,7 +488,7 @@ if ($submit)
 			if ($this->user->data['is_registered'] && DL_OVERALL_TRAFFICS == true)
 			{
 				$this->config['dl_remain_traffic'] += $file_size;
-	
+
 				$sql = 'UPDATE ' . DL_REM_TRAF_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', array(
 					'config_value' => $this->config['dl_remain_traffic'])) . " WHERE config_name = 'dl_remain_traffic'";
 				$this->db->sql_query($sql);
@@ -481,7 +496,7 @@ if ($submit)
 			else if (!$this->user->data['is_registered'] && DL_GUESTS_TRAFFICS == true)
 			{
 				$this->config['dl_remain_guest_traffic'] += $file_size;
-	
+
 				$sql = 'UPDATE ' . DL_REM_TRAF_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', array(
 					'config_value' => $this->config['dl_remain_guest_traffic'])) . " WHERE config_name = 'dl_remain_guest_traffic'";
 				$this->db->sql_query($sql);

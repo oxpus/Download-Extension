@@ -80,6 +80,7 @@
 	<td>{L_DL_ACP_MAIN_STATS_TOTAL_BROKEN}{L_COLON}</td>
 	<td><strong style="color: <!-- IF TOTAL_BROKEN -->#cc0000<!-- ELSE -->#009900<!-- ENDIF -->;">{TOTAL_BROKEN}</strong></td>
 </tr>
+</tbody>
 </table>
 
 <fieldset>
@@ -125,6 +126,7 @@
 <!-- IF S_DL_PERMISSIONS --><!-- INCLUDE dl_permissions_body.html --><!-- ENDIF -->
 <!-- IF S_DL_FIELDS --><!-- INCLUDE dl_fields_body.html --><!-- ENDIF -->
 <!-- IF S_DL_BROWSER --><!-- INCLUDE dl_browser_body.html --><!-- ENDIF -->
+<!-- IF S_DL_PERM_CHECK --><!-- INCLUDE dl_perm_check_body.html --><!-- ENDIF -->
 
 <fieldset class="submit-buttons">{DL_MOD_RELEASE}</fieldset>
 

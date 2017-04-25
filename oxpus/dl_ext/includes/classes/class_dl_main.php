@@ -20,16 +20,6 @@ if (!defined('IN_PHPBB'))
 
 class dl_main extends dl_mod
 {
-	public function __construct()
-	{
-		return;
-	}
-
-	public function __destruct()
-	{
-		return;
-	}
-
 	public static function full_index($helper = '', $only_cat = 0, $parent = 0, $level = 0, $auth_level = 0)
 	{
 		static $dl_index, $dl_auth, $user_admin;

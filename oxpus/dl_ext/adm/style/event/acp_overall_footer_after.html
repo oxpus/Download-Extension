@@ -1,5 +1,4 @@
 <script type="text/javascript">
-// <![CDATA[
 function help_popup(help_key) {
 	$.ajax({
         url: '{U_HELP_POPUP}&help_key=' + help_key,
@@ -16,11 +15,10 @@ function AJAXDLHelpDisplay(data) {
     $("#dl_help_popup").fadeIn("fast");
     $("#dl_help_bg").css("opacity", "0.7");
     $("#dl_help_bg").fadeIn("fast");
-    
+
     $(".dl_help_close").click(function() {
     $("#dl_help_popup").fadeOut("fast");
     $("#dl_help_bg").fadeOut("fast");
-    });
+	});
 }
-// ]]>
 </script>

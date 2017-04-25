@@ -120,12 +120,14 @@ switch ($this->config['dl_download_vc'])
 }
 
 $check_status = array();
-$check_status = \oxpus\dl_ext\includes\classes\ dl_status::status($df_id, $this->helper, $ext_path_images);
+$check_status = \oxpus\dl_ext\includes\classes\ dl_status::status($df_id, $this->helper);
 
 if (!$dl_files['id'])
 {
 	trigger_error('DL_NO_PERMISSION');
 }
+
+$this->language->add_lang('posting');
 
 /*
 * Check saved thumbs
@@ -134,10 +136,11 @@ $sql = 'SELECT * FROM ' . DL_IMAGES_TABLE . '
 	WHERE dl_id = ' . (int) $df_id;
 $result = $this->db->sql_query($sql);
 $total_images = $this->db->sql_affectedrows($result);
+$s_dl_popupimage = false;
 
 if ($total_images)
 {
-	$this->template->assign_var('S_DL_POPUPIMAGE', true);
+	$s_dl_popupimage = true;
 
 	$thumbs_ary = array();
 
@@ -150,14 +153,18 @@ if ($total_images)
 $this->db->sql_freeresult($result);
 
 $inc_module = true;
-page_header($this->language->lang('DOWNLOADS') . ' - ' . $dl_files['description']);
+page_header($this->language->lang('DOWNLOADS') . ' - ' . strip_tags($dl_files['description']));
 
 /*
 * User is banned?
 */
 if (\oxpus\dl_ext\includes\classes\ dl_auth::user_banned())
 {
-	$this->template->assign_var('S_DL_USERBAN', true);
+	$s_dl_userban = true;
+}
+else
+{
+	$s_dl_userban = false;
 }
 
 /*
@@ -172,10 +179,11 @@ if (isset($index[$cat_id]['rules']) && $index[$cat_id]['rules'] != '')
 	$cat_rule = censor_text($cat_rule);
 	$cat_rule = generate_text_for_display($cat_rule, $cat_rule_uid, $cat_rule_bitfield, $cat_rule_flags);
 
-	$this->template->assign_var('S_CAT_RULE', true);
+	$s_cat_rule = true;
 }
 else
 {
+	$s_cat_rule = false;
 	$cat_rule = '';
 }
 
@@ -183,6 +191,7 @@ else
 * Cat Traffic?
 */
 $cat_traffic = 0;
+$s_cat_traffic = false;
 
 if (!$this->config['dl_traffic_off'])
 {
@@ -205,8 +214,8 @@ if (!$this->config['dl_traffic_off'])
 		{
 			$cat_traffic = ($cat_traffic > $cat_overall_traffic && $cat_limit == true) ? $cat_overall_traffic : $cat_traffic;
 			$cat_traffic = \oxpus\dl_ext\includes\classes\ dl_format::dl_size($cat_traffic);
-	
-			$this->template->assign_var('S_CAT_TRAFFIC', true);
+
+			$s_cat_traffic = false;
 		}
 	}
 }
@@ -246,22 +255,339 @@ if ($this->config['dl_enable_rate'])
 * fetch last comment, if exists
 */
 $s_comments_tab = false;
+$allow_manage = false;
 
 if ($index[$cat_id]['comments'] && \oxpus\dl_ext\includes\classes\ dl_auth::cat_auth_comment_read($cat_id))
 {
+	/*
+	* check permissions to manage comments
+	*/
+	$sql = 'SELECT user_id FROM ' . DL_COMMENTS_TABLE . '
+		WHERE id = ' . (int) $df_id . '
+			AND dl_id = ' . (int) $dl_id . '
+			AND approve = ' . true . '
+			AND cat_id = ' . (int) $cat_id;
+	$result = $this->db->sql_query($sql);
+	$row_user = $this->db->sql_fetchfield('user_id');
+	$this->db->sql_freeresult($result);
+
+	if (($row_user == $this->user->data['user_id'] || $cat_auth['auth_mod'] || $index[$cat_id]['auth_mod'] || $this->auth->acl_get('a_')) && $this->user->data['is_registered'])
+	{
+		$allow_manage = true;
+	}
+
+	$deny_post = false;
+
+	if (!\oxpus\dl_ext\includes\classes\ dl_auth::cat_auth_comment_post($cat_id))
+	{
+		$allow_manage = false;
+		$deny_post = true;
+	}
+
 	$s_comments_tab = true;
-	$this->template->assign_var('S_COMMENTS_TAB', $s_comments_tab);
 
-	$s_hidden_fields = array(
-		'cat_id'	=> $cat_id,
-		'df_id'		=> $df_id,
-		'view'		=> 'comment'
-	);
+	$comment_text = $this->request->variable('message', '', true);
 
-	$this->template->assign_vars(array(
-		'S_COMMENT_ACTION'			=> $this->helper->route('dl_ext_controller'),
-		'S_HIDDEN_COMMENT_FIELDS'	=> build_hidden_fields($s_hidden_fields))
-	);
+	if ($action == 'save' && !$deny_post && $comment_text)
+	{
+		// check form
+		if (!check_form_key('dl_comment_posting'))
+		{
+			trigger_error($this->language->lang('FORM_INVALID'), E_USER_WARNING);
+		}
+
+		$allow_bbcode	= ($this->config['allow_bbcode']) ? true : false;
+		$allow_urls		= true;
+		$allow_smilies	= ($this->config['allow_smilies']) ? true : false;
+		$com_uid		= '';
+		$com_bitfield	= '';
+		$com_flags		= 0;
+
+		generate_text_for_storage($comment_text, $com_uid, $com_bitfield, $com_flags, $allow_bbcode, $allow_urls, $allow_smilies);
+
+		if ($index[$cat_id]['approve_comments'] || \oxpus\dl_ext\includes\classes\ dl_auth::user_admin())
+		{
+			$approve = true;
+		}
+		else
+		{
+			$approve = 0;
+		}
+
+		if ($dl_id)
+		{
+			$sql = 'UPDATE ' . DL_COMMENTS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', array(
+				'comment_edit_time'	=> time(),
+				'comment_text'		=> $comment_text,
+				'com_uid'			=> $com_uid,
+				'com_bitfield'		=> $com_bitfield,
+				'com_flags'			=> $com_flags,
+				'approve'			=> $approve)) . ' WHERE dl_id = ' . (int) $dl_id;
+			$this->db->sql_query($sql);
+
+			$comment_message = $this->language->lang('DL_COMMENT_UPDATED');
+		}
+		else
+		{
+			$sql = 'INSERT INTO ' . DL_COMMENTS_TABLE . ' ' . $this->db->sql_build_array('INSERT', array(
+				'id'				=> $df_id,
+				'cat_id'			=> $cat_id,
+				'user_id'			=> $this->user->data['user_id'],
+				'username'			=> $this->user->data['username'],
+				'comment_time'		=> time(),
+				'comment_edit_time'	=> time(),
+				'comment_text'		=> $comment_text,
+				'com_uid'			=> $com_uid,
+				'com_bitfield'		=> $com_bitfield,
+				'com_flags'			=> $com_flags,
+				'approve'			=> $approve));
+			$this->db->sql_query($sql);
+
+			$comment_message = $this->language->lang('DL_COMMENT_ADDED');
+		}
+
+		if ($approve)
+		{
+			$processing_user = (\oxpus\dl_ext\includes\classes\ dl_auth::cat_auth_comment_read($cat_id) == 3) ? 0 : \oxpus\dl_ext\includes\classes\ dl_auth::dl_auth_users($cat_id, 'auth_mod');
+
+			$sql = 'SELECT user_email, username, user_lang FROM ' . USERS_TABLE . '
+				WHERE ' . $this->db->sql_in_set('user_id', explode(',', $processing_user)) . '
+					OR user_type = ' . USER_FOUNDER;
+
+			$mail_data = array(
+				'query'				=> $sql,
+				'email_template'	=> 'downloads_approve_comment',
+				'cat_id'			=> $cat_id,
+				'df_id'				=> $df_id,
+				'description'		=> $description,
+				'cat_name'			=> $index[$cat_id]['cat_name_nav'],
+			);
+
+			\oxpus\dl_ext\includes\classes\ dl_email::send_comment_notify($mail_data, $this->helper, $ext_path);
+
+			$approve_message	= '';
+			$return_parameters	= array('view' => 'comment', 'action' => 'view', 'cat_id' => $cat_id, 'df_id' => $df_id);
+			$return_text		= $this->language->lang('CLICK_RETURN_COMMENTS');
+		}
+		else
+		{
+			$sql = 'SELECT fav_user_id FROM ' . DL_FAVORITES_TABLE . '
+				WHERE fav_dl_id = ' . (int) $df_id;
+			$result = $this->db->sql_query($sql);
+
+			$fav_user = array();
+
+			while ($row = $this->db->sql_fetchrow($result))
+			{
+				$fav_user[] = $row['fav_user_id'];
+			}
+
+			$this->db->sql_freeresult($result);
+
+			if (!$this->config['dl_disable_email'] && $fav_user)
+			{
+				$sql_fav_user = (sizeof($fav_user)) ? ' AND ' . $this->db->sql_in_set('user_id', $fav_user) : '';
+				$com_perms = $index[$cat_id]['auth_cread'];
+				$sql_user = '';
+
+				switch ($com_perms)
+				{
+					case 0:
+					case 1:
+						if ($sql_fav_user)
+						{
+							$sql_user = $sql_fav_user;
+							$send_notify = true;
+						}
+						else
+						{
+							$send_notify = false;
+						}
+					break;
+
+					case 2:
+						$processing_user = \oxpus\dl_ext\includes\classes\ dl_auth::dl_auth_users($cat_id, 'auth_mod');
+						if ($processing_user)
+						{
+							$sql_user .= ' AND ' . $this->db->sql_in_set('user_id', explode(',', $processing_user));
+							$send_notify = true;
+						}
+
+						if ($sql_fav_user)
+						{
+							$sql_user .= $sql_fav_user;
+							$send_notify = true;
+						}
+						else
+						{
+							$send_notify = false;
+						}
+					break;
+
+					case 3:
+					default:
+						$sql_user = '';
+						$send_notify = false;
+					break;
+				}
+
+				if ($send_notify)
+				{
+					$sql = 'SELECT user_email, username, user_lang FROM ' . USERS_TABLE . '
+						WHERE user_id <> ' . (int) $this->user->data['user_id'] . '
+							AND user_allow_fav_download_email = 1
+							AND user_allow_fav_comment_email = 1' . $sql_fav_user;
+
+					$mail_data = array(
+						'query'				=> $sql,
+						'email_template'	=> 'downloads_comment_notify',
+						'cat_id'			=> $cat_id,
+						'df_id'				=> $df_id,
+						'description'		=> $description,
+						'cat_name'			=> $index[$cat_id]['cat_name_nav'],
+					);
+
+					\oxpus\dl_ext\includes\classes\ dl_email::send_comment_notify($mail_data, $this->helper, $ext_path);
+				}
+			}
+
+			$approve_message	= '<br />' . $this->language->lang('DL_MUST_BE_APPROVE_COMMENT');
+			$return_parameters	= array('view' => 'detail', 'df_id' => $df_id);
+			$return_text		= $this->language->lang('CLICK_RETURN_DOWNLOAD_DETAILS');
+		}
+
+		$message = $comment_message . $approve_message . '<br /><br />' . sprintf($return_text, '<a href="' . $this->helper->route('dl_ext_controller', $return_parameters) . '">', '</a>');
+
+		meta_refresh(3, $this->helper->route('dl_ext_controller', $return_parameters));
+
+		trigger_error($message);
+	}
+
+	if ($action == 'delete' && $allow_manage)
+	{
+		// Delete comment by poster or admin or dl_mod
+		if (!$confirm)
+		{
+			// Confirm deletion
+			$s_hidden_fields = array(
+				'cat_id'	=> $cat_id,
+				'df_id'		=> $df_id,
+				'dl_id'		=> $dl_id,
+				'action'	=> 'delete',
+				'view'		=> 'comment'
+			);
+
+			$this->template->set_filenames(array(
+				'body' => 'dl_confirm_body.html')
+			);
+
+			page_header($this->language->lang('DOWNLOADS') . ' :: ' . $this->language->lang('DELETE_MESSAGE'));
+
+			add_form_key('dl_com_del');
+
+			$this->template->assign_vars(array(
+				'MESSAGE_TITLE' => $this->language->lang('DELETE_MESSAGE'),
+				'MESSAGE_TEXT' => $this->language->lang('DELETE_MESSAGE_CONFIRM'),
+
+				'S_CONFIRM_ACTION' => $this->helper->route('dl_ext_controller'),
+				'S_HIDDEN_FIELDS' => build_hidden_fields($s_hidden_fields))
+			);
+
+			page_footer();
+		}
+		else
+		{
+			if (!check_form_key('dl_com_del'))
+			{
+				trigger_error('FORM_INVALID');
+			}
+
+			$sql = 'DELETE FROM ' . DL_COMMENTS_TABLE . '
+				WHERE cat_id = ' . (int) $cat_id . '
+					AND id = ' . (int) $df_id . '
+					AND dl_id = ' . (int) $dl_id;
+			$this->db->sql_query($sql);
+
+			$sql = 'SELECT dl_id FROM ' . DL_COMMENTS_TABLE . '
+				WHERE cat_id = ' . (int) $cat_id . '
+					AND id = ' . (int) $df_id;
+			$result = $this->db->sql_query($sql);
+			$total_comments = $this->db->sql_affectedrows($result);
+			$this->db->sql_freeresult($result);
+
+			if (!$total_comments)
+			{
+				redirect($this->helper->route('dl_ext_controller', array('view' => 'detail' , 'df_id' => $df_id)));
+			}
+			else
+			{
+				$action = 'view';
+			}
+		}
+	}
+
+	if (!$deny_post)
+	{
+		// Edit or add a comment
+		if ($action == 'edit')
+		{
+			$sql = 'SELECT comment_text, com_uid, com_flags FROM ' . DL_COMMENTS_TABLE . '
+				WHERE dl_id = ' . (int) $dl_id . '
+					AND id = ' . (int) $df_id . '
+					AND cat_id = ' . (int) $cat_id;
+			$result = $this->db->sql_query($sql);
+			$row = $this->db->sql_fetchrow($result);
+
+			$comment_text	= $row['comment_text'];
+			$com_uid		= $row['com_uid'];
+			$com_flags		= $row['com_flags'];
+
+			$this->db->sql_freeresult($result);
+
+			$text_ary		= generate_text_for_edit($comment_text, $com_uid, $com_flags);
+			$comment_text	= $text_ary['text'];
+		}
+
+		$s_hidden_fields = array(
+			'dl_id'		=> $dl_id,
+			'df_id'		=> $df_id,
+			'cat_id'	=> $cat_id,
+			'action'	=> 'save',
+			'view'		=> 'comment'
+		);
+
+		add_form_key('dl_comment_posting', '_COMMENT');
+
+		// Status for HTML, BBCode, Smilies, Images and Flash
+		$bbcode_status	= ($this->config['allow_bbcode']) ? true : false;
+		$smilies_status	= ($bbcode_status && $this->config['allow_smilies']) ? true : false;
+		$img_status		= ($bbcode_status) ? true : false;
+		$url_status		= ($this->config['allow_post_links']) ? true : false;
+		$flash_status	= ($bbcode_status && $this->config['allow_post_flash']) ? true : false;
+		$quote_status	= true;
+
+		// Smilies Block
+		include($this->root_path . 'includes/functions_posting.' . $this->php_ext);
+		generate_smilies('inline', 0);
+
+		// BBCode-Block
+		display_custom_bbcodes();
+
+		$this->template->assign_vars(array(
+			'COMMENT_TEXT'		=> $comment_text,
+
+			'S_BBCODE_ALLOWED'	=> $bbcode_status,
+			'S_BBCODE_IMG'		=> $img_status,
+			'S_BBCODE_URL'		=> $url_status,
+			'S_BBCODE_FLASH'	=> $flash_status,
+			'S_BBCODE_QUOTE'	=> $quote_status,
+
+			'S_COMMENT_POST_ACTION'	=> $this->helper->route('dl_ext_controller'),
+			'S_HIDDEN_POST_FIELDS'	=> build_hidden_fields($s_hidden_fields),
+
+			'U_MORE_SMILIES'		=> $this->helper->route('dl_ext_controller', array('action' => 'smilies')),
+		));
+	}
 
 	$sql = 'SELECT * FROM ' . DL_COMMENTS_TABLE . '
 		WHERE cat_id = ' . (int) $cat_id . '
@@ -271,14 +597,27 @@ if ($index[$cat_id]['comments'] && \oxpus\dl_ext\includes\classes\ dl_auth::cat_
 	$real_comment_exists = $this->db->sql_affectedrows($result);
 	$this->db->sql_freeresult($result);
 
+	if ($real_comment_exists > $this->config['dl_links_per_page'])
+	{
+		$pagination = $this->phpbb_container->get('pagination');
+		$pagination->generate_template_pagination(
+			array(
+				'routes' => array(
+					'dl_ext_controller',
+					'dl_ext_page_controller',
+				),
+				'params' => array('view' => 'comment', 'action' => 'view', 'cat_id' => $cat_id, 'df_id' => $df_id),
+			), 'pagination', 'start', $real_comment_exists, $this->config['dl_links_per_page'], $page_start);
+
+		$this->template->assign_vars(array(
+			'PAGE_NUMBER'	=> $pagination->on_page($real_comment_exists, $this->config['dl_links_per_page'], $page_start),
+			'TOTAL_DL'		=> $this->language->lang('DL_COMMENTS_COUNT', $real_comment_exists),
+		));
+	}
+
 	if ($real_comment_exists)
 	{
 		$this->template->assign_var('S_VIEW_COMMENTS', true);
-	}
-
-	if ($this->config['dl_latest_comments'] && $real_comment_exists)
-	{
-		$this->template->assign_var('S_COMMENTS_ON', true);
 
 		$sql = 'SELECT c.*, u.user_colour, u.user_avatar, u.user_avatar_type, u.user_avatar_width, u.user_avatar_height FROM ' . DL_COMMENTS_TABLE . ' c
 			LEFT JOIN ' . USERS_TABLE . ' u ON u.user_id = c.user_id
@@ -286,7 +625,7 @@ if ($index[$cat_id]['comments'] && \oxpus\dl_ext\includes\classes\ dl_auth::cat_
 				AND id = ' . (int) $df_id . '
 				AND approve = ' . true . '
 			ORDER BY comment_time DESC';
-		$result = $this->db->sql_query_limit($sql, $this->config['dl_latest_comments']);
+		$result = $this->db->sql_query_limit($sql, $this->config['dl_links_per_page'], $start);
 
 		while ($row = $this->db->sql_fetchrow($result))
 		{
@@ -294,6 +633,7 @@ if ($index[$cat_id]['comments'] && \oxpus\dl_ext\includes\classes\ dl_auth::cat_
 			$poster				= $row['username'];
 			$poster_color		= $row['user_colour'];
 			$poster_avatar		= ($this->user->optionget('viewavatars')) ? get_user_avatar($row['user_avatar'], $row['user_avatar_type'], $row['user_avatar_width'], $row['user_avatar_height']) : '';
+			$dl_id				= $row['dl_id'];
 
 			$message			= $row['comment_text'];
 			$com_uid			= $row['com_uid'];
@@ -315,32 +655,28 @@ if ($index[$cat_id]['comments'] && \oxpus\dl_ext\includes\classes\ dl_auth::cat_
 				$edited_by = '';
 			}
 
+			$u_delete_comment	= $this->helper->route('dl_ext_controller', array('view' => 'comment', 'action' => 'delete', 'cat_id' => $cat_id, 'df_id' => $df_id, 'dl_id' => $dl_id));
+			$u_edit_comment		= $this->helper->route('dl_ext_controller', array('view' => 'comment', 'action' => 'edit', 'cat_id' => $cat_id, 'df_id' => $df_id, 'dl_id' => $dl_id));
+
 			$this->template->assign_block_vars('comment_row', array(
 				'EDITED_BY'		=> $edited_by,
 				'POSTER'		=> get_username_string('full', $poster_id, $poster, $poster_color),
 				'POSTER_AVATAR'	=> $poster_avatar,
 				'MESSAGE'		=> $message,
-				'POST_TIME'		=> $this->user->format_date($comment_time))
-			);
+				'POST_TIME'		=> $this->user->format_date($comment_time),
+				'DL_ID'			=> $dl_id,
+
+				'U_DELETE_COMMENT'	=> $u_delete_comment,
+				'U_EDIT_COMMENT'	=> ($deny_post) ? '' : $u_edit_comment,
+			));
+
+            if (($poster_id == $this->user->data['user_id'] || $cat_auth['auth_mod'] || $index[$cat_id]['auth_mod'] || $this->auth->acl_get('a_')) && $this->user->data['is_registered'] && !$deny_post)
+			{
+				$this->template->assign_block_vars('comment_row.action_button', array());
+			}
 		}
 
 		$this->db->sql_freeresult($result);
-	}
-
-	if (\oxpus\dl_ext\includes\classes\ dl_auth::cat_auth_comment_post($cat_id))
-	{
-		$s_hidden_fields = array(
-			'cat_id'	=> $cat_id,
-			'df_id'		=> $df_id,
-			'view'		=> 'comment'
-		);
-
-		$this->template->assign_var('S_POST_COMMENT', true);
-
-		$this->template->assign_vars(array(
-			'S_COMMENT_POST_ACTION'	=> $this->helper->route('dl_ext_controller'),
-			'S_HIDDEN_POST_FIELDS'	=> build_hidden_fields($s_hidden_fields))
-		);
 	}
 }
 
@@ -370,7 +706,7 @@ if (!$dl_files['extern'])
 			$this->db->sql_query($sql);
 		}
 	}
-	
+
 	if ($index[$cat_id]['show_file_hash'])
 	{
 		$dl_key = $dl_files['description'] . (($dl_files['hack_version']) ? ' ' . $dl_files['hack_version'] : ' (' . $this->language->lang('DL_CURRENT_VERSION') . ')');
@@ -379,7 +715,7 @@ if (!$dl_files['extern'])
 		$hash_table_tmp[$dl_key]['type'] = ($dl_files['file_hash']) ? $hash_method : $this->language->lang('DL_FILE_NOT_FOUND', $dl_files['file_name'], DL_EXT_FILES_WEBFOLDER . $index[$cat_id]['cat_path']);
 		$hash_ary[] = $dl_key;
 	}
-	
+
 	$sql = 'SELECT * FROM ' . DL_VERSIONS_TABLE . '
 		WHERE dl_id = ' . (int) $df_id . "
 		ORDER BY ver_version DESC, ver_change_time DESC";
@@ -393,7 +729,7 @@ if (!$dl_files['extern'])
 		while ($row = $this->db->sql_fetchrow($result))
 		{
 			$ver_file_hash = $row['ver_file_hash'];
-	
+
 			if (!$ver_file_hash)
 			{
 				if ($row['ver_real_file'] && file_exists(DL_EXT_FILES_FOLDER . $index[$cat_id]['cat_path'] . $row['ver_real_file']))
@@ -403,7 +739,7 @@ if (!$dl_files['extern'])
 					$this->db->sql_query($sql);
 				}
 			}
-			
+
 			$dl_key = $dl_files['description'] . (($row['ver_version']) ? ' ' . $row['ver_version'] : ' (' . $this->user->format_date($row['ver_change_time']) . ')');
 
 			if ($index[$cat_id]['show_file_hash'] && ($row['ver_active'] || $ver_can_edit))
@@ -456,9 +792,9 @@ if (!$dl_files['extern'])
 	}
 	unset($hash_ary);
 	unset($hash_table_tmp);
-	
+
 	$this->db->sql_freeresult($result);
-	
+
 	if (sizeof($hash_table) && $index[$cat_id]['show_file_hash'])
 	{
 		foreach ($hash_table as $key => $value)
@@ -470,7 +806,7 @@ if (!$dl_files['extern'])
 				'DL_HASH'			=> $value['hash'],
 			));
 		}
-	
+
 		$hash_tab = true;
 	}
 }
@@ -559,68 +895,64 @@ $last_time_string		= ($dl_files['extern']) ? $this->language->lang('DL_LAST_TIME
 $last_time				= ($dl_files['last_time']) ? sprintf($last_time_string, $this->user->format_date($dl_files['last_time'])) : $this->language->lang('DL_NO_LAST_TIME');
 
 $hack_author_email		= $dl_files['hack_author_email'];
-$hack_author			= ( $dl_files['hack_author'] != '' ) ? $dl_files['hack_author'] : 'n/a';
+$hack_author			= ($dl_files['hack_author'] != '') ? $dl_files['hack_author'] : 'n/a';
 $hack_author_website	= $dl_files['hack_author_website'];
 $hack_dl_url			= $dl_files['hack_dl_url'];
 
-$test					= $dl_files['test'];
-$require				= $dl_files['req'];
-$todo					= $dl_files['todo'];
-$todo_uid				= $dl_files['todo_uid'];
-$todo_bitfield			= $dl_files['todo_bitfield'];
-$todo_flags				= $dl_files['todo_flags'];
-$todo					= generate_text_for_display($todo, $todo_uid, $todo_bitfield, $todo_flags);
-$warning				= $dl_files['warning'];
-$warn_uid				= $dl_files['warn_uid'];
-$warn_bitfield			= $dl_files['warn_bitfield'];
-$warn_flags				= $dl_files['warn_flags'];
-$warning				= generate_text_for_display($warning, $warn_uid, $warn_bitfield, $warn_flags);
+$mod_test				= $dl_files['test'];
+$mod_require			= $dl_files['req'];
+$mod_warning			= $dl_files['warning'];
+$mod_desc				= $dl_files['mod_desc'];
 
 /*
 * Hacklist
 */
+$s_hacklist = false;
 if ($dl_files['hacklist'] && $this->config['dl_use_hacklist'])
 {
-	$this->template->assign_block_vars('hacklist', array(
-		'HACK_AUTHOR'			=> ( $hack_author_email != '' ) ? '<a href="mailto:'.$hack_author_email.'">'.$hack_author.'</a>' : $hack_author,
-		'HACK_AUTHOR_WEBSITE'	=> ( $hack_author_website != '' ) ? ' [ <a href="'.$hack_author_website.'">'.$this->language->lang('WEBSITE').'</a> ]' : '',
-		'HACK_DL_URL'	=> ( $hack_dl_url != '' ) ? '<a href="' . $hack_dl_url . '">'.$this->language->lang('DL_DOWNLOAD').'</a>' : 'n/a')
-	);
+	$s_hacklist = true;
 }
 
 /*
 * Block for extra informations - The MOD Block ;-)
 */
+$s_mod_test = false;
+$s_mod_desc = false;
+$s_mod_warning = false;
+$s_mod_require = false;
+
 if ($dl_files['mod_list'])
 {
-	$mod_desc			= $dl_files['mod_desc'];
-	$mod_desc_uid		= $dl_files['mod_desc_uid'];
-	$mod_desc_bitfield	= $dl_files['mod_desc_bitfield'];
-	$mod_desc_flags		= $dl_files['mod_desc_flags'];
-	$mod_desc			= generate_text_for_display($mod_desc, $mod_desc_uid, $mod_desc_bitfield, $mod_desc_flags);
-
 	if ($index[$cat_id]['allow_mod_desc'])
 	{
 		$this->template->assign_var('S_MOD_LIST', true);
-	
-		if ($test)
+
+		if ($mod_test)
 		{
-			$this->template->assign_block_vars('modlisttest', array('MOD_TEST' => $test));
+			$s_mod_test = true;
 		}
-	
+
 		if ($mod_desc)
 		{
-			$this->template->assign_block_vars('modlistdesc', array('MOD_DESC' => $mod_desc));
+			$s_mod_desc			= true;
+			$mod_desc_uid		= $dl_files['mod_desc_uid'];
+			$mod_desc_bitfield	= $dl_files['mod_desc_bitfield'];
+			$mod_desc_flags		= $dl_files['mod_desc_flags'];
+			$mod_desc			= generate_text_for_display($mod_desc, $mod_desc_uid, $mod_desc_bitfield, $mod_desc_flags);
 		}
-	
-		if ($warning)
+
+		if ($mod_warning)
 		{
-			$this->template->assign_block_vars('modwarning', array('MOD_WARNING' => $warning));
+			$s_mod_warning		= true;
+			$mod_warn_uid		= $dl_files['warn_uid'];
+			$mod_warn_bitfield	= $dl_files['warn_bitfield'];
+			$mod_warn_flags		= $dl_files['warn_flags'];
+			$mod_warning		= generate_text_for_display($mod_warning, $mod_warn_uid, $mod_warn_bitfield, $mod_warn_flags);
 		}
-	
-		if ($require)
+
+		if ($mod_require)
 		{
-			$this->template->assign_block_vars('modrequire', array('MOD_REQUIRE' => $require));
+			$s_mod_require = true;
 		}
 	}
 }
@@ -628,15 +960,26 @@ if ($dl_files['mod_list'])
 /*
 * ToDO's? ToDo's!
 */
-if ($todo)
+$mod_todo = $dl_files['todo'];
+
+if ($mod_todo)
 {
-	$this->template->assign_var('S_MOD_TODO', true);
-	$this->template->assign_block_vars('modtodo', array('MOD_TODO' => $todo));
+	$s_mod_todo			= true;
+	$mod_todo_uid		= $dl_files['todo_uid'];
+	$mod_todo_bitfield	= $dl_files['todo_bitfield'];
+	$mod_todo_flags		= $dl_files['todo_flags'];
+	$mod_todo			= generate_text_for_display($mod_todo, $mod_todo_uid, $mod_todo_bitfield, $mod_todo_flags);
+}
+else
+{
+	$s_mod_todo = false;
 }
 
 /*
 * Check for recurring downloads
 */
+$s_trafficfree_dl = false;
+
 if ($this->config['dl_user_traffic_once'] && !$file_load && !$dl_files['free'] && !$dl_files['extern'] && ($dl_files['file_size'] > $this->user->data['user_traffic'] ) && !$this->config['dl_traffic_off'] && DL_USERS_TRAFFICS == true)
 {
 	$sql = 'SELECT * FROM ' . DL_NOTRAF_TABLE . '
@@ -649,8 +992,7 @@ if ($this->config['dl_user_traffic_once'] && !$file_load && !$dl_files['free'] &
 	if ($still_count)
 	{
 		$file_load = true;
-
-		$this->template->assign_var('S_ALLOW_TRAFFICFREE_DOWNLOAD', true);
+		$s_trafficfree_dl = true;
 	}
 }
 
@@ -744,7 +1086,6 @@ if (($file_load || $user_can_alltimes_load) && !$this->user->data['is_bot'])
 
 		$this->db->sql_freeresult($result);
 
-
 		$this->template->assign_block_vars('download_button', array(
 			'S_HIDDEN_FIELDS'	=> build_hidden_fields($s_hidden_fields),
 			'S_HOTLINK_ID'		=> $hotlink_id,
@@ -753,7 +1094,7 @@ if (($file_load || $user_can_alltimes_load) && !$this->user->data['is_bot'])
 			'U_DOWNLOAD'		=> $this->helper->route('dl_ext_controller'),
 		));
 
-		add_form_key('dl_load');
+		add_form_key('dl_load', '_DOWNLOAD');
 
 		if ($captcha_active)
 		{
@@ -834,62 +1175,40 @@ if (($file_load || $user_can_alltimes_load) && !$this->user->data['is_bot'])
 /*
 * Display the link ro report the download as broken
 */
+$s_report_broken = false;
 if ($this->config['dl_report_broken'] && !$dl_files['broken'] && !$this->user->data['is_bot'])
 {
 	if ($this->user->data['is_registered'] || (!$this->user->data['is_registered'] && $this->config['dl_report_broken'] == 1))
 	{
-		$this->template->assign_var('S_REPORT_BROKEN_DL', true);
-		$this->template->assign_block_vars('report_broken_dl', array(
-			'U_BROKEN_DOWNLOAD' => $this->helper->route('dl_ext_controller', array('view' => 'broken', 'df_id' => $df_id, 'cat_id' => $cat_id)),
-		));
+		$s_report_broken = true;
 	}
 }
 
 /*
 * Second part of the report link
 */
+$s_dl_broken_mod = false;
+$s_dl_broken_cur = false;
 if ($dl_files['broken'] && !$this->user->data['is_bot'])
 {
 	if ($index[$cat_id]['auth_mod'] || $cat_auth['auth_mod'] || ($this->auth->acl_get('a_') && $this->user->data['is_registered']))
 	{
-		$this->template->assign_var('S_DL_BROKEN_MOD', true);
-		$this->template->assign_block_vars('dl_broken_mod', array(
-			'U_REPORT' => $this->helper->route('dl_ext_controller', array('view' => 'unbroken', 'df_id' => $df_id, 'cat_id' => $cat_id)),
-		));
+		$s_dl_broken_mod = true;
 	}
 
 	if (!$this->config['dl_report_broken_message'] || ($this->config['dl_report_broken_lock'] && $this->config['dl_report_broken_message']))
 	{
-		$this->template->assign_var('S_DL_BROKEN_CUR', true);
+		$s_dl_broken_cur = true;
 	}
 }
 
 /*
-* Send the values to the template to be able to read something *g*
-*/
-$this->template->assign_block_vars('downloads', array(
-	'DESCRIPTION'			=> $description,
-	'MINI_IMG'				=> $mini_icon,
-	'HACK_VERSION'			=> $hack_version,
-	'LONG_DESC'				=> $long_desc,
-	'STATUS'				=> $status,
-	'FILE_SIZE'				=> $file_size_out,
-	'FILE_KLICKS'			=> $file_klicks,
-	'FILE_OVERALL_KLICKS'	=> $file_overall_klicks,
-	'FILE_NAME'				=> ($dl_files['extern']) ? $this->language->lang('DL_EXTERN') : $file_name,
-	'LAST_TIME'				=> $last_time,
-	'ADD_USER'				=> ($add_user != '') ? $this->language->lang('DL_ADD_USER', $add_time, $add_user) : '',
-	'CHANGE_USER'			=> ($change_user != '') ? $this->language->lang('DL_CHANGE_USER', $change_time, $change_user) : '')
-);
-
-/*
 * Enabled Bug Tracker for this download category?
 */
+$s_bug_tracker = false;
 if ($index[$cat_id]['bug_tracker'] && !$this->user->data['is_bot'] && $this->user->data['is_registered'])
 {
-	$this->template->assign_block_vars('downloads.bug_tracker', array(
-		'U_BUG_TRACKER'			=> $this->helper->route('dl_ext_controller', array('view' => 'bug_tracker', 'df_id' => $df_id)),
-	));
+	$s_bug_tracker = true;
 }
 
 /*
@@ -946,7 +1265,7 @@ if ($index[$cat_id]['allow_thumbs'] && $this->config['dl_thumb_fsize'])
 		{
 			if (@file_exists(DL_EXT_THUMBS_FOLDER . $thumbs_ary[$key]['img_name']))
 			{
-				$this->template->assign_block_vars('downloads.thumbnail', array(
+				$this->template->assign_block_vars('thumbnail', array(
 					'THUMBNAIL_LINK'	=> DL_EXT_THUMBS_WEB_FOLDER . str_replace(" ", "%20", $thumbs_ary[$key]['img_name']),
 					'THUMBNAIL_NAME'	=> $thumbs_ary[$key]['img_title'])
 				);
@@ -970,13 +1289,12 @@ if ($index[$cat_id]['allow_thumbs'] && $this->config['dl_thumb_fsize'])
 /*
 * Urgh, the real filetime..... Heavy information, very important :-D
 */
+$s_real_filetime = false;
 if ($this->config['dl_show_real_filetime'] && !$dl_files['extern'])
 {
 	if (@file_exists(DL_EXT_FILES_FOLDER . $index[$cat_id]['cat_path'] . $real_file))
 	{
-		$this->template->assign_block_vars('downloads.real_filetime', array(
-			'REAL_FILETIME'		=> $this->user->format_date(@filemtime(DL_EXT_FILES_FOLDER . $index[$cat_id]['cat_path'] . $real_file)))
-		);
+		$s_real_filetime = true;
 	}
 }
 
@@ -984,7 +1302,6 @@ if ($this->config['dl_show_real_filetime'] && !$dl_files['extern'])
 * Like to rate? Do it!
 */
 $rating_points = $dl_files['rating'];
-
 $s_rating_perm = false;
 
 if ($this->config['dl_enable_rate'])
@@ -1009,13 +1326,6 @@ if ($this->config['dl_enable_rate'])
 	{
 		$rating_count_text = $this->language->lang('DL_RATING_NONE');
 	}
-
-	$this->template->assign_vars(array(
-		'RATING_IMG'	=> \oxpus\dl_ext\includes\classes\ dl_format::rating_img($rating_points, $s_rating_perm, $df_id, $ext_path_images),
-		'RATINGS'		=> $rating_count_text,
-		'DF_ID'			=> $df_id,
-		'PHPEX'			=> $this->php_ext,
-	));
 }
 
 /*
@@ -1056,18 +1366,20 @@ $cat_id		= $dl_files['cat'];
 /*
 * Can we edit the download? Yes we can, or not?
 */
+$s_edit_button = false;
+$s_edit_thumbs = false;
 if (!$this->user->data['is_bot'] && \oxpus\dl_ext\includes\classes\ dl_auth::user_auth($dl_files['cat'], 'auth_mod') || ($this->config['dl_edit_own_downloads'] && $dl_files['add_user'] == $this->user->data['user_id']))
 {
-	$this->template->assign_var('S_EDIT_BUTTON', true);
+	$s_edit_button = true;
 
 	if ($index[$cat_id]['allow_thumbs'] && $this->config['dl_thumb_fsize'])
 	{
-		$this->template->assign_var('S_EDIT_THUMBS_BUTTON', true);
+		$s_edit_thumbs = true;
 	}
 }
 
 /*
-* A little bit more values and strings for the template *bfg*
+* Send the values to the template to be able to read something *g*
 */
 $this->template->assign_vars(array(
 	'HASH_TAB'			=> $hash_tab,
@@ -1077,11 +1389,57 @@ $this->template->assign_vars(array(
 	'CAT_TRAFFIC'		=> (isset($cat_traffic)) ? $this->language->lang('DL_CAT_TRAFFIC_MAIN', $cat_traffic) : '',
 	'VER_TAB'			=> ($ver_tab) ? true : false,
 
-	'I_DL_BUTTON'		=> '<img src="' . $ext_path_images . 'dl_button.png" alt="' . $this->language->lang('DL_DOWNLOAD') . '" />',
+	'DESCRIPTION'			=> $description,
+	'MINI_IMG'				=> $mini_icon,
+	'HACK_VERSION'			=> $hack_version,
+	'LONG_DESC'				=> $long_desc,
+	'STATUS'				=> $status,
+	'FILE_SIZE'				=> $file_size_out,
+	'FILE_KLICKS'			=> $file_klicks,
+	'FILE_OVERALL_KLICKS'	=> $file_overall_klicks,
+	'FILE_NAME'				=> ($dl_files['extern']) ? $this->language->lang('DL_EXTERN') : $file_name,
+	'LAST_TIME'				=> $last_time,
+	'ADD_USER'				=> ($add_user != '') ? $this->language->lang('DL_ADD_USER', $add_time, $add_user) : '',
+	'CHANGE_USER'			=> ($change_user != '') ? $this->language->lang('DL_CHANGE_USER', $change_time, $change_user) : '',
+	'REAL_FILETIME'			=> $this->user->format_date(@filemtime(DL_EXT_FILES_FOLDER . $index[$cat_id]['cat_path'] . $real_file)),
+	'RATING_IMG'			=> \oxpus\dl_ext\includes\classes\ dl_format::rating_img($rating_points, $s_rating_perm, $df_id),
+	'RATINGS'				=> $rating_count_text,
+	'DF_ID'					=> $df_id,
+	'PHPEX'					=> $this->php_ext,
+	'MOD_TODO'				=> $mod_todo,
+	'MOD_TEST'				=> ($s_mod_test) ? $mod_test : false,
+	'MOD_DESC'				=> ($s_mod_desc) ? $mod_desc : false,
+	'MOD_WARNING'			=> ($s_mod_warning) ? $mod_warning : false,
+	'MOD_REQUIRE'			=> ($s_mod_require) ? $mod_require : false,
+	'HACK_AUTHOR'			=> ($hack_author_email != '') ? '<a href="mailto:' . $hack_author_email . '">' . $hack_author . '</a>' : $hack_author,
+	'HACK_AUTHOR_WEBSITE'	=> ($hack_author_website != '') ? ' [ <a href="' . $hack_author_website . '">' . $this->language->lang('WEBSITE') . '</a> ]' : '',
+	'HACK_DL_URL'			=> ($hack_dl_url != '') ? '<a href="' . $hack_dl_url . '">' . $this->language->lang('DL_DOWNLOAD') . '</a>' : 'n/a',
 
 	'S_DL_ACTION'		=> $this->helper->route('dl_ext_controller'),
 	'S_ENABLE_RATE'		=> (isset($this->config['dl_enable_rate']) && $this->config['dl_enable_rate']) ? true : false,
 	'S_SHOW_TOPIC_LINK'	=> ($dl_files['dl_topic']) ? true : false,
+
+	'S_DL_POPUPIMAGE'	=> $s_dl_popupimage,
+	'S_DL_USERBAN'		=> $s_dl_userban,
+	'S_CAT_RULE'		=> $s_cat_rule,
+	'S_CAT_TRAFFIC'		=> $s_cat_traffic,
+	'S_COMMENTS_TAB'	=> $s_comments_tab,
+	'S_TRAFFICFREE_DL'	=> $s_trafficfree_dl,
+	'S_REPORT_BROKEN'	=> $s_report_broken,
+	'S_DL_BROKEN_MOD'	=> $s_dl_broken_mod,
+	'S_DL_BROKEN_CUR'	=> $s_dl_broken_cur,
+	'S_BUG_TRACKER'		=> $s_bug_tracker,
+	'S_REAL_FILETIME'	=> $s_real_filetime,
+	'S_EDIT_BUTTON'		=> $s_edit_button,
+	'S_EDIT_THUMBS'		=> $s_edit_thumbs,
+	'S_MOD_TODO'		=> $s_mod_todo,
+	'S_HACKLIST'		=> $s_hacklist,
+	'S_OPEN_PANEL'		=> ($view == 'comment' && $s_comments_tab) ? 2 : 0,
+	'S_POST_COMMENT'	=> ($s_comments_tab && !$deny_post) ? true : false,
+
+	'U_REPORT'			=> $this->helper->route('dl_ext_controller', array('view' => 'unbroken', 'df_id' => $df_id, 'cat_id' => $cat_id)),
+	'U_BROKEN_DOWNLOAD' => $this->helper->route('dl_ext_controller', array('view' => 'broken', 'df_id' => $df_id, 'cat_id' => $cat_id)),
+	'U_BUG_TRACKER'		=> $this->helper->route('dl_ext_controller', array('view' => 'bug_tracker', 'df_id' => $df_id)),
 
 	'U_TOPIC'			=> append_sid($this->root_path . 'viewtopic.' . $this->php_ext, 't=' . $dl_files['dl_topic']),
 	'U_EDIT'			=> $this->helper->route('dl_ext_controller', array('view' => 'modcp', 'action' => 'edit', 'df_id' => $file_id, 'cat_id' => $cat_id)),
@@ -1119,22 +1477,10 @@ if (isset($dl_fields['row']) && sizeof($dl_fields['row']))
 	}
 }
 
-if (($dl_files['mod_list'] && $index[$cat_id]['allow_mod_desc']) || $todo || (isset($dl_fields['row']) && sizeof($dl_fields['row'])))
-{
-	$extra_tab = true;
-}
-else
-{
-	$extra_tab = false;
-}
-
 $detail_cat_names = array(
-	0 => $this->language->lang('DL_FILE_DESCRIPTION'),
-	1 => $this->language->lang('DL_DETAIL'),
-	2 => ($ver_tab) ? $this->language->lang('DL_VERSIONS') : '',
-	3 => ($extra_tab) ? $this->language->lang('DL_MOD_LIST_SHORT') : '',
-	4 => ($hash_tab) ? $this->language->lang('DL_MOD_FILE_HASH_TABLE') : '',
-	5 => ($s_comments_tab) ? $this->language->lang('DL_LAST_COMMENT') : '',
+	0 => $this->language->lang('DL_DETAIL'),
+	1 => ($ver_tab) ? $this->language->lang('DL_VERSIONS') : '',
+	2 => ($s_comments_tab) ? $this->language->lang('DL_COMMENTS') : '',
 );
 
 for ($i = 0; $i < sizeof($detail_cat_names); $i++)
@@ -1150,36 +1496,36 @@ for ($i = 0; $i < sizeof($detail_cat_names); $i++)
 
 /**
 * Find similar downloads
-*/	
+*/
 if ($this->config['dl_similar_dl'])
 {
 	$stopword_file = $ext_path . '/helpers/dl_stopwords.txt';
 	$stopwords = array();
-	
+
 	if (file_exists($stopword_file))
 	{
 		$stopwords = array_map('trim', file($stopword_file));
 	}
-	
+
 	$description = $dl_files['description'];
-	
+
 	if (sizeof($stopwords))
 	{
 		foreach ($stopwords as $key => $value)
 		{
 			$description = preg_replace('/\b' . $stopwords[$key] . '\b/iu', '', $description);
 		}
-	
+
 		$description = trim($description);
 	}
-	
+
 	$sql = 'SELECT id, description, desc_uid, desc_bitfield, desc_flags FROM ' . DOWNLOADS_TABLE . "
 		WHERE MATCH (description) AGAINST ('" . $this->db->sql_escape($description) . "')
 			AND id <> " . (int) $df_id . '
 			AND cat = ' . (int) $cat_id . '
 		ORDER BY description';
 	$result = $this->db->sql_query_limit($sql, $this->config['dl_similar_limit']);
-	
+
 	while ($row = $this->db->sql_fetchrow($result))
 	{
 		$similar_id		= $row['id'];
@@ -1188,14 +1534,14 @@ if ($this->config['dl_similar_dl'])
 		$desc_bitfield	= $dl_files['desc_bitfield'];
 		$desc_flags		= $dl_files['desc_flags'];
 		$similar_desc	= generate_text_for_display($similar_desc, $desc_uid, $desc_bitfield, $desc_flags);
-	
+
 		$this->template->assign_block_vars('similar_dl', array(
 			'DOWNLOAD'		=> $similar_desc,
 			'U_DOWNLOAD'	=> $this->helper->route('dl_ext_controller', array('view' => 'detail', 'df_id' => $similar_id)),
 		));
 	}
-	
-	$this->db->sql_freeresult($result);	
+
+	$this->db->sql_freeresult($result);
 }
 
 /*

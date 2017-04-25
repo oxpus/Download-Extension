@@ -303,7 +303,7 @@ if ($files && $file_command)
 
 if ($dir_name && $dircreate)
 {
-	$upas = array('ä' => 'ae', 'ü' => 'ue', 'ö' => 'oe', 'Ä' => 'Ae', 'Ü' => 'Ue', 'Ö' => 'Oe', 'ß' => 'ss');
+	$upas = array('ï¿½' => 'ae', 'ï¿½' => 'ue', 'ï¿½' => 'oe', 'ï¿½' => 'Ae', 'ï¿½' => 'Ue', 'ï¿½' => 'Oe', 'ï¿½' => 'ss');
 	$upass = array(' ' => '', '+' => '', '%' => '');
 	$dir_name = strtr(urlencode(strtr(utf8_decode($dir_name), $upas)), $upass);
 
@@ -505,7 +505,7 @@ if ($action == 'browse' || $action == '' || $action == 'unassigned')
 		{
 			$dir_ary = explode('|~|', $value);
 			$template->assign_block_vars('dirs_row', array(
-				'DIR_LINK' => '»&nbsp;' . $dir_ary[1],
+				'DIR_LINK' => $dir_ary[1],
 				'DIR_DELETE_LINK' => $dirs_delete[$i])
 			);
 		}
