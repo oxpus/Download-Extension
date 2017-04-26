@@ -26,12 +26,13 @@
 		</li>
 		<!-- ELSE -->
 		<!-- BEGIN downloads -->
-		<li class="row">
+		<li class="row dlTooltip" id="{downloads.CAT_ID}">
 			<dl>
 				<dt>
 					<span class="forum-image">{downloads.MINI_IMG}</span>
 					<!-- IF downloads.CAT_ICON --><span class="forum-image"><img src="{downloads.CAT_ICON}" alt="" title="{downloads.CAT_NAME}" /></span><!-- ENDIF -->
-					<a href="{downloads.U_CAT_VIEW}" class="forumtitle dlTooltip" title="{downloads.CAT_DESC}">{downloads.CAT_NAME}</a><br />
+					<a href="{downloads.U_CAT_VIEW}" class="forumtitle" title="">{downloads.CAT_NAME}</a><br />
+					<div class="noshow" id="desc_{downloads.CAT_ID}" style="padding-left: 4em;"><br />{downloads.CAT_DESC}</div>
 					<!-- IF .downloads.pagination -->
 					<div class="pagination">
 						<ul>
@@ -54,7 +55,7 @@
 						{downloads.sub.sublevel_row.M_SUBLEVEL}
 						<!-- IF downloads.sub.sublevel_row.M_SUBLEVEL_ICON -->
 						<img src="{downloads.sub.sublevel_row.M_SUBLEVEL_ICON}" alt="" title="{downloads.sub.sublevel_row.L_SUBLEVEL}" style="max-height: 12px; max-width: 12px;" /><!-- ENDIF -->
-						 &nbsp; <a href="{downloads.sub.sublevel_row.U_SUBLEVEL}" class="small dlTooltip"<!-- IF downloads.sub.sublevel_row.SUBLEVEL_COUNT --> title="{downloads.sub.sublevel_row.SUBLEVEL_COUNT} {L_DL_CAT_FILES}"<!-- ENDIF -->><strong>{downloads.sub.sublevel_row.L_SUBLEVEL}</strong></a>
+						 &nbsp; <a href="{downloads.sub.sublevel_row.U_SUBLEVEL}" class="small"<!-- IF downloads.sub.sublevel_row.SUBLEVEL_COUNT --> title="{downloads.sub.sublevel_row.SUBLEVEL_COUNT} {L_DL_CAT_FILES}"<!-- ENDIF -->><strong>{downloads.sub.sublevel_row.L_SUBLEVEL}</strong></a>
 					</div>
 					<!-- END sublevel_row -->
 					<!-- END sub -->

@@ -187,46 +187,6 @@ div.dl_new_close:hover, div.dl_help_close:hover, .dl-close-footer:hover
     font-size: 2em;
 }
 
-.ui-tooltip
-{
-    display:none;
-	position:absolute;
-	border:1px #aaaaaa solid;
-	background-color:#ffffff;
-	border-radius:5px;
-	padding: 1em;
-	color:#000000;
-    white-space: pre-wrap;
-}
-
-.ui-tooltip:after, .ui-tooltip:before
-{
-	bottom: 100%;
-	left: 5%;
-	border: solid transparent;
-	content: " ";
-	height: 0;
-	width: 0;
-	position: absolute;
-	pointer-events: none;
-}
-
-.ui-tooltip:after
-{
-	border-color: rgba(255, 255, 255, 0);
-	border-bottom-color: #ffffff;
-	border-width: 10px;
-	margin-left: -10px;
-}
-
-.ui-tooltip:before
-{
-	border-color: rgba(170, 170, 170, 0);
-	border-bottom-color: #aaaaaa;
-	border-width: 11px;
-	margin-left: -11px;
-}
-
 @media only screen and (max-width: 1220px), only screen and (max-device-width: 1220px) {
 	.footer-box {
         width: 95%;

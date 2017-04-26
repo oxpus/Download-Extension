@@ -13,11 +13,12 @@
 	</ul>
 	<ul class="topiclist forums">
 		<!-- BEGIN subcats -->
-		<li class="row">
+		<li class="row dlTooltip" id="{subcats.CAT_ID}">
 			<dl>
 				<dt><span class="forum-image">{subcats.MINI_IMG}</span>
 					<span class="forum-image"><!-- IF subcats.CAT_ICON --><img src="{subcats.CAT_ICON}" alt="" title="{subcats.CAT_NAME}" /><!-- ELSE -->&nbsp;<!-- ENDIF --></span>
-					<a href="{subcats.U_CAT_VIEW}" class="forumtitle dlTooltip" title="{subcats.CAT_DESC}">{subcats.CAT_NAME}</a><br />
+					<a href="{subcats.U_CAT_VIEW}" class="forumtitle" title="">{subcats.CAT_NAME}</a><br />
+					<div class="noshow" id="desc_{subcats.CAT_ID}" style="padding-left: 4em;"><br />{subcats.CAT_DESC}</div>
 					<!-- IF .subcats.pagination -->
 					<div class="pagination">
 						<ul>
@@ -38,7 +39,7 @@
 					<div style="padding-left: 3.5em;">
 						{subcats.sub.sublevel_row.M_SUBLEVEL}
 						<!-- IF subcats.sub.sublevel_row.M_SUBLEVEL_ICON --><img src="{subcats.sub.sublevel_row.M_SUBLEVEL_ICON}" alt="" title="{subcats.sub.sublevel_row.L_SUBLEVEL}" /><!-- ENDIF --> &nbsp;
-						<a href="{subcats.sub.sublevel_row.U_SUBLEVEL}" class="small dlTooltip" style="font-size: 8pt;"<!-- IF subcats.sub.sublevel_row.SUBLEVEL_COUNT --> title="{subcats.sub.sublevel_row.SUBLEVEL_COUNT} {L_DL_CAT_FILES}"<!-- ENDIF -->><strong>{subcats.sub.sublevel_row.L_SUBLEVEL}</strong></a>
+						<a href="{subcats.sub.sublevel_row.U_SUBLEVEL}" class="small" style="font-size: 8pt;"<!-- IF subcats.sub.sublevel_row.SUBLEVEL_COUNT --> title="{subcats.sub.sublevel_row.SUBLEVEL_COUNT} {L_DL_CAT_FILES}"<!-- ENDIF -->><strong>{subcats.sub.sublevel_row.L_SUBLEVEL}</strong></a>
 					</div>
 					<!-- END sublevel_row -->
 					<!-- END sub -->

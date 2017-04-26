@@ -112,10 +112,6 @@ if (sizeof($index) > 0)
 		{
 			$cat_desc = censor_text($cat_desc);
 			$cat_desc = generate_text_for_display($cat_desc, $cat_uid, $cat_bitfield, $cat_flags);
-
-			$cat_desc = str_replace('<br>', "\n", $cat_desc);
-			$cat_desc = str_replace('<br />', "\n", $cat_desc);
-			$cat_desc = str_replace("\n\n", "\n", $cat_desc);
 		}
 
 		$mini_icon = array();
@@ -185,6 +181,7 @@ if (sizeof($index) > 0)
 			'CAT_DESC'			=> $cat_desc,
 			'CAT_NAME'			=> $cat_name,
 			'CAT_ICON'			=> $cat_icon,
+			'CAT_ID'			=> $cat_id,
 			'CAT_DL'			=> ((isset($index[$cat_id]['total'])) ? $index[$cat_id]['total'] : 0) + \oxpus\dl_ext\includes\classes\ dl_main::get_sublevel_count($cat_id),
 			'CAT_LAST_DL'		=> (isset($last_dl[$last_cat_id]['desc'])) ? $last_dl[$last_cat_id]['desc'] : '',
 			'CAT_LAST_USER'		=> (isset($last_dl[$last_cat_id]['user'])) ? $last_dl[$last_cat_id]['user'] : '',
