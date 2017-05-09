@@ -20,7 +20,7 @@
 <tbody>
 <tr>
 	<td>{L_DL_ACP_MAIN_STATS_TRAFFIC}{L_COLON}</td>
-	<td><span style="color: #<!-- IF S_DL_TRAFFIC_OFF -->cc0000<!-- ELSE -->009900<!-- ENDIF -->;"><strong><!-- IF S_DL_TRAFFIC_OFF -->{L_DL_ACP_MAIN_STATS_TRAFFIC_OFF}<!-- ELSE -->{L_DL_ACP_MAIN_STATS_TRAFFIC_ON}<!-- ENDIF --></strong></span></td>
+	<td><span class="<!-- IF S_DL_TRAFFIC_OFF -->dl-red<!-- ELSE -->dl-green<!-- ENDIF -->"><strong><!-- IF S_DL_TRAFFIC_OFF -->{L_DL_ACP_MAIN_STATS_TRAFFIC_OFF}<!-- ELSE -->{L_DL_ACP_MAIN_STATS_TRAFFIC_ON}<!-- ENDIF --></strong></span></td>
 	<td>{L_DL_VERSION_CHECK}{L_COLON}</td>
 	<td><strong>{DL_MOD_VERSION_SIMPLE}</strong></td>
 </tr>
@@ -76,9 +76,9 @@
 </tr>
 <tr>
 	<td>{L_DL_ACP_MAIN_STATS_TOTAL_TODOS}{L_COLON}</td>
-	<td><strong style="color: <!-- IF TOTAL_TODOS -->#cc0000<!-- ELSE -->#009900<!-- ENDIF -->;">{TOTAL_TODOS}</strong></td>
+	<td><strong class="color: <!-- IF TOTAL_TODOS -->dl-red<!-- ELSE -->dl-green<!-- ENDIF -->">{TOTAL_TODOS}</strong></td>
 	<td>{L_DL_ACP_MAIN_STATS_TOTAL_BROKEN}{L_COLON}</td>
-	<td><strong style="color: <!-- IF TOTAL_BROKEN -->#cc0000<!-- ELSE -->#009900<!-- ENDIF -->;">{TOTAL_BROKEN}</strong></td>
+	<td><strong class="color: <!-- IF TOTAL_BROKEN -->dl-red<!-- ELSE -->dl-green<!-- ENDIF -->">{TOTAL_BROKEN}</strong></td>
 </tr>
 </tbody>
 </table>
@@ -109,7 +109,7 @@
 <!-- IF S_DL_TRAFFIC_OFF --><br /><div>{L_DL_TRAFFIC_OFF_EXPLAIN}</div><!-- ENDIF -->
 <!-- ENDIF -->
 
-<!-- IF U_BACK --><a href="{U_BACK}" style="float: {S_CONTENT_FLOW_END};">&laquo; {L_BACK}</a><!-- ENDIF -->
+<!-- IF U_BACK --><a href="{U_BACK}" class="dl-right">&laquo; {L_BACK}</a><!-- ENDIF -->
 
 <!-- IF S_DL_CONFIG --><!-- INCLUDE dl_config_body.html --><!-- ENDIF -->
 <!-- IF S_DL_TOOLBOX --><!-- INCLUDE dl_toolbox_body.html --><!-- ENDIF -->

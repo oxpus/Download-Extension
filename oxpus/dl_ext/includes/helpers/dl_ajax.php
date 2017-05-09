@@ -24,11 +24,13 @@ if ($df_id && $rate_point)
 		'dl_id'			=> $df_id));
 	$this->db->sql_query($sql);
 
-	$sql = 'SELECT AVG(rate_point) AS rating FROM ' . DL_RATING_TABLE . '
+	$sql = 'SELECT AVG(rate_point) AS rating, COUNT(rate_point) AS total FROM ' . DL_RATING_TABLE . '
 		WHERE dl_id = ' . (int) $df_id . '
 		GROUP BY dl_id';
 	$result = $this->db->sql_query($sql);
-	$new_rating = ceil($this->db->sql_fetchfield('rating'));
+	$row = $this->db->sql_fetchrow($result);
+	$new_rating = ceil($row['rating']);
+	$total_ratings = $row['total'];
 	$this->db->sql_freeresult($result);
 
 	$sql = 'UPDATE ' . DOWNLOADS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', array(
@@ -44,6 +46,15 @@ if ($df_id && $rate_point)
 		$j = $i + 1;
 
 		$rate_img .= ($j <= $new_rating ) ? $rate_yes : $rate_no;
+	}
+
+	if ($total_ratings == 1)
+	{
+		$rate_img .= '<br />' . $this->language->lang('DL_RATING_ONE');
+	}
+	else
+	{
+		$rate_img .= '<br />' . $this->language->lang('DL_RATING_MORE', $total_ratings);
 	}
 
 	$json_out = json_encode(array('rate_img' => $rate_img, 'df_id' => $df_id));

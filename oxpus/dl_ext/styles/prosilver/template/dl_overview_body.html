@@ -21,7 +21,7 @@ var dlAjaxUrl = '{U_DL_AJAX}';
 					<dd class="topics">{L_DL_FILE_SIZE}</dd>
 					<dd class="posts">{L_DL_KLICKS} /<br />{L_DL_OVERALL_KLICKS}</dd>
 					<!-- IF S_ENABLE_RATE -->
-					<dd class="lastpost" style="display: block;">{L_DL_RATING}</dd>
+					<dd class="lastpost dl-cell-clock">{L_DL_RATING}</dd>
 					<!-- ENDIF -->
 				</dl>
 			</li>
@@ -61,7 +61,7 @@ var dlAjaxUrl = '{U_DL_AJAX}';
 
 	<fieldset>
 
-	<p style="text-align: center;">
+	<p class="dl-text-center">
 		{L_SORT_BY}
 		&nbsp;
 		<select name="sort_by" onchange="forms['dl_mod'].submit();">

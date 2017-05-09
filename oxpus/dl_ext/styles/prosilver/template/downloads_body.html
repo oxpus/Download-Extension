@@ -10,12 +10,16 @@ var dlAjaxUrl = '{U_DL_AJAX}';
 <script type="text/javascript" src="{EXT_DL_PATH_AJAX}ajax_dl.js"></script>
 <!-- ENDIF -->
 
-<h2 style="float: left;">{INDEX_CAT_TITLE}</h2>
+<h2 class="dl-left">{INDEX_CAT_TITLE}</h2>
 
-<div style="float: right;">&nbsp;<a href="{U_DL_SEARCH}" class="button icon-button">{L_DL_SEARCH_DOWNLOAD}</a></div>
-<div style="float: right;"><!-- IF S_DL_UPLOAD --><a href="{DL_UPLOAD}" class="button icon-button reply-icon">{L_DL_UPLOAD}</a><!-- ENDIF --></div>
+<br />
 
-<p style="clear: both;"><strong><!-- IF DL_MODCP -->{L_MODERATORS}<!-- ENDIF --></strong> {DL_MODCP}</p>
+<div class="dl-right">&nbsp;<a href="{U_DL_SEARCH}" class="button icon-button">{L_DL_SEARCH_DOWNLOAD}</a></div>
+<div class="dl-right"><!-- IF S_DL_UPLOAD --><a href="{DL_UPLOAD}" class="button icon-button reply-icon">{L_DL_UPLOAD}</a><!-- ENDIF --></div>
+
+<div class="clear"></div>
+
+<div><strong><!-- IF DL_MODCP -->{L_MODERATORS}<!-- ENDIF --></strong> {DL_MODCP}</div>
 
 <!-- IF S_CAT_TRAFFIC -->
 <div class="panel bg3">
@@ -52,7 +56,7 @@ var dlAjaxUrl = '{U_DL_AJAX}';
 				<dd class="topics">{L_DL_FILE_SIZE}</dd>
 				<dd class="posts">{L_DL_KLICKS}<br />{L_DL_OVERALL_KLICKS}</dd>
 				<!-- BEGIN comment_header -->
-				<dd class="lastpost" style="display: block;"><!-- IF S_ENABLE_RATE -->{L_DL_RATING}<!-- ELSE -->&nbsp;<!-- ENDIF --></dd>
+				<dd class="lastpost"><!-- IF S_ENABLE_RATE -->{L_DL_RATING}<!-- ELSE -->&nbsp;<!-- ENDIF --></dd>
 				<!-- END comment_header -->
 			</dl>
 		</li>
@@ -70,24 +74,12 @@ var dlAjaxUrl = '{U_DL_AJAX}';
 				<dd class="lastposts">
 					<!-- IF S_ENABLE_RATE and downloads.RATING_IMG --><div id="rating_{downloads.DF_ID}">{downloads.RATING_IMG}<br />{downloads.RATINGS}</div><!-- ENDIF -->
     				<!-- BEGIN comments -->
-					<br />
-                    <ul class="post-buttons">
-						<li><strong>{L_DL_COMMENTS}</strong> &nbsp; </li>
-						<!-- IF downloads.comments.U_COMMENT_POST -->
-						<li>
-							<a href="{downloads.comments.U_COMMENT_POST}" title="{L_DL_POST_COMMENT}" class="button button-icon-only">
-								<i class="icon fa-pencil fa-fw" aria-hidden="true"></i><span class="sr-only">{L_DL_POST_COMMENT}</span>
-							</a>
-						</li>
+                    <br />
+					<div>
+						<!-- IF downloads.comments.U_COMMENT -->
+						<a href="{downloads.comments.U_COMMENT}"><i class="icon fa-comments fa-fw" aria-hidden="true"></i> {L_DL_COMMENTS}</a>
 						<!-- ENDIF -->
-						<!-- IF downloads.comments.U_COMMENT_SHOW -->
-						<li>
-							<a href="{downloads.comments.U_COMMENT_SHOW}" title="{L_DL_VIEW_COMMENTS}" class="button button-icon-only">
-								<i class="icon fa-info fa-fw" aria-hidden="true"></i><span class="sr-only">{L_DL_VIEW_COMMENTS}</span>
-							</a>
-						</li>
-						<!-- ENDIF -->
-					</ul>
+					</div>
     				<!-- END comments -->
 				</dd>
 			</dl>
@@ -125,7 +117,7 @@ var dlAjaxUrl = '{U_DL_AJAX}';
 
 <fieldset>
 
-<p style="text-align: center;">
+<p class="dl-text-center">
 	{L_SORT_BY}
 	&nbsp;
 	<select name="sort_by" onchange="forms['dl_mod'].submit()">

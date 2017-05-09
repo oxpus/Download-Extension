@@ -23,9 +23,15 @@ var	text_name 				= 'message';
 <div class="rules"><div class="inner"><span>{CAT_RULE}</span></div></div>
 <!-- ENDIF -->
 
-<h2 style="float: left;">{STATUS} {DESCRIPTION}{HACK_VERSION} {MINI_IMG}</h2>
-<div style="float: right;"><a href="{U_DL_SEARCH}" class="button icon-button">{L_DL_SEARCH_DOWNLOAD}</a></div>
-<br style="clear: both;" /><br /><br />
+<h2 class="dl-left">{STATUS} {DESCRIPTION}{HACK_VERSION} {MINI_IMG}</h2>
+
+<br />
+
+<div class="dl-right"><a href="{U_DL_SEARCH}" class="button icon-button">{L_DL_SEARCH_DOWNLOAD}</a></div>
+
+<div class="clear"></div>
+
+<br />
 
 <div class="action-bar bar-top">
 <!-- BEGIN category -->
@@ -37,7 +43,7 @@ var	text_name 				= 'message';
 
 <div class="panel dlext<!-- IF S_OPEN_PANEL <> 0 --> noshow<!-- ENDIF -->" id="options0">
 
-	<div style="width: 50%; float: left;">
+	<div class="dl-width-50 dl-left">
 
 		<!-- IF LONG_DESC -->
 		<div class="postbody"><div class="content">{LONG_DESC}<br /><br /></div></div>
@@ -45,55 +51,55 @@ var	text_name 				= 'message';
 
 	</div>
 
-	<div style="width: 50%; float: left;">
+	<div class="dl-width-50 dl-left">
 
 		<fieldset>
 			<dl>
 				<dt><label>{L_DL_FILE_NAME}</label></dt>
-				<dd class="lastpost" style="display: block;"><label>{FILE_NAME}</label></dd>
+				<dd class="lastpost dl-cell-block"><label>{FILE_NAME}</label></dd>
 			</dl>
 		<!-- IF S_REAL_FILENAME -->
 			<dl>
 				<dt><label>{L_DL_REAL_FILETIME}</label></dt>
-				<dd class="lastpost" style="display: block;"><label>{REAL_FILETIME}</label></dd>
+				<dd class="lastpost dl-cell-block"><label>{REAL_FILETIME}</label></dd>
 			</dl>
 		<!-- ENDIF -->
 		<!-- IF S_HACKLIST -->
 			<dl>
 				<dt><label>{L_DL_HACK_AUTOR}</label></dt>
-				<dd class="lastpost" style="display: block;"><label>{HACK_AUTHOR}{HACK_AUTHOR_WEBSITE}</label></dd>
+				<dd class="lastpost dl-cell-block"><label>{HACK_AUTHOR}{HACK_AUTHOR_WEBSITE}</label></dd>
 			</dl>
 		<!-- ENDIF -->
 		<!-- IF S_BUG_TRACKER -->
 			<dl>
 				<dt><label>{L_DL_BUG_TRACKER}</label></dt>
-				<dd class="lastpost" style="display: block;"><label><a href="{U_BUG_TRACKER}">{L_DL_BUG_TRACKER_FILE}</a></label></dd>
+				<dd class="lastpost dl-cell-block"><label><a href="{U_BUG_TRACKER}">{L_DL_BUG_TRACKER_FILE}</a></label></dd>
 			</dl>
 		<!-- ENDIF -->
 		<!-- IF S_SHOW_TOPIC_LINK -->
 			<dl>
 				<dt><label>{L_TOPIC}</label></dt>
-				<dd class="lastpost" style="display: block;"><label><a href="{U_TOPIC}">{L_VIEW_TOPIC}</a></label></dd>
+				<dd class="lastpost dl-cell-block"><label><a href="{U_TOPIC}">{L_VIEW_TOPIC}</a></label></dd>
 			</dl>
 		<!-- ENDIF -->
 			<dl>
 				<dt><label>{L_DL_FILE_SIZE}</label></dt>
-				<dd class="lastpost" style="display: block;"><label>{FILE_SIZE}</label></dd>
+				<dd class="lastpost dl-cell-block"><label>{FILE_SIZE}</label></dd>
 			</dl>
 			<dl>
 				<dt><label>{L_DL_KLICKS} / {L_DL_OVERALL_KLICKS}</label></dt>
-				<dd class="lastpost" style="display: block;"><label>{FILE_KLICKS} / {FILE_OVERALL_KLICKS}</label></dd>
+				<dd class="lastpost dl-cell-block"><label>{FILE_KLICKS} / {FILE_OVERALL_KLICKS}</label></dd>
 			</dl>
 		<!-- IF S_HACKLIST -->
 			<dl>
 				<dt><label>{L_DL_HACK_DL_URL}</label></dt>
-				<dd class="lastpost" style="display: block;"><label>{HACK_DL_URL}</label></dd>
+				<dd class="lastpost dl-cell-block"><label>{HACK_DL_URL}</label></dd>
 			</dl>
 		<!-- ENDIF -->
 		<!-- IF S_ENABLE_RATE -->
 			<dl>
 				<dt><label>{L_DL_RATING}</label></dt>
-				<dd class="lastpost" style="display: block;"><div id="rating_{DF_ID}">{RATING_IMG}</div><div>{RATINGS}</div></dd>
+				<dd class="lastpost dl-cell-block"><div id="rating_{DF_ID}">{RATING_IMG}<br />{RATINGS}</div></dd>
 			</dl>
 		<!-- ENDIF -->
 		</fieldset>
@@ -102,20 +108,21 @@ var	text_name 				= 'message';
 
 	<div class="clearfix"></div>
 
-	<div class="notice" style="text-align: center;">{ADD_USER} {CHANGE_USER}&nbsp;&bull;{LAST_TIME}</div>
+	<div class="notice dl-text-center">{ADD_USER} {CHANGE_USER}&nbsp;&bull;{LAST_TIME}</div>
 
 	<!-- BEGIN thumbnail -->
 	<!-- IF thumbnail.S_FIRST_ROW -->
 	<h3>{L_DL_IMAGES}:</h3>
-	<ul style="list-style-type: none; overflow: hidden;">
+	<ul class="dl-detail-row">
 	<!-- ENDIF -->
 		<!-- IF S_DL_POPUPIMAGE -->
-		<li style="float: left; margin-right: 2px;"><a href="{thumbnail.THUMBNAIL_LINK}" title="{thumbnail.THUMBNAIL_NAME}" rel="prettyPhoto[pp_gal]"><img src="{thumbnail.THUMBNAIL_LINK}" alt="{thumbnail.THUMBNAIL_NAME}" title="{thumbnail.THUMBNAIL_NAME}" style="max-weight: 150px; max-height: 100px;" /></a></li>
+		<li class="dl-left dl-margin-right-small"><a href="{thumbnail.THUMBNAIL_LINK}" title="{thumbnail.THUMBNAIL_NAME}" rel="prettyPhoto[pp_gal]"><img src="{thumbnail.THUMBNAIL_LINK}" alt="{thumbnail.THUMBNAIL_NAME}" title="{thumbnail.THUMBNAIL_NAME}" class="dl-thumb-box" /></a></li>
 		<!-- ELSE -->
-		<img src="{thumbnail.THUMBNAIL_LINK}" alt="{thumbnail.THUMBNAIL_NAME}" title="{thumbnail.THUMBNAIL_NAME}" style="max-weight: 150px; max-height: 100px;" />
+		<img src="{thumbnail.THUMBNAIL_LINK}" alt="{thumbnail.THUMBNAIL_NAME}" title="{thumbnail.THUMBNAIL_NAME}" class="dl-thumb-box" />
 		<!-- ENDIF -->
 	<!-- IF thumbnail.S_LAST_ROW -->
 	</ul>
+	<div class="clear"></div>
 	<!-- ENDIF -->
 	<!-- END thumbnail -->
 
@@ -124,46 +131,40 @@ var	text_name 				= 'message';
 <!-- IF VER_TAB -->
 <div class="panel dlext3<!-- IF S_OPEN_PANEL <> 1 --> noshow<!-- ENDIF -->" id="options1">
 
-	<div class="tablewrap">
-
-		<br />
-
-		<!-- BEGIN ver_cell -->
-		<!-- IF ver_cell.S_ROW_COUNT is even -->
-		<dl>
-		<!-- ENDIF -->
-			<dt style="width: 50%; float: left;">
-				<div class="postbody">
-					<ul class="post-buttons">
-    					<li class="rightside">
-                            <a href="{ver_cell.U_VERSION}" title="{L_DL_DETAIL}" class="button button-icon-only">
-                                <i class="icon fa-info fa-fw" area-hidden="true"></i><span>{L_DL_DETAIL}</span>
-                            </a>
-                        </li>
-    					<!-- IF ver_cell.S_USER_PERM -->
-    					<li class="rightside">
-                            <a href="{ver_cell.U_VERSION_EDIT}" title="{L_DL_EDIT_FILE}" class="button button-icon-only">
-                                <i class="icon fa-pencil fa-fw" area-hidden="true"></i><span>{L_DL_EDIT_FILE}</span>
-                            </a>
-                        </li>
-    					<!-- ENDIF -->
-					</ul>
-					<div class="small-icon icon-mark"><a href="{ver_cell.U_VERSION}" class="forumtitle">{ver_cell.VER_TITLE}</a>
-					<!-- IF not ver_cell.VER_ACTIVE and ver_cell.S_USER_PERM -->
-					&nbsp;<span style="color: #ff0000;" class="small"> &raquo; {L_DL_NOT_ACTIVE} &laquo; </span>
+	<!-- BEGIN ver_cell -->
+	<!-- IF ver_cell.S_ROW_COUNT is even -->
+	<dl>
+	<!-- ENDIF -->
+		<dt class="dl-width-50 dl-left">
+			<div class="postbody dl-width-90">
+				<ul class="post-buttons">
+					<li class="dl-right">
+                        <a href="{ver_cell.U_VERSION}" title="{L_DL_DETAIL}" class="button button-icon-only">
+                            <i class="icon fa-info fa-fw" area-hidden="true"></i><span>{L_DL_DETAIL}</span>
+                        </a>
+                    </li>
+					<!-- IF ver_cell.S_USER_PERM -->
+					<li class="dl-right">
+                        <a href="{ver_cell.U_VERSION_EDIT}" title="{L_DL_EDIT_FILE}" class="button button-icon-only">
+                            <i class="icon fa-pencil fa-fw" area-hidden="true"></i><span>{L_DL_EDIT_FILE}</span>
+                        </a>
+                    </li>
 					<!-- ENDIF -->
-                    </div>
-					<div> {ver_cell.VER_TIME}</div>
-					<div class="content">{ver_cell.VER_DESC} </div>
-				</div>
-			</dt>
-		<!-- IF ver_cell.S_ROW_COUNT is not even or ver_cell.S_LAST_ROW -->
-			<dd style="clear: both; margin: 10px 0 10px 0; border-bottom: 1px #aaaaaa dotted;"></dd>
-		</dl>
-		<!-- ENDIF -->
-		<!-- END ver_cell -->
-
-	</div>
+				</ul>
+				<div><a href="{ver_cell.U_VERSION}" class="forumtitle">{ver_cell.VER_TITLE}</a>
+				<!-- IF not ver_cell.VER_ACTIVE and ver_cell.S_USER_PERM -->
+				&nbsp;<span class="dl-red small"> &raquo; {L_DL_NOT_ACTIVE} &laquo; </span>
+				<!-- ENDIF -->
+                </div>
+				<div> {ver_cell.VER_TIME}</div>
+				<div class="content">{ver_cell.VER_DESC} </div>
+			</div>
+		</dt>
+	<!-- IF ver_cell.S_ROW_COUNT is not even or ver_cell.S_LAST_ROW -->
+		<dd class="dl-version-row-end"></dd>
+	</dl>
+	<!-- ENDIF -->
+	<!-- END ver_cell -->
 
 </div>
 <!-- ENDIF -->
@@ -197,7 +198,7 @@ var	text_name 				= 'message';
 			</fieldset>
 
 			<fieldset class="submit-buttons">
-				<input type="submit" name="post" value="{L_SUBMIT}" style="height: 28px;" class="button icon-button" />
+				<input type="submit" name="post" value="{L_SUBMIT}" class="button icon-button" />
 				{S_FORM_TOKEN_COMMENT}
 				{S_HIDDEN_POST_FIELDS}
 			</fieldset>
@@ -215,7 +216,7 @@ var	text_name 				= 'message';
 	<h3>{L_DL_COMMENTS}</h3>
 	<!-- ENDIF -->
 
-	<div style="background-color: #fafafa; border: 1px #555555 solid;" class="panel">
+	<div class="dl-edit-box-light panel">
 		<div class="inner">
 			<div class="posts">
 				<dl class="postprofile">
@@ -268,7 +269,7 @@ var	text_name 				= 'message';
     </ul>
 	<ul id="nav-breadcrumbs_detail" class="nav-breadcrumbs linklist" role="menubar">
     	<!-- IF S_REPORT_BROKEN --><li data-last-responsive="true" class="leftside"><a href="{U_BROKEN_DOWNLOAD}"><i class="icon fa-bell fa-fw" aria-hidden="true"></i> <span>{L_DL_BROKEN}</span></a></li><!-- ENDIF -->
-    	<!-- IF S_DL_BROKEN_CUR --><li data-last-responsive="true" class="leftside"><b style="color: #FF0000">&nbsp;{L_DL_BROKEN_CUR}</b></li><!-- ENDIF -->
+    	<!-- IF S_DL_BROKEN_CUR --><li data-last-responsive="true" class="leftside"><b class="dl-red">&nbsp;{L_DL_BROKEN_CUR}</b></li><!-- ENDIF -->
     	<!-- IF S_DL_BROKEN_MOD --><li data-last-responsive="true" class="leftside"><a href="{U_REPORT}"><i class="icon fa-bell-slash fa-fw" aria-hidden="true"></i> <span>{L_DL_BROKEN_MOD}</span></a></li><!-- ENDIF -->
 		<!-- IF S_MOD_LIST or S_MOD_TODO or S_DL_FIELDS --><li data-last-responsive="true" class="rightside" id="extra_page_open"><a href="#" onclick="pageToggle('extra_page', true, '{L_DL_MOD_LIST}', '{L_DL_MOD_LIST_CLOSE}');"><i class="icon fa-eye fa-fw" aria-hidden="true"></i> <span>{L_DL_MOD_LIST}</span></a></li><!-- ENDIF -->
 		<!-- IF HASH_TAB --><li data-last-responsive="true" class="rightside" id="hash_page_open"><a href="#" onclick="pageToggle('hash_page', true, '{L_DL_MOD_FILE_HASH_OPEN}', '{L_DL_MOD_FILE_HASH_CLOSE}');"><i class="icon fa-eye fa-fw" aria-hidden="true"></i> <span>{L_DL_MOD_FILE_HASH_OPEN}</span></a></li><!-- ENDIF -->
@@ -321,7 +322,7 @@ var	text_name 				= 'message';
 	<div class="tablewrap">
     	<table class="table1">
     		<!-- BEGIN hash_row -->
-    		<tr style="border: none;" class="row">
+    		<tr class="row">
     			<td><label><strong>{hash_row.DL_VERSION}</strong></label></td>
     			<td>{hash_row.DL_FILE_NAME}</td>
     			<td>[{hash_row.DL_HASH_METHOD}] {hash_row.DL_HASH}</td>
@@ -352,10 +353,9 @@ var	text_name 				= 'message';
 		<input type="hidden" name="hotlink_id" value="{download_button.S_HOTLINK_ID}" />
 		{download_button.S_HIDDEN_FIELDS}{S_HIDDEN_FIELDS}{S_FORM_TOKEN_DOWNLOAD}
 	</div>
+	<!-- IF S_TRAFFICFREE_DL --><div class="small dl-text-center dl-red">{L_DL_CAN_DOWNLOAD_TRAFFIC}</div><!-- ENDIF -->
 </li>
 </ul>
-
-<!-- IF S_TRAFFICFREE_DL --><p style="text-align: center"><span style="color: #FF0000;">{L_DL_CAN_DOWNLOAD_TRAFFIC}</span></p><!-- ENDIF -->
 
 </form>
 </div>

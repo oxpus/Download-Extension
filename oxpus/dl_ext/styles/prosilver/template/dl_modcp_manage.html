@@ -35,8 +35,8 @@ function select_switch(status)
 		<li class="header">
 			<dl>
 				<dt>{L_DL_DOWNLOAD}</dt>
-				<dd class="options" style="display: block;">&nbsp;</dd>
-				<dd class="time" style="display: block;">{L_OPTIONS}</dd>
+				<dd class="options dl-cell-block">&nbsp;</dd>
+				<dd class="time dl-cell-block">{L_OPTIONS}</dd>
 			</dl>
 		</li>
 	</ul>
@@ -45,8 +45,8 @@ function select_switch(status)
 		<li class="row<!-- IF manage_row.S_ROW_COUNT is even --> bg1<!-- ELSE --> bg2<!-- ENDIF -->">
 			<dl>
 				<dt>{manage_row.MINI_ICON}&nbsp;<a href="{manage_row.U_DOWNLOAD}" class="forumtitle">{manage_row.DESCRIPTION}</a></dt>
-				<dd class="options" style="display: block;">&nbsp;<input type="checkbox" class="permissions-checkbox" name="dlo_id[]" id="dlo_id_{manage_row.S_ROW_COUNT}" value="{manage_row.FILE_ID}" />&nbsp;</dd>
-				<dd class="time" style="display: block;">
+				<dd class="options dl-cell-block">&nbsp;<input type="checkbox" class="permissions-checkbox" name="dlo_id[]" id="dlo_id_{manage_row.S_ROW_COUNT}" value="{manage_row.FILE_ID}" />&nbsp;</dd>
+				<dd class="time dl-cell-block">
 					&nbsp;<!-- IF SORT --><a href="{manage_row.U_UP}" class="gensmall">{DL_UP}</a>&nbsp;&bull;&nbsp;<a href="{manage_row.U_DOWN}" class="gensmall">{DL_DOWN}</a>&nbsp;&bull;&nbsp;<!-- ENDIF --><a href="{manage_row.U_EDIT}">{L_DL_EDIT_FILE}</a>
 				</dd>
  			</dl>
@@ -63,11 +63,11 @@ function select_switch(status)
 	<div class="inner">
 
 	<fieldset class="submit-buttons">
-		<!-- IF S_ORDER_BUTTON --><input type="submit" name="sort" value="{L_DL_ORDER}" style="height: 28px;" class="button icon-button" />&nbsp;&nbsp;<!-- ENDIF -->
-		<!-- IF S_MODCP_BUTTON --><input type="submit" value="{L_PREVIOUS_STEP}" style="height: 28px;" class="button icon-button" />&nbsp;&nbsp;<!-- ENDIF -->
-		<input type="submit" name="move" value="{L_DL_MOVE}" style="height: 28px;" class="button icon-button" />&nbsp;{S_CAT_SELECT}&nbsp;&nbsp;
-		<input type="submit" name="delete" value="{L_DL_DELETE}" style="height: 28px;" class="button icon-button" />&nbsp;&nbsp;
-		<input type="submit" name="lock" value="{L_DL_LOCK}" style="height: 28px;" class="button icon-button" />
+		<!-- IF S_ORDER_BUTTON --><input type="submit" name="sort" value="{L_DL_ORDER}" class="button icon-button" />&nbsp;&nbsp;<!-- ENDIF -->
+		<!-- IF S_MODCP_BUTTON --><input type="submit" value="{L_PREVIOUS_STEP}" class="button icon-button" />&nbsp;&nbsp;<!-- ENDIF -->
+		<input type="submit" name="move" value="{L_DL_MOVE}" class="button icon-button" />&nbsp;{S_CAT_SELECT}&nbsp;&nbsp;
+		<input type="submit" name="delete" value="{L_DL_DELETE}" class="button icon-button" />&nbsp;&nbsp;
+		<input type="submit" name="lock" value="{L_DL_LOCK}" class="button icon-button" />
 	</fieldset>
 
 	</div>

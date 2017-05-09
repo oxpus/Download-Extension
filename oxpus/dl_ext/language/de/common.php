@@ -372,6 +372,7 @@ $lang = array_merge($lang, array(
 
 	'DL_ICON_FREE_FOR_REG'	=> 'Zeige Gästen das weisse Download Icon',
 	'DL_IMAGES'				=> 'Bilder',
+	'DL_INDEX_DESC_HIDE'	=> 'Verstecke Kategoriebeschreibungen',
 	'DL_INFO'				=> 'Info',
 	'DL_IP'					=> 'IP Adresse',
 	'DL_IS_FREE'			=> 'frei',

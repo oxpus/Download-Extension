@@ -40,13 +40,11 @@ function select_switch(status)
 	</dl>
 	<!-- END extension_row -->
 
-	<p style="text-align: right;">
-		<span><a href="javascript:select_switch(true);" class="small">{L_MARK_ALL}</a> :: <a href="javascript:select_switch(false);" class="small">{L_UNMARK_ALL}</a></span>
-	</p>
-
 </fieldset>
 
 <fieldset class="quick">
+	<div><a href="javascript:select_switch(true);" class="small">{L_MARK_ALL}</a> :: <a href="javascript:select_switch(false);" class="small">{L_UNMARK_ALL}</a></div>
+	<br />
 	<input type="submit" name="submit" class="button1" value="{L_DL_DELETE}" /><br />
 	<input type="hidden" name="action" value="delete" />
 	{S_FORM_TOKEN}

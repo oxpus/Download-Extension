@@ -44,7 +44,7 @@
 			<!-- BEGIN images -->
 			<dl<!-- IF images.S_ROW_COUNT is even --> class="row bg2"<!-- ENDIF -->>
 				<dt>
-					<a href="{images.LINK}" title="{images.NAME}" rel="prettyPhoto[pp_gal]"><img src="{images.LINK}" alt="{images.NAME}" title="{images.NAME}" style="max-weight: 150px; max-height: 100px;" /></a>
+					<a href="{images.LINK}" title="{images.NAME}" rel="prettyPhoto[pp_gal]"><img src="{images.LINK}" alt="{images.NAME}" title="{images.NAME}" class="dl-thumb-box" /></a>
 				</dt>
 				<dd>
 					<input type="text" maxlength="255" name="ver_title[{images.VER_FILE_ID}]" value="{images.NAME}" class="inputbox autowidth" />
@@ -99,8 +99,7 @@
 		</fieldset>
 
 		<fieldset class="submit-buttons">
-			<input type="submit" name="submit" value="{L_SUBMIT}" style="height: 28px;" class="button icon-button" />&nbsp;&nbsp;
-			<input type="reset" name="reset" value="{L_RESET}" style="height: 28px;" class="button icon-button" />
+			<input type="submit" name="submit" value="{L_SUBMIT}" class="button icon-button" />&nbsp;&nbsp;
 		</fieldset>
 
 	</div>

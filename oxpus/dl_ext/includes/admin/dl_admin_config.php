@@ -87,6 +87,7 @@ switch ($view)
 
 				'dl_links_per_page'			=> array('lang' => 'DL_LINKS_PER_PAGE',			'validate' => 'string',	'type' => 'text:3:4',		'explain' => false,		'help_key' => 'DL_LINKS_PER_PAGE'),
 				'dl_shorten_extern_links'	=> array('lang' => 'DL_SHORTEN_EXTERN_LINKS',	'validate' => 'string',	'type' => 'text:3:4',		'explain' => false,		'help_key' => 'DL_SHORTEN_EXTERN_LINKS'),
+				'dl_index_desc_hide'		=> array('lang' => 'DL_INDEX_DESC_HIDE',		'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_INDEX_DESC_HIDE'),
 				'dl_limit_desc_on_index'	=> array('lang' => 'DL_LIMIT_DESC_ON_INDEX',	'validate' => 'string',	'type' => 'text:5:10',		'explain' => false,		'help_key' => 'DL_LIMIT_DESC_ON_INDEX'),
 
 				'legend3'				=> '',

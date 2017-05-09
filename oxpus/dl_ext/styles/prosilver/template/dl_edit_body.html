@@ -6,7 +6,7 @@
 
 <form action="{S_DOWNLOADS_ACTION}" method="post" {ENCTYPE} id="dl_edit">
 
-<div style="background-color: #fafafa; border: 1px #555555 solid;" class="panel">
+<div class="panel dl-edit-box-light">
 	<div class="inner">
 
 	<h3>{DL_FILES_TITLE}</h3>
@@ -46,7 +46,7 @@
 	</div>
 </div>
 
-<div style="background-color: #fafafa; border: 1px #555555 solid;" class="panel bg2">
+<div class="panel dl-edit-box-light">
 	<div class="inner">
 
 	<fieldset>
@@ -76,7 +76,7 @@
 		</dd>
 	</dl>
 	<!-- IF S_VERSION_ON -->
-	<dl style="background-color: #ffeeee;">
+	<dl class="dl-edit-version">
 		<dt><label>{L_DL_VERSION}</label></dt>
 		<dd>
 			<label class="dl-green"><input type="radio" name="file_ver_opt" class="radio" value="0" checked="checked" />&nbsp;{L_DL_VERSION_ADD_NEW}</label><br />
@@ -98,7 +98,7 @@
 		<dd>
 			<a href="javascript:void(0)" onclick="javascript:help_popup('{L_DL_THUMBNAIL_EXPLAIN}')" title="{L_INFORMATION}">{ICON_DL_HELP}</a>
 			<!-- IF S_THUMBNAIL -->
-			<img src="{THUMBNAIL}" alt="" title="" style="max-weight: 150px; max-height: 100px;" /><br /><label><input type="checkbox" class="permissions_checkbox" name="del_thumb" value="1" />&nbsp;{L_DELETE}</label>
+			<img src="{THUMBNAIL}" alt="" title="" class="dl-thumb-box" /><br /><label><input type="checkbox" class="permissions_checkbox" name="del_thumb" value="1" />&nbsp;{L_DELETE}</label>
 			<br /><br />
 			<!-- ENDIF -->
 			<input type="file" name="thumb_name" class="inputbox" size="46" /><br /><span class="small">{DL_THUMBNAIL_SECOND}</span>
@@ -112,7 +112,7 @@
 </div>
 
 <!-- IF S_MODCP or S_CHANGE_TIME or S_POPUP_NOTIFY or S_EMAIL_BLOCK -->
-<div style="background-color: #fafafa; border: 1px #555555 solid;" class="panel">
+<div class="panel dl-edit-box-light">
 	<div class="inner">
 
 	<fieldset>
@@ -134,7 +134,7 @@
 	</dl>
 	<!-- ENDIF -->
 	<!-- IF S_MODCP -->
-	<dl style="background-color: #f0f0f0; border-right: 1px #555555 solid; border-bottom: 1px #555555 solid;" class="navbar">
+	<dl class="navbar dl-edit-box-medium">
 		<dt>
 			<label>{L_DL_APPROVE}</label>
 		</dt>
@@ -145,7 +145,7 @@
 	</dl>
 	<!-- ENDIF -->
 	<!-- IF S_CHANGE_TIME -->
-	<dl style="background-color: #f0f0f0; border-right: 1px #555555 solid; border-bottom: 1px #555555 solid;" class="navbar">
+	<dl class="navbar dl-edit-box-medium">
 		<dt>
 			<label>{L_DL_NO_CHANGE_EDIT_TIME}</label>
 		</dt>
@@ -156,7 +156,7 @@
 	</dl>
 	<!-- ENDIF -->
 	<!-- IF S_CLICK_RESET -->
-	<dl style="background-color: #f0f0f0; border-right: 1px #555555 solid; border-bottom: 1px #555555 solid;" class="navbar">
+	<dl class="navbar dl-edit-box-medium">
 		<dt>
 			<label>{L_DL_KLICKS_RESET}</label>
 		</dt>
@@ -167,7 +167,7 @@
 	</dl>
 	<!-- ENDIF -->
 	<!-- IF S_POPUP_NOTIFY -->
-	<dl style="background-color: #f0f0f0; border-right: 1px #555555 solid; border-bottom: 1px #555555 solid;" class="navbar">
+	<dl class="navbar dl-edit-box-medium">
 		<dt>
 			<label>{L_DL_DISABLE_POPUP}</label>
 		</dt>
@@ -178,7 +178,7 @@
 	</dl>
 	<!-- ENDIF -->
 	<!-- IF S_EMAIL_BLOCK -->
-	<dl style="background-color: #f0f0f0; border-right: 1px #555555 solid; border-bottom: 1px #555555 solid;" class="navbar">
+	<dl class="navbar dl-edit-box-medium">
 		<dt>
 			<label>{L_DL_DISABLE_EMAIL}</label>
 		</dt>
@@ -196,7 +196,7 @@
 <!-- ENDIF -->
 
 <!-- IF S_USE_HACKLIST -->
-<div style="background-color: #fafafa; border: 1px #555555 solid;" class="panel{HACKLIST_BG}">
+<div class="panel dl-edit-box-light">
 	<div class="inner">
 
 	<fieldset>
@@ -244,7 +244,7 @@
 <!-- ENDIF -->
 
 <!-- IF S_ALLOW_EDIT_MOD_DESC or S_TODO_LINK_ONOFF -->
-<div style="background-color: #fafafa; border: 1px #555555 solid;" class="panel{MOD_BLOCK_BG}">
+<div class="panel dl-edit-box-light">
 	<div class="inner">
 
 	<fieldset>
@@ -309,7 +309,7 @@
 
 <!-- BEGIN download_fields -->
 <!-- IF download_fields.S_FIRST_ROW -->
-<div style="background-color: #fafafa; border: 1px #555555 solid;" class="panel bg2">
+<div class="panel dl-edit-box-light">
 	<div class="inner">
 
 	<fieldset>
@@ -330,10 +330,12 @@
 <!-- ENDIF -->
 <!-- END download_fields -->
 
-<fieldset class="submit-buttons">
-	<input type="submit" name="submit" value="{L_SUBMIT}" style="height: 28px;" class="button icon-button" />&nbsp;&nbsp;
-	<input type="reset" name="reset" value="{L_RESET}" style="height: 28px;" class="button icon-button" />
+<fieldset class="submit-buttons dl-right">
+	<input type="submit" name="submit" value="{L_SUBMIT}" class="button icon-button" />&nbsp;&nbsp;
+	<input type="reset" name="reset" value="{L_RESET}" class="button icon-button" />
 </fieldset>
+
+<div class="clear"></div>
 
 <div>{S_FORM_TOKEN}{S_HIDDEN_FIELDS}</div>
 

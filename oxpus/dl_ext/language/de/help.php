@@ -86,6 +86,7 @@ $lang = array_merge($lang, array(
 	'HELP_DL_HOTLINK_ACTION'		=> 'Hier wird eingestellt, wie sich das Download Script verhalten soll, wenn ein Direktlink zum Download abgefangen wurde (siehe letzte Option).<br />Es wird dann entweder eine Meldung angezeigt (verringert die Serverlast) oder zum Download weitergeleitet (erzeugt zusätzlichen Traffic).',
 
 	'HELP_DL_ICON_FREE_FOR_REG'	=> 'Diese Option schaltet das weiße Download Icon (freier Download für registrierte Benutzer) ebenfalls für Gäste auf weiß.<br />Wenn Du diese Option deaktivierst, sehen Gäste hier das rote Icon anstelle des Weissen.',
+	'HELP_DL_INDEX_DESC_HIDE'	=> 'Versteckt die Kategoriebeschreibungen auf dem Index und in Subkategorien.<br />Die Beschreibungen werden dann eingeblendet, wenn man mit der Maus über die jeweilige Kategoriezeile fährt.',
 	'HELP_DL_IS_FREE'			=> 'Aktiviere diese Funktion, wenn der Download unabhängig des Kontos für alle Benutzer möglich sein soll.<br />Wähle frei für reg. Benutzer, um nur registrierten Benutzern einen freien Download zu ermöglichen.',
 
 	'HELP_DL_KLICKS_RESET'		=> 'Hiermit können die Klicks für den aktuellen Monat wieder auf 0 gesetzt werden.<br />Diese Option ist dann sinnvoll, wenn man die Downloads für neue Dateiversionen sofort überwachen will.',

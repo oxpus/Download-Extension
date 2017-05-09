@@ -7,7 +7,7 @@
 			<dl>
 				<dt>{L_DL_CAT_NAME} / {L_DL_FILE_DESCRIPTION}</dt>
 				<dd class="posts">{L_DL_CAT_FILES}</dd>
-				<dd style="display: block;">{L_DL_LATEST_DOWNLOAD}</dd>
+				<dd>{L_DL_LATEST_DOWNLOAD}</dd>
 			</dl>
 		</li>
 	</ul>
@@ -18,7 +18,7 @@
 				<dt><span class="forum-image">{subcats.MINI_IMG}</span>
 					<span class="forum-image"><!-- IF subcats.CAT_ICON --><img src="{subcats.CAT_ICON}" alt="" title="{subcats.CAT_NAME}" /><!-- ELSE -->&nbsp;<!-- ENDIF --></span>
 					<a href="{subcats.U_CAT_VIEW}" class="forumtitle" title="">{subcats.CAT_NAME}</a><br />
-					<div class="noshow" id="desc_{subcats.CAT_ID}" style="padding-left: 4em;"><br />{subcats.CAT_DESC}</div>
+					<div class="dl-index-desc<!-- IF S_ENABLE_DESC_HIDE --> noshow<!-- ENDIF -->" id="desc_{subcats.CAT_ID}"><br />{subcats.CAT_DESC}</div>
 					<!-- IF .subcats.pagination -->
 					<div class="pagination">
 						<ul>
@@ -36,10 +36,10 @@
 					<!-- BEGIN sub -->
 					<br />
 					<!-- BEGIN sublevel_row -->
-					<div style="padding-left: 3.5em;">
+					<div class="dl-padding-left-3-5">
 						{subcats.sub.sublevel_row.M_SUBLEVEL}
-						<!-- IF subcats.sub.sublevel_row.M_SUBLEVEL_ICON --><img src="{subcats.sub.sublevel_row.M_SUBLEVEL_ICON}" alt="" title="{subcats.sub.sublevel_row.L_SUBLEVEL}" /><!-- ENDIF --> &nbsp;
-						<a href="{subcats.sub.sublevel_row.U_SUBLEVEL}" class="small" style="font-size: 8pt;"<!-- IF subcats.sub.sublevel_row.SUBLEVEL_COUNT --> title="{subcats.sub.sublevel_row.SUBLEVEL_COUNT} {L_DL_CAT_FILES}"<!-- ENDIF -->><strong>{subcats.sub.sublevel_row.L_SUBLEVEL}</strong></a>
+						<!-- IF subcats.sub.sublevel_row.M_SUBLEVEL_ICON --><img src="{subcats.sub.sublevel_row.M_SUBLEVEL_ICON}" alt="" title="{subcats.sub.sublevel_row.L_SUBLEVEL}" class="dl-subfolder-small" /><!-- ENDIF --> &nbsp;
+						<a href="{subcats.sub.sublevel_row.U_SUBLEVEL}" class="small"<!-- IF subcats.sub.sublevel_row.SUBLEVEL_COUNT --> title="{subcats.sub.sublevel_row.SUBLEVEL_COUNT} {L_DL_CAT_FILES}"<!-- ENDIF -->><strong>{subcats.sub.sublevel_row.L_SUBLEVEL}</strong></a>
 					</div>
 					<!-- END sublevel_row -->
 					<!-- END sub -->
@@ -47,11 +47,13 @@
 				<dd class="posts">
 					<strong>{subcats.CAT_DL}</strong>
 				</dd>
-				<dd style="display: block; padding-left: 1em;">
-				<!-- IF subcats.CAT_LAST_DL -->
-                    <a href="{subcats.U_CAT_LAST_LINK}">{subcats.CAT_LAST_DL}</a><br />
-                    <a href="{subcats.U_CAT_LAST_USER}">{subcats.CAT_LAST_USER}</a>
-					<!-- IF subcats.CAT_LAST_TIME -->&nbsp;{subcats.CAT_LAST_TIME}<!-- ENDIF -->
+				<dd class="lastpost">
+					<!-- IF subcats.CAT_LAST_DL -->
+					<div class="dl-padding-left-1">
+					    <a href="{subcats.U_CAT_LAST_LINK}">{subcats.CAT_LAST_DL}</a><br />
+	                    <a href="{subcats.U_CAT_LAST_USER}">{subcats.CAT_LAST_USER}</a>
+						<!-- IF subcats.CAT_LAST_TIME -->&nbsp;{subcats.CAT_LAST_TIME}<!-- ENDIF -->
+					</div>
                 </dd>
                 <!-- ENDIF -->
 			</dl>

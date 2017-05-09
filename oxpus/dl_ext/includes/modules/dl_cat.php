@@ -472,26 +472,9 @@ if ($cat && $total_downloads)
 			'U_FILE'				=> $file_url)
 		);
 
-		if ($index_cat[$cat]['comments'] && \oxpus\dl_ext\includes\classes\ dl_auth::cat_auth_comment_read($cat))
+		if ($index_cat[$cat]['comments'] && (\oxpus\dl_ext\includes\classes\ dl_auth::cat_auth_comment_read($cat) || \oxpus\dl_ext\includes\classes\ dl_auth::cat_auth_comment_post($cat)))
 		{
-			if (isset($comment_count[$file_id]))
-			{
-				$this->template->assign_block_vars('downloads.comments', array(
-					'BREAK' => (\oxpus\dl_ext\includes\classes\ dl_auth::cat_auth_comment_post($cat)) ? '<br />' : '',
-					'U_COMMENT_POST' => (\oxpus\dl_ext\includes\classes\ dl_auth::cat_auth_comment_post($cat)) ? $this->helper->route('dl_ext_controller', array('view' => 'comment', 'action' => 'post', 'cat_id' => $cat, 'df_id' => $file_id)) : '',
-					'U_COMMENT_SHOW' => $this->helper->route('dl_ext_controller', array('view' => 'comment', 'action' => 'view', 'cat_id' => $cat, 'df_id' => $file_id)),
-				));
-			}
-			else if (\oxpus\dl_ext\includes\classes\ dl_auth::cat_auth_comment_post($cat))
-			{
-				$this->template->assign_block_vars('downloads.comments', array(
-					'U_COMMENT_POST' => $this->helper->route('dl_ext_controller', array('view' => 'comment', 'action' => 'post', 'cat_id' => $cat, 'df_id' => $file_id)),
-				));
-			}
-			else
-			{
-				$this->template->assign_block_vars('downloads.comments', array());
-			}
+			$this->template->assign_block_vars('downloads.comments', array('U_COMMENT' => $this->helper->route('dl_ext_controller', array('view' => 'comment', 'action' => 'view', 'cat_id' => $cat, 'df_id' => $file_id))));
 		}
 	}
 }
@@ -532,7 +515,8 @@ $this->template->assign_vars(array(
 	'DL_UPLOAD'		=> $this->helper->route('dl_ext_controller', array('view' => 'upload', 'cat_id' => $cat)),
 	'PHPEX'			=> $this->php_ext,
 
-	'S_ENABLE_RATE'	=> (isset($this->config['dl_enable_rate']) && $this->config['dl_enable_rate']) ? true : false,
+	'S_ENABLE_DESC_HIDE'	=> (isset($this->config['dl_index_desc_hide']) && $this->config['dl_index_desc_hide']) ? true : false,
+	'S_ENABLE_RATE'			=> (isset($this->config['dl_enable_rate']) && $this->config['dl_enable_rate']) ? true : false,
 
 	'U_DOWNLOADS'	=> $this->helper->route('dl_ext_controller', (($cat) ? array('cat' => $cat) : array())),
 	'U_DL_SEARCH'	=> (sizeof($index) || $cat) ? $this->helper->route('dl_ext_controller', array('view' => 'search')) : '',

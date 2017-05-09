@@ -8,28 +8,17 @@ function swapOptions(cat)
 {
 	activeOption = activeCat;
 
+	// no need to set anything if we are clicking on the same tab again
 	if (cat == activeOption)
 	{
 		return;
 	}
 
-	var	oldTab = document.getElementById('tab_' + activeOption);
-	var newTab = document.getElementById('tab_' + cat);
+	$('#tab_' + activeOption).removeClass('fa-eye');
+	$('#tab_' + cat).addClass('fa-eye');
 
-	// no need to set anything if we are clicking on the same tab again
-	if (newTab == oldTab)
-	{
-		return;
-	}
-
-	// set active tab
-	oldTab.className = oldTab.className = "icon";
-	newTab.className = newTab.className += " fa-eye fa-fw";
-
-	document.getElementById('options' + activeOption).className += " noshow";
-
-	document.getElementById('options' + cat).className =
-		document.getElementById('options' + cat).className.replace(/(?:^|\s)noshow(?!\S)/g , '')
+	$('#options' + activeOption).addClass('noshow');
+	$('#options' + cat).removeClass('noshow');
 
 	activeCat = cat;
 

@@ -83,6 +83,7 @@ $lang = array_merge($lang, array(
 	'HELP_DL_HOTLINK_ACTION'		=> 'Here you can choose, how the download script should react, while it prevents a direct link to a download (also see the last option).<br />It will display a message (reduces the server load) or it redirects to the download (produces additional traffic).',
 
 	'HELP_DL_ICON_FREE_FOR_REG'	=> 'This option switch the white icon for downloads (free download for registered users) for guests into white, too.<br />If you will disable this option, guests will see the red icon instead the white one.',
+	'HELP_DL_INDEX_DESC_HIDE'	=> 'Hides the descriptions of the categories on the download index and for sub categories.<br />The descriptions will be fade in on hover the category row.',
 	'HELP_DL_IS_FREE'			=> 'Activate this function if the download should be free to download for everybody.<br />The traffic accounts will not be used.<br />Choose free for reg. Users to enable a free download only for registered users.',
 
 	'HELP_DL_KLICKS_RESET'		=> 'This option can reset the clicks for this month back to zero.<br />This is useful if you will control the clicks after changing the file release.',

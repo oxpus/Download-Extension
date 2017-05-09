@@ -28,8 +28,8 @@
 </div>
 
 <fieldset class="submit-buttons">
-	<input type="submit" name="submit" value="{L_SUBMIT}" style="height: 28px;" class="button icon-button" />&nbsp;&nbsp;
-	<input type="reset" name="reset" value="{L_RESET}" style="height: 28px;" class="button icon-button" />
+	<input type="submit" name="submit" value="{L_SUBMIT}" class="button icon-button" />&nbsp;&nbsp;
+	<input type="reset" name="reset" value="{L_RESET}" class="button icon-button" />
 </fieldset>
 
 <div>{S_FORM_TOKEN}{S_HIDDEN_FIELDS}</div>
@@ -55,7 +55,7 @@
 <!-- ENDIF -->
 	<li class="row bg<!-- IF thumbnails.S_ROW_COUNT is even -->2<!-- ELSE -->1<!-- ENDIF -->">
 		<dl>
-			<dt><a href="{thumbnails.IMG_LINK}" rel="prettyPhoto[pp_gal]" title="{thumbnails.IMG_TITLE}"><img src="{thumbnails.IMG_LINK}" alt="{thumbnails.IMG_TITLE}" title="{thumbnails.IMG_TITLE}" style="max-weight: 150px; max-height: 100px;" /></a></dt>
+			<dt><a href="{thumbnails.IMG_LINK}" rel="prettyPhoto[pp_gal]" title="{thumbnails.IMG_TITLE}"><img src="{thumbnails.IMG_LINK}" alt="{thumbnails.IMG_TITLE}" title="{thumbnails.IMG_TITLE}" class="dl-thumb-box" /></a></dt>
 			<dd class="posts"><a href="{thumbnails.U_DELETE}">{L_DL_DELETE}</a></dd>
 			<dd class="topics"><a href="{thumbnails.U_EDIT}">{L_DL_EDIT_FILE}</a></dd>
 		</dl>

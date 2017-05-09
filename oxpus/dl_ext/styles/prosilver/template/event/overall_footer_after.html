@@ -2,32 +2,13 @@
 <link rel="stylesheet" href="{EXT_DL_PATH_WEB}includes/js/prettyPhoto/css/prettyPhoto.css" type="text/css" media="screen" />
 <!-- ENDIF -->
 <script src="{EXT_DL_PATH_WEB}includes/js/prettyPhoto/js/jquery.prettyPhoto.js" type="text/javascript"></script>
-<script type="text/javascript">
-// <![CDATA[
-function help_popup(help_key) {
-	$.ajax({
-        url: '{U_HELP_POPUP}&help_key=' + help_key,
-        type: "GET",
-        success: function (data) { AJAXDLHelpDisplay(data); }
-    });
-}
-function AJAXDLHelpDisplay(data) {
-	var obj = $.parseJSON( data );
-    $("#dl_help_title").html(obj.title);
-    $("#dl_help_option").html(obj.option);
-    $("#dl_help_string").html(obj.string);
-
-    $("#dl_help_popup").fadeIn("fast");
-    $("#dl_help_bg").css("opacity", "0.7");
-    $("#dl_help_bg").fadeIn("fast");
-
-    $(".dl_help_close").click(function() {
-    $("#dl_help_popup").fadeOut("fast");
-    $("#dl_help_bg").fadeOut("fast");
-    });
-}
+<script src="{EXT_DL_PATH_WEB}includes/js/dl_footer.js" type="text/javascript"></script>
+<!-- IF S_ENABLE_DESC_HIDE -->
+<script src="{EXT_DL_PATH_WEB}includes/js/dl_index_desc.js" type="text/javascript"></script>
+<!-- ENDIF -->
 
 <!-- IF S_TOTAL_IMAGES or S_DL_POPUPIMAGE -->
+<script type="text/javascript">
 $(document).ready(function() {
 	<!-- IF S_DL_POPUPIMAGE -->
 	$("a[rel^='prettyPhoto']").prettyPhoto({
@@ -36,44 +17,5 @@ $(document).ready(function() {
 	});
 	<!-- ENDIF -->
 });
-<!-- ENDIF -->
-
-$("#dl_new_popup").fadeIn("fast");
-$("#dl_new_bg").css("opacity", "0.7");
-$("#dl_new_bg").fadeIn("fast");
-
-$(".dl_new_close").click(function() {
-$("#dl_new_popup").fadeOut("fast");
-$("#dl_new_bg").fadeOut("fast");
-});
-
-function show_area(area, status)
-{
-	if (status == true)
-	{
-		$("#" + area).fadeIn("slow");
-		$("#dl_help_bg").css("opacity", "0.7");
-		$("#dl_help_bg").fadeIn("fast");
-	}
-	else
-	{
-		$("#" + area).fadeOut("fast");
-		$("#dl_help_bg").fadeOut("fast");
-	}
-}
-
-$('#legend-footer').click(function(ev) {show_area('legend', true);ev.stopPropagation();});
-$('#stats-footer').click(function(ev) {show_area('footer', true);ev.stopPropagation();});
-
-$(window).click(function(ev){
-	if ($(ev.target).attr('id') != "#legend") {show_area('legend', false);ev.stopPropagation();}
-	if ($(ev.target).attr('id') != "#footer") {show_area('footer', false);ev.stopPropagation();}
-	if ($(ev.target).attr('id') != "#dl_help_popup") {$("#dl_help_popup").fadeOut("fast");$("#dl_help_bg").fadeOut("fast");ev.stopPropagation();}
-});
-
-$('.dlTooltip').hover(
-	function() {cat = $(this).attr("id"); $('#desc_' + cat).fadeIn('slow');},
-	function() {cat = $(this).attr("id"); $('#desc_' + cat).fadeOut('fast');}
-);
-// ]]>
 </script>
+<!-- ENDIF -->

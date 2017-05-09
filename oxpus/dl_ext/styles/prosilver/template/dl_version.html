@@ -18,7 +18,7 @@
 	<div class="tablewrap">
 		<div class="panel">
 
-			<div class="postbody" style="min-width: 100%;">
+			<div class="postbody dl-width-100">
 				<h3>{L_DL_HACK_VERSION}: {VER_VERSION}</h3>
 				<!-- IF not S_ACTIVE --><br /><div class="rules">{L_DL_NOT_ACTIVE}</div><!-- ENDIF -->
 				<!-- IF U_VER_EDIT -->
@@ -33,16 +33,16 @@
 				<div class="content">{VER_DESC}</div>
 			</div>
 
-			<div class="notice" style="text-align: center;"><strong>{L_DL_FILE_NAME}:</strong> {FILE_NAME}<!-- IF FILE_SIZE -->, <strong>{L_DL_FILE_SIZE}:</strong> {FILE_SIZE}<!-- ENDIF --></div>
+			<div class="notice dl-text-center"><strong>{L_DL_FILE_NAME}:</strong> {FILE_NAME}<!-- IF FILE_SIZE -->, <strong>{L_DL_FILE_SIZE}:</strong> {FILE_SIZE}<!-- ENDIF --></div>
 
 			<!-- BEGIN images -->
 			<!-- IF images.S_FIRST_ROW -->
 			<br />
 			<h3>{L_DL_IMAGES}:</h3>
 			<dl>
-				<ul style="list-style-type: none; overflow: hidden;">
+				<ul class="dl-detail-row">
 			<!-- ENDIF -->
-					<li style="float: left; margin-right: 2px;"><!-- IF S_DL_POPUPIMAGE --><a href="{images.LINK}" title="{images.NAME}" rel="prettyPhoto[pp_gal]"><!-- ENDIF --><img src="{images.LINK}" alt="{images.NAME}" title="{images.NAME}" style="max-weight: 150px; max-height: 100px;" /><!-- IF S_DL_POPUPIMAGE --></a><!-- ENDIF --></li>
+					<li class="dl-left dl-margin-right-small"><!-- IF S_DL_POPUPIMAGE --><a href="{images.LINK}" title="{images.NAME}" rel="prettyPhoto[pp_gal]"><!-- ENDIF --><img src="{images.LINK}" alt="{images.NAME}" title="{images.NAME}" class="dl-thumb-box" /><!-- IF S_DL_POPUPIMAGE --></a><!-- ENDIF --></li>
 			<!-- IF images.S_LAST_ROW -->
 				</ul>
 			</dl>
@@ -54,9 +54,9 @@
 			<br />
 			<h3>{L_DL_FILES_TITLE}:</h3>
 			<dl>
-				<ul style="list-style-type: none; overflow: hidden;">
+				<ul class="dl-detail-row">
 			<!-- ENDIF -->
-					<li style="float: left; margin-right: 2px;"><!-- IF files.S_AUTH --><a href="{files.LINK}" title="{files.NAME}"><!-- ENDIF -->{files.NAME}<!-- IF files.S_AUTH --></a><!-- ENDIF --></li>
+					<li class="dl-left dl-margin-right-small"><!-- IF files.S_AUTH --><a href="{files.LINK}" title="{files.NAME}"><!-- ENDIF -->{files.NAME}<!-- IF files.S_AUTH --></a><!-- ENDIF --></li>
 			<!-- IF files.S_LAST_ROW -->
 				</ul>
 			</dl>

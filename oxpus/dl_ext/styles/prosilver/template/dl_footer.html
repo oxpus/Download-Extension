@@ -31,7 +31,7 @@
 <!-- BEGIN approve -->
 <br />
 
-<div class="panel" style="background-color: #FFAA44;">
+<div class="panel dl-footer-alert">
 	<div class="inner">
 	<a href="{approve.U_APPROVE_DOWNLOADS}" class="forumtitle">{approve.L_APPROVE_DOWNLOADS}</a>
 	</div>
@@ -41,7 +41,7 @@
 <!-- BEGIN approve_comments -->
 <br />
 
-<div class="panel" style="background-color: #FFAA44;">
+<div class="panel dl-footer-alert">
 	<div class="inner">
 	<a href="{approve_comments.U_APPROVE_COMMENTS}" class="forumtitle">{approve_comments.L_APPROVE_COMMENTS}</a>
 	</div>
@@ -50,8 +50,8 @@
 
 <!-- IF S_FOOTER_LEGEND -->
 <div class="button legend-footer" id="legend-footer">{L_LEGEND}</div>
-<div id="legend" style="display: none" class="footer-box"><a class="icon dl-close-footer" onclick="javascript:show_area('legend', false);"></a>
-<div style="padding: 1em;"><div><strong>{L_LEGEND}</strong></div>
+<div id="legend" class="footer-box"><a class="icon dl-close-footer" onclick="javascript:show_area('legend', false);"></a>
+<div><strong>{L_LEGEND}</strong></div>
 <!-- IF S_DL_TRAFFIC_OFF -->
 <dl>
 	<dt>
@@ -77,18 +77,18 @@
 	</dt>
 </dl>
 <!-- ENDIF -->
-</div></div>
+</div>
 <!-- ENDIF -->
 
 <div class="button stats-footer" id="stats-footer">{L_DL_FOOTER}</div>
-<div id="footer" style="display: none" class="footer-box"><a class="icon dl-close-footer" onclick="javascript:show_area('footer', false);"></a>
-<div class="small" style="padding: 1em;">
+<div id="footer" class="footer-box"><a class="icon dl-close-footer" onclick="javascript:show_area('footer', false);"></a>
+<div class="small">
 	<!-- IF L_CAN_DOWNLOAD_AGAIN -->{L_CAN_DOWNLOAD_AGAIN}<br /><!-- ENDIF -->
 	<!-- BEGIN userdata -->{userdata.ACCOUNT_TRAFFIC}<br /><!-- END userdata -->
 	<!-- BEGIN remain_traffic -->{remain_traffic.REMAIN_TRAFFIC}<br /><!-- END remain_traffic -->
-	<!-- BEGIN no_remain_traffic --><b><span style="text-decoration: underline">{no_remain_traffic.NO_OVERALL_TRAFFIC}</span></b><br /><!-- END no_remain_traffic -->
+	<!-- BEGIN no_remain_traffic --><strong class="dl-text-underline">{no_remain_traffic.NO_OVERALL_TRAFFIC}</strong><br /><!-- END no_remain_traffic -->
 	<!-- BEGIN remain_guest_traffic -->{remain_guest_traffic.REMAIN_GUEST_TRAFFIC}<br /><!-- END remain_guest_traffic -->
-	<!-- BEGIN no_remain_guest_traffic --><b><span style="text-decoration: underline">{no_remain_guest_traffic.NO_OVERALL_GUEST_TRAFFIC}</span></b><br /><!-- END no_remain_guest_traffic -->
+	<!-- BEGIN no_remain_guest_traffic --><strong class="dl-text-underline">{no_remain_guest_traffic.NO_OVERALL_GUEST_TRAFFIC}</strong><br /><!-- END no_remain_guest_traffic -->
 	<!-- IF not S_HIDE_FOOTER_DATA and S_SERARATE_STATS --><br /><!-- ENDIF -->
 	<!-- BEGIN total_stat -->{total_stat.TOTAL_STAT}<!-- END total_stat -->
 	<!-- IF not S_HIDE_FOOTER_DATA --><br /><!-- ENDIF -->
