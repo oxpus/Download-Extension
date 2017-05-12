@@ -950,7 +950,7 @@ else
 
 					$s_hidden_fields = array(
 						'view'		=> 'modcp',
-						'df_id'		=> $df_id,
+						'df_id'		=> $dl_id[0],
 						'action'	=> 'delete',
 						'confirm'	=> 1
 					);
