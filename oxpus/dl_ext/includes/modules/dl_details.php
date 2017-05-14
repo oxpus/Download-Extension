@@ -132,11 +132,17 @@ $this->language->add_lang('posting');
 /*
 * Check saved thumbs
 */
+$s_dl_popupimage = false;
+
+if ($dl_files['thumbnail'])
+{
+	$s_dl_popupimage = true;
+}
+
 $sql = 'SELECT * FROM ' . DL_IMAGES_TABLE . '
 	WHERE dl_id = ' . (int) $df_id;
 $result = $this->db->sql_query($sql);
 $total_images = $this->db->sql_affectedrows($result);
-$s_dl_popupimage = false;
 
 if ($total_images)
 {
