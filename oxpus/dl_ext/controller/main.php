@@ -146,7 +146,7 @@ class main
 		$this->template->assign_vars(array(
 			'EXT_DL_PATH_WEB'	=> $ext_path_web,
 			'EXT_DL_PATH_AJAX'	=> $ext_path_ajax,
-			'ICON_DL_HELP'		=> '<i class="icon fa-info-circle fa-fw dl-yellow"></i>',
+			'ICON_DL_HELP'		=> '<i class="icon fa-info-circle fa-fw dl-icon-yellow"></i>',
 		));
 
 		/*

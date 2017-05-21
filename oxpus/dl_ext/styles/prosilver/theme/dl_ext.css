@@ -173,7 +173,7 @@ div.dl_new_close:hover, div.dl_help_close:hover, .dl-close-footer:hover
     color: #0000ff;
 }
 
-.dl-yellow
+.dl-yellow,
 {
     color: #aaaa00;
 }
@@ -181,6 +181,18 @@ div.dl_new_close:hover, div.dl_help_close:hover, .dl-close-footer:hover
 .dl-grey
 {
     color: #666666;
+}
+
+.dl-icon-yellow
+{
+    color: #000099;
+    text-shadow: 0 0 2px #aaaa00;
+}
+
+.dl-icon-yellow:hover
+{
+    color: #009900;
+    text-shadow: none;
 }
 
 .dl-big

@@ -1,6 +1,6 @@
 function help_popup(help_key) {
 	$.ajax({
-        url: '{U_HELP_POPUP}&help_key=' + help_key,
+        url: ajax_path + '&help_key=' + help_key,
         type: "GET",
         success: function (data) { AJAXDLHelpDisplay(data); }
     });
