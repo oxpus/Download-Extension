@@ -1,5 +1,5 @@
 services:
-    oxpus.dl_ext.controller:
+    oxpus.dlext.controller:
         class: oxpus\dlext\controller\main
         arguments:
             - '%core.root_path%'
@@ -17,7 +17,7 @@ services:
             - '@template'
             - '@user'
             - '@language'
-    oxpus.dl_ext.listener:
+    oxpus.dlext.listener:
         class: oxpus\dlext\event\main_listener
         arguments:
             - '%core.root_path%'
@@ -35,7 +35,7 @@ services:
             - '@language'
         tags:
             - { name: event.listener }
-    oxpus.dl_ext.notification.type.dl_ext:
+    oxpus.dlext.notification.type.dlext:
         class: oxpus\dlext\notification\dl_ext
         shared: false
         arguments:
