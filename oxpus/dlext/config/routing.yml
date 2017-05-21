@@ -1,0 +1,6 @@
+oxpus_dlext_controller:
+    path: /dlext/
+    defaults: { _controller: oxpus.dlext.controller:handle }
+oxpus_dlext_page_controller:
+    path: /dlext/
+    defaults: { _controller: oxpus.dlext.controller:handle }
