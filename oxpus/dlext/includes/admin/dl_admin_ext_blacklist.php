@@ -23,7 +23,7 @@ if ($cancel)
 
 if($action == 'add')
 {
-	$extension = $request->variable('extension', '');
+	$extension = $request->variable('extension', '', true);
 
 	if (!check_form_key('dl_adm_ext'))
 	{
@@ -61,7 +61,7 @@ if($action == 'delete')
 		trigger_error('FORM_INVALID', E_USER_WARNING);
 	}
 
-	$extension = $request->variable('extension', array(''));
+	$extension = $request->variable('extension', array(''), true);
 
 	$confirm_delete = false;
 
@@ -75,7 +75,7 @@ if($action == 'delete')
 
 		for ($i = 0; $i < sizeof($extension); $i++)
 		{
-			$s_hidden_fields = array_merge($s_hidden_fields, array('extension[' . $i . ']' => htmlspecialchars($extension[$i])));
+			$s_hidden_fields = array_merge($s_hidden_fields, array('extension[' . $i . ']' => $extension[$i]));
 		}
 
 		add_form_key('dl_adm_ext');
@@ -107,7 +107,7 @@ if($action == 'delete')
 
 		for ($i = 0; $i < sizeof($extension); $i++)
 		{
-			$sql_ext_in[] = htmlspecialchars($extension[$i]);
+			$sql_ext_in[] = $extension[$i];
 		}
 
 		if (sizeof($sql_ext_in))

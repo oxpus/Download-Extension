@@ -70,6 +70,9 @@ if ($df_id && $rate_point)
 		header((string) $hname . ': ' . (string) $hval);
 	}
 
-	echo ($json_out);
-	flush();
+	$this->template->set_filenames(array(
+		'body' => 'dl_json.html')
+	);
+	$this->template->assign_var('JSON_OUTPUT', $json_out);
+	$this->template->display('body');
 }

@@ -92,8 +92,6 @@ $lang = array_merge($lang, array(
 	'HELP_DL_LIMIT_DESC_ON_INDEX'	=> 'Cut the descriptions after the entered number of characters.<br />Set 0 here to disable this function.',
 	'HELP_DL_LINKS_PER_PAGE'		=> 'This option controls, how many downloads will be displayed on each category page and ACP statistics.<br />In the hack list and overview list the board setting "topics per page" will be used.',
 
-	'HELP_DL_METHOD'			=> 'The "old" method will send the file directly to the web client.<br />This method is compatible to the most web environnements, but can not display the real file size while downloading, so the user client can not calculate the remaining download time.<br />The "new" method will display the real file size, but it can produce errors.<br />Use the "old" method, if you have trouble with the new one.<br />If nothing will work, check the box "direct" to link the download directly to the file on the server if this will be bigger than the PHP memory limit.',
-	'HELP_DL_METHOD_QUOTA'		=> 'Set the file size here from which on the chunked file will be read as a big file if you have chosen the "new" download method.<br />Under this quota the file will be fetched by read file(), and send directly to the web client.',
 	'HELP_DL_MOD_DESC'			=> 'Detailed descriptions about the entered Extension.<br />You can use BBCodes and Smilies in this text.<br />Line feeds will be formatted, too.<br />This text will only be shown in the download details.',
 	'HELP_DL_MOD_DESC_ALLOW'	=> 'Enables the Extension information block while add or edit a download.',
 	'HELP_DL_MOD_LIST'			=> 'Activate this block in the download details.<br />If you will not enable this option, the complete block will not be displayed.',

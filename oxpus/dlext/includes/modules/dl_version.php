@@ -169,25 +169,24 @@ if ($action == 'load' && $ver_id && $ver_file_id && $auth_dl)
 
 	if ($row['file_type'] == 0 && $row['ver_id'] == $ver_id)
 	{
-		$dl_file_url = DL_EXT_VER_FILES_FOLDER . $row['real_name'];
-		$dl_file_size = sprintf("%u", @filesize($dl_file_url));
+		include_once($this->root_path . 'includes/functions_download.' . $this->php_ext);
 
-		header("Content-Disposition: attachment; filename=" . $row['file_name']);
-		header("Content-Type: application/octet-stream");
-		header("Content-Description: File Transfer");
-		header("Content-Length: " . $dl_file_size);
-		header("Cache-Control: ");
-		header("Pragma: ");
-		header("Connection: close");
+		$this->language->add_lang('viewtopic');
 
-		$fp = fopen($dl_file_url, "rb");
-		while (!feof($fp))
-		{
-		    echo fread($fp, 4096);
-		}
-		fclose($fp);
+		$dl_file_url = str_replace($this->root_path, '', DL_EXT_VER_FILES_FOLDER);
 
-		exit;
+		$dl_file_data = array(
+			'attach_id'				=> 0,
+			'is_orphan'				=> false,
+			'physical_filename'		=> $row['real_name'],
+			'real_filename'			=> $row['file_name'],
+			'mimetype'				=> 'application/octetstream',
+			'filesize'				=> sprintf("%u", @filesize($dl_file_url . $row['real_name'])),
+			'filetime'				=> @filemtime($dl_file_url . $row['real_name']),
+		);
+
+		send_file_to_browser($dl_file_data, $dl_file_url, ATTACHMENT_CATEGORY_NONE);
+		file_gc();
 	}
 
 	trigger_error('DL_NO_ACCESS');

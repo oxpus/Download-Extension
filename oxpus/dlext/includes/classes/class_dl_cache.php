@@ -139,6 +139,7 @@ class dl_cache extends dl_mod
 	*/
 	public static function obtain_dl_files($dl_new_time, $dl_edit_time)
 	{
+		$sl_file = array();
 		$dl_file['new'] = array();
 		$dl_file['new_sum'] = array();
 		$dl_file['edit'] = array();
@@ -183,37 +184,42 @@ class dl_cache extends dl_mod
 						$sql_time_preset";
 			$result = $db->sql_query($sql);
 
-			while ($row = $db->sql_fetchrow($result))
+			$total_presets = $db->sql_affectedrows($result);
+
+			if ($total_presets)
 			{
-				$dl_id = $row['id'];
-				$cat_id = $row['cat'];
-				$change_time = $row['change_time'];
-				$add_time = $row['add_time'];
+				while ($row = $db->sql_fetchrow($result))
+				{
+					$dl_id = $row['id'];
+					$cat_id = $row['cat'];
+					$change_time = $row['change_time'];
+					$add_time = $row['add_time'];
 
-				if (!isset($dl_file['new'][$cat_id]))
-				{
-					$dl_file['new'][$cat_id][$dl_id] = 0;
-				}
-				if (!isset($dl_file['new_sum'][$cat_id]))
-				{
-					$dl_file['new_sum'][$cat_id] = 0;
-				}
-				if (!isset($dl_file['edit'][$cat_id]))
-				{
-					$dl_file['edit'][$cat_id][$dl_id] = 0;
-				}
-				if (!isset($dl_file['edit_sum'][$cat_id]))
-				{
-					$dl_file['edit_sum'][$cat_id] = 0;
-				}
+					if (!isset($dl_file['new'][$cat_id]))
+					{
+						$dl_file['new'][$cat_id][$dl_id] = 0;
+					}
+					if (!isset($dl_file['new_sum'][$cat_id]))
+					{
+						$dl_file['new_sum'][$cat_id] = 0;
+					}
+					if (!isset($dl_file['edit'][$cat_id]))
+					{
+						$dl_file['edit'][$cat_id][$dl_id] = 0;
+					}
+					if (!isset($dl_file['edit_sum'][$cat_id]))
+					{
+						$dl_file['edit_sum'][$cat_id] = 0;
+					}
 
-				$count_new = ($change_time == $add_time && ((time() - $change_time)) / 86400 <= $dl_new_time && $dl_new_time > 0) ? 1 : 0;
-				$count_edit = ($change_time != $add_time && ((time() - $change_time) / 86400) <= $dl_edit_time && $dl_edit_time > 0) ? 1 : 0;
+					$count_new = ($change_time == $add_time && ((time() - $change_time)) / 86400 <= $dl_new_time && $dl_new_time > 0) ? 1 : 0;
+					$count_edit = ($change_time != $add_time && ((time() - $change_time) / 86400) <= $dl_edit_time && $dl_edit_time > 0) ? 1 : 0;
 
-				$dl_file['new'][$cat_id][$dl_id] = $count_new;
-				$dl_file['new_sum'][$cat_id] += $count_new;
-				$dl_file['edit'][$cat_id][$dl_id] = $count_edit;
-				$dl_file['edit_sum'][$cat_id] += $count_edit;
+					$dl_file['new'][$cat_id][$dl_id] = $count_new;
+					$dl_file['new_sum'][$cat_id] += $count_new;
+					$dl_file['edit'][$cat_id][$dl_id] = $count_edit;
+					$dl_file['edit_sum'][$cat_id] += $count_edit;
+				}
 			}
 
 			$db->sql_freeresult($result);
@@ -429,7 +435,7 @@ class dl_cache extends dl_mod
 		fclose($handle);
 
 		// unserialize if we got some data
-		$data = ($data !== false) ? @unserialize($data) : $data;
+		$data = ($data !== false) ? @json_decode($data, true) : $data;
 
 		if ($data === false)
 		{
@@ -467,7 +473,8 @@ class dl_cache extends dl_mod
 			{
 				fwrite($handle, $query . "\n");
 			}
-			$data = serialize($data);
+
+			$data = json_encode($data);
 
 			fwrite($handle, strlen($data) . "\n");
 			fwrite($handle, $data);

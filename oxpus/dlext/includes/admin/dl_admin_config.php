@@ -44,8 +44,6 @@ switch ($view)
 
 				'dl_download_dir'	=> array('lang' => 'DOWNLOAD_PATH',		'validate' => 'int',	'type' => 'select',			'explain' => true,		'help_key' => 'DOWNLOAD_PATH',			'function' => 'select_filebase',	'params' => array('{CONFIG_VALUE}')),
 				'dl_base_switch'	=> array('lang' => 'DL_BASE_SWITCH',	'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => ''),
-				'dl_method'			=> array('lang' => 'DL_METHOD',			'validate' => 'int',	'type' => 'select',			'explain' => false,		'help_key' => 'DL_METHOD',				'function' => 'select_dl_method',	'params' => array('{CONFIG_VALUE}')),
-				'dl_method_quota'	=> array('lang' => 'DL_METHOD_QUOTA',	'validate' => 'string',	'type' => 'custom',			'explain' => false,		'help_key' => 'DL_METHOD_QUOTA', 		'function' => 'select_size',		'params' => array('{CONFIG_VALUE}', 'dl_method_quota', '10', '20', 'dl_m_quote', 'mb', false, $ext_path)),
 
 				'legend2'				=> '',
 
@@ -659,18 +657,6 @@ function select_dl_hash_algo($value)
 
 	$s_select = '<option value="md5">MD5</option>';
 	$s_select .= '<option value="sha1">SHA1</option>';
-	$s_select = str_replace('value="' . $value . '">', 'value="' . $value . '" selected="selected">', $s_select);
-
-	return $s_select;
-}
-
-function select_dl_method($value)
-{
-	global $language;
-
-	$s_select = '<option value="1">' . $language->lang('DL_METHOD_OLD') . '</option>';
-	$s_select .= '<option value="2">' . $language->lang('DL_METHOD_NEW') . '</option>';
-	$s_select .= '<option value="3">' . $language->lang('DL_DIRECT_DOWNLOAD') . '</option>';
 	$s_select = str_replace('value="' . $value . '">', 'value="' . $value . '" selected="selected">', $s_select);
 
 	return $s_select;

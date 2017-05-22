@@ -65,6 +65,11 @@ foreach ($http_headers as $hname => $hval)
 	header((string) $hname . ': ' . (string) $hval);
 }
 
-echo ($json_out);
-flush();
-exit;
+$this->template->set_filenames(array(
+	'body' => 'dl_json.html')
+);
+$this->template->assign_var('JSON_OUTPUT', $json_out);
+$this->template->display('body');
+
+garbage_collection();
+exit_handler();

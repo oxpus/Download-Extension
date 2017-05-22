@@ -138,44 +138,6 @@ class dl_physical extends dl_mod
 		return $file_size;
 	}
 
-	// Added by suggestion from Neverbirth. Thx to him!!!
-	public static function readfile_chunked($filename, $retbytes = true)
-	{
-		$chunksize = 1048576;
-		$buffer = '';
-		$cnt =0;
-
-		$filename = str_replace('//', '/', $filename);
-
-		$handle = fopen($filename, 'rb');
-
-		if ($handle === false)
-		{
-			return false;
-		}
-
-		while (!feof($handle))
-		{
-			$buffer = fread($handle, $chunksize);
-			echo $buffer;
-			if ($retbytes)
-			{
-				$cnt += strlen($buffer);
-			}
-	         ob_flush();
-	         flush();
-		}
-
-		$status = fclose($handle);
-
-		if ($retbytes && $status)
-		{
-			return $cnt;
-		}
-
-		return $status;
-	}
-
 	public static function dl_max_upload_size()
 	{
 		$post_max	= ini_get('post_max_size');

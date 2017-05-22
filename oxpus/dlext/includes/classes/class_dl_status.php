@@ -270,7 +270,7 @@ class dl_status extends dl_mod
 
 		if ($dl_file_p[$df_id]['extern'])
 		{
-			$status_detail = '<i class="icon fa-download fa-fw dl-green"></i>';
+			$status_detail = '<i class="icon fa-globe fa-fw dl-blue"></i>';
 			$status = '<a href="' . $helper->route('oxpus_dlext_controller', array('view' => 'detail', 'df_id' => $df_id)) . '">' . $status_detail . '</a>';
 			$file_name = '<a href="' . $helper->route('oxpus_dlext_controller', array('view' => 'detail', 'df_id' => $df_id)) . '">' . $language->lang('DL_EXTERN') . '</a>';
 			$auth_dl = true;

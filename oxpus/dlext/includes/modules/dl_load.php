@@ -410,74 +410,31 @@ if ($check_status['auth_dl'] && $dl_file['id'])
 	if ($dl_file['extern'])
 	{
 		header("HTTP/1.1 301 Moved Permanently");
-		header("Location: ".str_replace('&amp;', '&', $dl_file['file_name']));
+		header("Location: " . str_replace('&amp;', '&', $dl_file['file_name']));
+
+		garbage_collection();
+		exit_handler();
 	}
 	else if ($status)
 	{
-	 	$dl_file_url = DL_EXT_FILES_FOLDER . $index[$cat_id]['cat_path'] . $dl_file['real_file'];
+		include_once($this->root_path . 'includes/functions_download.' . $this->php_ext);
 
-		$dl_file_size = sprintf("%u", @filesize($dl_file_url));
+		$this->language->add_lang('viewtopic');
 
-		$mem_limit = ini_get('memory_limit');
+		$dl_file_url = str_replace($this->root_path, '', DL_EXT_FILES_FOLDER . $index[$cat_id]['cat_path']);
 
-		$last = strlen($mem_limit) - 1;
-		$max_mem_limit = (int) $mem_limit;
+		$dl_file_data = array(
+			'attach_id'				=> 0,
+			'is_orphan'				=> false,
+			'physical_filename'		=> $dl_file['real_file'],
+			'real_filename'			=> $dl_file['file_name'],
+			'mimetype'				=> 'application/octetstream',
+			'filesize'				=> sprintf("%u", @filesize($dl_file_url . $dl_file['real_file'])),
+			'filetime'				=> $dl_file['change_time'],
+		);
 
-		switch($mem_limit{$last})
-		{
-			case 'G':
-				$max_mem_limit *= 1024;
-			case 'M':
-				$max_mem_limit *= 1024;
-			case 'K':
-				$max_mem_limit *= 1024;
-		}
-
-		if ($dl_file_size > $max_mem_limit || $this->config['dl_method'] == 3)
-		{
-			header("Content-Disposition: attachment; filename=" . $dl_file['file_name']);
-			header("Content-Type: application/octet-stream");
-			header("Content-Description: File Transfer");
-			header("Content-Length: " . $dl_file_size);
-			header("Cache-Control: ");
-			header("Pragma: ");
-			header("Connection: close");
-
-			$fp = fopen($dl_file_url, "rb");
-			while (!feof($fp))
-			{
-			    echo fread($fp, 4096);
-			}
-			fclose($fp);
-		}
-		else
-		{
-			if ($this->config['dl_method'] == 1)
-			{
-				header("Content-Type: application/octet-stream");
-				header("Content-Disposition: attachment; filename=\"" . $dl_file['file_name'] . "\"");
-				readfile($dl_file_url);
-			}
-			else if ($this->config['dl_method'] == 2)
-			{
-				$size = sprintf("%u", @filesize($dl_file_url));
-
-				header("Cache-Control: must-revalidate, post-check=0, pre-check=0");
-				header("Content-Type: application/octet-stream");
-				header("Content-Length: ".$size);
-				header("Content-Transfer-Encoding: binary");
-				header("Content-Disposition: attachment; filename=\"" . $dl_file['file_name'] . "\"");
-
-				if ($size > $this->config['dl_method_quota'])
-				{
-					\oxpus\dlext\includes\classes\ dl_physical::readfile_chunked($dl_file_url);
-				}
-				else
-				{
-					readfile($dl_file_url);
-				}
-			}
-		}
+		send_file_to_browser($dl_file_data, $dl_file_url, ATTACHMENT_CATEGORY_NONE);
+		file_gc();
 	}
 	else
 	{
@@ -488,5 +445,3 @@ else
 {
 	trigger_error('DL_NO_ACCESS');
 }
-
-exit;

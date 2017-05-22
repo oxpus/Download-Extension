@@ -272,7 +272,8 @@ class main
 		{
 			include($ext_path . '/includes/helpers/dl_ajax.' . $this->php_ext);
 			$this->db->sql_close();
-			exit;
+			garbage_collection();
+			exit_handler();
 		}
 		else if ($view == 'ajax')
 		{
@@ -582,8 +583,7 @@ class main
 					WHERE session_user_id = ' . ANONYMOUS;
 				$result = $this->db->sql_query($sql);
 
-				$guest_sids = array();
-				$guest_sids[0] = 0;
+				$guest_sids = array('0');
 
 				while ($row = $this->db->sql_fetchrow($result))
 				{
@@ -591,7 +591,7 @@ class main
 				}
 				$this->db->sql_freeresult($result);
 
-				$sql_where = ' OR ' . $this->db->sql_in_set('session_id', array_map('intval', $guest_sids), true);
+				$sql_where = ' OR ' . $this->db->sql_in_set('session_id', $guest_sids, true);
 			}
 
 			$sql = 'DELETE FROM ' . DL_HOTLINK_TABLE . '
