@@ -104,7 +104,7 @@ if (sizeof($index) > 0)
 		$cat_view = (isset($index[$cat_id]['nav_path'])) ? $index[$cat_id]['nav_path'] : '';
 		$cat_uid = (isset($index[$cat_id]['desc_uid'])) ? $index[$cat_id]['desc_uid'] : '';
 		$cat_bitfield = (isset($index[$cat_id]['desc_bitfield'])) ? $index[$cat_id]['desc_bitfield'] : '';
-		$cat_flags = (isset($index[$cat_id]['desc_flags'])) ? $index[$cat_id]['desc_flags'] : '';
+		$cat_flags = (isset($index[$cat_id]['desc_flags'])) ? $index[$cat_id]['desc_flags'] : 0;
 		$cat_sublevel = (isset($index[$cat_id]['sublevel'])) ? $index[$cat_id]['sublevel'] : '';
 		$cat_icon = (isset($index[$cat_id]['cat_icon'])) ? $index[$cat_id]['cat_icon'] : '';
 
@@ -272,7 +272,7 @@ if ($cat)
 		$cat_rule = $index_cat[$cat]['rules'];
 		$cat_rule_uid = (isset($index_cat[$cat]['rule_uid'])) ? $index_cat[$cat]['rule_uid'] : '';
 		$cat_rule_bitfield = (isset($index_cat[$cat]['rule_bitfield'])) ? $index_cat[$cat]['rule_bitfield'] : '';
-		$cat_rule_flags = (isset($index_cat[$cat]['rule_flags'])) ? $index_cat[$cat]['rule_flags'] : '';
+		$cat_rule_flags = (isset($index_cat[$cat]['rule_flags'])) ? $index_cat[$cat]['rule_flags'] : 0;
 		$cat_rule = censor_text($cat_rule);
 		$cat_rule = generate_text_for_display($cat_rule, $cat_rule_uid, $cat_rule_bitfield, $cat_rule_flags);
 
@@ -366,11 +366,11 @@ if ($cat && $total_downloads)
 
 		$long_desc_uid = $dl_files[$i]['long_desc_uid'];
 		$long_desc_bitfield = $dl_files[$i]['long_desc_bitfield'];
-		$long_desc_flags = $dl_files[$i]['long_desc_flags'];
+		$long_desc_flags = (isset($dl_files[$i]['long_desc_flags'])) ? $dl_files[$i]['long_desc_flags'] : 0;
 
 		$desc_uid = $dl_files[$i]['desc_uid'];
 		$desc_bitfield = $dl_files[$i]['desc_bitfield'];
-		$desc_flags = $dl_files[$i]['desc_flags'];
+		$desc_flags = (isset($dl_files[$i]['desc_flags'])) ? $dl_files[$i]['desc_flags'] : 0;
 
 		$description = censor_text($description);
 		$description = generate_text_for_display($description, $desc_uid, $desc_bitfield, $desc_flags);

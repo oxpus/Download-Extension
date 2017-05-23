@@ -181,7 +181,7 @@ if (isset($index[$cat_id]['rules']) && $index[$cat_id]['rules'] != '')
 	$cat_rule = $index[$cat_id]['rules'];
 	$cat_rule_uid = (isset($index[$cat_id]['rule_uid'])) ? $index[$cat_id]['rule_uid'] : '';
 	$cat_rule_bitfield = (isset($index[$cat_id]['rule_bitfield'])) ? $index[$cat_id]['rule_bitfield'] : '';
-	$cat_rule_flags = (isset($index[$cat_id]['rule_flags'])) ? $index[$cat_id]['rule_flags'] : '';
+	$cat_rule_flags = (isset($index[$cat_id]['rule_flags'])) ? $index[$cat_id]['rule_flags'] : 0;
 	$cat_rule = censor_text($cat_rule);
 	$cat_rule = generate_text_for_display($cat_rule, $cat_rule_uid, $cat_rule_bitfield, $cat_rule_flags);
 
@@ -651,7 +651,7 @@ if ($index[$cat_id]['comments'] && \oxpus\dlext\includes\classes\ dl_auth::cat_a
 			$message			= $row['comment_text'];
 			$com_uid			= $row['com_uid'];
 			$com_bitfield		= $row['com_bitfield'];
-			$com_flags			= $row['com_flags'];
+			$com_flags			= (isset($row['com_flags'])) ? $row['com_flags'] : 0;
 
 			$message			= censor_text($message);
 			$message			= generate_text_for_display($message, $com_uid, $com_bitfield, $com_flags);
@@ -767,7 +767,8 @@ if (!$dl_files['extern'])
 			{
 				$ver_tab = true;
 				$ver_desc = censor_text($row['ver_text']);
-				$ver_desc = generate_text_for_display($ver_desc, $row['ver_uid'], $row['ver_bitfield'], $row['ver_flags']);
+				$flags = (isset($row['ver_flags'])) ? $row['ver_flags'] : 0;
+				$ver_desc = generate_text_for_display($ver_desc, $row['ver_uid'], $row['ver_bitfield'], $flags);
 				if (strlen($ver_desc) > 150)
 				{
 					$ver_desc = substr($ver_desc, 0, 100) . ' [...]';
@@ -840,7 +841,7 @@ $username = $this->user->data['username'];
 $long_desc			= $dl_files['long_desc'];
 $long_desc_uid		= $dl_files['long_desc_uid'];
 $long_desc_bitfield	= $dl_files['long_desc_bitfield'];
-$long_desc_flags	= $dl_files['long_desc_flags'];
+$long_desc_flags	= (isset($dl_files['long_desc_flags'])) ? $dl_files['long_desc_flags'] : 0;
 $long_desc			= generate_text_for_display($long_desc, $long_desc_uid, $long_desc_bitfield, $long_desc_flags);
 
 $file_name		= $file_status['file_detail'];
@@ -950,7 +951,7 @@ if ($dl_files['mod_list'])
 			$s_mod_desc			= true;
 			$mod_desc_uid		= $dl_files['mod_desc_uid'];
 			$mod_desc_bitfield	= $dl_files['mod_desc_bitfield'];
-			$mod_desc_flags		= $dl_files['mod_desc_flags'];
+			$mod_desc_flags		= (isset($dl_files['mod_desc_flags'])) ? $dl_files['mod_desc_flags'] : 0;
 			$mod_desc			= generate_text_for_display($mod_desc, $mod_desc_uid, $mod_desc_bitfield, $mod_desc_flags);
 		}
 
@@ -959,7 +960,7 @@ if ($dl_files['mod_list'])
 			$s_mod_warning		= true;
 			$mod_warn_uid		= $dl_files['warn_uid'];
 			$mod_warn_bitfield	= $dl_files['warn_bitfield'];
-			$mod_warn_flags		= $dl_files['warn_flags'];
+			$mod_warn_flags		= (isset($dl_files['warn_flags'])) ? $dl_files['warn_flags'] : 0;
 			$mod_warning		= generate_text_for_display($mod_warning, $mod_warn_uid, $mod_warn_bitfield, $mod_warn_flags);
 		}
 
@@ -980,7 +981,7 @@ if ($mod_todo)
 	$s_mod_todo			= true;
 	$mod_todo_uid		= $dl_files['todo_uid'];
 	$mod_todo_bitfield	= $dl_files['todo_bitfield'];
-	$mod_todo_flags		= $dl_files['todo_flags'];
+	$mod_todo_flags		= (isset($dl_files['todo_flags'])) ? $dl_files['todo_flags'] : 0;
 	$mod_todo			= generate_text_for_display($mod_todo, $mod_todo_uid, $mod_todo_bitfield, $mod_todo_flags);
 }
 else
@@ -1545,7 +1546,7 @@ if ($this->config['dl_similar_dl'])
 		$similar_desc	= $row['description'];
 		$desc_uid		= $dl_files['desc_uid'];
 		$desc_bitfield	= $dl_files['desc_bitfield'];
-		$desc_flags		= $dl_files['desc_flags'];
+		$desc_flags		= (isset($dl_files['desc_flags'])) ? $dl_files['desc_flags'] : 0;
 		$similar_desc	= generate_text_for_display($similar_desc, $desc_uid, $desc_bitfield, $desc_flags);
 
 		$this->template->assign_block_vars('similar_dl', array(

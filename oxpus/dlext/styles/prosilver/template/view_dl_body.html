@@ -58,7 +58,7 @@ var	text_name 				= 'message';
 				<dt><label>{L_DL_FILE_NAME}</label></dt>
 				<dd class="lastpost dl-cell-block"><label>{FILE_NAME}</label></dd>
 			</dl>
-		<!-- IF S_REAL_FILENAME -->
+		<!-- IF S_REAL_FILETIME -->
 			<dl>
 				<dt><label>{L_DL_REAL_FILETIME}</label></dt>
 				<dd class="lastpost dl-cell-block"><label>{REAL_FILETIME}</label></dd>
@@ -262,12 +262,12 @@ var	text_name 				= 'message';
 
 <!-- IF S_FAV_BLOCK or S_EDIT_BUTTON or S_DL_BROKEN_CUR or S_REPORT_BROKEN or S_DL_BROKEN_MOD or S_EDIT_THUMBS or S_MOD_LIST or S_MOD_TODO or S_DL_FIELDS or HASH_TAB -->
 <div class="panel dlext4">
-    <ul id="nav-breadcrumbs_detail" class="nav-breadcrumbs linklist" role="menubar">
+    <ul id="nav-breadcrumbs_detail-left" class="nav-breadcrumbs linklist" role="menubar">
     	<!-- IF S_FAV_BLOCK --><li data-last-responsive="true" class="leftside"><a href="{U_FAVORITE}"><i class="icon fa-bookmark<!-- IF not S_FAV_ACTIVE -->-o<!-- ENDIF --> fa-fw" aria-hidden="true"></i> <span>{FAVORITE}</span></a></li><!-- ENDIF -->
     	<!-- IF S_EDIT_BUTTON --><li data-last-responsive="true" class="rightside"><a href="{U_EDIT}"><i class="icon fa-edit fa-fw" aria-hidden="true"></i> <span>{L_DL_EDIT_FILE}</span></a></li><!-- ENDIF -->
     	<!-- IF S_EDIT_THUMBS --><li data-last-responsive="true" class="rightside"><a href="{U_EDIT_THUMBS}"><i class="icon fa-photo fa-fw" aria-hidden="true"></i> <span>{L_DL_EDIT_THUMBS}</span></a></li><!-- ENDIF -->
     </ul>
-	<ul id="nav-breadcrumbs_detail" class="nav-breadcrumbs linklist" role="menubar">
+	<ul id="nav-breadcrumbs_detail-right" class="nav-breadcrumbs linklist" role="menubar">
     	<!-- IF S_REPORT_BROKEN --><li data-last-responsive="true" class="leftside"><a href="{U_BROKEN_DOWNLOAD}"><i class="icon fa-bell fa-fw" aria-hidden="true"></i> <span>{L_DL_BROKEN}</span></a></li><!-- ENDIF -->
     	<!-- IF S_DL_BROKEN_CUR --><li data-last-responsive="true" class="leftside"><b class="dl-red">&nbsp;{L_DL_BROKEN_CUR}</b></li><!-- ENDIF -->
     	<!-- IF S_DL_BROKEN_MOD --><li data-last-responsive="true" class="leftside"><a href="{U_REPORT}"><i class="icon fa-bell-slash fa-fw" aria-hidden="true"></i> <span>{L_DL_BROKEN_MOD}</span></a></li><!-- ENDIF -->
