@@ -24,7 +24,7 @@ class ext extends \phpbb\extension\base
 		{
 			case '':
 				$phpbb_notifications = $this->container->get('notification_manager');
-				$phpbb_notifications->enable_notifications('oxpus.dl_ext.notification.type.dl_ext');
+				$phpbb_notifications->enable_notifications('oxpus.dlext.notification.type.dlext');
 				return 'notifications';
 			break;
 
@@ -40,7 +40,7 @@ class ext extends \phpbb\extension\base
 		{
 			case '':
 				$phpbb_notifications = $this->container->get('notification_manager');
-				$phpbb_notifications->disable_notifications('oxpus.dl_ext.notification.type.dl_ext');
+				$phpbb_notifications->disable_notifications('oxpus.dlext.notification.type.dlext');
 				return 'notifications';
 			break;
 
@@ -56,7 +56,7 @@ class ext extends \phpbb\extension\base
 		{
 			case '':
 				$phpbb_notifications = $this->container->get('notification_manager');
-				$phpbb_notifications->purge_notifications('oxpus.dl_ext.notification.type.dl_ext');
+				$phpbb_notifications->purge_notifications('oxpus.dlext.notification.type.dlext');
 				return 'notifications';
 			break;
 
