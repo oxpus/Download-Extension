@@ -20,7 +20,7 @@ if ($next_id)
 {
 	$notification = $this->phpbb_container->get('notification_manager');
 	$notification_data = array('notification_id' => $next_id);
-	$notification->delete_notifications('oxpus.dl_ext.notification.type.dl_ext', $notification_data);
+	$notification->delete_notifications('oxpus.dlext.notification.type.dlext', $notification_data);
 }
 
 page_header($this->language->lang('DL_LATEST_DOWNLOADS'));

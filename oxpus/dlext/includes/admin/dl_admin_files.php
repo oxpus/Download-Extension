@@ -513,7 +513,7 @@ else if($action == 'save')
 		if (!$description)
 		{
 			trigger_error($language->lang('NO_SUBJECT'), E_USER_WARNING);
-		}		
+		}
 
 		$send_notify			= $request->variable('send_notify', 0);
 		$change_time			= $request->variable('change_time', 0);
@@ -690,7 +690,7 @@ else if($action == 'save')
 		{
 			$hash_method = $config['dl_file_hash_algo'];
 			$func_hash = $hash_method . '_file';
-			$file_hash = $func_hash(DL_EXT_FILES_FOLDER . $file_path . $new_real_file);		
+			$file_hash = $func_hash(DL_EXT_FILES_FOLDER . $file_path . $new_real_file);
 		}
 		else
 		{
@@ -869,13 +869,13 @@ else if($action == 'save')
 						$config['dl_thumb_xsize'],
 						$config['dl_thumb_ysize'])
 					->set_disallowed_content((isset($config['mime_triggers']) ? explode('|', $config['mime_triggers']) : false));
-		
+
 				$form_name = 'thumb_name';
 
 				$upload_file = $request->file($form_name);
 				unset($upload_file['local_mode']);
 				$thumb_file = $upload->handle_upload('files.types.form', $form_name);
-		
+
 				$thumb_size = $upload_file['size'];
 				$thumb_temp = $upload_file['tmp_name'];
 				$thumb_name = $upload_file['name'];
@@ -1030,7 +1030,7 @@ else if($action == 'save')
 
 		$notification = $phpbb_container->get('notification_manager');
 		$notification_data = array('notification_id' => $dl_t_id);
-		$notification->add_notifications('oxpus.dl_ext.notification.type.dl_ext', $notification_data);
+		$notification->add_notifications('oxpus.dlext.notification.type.dlext', $notification_data);
 	}
 
 	if ($df_id)

@@ -268,7 +268,7 @@ class main_module
 							'DL_ID'			=> $row['fav_id'],
 							'DL_CAT'		=> $dl_nav,
 							'DOWNLOAD'		=> $row['description'],
-							'U_DOWNLOAD'	=> 'app.' . $phpEx . '/dl_ext/?view=detail&amp;df_id=' . $row['id'] . '&amp;cat_id=' . $row['cat'],
+							'U_DOWNLOAD'	=> 'app.' . $phpEx . '/dlext/?view=detail&amp;df_id=' . $row['id'] . '&amp;cat_id=' . $row['cat'],
 						));
 					}
 				}

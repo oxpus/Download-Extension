@@ -40,7 +40,7 @@ class dl_nav extends dl_mod
 		}
 
 		$temp_url = array('cat' => $cat_id);
-		$temp_url_2 = ($helper) ? $helper->route('oxpus_dlext_controller', array('cat' => $cat_id)) : 'app.' . $phpEx . '/dl_ext/?cat=' . $cat_id;
+		$temp_url_2 = ($helper) ? $helper->route('oxpus_dlext_controller', array('cat' => $cat_id)) : 'app.' . $phpEx . '/dlext/?cat=' . $cat_id;
 		$temp_url_3 = str_replace('#CAT#', $dl_index[$cat_id]['parent'], $basic_link);
 		$temp_title = $dl_index[$parent]['cat_name_nav'];
 

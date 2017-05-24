@@ -248,8 +248,8 @@ if ($total_data)
 			'TIME_STAMP'	=> $user->format_date($row['time_stamp']),
 			'ID'			=> $row['dl_id'],
 
-			'U_CAT_LINK'	=> 'app.php/dl_ext/cat=' . $row['cat_id'],
-			'U_DL_LINK'		=> 'app.php/dl_ext/view=detail&amp;df_id=' . $row['id'],
+			'U_CAT_LINK'	=> 'app.php/dlext/cat=' . $row['cat_id'],
+			'U_DL_LINK'		=> 'app.php/dlext/view=detail&amp;df_id=' . $row['id'],
 		));
 		$i++;
 	}

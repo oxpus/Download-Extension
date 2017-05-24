@@ -34,7 +34,7 @@ class dl_main extends dl_mod
 		if ($only_cat > 0)
 		{
 			$tree_dl[$only_cat] = $dl_index[$only_cat];
-			$tree_dl[$only_cat]['nav_path'] = ($helper) ? $helper->route('oxpus_dlext_controller', array('cat' => $only_cat)) : 'app.' . $phpEx . '/dl_ext/?cat=' . $only_cat;
+			$tree_dl[$only_cat]['nav_path'] = ($helper) ? $helper->route('oxpus_dlext_controller', array('cat' => $only_cat)) : 'app.' . $phpEx . '/dlext/?cat=' . $only_cat;
 			$tree_dl[$only_cat]['cat_path'] = $dl_index[$only_cat]['path'];
 			$tree_dl[$only_cat]['cat_name_nav'] = $dl_index[$only_cat]['cat_name'];
 		}
@@ -79,7 +79,7 @@ class dl_main extends dl_mod
 						}
 
 						$tree_dl[$cat_id] = $value;
-						$tree_dl[$cat_id]['nav_path'] = ($helper) ? $helper->route('oxpus_dlext_controller', array('cat' => $cat_id)) : 'app.' . $phpEx . '/dl_ext/?cat=' . $cat_id;
+						$tree_dl[$cat_id]['nav_path'] = ($helper) ? $helper->route('oxpus_dlext_controller', array('cat' => $cat_id)) : 'app.' . $phpEx . '/dlext/?cat=' . $cat_id;
 						$tree_dl[$cat_id]['cat_path'] = $value['path'];
 						$tree_dl[$cat_id]['cat_name'] = $seperator . $value['cat_name'];
 						$tree_dl[$cat_id]['cat_name_nav'] = $value['cat_name'];
@@ -112,7 +112,7 @@ class dl_main extends dl_mod
 			if (((isset($value['auth_view']) && $value['auth_view']) || (isset($dl_auth[$cat_id]['auth_view']) && $dl_auth[$cat_id]['auth_view']) || $user_admin) && (isset($value['parent']) && $value['parent'] == $parent))
 			{
 				$tree_dl[$cat_id] = $value;
-				$tree_dl[$cat_id]['nav_path'] = ($helper) ? $helper->route('oxpus_dlext_controller', array('cat' => $cat_id)) : 'app.' . $phpEx . '/dl_ext/?cat=' . $cat_id;
+				$tree_dl[$cat_id]['nav_path'] = ($helper) ? $helper->route('oxpus_dlext_controller', array('cat' => $cat_id)) : 'app.' . $phpEx . '/dlext/?cat=' . $cat_id;
 				$tree_dl[$cat_id]['cat_path'] = $value['path'];
 				$tree_dl[$cat_id]['cat_name_nav'] = $value['cat_name'];
 				$tree_dl[$cat_id]['sublevel'] = self::get_sublevel($helper, $cat_id);
@@ -141,7 +141,7 @@ class dl_main extends dl_mod
 				$sublevel['cat_name'][$i] = $dl_index[$cat_id]['cat_name'];
 				$sublevel['total'][$i] = (isset($dl_index[$cat_id]['total'])) ? $dl_index[$cat_id]['total'] : 0;
 				$sublevel['cat_id'][$i] = $dl_index[$cat_id]['id'];
-				$sublevel['cat_path'][$i] = ($helper) ? $helper->route('oxpus_dlext_controller', array('cat' => $cat_id)) : 'app.' . $phpEx . '/dl_ext/?cat=' . $cat_id;
+				$sublevel['cat_path'][$i] = ($helper) ? $helper->route('oxpus_dlext_controller', array('cat' => $cat_id)) : 'app.' . $phpEx . '/dlext/?cat=' . $cat_id;
 				$sublevel['cat_sub'][$i] = $cat_id;
 
 				$sublevel['description'][$i] = (isset($dl_index[$cat_id]['description'])) ? $dl_index[$cat_id]['description'] : '';

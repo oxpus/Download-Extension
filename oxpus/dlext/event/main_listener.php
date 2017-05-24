@@ -256,16 +256,16 @@ class main_listener implements EventSubscriberInterface
 
 	public function add_dl_ext_viewonline($event)
 	{
-		if (strpos($event['row']['session_page'], '/dl_ext') !== false)
+		if (strpos($event['row']['session_page'], '/dlext') !== false)
 		{
-			if (strpos($event['row']['session_page'], '/dl_ext/?view=hacks') !== false)
+			if (strpos($event['row']['session_page'], '/dlext/?view=hacks') !== false)
 			{
 				$dl_hacks_link = $this->helper->route('oxpus_dlext_controller', array('view' => 'hacks'));
 
 				$event['location'] = $this->language->lang('DL_PAGE_DL_HACKSLIST');
 				$event['location_url'] = $dl_hacks_link;
 			}
-			else if (strpos($event['row']['session_page'], '/dl_ext/?view=bug_tracker') !== false)
+			else if (strpos($event['row']['session_page'], '/dlext/?view=bug_tracker') !== false)
 			{
 				$dl_main_link = $this->helper->route('oxpus_dlext_controller', array('view' => 'bug_tracker'));
 
@@ -544,7 +544,7 @@ class main_listener implements EventSubscriberInterface
 		$replacements = array('&amp;', '?');
 		$placeholders = array('--AMPERSAND--', '--QUESTIONAIRE--');
 		$content = str_replace($replacements, $placeholders, $content);
-		$content = preg_replace_callback('#(">)(.*?)(\/dl_ext\/--QUESTIONAIRE--view=detail--AMPERSAND--df_id=)(\d+)(.*?)(<\/URL>)#i', array('self', 'dl_mod_callback'), $content);
+		$content = preg_replace_callback('#(">)(.*?)(\/dlext\/--QUESTIONAIRE--view=detail--AMPERSAND--df_id=)(\d+)(.*?)(<\/URL>)#i', array('self', 'dl_mod_callback'), $content);
 		$content = str_replace($placeholders, $replacements, $content);
 		$event['text'] = $content;
 	}

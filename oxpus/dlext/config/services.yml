@@ -36,7 +36,7 @@ services:
         tags:
             - { name: event.listener }
     oxpus.dlext.notification.type.dlext:
-        class: oxpus\dlext\notification\dl_ext
+        class: oxpus\dlext\notification\dlext
         shared: false
         arguments:
             - '@dbal.conn'

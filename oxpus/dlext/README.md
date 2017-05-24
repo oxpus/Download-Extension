@@ -19,7 +19,7 @@ After this enable the extension under "ACP" > "Customise" > "Extensions" > "Down
 ## Collaborate
 
 * For support visit the forum under https://phpbb3.oxpus.net
-* To post an issue with this extention please use the bug tracker https://phpbb3.oxpus.net/dl_ext/?view=bug_tracker
+* To post an issue with this extention please use the bug tracker https://phpbb3.oxpus.net/dlext/?view=bug_tracker
 
 ## License
 

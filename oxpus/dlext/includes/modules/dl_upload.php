@@ -443,7 +443,7 @@ if ($submit)
 
 			$notification = $this->phpbb_container->get('notification_manager');
 			$notification_data = array('notification_id' => $next_id);
-			$notification->add_notifications('oxpus.dl_ext.notification.type.dl_ext', $notification_data);
+			$notification->add_notifications('oxpus.dlext.notification.type.dlext', $notification_data);
 
 			\oxpus\dlext\includes\classes\ dl_topic::gen_dl_topic($next_id, $this->helper);
 		}
