@@ -27,6 +27,7 @@ class dl_topic extends dl_mod
 		global $db, $user, $config, $auth;
 		global $dl_index;
 		global $phpbb_container;
+
 		$language = $phpbb_container->get('language');
 
 		if (!$config['dl_enable_dl_topic'])
@@ -46,17 +47,18 @@ class dl_topic extends dl_mod
 			return;
 		}
 
-		$description = $row['description'];
-		$long_desc = $row['long_desc'];
-		$file_name = $row['file_name'];
-		$file_size = $row['file_size'];
-		$extern = $row['extern'];
-		$version = $row['hack_version'];
+		$description	= $row['description'];
+		$long_desc		= $row['long_desc'];
+		$file_name		= $row['file_name'];
+		$file_size		= $row['file_size'];
+		$extern			= $row['extern'];
+		$version		= $row['hack_version'];
+		$add_user		= $row['add_user'];
 
-		$long_desc_uid			= $row['long_desc_uid'];
-		$long_desc_flags		= $row['long_desc_flags'];
-		$desc_uid				= $row['desc_uid'];
-		$desc_flags				= $row['desc_flags'];
+		$long_desc_uid		= $row['long_desc_uid'];
+		$long_desc_flags	= $row['long_desc_flags'];
+		$desc_uid			= $row['desc_uid'];
+		$desc_flags			= $row['desc_flags'];
 
 		$long_text		= generate_text_for_edit($long_desc, $long_desc_uid, $long_desc_flags);
 		$long_desc		= $long_text['text'];
@@ -65,68 +67,57 @@ class dl_topic extends dl_mod
 
 		$cat_id		= $row['cat'];
 		$dl_title	= $description;
+
 		if ($config['dl_topic_title_catname'])
 		{
 			$dl_title .= ' - ' . $dl_index[$cat_id]['cat_name_nav'];
 		}
 
 		$topic_text_add = "\n[b]" . $language->lang('DL_NAME') . ":[/b] " . $description;
+
 		if ($config['dl_topic_post_catname'])
 		{
 			$topic_text_add .= "\n[b]" . $language->lang('DL_CAT_NAME') . ":[/b] " . $dl_index[$cat_id]['cat_name_nav'];
 		}
 
-		if ($config['dl_diff_topic_user'] == 1)
-		{
-			$sql = 'SELECT username, user_colour
-				FROM ' . USERS_TABLE . '
-				WHERE user_id = ' . (int) $row['add_user'];
-			$result = $db->sql_query($sql);
-			if ($db->sql_affectedrows($result))
-			{
-				$username = $db->sql_fetchfield('username');
-				$user_colour = $db->sql_fetchfield('user_colour');
-				$user_id = $row['add_user'];
-			}
-			else
-			{
-				$username = $user->data['username'];
-				$user_colour = $user->data['user_colour'];
-				$user_id = $user->data['user_id'];
-			}
-			$db->sql_freeresult($result);
+		$sql = 'SELECT username, user_colour
+			FROM ' . USERS_TABLE . '
+			WHERE user_id = ' . (int) $add_user;
+		$result = $db->sql_query($sql);
 
-			$author_full = get_username_string('full', $user_id, $username, $user_colour);
-			$topic_text_add .= "\n[b]" . $language->lang('DL_HACK_AUTOR') . ":[/b] " . $author_full;
-		}
-		else if ($config['dl_diff_topic_user'] == 2 && $dl_index[$cat_id]['diff_topic_user'])
+		if ($db->sql_affectedrows($result))
 		{
-			$sql = 'SELECT username, user_colour
-				FROM ' . USERS_TABLE . '
-				WHERE user_id = ' . (int) $dl_index[$cat_id]['diff_topic_user'];
-			$result = $db->sql_query($sql);
-			if ($db->sql_affectedrows($result))
-			{
-				$username = $db->sql_fetchfield('username');
-				$user_colour = $db->sql_fetchfield('user_colour');
-				$user_id = $row['add_user'];
-			}
-			else
-			{
-				$username = $user->data['username'];
-				$user_colour = $user->data['user_colour'];
-				$user_id = $user->data['user_id'];
-			}
-			$db->sql_freeresult($result);
-
-			$author_full = get_username_string('full', $user_id, $username, $user_colour);
-			$topic_text_add .= "\n[b]" . $language->lang('DL_HACK_AUTOR') . ":[/b] " . $author_full;
+			$row = $db->sql_fetchrow($result);
+			$username = $row['username'];
+			$user_colour = $row['user_colour'];
+			$user_id = $add_user;
 		}
+		else
+		{
+			$username = $user->data['username'];
+			$user_colour = $user->data['user_colour'];
+			$user_id = $user->data['user_id'];
+		}
+
+		$db->sql_freeresult($result);
+
+		$author_url		= get_username_string('profile', $user_id, $username, $user_colour);
+
+		if ($user_colour)
+		{
+			$author_link = '[url=' . $author_url . '][color=#' . $user_colour . ']' . $username . '[/color][/url]';
+		}
+		else
+		{
+			$author_link = '[url=' . $author_url . ']' . $username . '[/url]';
+		}
+
+		$topic_text_add .= "\n[b]" . $language->lang('DL_HACK_AUTOR') . ":[/b] " . $author_link;
 
 		$topic_text_add .= "\n[b]" . $language->lang('DL_FILE_DESCRIPTION') . ":[/b] " . html_entity_decode($long_desc);
 		$topic_text_add .= "\n\n[b]" . $language->lang('DL_HACK_VERSION') . ":[/b] " . $version;
 		$topic_text_add .= "\n[b]" . (($extern) ? $language->lang('DL_EXTERN') : $language->lang('DL_FILE_NAME')) . ":[/b] " . $file_name;
-		$topic_text_add .= (($extern) ? '' : "\n[b]" . $language->lang('DL_FILE_SIZE') . ":[/b] " . dl_format::dl_size($file_size));
+		$topic_text_add .= (($extern) ? '' : "\n[b]" . $language->lang('DL_FILE_SIZE') . ":[/b] " . str_replace('&nbsp;', ' ', dl_format::dl_size($file_size)));
 
 		if ($config['dl_topic_forum'] == -1)
 		{
@@ -170,6 +161,7 @@ class dl_topic extends dl_mod
 		{
 			$sql_tmp = 'SELECT user_id FROM ' . USERS_TABLE . ' WHERE user_id = ' . (int) $row['add_user'];
 			$result_tmp = $db->sql_query($sql_tmp);
+
 			if ($db->sql_affectedrows($result_tmp))
 			{
 				//Get add_user permissions
@@ -180,12 +172,14 @@ class dl_topic extends dl_mod
 			{
 				$dl_topic_user_id = $user->data['user_id'];
 			}
+
 			$db->sql_freeresult($result_tmp);
 		}
 		else if ($config['dl_diff_topic_user'] == 1 && $config['dl_topic_user'])
 		{
 			$sql_tmp = 'SELECT user_id FROM ' . USERS_TABLE . ' WHERE user_id = ' . (int) $config['dl_topic_user'];
 			$result_tmp = $db->sql_query($sql_tmp);
+
 			if ($db->sql_affectedrows($result_tmp))
 			{
 				//Get dl_topic_user permissions
@@ -196,12 +190,14 @@ class dl_topic extends dl_mod
 			{
 				$dl_topic_user_id = $user->data['user_id'];
 			}
+
 			$db->sql_freeresult($result_tmp);
 		}
 		else if ($config['dl_diff_topic_user'] == 2 && $dl_index[$cat_id]['diff_topic_user'])
 		{
 			$sql_tmp = 'SELECT user_id FROM ' . USERS_TABLE . ' WHERE user_id = ' . (int) $dl_index[$cat_id]['topic_user'];
 			$result_tmp = $db->sql_query($sql_tmp);
+
 			if ($db->sql_affectedrows($result_tmp))
 			{
 				//Get category topic_user permissions
@@ -212,6 +208,7 @@ class dl_topic extends dl_mod
 			{
 				$dl_topic_user_id = $user->data['user_id'];
 			}
+
 			$db->sql_freeresult($result_tmp);
 		}
 
@@ -254,6 +251,7 @@ class dl_topic extends dl_mod
 		{
 			include(dl_init::phpbb_root_path() . 'includes/message_parser' . dl_init::phpEx());
 		}
+
 		$message_parser = new \parse_message();
 
 		if (isset($message))
@@ -261,8 +259,9 @@ class dl_topic extends dl_mod
 			$message_parser->message = &$message;
 			unset($message);
 		}
-		$message_md5 = md5($message_parser->message);
+
 		$message_parser->parse($bbcode_status, $url_status, $smilies_status, $img_status, $flash_status, $quote_status, $url_status);
+		$message_md5 = md5($message_parser->message);
 
 		$data = array(
 			'topic_title'			=> $topic_title,
@@ -300,6 +299,7 @@ class dl_topic extends dl_mod
 		{
 			include(dl_init::phpbb_root_path() . 'includes/functions_posting' . dl_init::phpEx());
 		}
+
 		submit_post('post', $topic_title, $user->data['username'], $topic_type, $poll, $data, $update_message, true);
 
 		$dl_topic_id = (int) $data['topic_id'];
@@ -339,6 +339,7 @@ class dl_topic extends dl_mod
 		global $db, $user, $config, $auth;
 		global $dl_index;
 		global $phpbb_container;
+
 		$language = $phpbb_container->get('language');
 
 		if (!$topic_id || !$dl_id)
@@ -364,17 +365,18 @@ class dl_topic extends dl_mod
 		$row = $db->sql_fetchrow($result);
 		$db->sql_freeresult($result);
 
-		$description = $row['description'];
-		$long_desc = $row['long_desc'];
-		$file_name = $row['file_name'];
-		$file_size = $row['file_size'];
-		$extern = $row['extern'];
-		$version = $row['hack_version'];
+		$description	= $row['description'];
+		$long_desc		= $row['long_desc'];
+		$file_name		= $row['file_name'];
+		$file_size		= $row['file_size'];
+		$extern			= $row['extern'];
+		$version		= $row['hack_version'];
+		$add_user		= $row['add_user'];
 
-		$long_desc_uid			= $row['long_desc_uid'];
-		$long_desc_flags		= $row['long_desc_flags'];
-		$desc_uid				= $row['desc_uid'];
-		$desc_flags				= $row['desc_flags'];
+		$long_desc_uid		= $row['long_desc_uid'];
+		$long_desc_flags	= $row['long_desc_flags'];
+		$desc_uid			= $row['desc_uid'];
+		$desc_flags			= $row['desc_flags'];
 
 		$long_text		= generate_text_for_edit($long_desc, $long_desc_uid, $long_desc_flags);
 		$long_desc		= $long_text['text'];
@@ -383,68 +385,57 @@ class dl_topic extends dl_mod
 
 		$cat_id		= $row['cat'];
 		$dl_title	= $description;
+
 		if ($config['dl_topic_title_catname'])
 		{
 			$dl_title .= ' - ' . $dl_index[$cat_id]['cat_name_nav'];
 		}
 
 		$topic_text_add = "\n[b]" . $language->lang('DL_NAME') . ":[/b] " . $description;
+
 		if ($config['dl_topic_post_catname'])
 		{
 			$topic_text_add .= "\n[b]" . $language->lang('DL_CAT_NAME') . ":[/b] " . $dl_index[$cat_id]['cat_name_nav'];
 		}
 
-		if ($config['dl_diff_topic_user'] == 1)
-		{
-			$sql = 'SELECT username, user_colour
-				FROM ' . USERS_TABLE . '
-				WHERE user_id = ' . (int) $row['add_user'];
-			$result = $db->sql_query($sql);
-			if ($db->sql_affectedrows($result))
-			{
-				$username = $db->sql_fetchfield('username');
-				$user_colour = $db->sql_fetchfield('user_colour');
-				$user_id = $row['add_user'];
-			}
-			else
-			{
-				$username = $user->data['username'];
-				$user_colour = $user->data['user_colour'];
-				$user_id = $user->data['user_id'];
-			}
-			$db->sql_freeresult($result);
+		$sql = 'SELECT username, user_colour
+			FROM ' . USERS_TABLE . '
+			WHERE user_id = ' . (int) $add_user;
+		$result = $db->sql_query($sql);
 
-			$author_full = get_username_string('full', $user_id, $username, $user_colour);
-			$topic_text_add .= "\n[b]" . $language->lang('DL_HACK_AUTOR') . ":[/b] " . $author_full;
-		}
-		else if ($config['dl_diff_topic_user'] == 2 && $dl_index[$cat_id]['diff_topic_user'])
+		if ($db->sql_affectedrows($result))
 		{
-			$sql = 'SELECT username, user_colour
-				FROM ' . USERS_TABLE . '
-				WHERE user_id = ' . (int) $dl_index[$cat_id]['diff_topic_user'];
-			$result = $db->sql_query($sql);
-			if ($db->sql_affectedrows($result))
-			{
-				$username = $db->sql_fetchfield('username');
-				$user_colour = $db->sql_fetchfield('user_colour');
-				$user_id = $dl_index[$cat_id]['diff_topic_user'];
-			}
-			else
-			{
-				$username = $user->data['username'];
-				$user_colour = $user->data['user_colour'];
-				$user_id = $user->data['user_id'];
-			}
-			$db->sql_freeresult($result);
-
-			$author_full = get_username_string('full', $user_id, $username, $user_colour);
-			$topic_text_add .= "\n[b]" . $language->lang('DL_HACK_AUTOR') . ":[/b] " . $author_full;
+			$row = $db->sql_fetchrow($result);
+			$username = $row['username'];
+			$user_colour = $row['user_colour'];
+			$user_id = $add_user;
 		}
+		else
+		{
+			$username = $user->data['username'];
+			$user_colour = $user->data['user_colour'];
+			$user_id = $user->data['user_id'];
+		}
+
+		$db->sql_freeresult($result);
+
+		$author_url		= get_username_string('profile', $user_id, $username, $user_colour);
+
+		if ($user_colour)
+		{
+			$author_link = '[url=' . $author_url . '][color=#' . $user_colour . ']' . $username . '[/color][/url]';
+		}
+		else
+		{
+			$author_link = '[url=' . $author_url . ']' . $username . '[/url]';
+		}
+
+		$topic_text_add .= "\n[b]" . $language->lang('DL_HACK_AUTOR') . ":[/b] " . $author_link;
 
 		$topic_text_add .= "\n[b]" . $language->lang('DL_FILE_DESCRIPTION') . ":[/b] " . html_entity_decode($long_desc);
 		$topic_text_add .= "\n\n[b]" . $language->lang('DL_HACK_VERSION') . ":[/b] " . $version;
 		$topic_text_add .= "\n[b]" . (($extern) ? $language->lang('DL_EXTERN') : $language->lang('DL_FILE_NAME')) . ":[/b] " . $file_name;
-		$topic_text_add .= (($extern) ? '' : "\n[b]" . $language->lang('DL_FILE_SIZE') . ":[/b] " . dl_format::dl_size($file_size));
+		$topic_text_add .= (($extern) ? '' : "\n[b]" . $language->lang('DL_FILE_SIZE') . ":[/b] " . str_replace('&nbsp;', ' ', dl_format::dl_size($file_size)));
 
 		if ($config['dl_topic_forum'] == -1)
 		{
@@ -488,6 +479,7 @@ class dl_topic extends dl_mod
 		{
 			$sql_tmp = 'SELECT user_id FROM ' . USERS_TABLE . ' WHERE user_id = ' . (int) $row['add_user'];
 			$result_tmp = $db->sql_query($sql_tmp);
+
 			if ($db->sql_affectedrows($result_tmp))
 			{
 				//Get add_user permissions
@@ -498,12 +490,14 @@ class dl_topic extends dl_mod
 			{
 				$dl_topic_user_id = $user->data['user_id'];
 			}
+
 			$db->sql_freeresult($result_tmp);
 		}
 		else if ($config['dl_diff_topic_user'] == 1 && $config['dl_topic_user'])
 		{
 			$sql_tmp = 'SELECT user_id FROM ' . USERS_TABLE . ' WHERE user_id = ' . (int) $config['dl_topic_user'];
 			$result_tmp = $db->sql_query($sql_tmp);
+
 			if ($db->sql_affectedrows($result_tmp))
 			{
 				//Get dl_topic_user permissions
@@ -514,12 +508,14 @@ class dl_topic extends dl_mod
 			{
 				$dl_topic_user_id = $user->data['user_id'];
 			}
+
 			$db->sql_freeresult($result_tmp);
 		}
 		else if ($config['dl_diff_topic_user'] == 2 && $dl_index[$cat_id]['diff_topic_user'])
 		{
 			$sql_tmp = 'SELECT user_id FROM ' . USERS_TABLE . ' WHERE user_id = ' . (int) $dl_index[$cat_id]['topic_user'];
 			$result_tmp = $db->sql_query($sql_tmp);
+
 			if ($db->sql_affectedrows($result_tmp))
 			{
 				//Get category topic_user permissions
@@ -530,6 +526,7 @@ class dl_topic extends dl_mod
 			{
 				$dl_topic_user_id = $user->data['user_id'];
 			}
+
 			$db->sql_freeresult($result_tmp);
 		}
 
@@ -546,6 +543,7 @@ class dl_topic extends dl_mod
 		{
 			$topic_title = utf8_normalize_nfc($language->lang('DL_TOPIC_SUBJECT', $dl_title));
 		}
+
 		$topic_text .= "\n\n[b]" . $language->lang('DL_VIEW_LINK') . ':[/b] [url=' . $helper->route('oxpus_dlext_controller', array('view' => 'detail', 'df_id' => $dl_id), true, '') . ']' . $dl_title . '[/url]';
 
 		$poll = $forum_data = $post_data = array();
@@ -585,8 +583,9 @@ class dl_topic extends dl_mod
 			$message_parser->message = &$message;
 			unset($message);
 		}
-		$message_md5 = md5($message_parser->message);
+
 		$message_parser->parse($bbcode_status, $url_status, $smilies_status, $img_status, $flash_status, $quote_status, $url_status);
+		$message_md5 = md5($message_parser->message);
 
 		$data = array(
 			'topic_title'				=> $topic_title,
@@ -627,6 +626,7 @@ class dl_topic extends dl_mod
 		{
 			include(dl_init::phpbb_root_path() . 'includes/functions_posting' . dl_init::phpEx());
 		}
+
 		submit_post('edit', $topic_title, $user->data['username'], $topic_type, $poll, $data, $update_message, true);
 
 		// We need to sync the forum if we changed from current user to user id and back to get the correct colour, so do this for every updated download
@@ -634,6 +634,7 @@ class dl_topic extends dl_mod
 		{
 			include(dl_init::phpbb_root_path() . 'includes/functions_admin' . dl_init::phpEx());
 		}
+
 		sync('topic', 'topic_id', $topic_id, false, false);
 		sync('forum', 'forum_id', $topic_forum, false, false);
 

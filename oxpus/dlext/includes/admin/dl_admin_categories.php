@@ -66,8 +66,8 @@ $perms_copy_from	= $request->variable('perms_copy_from', 0);
 $topic_forum		= $request->variable('dl_topic_forum', 0);
 $topic_text			= $request->variable('dl_topic_text', '', true);
 $cat_icon			= $request->variable('cat_icon', '', true);
-$diff_topic_user	= $request->variable('dl_diff_topic_user', $config['dl_diff_topic_user']);
-$topic_user			= $request->variable('dl_topic_user', $config['dl_topic_user']);
+$diff_topic_user	= $request->variable('diff_topic_user', $config['dl_diff_topic_user']);
+$topic_user			= $request->variable('topic_user', $config['dl_topic_user']);
 $topic_more_details	= $request->variable('topic_more_details', 1);
 $show_file_hash		= $request->variable('show_file_hash', 0);
 $idx_type			= $request->variable('type', 'c');
@@ -181,7 +181,7 @@ if($action == 'edit' || $action == 'add')
 	$s_path_select .= '</select>';
 	$s_path_select = str_replace('value="' . $cat_path . '">', 'value="' . $cat_path . '" selected="selected">', $s_path_select);
 
-	$s_topic_user_select = '<select name="dl_diff_topic_user">';
+	$s_topic_user_select = '<select name="diff_topic_user">';
 	$s_topic_user_select .= '<option value="0">' . $language->lang('DL_TOPIC_USER_SELF') . '</option>';
 	$s_topic_user_select .= '<option value="1">' . $language->lang('DL_TOPIC_USER_OTHER') . '</option>';
 	$s_topic_user_select .= '</select>';
