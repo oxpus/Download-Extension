@@ -1,7 +1,7 @@
 <script type="text/javascript">
-function help_popup(help_key) {
+function help_popup(help_key, param) {
 	$.ajax({
-        url: '{U_HELP_POPUP}&help_key=' + help_key,
+        url: '{U_HELP_POPUP}&help_key=' + help_key + '&value=' + param,
         type: "GET",
         success: function (data) { AJAXDLHelpDisplay(data); }
     });
@@ -17,8 +17,8 @@ function AJAXDLHelpDisplay(data) {
     $("#dl_help_bg").fadeIn("fast");
 
     $(".dl_help_close").click(function() {
-    $("#dl_help_popup").fadeOut("fast");
-    $("#dl_help_bg").fadeOut("fast");
+    	$("#dl_help_popup").fadeOut("fast");
+    	$("#dl_help_bg").fadeOut("fast");
 	});
 }
 </script>

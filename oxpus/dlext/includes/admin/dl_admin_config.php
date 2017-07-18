@@ -60,6 +60,11 @@ switch ($view)
 				'dl_off_till'		=> array('lang' => 'DL_OFF_PERIOD_TILL',	'validate' => 'string',	'type' => 'text:5:5',		'explain' => false,		'help_key' => 'DL_OFF_PERIOD_TILL'),
 				'dl_on_admins'		=> array('lang' => 'DL_ON_ADMINS',			'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_ON_ADMINS'),
 				'dl_off_hide'		=> array('lang' => 'DL_OFF_HIDE',			'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_OFF_HIDE'),
+
+				'legend4'				=> '',
+
+				'dl_set_add'		=> array('lang' => 'DL_SET_ADD',			'validate' => 'int',	'type' => 'select',		'explain' => false,		'help_key' => 'DL_SET_ADD', 				'function' => 'select_topic_user',	'params' => array('{CONFIG_VALUE}')),
+				'dl_set_user'		=> array('lang' => 'DL_TOPIC_USER_OTHER',	'validate' => 'int',	'type' => 'text:5:5',	'explain' => false,		'help_key' => 'DL_SET_ADD'),
 			)
 		);
 	break;
@@ -99,7 +104,8 @@ switch ($view)
 
 		$fulltext_dl_search_enabled = false;
 		global $dbms;
-		if (substr(strtolower($dbms),0,5) == 'mysql')
+
+		if (strpos(strtolower($dbms), 'mysql') !== false)
 		{
 			$sql = 'SHOW INDEX FROM ' . DOWNLOADS_TABLE;
 			$result = $db->sql_query($sql);
@@ -118,12 +124,13 @@ switch ($view)
 			$display_vars['vars'] = array_merge($display_vars['vars'], array(
 				'legend4'				=> '',
 
-				'dl_similar_dl'		=> array('lang' => 'DL_SIMILAR_DL_LIMIT',		'validate' => 'int',	'type' => 'text:3:5',		'explain' => false,		'help_key' => 'DL_SIMILAR_DL_LIMIT'),
+				'dl_similar_dl'		=> array('lang' => 'DL_SIMILAR_DL_OPTION',		'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_SIMILAR_DL'),
+				'dl_similar_limit'	=> array('lang' => 'DL_SIMILAR_DL_LIMIT',		'validate' => 'int',	'type' => 'text:3:5',		'explain' => false,		'help_key' => 'DL_SIMILAR_DL_LIMIT'),
 			));
 		}
 		else
 		{
-			$s_hidden_fields = array('dl_similar_limit' => 0);
+			$s_hidden_fields = array('dl_similar_limit' => 0, 'dl_similar_dl' => 0);
 		}
 
 	break;
@@ -367,7 +374,10 @@ foreach ($display_vars['vars'] as $config_name => $null)
 		{
 			if (!$cfg_array['dl_base_switch'])
 			{
+				// disable the board to avoid new/edit downloads while moving the file base!!
+				$config->set('board_disable', true);
 				$success = \oxpus\dlext\includes\classes\ dl_physical::switch_ext_file_path($folder_base, $folder_desc, $cur_dl_dir, $phpbb_root_path, $ext_path);
+
 				switch ($success)
 				{
 					case 1:
@@ -382,6 +392,9 @@ foreach ($display_vars['vars'] as $config_name => $null)
 						$movement_error = false;
 						$movement_message = 'DL_FILEBASE_MOVED';
 				}
+
+				// enable the board after doing all the work
+				$config->set('board_disable', false);
 
 				$movement_message = $language->lang($movement_message);
 			}

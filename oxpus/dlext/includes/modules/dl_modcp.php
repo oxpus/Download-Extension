@@ -75,6 +75,12 @@ if ($action == 'delete')
 	$deny_modcp = false;
 }
 
+if ($action == 'sort')
+{
+	$sort = true;
+	$action = 'manage';
+}
+
 if ($deny_modcp)
 {
 	trigger_error($this->language->lang('DL_NO_PERMISSION'));
@@ -913,6 +919,30 @@ else
 			}
 
 			trigger_error($message);
+		}
+
+		if ($action == 'assign')
+		{
+			$dl_id		= $this->request->variable('dlo_id', array(0));
+			$username	= $this->request->variable('username', '', true);
+
+			if (!empty($dl_id) && $username)
+			{
+				$sql = 'SELECT user_id FROM ' . USERS_TABLE . "
+						WHERE username_clean = '" . $this->db->sql_escape(utf8_clean_string($username)) . "'";
+				$result = $this->db->sql_query($sql);
+				$user_id = (int) $this->db->sql_fetchfield('user_id');
+				$this->db->sql_freeresult($result);
+
+				if ($user_id)
+				{
+					$sql = 'UPDATE ' . DOWNLOADS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', array(
+						'add_user' => $user_id)) . ' WHERE ' . $this->db->sql_in_set('id', $dl_id);
+					$this->db->sql_query($sql);
+				}
+			}
+
+			$action = 'manage';
 		}
 
 		if ($action == 'delete')
@@ -1847,10 +1877,11 @@ else
 				'body' => 'dl_modcp_manage.html')
 			);
 
-			$sql = 'SELECT id, description, desc_uid, desc_bitfield, desc_flags FROM ' . DOWNLOADS_TABLE . '
-				WHERE approve = ' . true . '
-					AND cat = ' . (int) $cat_id . '
-				ORDER BY cat, sort';
+			$sql = 'SELECT d.id, d.description, d.desc_uid, d.desc_bitfield, d.desc_flags, u.username FROM ' . DOWNLOADS_TABLE . ' d
+				LEFT JOIN ' . USERS_TABLE . ' u ON (u.user_id = d.add_user)
+				WHERE d.approve = ' . true . '
+					AND d.cat = ' . (int) $cat_id . '
+				ORDER BY d.cat, d.sort';
 			$result = $this->db->sql_query_limit($sql, $per_page, $start);
 			$max_downloads = $this->db->sql_affectedrows($result);
 
@@ -1860,6 +1891,7 @@ else
 				$desc_uid		= $row['desc_uid'];
 				$desc_bitfield	= $row['desc_bitfield'];
 				$desc_flags		= $row['desc_flags'];
+				$username		= $row['username'];
 
 				$description	= generate_text_for_display($description, $desc_uid, $desc_bitfield, $desc_flags);
 
@@ -1871,6 +1903,7 @@ else
 					'FILE_ID'		=> $file_id,
 					'MINI_ICON'		=> $mini_icon,
 					'DESCRIPTION'	=> $description,
+					'USERNAME'		=> $username,
 
 					'U_UP'			=> ($this->auth->acl_get('a_') && $this->user->data['is_registered']) ? $this->helper->route('oxpus_dlext_controller', array('view' => 'modcp', 'action' => 'manage', 'fmove' => -1, 'sort' => 1, 'df_id' => $file_id, 'cat_id' => $cat_id)) : '',
 					'U_DOWN'		=> ($this->auth->acl_get('a_') && $this->user->data['is_registered']) ? $this->helper->route('oxpus_dlext_controller', array('view' => 'modcp', 'action' => 'manage', 'fmove' => 1, 'sort' => 1, 'df_id' => $file_id, 'cat_id' => $cat_id)) : '',
@@ -1891,7 +1924,6 @@ else
 
 			$s_hidden_fields = array(
 				'view'		=> 'modcp',
-				'action'	=> 'manage',
 				'cat_id'	=> $cat_id,
 				'start'		=> $start
 			);
@@ -1919,13 +1951,12 @@ else
 			}
 
 			$this->template->assign_vars(array(
-				'DL_UP'			=> ($sort && ($this->auth->acl_get('a_') && $this->user->data['is_registered'])) ? $this->language->lang('DL_UP') : '',
-				'DL_DOWN'		=> ($sort && ($this->auth->acl_get('a_') && $this->user->data['is_registered'])) ? $this->language->lang('DL_DOWN') : '',
 				'DL_ABC'		=> ($this->auth->acl_get('a_') && $this->user->data['is_registered']) ? $this->language->lang('SORT_BY') . ' ASC' : '',
 
 				'SORT'			=> $sort,
 				'MAX_DOWNLOADS'	=> $max_downloads,
 
+				'U_FIND_USERNAME'	=> append_sid("{$this->root_path}memberlist.{$this->php_ext}", 'mode=searchuser&amp;form=select_user&amp;field=username&amp;select_single=true'),
 				'U_SORT_ASC'		=> ($this->auth->acl_get('a_') && $this->user->data['is_registered']) ? $this->helper->route('oxpus_dlext_controller', array('view' => 'modcp', 'action' => 'manage', 'fmove' => 'ABC', 'sort' => (($sort) ? 1 : ''), 'df_id' => $file_id, 'cat_id' => $cat_id)) : '',
 				'S_CAT_SELECT'		=> $s_cat_select,
 				'S_DL_MODCP_ACTION'	=> $this->helper->route('oxpus_dlext_controller', array('view' => 'modcp')),

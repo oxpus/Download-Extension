@@ -380,6 +380,7 @@ if ($cat && $total_downloads)
 		$long_desc = generate_text_for_display($long_desc, $long_desc_uid, $long_desc_bitfield, $long_desc_flags);
 		if (intval($this->config['dl_limit_desc_on_index']) && strlen($long_desc) > intval($this->config['dl_limit_desc_on_index']))
 		{
+			$long_desc = strip_tags($long_desc, '<br><br/>');
 			$long_desc = substr($long_desc, 0, intval($this->config['dl_limit_desc_on_index'])) . ' [...]';
 		}
 

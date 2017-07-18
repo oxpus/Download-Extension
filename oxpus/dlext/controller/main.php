@@ -1004,7 +1004,7 @@ class main
 		}
 		else if ($view == 'modcp')
 		{
-			if (isset($index[$cat_id]['total']) && $index[$cat_id]['total'])
+			if ((isset($index[$cat_id]['total']) && $index[$cat_id]['total']) || in_array($action, array('approve', 'capprove')))
 			{
 				include($ext_path . '/includes/modules/dl_modcp.' . $this->php_ext);
 			}

@@ -159,13 +159,13 @@ class dl_topic extends dl_mod
 
 		if (!$config['dl_diff_topic_user'] || ($config['dl_diff_topic_user'] == 2 && !$dl_index[$cat_id]['diff_topic_user']))
 		{
-			$sql_tmp = 'SELECT user_id FROM ' . USERS_TABLE . ' WHERE user_id = ' . (int) $row['add_user'];
+			$sql_tmp = 'SELECT user_id FROM ' . USERS_TABLE . ' WHERE user_id = ' . (int) $add_user;
 			$result_tmp = $db->sql_query($sql_tmp);
 
 			if ($db->sql_affectedrows($result_tmp))
 			{
 				//Get add_user permissions
-				$dl_topic_user_id = $row['add_user'];
+				$dl_topic_user_id = $add_user;
 				$reset_perms = true;
 			}
 			else
@@ -324,6 +324,11 @@ class dl_topic extends dl_mod
 			return;
 		}
 
+		if (!is_array($topic_ids))
+		{
+			$topic_ids = array($topic_ids);
+		}
+
 		if (!function_exists('recalc_nested_sets'))
 		{
 			include(dl_init::phpbb_root_path() . 'includes/functions_admin' . dl_init::phpEx());
@@ -477,13 +482,13 @@ class dl_topic extends dl_mod
 
 		if (!$config['dl_diff_topic_user'] || ($config['dl_diff_topic_user'] == 2 && !$dl_index[$cat_id]['diff_topic_user']))
 		{
-			$sql_tmp = 'SELECT user_id FROM ' . USERS_TABLE . ' WHERE user_id = ' . (int) $row['add_user'];
+			$sql_tmp = 'SELECT user_id FROM ' . USERS_TABLE . ' WHERE user_id = ' . (int) $add_user;
 			$result_tmp = $db->sql_query($sql_tmp);
 
 			if ($db->sql_affectedrows($result_tmp))
 			{
 				//Get add_user permissions
-				$dl_topic_user_id = $row['add_user'];
+				$dl_topic_user_id = $add_user;
 				$reset_perms = true;
 			}
 			else

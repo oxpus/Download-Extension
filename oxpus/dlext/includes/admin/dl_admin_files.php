@@ -686,6 +686,16 @@ else if($action == 'save')
 		$current_time = time();
 		$current_user = $user->data['user_id'];
 
+		if ($config['dl_set_add'] == 1 && $config['dl_set_user'])
+		{
+			$current_user = $config['dl_set_user'];
+		}
+
+		if ($config['dl_set_add'] == 2 && $index[$cat_id]['dl_set_add'] && $index[$cat_id]['dl_set_user'])
+		{
+			$current_user = $index[$cat_id]['dl_set_user'];
+		}
+
 		if ($new_real_file)
 		{
 			$hash_method = $config['dl_file_hash_algo'];

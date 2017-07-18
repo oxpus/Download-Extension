@@ -318,6 +318,16 @@ if ($submit)
 		$current_time = time();
 		$current_user = $this->user->data['user_id'];
 
+		if ($this->config['dl_set_add'] == 1 && $this->config['dl_set_user'])
+		{
+			$current_user = $this->config['dl_set_user'];
+		}
+
+		if ($this->config['dl_set_add'] == 2 && $index[$cat_id]['dl_set_add'] && $index[$cat_id]['dl_set_user'])
+		{
+			$current_user = $index[$cat_id]['dl_set_user'];
+		}
+
 		$approve = ($index[$cat_id]['must_approve'] && !$cat_auth['auth_mod'] && !$index[$cat_id]['auth_mod'] && !($this->auth->acl_get('a_') && $this->user->data['is_registered'])) ? 0 : $approve;
 
 		unset($sql_array);

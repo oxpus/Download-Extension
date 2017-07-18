@@ -19,7 +19,7 @@ if ( !defined('IN_PHPBB') )
 $this->language->add_lang('help', 'oxpus/dlext');
 
 $help_key	= $this->request->variable('help_key', '');
-$value		= $this->request->variable('value', '');
+$value		= $this->request->variable('value', '', true);
 $value = ($value == 'undefined') ? '' : $value;
 
 //

@@ -34,7 +34,7 @@ class dl_format extends dl_mod
 			}
 			else
 			{
-				$output_desc = '&nbsp;'.$language->lang('DL_BYTES');
+				$output_desc = ' '.$language->lang('DL_BYTES');
 			}
 		}
 		else if ($input_value < 1048576)
@@ -46,7 +46,7 @@ class dl_format extends dl_mod
 			}
 			else
 			{
-				$output_desc = '&nbsp;'.$language->lang('DL_KB');
+				$output_desc = ' '.$language->lang('DL_KB');
 			}
 		}
 		else if ($input_value < 1073741824)
@@ -58,7 +58,7 @@ class dl_format extends dl_mod
 			}
 			else
 			{
-				$output_desc = '&nbsp;'.$language->lang('DL_MB');
+				$output_desc = ' '.$language->lang('DL_MB');
 			}
 		}
 		else
@@ -70,7 +70,7 @@ class dl_format extends dl_mod
 			}
 			else
 			{
-				$output_desc = '&nbsp;'.$language->lang('DL_GB');
+				$output_desc = ' '.$language->lang('DL_GB');
 			}
 		}
 

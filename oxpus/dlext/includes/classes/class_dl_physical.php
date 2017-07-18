@@ -256,11 +256,8 @@ class dl_physical extends dl_mod
 	*/
 	public static function switch_ext_file_path($source_path, $dest_path, $cur_dl_dir, $phpbb_root_path, $ext_path)
 	{
-		// disable the board to avoid new/edit downloads while moving the file base!!
-		$config->set('board_disable', true);
-
 		// wait a moment before continue to give the users, forum and database the chance to stop without errors
-		sleep(2); // Do not increase this to break the extension module with a possible bad error!!
+		sleep(1); // Do not increase this to break the extension module with a possible bad error!!
 
 		switch ($cur_dl_dir)
 		{
@@ -273,6 +270,7 @@ class dl_physical extends dl_mod
 				fputs($handle, "<Files *>\n");
 				fputs($handle, "	Order Deny,Allow\n");
 				fputs($handle, "	Allow from localhost 127.0.0.1 " . generate_board_url() . "\n");
+				fputs($handle, "	Require ip 127.0.0.1\n");
 				fputs($handle, "</Files>");
 				fclose($handle);
 			break;
@@ -316,9 +314,6 @@ class dl_physical extends dl_mod
 				fclose($handle);
 			break;
 		}
-
-		// welcome back ;-)
-		$config->set('board_disable', false);
 
 		return $return;
 	}

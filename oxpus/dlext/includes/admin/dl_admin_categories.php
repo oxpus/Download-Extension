@@ -72,6 +72,8 @@ $topic_more_details	= $request->variable('topic_more_details', 1);
 $show_file_hash		= $request->variable('show_file_hash', 0);
 $idx_type			= $request->variable('type', 'c');
 $topic_type			= $request->variable('topic_type', POST_NORMAL);
+$set_add			= $request->variable('set_add', 0);
+$set_user			= $request->variable('set_user', 0);
 
 $error = false;
 $error_msg = '';
@@ -124,6 +126,8 @@ if($action == 'edit' || $action == 'add')
 		$show_file_hash		= $index[$cat_id]['show_file_hash'];
 		$cat_icon			= $index[$cat_id]['cat_icon'];
 		$topic_type			= $index[$cat_id]['dl_topic_type'];
+		$set_add			= $index[$cat_id]['dl_set_add'];
+		$set_user			= $index[$cat_id]['dl_set_user'];
 
 		$perms_copy_from	= '<select name="perms_copy_from">';
 		$perms_copy_from	.= '<option value="-1">&nbsp;»&nbsp;'.$language->lang('DL_NO_PERMS_COPY').'</option>';
@@ -186,6 +190,12 @@ if($action == 'edit' || $action == 'add')
 	$s_topic_user_select .= '<option value="1">' . $language->lang('DL_TOPIC_USER_OTHER') . '</option>';
 	$s_topic_user_select .= '</select>';
 	$s_topic_user_select = str_replace('value="' . $diff_topic_user . '">', 'value="' . $diff_topic_user . '" selected="selected">', $s_topic_user_select);
+
+	$s_set_user_select = '<select name="set_add">';
+	$s_set_user_select .= '<option value="0">' . $language->lang('DL_TOPIC_USER_SELF') . '</option>';
+	$s_set_user_select .= '<option value="1">' . $language->lang('DL_TOPIC_USER_OTHER') . '</option>';
+	$s_set_user_select .= '</select>';
+	$s_set_user_select = str_replace('value="' . $set_add . '">', 'value="' . $set_add . '" selected="selected">', $s_set_user_select);
 
 	$cat_traffic_out	= 0;
 	$cat_remain_traffic	= ($cat_remain_traffic < 0) ? 0 : $cat_remain_traffic;
@@ -309,36 +319,20 @@ if($action == 'edit' || $action == 'add')
 		$template->assign_var('S_TOPIC_USER_ON', true);
 	}
 
+	if ($config['dl_set_add'] == 2)
+	{
+		$template->assign_var('S_SET_USER_ON', true);
+	}
+
 	add_form_key('dl_adm_cats');
 
 	$basic_link	.= '&amp;parent=' . $cat_parent . '&amp;type=' . $idx_type;
 
 	$template->assign_vars(array(
-		'L_DL_CAT_PATH_EXPLAIN'			=> 'DL_CAT_PATH',
-		'L_DL_NAME_EXPLAIN'				=> 'DL_CAT_NAME',
-		'L_DL_DESCRIPTION_EXPLAIN'		=> 'DL_CAT_DESCRIPTION',
-		'L_DL_RULES_EXPLAIN'			=> 'DL_CAT_RULES',
-		'L_DL_PARENT_EXPLAIN'			=> 'DL_CAT_PARENT',
-		'L_DL_MUST_APPROVE_EXPLAIN'		=> 'DL_MUST_APPROVE',
-		'L_DL_ALLOW_MOD_DESC_EXPLAIN'	=> 'DL_MOD_DESC_ALLOW',
-		'L_DL_STATISTICS_EXPLAIN'		=> 'DL_STATISTICS',
-		'L_DL_STATS_PRUNE_EXPLAIN'		=> 'DL_STATS_PRUNE',
-		'L_DL_COMMENTS_EXPLAIN'			=> 'DL_COMMENTS',
-		'L_DL_COPY_PERMISSIONS_EXPLAIN'	=> 'DL_COPY_PERMISSIONS',
 		'L_DL_CAT_MODE'					=> ($action == 'edit') ? $language->lang('EDIT') : $language->lang('ADD'),
 		'L_DL_CAT_TRAFFIC'				=> (isset($index[$cat_id]['cat_traffic']) && $index[$cat_id]['cat_traffic'] && isset($cat_remain_traffic) && $cat_remain_traffic) ? $language->lang('DL_CAT_TRAFFIC', $cat_remain_traffic) : $language->lang('DL_CAT_TRAFFIC_OFF'),
-		'L_DL_CAT_TRAFFIC_EXPLAIN'		=> 'DL_CAT_TRAFFIC',
-		'L_DL_CAT_TRAFFIC_VALUE'		=> (isset($index[$cat_id]['cat_traffic']) && $index[$cat_id]['cat_traffic'] && isset($cat_remain_traffic) && $cat_remain_traffic) ? $language->lang('DL_CAT_TRAFFIC', $cat_remain_traffic) : $language->lang('DL_CAT_TRAFFIC_OFF'),
-		'L_DL_THUMBNAIL_EXPLAIN'		=> 'DL_THUMB_CAT',
-		'L_DL_APPROVE_EXPLAIN'			=> 'DL_APPROVE_COMMENTS',
-		'L_DL_BUG_TRACKER_EXPLAIN'		=> 'DL_BUG_TRACKER_CAT',
-		'L_DL_TOPIC_FORUM_EXPLAIN'		=> 'DL_TOPIC_FORUM_C',
-		'L_DL_TOPIC_TEXT_EXPLAIN'		=> 'DL_TOPIC_TEXT',
-		'L_DL_CAT_ICON_EXPLAIN'			=> 'DL_CAT_ICON',
-		'L_DL_TOPIC_USER_EXPLAIN'		=> 'DL_TOPIC_USER',
+		'L_DL_CAT_TRAFFIC_HELP'			=> htmlentities((isset($index[$cat_id]['cat_traffic']) && $index[$cat_id]['cat_traffic'] && isset($cat_remain_traffic) && $cat_remain_traffic) ? $language->lang('DL_CAT_TRAFFIC', $cat_remain_traffic) : $language->lang('DL_CAT_TRAFFIC_OFF')),
 		'L_DL_UCONF_LINK_EXPLAIN'		=> 'DL_UCONF_LINK',
-		'L_DL_SHOW_FILE_HASH_EXPLAIN'	=> 'DL_SHOW_FILE_HASH',
-		'L_DL_TOPIC_TYPE_EXPLAIN'		=> 'DL_TOPIC_TYPE',
 
 		'ERROR_MSG'				=> $error_msg,
 		'CATEGORY'				=> (isset($index[$cat_id]['cat_name'])) ? $language->lang('DL_PERMISSIONS', $index[$cat_id]['cat_name']) : '',
@@ -368,6 +362,7 @@ if($action == 'edit' || $action == 'add')
 		'TOPIC_USER'			=> $topic_user,
 		'SHOW_FILE_HASH_YES'	=> $show_file_hash_yes,
 		'SHOW_FILE_HASH_NO'		=> $show_file_hash_no,
+		'SET_USER'				=> $set_user,
 
 		'S_TOPIC_TYPE'			=> $s_topic_type,
 		'S_CAT_PATH'			=> $s_path_select,
@@ -375,6 +370,7 @@ if($action == 'edit' || $action == 'add')
 		'S_CAT_TRAFFIC_RANGE'	=> $cat_traffic_range,
 		'S_CATEGORY_ACTION'		=> $basic_link,
 		'S_DL_DIFF_TOPIC_USER'	=> $s_topic_user_select,
+		'S_SET_USER'			=> $s_set_user_select,
 		'S_TOPIC_MORE_DETAILS'	=> $s_topic_more_details,
 		'S_ERROR'				=> $error,
 		'S_HIDDEN_FIELDS'		=> build_hidden_fields($s_hidden_fields),
@@ -525,6 +521,8 @@ else if($action == 'save_cat')
 			'topic_more_details'	=> $topic_more_details,
 			'show_file_hash'		=> $show_file_hash,
 			'bug_tracker'			=> $bug_tracker,
+			'dl_set_add'			=> $set_add,
+			'dl_set_user'			=> $set_user,
 			'dl_topic_type'			=> $topic_type)) . ' WHERE id = ' . (int) $cat_id;
 
 		$message = $language->lang('DL_CATEGORY_UPDATED');
@@ -560,6 +558,8 @@ else if($action == 'save_cat')
 			'topic_more_details'	=> $topic_more_details,
 			'show_file_hash'		=> $show_file_hash,
 			'bug_tracker'			=> $bug_tracker,
+			'dl_set_add'			=> $set_add,
+			'dl_set_user'			=> $set_user,
 			'dl_topic_type'			=> $topic_type));
 
 		$message = $language->lang('DL_CATEGORY_ADDED');

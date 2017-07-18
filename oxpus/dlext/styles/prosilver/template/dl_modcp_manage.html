@@ -26,7 +26,7 @@ function select_switch(status)
 
 <br />
 
-<form method="post" id="dl_modcp" action="{S_DL_MODCP_ACTION}" >
+<form method="post" id="select_user" action="{S_DL_MODCP_ACTION}" >
 
 <div class="forabg">
 	<div class="inner">
@@ -35,8 +35,8 @@ function select_switch(status)
 		<li class="header">
 			<dl>
 				<dt>{L_DL_DOWNLOAD}</dt>
-				<dd class="options dl-cell-block">&nbsp;</dd>
-				<dd class="time dl-cell-block">{L_OPTIONS}</dd>
+				<dd class="posts">{L_DL_HACK_AUTOR}</dd>
+				<dd class="options dl-cell-block">{L_OPTIONS}</dd>
 			</dl>
 		</li>
 	</ul>
@@ -45,16 +45,19 @@ function select_switch(status)
 		<li class="row<!-- IF manage_row.S_ROW_COUNT is even --> bg1<!-- ELSE --> bg2<!-- ENDIF -->">
 			<dl>
 				<dt>{manage_row.MINI_ICON}&nbsp;<a href="{manage_row.U_DOWNLOAD}" class="forumtitle">{manage_row.DESCRIPTION}</a></dt>
-				<dd class="options dl-cell-block">&nbsp;<input type="checkbox" class="permissions-checkbox" name="dlo_id[]" id="dlo_id_{manage_row.S_ROW_COUNT}" value="{manage_row.FILE_ID}" />&nbsp;</dd>
-				<dd class="time dl-cell-block">
-					&nbsp;<!-- IF SORT --><a href="{manage_row.U_UP}" class="gensmall">{DL_UP}</a>&nbsp;&bull;&nbsp;<a href="{manage_row.U_DOWN}" class="gensmall">{DL_DOWN}</a>&nbsp;&bull;&nbsp;<!-- ENDIF --><a href="{manage_row.U_EDIT}">{L_DL_EDIT_FILE}</a>
+				<dd class="posts">{manage_row.USERNAME}</dd>
+				<dd class="options dl-cell-block">
+					&nbsp;<input type="checkbox" class="permissions-checkbox" name="dlo_id[]" id="dlo_id_{manage_row.S_ROW_COUNT}" value="{manage_row.FILE_ID}" />&nbsp;
+					<!-- IF SORT -->
+					&nbsp;<a href="{manage_row.U_UP}" class="button button-icon-only"><i class="icon fa-chevron-up fa-fw" aria-hidden="true" title="{L_DL_UP}"></i><span class="sr-only">{L_DL_UP}</span></a>
+					&nbsp;<a href="{manage_row.U_DOWN}" class="button button-icon-only"><i class="icon fa-chevron-down fa-fw" aria-hidden="true" title="{L_DL_DOWN}"></i><span class="sr-only">{L_DL_DOWN}</span></a>
+					<!-- ENDIF -->
+					&nbsp;<a href="{manage_row.U_EDIT}" class="button button-icon-only"><i class="icon fa-pencil fa-fw" aria-hidden="true" title="{L_DL_EDIT_FILE}"></i><span class="sr-only">{L_DL_EDIT_FILE}</span></a>
 				</dd>
  			</dl>
  		</li>
 	<!-- END manage_row -->
 	</ul>
-
-	{S_HIDDEN_FIELDS}
 
 	</div>
 </div>
@@ -63,12 +66,22 @@ function select_switch(status)
 	<div class="inner">
 
 	<fieldset class="submit-buttons">
-		<!-- IF S_ORDER_BUTTON --><input type="submit" name="sort" value="{L_DL_ORDER}" class="button icon-button" />&nbsp;&nbsp;<!-- ENDIF -->
-		<!-- IF S_MODCP_BUTTON --><input type="submit" value="{L_PREVIOUS_STEP}" class="button icon-button" />&nbsp;&nbsp;<!-- ENDIF -->
-		<input type="submit" name="move" value="{L_DL_MOVE}" class="button icon-button" />&nbsp;{S_CAT_SELECT}&nbsp;&nbsp;
-		<input type="submit" name="delete" value="{L_DL_DELETE}" class="button icon-button" />&nbsp;&nbsp;
-		<input type="submit" name="lock" value="{L_DL_LOCK}" class="button icon-button" />
+		<!-- IF not S_MODCP_BUTTON -->
+		<select name="action">
+			<option value="manage">{L_DL_MODCP_MOD_SELECT}</option>
+			<option value="sort">{L_DL_ORDER}</option>
+			<option value="move">{L_DL_MOVE}</option>
+			<option value="delete">{L_DL_DELETE}</option>
+			<option value="lock">{L_DL_LOCK}</option>
+			<option value="assign">{L_DL_ASSIGN}</option>
+		</select>
+		&nbsp;{S_CAT_SELECT}&nbsp;
+		<input type="text" name="username" id="username" value="" class="inputbox autowidth" size="20" /> [ <a href="{U_FIND_USERNAME}" onclick="find_username(this.href); return false;">{L_FIND_USERNAME}</a> ]
+		<!-- ENDIF -->
+		&nbsp;<input type="submit" class="submit" value="<!-- IF not S_MODCP_BUTTON -->{L_SUBMIT}<!-- ELSE -->{L_BACK_TO_PREV}<!-- ENDIF -->" />
 	</fieldset>
+
+	{S_HIDDEN_FIELDS}
 
 	</div>
 </div>
