@@ -109,57 +109,7 @@ switch ($action)
 			$db->sql_query('DELETE FROM ' . DL_FIELDS_LANG_TABLE . ' WHERE field_id = ' . (int) $field_id);
 			$db->sql_query('DELETE FROM ' . DL_LANG_TABLE . ' WHERE field_id = ' . (int) $field_id);
 
-			switch ($db->sql_layer)
-			{
-				case 'sqlite':
-					$sql = "SELECT sql
-						FROM sqlite_master
-						WHERE type = 'table'
-							AND name = '" . DL_FIELDS_DATA_TABLE . "'
-						ORDER BY type DESC, name;";
-					$result = $db->sql_query($sql);
-					$row = $db->sql_fetchrow($result);
-					$db->sql_freeresult($result);
-
-					// Create a temp table and populate it, destroy the existing one
-					$db->sql_query(preg_replace('#CREATE\s+TABLE\s+"?' . DL_FIELDS_DATA_TABLE . '"?#i', 'CREATE TEMPORARY TABLE ' . DL_FIELDS_DATA_TABLE . '_temp', $row['sql']));
-					$db->sql_query('INSERT INTO ' . DL_FIELDS_DATA_TABLE . '_temp SELECT * FROM ' . DL_FIELDS_DATA_TABLE);
-					$db->sql_query('DROP TABLE ' . DL_FIELDS_DATA_TABLE);
-
-					preg_match('#\((.*)\)#s', $row['sql'], $matches);
-
-					$new_table_cols = trim($matches[1]);
-					$old_table_cols = preg_split('/,(?=[\\sa-z])/im', $new_table_cols);
-					$column_list = array();
-
-					foreach ($old_table_cols as $declaration)
-					{
-						$entities = preg_split('#\s+#', trim($declaration));
-
-						if ($entities[0] == 'PRIMARY')
-						{
-							continue;
-						}
-
-						if ($entities[0] !== 'pf_' . $field_ident)
-						{
-							$column_list[] = $entities[0];
-						}
-					}
-
-					$columns = implode(',', $column_list);
-
-					$new_table_cols = preg_replace('/' . 'pf_' . $field_ident . '[^,]+,/', '', $new_table_cols);
-
-					// create a new table and fill it up. destroy the temp one
-					$db->sql_query('CREATE TABLE ' . DL_FIELDS_DATA_TABLE . ' (' . $new_table_cols . ');');
-					$db->sql_query('INSERT INTO ' . DL_FIELDS_DATA_TABLE . ' (' . $columns . ') SELECT ' . $columns . ' FROM ' . DL_FIELDS_DATA_TABLE . '_temp;');
-					$db->sql_query('DROP TABLE ' . DL_FIELDS_DATA_TABLE . '_temp');
-				break;
-
-				default:
-					$db->sql_query('ALTER TABLE ' . DL_FIELDS_DATA_TABLE . " DROP COLUMN pf_$field_ident");
-			}
+			$db->sql_query('ALTER TABLE ' . DL_FIELDS_DATA_TABLE . " DROP COLUMN pf_$field_ident");
 
 			$order = 0;
 

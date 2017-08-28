@@ -501,7 +501,7 @@ class main_module
 	*/
 	function save_profile_field(&$cp, $field_type, $action = 'create')
 	{
-		global $db, $config, $user, $request;
+		global $db, $config, $user, $request, $phpbb_log, $language;
 
 		$field_id = $request->variable('field_id', 0);
 
