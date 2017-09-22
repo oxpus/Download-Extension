@@ -20,12 +20,11 @@ if (!defined('IN_PHPBB'))
 
 class dl_nav extends dl_mod
 {
-	public static function nav($helper = '', $parent, $disp_art, &$tmp_nav, $basic_link = '')
+	public static function nav($helper = '', $parent, $disp_art, $tmp_nav, $basic_link = '')
 	{
 		static $dl_index, $dl_auth, $user_admin;
 
-		global $config, $path_dl_array, $phpEx;
-		global $dl_index, $dl_auth, $user_admin;
+		global $config, $phpEx, $dl_index, $dl_auth, $user_admin;
 
 		if (!is_array($dl_index) || !sizeof($dl_index))
 		{
@@ -64,33 +63,41 @@ class dl_nav extends dl_mod
 
 		if (isset($dl_index[$parent]['parent']) && $dl_index[$parent]['parent'] != 0)
 		{
-			self::nav($helper, $dl_index[$parent]['parent'], $disp_art, $tmp_nav, $basic_link);
+			$return = self::nav($helper, $dl_index[$parent]['parent'], $disp_art, $tmp_nav, $basic_link);
+
+			if ($disp_art == 'url')
+			{
+				$tmp_nav = array_merge($tmp_nav, $return);
+			}
+			else
+			{
+				$path_dl_array[] = $return;
+			}
 		}
 
 		$path_dl = '';
 
 		if ($disp_art != 'url')
 		{
+			$tmp_navi_ary = array();
+			for ($i = sizeof($path_dl_array); $i >= 0; --$i)
+			{
+				if (isset($path_dl_array[$i]))
+				{
+					$tmp_navi_ary[] = $path_dl_array[$i];
+				}
+			}
+
 			if ($disp_art == 'acp')
 			{
-				$tmp_navi_ary = array();
-				for ($i = sizeof($path_dl_array); $i >= 0 ; $i--)
-				{
-					if (isset($path_dl_array[$i]))
-					{
-						$tmp_navi_ary[] = $path_dl_array[$i];
-					}
-				}
 				$path_dl = implode('<strong> -> </strong>', $tmp_navi_ary);
-				unset($tmp_navi_ary);
 			}
 			else
 			{
-				for ($i = sizeof($path_dl_array); $i >= 0 ; $i--)
-				{
-					$path_dl .= (isset($path_dl_array[$i])) ? $path_dl_array[$i] : '';
-				}
+				$path_dl = implode('&nbsp;&raquo;&nbsp;', $tmp_navi_ary);
 			}
+
+			unset($tmp_navi_ary);
 		}
 
 		return ($disp_art == 'url') ? $tmp_nav : $path_dl;

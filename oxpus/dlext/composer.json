@@ -3,7 +3,7 @@
 	"type": "phpbb-extension",
 	"description": "Download Extension for phpBB 3.1",
 	"homepage": "https://phpbb3.oxpus.net",
-	"version": "7.2.11",
+	"version": "7.2.12",
 	"time": "2015-05-11",
 	"license": "GPL-2.0",
 	"authors": [{

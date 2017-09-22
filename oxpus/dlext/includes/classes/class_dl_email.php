@@ -48,9 +48,9 @@ class dl_email extends dl_mod
 				'SITENAME'		=> $config['sitename'],
 				'BOARD_EMAIL'	=> $config['board_email_sig'],
 				'USERNAME'		=> htmlspecialchars_decode($row['username']),
-				'DOWNLOAD'		=> htmlspecialchars_decode($mail_data['description']),
-				'DESCRIPTION'	=> htmlspecialchars_decode($mail_data['long_desc']),
-				'CATEGORY'		=> htmlspecialchars_decode($mail_data['cat_name']),
+				'DOWNLOAD'		=> strip_tags(htmlspecialchars_decode($mail_data['description'])),
+				'DESCRIPTION'	=> strip_tags(htmlspecialchars_decode($mail_data['long_desc'])),
+				'CATEGORY'		=> strip_tags(htmlspecialchars_decode($mail_data['cat_name'])),
 				'U_APPROVE'		=> generate_board_url(true) . $helper->route('oxpus_dlext_controller', array('view' => 'modcp', 'action' => 'approve'), false, ''),
 				'U_CATEGORY'	=> generate_board_url(true) . $helper->route('oxpus_dlext_controller', array('cat' => $cat_id), false, ''),
 			));
@@ -100,9 +100,9 @@ class dl_email extends dl_mod
 			'SITENAME'		=> $config['sitename'],
 			'BOARD_EMAIL'	=> $config['board_email_sig'],
 			'USERNAME'		=> $user->data['username'],
-			'REPORT_TITLE'	=> htmlspecialchars_decode($mail_data['report_title']),
-			'STATUS'		=> htmlspecialchars_decode($language->lang('DL_REPORT_STATUS_' . $mail_data['report_status'])),
-			'STATUS_TEXT'	=> htmlspecialchars_decode($status_text),
+			'REPORT_TITLE'	=> strip_tags(htmlspecialchars_decode($mail_data['report_title'])),
+			'STATUS'		=> strip_tags(htmlspecialchars_decode($language->lang('DL_REPORT_STATUS_' . $mail_data['report_status']))),
+			'STATUS_TEXT'	=> strip_tags(htmlspecialchars_decode($status_text)),
 			'U_BUG_REPORT'	=> generate_board_url(true) . $helper->route('oxpus_dlext_controller', array('view' => 'bug_tracker', 'action' => 'detail', 'fav_id' => (int) $mail_data['fav_id']), false, ''),
 		));
 
@@ -163,9 +163,9 @@ class dl_email extends dl_mod
 			$messenger->assign_vars(array(
 				'SITENAME'		=> $config['sitename'],
 				'BOARD_EMAIL'	=> $config['board_email_sig'],
-				'CATEGORY'		=> htmlspecialchars_decode($mail_data['cat_name']),
-				'USERNAME'		=> htmlspecialchars_decode($row['username']),
-				'DOWNLOAD'		=> htmlspecialchars_decode($mail_data['description']),
+				'CATEGORY'		=> strip_tags(htmlspecialchars_decode($mail_data['cat_name'])),
+				'USERNAME'		=> strip_tags(htmlspecialchars_decode($row['username'])),
+				'DOWNLOAD'		=> strip_tags(htmlspecialchars_decode($mail_data['description'])),
 				'U_APPROVE'		=> generate_board_url(true) . $helper->route('oxpus_dlext_controller', array('view' => 'modcp', 'action' => 'capprove'), false, ''),
 				'U_DOWNLOAD'	=> generate_board_url(true) . $helper->route('oxpus_dlext_controller', array('view' => 'comment', 'action' => 'view', 'cat_id' => $cat_id, 'df_id' => $df_id), false, ''),
 			));
@@ -209,9 +209,9 @@ class dl_email extends dl_mod
 			$messenger->assign_vars(array(
 				'SITENAME'				=> $config['sitename'],
 				'BOARD_EMAIL'			=> $config['board_email_sig'],
-				'REPORTER'				=> htmlspecialchars_decode($username),
-				'REPORT_NOTIFY_TEXT'	=> htmlspecialchars_decode($mail_data['report_notify_text']),
-				'USERNAME'				=> htmlspecialchars_decode($row['username']),
+				'REPORTER'				=> strip_tags(htmlspecialchars_decode($username)),
+				'REPORT_NOTIFY_TEXT'	=> strip_tags(htmlspecialchars_decode($mail_data['report_notify_text'])),
+				'USERNAME'				=> strip_tags(htmlspecialchars_decode($row['username'])),
 				'U_DOWNLOAD'			=> generate_board_url(true) . $helper->route('oxpus_dlext_controller', array('view' => 'detail', 'cat_id' => $cat_id, 'df_id' => $df_id), false, ''),
 			));
 

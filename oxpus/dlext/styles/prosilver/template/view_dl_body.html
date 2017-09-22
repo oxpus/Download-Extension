@@ -342,8 +342,8 @@ var	text_name 				= 'message';
 <!-- IF S_VC -->
 <li class="panel dlbutton1">
 <!-- IF CAPTCHA_TEMPLATE -->
-		<!-- DEFINE $CAPTCHA_TAB_INDEX = 8 -->
-		<!-- INCLUDE {CAPTCHA_TEMPLATE} -->
+	<!-- DEFINE $CAPTCHA_TAB_INDEX = 8 -->
+	<!-- INCLUDE {CAPTCHA_TEMPLATE} -->
 <!-- ENDIF -->
 </li>
 <!-- ENDIF -->
@@ -359,14 +359,18 @@ var	text_name 				= 'message';
 
 </form>
 </div>
+<!-- BEGINELSE -->
+<div class="rules">
+	<div class="inner">
+		<span>{L_DL_NO_ACCESS}</span>
+	</div>
+</div>
 <!-- END download_button -->
 
 <!-- IF S_DL_USERBAN -->
 <div class="rules">
 	<div class="inner">
-
-	<span>{L_DL_USER_BANNED}</span>
-
+		<span>{L_DL_USER_BANNED}</span>
 	</div>
 </div>
 <!-- ENDIF -->

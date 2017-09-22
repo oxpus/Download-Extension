@@ -257,18 +257,21 @@ class main_module
 
 				$template->assign_var('S_FAV_BLOCK', true);
 
+				$helper = $phpbb_container->get('controller.helper');
+
 				if ($total_favorites)
 				{
 					while ($row = $db->sql_fetchrow($result))
 					{
-						$path_dl_array = $tmp_nav = array();
-						$dl_nav = \oxpus\dlext\includes\classes\ dl_nav::nav('', $row['cat'], 'links', $tmp_nav).'&nbsp;&raquo;';
+						$path_dl_array = array();
+						$tmp_nav = array();
+						$dl_nav = \oxpus\dlext\includes\classes\ dl_nav::nav($helper, $row['cat'], 'links', $tmp_nav);
 
 						$template->assign_block_vars('favorite_row', array(
 							'DL_ID'			=> $row['fav_id'],
 							'DL_CAT'		=> $dl_nav,
 							'DOWNLOAD'		=> $row['description'],
-							'U_DOWNLOAD'	=> 'app.' . $phpEx . '/dlext/?view=detail&amp;df_id=' . $row['id'] . '&amp;cat_id=' . $row['cat'],
+							'U_DOWNLOAD'	=> $helper->route('oxpus_dlext_controller', array('view' => 'detail', 'df_id' => $row['id'], 'cat_id' => $row['cat'])),
 						));
 					}
 				}

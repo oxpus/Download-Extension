@@ -108,7 +108,7 @@ class dlext extends \phpbb\notification\type\base
 		$users = array();
 		while ($row = $this->db->sql_fetchrow($result))
 		{
-			$users[$row['user_id']] = array('');
+			$users[$row['user_id']] = $this->notification_manager->get_default_methods();
 		}
 		$this->db->sql_freeresult($result);
 
@@ -172,10 +172,9 @@ class dlext extends \phpbb\notification\type\base
 	* @param array $data The data for the updated or new download
 	* @param array $pre_create_data Data from pre_create_insert_array()
 	*
-	* @return array Array of data ready to be inserted into the database
 	*/
 	public function create_insert_array($data, $pre_create_data = array())
 	{
-		return parent::create_insert_array($data, $pre_create_data);
+		parent::create_insert_array($data, $pre_create_data);
 	}
 }

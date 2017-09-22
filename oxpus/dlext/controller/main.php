@@ -428,14 +428,14 @@ class main
 			}
 
 			$tmp_nav = array();
-			\oxpus\dlext\includes\classes\ dl_nav::nav($this->helper, $cat_id, 'url', $tmp_nav);
+			$dl_nav = \oxpus\dlext\includes\classes\ dl_nav::nav($this->helper, $cat_id, 'url', $tmp_nav);
 
-			if (isset($tmp_nav['link']))
+			if (isset($dl_nav['link']))
 			{
-				for ($i = sizeof($tmp_nav['link']) - 1; $i >= 0; $i--)
+				for ($i = sizeof($dl_nav['link']) - 1; $i >= 0; $i--)
 				{
-					$nav_string['link'][] = $tmp_nav['link'][$i];
-					$nav_string['name'][] = $tmp_nav['name'][$i];
+					$nav_string['link'][] = $dl_nav['link'][$i];
+					$nav_string['name'][] = $dl_nav['name'][$i];
 				}
 			}
 		}
@@ -537,16 +537,16 @@ class main
 						redirect($ext_path);
 					}
 
-					\oxpus\dlext\includes\classes\ dl_nav::nav($this->helper, $cat, 'url', $tmp_nav);
+					$dl_nav = \oxpus\dlext\includes\classes\ dl_nav::nav($this->helper, $cat, 'url', $tmp_nav);
 
-					if (sizeof($tmp_nav['link']))
+					if (sizeof($dl_nav['link']))
 					{
 
-						for ($i = sizeof($tmp_nav['link']) - 1; $i >= 0; $i--)
+						for ($i = sizeof($dl_nav['link']) - 1; $i >= 0; $i--)
 						{
-							$nav_string['link'][] = $tmp_nav['link'][$i];
-							$nav_string['name'][] = $tmp_nav['name'][$i];
-							$index_cat_name = $tmp_nav['name'][$i];
+							$nav_string['link'][] = $dl_nav['link'][$i];
+							$nav_string['name'][] = $dl_nav['name'][$i];
+							$index_cat_name = $dl_nav['name'][$i];
 						}
 					}
 				}

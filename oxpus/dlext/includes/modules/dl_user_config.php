@@ -169,7 +169,7 @@ if ($total_favorites)
 	while ($row = $this->db->sql_fetchrow($result))
 	{
 		$tmp_nav	= $path_dl_array = array();
-		$dl_nav		= \oxpus\dlext\includes\classes\ dl_nav::nav($this->helper, $row['cat'], 'links', $tmp_nav) . '&nbsp;»&nbsp;';
+		$dl_nav		= \oxpus\dlext\includes\classes\ dl_nav::nav($this->helper, $row['cat'], 'links', $tmp_nav);
 
 		$this->template->assign_block_vars('favorite_row', array(
 			'DL_ID'			=> $row['fav_id'],
@@ -179,6 +179,7 @@ if ($total_favorites)
 		));
 	}
 }
+
 $this->db->sql_freeresult($result);
 
 $this->template->set_filenames(array(

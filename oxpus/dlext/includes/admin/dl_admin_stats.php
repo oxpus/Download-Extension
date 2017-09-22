@@ -149,7 +149,7 @@ if (!$show_guests)
 }
 
 $sql_array = array(
-	'SELECT'	=> 's.*, d.description, c.cat_name',
+	'SELECT'	=> 's.*, d.description, c.cat_name, u.user_colour',
 
 	'FROM'		=> array(DL_STATS_TABLE => 's'));
 
@@ -160,6 +160,9 @@ $sql_array['LEFT_JOIN'][] = array(
 $sql_array['LEFT_JOIN'][] = array(
 	'FROM'		=> array(DOWNLOADS_TABLE => 'd'),
 	'ON'		=> 'd.id = s.id');
+$sql_array['LEFT_JOIN'][] = array(
+	'FROM'		=> array(USERS_TABLE => 'u'),
+	'ON'		=> 'u.user_id = s.user_id');
 
 $sql_array['WHERE'] = $sql_where;
 
@@ -167,6 +170,8 @@ $sql = $db->sql_build_query('SELECT', $sql_array);
 
 $result = $db->sql_query($sql);
 $total_data = $db->sql_affectedrows($result);
+
+$helper = $phpbb_container->get('controller.helper');
 
 if ($total_data)
 {
@@ -240,7 +245,7 @@ if ($total_data)
 		$template->assign_block_vars('dl_stat_row', array(
 			'CAT_NAME'		=> $row['cat_name'],
 			'DESCRIPTION'	=> $row['description'],
-			'USERNAME'		=> ($row['user_id'] == ANONYMOUS) ? $language->lang('GUEST') : '<a href="' . append_sid($phpbb_root_path . 'memberlist.' . $phpEx, "mode=viewprofile&amp;u=" . $row['user_id']) . '">' . $row['username'] . '</a>',
+			'USERNAME'		=> ($row['user_id'] == ANONYMOUS) ? $language->lang('GUEST') : get_username_string('full', $row['user_id'], $row['username'], $row['user_colour']),
 			'TRAFFIC'		=> ($row['traffic'] == -1) ? $language->lang('DL_EXTERN') : \oxpus\dlext\includes\classes\ dl_format::dl_size($row['traffic']),
 			'DIRECTION'		=> $direction,
 			'USER_IP'		=> $row['user_ip'],
@@ -248,11 +253,13 @@ if ($total_data)
 			'TIME_STAMP'	=> $user->format_date($row['time_stamp']),
 			'ID'			=> $row['dl_id'],
 
-			'U_CAT_LINK'	=> 'app.php/dlext/cat=' . $row['cat_id'],
-			'U_DL_LINK'		=> 'app.php/dlext/view=detail&amp;df_id=' . $row['id'],
+			'U_CAT_LINK'	=> $helper->route('oxpus_dlext_controller', array('cat' => $row['cat_id'])),
+			'U_DL_LINK'		=> $helper->route('oxpus_dlext_controller', array('view' => 'detail', 'df_id' => $row['id'])),
 		));
+
 		$i++;
 	}
+
 	$db->sql_freeresult($result);
 
 	$template->assign_var('S_FILLED_FOOTER', true);
