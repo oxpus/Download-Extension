@@ -477,7 +477,7 @@ class main_listener implements EventSubscriberInterface
 
 					$sql = 'SELECT poster_id
 						FROM ' . POSTS_TABLE . '
-						WHERE post_id = ' . $post_id;
+						WHERE post_id = ' . $event['post_id'];
 					$result = $this->db->sql_query($sql);
 					$poster_id = $this->db->sql_fetchfield('poster_id');
 					$this->db->sql_freeresult($result);
