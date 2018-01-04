@@ -10,45 +10,45 @@ function select_switch(status)
 // ]]>
 </script>
 
-<h1>{L_DL_EXT_BLACKLIST}</h1>
+<h1>{{ lang('DL_EXT_BLACKLIST') }}</h1>
 
-<p>{L_DL_EXT_BLACKLIST_EXPLAIN}</p>
+<p>{{ lang('DL_EXT_BLACKLIST_EXPLAIN') }}</p>
 
-<form action="{S_DOWNLOADS_ACTION}" method="post" id="add_ext">
+<form action="{{ S_DOWNLOADS_ACTION }}" method="post" id="add_ext">
 
 <fieldset class="quick">
-	<label><strong>{L_DL_EXTENSION}</strong></label>&nbsp;
+	<label><strong>{{ lang('DL_EXTENSION') }}</strong></label>&nbsp;
 	<input type="text" name="extension" size="5" maxlength="10" value="" />&nbsp;
-	<input type="submit" class="button1" name="submit" value="{L_DL_ADD_EXTENSION}" />
+	<input type="submit" class="button1" name="submit" value="{{ lang('DL_ADD_EXTENSION') }}" />
 	<input type="hidden" name="action" value="add" />
-	{S_FORM_TOKEN}
+	{{ S_FORM_TOKEN }}
 </fieldset>
 
 </form>
 
-<!-- IF S_EXT_YES -->
-<form action="{S_DOWNLOADS_ACTION}" method="post" id="extension">
+{% if S_EXT_YES %}
+<form action="{{ S_DOWNLOADS_ACTION }}" method="post" id="extension">
 
 <fieldset>
 
-	<legend>{L_DL_EXTENSIONS}</legend>
+	<legend>{{ lang('DL_EXTENSIONS') }}</legend>
 
-	<!-- BEGIN extension_row -->
+	{% for extension_row in loops.extension_row %}
 	<dl>
-		<dt><label>{extension_row.EXTENSION}</label></dt>
-		<dd><input type="checkbox" class="permissions-checkbox" name="extension[]" value="{extension_row.EXTENSION}" /></dd>
+		<dt><label>{{ extension_row.EXTENSION }}</label></dt>
+		<dd><input type="checkbox" class="permissions-checkbox" name="extension[]" value="{{ extension_row.EXTENSION }}" /></dd>
 	</dl>
-	<!-- END extension_row -->
+	{% endfor %}
 
 </fieldset>
 
 <fieldset class="quick">
-	<div><a href="javascript:select_switch(true);" class="small">{L_MARK_ALL}</a> :: <a href="javascript:select_switch(false);" class="small">{L_UNMARK_ALL}</a></div>
+	<div><a href="javascript:select_switch(true);" class="small">{{ lang('MARK_ALL') }}</a> :: <a href="javascript:select_switch(false);" class="small">{{ lang('UNMARK_ALL') }}</a></div>
 	<br />
-	<input type="submit" name="submit" class="button1" value="{L_DL_DELETE}" /><br />
+	<input type="submit" name="submit" class="button1" value="{{ lang('DL_DELETE') }}" /><br />
 	<input type="hidden" name="action" value="delete" />
-	{S_FORM_TOKEN}
+	{{ S_FORM_TOKEN }}
 </fieldset>
 
 </form>
-<!-- ENDIF -->
+{% endif %}

@@ -186,6 +186,7 @@ if (sizeof($index) || $cat)
 		'L_CAN_DOWNLOAD_AGAIN'	=> $l_can_download_again,
 
 		'DL_MOD_RELEASE'		=> $this->language->lang('DL_MOD_VERSION_PUBLIC'),
+		'LIGHTBOX_RESIZE_WIDTH'	=> 0,
 
 		'S_DL_JUMPBOX'			=> $dl_jumpbox,
 		'S_DL_TRANSLATION'		=> ($translation) ? true : false,

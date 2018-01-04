@@ -654,6 +654,10 @@ $lang = array_merge($lang, array(
 	'DL_TODO_EDIT'					=> 'Todo-Eintrag bearbeiten',
 	'DL_TODO_LINK'					=> 'Link zur Todoliste anzeigen',
 	'DL_TOPIC_DETAILS'				=> 'Weitere Details',
+	'DL_TOPIC_DROP_MODE'			=> 'Vorhandene Download-Themen',
+	'DL_TOPIC_DROP_MODE_CLOSE'		=> 'Nur schließen',
+	'DL_TOPIC_DROP_MODE_DELETE'		=> 'Löschen',
+	'DL_TOPIC_DROP_MODE_MISSING'	=> 'Der Download ist nicht mehr verfügbar',
 	'DL_TOPIC_FORUM'				=> 'Wähle das Forum für die Themen',
 	'DL_TOPIC_FORUM_C'				=> 'Kategorieauswahl',
 	'DL_TOPIC_FORUM_T'				=> 'Wähle das Forum für die Themen aus dieser Download Kategorie',
@@ -841,5 +845,4 @@ $lang = array_merge($lang, array(
 	--------------------
 	%s
 	--------------------',
-
 ));

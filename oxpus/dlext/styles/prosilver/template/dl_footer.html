@@ -1,110 +1,110 @@
 <br />
 
-<!-- IF S_FOOTER_NAV_ON -->
+{% if S_FOOTER_NAV_ON %}
 <div class="panel">
 	<div class="inner">
 	<ul id="nav-breadcrumbs_footer" class="nav-breadcrumbs linklist" role="menubar">
-        <li>{S_DL_JUMPBOX}</li>
-		<!-- IF S_U_CONFIG_LINK --><li data-last-responsive="true" class="rightside"><a href="{U_DL_CONFIG}"><i class="icon fa-gears fa-fw" aria-hidden="true"></i> <span><strong>{L_DL_CONFIG}</strong></span></a></li><!-- ENDIF -->
-		<!-- IF S_TODO_LINK --><li data-last-responsive="true" class="rightside"><a href="{U_DL_TODOLIST}"><i class="icon fa-codepen fa-fw" aria-hidden="true"></i> <span><strong>{L_DL_MOD_TODO}</strong></span></a></li><!-- ENDIF -->
-		<!-- IF S_STATS_VIEW_ON --><li data-last-responsive="true" class="rightside"><a href="{U_DL_STATS}"><i class="icon fa-bar-chart fa-fw" aria-hidden="true"></i> <span><strong>{L_DL_STATS}</strong></span></a></li><!-- ENDIF -->
-		<!-- IF U_DL_OVERALL_VIEW --><li data-last-responsive="true" class="rightside"><a href="{U_DL_OVERALL_VIEW}"><i class="icon fa-list fa-fw" aria-hidden="true"></i> <span><strong>{L_DL_OVERVIEW}</strong></span></a></li><!-- ENDIF -->
-		<!-- IF U_LATEST_DOWNLOADS --><li data-last-responsive="true" class="rightside"><a href="{U_LATEST_DOWNLOADS}"><i class="icon fa-list fa-fw" aria-hidden="true"></i> <span><strong>{L_DL_LATEST_DOWNLOADS}</strong></span></a></li><!-- ENDIF -->
+        <li>{{ S_DL_JUMPBOX }}</li>
+		{% if S_U_CONFIG_LINK %}<li data-last-responsive="true" class="rightside"><a href="{{ U_DL_CONFIG }}"><i class="icon fa-gears fa-fw" aria-hidden="true"></i> <span><strong>{{ lang('DL_CONFIG') }}</strong></span></a></li>{% endif %}
+		{% if S_TODO_LINK %}<li data-last-responsive="true" class="rightside"><a href="{{ U_DL_TODOLIST }}"><i class="icon fa-codepen fa-fw" aria-hidden="true"></i> <span><strong>{{ lang('DL_MOD_TODO') }}</strong></span></a></li>{% endif %}
+		{% if S_STATS_VIEW_ON %}<li data-last-responsive="true" class="rightside"><a href="{{ U_DL_STATS }}"><i class="icon fa-bar-chart fa-fw" aria-hidden="true"></i> <span><strong>{{ lang('DL_STATS') }}</strong></span></a></li>{% endif %}
+		{% if U_DL_OVERALL_VIEW %}<li data-last-responsive="true" class="rightside"><a href="{{ U_DL_OVERALL_VIEW }}"><i class="icon fa-list fa-fw" aria-hidden="true"></i> <span><strong>{{ lang('DL_OVERVIEW') }}</strong></span></a></li>{% endif %}
+		{% if U_LATEST_DOWNLOADS %}<li data-last-responsive="true" class="rightside"><a href="{{ U_LATEST_DOWNLOADS }}"><i class="icon fa-list fa-fw" aria-hidden="true"></i> <span><strong>{{ lang('DL_LATEST_DOWNLOADS') }}</strong></span></a></li>{% endif %}
 	</ul>
 	</div>
 </div>
-<!-- ELSE -->
-{S_DL_JUMPBOX}
-<!-- ENDIF -->
+{% else %}
+{{ S_DL_JUMPBOX }}
+{% endif %}
 
-<!-- IF S_DL_MOD_OFFLINE_ADMINS -->
+{% if S_DL_MOD_OFFLINE_ADMINS %}
 
 <br />
 
 <div class="rules">
 	<div class="inner">
-		<strong>{L_DL_OFF_MESSAGE_ADMIN}</strong>
+		<strong>{{ lang('DL_OFF_MESSAGE_ADMIN') }}</strong>
 	</div>
 </div>
-<!-- ENDIF -->
+{% endif %}
 
-<!-- BEGIN approve -->
+{% for approve in loops.approve %}
 <br />
 
 <div class="panel dl-footer-alert">
 	<div class="inner">
-	<a href="{approve.U_APPROVE_DOWNLOADS}" class="forumtitle">{approve.L_APPROVE_DOWNLOADS}</a>
+	<a href="{{ approve.U_APPROVE_DOWNLOADS }}" class="forumtitle">{{ approve.L_APPROVE_DOWNLOADS }}</a>
 	</div>
 </div>
 
-<!-- END approve -->
-<!-- BEGIN approve_comments -->
+{% endfor %}
+{% for approve_comments in loops.approve_comments %}
 <br />
 
 <div class="panel dl-footer-alert">
 	<div class="inner">
-	<a href="{approve_comments.U_APPROVE_COMMENTS}" class="forumtitle">{approve_comments.L_APPROVE_COMMENTS}</a>
+	<a href="{{ approve_comments.U_APPROVE_COMMENTS }}" class="forumtitle">{{ approve_comments.L_APPROVE_COMMENTS }}</a>
 	</div>
 </div>
-<!-- END approve_comments -->
+{% endfor %}
 
-<!-- IF S_FOOTER_LEGEND -->
-<div class="button legend-footer" id="legend-footer">{L_LEGEND}</div>
+{% if S_FOOTER_LEGEND %}
+<div class="button legend-footer" id="legend-footer">{{ lang('LEGEND') }}</div>
 <div id="legend" class="footer-box"><a class="icon dl-close-footer" onclick="javascript:show_area('legend', false);"></a>
-<div><strong>{L_LEGEND}</strong></div>
-<!-- IF S_DL_TRAFFIC_OFF -->
+<div><strong>{{ lang('LEGEND') }}</strong></div>
+{% if S_DL_TRAFFIC_OFF %}
 <dl>
 	<dt>
-		<i class="icon fa-ban fa-fw dl-red"></i> {L_DL_RED_EXPLAIN}<br />
-		<i class="icon fa-download fa-fw dl-green"></i> {L_DL_GREEN_EXPLAIN}<br />
-		<i class="icon fa-globe fa-fw dl-blue"></i> {L_DL_GREY_EXPLAIN}<br />
-		<i class="icon fa-download fa-fw dl-grey"></i> {L_DL_WHITE_EXPLAIN}<br />
-		<i class="icon fa-comment-o fa-fw dl-red"></i> {L_DL_NEW}<br />
-		<i class="icon fa-edit fa-fw dl-blue"></i> {L_DL_EDIT}<br />
+		<i class="icon fa-ban fa-fw dl-red"></i> {{ lang('DL_RED_EXPLAIN') }}<br />
+		<i class="icon fa-download fa-fw dl-green"></i> {{ lang('DL_GREEN_EXPLAIN') }}<br />
+		<i class="icon fa-globe fa-fw dl-blue"></i> {{ lang('DL_GREY_EXPLAIN') }}<br />
+		<i class="icon fa-download fa-fw dl-grey"></i> {{ lang('DL_WHITE_EXPLAIN') }}<br />
+		<i class="icon fa-comment-o fa-fw dl-red"></i> {{ lang('DL_NEW') }}<br />
+		<i class="icon fa-edit fa-fw dl-blue"></i> {{ lang('DL_EDIT') }}<br />
 	</dt>
 </dl>
-<!-- ELSE -->
+{% else %}
 <dl>
 	<dt>
-		<i class="icon fa-info-circle fa-fw dl-blue"></i> {L_DL_BLUE_EXPLAIN_FOOT}<br />
-		<i class="icon fa-ban fa-fw dl-red"></i> {L_DL_RED_EXPLAIN}<br />
-		<i class="icon fa-globe fa-fw dl-blue"></i> {L_DL_GREY_EXPLAIN}<br />
-		<i class="icon fa-download fa-fw dl-grey"></i> {L_DL_WHITE_EXPLAIN}<br />
-		<i class="icon fa-download fa-fw dl-yellow"></i> {L_DL_YELLOW_EXPLAIN}<br />
-		<i class="icon fa-download fa-fw dl-green"></i> {L_DL_GREEN_EXPLAIN}<br />
-		<i class="icon fa-comment-o fa-fw dl-red"></i> {L_DL_NEW}<br />
-		<i class="icon fa-edit fa-fw dl-blue"></i> {L_DL_EDIT}<br />
+		<i class="icon fa-info-circle fa-fw dl-blue"></i> {{ lang('DL_BLUE_EXPLAIN_FOOT') }}<br />
+		<i class="icon fa-ban fa-fw dl-red"></i> {{ lang('DL_RED_EXPLAIN') }}<br />
+		<i class="icon fa-globe fa-fw dl-blue"></i> {{ lang('DL_GREY_EXPLAIN') }}<br />
+		<i class="icon fa-download fa-fw dl-grey"></i> {{ lang('DL_WHITE_EXPLAIN') }}<br />
+		<i class="icon fa-download fa-fw dl-yellow"></i> {{ lang('DL_YELLOW_EXPLAIN') }}<br />
+		<i class="icon fa-download fa-fw dl-green"></i> {{ lang('DL_GREEN_EXPLAIN') }}<br />
+		<i class="icon fa-comment-o fa-fw dl-red"></i> {{ lang('DL_NEW') }}<br />
+		<i class="icon fa-edit fa-fw dl-blue"></i> {{ lang('DL_EDIT') }}<br />
 	</dt>
 </dl>
-<!-- ENDIF -->
+{% endif %}
 </div>
-<!-- ENDIF -->
+{% endif %}
 
-<div class="button stats-footer" id="stats-footer">{L_DL_FOOTER}</div>
+<div class="button stats-footer" id="stats-footer">{{ lang('DL_FOOTER') }}</div>
 <div id="footer" class="footer-box"><a class="icon dl-close-footer" onclick="javascript:show_area('footer', false);"></a>
 <div class="small">
-	<!-- IF L_CAN_DOWNLOAD_AGAIN -->{L_CAN_DOWNLOAD_AGAIN}<br /><!-- ENDIF -->
-	<!-- BEGIN userdata -->{userdata.ACCOUNT_TRAFFIC}<br /><!-- END userdata -->
-	<!-- BEGIN remain_traffic -->{remain_traffic.REMAIN_TRAFFIC}<br /><!-- END remain_traffic -->
-	<!-- BEGIN no_remain_traffic --><strong class="dl-text-underline">{no_remain_traffic.NO_OVERALL_TRAFFIC}</strong><br /><!-- END no_remain_traffic -->
-	<!-- BEGIN remain_guest_traffic -->{remain_guest_traffic.REMAIN_GUEST_TRAFFIC}<br /><!-- END remain_guest_traffic -->
-	<!-- BEGIN no_remain_guest_traffic --><strong class="dl-text-underline">{no_remain_guest_traffic.NO_OVERALL_GUEST_TRAFFIC}</strong><br /><!-- END no_remain_guest_traffic -->
-	<!-- IF not S_HIDE_FOOTER_DATA and S_SERARATE_STATS --><br /><!-- ENDIF -->
-	<!-- BEGIN total_stat -->{total_stat.TOTAL_STAT}<!-- END total_stat -->
-	<!-- IF not S_HIDE_FOOTER_DATA --><br /><!-- ENDIF -->
-    <!-- IF EXT_STATS_OVERALL_TRAFFIC -->{EXT_STATS_OVERALL_TRAFFIC}<br /><!-- ENDIF -->
-    <!-- IF EXT_STATS_OVERALL_GUESTS_TRAFFIC -->{EXT_STATS_OVERALL_GUESTS_TRAFFIC}<br /><!-- ENDIF -->
-    <!-- IF EXT_STATS_MONTH_CLICKS -->{EXT_STATS_MONTH_CLICKS}<br /><!-- ENDIF -->
-  	<!-- IF not S_HIDE_FOOTER_DATA --><br /><!-- ENDIF -->
+	{% if L_CAN_DOWNLOAD_AGAIN %}{{ lang('CAN_DOWNLOAD_AGAIN') }}<br />{% endif %}
+	{% for userdata in loops.userdata %}{{ userdata.ACCOUNT_TRAFFIC }}<br />{% endfor %}
+	{% for remain_traffic in loops.remain_traffic %}{{ remain_traffic.REMAIN_TRAFFIC }}<br />{% endfor %}
+	{% for no_remain_traffic in loops.no_remain_traffic %}<strong class="dl-text-underline">{{ no_remain_traffic.NO_OVERALL_TRAFFIC }}</strong><br />{% endfor %}
+	{% for remain_guest_traffic in loops.remain_guest_traffic %}{{ remain_guest_traffic.REMAIN_GUEST_TRAFFIC }}<br />{% endfor %}
+	{% for no_remain_guest_traffic in loops.no_remain_guest_traffic %}<strong class="dl-text-underline">{{ no_remain_guest_traffic.NO_OVERALL_GUEST_TRAFFIC }}</strong><br />{% endfor %}
+	{% if not S_HIDE_FOOTER_DATA and S_SERARATE_STATS %}<br />{% endif %}
+	{% for total_stat in loops.total_stat %}{{ total_stat.TOTAL_STAT }}{% endfor %}
+	{% if not S_HIDE_FOOTER_DATA %}<br />{% endif %}
+    {% if EXT_STATS_OVERALL_TRAFFIC %}{{ EXT_STATS_OVERALL_TRAFFIC }}<br />{% endif %}
+    {% if EXT_STATS_OVERALL_GUESTS_TRAFFIC %}{{ EXT_STATS_OVERALL_GUESTS_TRAFFIC }}<br />{% endif %}
+    {% if EXT_STATS_MONTH_CLICKS %}{{ EXT_STATS_MONTH_CLICKS }}<br />{% endif %}
+  	{% if not S_HIDE_FOOTER_DATA %}<br />{% endif %}
 </div>
 </div>
 
 <div class="clear"></div>
 
 <div class="copyright">
-	<strong>{DL_MOD_RELEASE}</strong>
-	<!-- IF S_DL_TRANSLATION -->&bull;&nbsp;{L_DL_TRANSLATION}<!-- ENDIF -->
-	<!-- IF U_DL_RSS_FEED -->&bull;&nbsp;<a href="{U_DL_RSS_FEED}">{L_DL_ACP_CONF_RSS}</a><!-- ENDIF -->
+	<strong>{{ DL_MOD_RELEASE }}</strong>
+	{% if S_DL_TRANSLATION %}&bull;&nbsp;{{ lang('DL_TRANSLATION') }}{% endif %}
+	{% if U_DL_RSS_FEED %}&bull;&nbsp;<a href="{{ U_DL_RSS_FEED }}">{{ lang('DL_ACP_CONF_RSS') }}</a>{% endif %}
 </div>
 
-<!-- INCLUDE overall_footer.html -->
+{% INCLUDE 'overall_footer.html' %}

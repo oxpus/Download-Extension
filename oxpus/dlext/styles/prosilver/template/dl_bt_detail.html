@@ -1,6 +1,6 @@
-<!-- INCLUDE dl_header.html -->
+{% INCLUDE 'dl_header.html' %}
 
-<h2>{L_DL_BUG_TRACKER_REPORT}</h2>
+<h2>{{ lang('DL_BUG_TRACKER_REPORT') }}</h2>
 
 <br />
 
@@ -11,51 +11,51 @@
 	<tbody>
 	<tr>
 		<td class="dl-width-75" valign="top">
-			<h3>{L_DL_BUG_REPORT_TITLE}</h3><p>{REPORT_TITLE}</p>
-			<h3>{L_DL_BUG_REPORT_TEXT}</h3><p>{REPORT_TEXT}</p>
+			<h3>{{ lang('DL_BUG_REPORT_TITLE') }}</h3><p>{{ REPORT_TITLE }}</p>
+			<h3>{{ lang('DL_BUG_REPORT_TEXT') }}</h3><p>{{ REPORT_TEXT }}</p>
 		</td>
 		<td class="dl-width-25" valign="top">
-			<h3>{L_DL_BUG_REPORT_ID}</h3><span>{REPORT_ID}</span>
-			<h3>{L_DL_BUG_REPORT_FILE}</h3><span><a href="{U_DOWNLOAD_FILE}" class="genmed">{REPORT_FILE}</a></span>
-			<!-- IF REPORT_FILE_VER --><h3>{L_DL_HACK_VERSION}</h3><span>{REPORT_FILE_VER}</span><!-- ENDIF -->
-			<h3>{L_DL_BUG_REPORT_DATE}</h3><span>{REPORT_DATE}</span>
-			<h3>{L_DL_BUG_REPORT_AUTHOR}</h3><span>{REPORT_AUTHOR}</span>
-			<!-- IF REPORT_PHP --><h3>{L_DL_BUG_REPORT_PHP}</h3><span>{REPORT_PHP}</span><!-- ENDIF -->
-			<!-- IF REPORT_DB --><h3>{L_DL_BUG_REPORT_DB}</h3><span>{REPORT_DB}</span><!-- ENDIF -->
-			<!-- IF REPORT_FORUM --><h3>{L_DL_BUG_REPORT_FORUM}</h3><span>{REPORT_FORUM}</span><!-- ENDIF -->
-			<h3>{L_DL_BUG_REPORT_STATUS}</h3><span>{REPORT_STATUS}</span>
-			<h3>{L_DL_BUG_REPORT_STATUS_DATE}</h3><span>{STATUS_DATE}</span>
-			<!-- BEGIN assign -->
-			<h3>{L_DL_BUG_REPORT_ASSIGNED}</h3><span>{assign.ASSIGN_TO}</span>
-			<h3>{L_DL_BUG_REPORT_ASSIGN_DATE}</h3><span>{assign.ASSIGN_DATE}</span>
-			<!-- END assign -->
-			<!-- IF S_NO_ASSIGN -->
-			<h3>{L_DL_BUG_REPORT_UNASSIGNED}</h3>
-			<!-- ENDIF -->
-			<!-- IF S_ASSIGN_MOD -->
-			<form action="{S_FORM_ASSIGN_ACTION}" id="assign_user" method="post">
-			<div>{S_SELECT_ASSIGN_USER}&nbsp;<input type="submit" name="submit" value="{L_DL_BUG_REPORT_ASSIGN}" class="button2" /></div>
-			<div>{S_FORM_TOKEN}</div></form>
-			<!-- ENDIF -->
+			<h3>{{ lang('DL_BUG_REPORT_ID') }}</h3><span>{{ REPORT_ID }}</span>
+			<h3>{{ lang('DL_BUG_REPORT_FILE') }}</h3><span><a href="{{ U_DOWNLOAD_FILE }}" class="genmed">{{ REPORT_FILE }}</a></span>
+			{% if REPORT_FILE_VER %}<h3>{{ lang('DL_HACK_VERSION') }}</h3><span>{{ REPORT_FILE_VER }}</span>{% endif %}
+			<h3>{{ lang('DL_BUG_REPORT_DATE') }}</h3><span>{{ REPORT_DATE }}</span>
+			<h3>{{ lang('DL_BUG_REPORT_AUTHOR') }}</h3><span>{{ REPORT_AUTHOR }}</span>
+			{% if REPORT_PHP %}<h3>{{ lang('DL_BUG_REPORT_PHP') }}</h3><span>{{ REPORT_PHP }}</span>{% endif %}
+			{% if REPORT_DB %}<h3>{{ lang('DL_BUG_REPORT_DB') }}</h3><span>{{ REPORT_DB }}</span>{% endif %}
+			{% if REPORT_FORUM %}<h3>{{ lang('DL_BUG_REPORT_FORUM') }}</h3><span>{{ REPORT_FORUM }}</span>{% endif %}
+			<h3>{{ lang('DL_BUG_REPORT_STATUS') }}</h3><span>{{ REPORT_STATUS }}</span>
+			<h3>{{ lang('DL_BUG_REPORT_STATUS_DATE') }}</h3><span>{{ STATUS_DATE }}</span>
+			{% for assign in loops.assign %}
+			<h3>{{ lang('DL_BUG_REPORT_ASSIGNED') }}</h3><span>{{ assign.ASSIGN_TO }}</span>
+			<h3>{{ lang('DL_BUG_REPORT_ASSIGN_DATE') }}</h3><span>{{ assign.ASSIGN_DATE }}</span>
+			{% endfor %}
+			{% if S_NO_ASSIGN %}
+			<h3>{{ lang('DL_BUG_REPORT_UNASSIGNED') }}</h3>
+			{% endif %}
+			{% if S_ASSIGN_MOD %}
+			<form action="{{ S_FORM_ASSIGN_ACTION }}" id="assign_user" method="post">
+			<div>{{ S_SELECT_ASSIGN_USER }}&nbsp;<input type="submit" name="submit" value="{{ lang('DL_BUG_REPORT_ASSIGN') }}" class="button2" /></div>
+			<div>{{ S_FORM_TOKEN }}</div></form>
+			{% endif %}
 			<br />
-			<!-- IF U_BUG_REPORT_EDIT -->
+			{% if U_BUG_REPORT_EDIT %}
 			<ul class="post-buttons">
 				<li>
-					<a href="{U_BUG_REPORT_EDIT}" title="{L_DL_EDIT_FILE}" class="button button-icon-only">
-						<i class="icon fa-pencil fa-fw" aria-hidden="true"></i><span class="sr-only">{L_DL_EDIT_FILE}</span>
+					<a href="{{ U_BUG_REPORT_EDIT }}" title="{{ lang('DL_EDIT_FILE') }}" class="button button-icon-only">
+						<i class="icon fa-pencil fa-fw" aria-hidden="true"></i><span class="sr-only">{{ lang('DL_EDIT_FILE') }}</span>
 					</a>
 				</li>
 			</ul>
-			<!-- ENDIF -->
-			<!-- BEGIN delete -->
+			{% endif %}
+			{% for delete in loops.delete %}
 			<ul class="post-buttons">
 				<li>
-					<a href="{delete.U_DELETE}" title="{L_DL_DELETE}" class="button button-icon-only">
-						<i class="icon fa-times fa-fw" aria-hidden="true"></i><span class="sr-only">{L_DL_DELETE}</span>
+					<a href="{{ delete.U_DELETE }}" title="{{ lang('DL_DELETE') }}" class="button button-icon-only">
+						<i class="icon fa-times fa-fw" aria-hidden="true"></i><span class="sr-only">{{ lang('DL_DELETE') }}</span>
 					</a>
 				</li>
 			</ul>
-			<!-- END delete -->
+			{% endfor %}
 		</td>
 	</tr>
 	</tbody>
@@ -64,50 +64,50 @@
 	</div>
 </div>
 
-<!-- IF S_SELECT_STATUS -->
+{% if S_SELECT_STATUS %}
 <div class="panel bg2">
 	<div class="inner">
 
-	<form action="{S_FORM_STATUS_ACTION}" method="post" id="status_change">
+	<form action="{{ S_FORM_STATUS_ACTION }}" method="post" id="status_change">
 
-	<h3>{L_DL_BUG_REPORT_STATUS}</h3>
+	<h3>{{ lang('DL_BUG_REPORT_STATUS') }}</h3>
 
 	<ul class="linklist">
 		<li>
 			<dl>
-				<dd>{S_SELECT_STATUS}&nbsp;<input type="submit" name="submit" value="{L_DL_BUG_REPORT_STATUS_UPDATE}" class="button2" /></dd>
-				<dd><label>{L_DL_BUG_REPORT_STATUS_TEXT}</label><br /><textarea cols="75" rows="3" class="inputbox" name="new_status_text"></textarea></dd>
+				<dd>{{ S_SELECT_STATUS }}&nbsp;<input type="submit" name="submit" value="{{ lang('DL_BUG_REPORT_STATUS_UPDATE') }}" class="button2" /></dd>
+				<dd><label>{{ lang('DL_BUG_REPORT_STATUS_TEXT') }}</label><br /><textarea cols="75" rows="3" class="inputbox" name="new_status_text"></textarea></dd>
 			</dl>
 		</li>
 	</ul>
 
-	<div>{S_FORM_TOKEN}</div>
+	<div>{{ S_FORM_TOKEN }}</div>
 
 	</form>
 
 	</div>
 </div>
-<!-- ENDIF -->
+{% endif %}
 
-<!-- IF S_HISTORY -->
+{% if S_HISTORY %}
 <div class="panel bg1">
 	<div class="inner">
 
-	<h3>{L_DL_BUG_REPORT_HISTORY}</h3>
+	<h3>{{ lang('DL_BUG_REPORT_HISTORY') }}</h3>
 
 	<table cellpadding="0" cellspacing="0" class="table1">
-	<!-- BEGIN history_row -->
+	{% for history_row in loops.history_row %}
 	<tr>
-		<td class="row bg3 dl-width-15 dl-text-top"><label>{history_row.VALUE}</label><br /><span class="small">{history_row.DATE}</span></td>
-		<td class="row bg2 dl-width-85 dl-text-top"><span>{history_row.TEXT}</span></td>
+		<td class="row bg3 dl-width-15 dl-text-top"><label>{{ history_row.VALUE }}</label><br /><span class="small">{{ history_row.DATE }}</span></td>
+		<td class="row bg2 dl-width-85 dl-text-top"><span>{{ history_row.TEXT }}</span></td>
 	</tr>
-	<!-- END history_row -->
+	{% endfor %}
 	</table>
 
 	</div>
 </div>
-<!-- ENDIF -->
+{% endif %}
 
 <br />
 
-<!-- INCLUDE dl_footer.html -->
+{% INCLUDE 'dl_footer.html' %}

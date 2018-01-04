@@ -5,60 +5,60 @@
 	<ul class="topiclist">
 		<li class="header">
 			<dl>
-				<dt>{L_DL_CAT_NAME} / {L_DL_FILE_DESCRIPTION}</dt>
-				<dd class="posts">{L_DL_CAT_FILES}</dd>
-				<dd>{L_DL_LATEST_DOWNLOAD}</dd>
+				<dt>{{ lang('DL_CAT_NAME') }} / {{ lang('DL_FILE_DESCRIPTION') }}</dt>
+				<dd class="posts">{{ lang('DL_CAT_FILES') }}</dd>
+				<dd>{{ lang('DL_LATEST_DOWNLOAD') }}</dd>
 			</dl>
 		</li>
 	</ul>
 	<ul class="topiclist forums">
-		<!-- BEGIN subcats -->
-		<li class="row dlTooltip" id="{subcats.CAT_ID}">
+		{% for subcats in loops.subcats %}
+		<li class="row dlTooltip" id="{{ subcats.CAT_ID }}">
 			<dl>
-				<dt><span class="forum-image">{subcats.MINI_IMG}</span>
-					<span class="forum-image"><!-- IF subcats.CAT_ICON --><img src="{subcats.CAT_ICON}" alt="" title="{subcats.CAT_NAME}" /><!-- ELSE -->&nbsp;<!-- ENDIF --></span>
-					<a href="{subcats.U_CAT_VIEW}" class="forumtitle" title="">{subcats.CAT_NAME}</a><br />
-					<div class="dl-index-desc<!-- IF S_ENABLE_DESC_HIDE --> noshow<!-- ENDIF -->" id="desc_{subcats.CAT_ID}"><br />{subcats.CAT_DESC}</div>
-					<!-- IF .subcats.pagination -->
+				<dt><span class="forum-image">{{ subcats.MINI_IMG }}</span>
+					<span class="forum-image">{% if subcats.CAT_ICON %}<img src="{{ subcats.CAT_ICON }}" alt="" title="{{ subcats.CAT_NAME }}" />{% else %}&nbsp;{% endif %}</span>
+					<a href="{{ subcats.U_CAT_VIEW }}" class="forumtitle" title="">{{ subcats.CAT_NAME }}</a><br />
+					<div class="dl-index-desc{% if S_ENABLE_DESC_HIDE %} noshow{% endif %}" id="desc_{{ subcats.CAT_ID }}"><br />{{ subcats.CAT_DESC }}</div>
+					{% if subcats.pagination|length %}
 					<div class="pagination">
 						<ul>
-						<!-- BEGIN pagination -->
-							<!-- IF subcats.pagination.S_IS_PREV -->
-							<!-- ELSEIF subcats.pagination.S_IS_CURRENT --><li class="active"><span>{subcats.pagination.PAGE_NUMBER}</span></li>
-							<!-- ELSEIF subcats.pagination.S_IS_ELLIPSIS --><li class="ellipsis"><span>{L_ELLIPSIS}</span></li>
-							<!-- ELSEIF subcats.pagination.S_IS_NEXT -->
-							<!-- ELSE --><li><a href="{subcats.pagination.PAGE_URL}">{subcats.pagination.PAGE_NUMBER}</a></li>
-							<!-- ENDIF -->
-						<!-- END pagination -->
+						{% for pagination in subcats.pagination %}
+							{% if pagination.S_IS_PREV %}
+							{% elseif pagination.S_IS_CURRENT %}<li class="active"><span>{{ pagination.PAGE_NUMBER }}</span></li>
+							{% elseif pagination.S_IS_ELLIPSIS %}<li class="ellipsis"><span>{{ lang('ELLIPSIS') }}</span></li>
+							{% elseif pagination.S_IS_NEXT %}
+							{% else %}<li><a href="{{ pagination.PAGE_URL }}">{{ pagination.PAGE_NUMBER }}</a></li>
+							{% endif %}
+						{% endfor %}
 						</ul>
 					</div>
-					<!-- ENDIF -->
-					<!-- BEGIN sub -->
+					{% endif %}
+					{% for sub in subcats.sub %}
 					<br />
-					<!-- BEGIN sublevel_row -->
+					{% for sublevel_row in sub.sublevel_row %}
 					<div class="dl-padding-left-3-5">
-						{subcats.sub.sublevel_row.M_SUBLEVEL}
-						<!-- IF subcats.sub.sublevel_row.M_SUBLEVEL_ICON --><img src="{subcats.sub.sublevel_row.M_SUBLEVEL_ICON}" alt="" title="{subcats.sub.sublevel_row.L_SUBLEVEL}" class="dl-subfolder-small" /><!-- ENDIF --> &nbsp;
-						<a href="{subcats.sub.sublevel_row.U_SUBLEVEL}" class="small"<!-- IF subcats.sub.sublevel_row.SUBLEVEL_COUNT --> title="{subcats.sub.sublevel_row.SUBLEVEL_COUNT} {L_DL_CAT_FILES}"<!-- ENDIF -->><strong>{subcats.sub.sublevel_row.L_SUBLEVEL}</strong></a>
+						{{ sublevel_row.M_SUBLEVEL }}
+						{% if sublevel_row.M_SUBLEVEL_ICON %}<img src="{{ sublevel_row.M_SUBLEVEL_ICON }}" alt="" title="{{ sublevel_row.L_SUBLEVEL }}" class="dl-subfolder-small" />{% endif %} &nbsp;
+						<a href="{{ sublevel_row.U_SUBLEVEL }}" class="small"{% if sublevel_row.SUBLEVEL_COUNT %} title="{{ sublevel_row.SUBLEVEL_COUNT }} {{ lang('DL_CAT_FILES') }}"{% endif %}><strong>{{ sublevel_row.L_SUBLEVEL }}</strong></a>
 					</div>
-					<!-- END sublevel_row -->
-					<!-- END sub -->
+					{% endfor %}
+					{% endfor %}
 				</dt>
 				<dd class="posts">
-					<strong>{subcats.CAT_DL}</strong>
+					<strong>{{ subcats.CAT_DL }}</strong>
 				</dd>
 				<dd class="lastpost">
-					<!-- IF subcats.CAT_LAST_DL -->
+					{% if subcats.CAT_LAST_DL %}
 					<div class="dl-padding-left-1">
-					    <a href="{subcats.U_CAT_LAST_LINK}">{subcats.CAT_LAST_DL}</a><br />
-	                    <a href="{subcats.U_CAT_LAST_USER}">{subcats.CAT_LAST_USER}</a>
-						<!-- IF subcats.CAT_LAST_TIME -->&nbsp;{subcats.CAT_LAST_TIME}<!-- ENDIF -->
+					    <a href="{{ subcats.U_CAT_LAST_LINK }}">{{ subcats.CAT_LAST_DL }}</a><br />
+	                    <a href="{{ subcats.U_CAT_LAST_USER }}">{{ subcats.CAT_LAST_USER }}</a>
+						{% if subcats.CAT_LAST_TIME %}&nbsp;{{ subcats.CAT_LAST_TIME }}{% endif %}
 					</div>
                 </dd>
-                <!-- ENDIF -->
+                {% endif %}
 			</dl>
 		</li>
-		<!-- END subcats -->
+		{% endfor %}
 	</ul>
 
 	</div>

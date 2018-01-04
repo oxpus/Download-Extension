@@ -1,10 +1,10 @@
-<!-- INCLUDE dl_header.html -->
+{% INCLUDE 'dl_header.html' %}
 
-<h2 class="dl-left">{L_DL_CAT_TITLE}</h2>
+<h2 class="dl-left">{{ lang('DL_CAT_TITLE') }}</h2>
 
 <br />
 
-<div class="dl-right"><a href="{U_DL_SEARCH}" class="button icon-button">{L_DL_SEARCH_DOWNLOAD}</a></div>
+<div class="dl-right"><a href="{{ U_DL_SEARCH }}" class="button icon-button">{{ lang('DL_SEARCH_DOWNLOAD') }}</a></div>
 
 <div class="clear"></div>
 
@@ -15,72 +15,72 @@
 	<ul class="topiclist">
 		<li class="header">
 			<dl>
-				<dt>{L_DL_CAT_NAME} / {L_DL_FILE_DESCRIPTION}</dt>
-				<dd class="posts">{L_DL_CAT_FILES}</dd>
-				<dd>{L_DL_LATEST_DOWNLOAD}</dd>
+				<dt>{{ lang('DL_CAT_NAME') }} / {{ lang('DL_FILE_DESCRIPTION') }}</dt>
+				<dd class="posts">{{ lang('DL_CAT_FILES') }}</dd>
+				<dd>{{ lang('DL_LATEST_DOWNLOAD') }}</dd>
 			</dl>
 		</li>
 	</ul>
 	<ul class="topiclist forums">
-		<!-- IF S_NO_CATEGORY -->
+		{% if S_NO_CATEGORY %}
 		<li class="row">
 			<dl>
-				<dt>{L_DL_NO_CATEGORY_INDEX}</dt>
+				<dt>{{ lang('DL_NO_CATEGORY_INDEX') }}</dt>
 			</dl>
 		</li>
-		<!-- ELSE -->
-		<!-- BEGIN downloads -->
-		<li class="row dlTooltip" id="{downloads.CAT_ID}">
+		{% else %}
+		{% for downloads in loops.downloads %}
+		<li class="row dlTooltip" id="{{ downloads.CAT_ID }}">
 			<dl>
 				<dt>
-					<span class="forum-image">{downloads.MINI_IMG}</span>
-					<!-- IF downloads.CAT_ICON --><span class="forum-image"><img src="{downloads.CAT_ICON}" alt="" title="{downloads.CAT_NAME}" /></span><!-- ENDIF -->
-					<a href="{downloads.U_CAT_VIEW}" class="forumtitle" title="">{downloads.CAT_NAME}</a><br />
-					<div class="dl-index-desc<!-- IF S_ENABLE_DESC_HIDE --> noshow<!-- ENDIF -->" id="desc_{downloads.CAT_ID}"><br />{downloads.CAT_DESC}</div>
-					<!-- IF .downloads.pagination -->
+					<span class="forum-image">{{ downloads.MINI_IMG }}</span>
+					{% if downloads.CAT_ICON %}<span class="forum-image"><img src="{{ downloads.CAT_ICON }}" alt="" title="{{ downloads.CAT_NAME }}" /></span>{% endif %}
+					<a href="{{ downloads.U_CAT_VIEW }}" class="forumtitle" title="">{{ downloads.CAT_NAME }}</a><br />
+					<div class="dl-index-desc{% if S_ENABLE_DESC_HIDE %} noshow{% endif %}" id="desc_{{ downloads.CAT_ID }}"><br />{{ downloads.CAT_DESC }}</div>
+					{% if downloads.pagination|length %}
 					<div class="pagination">
 						<ul>
-						<!-- BEGIN pagination -->
-							<!-- IF downloads.pagination.S_IS_PREV -->
-							<!-- ELSEIF downloads.pagination.S_IS_CURRENT --><li class="active"><span>{downloads.pagination.PAGE_NUMBER}</span></li>
-							<!-- ELSEIF downloads.pagination.S_IS_ELLIPSIS --><li class="ellipsis"><span>{L_ELLIPSIS}</span></li>
-							<!-- ELSEIF downloads.pagination.S_IS_NEXT -->
-							<!-- ELSE --><li><a href="{downloads.pagination.PAGE_URL}">{downloads.pagination.PAGE_NUMBER}</a></li>
-							<!-- ENDIF -->
-						<!-- END pagination -->
+						{% for pagination in downloads.pagination %}
+							{% if pagination.S_IS_PREV %}
+							{% elseif pagination.S_IS_CURRENT %}<li class="active"><span>{{ pagination.PAGE_NUMBER }}</span></li>
+							{% elseif pagination.S_IS_ELLIPSIS %}<li class="ellipsis"><span>{{ lang('ELLIPSIS') }}</span></li>
+							{% elseif pagination.S_IS_NEXT %}
+							{% else %}<li><a href="{{ pagination.PAGE_URL }}">{{ pagination.PAGE_NUMBER }}</a></li>
+							{% endif %}
+						{% endfor %}
 						</ul>
 					</div>
-					<!-- ENDIF -->
-					<!-- IF S_SUB_ON_INDEX -->
-					<!-- BEGIN sub -->
+					{% endif %}
+					{% if S_SUB_ON_INDEX %}
+					{% for sub in downloads.sub %}
 					<br />
-					<!-- BEGIN sublevel_row -->
+					{% for sublevel_row in sub.sublevel_row %}
 					<div class="dl-padding-left-3-5">
-						{downloads.sub.sublevel_row.M_SUBLEVEL}
-						<!-- IF downloads.sub.sublevel_row.M_SUBLEVEL_ICON -->
-						<img src="{downloads.sub.sublevel_row.M_SUBLEVEL_ICON}" alt="" title="{downloads.sub.sublevel_row.L_SUBLEVEL}" class="dl-subfolder-small" /><!-- ENDIF -->
-						 &nbsp; <a href="{downloads.sub.sublevel_row.U_SUBLEVEL}" class="small"<!-- IF downloads.sub.sublevel_row.SUBLEVEL_COUNT --> title="{downloads.sub.sublevel_row.SUBLEVEL_COUNT} {L_DL_CAT_FILES}"<!-- ENDIF -->><strong>{downloads.sub.sublevel_row.L_SUBLEVEL}</strong></a>
+						{{ sublevel_row.M_SUBLEVEL }}
+						{% if sublevel_row.M_SUBLEVEL_ICON %}
+						<img src="{{ sublevel_row.M_SUBLEVEL_ICON }}" alt="" title="{{ sublevel_row.L_SUBLEVEL }}" class="dl-subfolder-small" />{% endif %}
+						 &nbsp; <a href="{{ sublevel_row.U_SUBLEVEL }}" class="small"{% if sublevel_row.SUBLEVEL_COUNT %} title="{{ sublevel_row.SUBLEVEL_COUNT }} {{ lang('DL_CAT_FILES') }}"{% endif %}><strong>{{ sublevel_row.L_SUBLEVEL }}</strong></a>
 					</div>
-					<!-- END sublevel_row -->
-					<!-- END sub -->
-					<!-- ENDIF -->
+					{% endfor %}
+					{% endfor %}
+					{% endif %}
 				</dt>
 				<dd class="posts">
-					<strong>{downloads.CAT_DL}</strong>
+					<strong>{{ downloads.CAT_DL }}</strong>
 				</dd>
 				<dd class="lastpost">
-					<!-- IF downloads.CAT_LAST_DL -->
+					{% if downloads.CAT_LAST_DL %}
 					<div class="dl-padding-left-1">
-						<a href="{downloads.U_CAT_LAST_LINK}">{downloads.CAT_LAST_DL}</a><br />
-	                    <a href="{downloads.U_CAT_LAST_USER}">{downloads.CAT_LAST_USER}</a>
-						<!-- IF downloads.CAT_LAST_TIME -->&nbsp;{downloads.CAT_LAST_TIME}<!-- ENDIF -->
+						<a href="{{ downloads.U_CAT_LAST_LINK }}">{{ downloads.CAT_LAST_DL }}</a><br />
+	                    <a href="{{ downloads.U_CAT_LAST_USER }}">{{ downloads.CAT_LAST_USER }}</a>
+						{% if downloads.CAT_LAST_TIME %}&nbsp;{{ downloads.CAT_LAST_TIME }}{% endif %}
 					</div>
-					<!-- ENDIF -->
+					{% endif %}
                 </dd>
 			</dl>
 		</li>
-		<!-- END downloads -->
-		<!-- ENDIF -->
+		{% endfor %}
+		{% endif %}
 	</ul>
 
 	</div>
@@ -88,4 +88,4 @@
 
 <br />
 
-<!-- INCLUDE dl_footer.html -->
+{% INCLUDE 'dl_footer.html' %}

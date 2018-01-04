@@ -1,19 +1,19 @@
-<!-- INCLUDE dl_header.html -->
+{% INCLUDE 'dl_header.html' %}
 
-	<h2>{L_DL_HACKS_LIST}</h2>
+	<h2>{{ lang('DL_HACKS_LIST') }}</h2>
 
 	<br />
 
-	<!-- IF .pagination or TOTAL_DL -->
+	{% if loops.pagination|length or TOTAL_DL %}
 		<div class="pagination">
-			{TOTAL_DL}
-			<!-- IF .pagination -->
-				<!-- INCLUDE pagination.html -->
-			<!-- ELSE -->
-				&bull; {PAGE_NUMBER}
-			<!-- ENDIF -->
+			{{ TOTAL_DL }}
+			{% if loops.pagination|length %}
+				{% INCLUDE 'pagination.html' %}
+			{% else %}
+				&bull; {{ PAGE_NUMBER }}
+			{% endif %}
 		</div>
-	<!-- ENDIF -->
+	{% endif %}
 
 	<div class="forabg">
 
@@ -21,68 +21,68 @@
 		<ul class="topiclist">
 			<li class="header">
 				<dl>
-					<dd class="dl-width-40 dl-cell-block">{L_DL_NAME}</dd>
-					<dd class="dl-width-40 dl-cell-block">{L_DL_FILE_DESCRIPTION}</dd>
-					<dd class="dl-width-20 dl-cell-block">{L_DL_HACK_AUTOR}</dd>
+					<dd class="dl-width-40 dl-cell-block">{{ lang('DL_NAME') }}</dd>
+					<dd class="dl-width-40 dl-cell-block">{{ lang('DL_FILE_DESCRIPTION') }}</dd>
+					<dd class="dl-width-20 dl-cell-block">{{ lang('DL_HACK_AUTOR') }}</dd>
 				</dl>
 			</li>
 		</ul>
 		<ul class="topiclist topics">
-		<!-- BEGIN listrow -->
-			<li class="row<!-- IF listrow.S_ROW_COUNT is even --> bg1<!-- ELSE --> bg2<!-- ENDIF -->">
+		{% for listrow in loops.listrow %}
+			<li class="row{% if listrow.S_ROW_COUNT is even %} bg1{% else %} bg2{% endif %}">
 				<dl>
-					<dd class="dl-width-40 dl-cell-block"><div class="dl-text-big">{listrow.HACK_NAME}</div><div class="notice">&nbsp;<b>{L_DL_CAT_NAME}:</b> {listrow.CAT_NAME}</div></dd>
-					<dd class="dl-width-40 dl-cell-block">{listrow.HACK_DESCRIPTION}</dd>
+					<dd class="dl-width-40 dl-cell-block"><div class="dl-text-big">{{ listrow.HACK_NAME }}</div><div class="notice">&nbsp;<b>{{ lang('DL_CAT_NAME') }}:</b> {{ listrow.CAT_NAME }}</div></dd>
+					<dd class="dl-width-40 dl-cell-block">{{ listrow.HACK_DESCRIPTION }}</dd>
 					<dd class="dl-width-20 dl-cell-block">
-						{listrow.HACK_AUTHOR}
+						{{ listrow.HACK_AUTHOR }}
 						<br />
-						{listrow.HACK_AUTHOR_WEBSITE}
-						<!-- IF listrow.HACK_AUTHOR_WEBSITE && listrow.HACK_DL_URL --><br /><!-- ENDIF -->
-						{listrow.HACK_DL_URL}</dd>
+						{{ listrow.HACK_AUTHOR_WEBSITE }}
+						{% if listrow.HACK_AUTHOR_WEBSITE && listrow.HACK_DL_URL %}<br />{% endif %}
+						{{ listrow.HACK_DL_URL }}</dd>
 				</dl>
 			</li>
-		<!-- END listrow -->
+		{% endfor %}
 		</ul>
 
 		</div>
 	</div>
 
-	<form action="{S_FORM_ACTION}" method="post">
+	<form action="{{ S_FORM_ACTION }}" method="post">
 
 	<fieldset class="display-options">
-			<label>{L_SORT_BY}</label>
+			<label>{{ lang('SORT_BY') }}</label>
 				<label>
 					<select name="sort_by" onchange="forms['hacklist'].submit()">
-					<option value="0"{SELECTED_0}>{L_DL_DEFAULT_SORT}</option>
-					<option value="1"{SELECTED_1}>{L_DL_FILE_DESCRIPTION}</option>
-					<option value="2"{SELECTED_2}>{L_DL_HACK_AUTOR}</option>
+					<option value="0"{{ SELECTED_0 }}>{{ lang('DL_DEFAULT_SORT') }}</option>
+					<option value="1"{{ SELECTED_1 }}>{{ lang('DL_FILE_DESCRIPTION') }}</option>
+					<option value="2"{{ SELECTED_2 }}>{{ lang('DL_HACK_AUTOR') }}</option>
 					</select>
 				</label>
-				<label>{L_DL_ORDER}</label>
+				<label>{{ lang('DL_ORDER') }}</label>
 				<label>
 					<select name="order" onchange="forms['hacklist'].submit()">
-					<option value="ASC"{SELECTED_SORT_0}>{L_ASCENDING}</option>
-					<option value="DESC"{SELECTED_SORT_1}>{L_DESCENDING}</option>
+					<option value="ASC"{{ SELECTED_SORT_0 }}>{{ lang('ASCENDING') }}</option>
+					<option value="DESC"{{ SELECTED_SORT_1 }}>{{ lang('DESCENDING') }}</option>
 					</select>
 				</label>
-			<label><input type="submit" class="button2" value="{L_GO}" /></label>
+			<label><input type="submit" class="button2" value="{{ lang('GO') }}" /></label>
 	</fieldset>
 
 	</form>
 
 	<hr />
 
-	<!-- IF .pagination or TOTAL_DL -->
+	{% if loops.pagination|length or TOTAL_DL %}
 		<div class="pagination">
-			{TOTAL_DL}
-			<!-- IF .pagination -->
-				<!-- INCLUDE pagination.html -->
-			<!-- ELSE -->
-				&bull; {PAGE_NUMBER}
-			<!-- ENDIF -->
+			{{ TOTAL_DL }}
+			{% if loops.pagination|length %}
+				{% INCLUDE 'pagination.html' %}
+			{% else %}
+				&bull; {{ PAGE_NUMBER }}
+			{% endif %}
 		</div>
-	<!-- ENDIF -->
+	{% endif %}
 
-<!-- INCLUDE jumpbox.html -->
+{% INCLUDE 'jumpbox.html' %}
 
-<!-- INCLUDE overall_footer.html -->
+{% INCLUDE 'overall_footer.html' %}

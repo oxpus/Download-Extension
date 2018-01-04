@@ -1,16 +1,16 @@
-<!-- INCLUDE dl_header.html -->
+{% INCLUDE 'dl_header.html' %}
 
-<!-- IF S_CAT_RULE -->
+{% if S_CAT_RULE %}
 <div class="rules">
 	<div class="inner">
 
-	<span>{CAT_RULE}</span>
+	<span>{{ CAT_RULE }}</span>
 
 	</div>
 </div>
-<!-- ENDIF -->
+{% endif %}
 
-<h2>{STATUS} <label>{DESCRIPTION} {MINI_IMG}</label></h2>
+<h2>{{ STATUS }} <label>{{ DESCRIPTION }} {{ MINI_IMG }}</label></h2>
 
 <br />
 
@@ -19,49 +19,49 @@
 		<div class="panel">
 
 			<div class="postbody dl-width-100">
-				<h3>{L_DL_HACK_VERSION}: {VER_VERSION}</h3>
-				<!-- IF not S_ACTIVE --><br /><div class="rules">{L_DL_NOT_ACTIVE}</div><!-- ENDIF -->
-				<!-- IF U_VER_EDIT -->
+				<h3>{{ lang('DL_HACK_VERSION') }}: {{ VER_VERSION }}</h3>
+				{% if not S_ACTIVE %}<br /><div class="rules">{{ lang('DL_NOT_ACTIVE') }}</div>{% endif %}
+				{% if U_VER_EDIT %}
 				<ul class="post-buttons">
 					<li class="rightside">
-                        <a href="{U_VER_EDIT}" title="{L_DL_EDIT_FILE}" class="button button-icon-only">
-                            <i class="icon fa-pencil fa-fw"></i><span>{L_DL_EDIT_FILE}</span>
+                        <a href="{{ U_VER_EDIT }}" title="{{ lang('DL_EDIT_FILE') }}" class="button button-icon-only">
+                            <i class="icon fa-pencil fa-fw"></i><span>{{ lang('DL_EDIT_FILE') }}</span>
                         </a>
                     </li>
 				</ul>
-				<!-- ENDIF -->
-				<div class="content">{VER_DESC}</div>
+				{% endif %}
+				<div class="content">{{ VER_DESC }}</div>
 			</div>
 
-			<div class="notice dl-text-center"><strong>{L_DL_FILE_NAME}:</strong> {FILE_NAME}<!-- IF FILE_SIZE -->, <strong>{L_DL_FILE_SIZE}:</strong> {FILE_SIZE}<!-- ENDIF --></div>
+			<div class="notice dl-text-center"><strong>{{ lang('DL_FILE_NAME') }}:</strong> {{ FILE_NAME }}{% if FILE_SIZE %}, <strong>{{ lang('DL_FILE_SIZE') }}:</strong> {{ FILE_SIZE }}{% endif %}</div>
 
-			<!-- BEGIN images -->
-			<!-- IF images.S_FIRST_ROW -->
+			{% for images in loops.images %}
+			{% if images.S_FIRST_ROW %}
 			<br />
-			<h3>{L_DL_IMAGES}:</h3>
+			<h3>{{ lang('DL_IMAGES') }}:</h3>
 			<dl>
 				<ul class="dl-detail-row">
-			<!-- ENDIF -->
-					<li class="dl-left dl-margin-right-small"><!-- IF S_DL_POPUPIMAGE --><a href="{images.LINK}" title="{images.NAME}" rel="prettyPhoto[pp_gal]"><!-- ENDIF --><img src="{images.LINK}" alt="{images.NAME}" title="{images.NAME}" class="dl-thumb-box" /><!-- IF S_DL_POPUPIMAGE --></a><!-- ENDIF --></li>
-			<!-- IF images.S_LAST_ROW -->
+			{% endif %}
+					<li class="dl-left dl-margin-right-small">{% if S_DL_POPUPIMAGE %}<a href="{{ images.LINK }}" title="{{ images.NAME }}" rel="prettyPhoto[pp_gal]">{% endif %}<img src="{{ images.LINK }}" alt="{{ images.NAME }}" title="{{ images.NAME }}" class="dl-thumb-box" />{% if S_DL_POPUPIMAGE %}</a>{% endif %}</li>
+			{% if images.S_LAST_ROW %}
 				</ul>
 			</dl>
-			<!-- ENDIF -->
-			<!-- END images -->
+			{% endif %}
+			{% endfor %}
 
-			<!-- BEGIN files -->
-			<!-- IF files.S_FIRST_ROW -->
+			{% for files in loops.files %}
+			{% if files.S_FIRST_ROW %}
 			<br />
-			<h3>{L_DL_FILES_TITLE}:</h3>
+			<h3>{{ lang('DL_FILES_TITLE') }}:</h3>
 			<dl>
 				<ul class="dl-detail-row">
-			<!-- ENDIF -->
-					<li class="dl-left dl-margin-right-small"><!-- IF files.S_AUTH --><a href="{files.LINK}" title="{files.NAME}"><!-- ENDIF -->{files.NAME}<!-- IF files.S_AUTH --></a><!-- ENDIF --></li>
-			<!-- IF files.S_LAST_ROW -->
+			{% endif %}
+					<li class="dl-left dl-margin-right-small">{% if files.S_AUTH %}<a href="{{ files.LINK }}" title="{{ files.NAME }}">{% endif %}{{ files.NAME }}{% if files.S_AUTH %}</a>{% endif %}</li>
+			{% if files.S_LAST_ROW %}
 				</ul>
 			</dl>
-			<!-- ENDIF -->
-			<!-- END files -->
+			{% endif %}
+			{% endfor %}
 
 		</div>
 	</div>
@@ -71,4 +71,4 @@
 
 <br />
 
-<!-- INCLUDE dl_footer.html -->
+{% INCLUDE 'dl_footer.html' %}

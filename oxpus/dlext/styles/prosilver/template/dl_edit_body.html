@@ -1,43 +1,43 @@
-<!-- INCLUDE dl_header.html -->
+{% INCLUDE 'dl_header.html' %}
 
-<h2><!-- IF S_ADD_DL -->{L_DL_ADD_DOWNLOAD}<!-- ELSE -->{L_DL_EDIT_DOWNLOAD}<!-- ENDIF --></h2>
+<h2>{% if S_ADD_DL %}{{ lang('DL_ADD_DOWNLOAD') }}{% else %}{{ lang('DL_EDIT_DOWNLOAD') }}{% endif %}</h2>
 
 <br />
 
-<form action="{S_DOWNLOADS_ACTION}" method="post" {ENCTYPE} id="dl_edit">
+<form action="{{ S_DOWNLOADS_ACTION }}" method="post" {{ ENCTYPE }} id="dl_edit">
 
 <div class="panel dl-edit-box-light">
 	<div class="inner">
 
-	<h3>{DL_FILES_TITLE}</h3>
+	<h3>{{ DL_FILES_TITLE }}</h3>
 
-	<!-- IF S_UPLOAD_TRAFFIC -->
-	<div class="rules"><span class="small">{L_DL_UPLOAD_TRAFFIC}</span></div>
-	<!-- ENDIF -->
+	{% if S_UPLOAD_TRAFFIC %}
+	<div class="rules"><span class="small">{{ lang('DL_UPLOAD_TRAFFIC') }}</span></div>
+	{% endif %}
 
 	<fieldset>
 
 	<dl>
-		<dt><label>{L_DL_NAME}</label></dt>
+		<dt><label>{{ lang('DL_NAME') }}</label></dt>
 		<dd>
-			<a href="javascript:void(0)" onclick="javascript:help_popup('{L_DL_NAME_EXPLAIN}')" title="{L_INFORMATION}">{ICON_DL_HELP}</a>
-			<input type="text" name="description" size="40" maxlength="255" value="{DESCRIPTION}" class="inputbox autowidth" />
+			<a href="javascript:void(0)" onclick="javascript:help_popup('{{ lang('DL_NAME_EXPLAIN') }}')" title="{{ lang('INFORMATION') }}">{{ ICON_DL_HELP }}</a>
+			<input type="text" name="description" size="40" maxlength="255" value="{{ DESCRIPTION }}" class="inputbox autowidth" />
 		</dd>
 	</dl>
-	<!-- IF S_CAT_CHOOSE -->
+	{% if S_CAT_CHOOSE %}
 	<dl>
-		<dt><label>{L_DL_CAT_NAME}</label></dt>
+		<dt><label>{{ lang('DL_CAT_NAME') }}</label></dt>
 		<dd>
-			<a href="javascript:void(0)" onclick="javascript:help_popup('{L_DL_CAT_NAME_EXPLAIN}')" title="{L_INFORMATION}">{ICON_DL_HELP}</a>
-			{SELECT_CAT}
+			<a href="javascript:void(0)" onclick="javascript:help_popup('{{ lang('DL_CAT_NAME_EXPLAIN') }}')" title="{{ lang('INFORMATION') }}">{{ ICON_DL_HELP }}</a>
+			{{ SELECT_CAT }}
 		</dd>
 	</dl>
-	<!-- ENDIF -->
+	{% endif %}
 	<dl>
-		<dt><label>{L_DL_FILE_DESCRIPTION}</label></dt>
+		<dt><label>{{ lang('DL_FILE_DESCRIPTION') }}</label></dt>
 		<dd>
-			<a href="javascript:void(0)" onclick="javascript:help_popup('{L_DL_DESCRIPTION_EXPLAIN}')" title="{L_INFORMATION}">{ICON_DL_HELP}</a>
-			<textarea name="long_desc" rows="4" cols="100" class="inputbox">{LONG_DESC}</textarea>
+			<a href="javascript:void(0)" onclick="javascript:help_popup('{{ lang('DL_DESCRIPTION_EXPLAIN') }}')" title="{{ lang('INFORMATION') }}">{{ ICON_DL_HELP }}</a>
+			<textarea name="long_desc" rows="4" cols="100" class="inputbox">{{ LONG_DESC }}</textarea>
 		</dd>
 	</dl>
 
@@ -52,188 +52,188 @@
 	<fieldset>
 
 	<dl>
-		<dt><label>{L_DL_UPLOAD_FILE}</label></dt>
+		<dt><label>{{ lang('DL_UPLOAD_FILE') }}</label></dt>
 		<dd>
-			<a href="javascript:void(0)" onclick="javascript:help_popup('{L_DL_UPLOAD_FILE_EXPLAIN}')" title="{L_INFORMATION}">{ICON_DL_HELP}</a>
+			<a href="javascript:void(0)" onclick="javascript:help_popup('{{ lang('DL_UPLOAD_FILE_EXPLAIN') }}')" title="{{ lang('INFORMATION') }}">{{ ICON_DL_HELP }}</a>
 			<input type="file" name="dl_name" class="inputbox" size="46" /><br />
-			<span class="small">{MAX_UPLOAD_SIZE}{EXT_BLACKLIST}</span>
+			<span class="small">{{ MAX_UPLOAD_SIZE }}{{ EXT_BLACKLIST }}</span>
 		</dd>
 	</dl>
 	<dl>
-		<dt><label>{L_DL_EXTERN}</label></dt>
+		<dt><label>{{ lang('DL_EXTERN') }}</label></dt>
 		<dd>
-			<a href="javascript:void(0)" onclick="javascript:help_popup('{L_DL_EXTERN_EXPLAIN}')" title="{L_INFORMATION}">{ICON_DL_HELP}</a>
-			<input type="checkbox" class="permissions-checkbox" name="file_extern" {CHECKEXTERN} value="1" />
-			&nbsp;<input type="text" name="file_name" class="inputbox autowidth" size="40" value="{URL}" />
-			&nbsp;<input type="text" size="10" maxlength="20" name="file_extern_size" value="{FILE_EXT_SIZE}" class="inputbox autowidth" />&nbsp;{S_FILE_EXT_SIZE_RANGE}
+			<a href="javascript:void(0)" onclick="javascript:help_popup('{{ lang('DL_EXTERN_EXPLAIN') }}')" title="{{ lang('INFORMATION') }}">{{ ICON_DL_HELP }}</a>
+			<input type="checkbox" class="permissions-checkbox" name="file_extern" {{ CHECKEXTERN }} value="1" />
+			&nbsp;<input type="text" name="file_name" class="inputbox autowidth" size="40" value="{{ URL }}" />
+			&nbsp;<input type="text" size="10" maxlength="20" name="file_extern_size" value="{{ FILE_EXT_SIZE }}" class="inputbox autowidth" />&nbsp;{{ S_FILE_EXT_SIZE_RANGE }}
 		</dd>
 	</dl>
 	<dl>
-		<dt><label>{L_DL_HACK_VERSION}</label></dt>
+		<dt><label>{{ lang('DL_HACK_VERSION') }}</label></dt>
 		<dd>
-			<a href="javascript:void(0)" onclick="javascript:help_popup('{L_DL_HACK_VERSION_EXPLAIN}')" title="{L_INFORMATION}">{ICON_DL_HELP}</a>
-			<input type="text" name="hack_version" size="10" maxlength="32" value="{HACK_VERSION}" class="inputbox autowidth" />
+			<a href="javascript:void(0)" onclick="javascript:help_popup('{{ lang('DL_HACK_VERSION_EXPLAIN') }}')" title="{{ lang('INFORMATION') }}">{{ ICON_DL_HELP }}</a>
+			<input type="text" name="hack_version" size="10" maxlength="32" value="{{ HACK_VERSION }}" class="inputbox autowidth" />
 		</dd>
 	</dl>
-	<!-- IF S_VERSION_ON -->
+	{% if S_VERSION_ON %}
 	<dl class="dl-edit-version">
-		<dt><label>{L_DL_VERSION}</label></dt>
+		<dt><label>{{ lang('DL_VERSION') }}</label></dt>
 		<dd>
-			<label class="dl-green"><input type="radio" name="file_ver_opt" class="radio" value="0" checked="checked" />&nbsp;{L_DL_VERSION_ADD_NEW}</label><br />
-			<label class="dl-blue"><input type="radio" name="file_ver_opt" class="radio" value="1" />&nbsp;{L_DL_VERSION_ADD_OLD}</label><br />
-			<label class="dl-yellow"><input type="radio" name="file_ver_opt" class="radio" value="2" />&nbsp;{L_DL_VERSION_REPLACE}</label><br />
-			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&raquo;&nbsp;{S_SELECT_VERSION}<br />
-			<span class="small">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{L_DL_VERSION_REPLACE_EXPLAIN}</span><br />
-			<!-- IF S_SELECT_VER_DEL -->
+			<label class="dl-green"><input type="radio" name="file_ver_opt" class="radio" value="0" checked="checked" />&nbsp;{{ lang('DL_VERSION_ADD_NEW') }}</label><br />
+			<label class="dl-blue"><input type="radio" name="file_ver_opt" class="radio" value="1" />&nbsp;{{ lang('DL_VERSION_ADD_OLD') }}</label><br />
+			<label class="dl-yellow"><input type="radio" name="file_ver_opt" class="radio" value="2" />&nbsp;{{ lang('DL_VERSION_REPLACE') }}</label><br />
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&raquo;&nbsp;{{ S_SELECT_VERSION }}<br />
+			<span class="small">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ lang('DL_VERSION_REPLACE_EXPLAIN') }}</span><br />
+			{% if S_SELECT_VER_DEL %}
 			<br />
-			<label class="dl-red"><input type="radio" name="file_ver_opt" class="radio" value="3" />&nbsp;{L_DL_VERSION_DELETE}</label><br />
-			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&raquo;&nbsp;{S_SELECT_VER_DEL}<br /><div class="notice">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{L_DL_VERSION_DELETE_EXPLAIN}</div>
-			<!-- ENDIF -->
+			<label class="dl-red"><input type="radio" name="file_ver_opt" class="radio" value="3" />&nbsp;{{ lang('DL_VERSION_DELETE') }}</label><br />
+			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&raquo;&nbsp;{{ S_SELECT_VER_DEL }}<br /><div class="notice">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ lang('DL_VERSION_DELETE_EXPLAIN') }}</div>
+			{% endif %}
 		</dd>
 	</dl>
-	<!-- ENDIF -->
-	<!-- IF S_ALLOW_THUMBS -->
+	{% endif %}
+	{% if S_ALLOW_THUMBS %}
 	<dl>
-		<dt><label>{L_DL_THUMB}</label></dt>
+		<dt><label>{{ lang('DL_THUMB') }}</label></dt>
 		<dd>
-			<a href="javascript:void(0)" onclick="javascript:help_popup('{L_DL_THUMBNAIL_EXPLAIN}')" title="{L_INFORMATION}">{ICON_DL_HELP}</a>
-			<!-- IF S_THUMBNAIL -->
-			<img src="{THUMBNAIL}" alt="" title="" class="dl-thumb-box" /><br /><label><input type="checkbox" class="permissions_checkbox" name="del_thumb" value="1" />&nbsp;{L_DELETE}</label>
+			<a href="javascript:void(0)" onclick="javascript:help_popup('{{ lang('DL_THUMBNAIL_EXPLAIN') }}')" title="{{ lang('INFORMATION') }}">{{ ICON_DL_HELP }}</a>
+			{% if S_THUMBNAIL %}
+			<img src="{{ THUMBNAIL }}" alt="" title="" class="dl-thumb-box" /><br /><label><input type="checkbox" class="permissions_checkbox" name="del_thumb" value="1" />&nbsp;{{ lang('DELETE') }}</label>
 			<br /><br />
-			<!-- ENDIF -->
-			<input type="file" name="thumb_name" class="inputbox" size="46" /><br /><span class="small">{DL_THUMBNAIL_SECOND}</span>
+			{% endif %}
+			<input type="file" name="thumb_name" class="inputbox" size="46" /><br /><span class="small">{{ DL_THUMBNAIL_SECOND }}</span>
 		</dd>
 	</dl>
-	<!-- ENDIF -->
+	{% endif %}
 
 	</fieldset>
 
 	</div>
 </div>
 
-<!-- IF S_MODCP or S_CHANGE_TIME or S_POPUP_NOTIFY or S_EMAIL_BLOCK -->
+{% if S_MODCP or S_CHANGE_TIME or S_POPUP_NOTIFY or S_EMAIL_BLOCK %}
 <div class="panel dl-edit-box-light">
 	<div class="inner">
 
 	<fieldset>
 
-	<!-- IF S_MODCP -->
+	{% if S_MODCP %}
 	<dl>
-		<dt><label>{L_DL_IS_FREE}</label></dt>
+		<dt><label>{{ lang('DL_IS_FREE') }}</label></dt>
 		<dd>
-			<a href="javascript:void(0)" onclick="javascript:help_popup('{L_DL_IS_FREE_EXPLAIN}')" title="{L_INFORMATION}">{ICON_DL_HELP}</a>
-			{S_CHECK_FREE}
+			<a href="javascript:void(0)" onclick="javascript:help_popup('{{ lang('DL_IS_FREE_EXPLAIN') }}')" title="{{ lang('INFORMATION') }}">{{ ICON_DL_HELP }}</a>
+			{{ S_CHECK_FREE }}
 		</dd>
 	</dl>
 	<dl>
-		<dt><label>{L_DL_TRAFFIC}</label></dt>
+		<dt><label>{{ lang('DL_TRAFFIC') }}</label></dt>
 		<dd>
-			<a href="javascript:void(0)" onclick="javascript:help_popup('{L_DL_TRAFFIC_EXPLAIN}')" title="{L_INFORMATION}">{ICON_DL_HELP}</a>
-			<input type="text" name="file_traffic" size="10" maxlength="10" value="{TRAFFIC}" class="inputbox autowidth" />&nbsp;{S_TRAFFIC_RANGE}
+			<a href="javascript:void(0)" onclick="javascript:help_popup('{{ lang('DL_TRAFFIC_EXPLAIN') }}')" title="{{ lang('INFORMATION') }}">{{ ICON_DL_HELP }}</a>
+			<input type="text" name="file_traffic" size="10" maxlength="10" value="{{ TRAFFIC }}" class="inputbox autowidth" />&nbsp;{{ S_TRAFFIC_RANGE }}
 		</dd>
 	</dl>
-	<!-- ENDIF -->
-	<!-- IF S_MODCP -->
+	{% endif %}
+	{% if S_MODCP %}
 	<dl class="navbar dl-edit-box-medium">
 		<dt>
-			<label>{L_DL_APPROVE}</label>
+			<label>{{ lang('DL_APPROVE') }}</label>
 		</dt>
 		<dd>
-			<a href="javascript:void(0)" onclick="javascript:help_popup('{L_DL_APPROVE_EXPLAIN}')" title="{L_INFORMATION}">{ICON_DL_HELP}</a>
-			<input type="checkbox" class="permissions_checkbox" name="approve" value="1" {APPROVE} />
+			<a href="javascript:void(0)" onclick="javascript:help_popup('{{ lang('DL_APPROVE_EXPLAIN') }}')" title="{{ lang('INFORMATION') }}">{{ ICON_DL_HELP }}</a>
+			<input type="checkbox" class="permissions_checkbox" name="approve" value="1" {{ APPROVE }} />
 		</dd>
 	</dl>
-	<!-- ENDIF -->
-	<!-- IF S_CHANGE_TIME -->
+	{% endif %}
+	{% if S_CHANGE_TIME %}
 	<dl class="navbar dl-edit-box-medium">
 		<dt>
-			<label>{L_DL_NO_CHANGE_EDIT_TIME}</label>
+			<label>{{ lang('DL_NO_CHANGE_EDIT_TIME') }}</label>
 		</dt>
 		<dd>
-			<a href="javascript:void(0)" onclick="javascript:help_popup('{L_CHANGE_TIME_EXPLAIN}')" title="{L_INFORMATION}">{ICON_DL_HELP}</a>
+			<a href="javascript:void(0)" onclick="javascript:help_popup('{{ lang('CHANGE_TIME_EXPLAIN') }}')" title="{{ lang('INFORMATION') }}">{{ ICON_DL_HELP }}</a>
 			<input type="checkbox" class="permissions_checkbox" name="change_time" value="1" />
 		</dd>
 	</dl>
-	<!-- ENDIF -->
-	<!-- IF S_CLICK_RESET -->
+	{% endif %}
+	{% if S_CLICK_RESET %}
 	<dl class="navbar dl-edit-box-medium">
 		<dt>
-			<label>{L_DL_KLICKS_RESET}</label>
+			<label>{{ lang('DL_KLICKS_RESET') }}</label>
 		</dt>
 		<dd>
-			<a href="javascript:void(0)" onclick="javascript:help_popup('{L_CLICK_RESET_EXPLAIN}')" title="{L_INFORMATION}">{ICON_DL_HELP}</a>
+			<a href="javascript:void(0)" onclick="javascript:help_popup('{{ lang('CLICK_RESET_EXPLAIN') }}')" title="{{ lang('INFORMATION') }}">{{ ICON_DL_HELP }}</a>
 			<input type="checkbox" class="permissions-checkbox" name="click_reset" value="1" />
 		</dd>
 	</dl>
-	<!-- ENDIF -->
-	<!-- IF S_POPUP_NOTIFY -->
+	{% endif %}
+	{% if S_POPUP_NOTIFY %}
 	<dl class="navbar dl-edit-box-medium">
 		<dt>
-			<label>{L_DL_DISABLE_POPUP}</label>
+			<label>{{ lang('DL_DISABLE_POPUP') }}</label>
 		</dt>
 		<dd>
-			<a href="javascript:void(0)" onclick="javascript:help_popup('{L_DISABLE_POPUP_EXPLAIN}')" title="{L_INFORMATION}">{ICON_DL_HELP}</a>
+			<a href="javascript:void(0)" onclick="javascript:help_popup('{{ lang('DISABLE_POPUP_EXPLAIN') }}')" title="{{ lang('INFORMATION') }}">{{ ICON_DL_HELP }}</a>
 			<input type="checkbox" class="permissions_checkbox" name="disable_popup_notify" value="1" />
 		</dd>
 	</dl>
-	<!-- ENDIF -->
-	<!-- IF S_EMAIL_BLOCK -->
+	{% endif %}
+	{% if S_EMAIL_BLOCK %}
 	<dl class="navbar dl-edit-box-medium">
 		<dt>
-			<label>{L_DL_DISABLE_EMAIL}</label>
+			<label>{{ lang('DL_DISABLE_EMAIL') }}</label>
 		</dt>
 		<dd>
-			<a href="javascript:void(0)" onclick="javascript:help_popup('{L_DL_SEND_NOTIFY_EXPLAIN}')" title="{L_INFORMATION}">{ICON_DL_HELP}</a>
+			<a href="javascript:void(0)" onclick="javascript:help_popup('{{ lang('DL_SEND_NOTIFY_EXPLAIN') }}')" title="{{ lang('INFORMATION') }}">{{ ICON_DL_HELP }}</a>
 			<input type="checkbox" class="permissions_checkbox" name="send_notify" value="1" />
 		</dd>
 	</dl>
-	<!-- ENDIF -->
+	{% endif %}
 
 	</fieldset>
 
 	</div>
 </div>
-<!-- ENDIF -->
+{% endif %}
 
-<!-- IF S_USE_HACKLIST -->
+{% if S_USE_HACKLIST %}
 <div class="panel dl-edit-box-light">
 	<div class="inner">
 
 	<fieldset>
 
 	<dl>
-		<dt><label>{L_DL_HACKLIST}</label></dt>
+		<dt><label>{{ lang('DL_HACKLIST') }}</label></dt>
 		<dd>
-			<a href="javascript:void(0)" onclick="javascript:help_popup('{L_DL_HACKLIST_EXPLAIN}')" title="{L_INFORMATION}">{ICON_DL_HELP}</a>
-			{S_HACKLIST}
+			<a href="javascript:void(0)" onclick="javascript:help_popup('{{ lang('DL_HACKLIST_EXPLAIN') }}')" title="{{ lang('INFORMATION') }}">{{ ICON_DL_HELP }}</a>
+			{{ S_HACKLIST }}
 		</dd>
 	</dl>
 	<dl>
-		<dt><label>{L_DL_HACK_AUTOR}</label></dt>
+		<dt><label>{{ lang('DL_HACK_AUTOR') }}</label></dt>
 		<dd>
-			<a href="javascript:void(0)" onclick="javascript:help_popup('{L_DL_HACK_AUTHOR_EXPLAIN}')" title="{L_INFORMATION}">{ICON_DL_HELP}</a>
-			<input type="text" name="hack_author" size="40" maxlength="255" value="{HACK_AUTHOR}" class="inputbox autowidth" />
+			<a href="javascript:void(0)" onclick="javascript:help_popup('{{ lang('DL_HACK_AUTHOR_EXPLAIN') }}')" title="{{ lang('INFORMATION') }}">{{ ICON_DL_HELP }}</a>
+			<input type="text" name="hack_author" size="40" maxlength="255" value="{{ HACK_AUTHOR }}" class="inputbox autowidth" />
 		</dd>
 	</dl>
 	<dl>
-		<dt><label>{L_DL_HACK_AUTOR_EMAIL}</label></dt>
+		<dt><label>{{ lang('DL_HACK_AUTOR_EMAIL') }}</label></dt>
 		<dd>
-			<a href="javascript:void(0)" onclick="javascript:help_popup('{L_DL_HACK_AUTHOR_EMAIL_EXPLAIN}')" title="{L_INFORMATION}">{ICON_DL_HELP}</a>
-			<input type="text" name="hack_author_email" size="40" maxlength="255" value="{HACK_AUTHOR_EMAIL}" class="inputbox autowidth" />
+			<a href="javascript:void(0)" onclick="javascript:help_popup('{{ lang('DL_HACK_AUTHOR_EMAIL_EXPLAIN') }}')" title="{{ lang('INFORMATION') }}">{{ ICON_DL_HELP }}</a>
+			<input type="text" name="hack_author_email" size="40" maxlength="255" value="{{ HACK_AUTHOR_EMAIL }}" class="inputbox autowidth" />
 		</dd>
 	</dl>
 	<dl>
-		<dt><label>{L_DL_HACK_AUTOR_WEBSITE}</label></dt>
+		<dt><label>{{ lang('DL_HACK_AUTOR_WEBSITE') }}</label></dt>
 		<dd>
-			<a href="javascript:void(0)" onclick="javascript:help_popup('{L_DL_HACK_AUTHOR_WEBSITE_EXPLAIN}')" title="{L_INFORMATION}">{ICON_DL_HELP}</a>
-			<input type="text" name="hack_author_website" size="40" maxlength="255" value="{HACK_AUTHOR_WEBSITE}" class="inputbox autowidth" />
+			<a href="javascript:void(0)" onclick="javascript:help_popup('{{ lang('DL_HACK_AUTHOR_WEBSITE_EXPLAIN') }}')" title="{{ lang('INFORMATION') }}">{{ ICON_DL_HELP }}</a>
+			<input type="text" name="hack_author_website" size="40" maxlength="255" value="{{ HACK_AUTHOR_WEBSITE }}" class="inputbox autowidth" />
 		</dd>
 	</dl>
 	<dl>
-		<dt><label>{L_DL_HACK_DL_URL}</label></dt>
+		<dt><label>{{ lang('DL_HACK_DL_URL') }}</label></dt>
 		<dd>
-			<a href="javascript:void(0)" onclick="javascript:help_popup('{L_DL_HACK_DL_URL_EXPLAIN}')" title="{L_INFORMATION}">{ICON_DL_HELP}</a>
-			<input type="text" name="hack_dl_url" size="40" maxlength="255" value="{HACK_DL_URL}" class="inputbox autowidth" />
+			<a href="javascript:void(0)" onclick="javascript:help_popup('{{ lang('DL_HACK_DL_URL_EXPLAIN') }}')" title="{{ lang('INFORMATION') }}">{{ ICON_DL_HELP }}</a>
+			<input type="text" name="hack_dl_url" size="40" maxlength="255" value="{{ HACK_DL_URL }}" class="inputbox autowidth" />
 		</dd>
 	</dl>
 
@@ -241,106 +241,106 @@
 
 	</div>
 </div>
-<!-- ENDIF -->
+{% endif %}
 
-<!-- IF S_ALLOW_EDIT_MOD_DESC or S_TODO_LINK_ONOFF -->
+{% if S_ALLOW_EDIT_MOD_DESC or S_TODO_LINK_ONOFF %}
 <div class="panel dl-edit-box-light">
 	<div class="inner">
 
 	<fieldset>
 
-	<!-- IF S_ALLOW_EDIT_MOD_DESC -->
+	{% if S_ALLOW_EDIT_MOD_DESC %}
 	<dl>
-		<dt><label>{L_DL_MOD_LIST}</label></dt>
+		<dt><label>{{ lang('DL_MOD_LIST') }}</label></dt>
 		<dd>
-			<a href="javascript:void(0)" onclick="javascript:help_popup('{L_DL_MOD_LIST_EXPLAIN}')" title="{L_INFORMATION}">{ICON_DL_HELP}</a>
-			<input type="checkbox" class="permissions-checkbox" name="mod_list" {MOD_LIST} value="1" />
+			<a href="javascript:void(0)" onclick="javascript:help_popup('{{ lang('DL_MOD_LIST_EXPLAIN') }}')" title="{{ lang('INFORMATION') }}">{{ ICON_DL_HELP }}</a>
+			<input type="checkbox" class="permissions-checkbox" name="mod_list" {{ MOD_LIST }} value="1" />
 		</dd>
 	</dl>
 	<dl>
-		<dt><label>{L_DL_MOD_TEST}</label></dt>
+		<dt><label>{{ lang('DL_MOD_TEST') }}</label></dt>
 		<dd>
-			<a href="javascript:void(0)" onclick="javascript:help_popup('{L_DL_MOD_TEST_EXPLAIN}')" title="{L_INFORMATION}">{ICON_DL_HELP}</a>
-			<input type="text" name="test" size="40" maxlength="50" value="{MOD_TEST}" class="inputbox autowidth" />
+			<a href="javascript:void(0)" onclick="javascript:help_popup('{{ lang('DL_MOD_TEST_EXPLAIN') }}')" title="{{ lang('INFORMATION') }}">{{ ICON_DL_HELP }}</a>
+			<input type="text" name="test" size="40" maxlength="50" value="{{ MOD_TEST }}" class="inputbox autowidth" />
 		</dd>
 	</dl>
 	<dl>
-		<dt><label>{L_DL_MOD_REQUIRE}</label></dt>
+		<dt><label>{{ lang('DL_MOD_REQUIRE') }}</label></dt>
 		<dd>
-			<a href="javascript:void(0)" onclick="javascript:help_popup('{L_DL_MOD_REQUIRE_EXPLAIN}')" title="{L_INFORMATION}">{ICON_DL_HELP}</a>
-			<input type="text" name="require" size="40" maxlength="255" value="{MOD_REQUIRE}" class="inputbox autowidth" />
+			<a href="javascript:void(0)" onclick="javascript:help_popup('{{ lang('DL_MOD_REQUIRE_EXPLAIN') }}')" title="{{ lang('INFORMATION') }}">{{ ICON_DL_HELP }}</a>
+			<input type="text" name="require" size="40" maxlength="255" value="{{ MOD_REQUIRE }}" class="inputbox autowidth" />
 		</dd>
 	</dl>
 	<dl>
-		<dt><label>{L_DL_MOD_DESC}</label></dt>
+		<dt><label>{{ lang('DL_MOD_DESC') }}</label></dt>
 		<dd>
-			<a href="javascript:void(0)" onclick="javascript:help_popup('{L_DL_MOD_DESC_EXPLAIN}')" title="{L_INFORMATION}">{ICON_DL_HELP}</a>
-			<textarea name="mod_desc" rows="4" cols="100" class="inputbox">{MOD_DESC}</textarea>
+			<a href="javascript:void(0)" onclick="javascript:help_popup('{{ lang('DL_MOD_DESC_EXPLAIN') }}')" title="{{ lang('INFORMATION') }}">{{ ICON_DL_HELP }}</a>
+			<textarea name="mod_desc" rows="4" cols="100" class="inputbox">{{ MOD_DESC }}</textarea>
 		</dd>
 	</dl>
 	<dl>
-		<dt><label>{L_DL_MOD_WARNING}</label></dt>
+		<dt><label>{{ lang('DL_MOD_WARNING') }}</label></dt>
 		<dd>
-			<a href="javascript:void(0)" onclick="javascript:help_popup('{L_DL_MOD_WARNING_EXPLAIN}')" title="{L_INFORMATION}">{ICON_DL_HELP}</a>
-			<textarea name="warning" rows="4" cols="100" class="inputbox">{MOD_WARNING}</textarea>
+			<a href="javascript:void(0)" onclick="javascript:help_popup('{{ lang('DL_MOD_WARNING_EXPLAIN') }}')" title="{{ lang('INFORMATION') }}">{{ ICON_DL_HELP }}</a>
+			<textarea name="warning" rows="4" cols="100" class="inputbox">{{ MOD_WARNING }}</textarea>
 		</dd>
 	</dl>
-	<!-- ENDIF -->
+	{% endif %}
 
-	<!-- IF S_TODO_LINK_ONOFF -->
+	{% if S_TODO_LINK_ONOFF %}
 	<dl>
-		<dt><label>{L_DL_MOD_TODO}</label></dt>
+		<dt><label>{{ lang('DL_MOD_TODO') }}</label></dt>
 		<dd>
-			<a href="javascript:void(0)" onclick="javascript:help_popup('{L_DL_MOD_TODO_EXPLAIN}')" title="{L_INFORMATION}">{ICON_DL_HELP}</a>
-			<textarea name="todo" rows="4" cols="100" class="inputbox">{MOD_TODO}</textarea>
+			<a href="javascript:void(0)" onclick="javascript:help_popup('{{ lang('DL_MOD_TODO_EXPLAIN') }}')" title="{{ lang('INFORMATION') }}">{{ ICON_DL_HELP }}</a>
+			<textarea name="todo" rows="4" cols="100" class="inputbox">{{ MOD_TODO }}</textarea>
 		</dd>
 	</dl>
-	<!-- ENDIF -->
+	{% endif %}
 
 	</fieldset>
 
 	</div>
 </div>
-<!-- ENDIF -->
+{% endif %}
 
-<!-- IF not S_TODO_LINK_ONOFF -->
-<div><input type="hidden" name="todo" value="{MOD_TODO}" /></div>
-<!-- ENDIF -->
+{% if not S_TODO_LINK_ONOFF %}
+<div><input type="hidden" name="todo" value="{{ MOD_TODO }}" /></div>
+{% endif %}
 
-<!-- BEGIN download_fields -->
-<!-- IF download_fields.S_FIRST_ROW -->
+{% for download_fields in loops.download_fields %}
+{% if download_fields.S_FIRST_ROW %}
 <div class="panel dl-edit-box-light">
 	<div class="inner">
 
 	<fieldset>
-<!-- ENDIF -->
+{% endif %}
 
 	<dl>
-		<dt><label<!-- IF download_fields.FIELD_ID --> for="{download_fields.FIELD_ID}"<!-- ENDIF -->>{download_fields.LANG_NAME}:<!-- IF download_fields.S_REQUIRED --> *<!-- ENDIF --></label>
-		<!-- IF download_fields.LANG_EXPLAIN --><br /><span>{download_fields.LANG_EXPLAIN}</span><!-- ENDIF --></dt>
-		<!-- IF download_fields.ERROR --><dd class="error">{download_fields.ERROR}</dd><!-- ENDIF -->
-		<dd>{download_fields.FIELD}</dd>
+		<dt><label{% if download_fields.FIELD_ID %} for="{{ download_fields.FIELD_ID }}"{% endif %}>{{ download_fields.LANG_NAME }}:{% if download_fields.S_REQUIRED %} *{% endif %}</label>
+		{% if download_fields.LANG_EXPLAIN %}<br /><span>{{ download_fields.LANG_EXPLAIN }}</span>{% endif %}</dt>
+		{% if download_fields.ERROR %}<dd class="error">{{ download_fields.ERROR }}</dd>{% endif %}
+		<dd>{{ download_fields.FIELD }}</dd>
 	</dl>
 
-<!-- IF download_fields.S_LAST_ROW -->
+{% if download_fields.S_LAST_ROW %}
 	</fieldset>
 
 	</div>
 </div>
-<!-- ENDIF -->
-<!-- END download_fields -->
+{% endif %}
+{% endfor %}
 
 <fieldset class="submit-buttons dl-right">
-	<input type="submit" name="submit" value="{L_SUBMIT}" class="button icon-button" />&nbsp;&nbsp;
-	<input type="reset" name="reset" value="{L_RESET}" class="button icon-button" />
+	<input type="submit" name="submit" value="{{ lang('SUBMIT') }}" class="button icon-button" />&nbsp;&nbsp;
+	<input type="reset" name="reset" value="{{ lang('RESET') }}" class="button icon-button" />
 </fieldset>
 
 <div class="clear"></div>
 
-<div>{S_FORM_TOKEN}{S_HIDDEN_FIELDS}</div>
+<div>{{ S_FORM_TOKEN }}{{ S_HIDDEN_FIELDS }}</div>
 
 </form>
 
 <br />
 
-<!-- INCLUDE dl_footer.html -->
+{% INCLUDE 'dl_footer.html' %}

@@ -1,48 +1,48 @@
-<h1>{L_TITLE}</h1>
+<h1>{{ lang('TITLE') }}</h1>
 
-<h2>{L_TITLE_PAGE}</h2>
+<h2>{{ lang('TITLE_PAGE') }}</h2>
 
-<!-- IF S_ERROR -->
+{% if S_ERROR %}
 	<div class="errorbox">
-		<h3>{L_WARNING}</h3>
-		<p>{ERROR_MSG}</p>
+		<h3>{{ lang('WARNING') }}</h3>
+		<p>{{ ERROR_MSG }}</p>
 	</div>
-<!-- ENDIF -->
+{% endif %}
 
-<form id="mode_select" method="post" action="{U_MODE_SELECT}">
+<form id="mode_select" method="post" action="{{ U_MODE_SELECT }}">
 
 <fieldset class="quick">
-	{L_SELECT_FORM}: <select name="view" onchange="if (this.options[this.selectedIndex].value != '') this.form.submit();">{S_MODE_SELECT}</select> <input class="button2" type="submit" value="{L_GO}" />
-	{S_FORM_TOKEN}
+	{{ lang('SELECT_FORM') }}: <select name="view" onchange="if (this.options[this.selectedIndex].value != '') this.form.submit();">{{ S_MODE_SELECT }}</select> <input class="button2" type="submit" value="{{ lang('GO') }}" />
+	{{ S_FORM_TOKEN }}
 </fieldset>
 </form>
 
-<form id="acp_dl_config" method="post" action="{U_ACTION}">
+<form id="acp_dl_config" method="post" action="{{ U_ACTION }}">
 
-<!-- BEGIN options -->
-	<!-- IF options.S_LEGEND -->
-		<!-- IF not options.S_FIRST_ROW -->
+{% for options in loops.options %}
+	{% if options.S_LEGEND %}
+		{% if not options.S_FIRST_ROW %}
 			</fieldset>
-		<!-- ENDIF -->
+		{% endif %}
 		<fieldset>
-			<legend>{options.LEGEND}</legend>
-	<!-- ELSE -->
+			<legend>{{ options.LEGEND }}</legend>
+	{% else %}
 
 		<dl>
-			<dt><label for="{options.KEY}">{options.TITLE}:</label><!-- IF options.S_EXPLAIN --><br /><span>{options.TITLE_EXPLAIN}</span><!-- ENDIF --></dt>
-			<dd><a href="javascript:void(0)" onclick="javascript:help_popup('{options.HELP_KEY}')">{ICON_DL_HELP}</a>&nbsp;&nbsp;{options.CONTENT}</dd>
+			<dt><label for="{{ options.KEY }}">{{ options.TITLE }}:</label>{% if options.S_EXPLAIN %}<br /><span>{{ options.TITLE_EXPLAIN }}</span>{% endif %}</dt>
+			<dd><a href="javascript:void(0)" onclick="javascript:help_popup('{{ options.HELP_KEY }}')">{{ ICON_DL_HELP }}</a>&nbsp;&nbsp;{{ options.CONTENT }}</dd>
 		</dl>
 
-	<!-- ENDIF -->
-<!-- END options -->
+	{% endif %}
+{% endfor %}
 
 	</fieldset>
 
 	<fieldset class="submit-buttons">
-		<input class="button1" type="submit" id="submit" name="submit" value="{L_SUBMIT}" />&nbsp;
-		<input class="button2" type="reset" id="reset" name="reset" value="{L_RESET}" />
-		{S_FORM_TOKEN}
-		{S_HIDDEN_FIELDS}
+		<input class="button1" type="submit" id="submit" name="submit" value="{{ lang('SUBMIT') }}" />&nbsp;
+		<input class="button2" type="reset" id="reset" name="reset" value="{{ lang('RESET') }}" />
+		{{ S_FORM_TOKEN }}
+		{{ S_HIDDEN_FIELDS }}
 	</fieldset>
 
 </form>

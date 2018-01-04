@@ -1,34 +1,34 @@
-<!-- INCLUDE dl_header.html -->
+{% INCLUDE 'dl_header.html' %}
 
-<h2>{STATUS} <label>{DESCRIPTION}{HACK_VERSION} {MINI_IMG}</label></h2>
+<h2>{{ STATUS }} <label>{{ DESCRIPTION }}{{ HACK_VERSION }} {{ MINI_IMG }}</label></h2>
 
 <br />
 
 <div class="panel">
 	<div class="inner">
 
-	<form action="{S_CONFIRM_ACTION}" method="post" id="confirm_broken_dl">
+	<form action="{{ S_CONFIRM_ACTION }}" method="post" id="confirm_broken_dl">
 
 	<fieldset>
 
-		<h3>{MESSAGE_TITLE}</h3>
+		<h3>{{ MESSAGE_TITLE }}</h3>
 
 		<dl>
-			<dt><b>{L_DL_REPORT_REASON}:</b></dt>
+			<dt><b>{{ lang('DL_REPORT_REASON') }}:</b></dt>
 			<dd class="lastpost"><textarea class="inputbox autowidth" rows="5" cols="50" name="report_notify_text"></textarea></dd>
 		</dl>
-		<!-- IF CAPTCHA_TEMPLATE -->
-				<!-- DEFINE $CAPTCHA_TAB_INDEX = 8 -->
-				<br />{L_DL_CONFIRM_EXPLAIN}<br /><br />
-				<!-- INCLUDE {CAPTCHA_TEMPLATE} -->
-		<!-- ENDIF -->
+		{% if CAPTCHA_TEMPLATE %}
+				{% DEFINE CAPTCHA_TAB_INDEX = 8 %}
+				<br />{{ lang('DL_CONFIRM_EXPLAIN') }}<br /><br />
+				{% INCLUDE ''~ CAPTCHA_TEMPLATE ~'' %}
+		{% endif %}
 
 	</fieldset>
 
 	<fieldset class="submit-buttons">
-		<input type="submit" name="submit" value="{L_SUBMIT}" class="button icon-button" />
-		{S_FORM_TOKEN}
-		{S_HIDDEN_FIELDS}
+		<input type="submit" name="submit" value="{{ lang('SUBMIT') }}" class="button icon-button" />
+		{{ S_FORM_TOKEN }}
+		{{ S_HIDDEN_FIELDS }}
 	</fieldset>
 
 	</form>
@@ -38,4 +38,4 @@
 
 <br />
 
-<!-- INCLUDE dl_footer.html -->
+{% INCLUDE 'dl_footer.html' %}

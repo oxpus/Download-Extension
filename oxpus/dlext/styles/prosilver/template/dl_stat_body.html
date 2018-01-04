@@ -1,307 +1,307 @@
-<!-- INCLUDE dl_header.html -->
+{% INCLUDE 'dl_header.html' %}
 
-<h2 class="solo">{L_DL_STATS}</h2>
+<h2 class="solo">{{ lang('DL_STATS') }}</h2>
 
-	<!-- IF S_LATEST_DOWNLOADS -->
-	<h3>{L_DL_LATEST_DOWNLOADS}</h3>
-
-	<div class="forabg">
-		<div class="inner">
-		<ul class="topiclist">
-			<li class="header">
-				<dl>
-					<dd class="dl-width-5 dl-cell-block dl-text-center dl-text-big">{L_DL_POS}</dd>
-					<dd class="dl-width-75 dl-cell-block">{L_DL_FILE_DESCRIPTION}</dd>
-					<dd class="dl-width-20 dl-cell-block">{L_DL_TIME}</dd>
-				</dl>
-			</li>
-		</ul>
-
-		<ul class="topiclist forums">
-			<!-- BEGIN top_ten_latest -->
-			<li class="row">
-				<dl>
-					<dd class="dl-width-5 dl-cell-block dl-text-center dl-text-big">{top_ten_latest.POS}</dd>
-					<dd class="dl-width-75 dl-cell-block"><a href="{top_ten_latest.U_FILE_LINK}" class="forumtitle">{top_ten_latest.DESCRIPTION}</a><br /><span>{L_DL_CAT_NAME}: {top_ten_latest.CAT_NAME}</span></dd>
-					<dd class="dl-width-20 dl-cell-block">{top_ten_latest.USER_LINK}<br /><span class="small">{top_ten_latest.DL_TIME}</span></dd>
-				</dl>
-			</li>
-			<!-- END top_ten_latest -->
-		</ul>
-		</div>
-	</div>
-	<!-- ENDIF -->
-
-	<!-- IF S_LATEST_UPLOADS -->
-	<h3>{L_DL_LATEST_UPLOADS}</h3>
+	{% if S_LATEST_DOWNLOADS %}
+	<h3>{{ lang('DL_LATEST_DOWNLOADS') }}</h3>
 
 	<div class="forabg">
 		<div class="inner">
 		<ul class="topiclist">
 			<li class="header">
 				<dl>
-					<dd class="dl-width-5 dl-cell-block dl-text-center dl-text-big">{L_DL_POS}</dd>
-					<dd class="dl-width-75 dl-cell-block">{L_DL_FILE_DESCRIPTION}</dd>
-					<dd class="dl-width-20 dl-cell-block">{L_DL_TIME}</dd>
+					<dd class="dl-width-5 dl-cell-block dl-text-center dl-text-big">{{ lang('DL_POS') }}</dd>
+					<dd class="dl-width-75 dl-cell-block">{{ lang('DL_FILE_DESCRIPTION') }}</dd>
+					<dd class="dl-width-20 dl-cell-block">{{ lang('DL_TIME') }}</dd>
 				</dl>
 			</li>
 		</ul>
 
 		<ul class="topiclist forums">
-			<!-- BEGIN top_ten_uploads -->
+			{% for top_ten_latest in loops.top_ten_latest %}
 			<li class="row">
 				<dl>
-					<dd class="dl-width-5 dl-cell-block dl-text-center dl-text-big">{top_ten_uploads.POS}</dd>
-					<dd class="dl-width-75 dl-cell-block"><a href="{top_ten_uploads.U_FILE_LINK}" class="forumtitle">{top_ten_uploads.DESCRIPTION}</a><br /><span>{L_DL_CAT_NAME}: {top_ten_uploads.CAT_NAME}</span></dd>
-					<dd class="dl-width-20 dl-cell-block">{top_ten_uploads.USER_LINK}<br /><span class="small">{top_ten_uploads.DL_TIME}</span></dd>
+					<dd class="dl-width-5 dl-cell-block dl-text-center dl-text-big">{{ top_ten_latest.POS }}</dd>
+					<dd class="dl-width-75 dl-cell-block"><a href="{{ top_ten_latest.U_FILE_LINK }}" class="forumtitle">{{ top_ten_latest.DESCRIPTION }}</a><br /><span>{{ lang('DL_CAT_NAME') }}: {{ top_ten_latest.CAT_NAME }}</span></dd>
+					<dd class="dl-width-20 dl-cell-block">{{ top_ten_latest.USER_LINK }}<br /><span class="small">{{ top_ten_latest.DL_TIME }}</span></dd>
 				</dl>
 			</li>
-			<!-- END top_ten_uploads -->
+			{% endfor %}
 		</ul>
 		</div>
 	</div>
-	<!-- ENDIF -->
+	{% endif %}
 
-	<!-- IF S_TOP10_DOWN_MONTH -->
-	<h3>{L_DL_DOWNLOADS_CUR_MONTH}</h3>
+	{% if S_LATEST_UPLOADS %}
+	<h3>{{ lang('DL_LATEST_UPLOADS') }}</h3>
 
 	<div class="forabg">
 		<div class="inner">
 		<ul class="topiclist">
 			<li class="header">
 				<dl>
-					<dd class="dl-width-5 dl-cell-block dl-text-center dl-text-big">{L_DL_POS}</dd>
-					<dd class="dl-width-75 dl-cell-block">{L_DL_FILE_DESCRIPTION}</dd>
-					<dd class="dl-width-20 dl-cell-block">{L_DL_KLICKS}</dd>
+					<dd class="dl-width-5 dl-cell-block dl-text-center dl-text-big">{{ lang('DL_POS') }}</dd>
+					<dd class="dl-width-75 dl-cell-block">{{ lang('DL_FILE_DESCRIPTION') }}</dd>
+					<dd class="dl-width-20 dl-cell-block">{{ lang('DL_TIME') }}</dd>
 				</dl>
 			</li>
 		</ul>
 
 		<ul class="topiclist forums">
-			<!-- BEGIN top_ten_dl_cur_month -->
+			{% for top_ten_uploads in loops.top_ten_uploads %}
 			<li class="row">
 				<dl>
-					<dd class="dl-width-5 dl-cell-block dl-text-center dl-text-big">{top_ten_dl_cur_month.POS}</dd>
-					<dd class="dl-width-75 dl-cell-block"><a href="{top_ten_dl_cur_month.U_FILE_LINK}" class="forumtitle">{top_ten_dl_cur_month.DESCRIPTION}</a><br /><span>{L_DL_CAT_NAME}: {top_ten_dl_cur_month.CAT_NAME}</span></dd>
-					<dd class="dl-width-20 dl-cell-block"><span class="small">{top_ten_dl_cur_month.DL_KLICKS}</span></dd>
+					<dd class="dl-width-5 dl-cell-block dl-text-center dl-text-big">{{ top_ten_uploads.POS }}</dd>
+					<dd class="dl-width-75 dl-cell-block"><a href="{{ top_ten_uploads.U_FILE_LINK }}" class="forumtitle">{{ top_ten_uploads.DESCRIPTION }}</a><br /><span>{{ lang('DL_CAT_NAME') }}: {{ top_ten_uploads.CAT_NAME }}</span></dd>
+					<dd class="dl-width-20 dl-cell-block">{{ top_ten_uploads.USER_LINK }}<br /><span class="small">{{ top_ten_uploads.DL_TIME }}</span></dd>
 				</dl>
 			</li>
-			<!-- END top_ten_dl_cur_month -->
+			{% endfor %}
 		</ul>
 		</div>
 	</div>
-	<!-- ENDIF -->
+	{% endif %}
 
-	<!-- IF S_TOP10_DOWN_ALL -->
-	<h3>{L_DL_DOWNLOADS_OVERALL}</h3>
+	{% if S_TOP10_DOWN_MONTH %}
+	<h3>{{ lang('DL_DOWNLOADS_CUR_MONTH') }}</h3>
 
 	<div class="forabg">
 		<div class="inner">
 		<ul class="topiclist">
 			<li class="header">
 				<dl>
-					<dd class="dl-width-5 dl-cell-block dl-text-center dl-text-big">{L_DL_POS}</dd>
-					<dd class="dl-width-75 dl-cell-block">{L_DL_FILE_DESCRIPTION}</dd>
-					<dd class="dl-width-20 dl-cell-block">{L_DL_OVERALL_KLICKS}</dd>
+					<dd class="dl-width-5 dl-cell-block dl-text-center dl-text-big">{{ lang('DL_POS') }}</dd>
+					<dd class="dl-width-75 dl-cell-block">{{ lang('DL_FILE_DESCRIPTION') }}</dd>
+					<dd class="dl-width-20 dl-cell-block">{{ lang('DL_KLICKS') }}</dd>
 				</dl>
 			</li>
 		</ul>
 
 		<ul class="topiclist forums">
-			<!-- BEGIN top_ten_dl_overall -->
+			{% for top_ten_dl_cur_month in loops.top_ten_dl_cur_month %}
 			<li class="row">
 				<dl>
-					<dd class="dl-width-5 dl-cell-block dl-text-center dl-text-big">{top_ten_dl_overall.POS}</dd>
-					<dd class="dl-width-75 dl-cell-block"><a href="{top_ten_dl_overall.U_FILE_LINK}" class="forumtitle">{top_ten_dl_overall.DESCRIPTION}</a><br /><span>{L_DL_CAT_NAME}: {top_ten_dl_overall.CAT_NAME}</span></dd>
-					<dd class="dl-width-20 dl-cell-block"><span class="small">{top_ten_dl_overall.DL_KLICKS}</span></dd>
+					<dd class="dl-width-5 dl-cell-block dl-text-center dl-text-big">{{ top_ten_dl_cur_month.POS }}</dd>
+					<dd class="dl-width-75 dl-cell-block"><a href="{{ top_ten_dl_cur_month.U_FILE_LINK }}" class="forumtitle">{{ top_ten_dl_cur_month.DESCRIPTION }}</a><br /><span>{{ lang('DL_CAT_NAME') }}: {{ top_ten_dl_cur_month.CAT_NAME }}</span></dd>
+					<dd class="dl-width-20 dl-cell-block"><span class="small">{{ top_ten_dl_cur_month.DL_KLICKS }}</span></dd>
 				</dl>
 			</li>
-			<!-- END top_ten_dl_overall -->
+			{% endfor %}
 		</ul>
 		</div>
 	</div>
-	<!-- ENDIF -->
+	{% endif %}
 
-	<!-- IF S_TOP10_TRAFFIC_MONTH -->
-	<h3>{L_DL_TRAFFIC_CUR_MONTH}</h3>
+	{% if S_TOP10_DOWN_ALL %}
+	<h3>{{ lang('DL_DOWNLOADS_OVERALL') }}</h3>
 
 	<div class="forabg">
 		<div class="inner">
 		<ul class="topiclist">
 			<li class="header">
 				<dl>
-					<dd class="dl-width-5 dl-cell-block dl-text-center dl-text-big">{L_DL_POS}</dd>
-					<dd class="dl-width-75 dl-cell-block">{L_DL_FILE_DESCRIPTION}</dd>
-					<dd class="dl-width-20 dl-cell-block">{L_DL_TRAFFIC_CUR_MONTH}</dd>
+					<dd class="dl-width-5 dl-cell-block dl-text-center dl-text-big">{{ lang('DL_POS') }}</dd>
+					<dd class="dl-width-75 dl-cell-block">{{ lang('DL_FILE_DESCRIPTION') }}</dd>
+					<dd class="dl-width-20 dl-cell-block">{{ lang('DL_OVERALL_KLICKS') }}</dd>
 				</dl>
 			</li>
 		</ul>
 
 		<ul class="topiclist forums">
-			<!-- BEGIN top_ten_traffic_cur_month -->
+			{% for top_ten_dl_overall in loops.top_ten_dl_overall %}
 			<li class="row">
 				<dl>
-					<dd class="dl-width-5 dl-cell-block dl-text-center dl-text-big">{top_ten_traffic_cur_month.POS}</dd>
-					<dd class="dl-width-75 dl-cell-block"><a href="{top_ten_traffic_cur_month.U_FILE_LINK}" class="forumtitle">{top_ten_traffic_cur_month.DESCRIPTION}</a><br /><span>{L_DL_CAT_NAME}: {top_ten_traffic_cur_month.CAT_NAME}</span></dd>
-					<dd class="dl-width-20 dl-cell-block"><span class="small">{top_ten_traffic_cur_month.DL_TRAFFIC}</span></dd>
+					<dd class="dl-width-5 dl-cell-block dl-text-center dl-text-big">{{ top_ten_dl_overall.POS }}</dd>
+					<dd class="dl-width-75 dl-cell-block"><a href="{{ top_ten_dl_overall.U_FILE_LINK }}" class="forumtitle">{{ top_ten_dl_overall.DESCRIPTION }}</a><br /><span>{{ lang('DL_CAT_NAME') }}: {{ top_ten_dl_overall.CAT_NAME }}</span></dd>
+					<dd class="dl-width-20 dl-cell-block"><span class="small">{{ top_ten_dl_overall.DL_KLICKS }}</span></dd>
 				</dl>
 			</li>
-			<!-- END top_ten_traffic_cur_month -->
+			{% endfor %}
 		</ul>
 		</div>
 	</div>
-	<!-- ENDIF -->
+	{% endif %}
 
-	<!-- IF S_TOP10_TRAFFIC_ALL -->
-	<h3>{L_DL_TRAFFIC_OVERALL}</h3>
+	{% if S_TOP10_TRAFFIC_MONTH %}
+	<h3>{{ lang('DL_TRAFFIC_CUR_MONTH') }}</h3>
 
 	<div class="forabg">
 		<div class="inner">
 		<ul class="topiclist">
 			<li class="header">
 				<dl>
-					<dd class="dl-width-5 dl-cell-block dl-text-center dl-text-big">{L_DL_POS}</dd>
-					<dd class="dl-width-75 dl-cell-block">{L_DL_FILE_DESCRIPTION}</dd>
-					<dd class="dl-width-20 dl-cell-block">{L_DL_TRAFFIC_OVERALL}</dd>
+					<dd class="dl-width-5 dl-cell-block dl-text-center dl-text-big">{{ lang('DL_POS') }}</dd>
+					<dd class="dl-width-75 dl-cell-block">{{ lang('DL_FILE_DESCRIPTION') }}</dd>
+					<dd class="dl-width-20 dl-cell-block">{{ lang('DL_TRAFFIC_CUR_MONTH') }}</dd>
 				</dl>
 			</li>
 		</ul>
 
 		<ul class="topiclist forums">
-			<!-- BEGIN top_ten_traffic_overall -->
+			{% for top_ten_traffic_cur_month in loops.top_ten_traffic_cur_month %}
 			<li class="row">
 				<dl>
-					<dd class="dl-width-5 dl-cell-block dl-text-center dl-text-big">{top_ten_traffic_overall.POS}</dd>
-					<dd class="dl-width-75 dl-cell-block"><a href="{top_ten_traffic_overall.U_FILE_LINK}" class="forumtitle">{top_ten_traffic_overall.DESCRIPTION}</a><br /><span>{L_DL_CAT_NAME}: {top_ten_traffic_overall.CAT_NAME}</span></dd>
-					<dd class="dl-width-20 dl-cell-block"><span class="small">{top_ten_traffic_overall.DL_TRAFFIC}</span></dd>
+					<dd class="dl-width-5 dl-cell-block dl-text-center dl-text-big">{{ top_ten_traffic_cur_month.POS }}</dd>
+					<dd class="dl-width-75 dl-cell-block"><a href="{{ top_ten_traffic_cur_month.U_FILE_LINK }}" class="forumtitle">{{ top_ten_traffic_cur_month.DESCRIPTION }}</a><br /><span>{{ lang('DL_CAT_NAME') }}: {{ top_ten_traffic_cur_month.CAT_NAME }}</span></dd>
+					<dd class="dl-width-20 dl-cell-block"><span class="small">{{ top_ten_traffic_cur_month.DL_TRAFFIC }}</span></dd>
 				</dl>
 			</li>
-			<!-- END top_ten_traffic_overall -->
+			{% endfor %}
 		</ul>
 		</div>
 	</div>
-	<!-- ENDIF -->
+	{% endif %}
 
-	<!-- IF S_TOP10_DOWN_CLICKS -->
-	<h3>{L_DL_DOWNLOADS_COUNT}</h3>
+	{% if S_TOP10_TRAFFIC_ALL %}
+	<h3>{{ lang('DL_TRAFFIC_OVERALL') }}</h3>
 
 	<div class="forabg">
 		<div class="inner">
 		<ul class="topiclist">
 			<li class="header">
 				<dl>
-					<dd class="dl-width-5 dl-cell-block dl-text-center dl-text-big">{L_DL_POS}</dd>
-					<dd class="dl-width-75 dl-cell-block">{L_USERNAME}</dd>
-					<dd class="dl-width-20 dl-cell-block">{L_DL_DOWNLOADS_COUNT}</dd>
+					<dd class="dl-width-5 dl-cell-block dl-text-center dl-text-big">{{ lang('DL_POS') }}</dd>
+					<dd class="dl-width-75 dl-cell-block">{{ lang('DL_FILE_DESCRIPTION') }}</dd>
+					<dd class="dl-width-20 dl-cell-block">{{ lang('DL_TRAFFIC_OVERALL') }}</dd>
 				</dl>
 			</li>
 		</ul>
 
 		<ul class="topiclist forums">
-			<!-- BEGIN top_ten_dl_counts -->
+			{% for top_ten_traffic_overall in loops.top_ten_traffic_overall %}
 			<li class="row">
 				<dl>
-					<dd class="dl-width-5 dl-cell-block dl-text-center dl-text-big">{top_ten_dl_counts.POS}</dd>
-					<dd class="dl-width-75 dl-cell-block"><label>{top_ten_dl_counts.USER_LINK}</label></dd>
-					<dd class="dl-width-20 dl-cell-block"><span class="small">{top_ten_dl_counts.DL_COUNTS}</span></dd>
+					<dd class="dl-width-5 dl-cell-block dl-text-center dl-text-big">{{ top_ten_traffic_overall.POS }}</dd>
+					<dd class="dl-width-75 dl-cell-block"><a href="{{ top_ten_traffic_overall.U_FILE_LINK }}" class="forumtitle">{{ top_ten_traffic_overall.DESCRIPTION }}</a><br /><span>{{ lang('DL_CAT_NAME') }}: {{ top_ten_traffic_overall.CAT_NAME }}</span></dd>
+					<dd class="dl-width-20 dl-cell-block"><span class="small">{{ top_ten_traffic_overall.DL_TRAFFIC }}</span></dd>
 				</dl>
 			</li>
-			<!-- END top_ten_dl_counts -->
+			{% endfor %}
 		</ul>
 		</div>
 	</div>
-	<!-- ENDIF -->
+	{% endif %}
 
-	<!-- IF S_TOP10_DOWN_TRAFFIC -->
-	<h3>{L_DL_DOWNLOADS_TRAFFIC}</h3>
+	{% if S_TOP10_DOWN_CLICKS %}
+	<h3>{{ lang('DL_DOWNLOADS_COUNT') }}</h3>
 
 	<div class="forabg">
 		<div class="inner">
 		<ul class="topiclist">
 			<li class="header">
 				<dl>
-					<dd class="dl-width-5 dl-cell-block dl-text-center dl-text-big">{L_DL_POS}</dd>
-					<dd class="dl-width-75 dl-cell-block">{L_USERNAME}</dd>
-					<dd class="dl-width-20 dl-cell-block">{L_TRAFFIC}</dd>
+					<dd class="dl-width-5 dl-cell-block dl-text-center dl-text-big">{{ lang('DL_POS') }}</dd>
+					<dd class="dl-width-75 dl-cell-block">{{ lang('USERNAME') }}</dd>
+					<dd class="dl-width-20 dl-cell-block">{{ lang('DL_DOWNLOADS_COUNT') }}</dd>
 				</dl>
 			</li>
 		</ul>
 
 		<ul class="topiclist forums">
-			<!-- BEGIN top_ten_dl_traffic -->
+			{% for top_ten_dl_counts in loops.top_ten_dl_counts %}
 			<li class="row">
 				<dl>
-					<dd class="dl-width-5 dl-cell-block dl-text-center dl-text-big">{top_ten_dl_traffic.POS}</dd>
-					<dd class="dl-width-75 dl-cell-block"><label>{top_ten_dl_traffic.USER_LINK}</label></dd>
-					<dd class="dl-width-20 dl-cell-block"><span class="small">{top_ten_dl_traffic.DL_TRAFFIC}</span></dd>
+					<dd class="dl-width-5 dl-cell-block dl-text-center dl-text-big">{{ top_ten_dl_counts.POS }}</dd>
+					<dd class="dl-width-75 dl-cell-block"><label>{{ top_ten_dl_counts.USER_LINK }}</label></dd>
+					<dd class="dl-width-20 dl-cell-block"><span class="small">{{ top_ten_dl_counts.DL_COUNTS }}</span></dd>
 				</dl>
 			</li>
-			<!-- END top_ten_dl_traffic -->
+			{% endfor %}
 		</ul>
 		</div>
 	</div>
-	<!-- ENDIF -->
+	{% endif %}
 
-	<!-- IF S_TOP10_UP_COUNT -->
-	<h3>{L_DL_UPLOADS_COUNT}</h3>
+	{% if S_TOP10_DOWN_TRAFFIC %}
+	<h3>{{ lang('DL_DOWNLOADS_TRAFFIC') }}</h3>
 
 	<div class="forabg">
 		<div class="inner">
 		<ul class="topiclist">
 			<li class="header">
 				<dl>
-					<dd class="dl-width-5 dl-cell-block dl-text-center dl-text-big">{L_DL_POS}</dd>
-					<dd class="dl-width-75 dl-cell-block">{L_USERNAME}</dd>
-					<dd class="dl-width-20 dl-cell-block">{L_DL_UPLOADS_COUNT}</dd>
+					<dd class="dl-width-5 dl-cell-block dl-text-center dl-text-big">{{ lang('DL_POS') }}</dd>
+					<dd class="dl-width-75 dl-cell-block">{{ lang('USERNAME') }}</dd>
+					<dd class="dl-width-20 dl-cell-block">{{ lang('TRAFFIC') }}</dd>
 				</dl>
 			</li>
 		</ul>
 
 		<ul class="topiclist forums">
-			<!-- BEGIN top_ten_up_counts -->
+			{% for top_ten_dl_traffic in loops.top_ten_dl_traffic %}
 			<li class="row">
 				<dl>
-					<dd class="dl-width-5 dl-cell-block dl-text-center dl-text-big">{top_ten_up_counts.POS}</dd>
-					<dd class="dl-width-75 dl-cell-block"><label>{top_ten_up_counts.USER_LINK}</label></dd>
-					<dd class="dl-width-20 dl-cell-block"><span class="small">{top_ten_up_counts.DL_COUNTS}</span></dd>
+					<dd class="dl-width-5 dl-cell-block dl-text-center dl-text-big">{{ top_ten_dl_traffic.POS }}</dd>
+					<dd class="dl-width-75 dl-cell-block"><label>{{ top_ten_dl_traffic.USER_LINK }}</label></dd>
+					<dd class="dl-width-20 dl-cell-block"><span class="small">{{ top_ten_dl_traffic.DL_TRAFFIC }}</span></dd>
 				</dl>
 			</li>
-			<!-- END top_ten_up_counts -->
+			{% endfor %}
 		</ul>
 		</div>
 	</div>
-	<!-- ENDIF -->
+	{% endif %}
 
-	<!-- IF S_TOP10_UP_TRAFFIC -->
-	<h3>{L_DL_UPLOADS_TRAFFIC}</h3>
+	{% if S_TOP10_UP_COUNT %}
+	<h3>{{ lang('DL_UPLOADS_COUNT') }}</h3>
 
 	<div class="forabg">
 		<div class="inner">
 		<ul class="topiclist">
 			<li class="header">
 				<dl>
-					<dd class="dl-width-5 dl-cell-block dl-text-center dl-text-big">{L_DL_POS}</dd>
-					<dd class="dl-width-75 dl-cell-block">{L_USERNAME}</dd>
-					<dd class="dl-width-20 dl-cell-block">{L_TRAFFIC}</dd>
+					<dd class="dl-width-5 dl-cell-block dl-text-center dl-text-big">{{ lang('DL_POS') }}</dd>
+					<dd class="dl-width-75 dl-cell-block">{{ lang('USERNAME') }}</dd>
+					<dd class="dl-width-20 dl-cell-block">{{ lang('DL_UPLOADS_COUNT') }}</dd>
 				</dl>
 			</li>
 		</ul>
 
 		<ul class="topiclist forums">
-			<!-- BEGIN top_ten_up_traffic -->
+			{% for top_ten_up_counts in loops.top_ten_up_counts %}
 			<li class="row">
 				<dl>
-					<dd class="dl-width-5 dl-cell-block dl-text-center dl-text-big">{top_ten_up_traffic.POS}</dd>
-					<dd class="dl-width-75 dl-cell-block"><label>{top_ten_up_traffic.USER_LINK}</label></dd>
-					<dd class="dl-width-20 dl-cell-block"><span class="small">{top_ten_up_traffic.DL_TRAFFIC}</span></dd>
+					<dd class="dl-width-5 dl-cell-block dl-text-center dl-text-big">{{ top_ten_up_counts.POS }}</dd>
+					<dd class="dl-width-75 dl-cell-block"><label>{{ top_ten_up_counts.USER_LINK }}</label></dd>
+					<dd class="dl-width-20 dl-cell-block"><span class="small">{{ top_ten_up_counts.DL_COUNTS }}</span></dd>
 				</dl>
 			</li>
-			<!-- END top_ten_up_traffic -->
+			{% endfor %}
 		</ul>
 		</div>
 	</div>
-	<!-- ENDIF -->
+	{% endif %}
+
+	{% if S_TOP10_UP_TRAFFIC %}
+	<h3>{{ lang('DL_UPLOADS_TRAFFIC') }}</h3>
+
+	<div class="forabg">
+		<div class="inner">
+		<ul class="topiclist">
+			<li class="header">
+				<dl>
+					<dd class="dl-width-5 dl-cell-block dl-text-center dl-text-big">{{ lang('DL_POS') }}</dd>
+					<dd class="dl-width-75 dl-cell-block">{{ lang('USERNAME') }}</dd>
+					<dd class="dl-width-20 dl-cell-block">{{ lang('TRAFFIC') }}</dd>
+				</dl>
+			</li>
+		</ul>
+
+		<ul class="topiclist forums">
+			{% for top_ten_up_traffic in loops.top_ten_up_traffic %}
+			<li class="row">
+				<dl>
+					<dd class="dl-width-5 dl-cell-block dl-text-center dl-text-big">{{ top_ten_up_traffic.POS }}</dd>
+					<dd class="dl-width-75 dl-cell-block"><label>{{ top_ten_up_traffic.USER_LINK }}</label></dd>
+					<dd class="dl-width-20 dl-cell-block"><span class="small">{{ top_ten_up_traffic.DL_TRAFFIC }}</span></dd>
+				</dl>
+			</li>
+			{% endfor %}
+		</ul>
+		</div>
+	</div>
+	{% endif %}
 
 <br />
 
-<!-- INCLUDE dl_footer.html -->
+{% INCLUDE 'dl_footer.html' %}

@@ -1,211 +1,211 @@
-<!-- IF S_EDIT -->
+{% if S_EDIT %}
 
-	<h1>{L_TITLE}</h1>
+	<h1>{{ lang('TITLE') }}</h1>
 
-	<p>{L_EXPLAIN}</p>
+	<p>{{ lang('EXPLAIN') }}</p>
 
-	<!-- IF ERROR_MSG -->
+	{% if ERROR_MSG %}
 		<div class="errorbox">
-			<h3>{L_WARNING}</h3>
-			<p>{ERROR_MSG}</p>
+			<h3>{{ lang('WARNING') }}</h3>
+			<p>{{ ERROR_MSG }}</p>
 		</div>
-	<!-- ENDIF -->
+	{% endif %}
 
-	<form id="add_profile_field" method="post" action="{U_ACTION}">
+	<form id="add_profile_field" method="post" action="{{ U_ACTION }}">
 
-	<!-- IF S_STEP_ONE -->
+	{% if S_STEP_ONE %}
 
 		<fieldset>
-			<legend>{L_TITLE}</legend>
+			<legend>{{ lang('TITLE') }}</legend>
 		<dl>
-			<dt><label>{L_FIELD_TYPE}:</label><br /><span>{L_FIELD_TYPE_EXPLAIN}</span></dt>
-			<dd><strong>{FIELD_TYPE}</strong></dd>
+			<dt><label>{{ lang('FIELD_TYPE') }}:</label><br /><span>{{ lang('FIELD_TYPE_EXPLAIN') }}</span></dt>
+			<dd><strong>{{ FIELD_TYPE }}</strong></dd>
 		</dl>
-		<!-- IF S_EDIT_MODE -->
+		{% if S_EDIT_MODE %}
 		<dl>
-			<dt><label>{L_FIELD_IDENT}:</label><br /><span>{L_FIELD_IDENT_EXPLAIN}</span></dt>
-			<dd><input type="hidden" name="field_ident" value="{FIELD_IDENT}" /><strong>{FIELD_IDENT}</strong></dd>
+			<dt><label>{{ lang('FIELD_IDENT') }}:</label><br /><span>{{ lang('FIELD_IDENT_EXPLAIN') }}</span></dt>
+			<dd><input type="hidden" name="field_ident" value="{{ FIELD_IDENT }}" /><strong>{{ FIELD_IDENT }}</strong></dd>
 		</dl>
-		<!-- ELSE -->
+		{% else %}
 		<dl>
-			<dt><label for="field_ident">{L_FIELD_IDENT}:</label><br /><span>{L_FIELD_IDENT_EXPLAIN}</span></dt>
-			<dd><input class="text medium" type="text" id="field_ident" name="field_ident" value="{FIELD_IDENT}" /></dd>
+			<dt><label for="field_ident">{{ lang('FIELD_IDENT') }}:</label><br /><span>{{ lang('FIELD_IDENT_EXPLAIN') }}</span></dt>
+			<dd><input class="text medium" type="text" id="field_ident" name="field_ident" value="{{ FIELD_IDENT }}" /></dd>
 		</dl>
-		<!-- ENDIF -->
+		{% endif %}
 		</fieldset>
 
 		<fieldset>
-			<legend>{L_DL_FIELDS_REQUIRED}</legend>
+			<legend>{{ lang('DL_FIELDS_REQUIRED') }}</legend>
 		<dl>
-			<dt><label for="field_required">{L_DL_FIELDS_REQUIRED}:</label><br /><span>{L_DL_FIELDS_REQUIRED_EXPLAIN}</span></dt>
-			<dd><input type="checkbox" class="radio" id="field_required" name="field_required" value="1"<!-- IF S_FIELD_REQUIRED --> checked="checked"<!-- ENDIF --> /></dd>
+			<dt><label for="field_required">{{ lang('DL_FIELDS_REQUIRED') }}:</label><br /><span>{{ lang('DL_FIELDS_REQUIRED_EXPLAIN') }}</span></dt>
+			<dd><input type="checkbox" class="radio" id="field_required" name="field_required" value="1"{% if S_FIELD_REQUIRED %} checked="checked"{% endif %} /></dd>
 		</dl>
 		</fieldset>
 
-		<!-- IF S_EDIT_MODE -->
+		{% if S_EDIT_MODE %}
 			<fieldset class="quick">
-				<input class="button1" type="submit" name="save" value="{L_SAVE}" />
+				<input class="button1" type="submit" name="save" value="{{ lang('SAVE') }}" />
 			</fieldset>
-		<!-- ENDIF -->
+		{% endif %}
 
 		<fieldset>
-			<legend>{L_LANG_SPECIFIC}</legend>
+			<legend>{{ lang('LANG_SPECIFIC') }}</legend>
 		<dl>
-			<dt><label for="lang_name">{L_USER_FIELD_NAME}:</label></dt>
-			<dd><input class="text medium" type="text" id="lang_name" name="lang_name" value="{LANG_NAME}" /></dd>
+			<dt><label for="lang_name">{{ lang('USER_FIELD_NAME') }}:</label></dt>
+			<dd><input class="text medium" type="text" id="lang_name" name="lang_name" value="{{ LANG_NAME }}" /></dd>
 		</dl>
 		<dl>
-			<dt><label for="lang_explain">{L_FIELD_DESCRIPTION}:</label><br /><span>{L_FIELD_DESCRIPTION_EXPLAIN}</span></dt>
-			<dd><textarea id="lang_explain" name="lang_explain" rows="3" cols="80">{LANG_EXPLAIN}</textarea></dd>
+			<dt><label for="lang_explain">{{ lang('FIELD_DESCRIPTION') }}:</label><br /><span>{{ lang('FIELD_DESCRIPTION_EXPLAIN') }}</span></dt>
+			<dd><textarea id="lang_explain" name="lang_explain" rows="3" cols="80">{{ LANG_EXPLAIN }}</textarea></dd>
 		</dl>
-		<!-- IF S_TEXT or S_STRING -->
+		{% if S_TEXT or S_STRING %}
 			<dl>
-				<dt><label for="lang_default_value">{L_DEFAULT_VALUE}:</label><br /><span>{L_DEFAULT_VALUE_EXPLAIN}</span></dt>
-				<dd><!-- IF S_STRING --><input class="text medium" type="text" id="lang_default_value" name="lang_default_value" value="{LANG_DEFAULT_VALUE}" /><!-- ELSE --><textarea id="lang_default_value" name="lang_default_value" rows="5" cols="80">{LANG_DEFAULT_VALUE}</textarea><!-- ENDIF --></dd>
+				<dt><label for="lang_default_value">{{ lang('DEFAULT_VALUE') }}:</label><br /><span>{{ lang('DEFAULT_VALUE_EXPLAIN') }}</span></dt>
+				<dd>{% if S_STRING %}<input class="text medium" type="text" id="lang_default_value" name="lang_default_value" value="{{ LANG_DEFAULT_VALUE }}" />{% else %}<textarea id="lang_default_value" name="lang_default_value" rows="5" cols="80">{{ LANG_DEFAULT_VALUE }}</textarea>{% endif %}</dd>
 			</dl>
-		<!-- ENDIF -->
-		<!-- IF S_BOOL or S_DROPDOWN -->
+		{% endif %}
+		{% if S_BOOL or S_DROPDOWN %}
 			<dl>
-				<dt><label for="lang_options">{L_ENTRIES}:</label>
-					<!-- IF S_EDIT_MODE and S_DROPDOWN -->
-						<br /><span>{L_EDIT_DROPDOWN_LANG_EXPLAIN}</span>
-					<!-- ELSE -->
-						<br /><span>{L_LANG_OPTIONS_EXPLAIN}</span>
-					<!-- ENDIF -->
+				<dt><label for="lang_options">{{ lang('ENTRIES') }}:</label>
+					{% if S_EDIT_MODE and S_DROPDOWN %}
+						<br /><span>{{ lang('EDIT_DROPDOWN_LANG_EXPLAIN') }}</span>
+					{% else %}
+						<br /><span>{{ lang('LANG_OPTIONS_EXPLAIN') }}</span>
+					{% endif %}
 				</dt>
-			<!-- IF S_DROPDOWN -->
-				<dd><textarea id="lang_options" name="lang_options" rows="5" cols="80">{LANG_OPTIONS}</textarea></dd>
-			<!-- ELSE -->
-				<dd><input class="medium" id="lang_options" name="lang_options[0]" value="{FIRST_LANG_OPTION}" /> {L_FIRST_OPTION}</dd>
-				<dd><input class="medium" name="lang_options[1]" value="{SECOND_LANG_OPTION}" /> {L_SECOND_OPTION}</dd>
-			<!-- ENDIF -->
+			{% if S_DROPDOWN %}
+				<dd><textarea id="lang_options" name="lang_options" rows="5" cols="80">{{ LANG_OPTIONS }}</textarea></dd>
+			{% else %}
+				<dd><input class="medium" id="lang_options" name="lang_options[0]" value="{{ FIRST_LANG_OPTION }}" /> {{ lang('FIRST_OPTION') }}</dd>
+				<dd><input class="medium" name="lang_options[1]" value="{{ SECOND_LANG_OPTION }}" /> {{ lang('SECOND_OPTION') }}</dd>
+			{% endif %}
 			</dl>
-		<!-- ENDIF -->
+		{% endif %}
 		</fieldset>
 
 		<fieldset class="quick">
-			{S_HIDDEN_FIELDS}
-			{S_FORM_TOKEN}
-			<input class="button1" type="submit" name="next" value="{L_PROFILE_TYPE_OPTIONS}" />
+			{{ S_HIDDEN_FIELDS }}
+			{{ S_FORM_TOKEN }}
+			<input class="button1" type="submit" name="next" value="{{ lang('PROFILE_TYPE_OPTIONS') }}" />
 		</fieldset>
 
-	<!-- ELSEIF S_STEP_TWO -->
+	{% elseif S_STEP_TWO %}
 
 		<fieldset>
-			<legend>{L_TITLE}</legend>
-		<!-- BEGIN option -->
+			<legend>{{ lang('TITLE') }}</legend>
+		{% for option in loops.option %}
 			<dl>
-				<dt><label>{option.TITLE}:</label><!-- IF option.EXPLAIN --><br /><span>{option.EXPLAIN}</span><!-- ENDIF --></dt>
-				<dd>{option.FIELD}</dd>
+				<dt><label>{{ option.TITLE }}:</label>{% if option.EXPLAIN %}<br /><span>{{ option.EXPLAIN }}</span>{% endif %}</dt>
+				<dd>{{ option.FIELD }}</dd>
 			</dl>
-		<!-- END option -->
+		{% endfor %}
 		</fieldset>
 
 		<fieldset class="quick dl-left">
-			<input class="button1" type="submit" name="prev" value="{L_PROFILE_BASIC_OPTIONS}" />
+			<input class="button1" type="submit" name="prev" value="{{ lang('PROFILE_BASIC_OPTIONS') }}" />
 		</fieldset>
 
 		<fieldset class="quick dl-right">
-			{S_HIDDEN_FIELDS}
-			{S_FORM_TOKEN}
-			<input class="button1" type="submit" name="next" value="{L_NEXT_STEP}" />
+			{{ S_HIDDEN_FIELDS }}
+			{{ S_FORM_TOKEN }}
+			<input class="button1" type="submit" name="next" value="{{ lang('NEXT_STEP') }}" />
 		</fieldset>
 
-	<!-- ELSEIF S_STEP_THREE -->
+	{% elseif S_STEP_THREE %}
 
-		<!-- BEGIN options -->
+		{% for options in loops.options %}
 			<fieldset>
-				<legend>{options.LANGUAGE}</legend>
-			<!-- BEGIN field -->
+				<legend>{{ options.LANGUAGE }}</legend>
+			{% for field in options.field %}
 				<dl>
-					<dt><label>{options.field.L_TITLE}:</label><!-- IF options.field.L_EXPLAIN --><br /><span>{options.field.L_EXPLAIN}</span><!-- ENDIF --></dt>
-					{options.field.FIELD}
+					<dt><label>{{ field.L_TITLE }}:</label>{% if field.L_EXPLAIN %}<br /><span>{{ field.L_EXPLAIN }}</span>{% endif %}</dt>
+					{{ field.FIELD }}
 				</dl>
-			<!-- END field -->
+			{% endfor %}
 			</fieldset>
-		<!-- END options -->
+		{% endfor %}
 
 		<fieldset class="quick dl-left">
-			<input class="button1" type="submit" name="prev" value="{L_PROFILE_TYPE_OPTIONS}" />
+			<input class="button1" type="submit" name="prev" value="{{ lang('PROFILE_TYPE_OPTIONS') }}" />
 		</fieldset>
 
 		<fieldset class="quick dl-right">
-			{S_HIDDEN_FIELDS}
-			<input class="button1" type="submit" name="save" value="{L_SAVE}" />
-			{S_FORM_TOKEN}
+			{{ S_HIDDEN_FIELDS }}
+			<input class="button1" type="submit" name="save" value="{{ lang('SAVE') }}" />
+			{{ S_FORM_TOKEN }}
 		</fieldset>
 
-	<!-- ENDIF -->
+	{% endif %}
 
 	</form>
 
-<!-- ELSE -->
+{% else %}
 
-	<h1>{L_DL_ACP_FIELDS}</h1>
+	<h1>{{ lang('DL_ACP_FIELDS') }}</h1>
 
-	<p>{L_DL_FIELDS_STEP0_EXPLAIN}</p>
+	<p>{{ lang('DL_FIELDS_STEP0_EXPLAIN') }}</p>
 
-	<!-- IF S_NEED_EDIT -->
+	{% if S_NEED_EDIT %}
 		<div class="errorbox">
-			<h3>{L_WARNING}</h3>
-			<p>{L_CUSTOM_FIELDS_NOT_TRANSLATED}</p>
+			<h3>{{ lang('WARNING') }}</h3>
+			<p>{{ lang('CUSTOM_FIELDS_NOT_TRANSLATED') }}</p>
 		</div>
-	<!-- ENDIF -->
+	{% endif %}
 
 	<table cellspacing="1">
 	<thead>
 	<tr>
-		<th>{L_FIELD_IDENT}</th>
-		<th>{L_FIELD_TYPE}</th>
-		<th colspan="2">{L_OPTIONS}</th>
+		<th>{{ lang('FIELD_IDENT') }}</th>
+		<th>{{ lang('FIELD_TYPE') }}</th>
+		<th colspan="2">{{ lang('OPTIONS') }}</th>
 	</tr>
 	</thead>
 	<tbody>
-	<!-- BEGIN fields -->
-		<!-- IF fields.S_ROW_COUNT is even --><tr class="row1"><!-- ELSE --><tr class="row2"><!-- ENDIF -->
+	{% for fields in loops.fields %}
+		{% if fields.S_ROW_COUNT is even %}<tr class="row1">{% else %}<tr class="row2">{% endif %}
 
-		<td>{fields.FIELD_IDENT}</td>
-		<td>{fields.FIELD_TYPE}</td>
-		<td class="dl-text-center"><a href="{fields.U_ACTIVATE_DEACTIVATE}">{fields.L_ACTIVATE_DEACTIVATE}</a><!-- IF fields.S_NEED_EDIT --> | <a href="{fields.U_TRANSLATE}" class="dl-red">{L_TRANSLATE}</a><!-- ENDIF --></td>
+		<td>{{ fields.FIELD_IDENT }}</td>
+		<td>{{ fields.FIELD_TYPE }}</td>
+		<td class="dl-text-center"><a href="{{ fields.U_ACTIVATE_DEACTIVATE }}">{{ fields.L_ACTIVATE_DEACTIVATE }}</a>{% if fields.S_NEED_EDIT %} | <a href="{{ fields.U_TRANSLATE }}" class="dl-red">{{ lang('TRANSLATE') }}</a>{% endif %}</td>
 
 		<td class="dl-field-nav">
-			<!-- IF fields.S_FIRST_ROW && not fields.S_LAST_ROW -->
-				{ICON_MOVE_UP_DISABLED}
-				<a href="{fields.U_MOVE_DOWN}">{ICON_MOVE_DOWN}</a>
-			<!-- ELSEIF not fields.S_FIRST_ROW && not fields.S_LAST_ROW-->
-				<a href="{fields.U_MOVE_UP}">{ICON_MOVE_UP}</a>
-				<a href="{fields.U_MOVE_DOWN}">{ICON_MOVE_DOWN}</a>
-			<!-- ELSEIF fields.S_LAST_ROW && not fields.S_FIRST_ROW -->
-				<a href="{fields.U_MOVE_UP}">{ICON_MOVE_UP}</a>
-				{ICON_MOVE_DOWN_DISABLED}
-			<!-- ENDIF -->
-			<!-- IF not fields.S_NEED_EDIT -->
-				<a href="{fields.U_EDIT}">{ICON_EDIT}</a>
-			<!-- ELSE -->
-				{ICON_EDIT_DISABLED}
-			<!-- ENDIF -->
-			<a href="{fields.U_DELETE}">{ICON_DELETE}</a>
+			{% if fields.S_FIRST_ROW && not fields.S_LAST_ROW %}
+				{{ ICON_MOVE_UP_DISABLED }}
+				<a href="{{ fields.U_MOVE_DOWN }}">{{ ICON_MOVE_DOWN }}</a>
+			{% elseif not fields.S_FIRST_ROW && not fields.S_LAST_ROW%}
+				<a href="{{ fields.U_MOVE_UP }}">{{ ICON_MOVE_UP }}</a>
+				<a href="{{ fields.U_MOVE_DOWN }}">{{ ICON_MOVE_DOWN }}</a>
+			{% elseif fields.S_LAST_ROW && not fields.S_FIRST_ROW %}
+				<a href="{{ fields.U_MOVE_UP }}">{{ ICON_MOVE_UP }}</a>
+				{{ ICON_MOVE_DOWN_DISABLED }}
+			{% endif %}
+			{% if not fields.S_NEED_EDIT %}
+				<a href="{{ fields.U_EDIT }}">{{ ICON_EDIT }}</a>
+			{% else %}
+				{{ ICON_EDIT_DISABLED }}
+			{% endif %}
+			<a href="{{ fields.U_DELETE }}">{{ ICON_DELETE }}</a>
 		</td>
 
 	</tr>
-	<!-- BEGINELSE -->
+	{% else %}
 	<tr class="row3">
-		<td colspan="4">{L_ACP_NO_ITEMS}</td>
+		<td colspan="4">{{ lang('ACP_NO_ITEMS') }}</td>
 	</tr>
-	<!-- END fields -->
+	{% endfor %}
 	</tbody>
 	</table>
 
-	<form id="profile_fields" method="post" action="{U_ACTION}">
+	<form id="profile_fields" method="post" action="{{ U_ACTION }}">
 
 	<fieldset class="quick">
-		<input class="text small" type="text" name="field_ident" /> <select name="field_type">{S_TYPE_OPTIONS}</select>
-		<input class="button1" type="submit" name="submit" value="{L_CREATE_NEW_FIELD}" />
+		<input class="text small" type="text" name="field_ident" /> <select name="field_type">{{ S_TYPE_OPTIONS }}</select>
+		<input class="button1" type="submit" name="submit" value="{{ lang('CREATE_NEW_FIELD') }}" />
 		<input type="hidden" name="create" value="1" />
-		{S_FORM_TOKEN}
+		{{ S_FORM_TOKEN }}
 	</fieldset>
 	</form>
 
-<!-- ENDIF -->
+{% endif %}
 
 <br /><br />

@@ -1,53 +1,53 @@
-<!-- INCLUDE dl_header.html -->
+{% INCLUDE 'dl_header.html' %}
 
 <script type="text/javascript">
-var phpEx					= '{PHPEX}';
-var dlAjaxUrl				= '{U_DL_AJAX}';
-var activeCat				= {S_OPEN_PANEL};
-var LANG_TOO_FEW_CHARS 		= '{L_TOO_FEW_CHARS}';
-var LANG_L_NO_TEXT_SELECTED	= '{L_NO_TEXT_SELECTED}';
+var phpEx					= '{{ PHPEX }}';
+var dlAjaxUrl				= '{{ U_DL_AJAX }}';
+var activeCat				= {{ S_OPEN_PANEL }};
+var LANG_TOO_FEW_CHARS 		= '{{ lang('TOO_FEW_CHARS') }}';
+var LANG_L_NO_TEXT_SELECTED	= '{{ lang('NO_TEXT_SELECTED') }}';
 var	form_name 				= 'postform';
 var	text_name 				= 'message';
 </script>
-<script type="text/javascript" src="{T_SUPER_TEMPLATE_PATH}/editor.js" ></script>
-<script type="text/javascript" src="{EXT_DL_PATH_WEB}includes/js/dl_main.js"></script>
-<!-- IF S_ENABLE_RATE -->
-<script type="text/javascript" src="{EXT_DL_PATH_AJAX}ajax_dl.js"></script>
-<!-- ENDIF -->
+<script type="text/javascript" src="{{ T_SUPER_TEMPLATE_PATH }}/editor.js" ></script>
+<script type="text/javascript" src="{{ EXT_DL_PATH_WEB }}includes/js/dl_main.js"></script>
+{% if S_ENABLE_RATE %}
+<script type="text/javascript" src="{{ EXT_DL_PATH_AJAX }}ajax_dl.js"></script>
+{% endif %}
 
-<!-- IF S_CAT_TRAFFIC -->
-<div class="panel bg3"><div class="inner"><span><strong>{CAT_TRAFFIC}</strong></span></div></div>
-<!-- ENDIF -->
+{% if S_CAT_TRAFFIC %}
+<div class="panel bg3"><div class="inner"><span><strong>{{ CAT_TRAFFIC }}</strong></span></div></div>
+{% endif %}
 
-<!-- IF S_CAT_RULE -->
-<div class="rules"><div class="inner"><span>{CAT_RULE}</span></div></div>
-<!-- ENDIF -->
+{% if S_CAT_RULE %}
+<div class="rules"><div class="inner"><span>{{ CAT_RULE }}</span></div></div>
+{% endif %}
 
-<h2 class="dl-left">{STATUS} {DESCRIPTION}{HACK_VERSION} {MINI_IMG}</h2>
+<h2 class="dl-left">{{ STATUS }} {{ DESCRIPTION }}{{ HACK_VERSION }} {{ MINI_IMG }}</h2>
 
 <br />
 
-<div class="dl-right"><a href="{U_DL_SEARCH}" class="button icon-button">{L_DL_SEARCH_DOWNLOAD}</a></div>
+<div class="dl-right"><a href="{{ U_DL_SEARCH }}" class="button icon-button">{{ lang('DL_SEARCH_DOWNLOAD') }}</a></div>
 
 <div class="clear"></div>
 
 <br />
 
 <div class="action-bar bar-top">
-<!-- BEGIN category -->
-<a onclick="swapOptions('{category.CAT_ID}');" class="button">
-	<span>{category.CAT_NAME}</span> <i id="tab_{category.CAT_ID}" class="icon<!-- IF S_OPEN_PANEL == category.CAT_ID --> fa-eye fa-fw<!-- ENDIF -->" aria-hidden="true"></i>
+{% for category in loops.category %}
+<a onclick="swapOptions('{{ category.CAT_ID }}');" class="button">
+	<span>{{ category.CAT_NAME }}</span> <i id="tab_{{ category.CAT_ID }}" class="icon{% if S_OPEN_PANEL == category.CAT_ID %} fa-eye fa-fw{% endif %}" aria-hidden="true"></i>
 </a>
-<!-- END category -->
+{% endfor %}
 </div>
 
-<div class="panel dlext<!-- IF S_OPEN_PANEL <> 0 --> noshow<!-- ENDIF -->" id="options0">
+<div class="panel dlext{% if S_OPEN_PANEL <> 0 %} noshow{% endif %}" id="options0">
 
 	<div class="dl-width-50 dl-left">
 
-		<!-- IF LONG_DESC -->
-		<div class="postbody"><div class="content">{LONG_DESC}<br /><br /></div></div>
-		<!-- ENDIF -->
+		{% if LONG_DESC %}
+		<div class="postbody"><div class="content">{{ LONG_DESC }}<br /><br /></div></div>
+		{% endif %}
 
 	</div>
 
@@ -55,152 +55,152 @@ var	text_name 				= 'message';
 
 		<fieldset>
 			<dl>
-				<dt><label>{L_DL_FILE_NAME}</label></dt>
-				<dd class="lastpost dl-cell-block"><label>{FILE_NAME}</label></dd>
+				<dt><label>{{ lang('DL_FILE_NAME') }}</label></dt>
+				<dd class="lastpost dl-cell-block"><label>{{ FILE_NAME }}</label></dd>
 			</dl>
-		<!-- IF S_REAL_FILETIME -->
+		{% if S_REAL_FILETIME %}
 			<dl>
-				<dt><label>{L_DL_REAL_FILETIME}</label></dt>
-				<dd class="lastpost dl-cell-block"><label>{REAL_FILETIME}</label></dd>
+				<dt><label>{{ lang('DL_REAL_FILETIME') }}</label></dt>
+				<dd class="lastpost dl-cell-block"><label>{{ REAL_FILETIME }}</label></dd>
 			</dl>
-		<!-- ENDIF -->
-		<!-- IF S_HACKLIST -->
+		{% endif %}
+		{% if S_HACKLIST %}
 			<dl>
-				<dt><label>{L_DL_HACK_AUTOR}</label></dt>
-				<dd class="lastpost dl-cell-block"><label>{HACK_AUTHOR}{HACK_AUTHOR_WEBSITE}</label></dd>
+				<dt><label>{{ lang('DL_HACK_AUTOR') }}</label></dt>
+				<dd class="lastpost dl-cell-block"><label>{{ HACK_AUTHOR }}{{ HACK_AUTHOR_WEBSITE }}</label></dd>
 			</dl>
-		<!-- ENDIF -->
-		<!-- IF S_BUG_TRACKER -->
+		{% endif %}
+		{% if S_BUG_TRACKER %}
 			<dl>
-				<dt><label>{L_DL_BUG_TRACKER}</label></dt>
-				<dd class="lastpost dl-cell-block"><label><a href="{U_BUG_TRACKER}">{L_DL_BUG_TRACKER_FILE}</a></label></dd>
+				<dt><label>{{ lang('DL_BUG_TRACKER') }}</label></dt>
+				<dd class="lastpost dl-cell-block"><label><a href="{{ U_BUG_TRACKER }}">{{ lang('DL_BUG_TRACKER_FILE') }}</a></label></dd>
 			</dl>
-		<!-- ENDIF -->
-		<!-- IF S_SHOW_TOPIC_LINK -->
+		{% endif %}
+		{% if S_SHOW_TOPIC_LINK %}
 			<dl>
-				<dt><label>{L_TOPIC}</label></dt>
-				<dd class="lastpost dl-cell-block"><label><a href="{U_TOPIC}">{L_VIEW_TOPIC}</a></label></dd>
+				<dt><label>{{ lang('TOPIC') }}</label></dt>
+				<dd class="lastpost dl-cell-block"><label><a href="{{ U_TOPIC }}">{{ lang('VIEW_TOPIC') }}</a></label></dd>
 			</dl>
-		<!-- ENDIF -->
+		{% endif %}
 			<dl>
-				<dt><label>{L_DL_FILE_SIZE}</label></dt>
-				<dd class="lastpost dl-cell-block"><label>{FILE_SIZE}</label></dd>
+				<dt><label>{{ lang('DL_FILE_SIZE') }}</label></dt>
+				<dd class="lastpost dl-cell-block"><label>{{ FILE_SIZE }}</label></dd>
 			</dl>
 			<dl>
-				<dt><label>{L_DL_KLICKS} / {L_DL_OVERALL_KLICKS}</label></dt>
-				<dd class="lastpost dl-cell-block"><label>{FILE_KLICKS} / {FILE_OVERALL_KLICKS}</label></dd>
+				<dt><label>{{ lang('DL_KLICKS') }} / {{ lang('DL_OVERALL_KLICKS') }}</label></dt>
+				<dd class="lastpost dl-cell-block"><label>{{ FILE_KLICKS }} / {{ FILE_OVERALL_KLICKS }}</label></dd>
 			</dl>
-		<!-- IF S_HACKLIST -->
+		{% if S_HACKLIST %}
 			<dl>
-				<dt><label>{L_DL_HACK_DL_URL}</label></dt>
-				<dd class="lastpost dl-cell-block"><label>{HACK_DL_URL}</label></dd>
+				<dt><label>{{ lang('DL_HACK_DL_URL') }}</label></dt>
+				<dd class="lastpost dl-cell-block"><label>{{ HACK_DL_URL }}</label></dd>
 			</dl>
-		<!-- ENDIF -->
-		<!-- IF S_ENABLE_RATE -->
+		{% endif %}
+		{% if S_ENABLE_RATE %}
 			<dl>
-				<dt><label>{L_DL_RATING}</label></dt>
-				<dd class="lastpost dl-cell-block"><div id="rating_{DF_ID}">{RATING_IMG}<br />{RATINGS}</div></dd>
+				<dt><label>{{ lang('DL_RATING') }}</label></dt>
+				<dd class="lastpost dl-cell-block"><div id="rating_{{ DF_ID }}">{{ RATING_IMG }}<br />{{ RATINGS }}</div></dd>
 			</dl>
-		<!-- ENDIF -->
+		{% endif %}
 		</fieldset>
 
 	</div>
 
 	<div class="clearfix"></div>
 
-	<div class="notice dl-text-center">{ADD_USER} {CHANGE_USER}&nbsp;&bull;{LAST_TIME}</div>
+	<div class="notice dl-text-center">{{ ADD_USER }} {{ CHANGE_USER }}&nbsp;&bull;{{ LAST_TIME }}</div>
 
-	<!-- BEGIN thumbnail -->
-	<!-- IF thumbnail.S_FIRST_ROW -->
-	<h3>{L_DL_IMAGES}:</h3>
+	{% for thumbnail in loops.thumbnail %}
+	{% if thumbnail.S_FIRST_ROW %}
+	<h3>{{ lang('DL_IMAGES') }}:</h3>
 	<ul class="dl-detail-row">
-	<!-- ENDIF -->
-		<!-- IF S_DL_POPUPIMAGE -->
-		<li class="dl-left dl-margin-right-small"><a href="{thumbnail.THUMBNAIL_LINK}" title="{thumbnail.THUMBNAIL_NAME}" rel="prettyPhoto[pp_gal]"><img src="{thumbnail.THUMBNAIL_LINK}" alt="{thumbnail.THUMBNAIL_NAME}" title="{thumbnail.THUMBNAIL_NAME}" class="dl-thumb-box" /></a></li>
-		<!-- ELSE -->
-		<img src="{thumbnail.THUMBNAIL_LINK}" alt="{thumbnail.THUMBNAIL_NAME}" title="{thumbnail.THUMBNAIL_NAME}" class="dl-thumb-box" />
-		<!-- ENDIF -->
-	<!-- IF thumbnail.S_LAST_ROW -->
+	{% endif %}
+		{% if S_DL_POPUPIMAGE %}
+		<li class="dl-left dl-margin-right-small"><a href="{{ thumbnail.THUMBNAIL_LINK }}" title="{{ thumbnail.THUMBNAIL_NAME }}" rel="prettyPhoto[pp_gal]"><img src="{{ thumbnail.THUMBNAIL_LINK }}" alt="{{ thumbnail.THUMBNAIL_NAME }}" title="{{ thumbnail.THUMBNAIL_NAME }}" class="dl-thumb-box" /></a></li>
+		{% else %}
+		<img src="{{ thumbnail.THUMBNAIL_LINK }}" alt="{{ thumbnail.THUMBNAIL_NAME }}" title="{{ thumbnail.THUMBNAIL_NAME }}" class="dl-thumb-box" />
+		{% endif %}
+	{% if thumbnail.S_LAST_ROW %}
 	</ul>
 	<div class="clear"></div>
-	<!-- ENDIF -->
-	<!-- END thumbnail -->
+	{% endif %}
+	{% endfor %}
 
 </div>
 
-<!-- IF VER_TAB -->
-<div class="panel dlext3<!-- IF S_OPEN_PANEL <> 1 --> noshow<!-- ENDIF -->" id="options1">
+{% if VER_TAB %}
+<div class="panel dlext3{% if S_OPEN_PANEL <> 1 %} noshow{% endif %}" id="options1">
 
-	<!-- BEGIN ver_cell -->
-	<!-- IF ver_cell.S_ROW_COUNT is even -->
+	{% for ver_cell in loops.ver_cell %}
+	{% if ver_cell.S_ROW_COUNT is even %}
 	<dl>
-	<!-- ENDIF -->
+	{% endif %}
 		<dt class="dl-width-50 dl-left">
 			<div class="postbody dl-width-90">
 				<ul class="post-buttons">
 					<li class="dl-right">
-                        <a href="{ver_cell.U_VERSION}" title="{L_DL_DETAIL}" class="button button-icon-only">
-                            <i class="icon fa-info fa-fw" area-hidden="true"></i><span>{L_DL_DETAIL}</span>
+                        <a href="{{ ver_cell.U_VERSION }}" title="{{ lang('DL_DETAIL') }}" class="button button-icon-only">
+                            <i class="icon fa-info fa-fw" area-hidden="true"></i><span>{{ lang('DL_DETAIL') }}</span>
                         </a>
                     </li>
-					<!-- IF ver_cell.S_USER_PERM -->
+					{% if ver_cell.S_USER_PERM %}
 					<li class="dl-right">
-                        <a href="{ver_cell.U_VERSION_EDIT}" title="{L_DL_EDIT_FILE}" class="button button-icon-only">
-                            <i class="icon fa-pencil fa-fw" area-hidden="true"></i><span>{L_DL_EDIT_FILE}</span>
+                        <a href="{{ ver_cell.U_VERSION_EDIT }}" title="{{ lang('DL_EDIT_FILE') }}" class="button button-icon-only">
+                            <i class="icon fa-pencil fa-fw" area-hidden="true"></i><span>{{ lang('DL_EDIT_FILE') }}</span>
                         </a>
                     </li>
-					<!-- ENDIF -->
+					{% endif %}
 				</ul>
-				<div><a href="{ver_cell.U_VERSION}" class="forumtitle">{ver_cell.VER_TITLE}</a>
-				<!-- IF not ver_cell.VER_ACTIVE and ver_cell.S_USER_PERM -->
-				&nbsp;<span class="dl-red small"> &raquo; {L_DL_NOT_ACTIVE} &laquo; </span>
-				<!-- ENDIF -->
+				<div><a href="{{ ver_cell.U_VERSION }}" class="forumtitle">{{ ver_cell.VER_TITLE }}</a>
+				{% if not ver_cell.VER_ACTIVE and ver_cell.S_USER_PERM %}
+				&nbsp;<span class="dl-red small"> &raquo; {{ lang('DL_NOT_ACTIVE') }} &laquo; </span>
+				{% endif %}
                 </div>
-				<div> {ver_cell.VER_TIME}</div>
-				<div class="content">{ver_cell.VER_DESC} </div>
+				<div> {{ ver_cell.VER_TIME }}</div>
+				<div class="content">{{ ver_cell.VER_DESC }} </div>
 			</div>
 		</dt>
-	<!-- IF ver_cell.S_ROW_COUNT is not even or ver_cell.S_LAST_ROW -->
+	{% if ver_cell.S_ROW_COUNT is not even or ver_cell.S_LAST_ROW %}
 		<dd class="dl-version-row-end"></dd>
 	</dl>
-	<!-- ENDIF -->
-	<!-- END ver_cell -->
+	{% endif %}
+	{% endfor %}
 
 </div>
-<!-- ENDIF -->
+{% endif %}
 
-<!-- IF S_COMMENTS_TAB -->
-<div class="panel dlext3<!-- IF S_OPEN_PANEL <> 2 --> noshow<!-- ENDIF -->" id="options2">
+{% if S_COMMENTS_TAB %}
+<div class="panel dlext3{% if S_OPEN_PANEL <> 2 %} noshow{% endif %}" id="options2">
 
-	<!-- IF S_POST_COMMENT -->
-	<h3>{L_DL_COMMENT_WRITE}</h3>
+	{% if S_POST_COMMENT %}
+	<h3>{{ lang('DL_COMMENT_WRITE') }}</h3>
 
-	<form action="{S_COMMENT_POST_ACTION}" method="post" id="postform" onsubmit="return checkQuickForm(this)">
+	<form action="{{ S_COMMENT_POST_ACTION }}" method="post" id="postform" onsubmit="return checkQuickForm(this)">
 
 	<div class="panel" id="postingbox">
 		<div class="inner">
 
 			<fieldset>
-				<div><!-- INCLUDE posting_buttons.html --></div>
-				<!-- IF .smiley -->
+				<div>{% INCLUDE 'posting_buttons.html' %}</div>
+				{% if loops.smiley|length %}
 				<div id="smiley-box">
-					<strong>{L_SMILIES}</strong><br />
-					<!-- BEGIN smiley -->
-						<a href="#" onclick="insert_text('{smiley.A_SMILEY_CODE}', true); return false;"><img src="{smiley.SMILEY_IMG}" width="{smiley.SMILEY_WIDTH}" height="{smiley.SMILEY_HEIGHT}" alt="{smiley.SMILEY_CODE}" title="{smiley.SMILEY_DESC}" /></a>
-					<!-- END smiley -->
-					<br /><a href="{U_MORE_SMILIES}" onclick="window.open('{U_MORE_SMILIES}', '_blank', 'HEIGHT=200,resizable=yes,scrollbars=yes,WIDTH=400'); return false;">{L_MORE_SMILIES}</a>
+					<strong>{{ lang('SMILIES') }}</strong><br />
+					{% for smiley in loops.smiley %}
+						<a href="#" onclick="insert_text('{{ smiley.A_SMILEY_CODE }}', true); return false;"><img src="{{ smiley.SMILEY_IMG }}" width="{{ smiley.SMILEY_WIDTH }}" height="{{ smiley.SMILEY_HEIGHT }}" alt="{{ smiley.SMILEY_CODE }}" title="{{ smiley.SMILEY_DESC }}" /></a>
+					{% endfor %}
+					<br /><a href="{{ U_MORE_SMILIES }}" onclick="window.open('{{ U_MORE_SMILIES }}', '_blank', 'HEIGHT=200,resizable=yes,scrollbars=yes,WIDTH=400'); return false;">{{ lang('MORE_SMILIES') }}</a>
 				</div>
-				<!-- ENDIF -->
+				{% endif %}
 				<br />
 				<div id="message-box">
-					<textarea name="message" id="message" rows="5" cols="76" tabindex="3" onselect="storeCaret(this);" onclick="storeCaret(this);" onkeyup="storeCaret(this);" class="inputbox">{COMMENT_TEXT}</textarea>
+					<textarea name="message" id="message" rows="5" cols="76" tabindex="3" onselect="storeCaret(this);" onclick="storeCaret(this);" onkeyup="storeCaret(this);" class="inputbox">{{ COMMENT_TEXT }}</textarea>
 				</div>
 			</fieldset>
 
 			<fieldset class="submit-buttons">
-				<input type="submit" name="post" value="{L_SUBMIT}" class="button icon-button" />
-				{S_FORM_TOKEN_COMMENT}
-				{S_HIDDEN_POST_FIELDS}
+				<input type="submit" name="post" value="{{ lang('SUBMIT') }}" class="button icon-button" />
+				{{ S_FORM_TOKEN_COMMENT }}
+				{{ S_HIDDEN_POST_FIELDS }}
 			</fieldset>
 		</div>
 
@@ -209,179 +209,179 @@ var	text_name 				= 'message';
 	</form>
 
 	<br />
-	<!-- ENDIF -->
+	{% endif %}
 
-	<!-- BEGIN comment_row -->
-	<!-- IF comment_row.S_FIRST_ROW -->
-	<h3>{L_DL_COMMENTS}</h3>
-	<!-- ENDIF -->
+	{% for comment_row in loops.comment_row %}
+	{% if comment_row.S_FIRST_ROW %}
+	<h3>{{ lang('DL_COMMENTS') }}</h3>
+	{% endif %}
 
 	<div class="dl-edit-box-light panel">
 		<div class="inner">
 			<div class="posts">
 				<dl class="postprofile">
 					<dt>
-						<div class="avatar-container">{comment_row.POSTER_AVATAR}</div>
+						<div class="avatar-container">{{ comment_row.POSTER_AVATAR }}</div>
 					</dt>
 					<dd class="profile-contact">
-						{comment_row.POSTER}<br /><span class="small">{comment_row.POST_TIME}</span>
+						{{ comment_row.POSTER }}<br /><span class="small">{{ comment_row.POST_TIME }}</span>
 					</dd>
 				</dl>
 				<div class="postbody">
-					<!-- BEGIN action_button -->
+					{% for action_button in comment_row.action_button %}
 					<ul class="post-buttons">
-							<li><a class="button button-icon-only" href="{comment_row.U_EDIT_COMMENT}" title="{L_EDIT_POST}"><i class="icon fa-pencil fa-fw" aria-hidden="true"></i><span>{L_EDIT_POST}</span></a></li>
-							<li><a class="button button-icon-only" href="{comment_row.U_DELETE_COMMENT}" title="{L_DELETE_POST}"><i class="icon fa-times fa-fw" aria-hidden="true"></i><span>{L_DELETE}</span></a></li>
+							<li><a class="button button-icon-only" href="{{ comment_row.U_EDIT_COMMENT }}" title="{{ lang('EDIT_POST') }}"><i class="icon fa-pencil fa-fw" aria-hidden="true"></i><span>{{ lang('EDIT_POST') }}</span></a></li>
+							<li><a class="button button-icon-only" href="{{ comment_row.U_DELETE_COMMENT }}" title="{{ lang('DELETE_POST') }}"><i class="icon fa-times fa-fw" aria-hidden="true"></i><span>{{ lang('DELETE') }}</span></a></li>
 					</ul>
-					<!-- END action_button -->
-					<div class="content">{comment_row.MESSAGE}</div>
-					<!-- IF comment_row.EDITED_BY --><div class="notice">{comment_row.EDITED_BY}</div><!-- ENDIF -->
+					{% endfor %}
+					<div class="content">{{ comment_row.MESSAGE }}</div>
+					{% if comment_row.EDITED_BY %}<div class="notice">{{ comment_row.EDITED_BY }}</div>{% endif %}
 				</div>
 			</div>
 		</div>
 	</div>
-	<!-- END comment_row -->
+	{% endfor %}
 
-	<!-- IF .pagination or TOTAL_DL -->
+	{% if loops.pagination|length or TOTAL_DL %}
 	<div class="pagination">
-		{TOTAL_DL}
-		<!-- IF .pagination -->
-			<!-- INCLUDE pagination.html -->
-		<!-- ELSE -->
-			&bull; {PAGE_NUMBER}
-		<!-- ENDIF -->
+		{{ TOTAL_DL }}
+		{% if loops.pagination|length %}
+			{% INCLUDE 'pagination.html' %}
+		{% else %}
+			&bull; {{ PAGE_NUMBER }}
+		{% endif %}
 	</div>
 
 	<br /><br />
-	<!-- ENDIF -->
+	{% endif %}
 
 </div>
-<!-- ENDIF -->
+{% endif %}
 
 <div class="clearfix"></div>
 
-<!-- IF S_FAV_BLOCK or S_EDIT_BUTTON or S_DL_BROKEN_CUR or S_REPORT_BROKEN or S_DL_BROKEN_MOD or S_EDIT_THUMBS or S_MOD_LIST or S_MOD_TODO or S_DL_FIELDS or HASH_TAB -->
+{% if S_FAV_BLOCK or S_EDIT_BUTTON or S_DL_BROKEN_CUR or S_REPORT_BROKEN or S_DL_BROKEN_MOD or S_EDIT_THUMBS or S_MOD_LIST or S_MOD_TODO or S_DL_FIELDS or HASH_TAB %}
 <div class="panel dlext4">
     <ul id="nav-breadcrumbs_detail-left" class="nav-breadcrumbs linklist" role="menubar">
-    	<!-- IF S_FAV_BLOCK --><li data-last-responsive="true" class="leftside"><a href="{U_FAVORITE}"><i class="icon fa-bookmark<!-- IF not S_FAV_ACTIVE -->-o<!-- ENDIF --> fa-fw" aria-hidden="true"></i> <span>{FAVORITE}</span></a></li><!-- ENDIF -->
-    	<!-- IF S_EDIT_BUTTON --><li data-last-responsive="true" class="rightside"><a href="{U_EDIT}"><i class="icon fa-edit fa-fw" aria-hidden="true"></i> <span>{L_DL_EDIT_FILE}</span></a></li><!-- ENDIF -->
-    	<!-- IF S_EDIT_THUMBS --><li data-last-responsive="true" class="rightside"><a href="{U_EDIT_THUMBS}"><i class="icon fa-photo fa-fw" aria-hidden="true"></i> <span>{L_DL_EDIT_THUMBS}</span></a></li><!-- ENDIF -->
+    	{% if S_FAV_BLOCK %}<li data-last-responsive="true" class="leftside"><a href="{{ U_FAVORITE }}"><i class="icon fa-bookmark{% if not S_FAV_ACTIVE %}-o{% endif %} fa-fw" aria-hidden="true"></i> <span>{{ FAVORITE }}</span></a></li>{% endif %}
+    	{% if S_EDIT_BUTTON %}<li data-last-responsive="true" class="rightside"><a href="{{ U_EDIT }}"><i class="icon fa-edit fa-fw" aria-hidden="true"></i> <span>{{ lang('DL_EDIT_FILE') }}</span></a></li>{% endif %}
+    	{% if S_EDIT_THUMBS %}<li data-last-responsive="true" class="rightside"><a href="{{ U_EDIT_THUMBS }}"><i class="icon fa-photo fa-fw" aria-hidden="true"></i> <span>{{ lang('DL_EDIT_THUMBS') }}</span></a></li>{% endif %}
     </ul>
 	<ul id="nav-breadcrumbs_detail-right" class="nav-breadcrumbs linklist" role="menubar">
-    	<!-- IF S_REPORT_BROKEN --><li data-last-responsive="true" class="leftside"><a href="{U_BROKEN_DOWNLOAD}"><i class="icon fa-bell fa-fw" aria-hidden="true"></i> <span>{L_DL_BROKEN}</span></a></li><!-- ENDIF -->
-    	<!-- IF S_DL_BROKEN_CUR --><li data-last-responsive="true" class="leftside"><b class="dl-red">&nbsp;{L_DL_BROKEN_CUR}</b></li><!-- ENDIF -->
-    	<!-- IF S_DL_BROKEN_MOD --><li data-last-responsive="true" class="leftside"><a href="{U_REPORT}"><i class="icon fa-bell-slash fa-fw" aria-hidden="true"></i> <span>{L_DL_BROKEN_MOD}</span></a></li><!-- ENDIF -->
-		<!-- IF S_MOD_LIST or S_MOD_TODO or S_DL_FIELDS --><li data-last-responsive="true" class="rightside" id="extra_page_open"><a href="#" onclick="pageToggle('extra_page', true, '{L_DL_MOD_LIST}', '{L_DL_MOD_LIST_CLOSE}');"><i class="icon fa-eye fa-fw" aria-hidden="true"></i> <span>{L_DL_MOD_LIST}</span></a></li><!-- ENDIF -->
-		<!-- IF HASH_TAB --><li data-last-responsive="true" class="rightside" id="hash_page_open"><a href="#" onclick="pageToggle('hash_page', true, '{L_DL_MOD_FILE_HASH_OPEN}', '{L_DL_MOD_FILE_HASH_CLOSE}');"><i class="icon fa-eye fa-fw" aria-hidden="true"></i> <span>{L_DL_MOD_FILE_HASH_OPEN}</span></a></li><!-- ENDIF -->
+    	{% if S_REPORT_BROKEN %}<li data-last-responsive="true" class="leftside"><a href="{{ U_BROKEN_DOWNLOAD }}"><i class="icon fa-bell fa-fw" aria-hidden="true"></i> <span>{{ lang('DL_BROKEN') }}</span></a></li>{% endif %}
+    	{% if S_DL_BROKEN_CUR %}<li data-last-responsive="true" class="leftside"><b class="dl-red">&nbsp;{{ lang('DL_BROKEN_CUR') }}</b></li>{% endif %}
+    	{% if S_DL_BROKEN_MOD %}<li data-last-responsive="true" class="leftside"><a href="{{ U_REPORT }}"><i class="icon fa-bell-slash fa-fw" aria-hidden="true"></i> <span>{{ lang('DL_BROKEN_MOD') }}</span></a></li>{% endif %}
+		{% if S_MOD_LIST or S_MOD_TODO or S_DL_FIELDS %}<li data-last-responsive="true" class="rightside" id="extra_page_open"><a href="#" onclick="pageToggle('extra_page', true, '{{ lang('DL_MOD_LIST') }}', '{{ lang('DL_MOD_LIST_CLOSE') }}');"><i class="icon fa-eye fa-fw" aria-hidden="true"></i> <span>{{ lang('DL_MOD_LIST') }}</span></a></li>{% endif %}
+		{% if HASH_TAB %}<li data-last-responsive="true" class="rightside" id="hash_page_open"><a href="#" onclick="pageToggle('hash_page', true, '{{ lang('DL_MOD_FILE_HASH_OPEN') }}', '{{ lang('DL_MOD_FILE_HASH_CLOSE') }}');"><i class="icon fa-eye fa-fw" aria-hidden="true"></i> <span>{{ lang('DL_MOD_FILE_HASH_OPEN') }}</span></a></li>{% endif %}
     </ul>
 </div>
-<!-- ENDIF -->
+{% endif %}
 
-<!-- IF S_MOD_LIST or S_MOD_TODO or S_DL_FIELDS -->
+{% if S_MOD_LIST or S_MOD_TODO or S_DL_FIELDS %}
 <div class="panel dlext3 noshow" id="extra_page">
-	<h3>{L_DL_MOD_LIST_SHORT}</h3>
+	<h3>{{ lang('DL_MOD_LIST_SHORT') }}</h3>
 	<div class="tablewrap">
-		<!-- IF MOD_WARNING -->
-		<div class="rules"><strong>{L_DL_MOD_WARNING}</strong><br />{MOD_WARNING}</div>
-		<!-- ENDIF -->
-		<!-- IF MOD_TEST -->
+		{% if MOD_WARNING %}
+		<div class="rules"><strong>{{ lang('DL_MOD_WARNING') }}</strong><br />{{ MOD_WARNING }}</div>
+		{% endif %}
+		{% if MOD_TEST %}
 		<br />
-		<h3>{L_DL_MOD_TEST}</h3>
-		<p>{MOD_TEST}</p>
-		<!-- ENDIF -->
-		<!-- IF MOD_REQUIRE -->
+		<h3>{{ lang('DL_MOD_TEST') }}</h3>
+		<p>{{ MOD_TEST }}</p>
+		{% endif %}
+		{% if MOD_REQUIRE %}
 		<br />
-		<h3>{L_DL_MOD_REQUIRE}</h3>
-		<p>{MOD_REQUIRE}</p>
-		<!-- ENDIF -->
-		<!-- IF S_MOD_TODO -->
+		<h3>{{ lang('DL_MOD_REQUIRE') }}</h3>
+		<p>{{ MOD_REQUIRE }}</p>
+		{% endif %}
+		{% if S_MOD_TODO %}
 		<br />
-		<h3>{L_DL_MOD_TODO}</h3>
-		<p>{MOD_TODO}</p>
-		<!-- ENDIF -->
-		<!-- IF MOD_DESC -->
+		<h3>{{ lang('DL_MOD_TODO') }}</h3>
+		<p>{{ MOD_TODO }}</p>
+		{% endif %}
+		{% if MOD_DESC %}
 		<br />
-		<h3>{L_DL_MOD_DESC}</h3>
-		<p>{MOD_DESC}</p>
-		<!-- ENDIF -->
-    	<!-- IF S_DL_FIELDS -->
+		<h3>{{ lang('DL_MOD_DESC') }}</h3>
+		<p>{{ MOD_DESC }}</p>
+		{% endif %}
+    	{% if S_DL_FIELDS %}
 		<br />
-		<!-- BEGIN custom_fields -->
-		<h3>{custom_fields.DL_FIELD_NAME}:</h3>
-		<p>{custom_fields.DL_FIELD_VALUE}</p>
+		{% for custom_fields in loops.custom_fields %}
+		<h3>{{ custom_fields.DL_FIELD_NAME }}:</h3>
+		<p>{{ custom_fields.DL_FIELD_VALUE }}</p>
 		<br />
-		<!-- END custom_fields -->
-    	<!-- ENDIF -->
+		{% endfor %}
+    	{% endif %}
 	</div>
 </div>
-<!-- ENDIF -->
+{% endif %}
 
-<!-- IF HASH_TAB -->
+{% if HASH_TAB %}
 <div class="panel dlext3 noshow" id="hash_page">
-	<h3>{L_DL_MOD_FILE_HASH_TABLE}</h3>
+	<h3>{{ lang('DL_MOD_FILE_HASH_TABLE') }}</h3>
 	<div class="tablewrap">
     	<table class="table1">
-    		<!-- BEGIN hash_row -->
+    		{% for hash_row in loops.hash_row %}
     		<tr class="row">
-    			<td><label><strong>{hash_row.DL_VERSION}</strong></label></td>
-    			<td>{hash_row.DL_FILE_NAME}</td>
-    			<td>[{hash_row.DL_HASH_METHOD}] {hash_row.DL_HASH}</td>
+    			<td><label><strong>{{ hash_row.DL_VERSION }}</strong></label></td>
+    			<td>{{ hash_row.DL_FILE_NAME }}</td>
+    			<td>[{{ hash_row.DL_HASH_METHOD }}] {{ hash_row.DL_HASH }}</td>
     		</tr>
-    		<!-- END hash_row -->
+    		{% endfor %}
     	</table>
 	</div>
 </div>
-<!-- ENDIF -->
+{% endif %}
 
-<!-- BEGIN download_button -->
+{% for download_button in loops.download_button %}
 <br />
 <div id="dl_mod_button">
-<form action="{download_button.U_DOWNLOAD}" method="post" id="download" {download_button.S_DL_WINDOW} onsubmit="hideDlButton();">
+<form action="{{ download_button.U_DOWNLOAD }}" method="post" id="download" {{ download_button.S_DL_WINDOW }} onsubmit="hideDlButton();">
 
 <ul class="linklist navlinks">
-<!-- IF S_VC -->
+{% if S_VC %}
 <li class="panel dlbutton1">
-<!-- IF CAPTCHA_TEMPLATE -->
-	<!-- DEFINE $CAPTCHA_TAB_INDEX = 8 -->
-	<!-- INCLUDE {CAPTCHA_TEMPLATE} -->
-<!-- ENDIF -->
+{% if CAPTCHA_TEMPLATE %}
+	{% DEFINE CAPTCHA_TAB_INDEX = 8 %}
+	{% INCLUDE ''~ CAPTCHA_TEMPLATE ~'' %}
+{% endif %}
 </li>
-<!-- ENDIF -->
+{% endif %}
 <li class="panel dlbutton2">
 	<div>
-		{download_button.S_DL_VERSION}<br /><button type="submit" name="submit" id="submit" class="downloadbtn"><i class="icon fa-download fa-fw" area-hidden="true"></i> {L_DL_DOWNLOAD}</button>
-		<input type="hidden" name="hotlink_id" value="{download_button.S_HOTLINK_ID}" />
-		{download_button.S_HIDDEN_FIELDS}{S_HIDDEN_FIELDS}{S_FORM_TOKEN_DOWNLOAD}
+		{{ download_button.S_DL_VERSION }}<br /><button type="submit" name="submit" id="submit" class="downloadbtn"><i class="icon fa-download fa-fw" area-hidden="true"></i> {{ lang('DL_DOWNLOAD') }}</button>
+		<input type="hidden" name="hotlink_id" value="{{ download_button.S_HOTLINK_ID }}" />
+		{{ download_button.S_HIDDEN_FIELDS }}{{ S_HIDDEN_FIELDS }}{{ S_FORM_TOKEN_DOWNLOAD }}
 	</div>
-	<!-- IF S_TRAFFICFREE_DL --><div class="small dl-text-center dl-red">{L_DL_CAN_DOWNLOAD_TRAFFIC}</div><!-- ENDIF -->
+	{% if S_TRAFFICFREE_DL %}<div class="small dl-text-center dl-red">{{ lang('DL_CAN_DOWNLOAD_TRAFFIC') }}</div>{% endif %}
 </li>
 </ul>
 
 </form>
 </div>
-<!-- BEGINELSE -->
+{% else %}
 <div class="rules">
 	<div class="inner">
-		<span>{L_DL_NO_ACCESS}</span>
+		<span>{{ lang('DL_NO_ACCESS') }}</span>
 	</div>
 </div>
-<!-- END download_button -->
+{% endfor %}
 
-<!-- IF S_DL_USERBAN -->
+{% if S_DL_USERBAN %}
 <div class="rules">
 	<div class="inner">
-		<span>{L_DL_USER_BANNED}</span>
+		<span>{{ lang('DL_USER_BANNED') }}</span>
 	</div>
 </div>
-<!-- ENDIF -->
+{% endif %}
 
-<!-- BEGIN similar_dl -->
-<!-- IF similar_dl.S_FIRST_ROW -->
-<br /><h3>{L_DL_SIMILAR_DL}</h3>
-<!-- ENDIF -->
+{% for similar_dl in loops.similar_dl %}
+{% if similar_dl.S_FIRST_ROW %}
+<br /><h3>{{ lang('DL_SIMILAR_DL') }}</h3>
+{% endif %}
 <dl>
-	<dt><a href="{similar_dl.U_DOWNLOAD}">{similar_dl.DOWNLOAD}</a></dt>
+	<dt><a href="{{ similar_dl.U_DOWNLOAD }}">{{ similar_dl.DOWNLOAD }}</a></dt>
 </dl>
-<!-- END similar_dl -->
+{% endfor %}
 
-<!-- INCLUDE dl_footer.html -->
+{% INCLUDE 'dl_footer.html' %}
