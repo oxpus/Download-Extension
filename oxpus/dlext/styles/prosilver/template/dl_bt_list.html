@@ -1,14 +1,14 @@
-<!-- INCLUDE dl_header.html -->
+{% INCLUDE 'dl_header.html' %}
 
-<h2>{L_DL_BUG_TRACKER}</h2>
-
-<br />
-
-<!-- IF S_NO_BUG_TRACKER -->
-<h3 class="solo">{L_DL_NO_BUG_TRACKER}</h3>
+<h2>{{ lang('DL_BUG_TRACKER') }}</h2>
 
 <br />
-<!-- ELSE -->
+
+{% if S_NO_BUG_TRACKER %}
+<h3 class="solo">{{ lang('DL_NO_BUG_TRACKER') }}</h3>
+
+<br />
+{% else %}
 
 <div class="forabg">
 	<div class="inner">
@@ -16,61 +16,61 @@
 	<ul class="topiclist">
 		<li class="header">
 			<dl>
-				<dt>{L_DL_BUG_REPORT_TITLE_DETAILS}</dt>
-				<dd class="posts"><!-- IF S_REPORT_TEXT --><br />{L_DL_BUG_REPORT_PHP} {L_DL_BUG_REPORT_DB} {L_DL_BUG_REPORT_FORUM}<!-- ELSE -->&nbsp;<!-- ENDIF --></dd>
-				<dd class="time">{L_DL_BUG_REPORT_STATUS}</dd>
+				<dt>{{ lang('DL_BUG_REPORT_TITLE_DETAILS') }}</dt>
+				<dd class="posts">{% if S_REPORT_TEXT %}<br />{{ lang('DL_BUG_REPORT_PHP') }} {{ lang('DL_BUG_REPORT_DB') }} {{ lang('DL_BUG_REPORT_FORUM') }}{% else %}&nbsp;{% endif %}</dd>
+				<dd class="time">{{ lang('DL_BUG_REPORT_STATUS') }}</dd>
 			</dl>
 		</li>
 	</ul>
 	<ul class="topiclist topics">
-		<!-- BEGIN bug_tracker_row -->
-		<li class="row<!-- IF bug_tracker_row.S_ROW_COUNT is even --> bg1<!-- ELSE --> bg2<!-- ENDIF -->">
+		{% for bug_tracker_row in loops.bug_tracker_row %}
+		<li class="row{% if bug_tracker_row.S_ROW_COUNT is even %} bg1{% else %} bg2{% endif %}">
 			<dl>
 				<dt>
 					<div class="post">
 					<ul class="post-buttons">
 						<li>
-							<a href="{bug_tracker_row.REPORT_DETAIL}" title="{L_DL_BUG_REPORT_DETAIL}" class="button button-icon-only">
-								<i class="icon fa-pencil fa-fw" aria-hidden="true"></i><span class="sr-only">{L_DL_BUG_REPORT_DETAIL}</span>
+							<a href="{{ bug_tracker_row.REPORT_DETAIL }}" title="{{ lang('DL_BUG_REPORT_DETAIL') }}" class="button button-icon-only">
+								<i class="icon fa-pencil fa-fw" aria-hidden="true"></i><span class="sr-only">{{ lang('DL_BUG_REPORT_DETAIL') }}</span>
 							</a>
 						</li>
-						<!-- BEGIN modext -->
+						{% for modext in bug_tracker_row.modext %}
 						<li>
-							<a href="{bug_tracker_row.modext.U_DELETE}" title="{L_DL_DELETE}" class="button button-icon-only">
-								<i class="icon fa-times fa-fw" aria-hidden="true"></i><span class="sr-only">{L_DL_DELETE}</span>
+							<a href="{{ modext.U_DELETE }}" title="{{ lang('DL_DELETE') }}" class="button button-icon-only">
+								<i class="icon fa-times fa-fw" aria-hidden="true"></i><span class="sr-only">{{ lang('DL_DELETE') }}</span>
 							</a>
 						</li>
-						<!-- END modext -->
+						{% endfor %}
 					</ul>
-					<label>{bug_tracker_row.REPORT_ID}&nbsp;&bull;&nbsp;{bug_tracker_row.REPORT_TITLE}</label>
-					<br /><strong>{bug_tracker_row.REPORT_FILE} {bug_tracker_row.REPORT_FILE_VER}</strong>
-					<br /><span>{L_DL_BUG_REPORT_DATE} {bug_tracker_row.REPORT_DATE}
-					<br />{L_DL_BUG_REPORT_AUTHOR} {bug_tracker_row.REPORT_AUTHOR_LINK}</span>
-					<!-- IF S_REPORT_TEXT --><hr /><span class="small"><i>{bug_tracker_row.REPORT_TEXT}</i></span><!-- ENDIF -->
+					<label>{{ bug_tracker_row.REPORT_ID }}&nbsp;&bull;&nbsp;{{ bug_tracker_row.REPORT_TITLE }}</label>
+					<br /><strong>{{ bug_tracker_row.REPORT_FILE }} {{ bug_tracker_row.REPORT_FILE_VER }}</strong>
+					<br /><span>{{ lang('DL_BUG_REPORT_DATE') }} {{ bug_tracker_row.REPORT_DATE }}
+					<br />{{ lang('DL_BUG_REPORT_AUTHOR') }} {{ bug_tracker_row.REPORT_AUTHOR_LINK }}</span>
+					{% if S_REPORT_TEXT %}<hr /><span class="small"><i>{{ bug_tracker_row.REPORT_TEXT }}</i></span>{% endif %}
 					</div>
 				</dt>
 				<dd class="posts">
-					<!-- IF bug_tracker_row.REPORT_PHP or bug_tracker_row.REPORT_DB or bug_tracker_row.REPORT_FORUM --><div class="small">{bug_tracker_row.REPORT_PHP}</div><div class="small">{bug_tracker_row.REPORT_DB}</div><div class="small">{bug_tracker_row.REPORT_FORUM}</div><!-- ENDIF -->
+					{% if bug_tracker_row.REPORT_PHP or bug_tracker_row.REPORT_DB or bug_tracker_row.REPORT_FORUM %}<div class="small">{{ bug_tracker_row.REPORT_PHP }}</div><div class="small">{{ bug_tracker_row.REPORT_DB }}</div><div class="small">{{ bug_tracker_row.REPORT_FORUM }}</div>{% endif %}
 				</dd>
 				<dd class="time"><span>
-				{bug_tracker_row.REPORT_STATUS_DATE}&nbsp;<b>{bug_tracker_row.REPORT_STATUS}</b></span>
-					<!-- BEGIN assign -->
-					&nbsp;{L_DL_BUG_REPORT_ASSIGN_DATE}&nbsp;{bug_tracker_row.assign.REPORT_ASSIGN_DATE}
-					&nbsp;{bug_tracker_row.assign.REPORT_ASSIGN_LINK}
-					<!-- END assign -->
-					<!-- IF S_NO_ASSIGN -->
-					&nbsp;{L_DL_BUG_REPORT_UNASSIGNED}
-					<!-- ENDIF -->
+				{{ bug_tracker_row.REPORT_STATUS_DATE }}&nbsp;<b>{{ bug_tracker_row.REPORT_STATUS }}</b></span>
+					{% for assign in bug_tracker_row.assign %}
+					&nbsp;{{ lang('DL_BUG_REPORT_ASSIGN_DATE') }}&nbsp;{{ assign.REPORT_ASSIGN_DATE }}
+					&nbsp;{{ assign.REPORT_ASSIGN_LINK }}
+					{% endfor %}
+					{% if S_NO_ASSIGN %}
+					&nbsp;{{ lang('DL_BUG_REPORT_UNASSIGNED') }}
+					{% endif %}
 				</dd>
 			</dl>
 		</li>
-		<!-- END bug_tracker_row -->
+		{% endfor %}
 	</ul>
 
 	</div>
 </div>
 
-<!-- ENDIF -->
+{% endif %}
 
 <br />
 
@@ -78,24 +78,24 @@
 	<div class="inner">
 
 		<fieldset class="submit-buttons">
-		<form action="{S_FORM_ACTION}" method="post" id="filter_report" class="dl-left dl-margin-right-small">
-			<div>{S_SELECT_FILTER}&nbsp;<input type="submit" name="submit" value="{L_DL_FILTER}" class="button1" /></div>
+		<form action="{{ S_FORM_ACTION }}" method="post" id="filter_report" class="dl-left dl-margin-right-small">
+			<div>{{ S_SELECT_FILTER }}&nbsp;<input type="submit" name="submit" value="{{ lang('DL_FILTER') }}" class="button1" /></div>
 		</form>
-		<!-- IF S_OWN_REPORT -->
-		<form action="{S_FORM_OWN_ACTION}" method="post" id="filter_own_report" class="dl-left dl-margin-right-small">
-			<div><input type="submit" name="submit" value="{L_DL_FILTER_BT_OWN}" class="button2" /></div>
+		{% if S_OWN_REPORT %}
+		<form action="{{ S_FORM_OWN_ACTION }}" method="post" id="filter_own_report" class="dl-left dl-margin-right-small">
+			<div><input type="submit" name="submit" value="{{ lang('DL_FILTER_BT_OWN') }}" class="button2" /></div>
 		</form>
-		<!-- ENDIF -->
-		<!-- IF S_ASSIGN_REPORT -->
-		<form action="{S_FORM_ASSIGN_ACTION}" method="post" id="filter_assign_report" class="dl-left dl-margin-right-small">
-			<div><input type="submit" name="submit" value="{L_DL_FILTER_BT_ASSIGN}" class="button2" /></div>
+		{% endif %}
+		{% if S_ASSIGN_REPORT %}
+		<form action="{{ S_FORM_ASSIGN_ACTION }}" method="post" id="filter_assign_report" class="dl-left dl-margin-right-small">
+			<div><input type="submit" name="submit" value="{{ lang('DL_FILTER_BT_ASSIGN') }}" class="button2" /></div>
 		</form>
-		<!-- ENDIF -->
-		<!-- IF S_ADD_NEW_REPORT -->
-		<form action="{S_FORM_ADD_ACTION}" method="post" id="add_new_report" class="dl-left dl-margin-right-small">
-			<div><input type="submit" name="submit" value="{L_NEW_POST}" class="button1" /></div>
+		{% endif %}
+		{% if S_ADD_NEW_REPORT %}
+		<form action="{{ S_FORM_ADD_ACTION }}" method="post" id="add_new_report" class="dl-left dl-margin-right-small">
+			<div><input type="submit" name="submit" value="{{ lang('NEW_POST') }}" class="button1" /></div>
 		</form>
-		<!-- ENDIF -->
+		{% endif %}
 
 		</fieldset>
 
@@ -104,4 +104,4 @@
 
 <br />
 
-<!-- INCLUDE dl_footer.html -->
+{% INCLUDE 'dl_footer.html' %}

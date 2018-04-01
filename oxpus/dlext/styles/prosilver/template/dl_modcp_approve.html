@@ -1,4 +1,4 @@
-<!-- INCLUDE dl_header.html -->
+{% INCLUDE 'dl_header.html' %}
 
 <script type="text/javascript">
 // <![CDATA[
@@ -12,11 +12,11 @@ function select_switch(status)
 // ]]>
 </script>
 
-<h2>{L_DL_MODCP_APPROVE}</h2>
+<h2>{{ lang('DL_MODCP_APPROVE') }}</h2>
 
 <br />
 
-<form action="{S_DL_MODCP_ACTION}" method="post" id="dl_modcp">
+<form action="{{ S_DL_MODCP_ACTION }}" method="post" id="dl_modcp">
 
 <div class="forabg">
 	<div class="inner">
@@ -24,25 +24,25 @@ function select_switch(status)
 	<ul class="topiclist">
 		<li class="header">
 			<dl>
-				<dd class="lastpost">{L_DL_CAT_NAME}</dd>
-				<dt>{L_DL_DOWNLOAD}</dt>
-				<dd class="options">{L_OPTIONS}</dd>
+				<dd class="lastpost">{{ lang('DL_CAT_NAME') }}</dd>
+				<dt>{{ lang('DL_DOWNLOAD') }}</dt>
+				<dd class="options">{{ lang('OPTIONS') }}</dd>
 			</dl>
 		</li>
 	</ul>
 	<ul class="topiclist forums">
-	<!-- BEGIN approve_row -->
-		<li class="row<!-- IF approve_row.S_ROW_COUNT is even --> bg1<!-- ELSE --> bg2<!-- ENDIF -->">
+	{% for approve_row in loops.approve_row %}
+		<li class="row{% if approve_row.S_ROW_COUNT is even %} bg1{% else %} bg2{% endif %}">
 			<dl>
-				<dd class="lastpost"><a href="{approve_row.U_CAT_VIEW}">{approve_row.CAT_NAME}</a></dd>
-				<dt>{approve_row.MINI_ICON}&nbsp;<a href="{approve_row.U_DOWNLOAD}">{approve_row.DESCRIPTION}</a></dt>
+				<dd class="lastpost"><a href="{{ approve_row.U_CAT_VIEW }}">{{ approve_row.CAT_NAME }}</a></dd>
+				<dt>{{ approve_row.MINI_ICON }}&nbsp;<a href="{{ approve_row.U_DOWNLOAD }}">{{ approve_row.DESCRIPTION }}</a></dt>
 				<dd class="options">
-					<!-- IF approve_row.U_EDIT --><a href="{approve_row.U_EDIT}">{L_DL_EDIT_FILE}</a>&nbsp;&nbsp;<!-- ENDIF -->
-					<input type="checkbox" class="permissions-checkbox" name="dlo_id[]" value="{approve_row.FILE_ID}" />
+					{% if approve_row.U_EDIT %}<a href="{{ approve_row.U_EDIT }}">{{ lang('DL_EDIT_FILE') }}</a>&nbsp;&nbsp;{% endif %}
+					<input type="checkbox" class="permissions-checkbox" name="dlo_id[]" value="{{ approve_row.FILE_ID }}" />
 				</dd>
  			</dl>
  		</li>
-	<!-- END approve_row -->
+	{% endfor %}
 	</ul>
 
 	</div>
@@ -50,30 +50,30 @@ function select_switch(status)
 
 <ul class="linklist">
 	<li class="rightside">
-		<span><a href="javascript:select_switch(true);">{L_DL_MARK_ALL}</a> :: <a href="javascript:select_switch(false);">{L_DL_UNMARK}</a></span>
+		<span><a href="javascript:select_switch(true);">{{ lang('DL_MARK_ALL') }}</a> :: <a href="javascript:select_switch(false);">{{ lang('DL_UNMARK') }}</a></span>
 	</li>
 </ul>
 
-<!-- IF .pagination or TOTAL_DL -->
+{% if loops.pagination|length or TOTAL_DL %}
 	<div class="pagination">
-		{TOTAL_DL}
-		<!-- IF .pagination -->
-			<!-- INCLUDE pagination.html -->
-		<!-- ELSE -->
-			&bull; {PAGE_NUMBER}
-		<!-- ENDIF -->
+		{{ TOTAL_DL }}
+		{% if loops.pagination|length %}
+			{% INCLUDE 'pagination.html' %}
+		{% else %}
+			&bull; {{ PAGE_NUMBER }}
+		{% endif %}
 	</div>
-<!-- ENDIF -->
+{% endif %}
 
 <fieldset class="submit-buttons">
-	<input type="submit" name="delete" value="{L_DL_DELETE}" class="button icon-button" />&nbsp;&nbsp;
-	<input type="submit" name="submit" value="{L_DL_APPROVE}" class="button icon-button" />
-	{S_FORM_TOKEN}
-	{S_HIDDEN_FIELDS}
+	<input type="submit" name="delete" value="{{ lang('DL_DELETE') }}" class="button icon-button" />&nbsp;&nbsp;
+	<input type="submit" name="submit" value="{{ lang('DL_APPROVE') }}" class="button icon-button" />
+	{{ S_FORM_TOKEN }}
+	{{ S_HIDDEN_FIELDS }}
 </fieldset>
 
 </form>
 
 <br />
 
-<!-- INCLUDE dl_footer.html -->
+{% INCLUDE 'dl_footer.html' %}

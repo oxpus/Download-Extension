@@ -1,7 +1,7 @@
 <script type="text/javascript">
 function help_popup(help_key, param) {
 	$.ajax({
-        url: '{U_HELP_POPUP}&help_key=' + help_key + '&value=' + param,
+        url: '{{ U_HELP_POPUP }}&help_key=' + help_key + '&value=' + param,
         type: "GET",
         success: function (data) { AJAXDLHelpDisplay(data); }
     });

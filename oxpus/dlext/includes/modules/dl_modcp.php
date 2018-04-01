@@ -1035,7 +1035,8 @@ else
 							AND ' . $this->db->sql_in_set('d.id', $dl_ids);
 					$result = $this->db->sql_query($sql);
 
-					$dl_topics = array();
+					$dl_topics	= array();
+					$dl_t_ids	= array();
 
 					while ($row = $this->db->sql_fetchrow($result))
 					{
@@ -1093,13 +1094,18 @@ else
 
 						if ($row['dl_topic'])
 						{
-							$dl_topics[] = $row['dl_topic'];
+							$dl_topics[]		= $row['dl_topic'];
+							$dl_t_ids[$df_id]	= $row['dl_topic'];
 						}
 					}
 					$this->db->sql_freeresult($result);
 
 					if (sizeof($dl_ids))
 					{
+						$topic_drop_mode = $this->request->variable('topic_drop_mode', 'drop');
+
+						$return = \oxpus\dlext\includes\classes\ dl_topic::delete_topic($dl_topics, $topic_drop_mode, $dl_t_ids, $this->helper);
+
 						$sql = 'DELETE FROM ' . DOWNLOADS_TABLE . '
 							WHERE ' . $this->db->sql_in_set('id', $dl_ids) . '
 								AND cat = ' . (int) $cat_id;
@@ -1143,8 +1149,6 @@ else
 					// Purge the files cache
 					@unlink(DL_EXT_CACHE_FOLDER . 'data_dl_cat_counts.' . $this->php_ext);
 					@unlink(DL_EXT_CACHE_FOLDER . 'data_dl_file_preset.' . $this->php_ext);
-
-					$return = \oxpus\dlext\includes\classes\ dl_topic::delete_topic($dl_topics);
 				}
 			}
 

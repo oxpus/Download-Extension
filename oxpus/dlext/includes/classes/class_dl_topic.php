@@ -293,6 +293,7 @@ class dl_topic extends dl_mod
 			'bbcode_bitfield'		=> $message_parser->bbcode_bitfield,
 			'bbcode_uid'			=> $message_parser->bbcode_uid,
 			'message'				=> $message_parser->message,
+			'topic_status'			=> ITEM_UNLOCKED,
 		);
 
 		if (!function_exists('submit_post'))
@@ -317,7 +318,7 @@ class dl_topic extends dl_mod
 		return;
 	}
 
-	public static function delete_topic($topic_ids)
+	public static function delete_topic($topic_ids, $topic_drop_mode = 'drop', $dl_ids = array(), $helper = '')
 	{
 		if (!$topic_ids)
 		{
@@ -329,15 +330,27 @@ class dl_topic extends dl_mod
 			$topic_ids = array($topic_ids);
 		}
 
-		if (!function_exists('recalc_nested_sets'))
+		if ($topic_drop_mode == 'drop')
 		{
-			include(dl_init::phpbb_root_path() . 'includes/functions_admin' . dl_init::phpEx());
+			if (!function_exists('recalc_nested_sets'))
+			{
+				include(dl_init::phpbb_root_path() . 'includes/functions_admin' . dl_init::phpEx());
+			}
+
+			return delete_topics('topic_id', $topic_ids);
+		}
+		else if ($topic_drop_mode == 'close')
+		{
+			foreach($dl_ids as $dl_id => $topic_id)
+			{
+				$return = self::update_topic($topic_id, $dl_id, $helper, 'close');
+			}
 		}
 
-		return delete_topics('topic_id', $topic_ids);
+		return;
 	}
 
-	public static function update_topic($topic_id, $dl_id, $helper)
+	public static function update_topic($topic_id, $dl_id, $helper, $topic_drop_mode = '')
 	{
 		static $dl_index;
 
@@ -437,10 +450,10 @@ class dl_topic extends dl_mod
 
 		$topic_text_add .= "\n[b]" . $language->lang('DL_HACK_AUTOR') . ":[/b] " . $author_link;
 
-		$topic_text_add .= "\n[b]" . $language->lang('DL_FILE_DESCRIPTION') . ":[/b] " . html_entity_decode($long_desc);
-		$topic_text_add .= "\n\n[b]" . $language->lang('DL_HACK_VERSION') . ":[/b] " . $version;
-		$topic_text_add .= "\n[b]" . (($extern) ? $language->lang('DL_EXTERN') : $language->lang('DL_FILE_NAME')) . ":[/b] " . $file_name;
-		$topic_text_add .= (($extern) ? '' : "\n[b]" . $language->lang('DL_FILE_SIZE') . ":[/b] " . str_replace('&nbsp;', ' ', dl_format::dl_size($file_size)));
+		$topic_text_add .= ($long_desc) ? "\n[b]" . $language->lang('DL_FILE_DESCRIPTION') . ":[/b] " . html_entity_decode($long_desc) : '';
+		$topic_text_add .= ($version) ? "\n\n[b]" . $language->lang('DL_HACK_VERSION') . ":[/b] " . $version : '';
+		$topic_text_add .= (!$topic_drop_mode) ? "\n[b]" . ((($extern) ? $language->lang('DL_EXTERN') : $language->lang('DL_FILE_NAME')) . ":[/b] " . $file_name) : '';
+		$topic_text_add .= (!$topic_drop_mode) ? (($extern) ? '' : "\n[b]" . $language->lang('DL_FILE_SIZE') . ":[/b] " . str_replace('&nbsp;', ' ', dl_format::dl_size($file_size))) : '';
 
 		if ($config['dl_topic_forum'] == -1)
 		{
@@ -549,7 +562,14 @@ class dl_topic extends dl_mod
 			$topic_title = utf8_normalize_nfc($language->lang('DL_TOPIC_SUBJECT', $dl_title));
 		}
 
-		$topic_text .= "\n\n[b]" . $language->lang('DL_VIEW_LINK') . ':[/b] [url=' . $helper->route('oxpus_dlext_controller', array('view' => 'detail', 'df_id' => $dl_id), true, '') . ']' . $dl_title . '[/url]';
+		if ($topic_drop_mode)
+		{
+			$topic_text .= "\n\n[b]" . $language->lang('DL_VIEW_LINK') . ':[/b] ' . $language->lang('DL_TOPIC_DROP_MODE_MISSING');
+		}
+		else
+		{
+			$topic_text .= "\n\n[b]" . $language->lang('DL_VIEW_LINK') . ':[/b] [url=' . $helper->route('oxpus_dlext_controller', array('view' => 'detail', 'df_id' => $dl_id), true, '') . ']' . $dl_title . '[/url]';
+		}
 
 		$poll = $forum_data = $post_data = array();
 		$update_message	= true;
@@ -633,6 +653,12 @@ class dl_topic extends dl_mod
 		}
 
 		submit_post('edit', $topic_title, $user->data['username'], $topic_type, $poll, $data, $update_message, true);
+
+		if ($topic_drop_mode)
+		{
+			$sql = 'UPDATE ' . TOPICS_TABLE . ' SET ' . $db->sql_build_array('UPDATE', array('topic_status' => ITEM_LOCKED)) . ' WHERE topic_id = ' . (int) $topic_id;
+			$db->sql_query($sql);
+		}
 
 		// We need to sync the forum if we changed from current user to user id and back to get the correct colour, so do this for every updated download
 		if (!function_exists('sync'))

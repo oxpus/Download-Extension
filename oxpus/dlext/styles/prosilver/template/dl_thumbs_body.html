@@ -1,25 +1,25 @@
-<!-- INCLUDE dl_header.html -->
+{% INCLUDE 'dl_header.html' %}
 
-<h2>{STATUS} <label>{DESCRIPTION}{HACK_VERSION} {MINI_IMG}</label></h2>
+<h2>{{ STATUS }} <label>{{ DESCRIPTION }}{{ HACK_VERSION }} {{ MINI_IMG }}</label></h2>
 
 <br />
 
-<form action="{S_FORMS_ACTION}" method="post" {ENCTYPE} id="dl_thumbs">
+<form action="{{ S_FORMS_ACTION }}" method="post" {{ ENCTYPE }} id="dl_thumbs">
 
 <div class="panel">
 	<div class="inner">
 
-	<h3>{L_DL_EDIT_THUMBS}</h3>
+	<h3>{{ lang('DL_EDIT_THUMBS') }}</h3>
 
 	<fieldset>
 
 	<dl>
-		<dt><label>{L_DL_FILE_NAME}</label></dt>
-		<dd><input type="file" name="img_link" class="inputbox" size="60" /><br /><span class="small">{DL_THUMB_MAX_SIZE}</span></dd>
+		<dt><label>{{ lang('DL_FILE_NAME') }}</label></dt>
+		<dd><input type="file" name="img_link" class="inputbox" size="60" /><br /><span class="small">{{ DL_THUMB_MAX_SIZE }}</span></dd>
 	</dl>
 	<dl>
-		<dt><label>{L_DL_FILE_DESCRIPTION}</label></dt>
-		<dd><input type="text" name="img_title" size="70" maxlength="255" value="{EDIT_IMG_TITLE}" class="inputbox autowidth" /></dd>
+		<dt><label>{{ lang('DL_FILE_DESCRIPTION') }}</label></dt>
+		<dd><input type="text" name="img_title" size="70" maxlength="255" value="{{ EDIT_IMG_TITLE }}" class="inputbox autowidth" /></dd>
 	</dl>
 
 	</fieldset>
@@ -28,22 +28,22 @@
 </div>
 
 <fieldset class="submit-buttons">
-	<input type="submit" name="submit" value="{L_SUBMIT}" class="button icon-button" />&nbsp;&nbsp;
-	<input type="reset" name="reset" value="{L_RESET}" class="button icon-button" />
+	<input type="submit" name="submit" value="{{ lang('SUBMIT') }}" class="button icon-button" />&nbsp;&nbsp;
+	<input type="reset" name="reset" value="{{ lang('RESET') }}" class="button icon-button" />
 </fieldset>
 
-<div>{S_FORM_TOKEN}{S_HIDDEN_FIELDS}</div>
+<div>{{ S_FORM_TOKEN }}{{ S_HIDDEN_FIELDS }}</div>
 
 </form>
 
-<!-- BEGIN thumbnails -->
-<!-- IF thumbnails.S_FIRST_ROW -->
+{% for thumbnails in loops.thumbnails %}
+{% if thumbnails.S_FIRST_ROW %}
 <br />
 
 <div class="rules">
 	<div class="inner">
 
-	{L_DL_THUMB_HINTS}
+	{{ lang('DL_THUMB_HINTS') }}
 
 	</div>
 </div>
@@ -52,23 +52,23 @@
 	<div class="inner">
 
 	<ul class="topiclist">
-<!-- ENDIF -->
-	<li class="row bg<!-- IF thumbnails.S_ROW_COUNT is even -->2<!-- ELSE -->1<!-- ENDIF -->">
+{% endif %}
+	<li class="row bg{% if thumbnails.S_ROW_COUNT is even %}2{% else %}1{% endif %}">
 		<dl>
-			<dt><a href="{thumbnails.IMG_LINK}" rel="prettyPhoto[pp_gal]" title="{thumbnails.IMG_TITLE}"><img src="{thumbnails.IMG_LINK}" alt="{thumbnails.IMG_TITLE}" title="{thumbnails.IMG_TITLE}" class="dl-thumb-box" /></a></dt>
-			<dd class="posts"><a href="{thumbnails.U_DELETE}">{L_DL_DELETE}</a></dd>
-			<dd class="topics"><a href="{thumbnails.U_EDIT}">{L_DL_EDIT_FILE}</a></dd>
+			<dt><a href="{{ thumbnails.IMG_LINK }}" rel="prettyPhoto[pp_gal]" title="{{ thumbnails.IMG_TITLE }}"><img src="{{ thumbnails.IMG_LINK }}" alt="{{ thumbnails.IMG_TITLE }}" title="{{ thumbnails.IMG_TITLE }}" class="dl-thumb-box" /></a></dt>
+			<dd class="posts"><a href="{{ thumbnails.U_DELETE }}">{{ lang('DL_DELETE') }}</a></dd>
+			<dd class="topics"><a href="{{ thumbnails.U_EDIT }}">{{ lang('DL_EDIT_FILE') }}</a></dd>
 		</dl>
 	</li>
 
-<!-- IF thumbnails.S_LAST_ROW -->
+{% if thumbnails.S_LAST_ROW %}
 	</ul>
 
 	</div>
 </div>
-<!-- ENDIF -->
-<!-- END thumbnails -->
+{% endif %}
+{% endfor %}
 
 <br />
 
-<!-- INCLUDE dl_footer.html -->
+{% INCLUDE 'dl_footer.html' %}

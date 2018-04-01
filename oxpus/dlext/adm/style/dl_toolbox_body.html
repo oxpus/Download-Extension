@@ -14,75 +14,75 @@ function select_switch(status)
 // ]]>
 </script>
 
-<h1>{L_DL_MANAGE}</h1>
+<h1>{{ lang('DL_MANAGE') }}</h1>
 
-<p>{L_DL_MANAGE_EXPLAIN}</p>
+<p>{{ lang('DL_MANAGE_EXPLAIN') }}</p>
 
-<form action="{S_MANAGE_ACTION}" method="post" id="create_dir">
+<form action="{{ S_MANAGE_ACTION }}" method="post" id="create_dir">
 
 <fieldset class="quick">
-	<input type="button" onclick="javascript:window.open('{U_DOWNLOADS_CHECK_FILES}', '_self');" class="button1" value="{L_DL_CHECK_FILE_SIZES}" />
-	<!-- IF S_CREATE_DIR_COMMAND -->&nbsp;&nbsp;&nbsp;<input type="submit" name="dircreate" class="button2" value="{L_DL_MANAGE_CREATE_DIR}:" />&nbsp;<input type="text" name="dir_name" size="30" maxlength="200" /><!-- ENDIF -->
-	<!-- IF S_UNASSIGNED_FILES -->&nbsp;&nbsp;&nbsp;<input type="button" onclick="javascript:window.open('{U_UNASSIGNED_FILES}', '_self');" class="button1" value="{L_DL_UNASSIGNED_FILES}" /><!-- ENDIF -->
-	<!-- IF S_THUMBNAIL_CHECK -->&nbsp;&nbsp;&nbsp;<input type="button" onclick="javascript:window.open('{U_DOWNLOADS_CHECK_THUMB}', '_self');" class="button1" value="{L_DL_CHECK_THUMBNAILS}" /><!-- ENDIF -->
+	<input type="button" onclick="javascript:window.open('{{ U_DOWNLOADS_CHECK_FILES }}', '_self');" class="button1" value="{{ lang('DL_CHECK_FILE_SIZES') }}" />
+	{% if S_CREATE_DIR_COMMAND %}&nbsp;&nbsp;&nbsp;<input type="submit" name="dircreate" class="button2" value="{{ lang('DL_MANAGE_CREATE_DIR') }}:" />&nbsp;<input type="text" name="dir_name" size="30" maxlength="200" />{% endif %}
+	{% if S_UNASSIGNED_FILES %}&nbsp;&nbsp;&nbsp;<input type="button" onclick="javascript:window.open('{{ U_UNASSIGNED_FILES }}', '_self');" class="button1" value="{{ lang('DL_UNASSIGNED_FILES') }}" />{% endif %}
+	{% if S_THUMBNAIL_CHECK %}&nbsp;&nbsp;&nbsp;<input type="button" onclick="javascript:window.open('{{ U_DOWNLOADS_CHECK_THUMB }}', '_self');" class="button1" value="{{ lang('DL_CHECK_THUMBNAILS') }}" />{% endif %}
 </fieldset>
 
 <fieldset>
 
-	<legend>{DL_NAVI}</legend>
+	<legend>{{ DL_NAVI }}</legend>
 
-	<!-- BEGIN dirs_row -->
+	{% for dirs_row in loops.dirs_row %}
 	<dl>
-		<dt><i class="icon fa-folder fa-fw"></i>&nbsp;<label>{dirs_row.DIR_LINK}</label></dt>
-		<dd><label>{dirs_row.DIR_DELETE_LINK}</label></dd>
+		<dt><i class="icon fa-folder fa-fw"></i>&nbsp;<label>{{ dirs_row.DIR_LINK }}</label></dt>
+		<dd><label>{{ dirs_row.DIR_DELETE_LINK }}</label></dd>
 	</dl>
-	<!-- END dirs_row -->
+	{% endfor %}
 
-	<!-- BEGIN files_row -->
+	{% for files_row in loops.files_row %}
 	<dl>
-		<dt><label>{files_row.FILE_EXIST}&nbsp;<!-- IF files_row.S_UNKNOWN_FILE --><span class="dl-red"><i class="icon fa-file-o fa-fw"></i>&nbsp;{L_DL_UNKNOWN_FILE}</span>&nbsp;<!-- ELSE --><i class="icon fa-file fa-fw"></i>&nbsp;<!-- ENDIF -->{files_row.FILE_NAME}</label></dt>
-		<dd><span>{files_row.FILE_SIZE}&nbsp;{files_row.FILE_SIZE_RANGE}<!-- IF files_row.FILE_NAME_REAL --><br />{files_row.FILE_NAME_REAL}<!-- ENDIF --></span></dd>
+		<dt><label>{{ files_row.FILE_EXIST }}&nbsp;{% if files_row.S_UNKNOWN_FILE %}<span class="dl-red"><i class="icon fa-file-o fa-fw"></i>&nbsp;{{ lang('DL_UNKNOWN_FILE') }}</span>&nbsp;{% else %}<i class="icon fa-file fa-fw"></i>&nbsp;{% endif %}{{ files_row.FILE_NAME }}</label></dt>
+		<dd><span>{{ files_row.FILE_SIZE }}&nbsp;{{ files_row.FILE_SIZE_RANGE }}{% if files_row.FILE_NAME_REAL %}<br />{{ files_row.FILE_NAME_REAL }}{% endif %}</span></dd>
 	</dl>
-	<!-- END files_row -->
+	{% endfor %}
 
-	<!-- IF files_row.S_ROW_COUNT -->
+	{% if files_row.S_ROW_COUNT %}
 	<p>
-		<span><a href="javascript:select_switch(true);" class="small">{L_MARK_ALL}</a> :: <a href="javascript:select_switch(false);" class="small">{L_UNMARK_ALL}</a></span>
+		<span><a href="javascript:select_switch(true);" class="small">{{ lang('MARK_ALL') }}</a> :: <a href="javascript:select_switch(false);" class="small">{{ lang('UNMARK_ALL') }}</a></span>
 	</p>
-	<!-- ENDIF -->
+	{% endif %}
 
 </fieldset>
 
-<!-- BEGIN overall_size -->
+{% for overall_size in loops.overall_size %}
 <fieldset>
 
 	<dl>
-		<dt><label>{L_DL_ALL}</label></dt>
-		<dd><span>{overall_size.OVERALL_SIZE}&nbsp;{overall_size.OVERALL_SIZE_RANGE}</span></dd>
+		<dt><label>{{ lang('DL_ALL') }}</label></dt>
+		<dd><span>{{ overall_size.OVERALL_SIZE }}&nbsp;{{ overall_size.OVERALL_SIZE_RANGE }}</span></dd>
 	</dl>
 
 </fieldset>
-<!-- END overall_size -->
+{% endfor %}
 
-<!-- IF S_EMPTY_FOLDER -->
+{% if S_EMPTY_FOLDER %}
 <fieldset>
 
 	<p class="submit-buttons">
-		<span>{L_DL_MANAGE_EMPTY_FOLDER}</span>
+		<span>{{ lang('DL_MANAGE_EMPTY_FOLDER') }}</span>
 	</p>
 
 </fieldset>
-<!-- ENDIF -->
+{% endif %}
 
-<!-- BEGIN file_move_delete -->
+{% for file_move_delete in loops.file_move_delete %}
 <fieldset>
 
 	<dl>
-		<dt><label>{L_DL_UNASSIGNED_FILES}</label></dt>
-		<dd>{file_move_delete.S_FILE_ACTION}&nbsp;&nbsp;<input type="submit" class="button2" name="file_action" value="{L_DL_GO}" />{S_FORM_TOKEN}</dd>
+		<dt><label>{{ lang('DL_UNASSIGNED_FILES') }}</label></dt>
+		<dd>{{ file_move_delete.S_FILE_ACTION }}&nbsp;&nbsp;<input type="submit" class="button2" name="file_action" value="{{ lang('DL_GO') }}" />{{ S_FORM_TOKEN }}</dd>
 	</dl>
 
 </fieldset>
-<!-- END file_move_delete -->
+{% endfor %}
 
 </form>

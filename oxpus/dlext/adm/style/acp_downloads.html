@@ -1,133 +1,133 @@
-<!-- INCLUDE overall_header.html -->
+{% INCLUDE 'overall_header.html' %}
 
 <a name="maincontent"></a>
 
-<h1>{DL_MANAGEMENT_TITLE}</h1>
-<!-- IF S_DL_OVERVIEW -->
-<p>{DL_MANAGEMENT_EXPLAIN}</p>
+<h1>{{ DL_MANAGEMENT_TITLE }}</h1>
+{% if S_DL_OVERVIEW %}
+<p>{{ DL_MANAGEMENT_EXPLAIN }}</p>
 
 <table cellspacing="1">
-	<caption>{DL_STATS}</caption>
+	<caption>{{ DL_STATS }}</caption>
 	<col class="col1" /><col class="col2" /><col class="col1" /><col class="col2" />
 <thead>
 <tr>
-	<th>{L_STATISTIC}</th>
-	<th>{L_VALUE}</th>
-	<th>{L_STATISTIC}</th>
-	<th>{L_VALUE}</th>
+	<th>{{ lang('STATISTIC') }}</th>
+	<th>{{ lang('VALUE') }}</th>
+	<th>{{ lang('STATISTIC') }}</th>
+	<th>{{ lang('VALUE') }}</th>
 </tr>
 </thead>
 <tbody>
 <tr>
-	<td>{L_DL_ACP_MAIN_STATS_TRAFFIC}{L_COLON}</td>
-	<td><span class="<!-- IF S_DL_TRAFFIC_OFF -->dl-red<!-- ELSE -->dl-green<!-- ENDIF -->"><strong><!-- IF S_DL_TRAFFIC_OFF -->{L_DL_ACP_MAIN_STATS_TRAFFIC_OFF}<!-- ELSE -->{L_DL_ACP_MAIN_STATS_TRAFFIC_ON}<!-- ENDIF --></strong></span></td>
-	<td>{L_DL_VERSION_CHECK}{L_COLON}</td>
-	<td><strong>{DL_MOD_VERSION_SIMPLE}</strong></td>
+	<td>{{ lang('DL_ACP_MAIN_STATS_TRAFFIC') }}{{ lang('COLON') }}</td>
+	<td><span class="{% if S_DL_TRAFFIC_OFF %}dl-red{% else %}dl-green{% endif %}"><strong>{% if S_DL_TRAFFIC_OFF %}{{ lang('DL_ACP_MAIN_STATS_TRAFFIC_OFF') }}{% else %}{{ lang('DL_ACP_MAIN_STATS_TRAFFIC_ON') }}{% endif %}</strong></span></td>
+	<td>{{ lang('DL_VERSION_CHECK') }}{{ lang('COLON') }}</td>
+	<td><strong>{{ DL_MOD_VERSION_SIMPLE }}</strong></td>
 </tr>
 <tr>
-	<td>{L_DL_ACP_MAIN_STATS_TOTAL_NUM}{L_COLON}</td>
-	<td><strong>{TOTAL_NUM}</strong></td>
-	<td>{L_DL_ACP_MAIN_STATS_TOTAL_EXTERN}{L_COLON}</td>
-	<td><strong>{TOTAL_EXTERN}</strong></td>
+	<td>{{ lang('DL_ACP_MAIN_STATS_TOTAL_NUM') }}{{ lang('COLON') }}</td>
+	<td><strong>{{ TOTAL_NUM }}</strong></td>
+	<td>{{ lang('DL_ACP_MAIN_STATS_TOTAL_EXTERN') }}{{ lang('COLON') }}</td>
+	<td><strong>{{ TOTAL_EXTERN }}</strong></td>
 </tr>
 <tr>
-	<td>{L_DL_ACP_MAIN_STATS_TOTAL_LIMIT}{L_COLON}</td>
-	<td><strong>{TOTAL_LIMIT}</strong></td>
-	<td>{L_DL_ACP_MAIN_STATS_TOTAL_SIZE}{L_COLON}</td>
-	<td><strong>{TOTAL_SIZE}</strong></td>
+	<td>{{ lang('DL_ACP_MAIN_STATS_TOTAL_LIMIT') }}{{ lang('COLON') }}</td>
+	<td><strong>{{ TOTAL_LIMIT }}</strong></td>
+	<td>{{ lang('DL_ACP_MAIN_STATS_TOTAL_SIZE') }}{{ lang('COLON') }}</td>
+	<td><strong>{{ TOTAL_SIZE }}</strong></td>
 </tr>
-<!-- IF not S_DL_TRAFFIC_OFF -->
+{% if not S_DL_TRAFFIC_OFF %}
 <tr>
-	<td>{L_DL_ACP_MAIN_STATS_TOTAL_TRAFFIC}{L_COLON}</td>
-	<td><strong>{OVERALL_TRAFFIC}</strong></td>
-	<td>{L_DL_ACP_MAIN_STATS_REMAIN_TRAFFIC}{L_COLON}</td>
-	<td><strong>{REMAIN_TRAFFIC}</strong></td>
-</tr>
-<tr>
-	<td>{L_DL_ACP_MAIN_STATS_TOTAL_GTRAFFIC}{L_COLON}</td>
-	<td><strong>{OVERALL_GTRAFFIC}</strong></td>
-	<td>{L_DL_ACP_MAIN_STATS_REMAIN_GTRAFFIC}{L_COLON}</td>
-	<td><strong>{REMAIN_GTRAFFIC}</strong></td>
-</tr>
-<!-- ENDIF -->
-<tr>
-	<td>{L_DL_OVERALL_KLICKS}{L_COLON}</td>
-	<td><strong>{OCLICKS}</strong></td>
-	<td>{L_DL_KLICKS}{L_COLON}</td>
-	<td><strong>{MCLICKS}</strong></td>
+	<td>{{ lang('DL_ACP_MAIN_STATS_TOTAL_TRAFFIC') }}{{ lang('COLON') }}</td>
+	<td><strong>{{ OVERALL_TRAFFIC }}</strong></td>
+	<td>{{ lang('DL_ACP_MAIN_STATS_REMAIN_TRAFFIC') }}{{ lang('COLON') }}</td>
+	<td><strong>{{ REMAIN_TRAFFIC }}</strong></td>
 </tr>
 <tr>
-	<td>{L_DL_ACP_MAIN_STATS_CATEGORIES}{L_COLON}</td>
-	<td><strong>{CATEGORIES}</strong></td>
-	<td>{L_DL_ACP_MAIN_STATS_SUBCATEGORIES}{L_COLON}</td>
-	<td><strong>{SUBCATEGORIES}</strong></td>
+	<td>{{ lang('DL_ACP_MAIN_STATS_TOTAL_GTRAFFIC') }}{{ lang('COLON') }}</td>
+	<td><strong>{{ OVERALL_GTRAFFIC }}</strong></td>
+	<td>{{ lang('DL_ACP_MAIN_STATS_REMAIN_GTRAFFIC') }}{{ lang('COLON') }}</td>
+	<td><strong>{{ REMAIN_GTRAFFIC }}</strong></td>
+</tr>
+{% endif %}
+<tr>
+	<td>{{ lang('DL_OVERALL_KLICKS') }}{{ lang('COLON') }}</td>
+	<td><strong>{{ OCLICKS }}</strong></td>
+	<td>{{ lang('DL_KLICKS') }}{{ lang('COLON') }}</td>
+	<td><strong>{{ MCLICKS }}</strong></td>
 </tr>
 <tr>
-	<td>{L_DL_ACP_MAIN_STATS_TOTAL_TSIZE}{L_COLON}</td>
-	<td><strong>{TOTAL_THUMBS_SIZE}</strong></td>
-	<td>{L_DL_ACP_MAIN_STATS_TOTAL_VERSIONS}{L_COLON}</td>
-	<td><strong>{TOTAL_VERSIONS}</strong></td>
+	<td>{{ lang('DL_ACP_MAIN_STATS_CATEGORIES') }}{{ lang('COLON') }}</td>
+	<td><strong>{{ CATEGORIES }}</strong></td>
+	<td>{{ lang('DL_ACP_MAIN_STATS_SUBCATEGORIES') }}{{ lang('COLON') }}</td>
+	<td><strong>{{ SUBCATEGORIES }}</strong></td>
 </tr>
 <tr>
-	<td>{L_DL_ACP_MAIN_STATS_TOTAL_VFSIZE}{L_COLON}</td>
-	<td><strong>{TOTAL_VERSION_FSIZE}</strong></td>
-	<td>{L_DL_ACP_MAIN_STATS_TOTAL_TFSIZE}{L_COLON}</td>
-	<td><strong>{TOTAL_VERSION_TSIZE}</strong></td>
+	<td>{{ lang('DL_ACP_MAIN_STATS_TOTAL_TSIZE') }}{{ lang('COLON') }}</td>
+	<td><strong>{{ TOTAL_THUMBS_SIZE }}</strong></td>
+	<td>{{ lang('DL_ACP_MAIN_STATS_TOTAL_VERSIONS') }}{{ lang('COLON') }}</td>
+	<td><strong>{{ TOTAL_VERSIONS }}</strong></td>
 </tr>
 <tr>
-	<td>{L_DL_ACP_MAIN_STATS_TOTAL_TODOS}{L_COLON}</td>
-	<td><strong class="color: <!-- IF TOTAL_TODOS -->dl-red<!-- ELSE -->dl-green<!-- ENDIF -->">{TOTAL_TODOS}</strong></td>
-	<td>{L_DL_ACP_MAIN_STATS_TOTAL_BROKEN}{L_COLON}</td>
-	<td><strong class="color: <!-- IF TOTAL_BROKEN -->dl-red<!-- ELSE -->dl-green<!-- ENDIF -->">{TOTAL_BROKEN}</strong></td>
+	<td>{{ lang('DL_ACP_MAIN_STATS_TOTAL_VFSIZE') }}{{ lang('COLON') }}</td>
+	<td><strong>{{ TOTAL_VERSION_FSIZE }}</strong></td>
+	<td>{{ lang('DL_ACP_MAIN_STATS_TOTAL_TFSIZE') }}{{ lang('COLON') }}</td>
+	<td><strong>{{ TOTAL_VERSION_TSIZE }}</strong></td>
+</tr>
+<tr>
+	<td>{{ lang('DL_ACP_MAIN_STATS_TOTAL_TODOS') }}{{ lang('COLON') }}</td>
+	<td><strong class="color: {% if TOTAL_TODOS %}dl-red{% else %}dl-green{% endif %}">{{ TOTAL_TODOS }}</strong></td>
+	<td>{{ lang('DL_ACP_MAIN_STATS_TOTAL_BROKEN') }}{{ lang('COLON') }}</td>
+	<td><strong class="color: {% if TOTAL_BROKEN %}dl-red{% else %}dl-green{% endif %}">{{ TOTAL_BROKEN }}</strong></td>
 </tr>
 </tbody>
 </table>
 
 <fieldset>
-	<form id="dl_reset_clicks" method="post" action="{U_ACTION}">
+	<form id="dl_reset_clicks" method="post" action="{{ U_ACTION }}">
 		<dl>
-			<dt><label for="reset_clicks">{L_DL_KLICKS_RESET}</label></dt>
-			<dd><input type="hidden" name="action" value="reset_clicks" /><input class="button2" type="submit" id="reset_clicks" name="reset_clicks" value="{L_RUN}" /></dd>
+			<dt><label for="reset_clicks">{{ lang('DL_KLICKS_RESET') }}</label></dt>
+			<dd><input type="hidden" name="action" value="reset_clicks" /><input class="button2" type="submit" id="reset_clicks" name="reset_clicks" value="{{ lang('RUN') }}" /></dd>
 		</dl>
 	</form>
 
-	<form id="dl_reset_stats" method="post" action="{U_ACTION}">
+	<form id="dl_reset_stats" method="post" action="{{ U_ACTION }}">
 		<dl>
-			<dt><label for="reset_stats">{L_DL_STATS_DELETE_ALL}</label></dt>
-			<dd><input type="hidden" name="action" value="reset_stats" /><input class="button2" type="submit" id="reset_stats" name="reset_stats" value="{L_RUN}" /></dd>
+			<dt><label for="reset_stats">{{ lang('DL_STATS_DELETE_ALL') }}</label></dt>
+			<dd><input type="hidden" name="action" value="reset_stats" /><input class="button2" type="submit" id="reset_stats" name="reset_stats" value="{{ lang('RUN') }}" /></dd>
 		</dl>
 	</form>
 
-	<form id="dl_reset_cache" method="post" action="{U_ACTION}">
+	<form id="dl_reset_cache" method="post" action="{{ U_ACTION }}">
 		<dl>
-			<dt><label for="reset_cache">{L_PURGE_CACHE}</label></dt>
-			<dd><input type="hidden" name="action" value="reset_cache" /><input class="button2" type="submit" id="reset_cache" name="reset_cache" value="{L_RUN}" /></dd>
+			<dt><label for="reset_cache">{{ lang('PURGE_CACHE') }}</label></dt>
+			<dd><input type="hidden" name="action" value="reset_cache" /><input class="button2" type="submit" id="reset_cache" name="reset_cache" value="{{ lang('RUN') }}" /></dd>
 		</dl>
 	</form>
 </fieldset>
-<!-- ELSE -->
-<!-- IF S_DL_TRAFFIC_OFF --><br /><div>{L_DL_TRAFFIC_OFF_EXPLAIN}</div><!-- ENDIF -->
-<!-- ENDIF -->
+{% else %}
+{% if S_DL_TRAFFIC_OFF %}<br /><div>{{ lang('DL_TRAFFIC_OFF_EXPLAIN') }}</div>{% endif %}
+{% endif %}
 
-<!-- IF U_BACK --><div class="dl-right"><a href="{U_BACK}">&laquo; {L_BACK}</a></div><!-- ENDIF -->
+{% if U_BACK %}<div class="dl-right"><a href="{{ U_BACK }}">&laquo; {{ lang('BACK') }}</a></div>{% endif %}
 
-<!-- IF S_DL_CONFIG --><!-- INCLUDE dl_config_body.html --><!-- ENDIF -->
-<!-- IF S_DL_TOOLBOX --><!-- INCLUDE dl_toolbox_body.html --><!-- ENDIF -->
-<!-- IF S_DL_THUMBS --><!-- INCLUDE dl_thumbs_body.html --><!-- ENDIF -->
-<!-- IF S_DL_BLACKLIST --><!-- INCLUDE dl_ext_blacklist_body.html --><!-- ENDIF -->
-<!-- IF S_DL_BANLIST --><!-- INCLUDE dl_banlist_body.html --><!-- ENDIF -->
-<!-- IF S_DL_CONFIRM --><!-- INCLUDE dl_confirm_body.html --><!-- ENDIF -->
-<!-- IF S_DL_TRAFFIC --><!-- INCLUDE dl_traffic_body.html --><!-- ENDIF -->
-<!-- IF S_DL_CATEGORIES --><!-- INCLUDE dl_cat_body.html --><!-- ENDIF -->
-<!-- IF S_DL_CATEGORY_EDIT --><!-- INCLUDE dl_cat_edit_body.html --><!-- ENDIF -->
-<!-- IF S_DL_FILES --><!-- INCLUDE dl_files_body.html --><!-- ENDIF -->
-<!-- IF S_DL_FILES_EDIT --><!-- INCLUDE dl_files_edit_body.html --><!-- ENDIF -->
-<!-- IF S_DL_STATS --><!-- INCLUDE dl_stats_admin_body.html --><!-- ENDIF -->
-<!-- IF S_DL_PERMISSIONS --><!-- INCLUDE dl_permissions_body.html --><!-- ENDIF -->
-<!-- IF S_DL_FIELDS --><!-- INCLUDE dl_fields_body.html --><!-- ENDIF -->
-<!-- IF S_DL_BROWSER --><!-- INCLUDE dl_browser_body.html --><!-- ENDIF -->
-<!-- IF S_DL_PERM_CHECK --><!-- INCLUDE dl_perm_check_body.html --><!-- ENDIF -->
+{% if S_DL_CONFIG %}{% INCLUDE 'dl_config_body.html' %}{% endif %}
+{% if S_DL_TOOLBOX %}{% INCLUDE 'dl_toolbox_body.html' %}{% endif %}
+{% if S_DL_THUMBS %}{% INCLUDE 'dl_thumbs_body.html' %}{% endif %}
+{% if S_DL_BLACKLIST %}{% INCLUDE 'dl_ext_blacklist_body.html' %}{% endif %}
+{% if S_DL_BANLIST %}{% INCLUDE 'dl_banlist_body.html' %}{% endif %}
+{% if S_DL_CONFIRM %}{% INCLUDE 'dl_confirm_body.html' %}{% endif %}
+{% if S_DL_TRAFFIC %}{% INCLUDE 'dl_traffic_body.html' %}{% endif %}
+{% if S_DL_CATEGORIES %}{% INCLUDE 'dl_cat_body.html' %}{% endif %}
+{% if S_DL_CATEGORY_EDIT %}{% INCLUDE 'dl_cat_edit_body.html' %}{% endif %}
+{% if S_DL_FILES %}{% INCLUDE 'dl_files_body.html' %}{% endif %}
+{% if S_DL_FILES_EDIT %}{% INCLUDE 'dl_files_edit_body.html' %}{% endif %}
+{% if S_DL_STATS %}{% INCLUDE 'dl_stats_admin_body.html' %}{% endif %}
+{% if S_DL_PERMISSIONS %}{% INCLUDE 'dl_permissions_body.html' %}{% endif %}
+{% if S_DL_FIELDS %}{% INCLUDE 'dl_fields_body.html' %}{% endif %}
+{% if S_DL_BROWSER %}{% INCLUDE 'dl_browser_body.html' %}{% endif %}
+{% if S_DL_PERM_CHECK %}{% INCLUDE 'dl_perm_check_body.html' %}{% endif %}
 
-<fieldset class="submit-buttons">{DL_MOD_RELEASE}</fieldset>
+<fieldset class="submit-buttons">{{ DL_MOD_RELEASE }}</fieldset>
 
-<!-- INCLUDE overall_footer.html -->
+{% INCLUDE 'overall_footer.html' %}

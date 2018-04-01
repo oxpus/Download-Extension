@@ -1,96 +1,96 @@
-<!-- INCLUDE dl_header.html -->
+{% INCLUDE 'dl_header.html' %}
 
-<!-- IF S_ENABLE_RATE -->
+{% if S_ENABLE_RATE %}
 <script type="text/javascript">
 // <![CDATA[
-var phpEx = '{PHPEX}';
-var dlAjaxUrl = '{U_DL_AJAX}';
+var phpEx = '{{ PHPEX }}';
+var dlAjaxUrl = '{{ U_DL_AJAX }}';
 // ]]>
 </script>
-<script type="text/javascript" src="{EXT_DL_PATH_AJAX}ajax_dl.js"></script>
-<!-- ENDIF -->
+<script type="text/javascript" src="{{ EXT_DL_PATH_AJAX }}ajax_dl.js"></script>
+{% endif %}
 
-<h2 class="solo">{PAGE_NAME}</h2>
+<h2 class="solo">{{ PAGE_NAME }}</h2>
 
 	<div class="forabg">
 		<div class="inner">
 		<ul class="topiclist">
 			<li class="header">
 				<dl>
-					<dt>{L_DL_NAME}</dt>
-					<dd class="topics">{L_DL_FILE_SIZE}</dd>
-					<dd class="posts">{L_DL_KLICKS} /<br />{L_DL_OVERALL_KLICKS}</dd>
-					<!-- IF S_ENABLE_RATE -->
-					<dd class="lastpost dl-cell-clock">{L_DL_RATING}</dd>
-					<!-- ENDIF -->
+					<dt>{{ lang('DL_NAME') }}</dt>
+					<dd class="topics">{{ lang('DL_FILE_SIZE') }}</dd>
+					<dd class="posts">{{ lang('DL_KLICKS') }} /<br />{{ lang('DL_OVERALL_KLICKS') }}</dd>
+					{% if S_ENABLE_RATE %}
+					<dd class="lastpost dl-cell-clock">{{ lang('DL_RATING') }}</dd>
+					{% endif %}
 				</dl>
 			</li>
 		</ul>
-		<!-- IF S_OVERALL_VIEW -->
+		{% if S_OVERALL_VIEW %}
 		<ul class="topiclist forums">
-			<!-- BEGIN downloads -->
+			{% for downloads in loops.downloads %}
 			<li class="row">
 				<dl>
-					<dt>{downloads.STATUS} <a href="{downloads.U_DL_LINK}"><label>{downloads.DESCRIPTION}</label></a> <span>{downloads.HACK_VERSION}</span><br />{L_DL_CAT_NAME}: <a href="{downloads.U_CAT_VIEW}">{downloads.CAT_NAME}</a></dt>
-					<dd class="topics">{downloads.FILE_SIZE}</dd>
-					<dd class="posts">{downloads.FILE_KLICKS} | {downloads.FILE_OVERALL_KLICKS}</dd>
-					<!-- IF S_ENABLE_RATE -->
-					<dd class="lastpost"><!-- IF downloads.RATING_IMG --><div id="rating_{downloads.DF_ID}">{downloads.RATING_IMG}</div>&nbsp;{downloads.RATINGS}<!-- ENDIF --></dd>
-					<!-- ENDIF -->
+					<dt>{{ downloads.STATUS }} <a href="{{ downloads.U_DL_LINK }}"><label>{{ downloads.DESCRIPTION }}</label></a> <span>{{ downloads.HACK_VERSION }}</span><br />{{ lang('DL_CAT_NAME') }}: <a href="{{ downloads.U_CAT_VIEW }}">{{ downloads.CAT_NAME }}</a></dt>
+					<dd class="topics">{{ downloads.FILE_SIZE }}</dd>
+					<dd class="posts">{{ downloads.FILE_KLICKS }} | {{ downloads.FILE_OVERALL_KLICKS }}</dd>
+					{% if S_ENABLE_RATE %}
+					<dd class="lastpost">{% if downloads.RATING_IMG %}<div id="rating_{{ downloads.DF_ID }}">{{ downloads.RATING_IMG }}</div>&nbsp;{{ downloads.RATINGS }}{% endif %}</dd>
+					{% endif %}
 				</dl>
 			</li>
-			<!-- END downloads -->
+			{% endfor %}
 		</ul>
-		<!-- ENDIF -->
+		{% endif %}
 		</div>
 	</div>
 
-	<!-- IF .pagination or TOTAL_DL -->
+	{% if loops.pagination|length or TOTAL_DL %}
 		<div class="pagination">
-			{TOTAL_DL}
-			<!-- IF .pagination -->
-				<!-- INCLUDE pagination.html -->
-			<!-- ELSE -->
-				&bull; {PAGE_NUMBER}
-			<!-- ENDIF -->
+			{{ TOTAL_DL }}
+			{% if loops.pagination|length %}
+				{% INCLUDE 'pagination.html' %}
+			{% else %}
+				&bull; {{ PAGE_NUMBER }}
+			{% endif %}
 		</div>
-	<!-- ENDIF -->
+	{% endif %}
 
-	<!-- IF S_SORT_OPTIONS -->
-	<form action="{S_FORM_ACTION}" method="post" name="dl_mod">
+	{% if S_SORT_OPTIONS %}
+	<form action="{{ S_FORM_ACTION }}" method="post" name="dl_mod">
 
 	<fieldset>
 
 	<p class="dl-text-center">
-		{L_SORT_BY}
+		{{ lang('SORT_BY') }}
 		&nbsp;
 		<select name="sort_by" onchange="forms['dl_mod'].submit();">
-		<option value="0"{SELECTED_0}>{L_DL_DEFAULT_SORT}</option>
-		<option value="1"{SELECTED_1}>{L_DL_FILE_DESCRIPTION}</option>
-		<option value="2"{SELECTED_2}>{L_DL_FILE_NAME}</option>
-		<option value="3"{SELECTED_3}>{L_DL_KLICKS}</option>
-		<option value="4"{SELECTED_4}>{L_DL_FREE}</option>
-		<option value="5"{SELECTED_5}>{L_DL_EXTERN}</option>
-		<option value="6"{SELECTED_6}>{L_DL_FILE_SIZE}</option>
-		<option value="7"{SELECTED_7}>{L_LAST_UPDATED}</option>
-		<option value="8"{SELECTED_8}>{L_DL_RATING}</option>
+		<option value="0"{{ SELECTED_0 }}>{{ lang('DL_DEFAULT_SORT') }}</option>
+		<option value="1"{{ SELECTED_1 }}>{{ lang('DL_FILE_DESCRIPTION') }}</option>
+		<option value="2"{{ SELECTED_2 }}>{{ lang('DL_FILE_NAME') }}</option>
+		<option value="3"{{ SELECTED_3 }}>{{ lang('DL_KLICKS') }}</option>
+		<option value="4"{{ SELECTED_4 }}>{{ lang('DL_FREE') }}</option>
+		<option value="5"{{ SELECTED_5 }}>{{ lang('DL_EXTERN') }}</option>
+		<option value="6"{{ SELECTED_6 }}>{{ lang('DL_FILE_SIZE') }}</option>
+		<option value="7"{{ SELECTED_7 }}>{{ lang('LAST_UPDATED') }}</option>
+		<option value="8"{{ SELECTED_8 }}>{{ lang('DL_RATING') }}</option>
 		</select>
 		&nbsp;&nbsp;&nbsp;
-		{L_DL_ORDER}
+		{{ lang('DL_ORDER') }}
 		&nbsp;
 		<select name="order" onchange="forms['dl_mod'].submit()">
-		<option value="ASC"{SELECTED_SORT_0}>{L_ASCENDING}</option>
-		<option value="DESC"{SELECTED_SORT_1}>{L_DESCENDING}</option>
+		<option value="ASC"{{ SELECTED_SORT_0 }}>{{ lang('ASCENDING') }}</option>
+		<option value="DESC"{{ SELECTED_SORT_1 }}>{{ lang('DESCENDING') }}</option>
 		</select>
 		&nbsp;
-		<input type="submit" class="button2" value="{L_GO}" />
+		<input type="submit" class="button2" value="{{ lang('GO') }}" />
 	</p>
 
 	</fieldset>
 
 	</form>
-	<!-- ENDIF -->
+	{% endif %}
 
 <br />
 
-<!-- INCLUDE dl_footer.html -->
+{% INCLUDE 'dl_footer.html' %}

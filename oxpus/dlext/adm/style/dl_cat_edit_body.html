@@ -1,41 +1,41 @@
-<h1>{L_DL_CAT_TITLE}</h1>
+<h1>{{ lang('DL_CAT_TITLE') }}</h1>
 
-<!-- IF S_ERROR -->
+{% if S_ERROR %}
 	<div class="errorbox">
-		<h3>{L_WARNING}</h3>
-		<p>{ERROR_MSG}</p>
+		<h3>{{ lang('WARNING') }}</h3>
+		<p>{{ ERROR_MSG }}</p>
 	</div>
-<!-- ENDIF -->
+{% endif %}
 
-<form action="{S_CATEGORY_ACTION}" method="post" id="dl_edit_cat">
+<form action="{{ S_CATEGORY_ACTION }}" method="post" id="dl_edit_cat">
 
 <fieldset>
 
-	<legend>{L_DL_CAT_MODE}</legend>
+	<legend>{{ lang('DL_CAT_MODE') }}</legend>
 
 	<dl>
-		<dt><label>{L_DL_CAT_NAME}</label></dt>
-		<dd><a href="javascript:void(0)" onclick="javascript:help_popup('DL_CAT_NAME')" class="nav">{ICON_DL_HELP}</a>&nbsp;<input type="text" name="cat_name" size="40" maxlength="255" value="{CAT_NAME}" /></dd>
+		<dt><label>{{ lang('DL_CAT_NAME') }}</label></dt>
+		<dd><a href="javascript:void(0)" onclick="javascript:help_popup('DL_CAT_NAME')" class="nav">{{ ICON_DL_HELP }}</a>&nbsp;<input type="text" name="cat_name" size="40" maxlength="255" value="{{ CAT_NAME }}" /></dd>
 	</dl>
 	<dl>
-		<dt><label>{L_DL_CAT_PARENT}</label></dt>
-		<dd><a href="javascript:void(0)" onclick="javascript:help_popup('DL_CAT_PARENT')" class="nav">{ICON_DL_HELP}</a>&nbsp;{CAT_PARENT}</dd>
+		<dt><label>{{ lang('DL_CAT_PARENT') }}</label></dt>
+		<dd><a href="javascript:void(0)" onclick="javascript:help_popup('DL_CAT_PARENT')" class="nav">{{ ICON_DL_HELP }}</a>&nbsp;{{ CAT_PARENT }}</dd>
 	</dl>
 	<dl>
-		<dt><label>{L_DL_CAT_PATH}</label></dt>
-		<dd><a href="javascript:void(0)" onclick="javascript:help_popup('DL_CAT_PATH')" class="nav">{ICON_DL_HELP}</a>&nbsp;{S_CAT_PATH}</dd>
+		<dt><label>{{ lang('DL_CAT_PATH') }}</label></dt>
+		<dd><a href="javascript:void(0)" onclick="javascript:help_popup('DL_CAT_PATH')" class="nav">{{ ICON_DL_HELP }}</a>&nbsp;{{ S_CAT_PATH }}</dd>
 	</dl>
 	<dl>
-		<dt><label>{L_DL_CAT_DESCRIPTION}</label></dt>
-		<dd><a href="javascript:void(0)" onclick="javascript:help_popup('DL_CAT_DESCRIPTION')" class="nav">{ICON_DL_HELP}</a>&nbsp;<textarea name="description" rows="3" cols="40">{DESCRIPTION}</textarea></dd>
+		<dt><label>{{ lang('DL_CAT_DESCRIPTION') }}</label></dt>
+		<dd><a href="javascript:void(0)" onclick="javascript:help_popup('DL_CAT_DESCRIPTION')" class="nav">{{ ICON_DL_HELP }}</a>&nbsp;<textarea name="description" rows="3" cols="40">{{ DESCRIPTION }}</textarea></dd>
 	</dl>
 	<dl>
-		<dt><label>{L_DL_CAT_ICON}</label></dt>
-		<dd><a href="javascript:void(0)" onclick="javascript:help_popup('DL_CAT_ICON')" class="nav">{ICON_DL_HELP}</a>&nbsp;<input type="text" name="cat_icon" size="40" maxlength="255" value="{CAT_ICON}" /></dd>
+		<dt><label>{{ lang('DL_CAT_ICON') }}</label></dt>
+		<dd><a href="javascript:void(0)" onclick="javascript:help_popup('DL_CAT_ICON')" class="nav">{{ ICON_DL_HELP }}</a>&nbsp;<input type="text" name="cat_icon" size="40" maxlength="255" value="{{ CAT_ICON }}" /></dd>
 	</dl>
 	<dl>
-		<dt><label>{L_DL_CAT_RULES}</label></dt>
-		<dd><a href="javascript:void(0)" onclick="javascript:help_popup('DL_CAT_RULES')" class="nav">{ICON_DL_HELP}</a>&nbsp;<textarea name="rules" rows="3" cols="40">{RULES}</textarea></dd>
+		<dt><label>{{ lang('DL_CAT_RULES') }}</label></dt>
+		<dd><a href="javascript:void(0)" onclick="javascript:help_popup('DL_CAT_RULES')" class="nav">{{ ICON_DL_HELP }}</a>&nbsp;<textarea name="rules" rows="3" cols="40">{{ RULES }}</textarea></dd>
 	</dl>
 
 </fieldset>
@@ -43,16 +43,16 @@
 <fieldset>
 
 	<dl>
-		<dt><label>{L_DL_COPY_PERMISSIONS}</label></dt>
-		<dd><a href="javascript:void(0)" onclick="javascript:help_popup('DL_COPY_PERMISSIONS')" class="nav">{ICON_DL_HELP}</a>&nbsp;{PERMS_COPY_FROM}</dd>
+		<dt><label>{{ lang('DL_COPY_PERMISSIONS') }}</label></dt>
+		<dd><a href="javascript:void(0)" onclick="javascript:help_popup('DL_COPY_PERMISSIONS')" class="nav">{{ ICON_DL_HELP }}</a>&nbsp;{{ PERMS_COPY_FROM }}</dd>
 	</dl>
 	<dl>
-		<dt><label>{L_DL_MUST_APPROVE}</label></dt>
-		<dd><a href="javascript:void(0)" onclick="javascript:help_popup('DL_MUST_APPROVE')" class="nav">{ICON_DL_HELP}</a>&nbsp;<label><input type="radio" class="radio" name="must_approve" value="1" {MUST_APPROVE_YES} />&nbsp;{L_YES}</label>&nbsp;<label><input type="radio" class="radio" name="must_approve" value="0" {MUST_APPROVE_NO} />&nbsp;{L_NO}</label></dd>
+		<dt><label>{{ lang('DL_MUST_APPROVE') }}</label></dt>
+		<dd><a href="javascript:void(0)" onclick="javascript:help_popup('DL_MUST_APPROVE')" class="nav">{{ ICON_DL_HELP }}</a>&nbsp;<label><input type="radio" class="radio" name="must_approve" value="1" {{ MUST_APPROVE_YES }} />&nbsp;{{ lang('YES') }}</label>&nbsp;<label><input type="radio" class="radio" name="must_approve" value="0" {{ MUST_APPROVE_NO }} />&nbsp;{{ lang('NO') }}</label></dd>
 	</dl>
 	<dl>
-		<dt><label>{L_DL_MOD_DESC_ALLOW}</label></dt>
-		<dd><a href="javascript:void(0)" onclick="javascript:help_popup('DL_MOD_DESC_ALLOW')" class="nav">{ICON_DL_HELP}</a>&nbsp;<label><input type="radio" class="radio" name="allow_mod_desc" value="1" {ALLOW_MOD_DESC_YES} />&nbsp;{L_YES}</label>&nbsp;<label><input type="radio" class="radio" name="allow_mod_desc" value="0" {ALLOW_MOD_DESC_NO} />&nbsp;{L_NO}</label></dd>
+		<dt><label>{{ lang('DL_MOD_DESC_ALLOW') }}</label></dt>
+		<dd><a href="javascript:void(0)" onclick="javascript:help_popup('DL_MOD_DESC_ALLOW')" class="nav">{{ ICON_DL_HELP }}</a>&nbsp;<label><input type="radio" class="radio" name="allow_mod_desc" value="1" {{ ALLOW_MOD_DESC_YES }} />&nbsp;{{ lang('YES') }}</label>&nbsp;<label><input type="radio" class="radio" name="allow_mod_desc" value="0" {{ ALLOW_MOD_DESC_NO }} />&nbsp;{{ lang('NO') }}</label></dd>
 	</dl>
 
 </fieldset>
@@ -60,93 +60,93 @@
 <fieldset>
 
 	<dl>
-		<dt><label>{L_DL_STATISTICS}</label></dt>
-		<dd><a href="javascript:void(0)" onclick="javascript:help_popup('DL_STATISTICS')" class="nav">{ICON_DL_HELP}</a>&nbsp;<label><input type="radio" class="radio" name="statistics" value="1" {STATS_YES} />&nbsp;{L_YES}</label>&nbsp;<label><input type="radio" class="radio" name="statistics" value="0" {STATS_NO} />&nbsp;{L_NO}</label></dd>
+		<dt><label>{{ lang('DL_STATISTICS') }}</label></dt>
+		<dd><a href="javascript:void(0)" onclick="javascript:help_popup('DL_STATISTICS')" class="nav">{{ ICON_DL_HELP }}</a>&nbsp;<label><input type="radio" class="radio" name="statistics" value="1" {{ STATS_YES }} />&nbsp;{{ lang('YES') }}</label>&nbsp;<label><input type="radio" class="radio" name="statistics" value="0" {{ STATS_NO }} />&nbsp;{{ lang('NO') }}</label></dd>
 	</dl>
 	<dl>
-		<dt><label>{L_DL_STATS_PRUNE}</label></dt>
-		<dd><a href="javascript:void(0)" onclick="javascript:help_popup('DL_STATS_PRUNE')" class="nav">{ICON_DL_HELP}</a>&nbsp;<input type="text" name="stats_prune" value="{STATS_PRUNE}" size="10" maxlength="8" /></dd>
+		<dt><label>{{ lang('DL_STATS_PRUNE') }}</label></dt>
+		<dd><a href="javascript:void(0)" onclick="javascript:help_popup('DL_STATS_PRUNE')" class="nav">{{ ICON_DL_HELP }}</a>&nbsp;<input type="text" name="stats_prune" value="{{ STATS_PRUNE }}" size="10" maxlength="8" /></dd>
 	</dl>
 	<dl>
-		<dt><label>{L_DL_COMMENTS}</label></dt>
-		<dd><a href="javascript:void(0)" onclick="javascript:help_popup('DL_COMMENTS')" class="nav">{ICON_DL_HELP}</a>&nbsp;<label><input type="radio" class="radio" name="comments" value="1" {COMMENTS_YES} />&nbsp;{L_YES}</label>&nbsp;<label><input type="radio" class="radio" name="comments" value="0" {COMMENTS_NO} />&nbsp;{L_NO}</label></dd>
+		<dt><label>{{ lang('DL_COMMENTS') }}</label></dt>
+		<dd><a href="javascript:void(0)" onclick="javascript:help_popup('DL_COMMENTS')" class="nav">{{ ICON_DL_HELP }}</a>&nbsp;<label><input type="radio" class="radio" name="comments" value="1" {{ COMMENTS_YES }} />&nbsp;{{ lang('YES') }}</label>&nbsp;<label><input type="radio" class="radio" name="comments" value="0" {{ COMMENTS_NO }} />&nbsp;{{ lang('NO') }}</label></dd>
 	</dl>
 	<dl>
-		<dt><label>{L_DL_APPROVE_COMMENTS}</label></dt>
-		<dd><a href="javascript:void(0)" onclick="javascript:help_popup('DL_APPROVE_COMMENTS')" class="nav">{ICON_DL_HELP}</a>&nbsp;<label><input type="radio" class="radio" name="approve_comments" value="1" {APPROVE_COMMENTS_YES} />&nbsp;{L_YES}</label>&nbsp;<label><input type="radio" class="radio" name="approve_comments" value="0" {APPROVE_COMMENTS_NO} />&nbsp;{L_NO}</label></dd>
+		<dt><label>{{ lang('DL_APPROVE_COMMENTS') }}</label></dt>
+		<dd><a href="javascript:void(0)" onclick="javascript:help_popup('DL_APPROVE_COMMENTS')" class="nav">{{ ICON_DL_HELP }}</a>&nbsp;<label><input type="radio" class="radio" name="approve_comments" value="1" {{ APPROVE_COMMENTS_YES }} />&nbsp;{{ lang('YES') }}</label>&nbsp;<label><input type="radio" class="radio" name="approve_comments" value="0" {{ APPROVE_COMMENTS_NO }} />&nbsp;{{ lang('NO') }}</label></dd>
 	</dl>
-	<!-- IF S_THUMNAILS -->
+	{% if S_THUMNAILS %}
 	<dl>
-		<dt><label>{L_DL_THUMB_CAT}</label></dt>
-		<dd><a href="javascript:void(0)" onclick="javascript:help_popup('DL_THUMB_CAT')" class="nav">{ICON_DL_HELP}</a>&nbsp;<label><input type="radio" class="radio" name="allow_thumbs" value="1" {ALLOW_THUMBS_YES} />&nbsp;{L_YES}</label>&nbsp;<label><input type="radio" class="radio" name="allow_thumbs" value="0" {ALLOW_THUMBS_NO} />&nbsp;{L_NO}</label></dd>
+		<dt><label>{{ lang('DL_THUMB_CAT') }}</label></dt>
+		<dd><a href="javascript:void(0)" onclick="javascript:help_popup('DL_THUMB_CAT')" class="nav">{{ ICON_DL_HELP }}</a>&nbsp;<label><input type="radio" class="radio" name="allow_thumbs" value="1" {{ ALLOW_THUMBS_YES }} />&nbsp;{{ lang('YES') }}</label>&nbsp;<label><input type="radio" class="radio" name="allow_thumbs" value="0" {{ ALLOW_THUMBS_NO }} />&nbsp;{{ lang('NO') }}</label></dd>
 	</dl>
-	<!-- ENDIF -->
+	{% endif %}
 	<dl>
-		<dt><label>{L_DL_BUG_TRACKER_CAT}</label></dt>
-		<dd><a href="javascript:void(0)" onclick="javascript:help_popup('DL_BUG_TRACKER_CAT')" class="nav">{ICON_DL_HELP}</a>&nbsp;<label><input type="radio" class="radio" name="bug_tracker" value="1" {BUG_TRACKER_YES} />&nbsp;{L_YES}</label>&nbsp;<label><input type="radio" class="radio" name="bug_tracker" value="0" {BUG_TRACKER_NO} />&nbsp;{L_NO}</label></dd>
-	</dl>
-	<dl>
-		<dt><label>{L_DL_CAT_TRAFFIC}</label></dt>
-		<dd><a href="javascript:void(0)" onclick="javascript:help_popup('DL_CAT_TRAFFIC', '{L_DL_CAT_TRAFFIC_HELP}')" class="nav">{ICON_DL_HELP}</a>&nbsp;<input type="text" name="cat_traffic" size="10" maxlength="10" value="{CAT_TRAFFIC}" />&nbsp;{S_CAT_TRAFFIC_RANGE}</dd>
+		<dt><label>{{ lang('DL_BUG_TRACKER_CAT') }}</label></dt>
+		<dd><a href="javascript:void(0)" onclick="javascript:help_popup('DL_BUG_TRACKER_CAT')" class="nav">{{ ICON_DL_HELP }}</a>&nbsp;<label><input type="radio" class="radio" name="bug_tracker" value="1" {{ BUG_TRACKER_YES }} />&nbsp;{{ lang('YES') }}</label>&nbsp;<label><input type="radio" class="radio" name="bug_tracker" value="0" {{ BUG_TRACKER_NO }} />&nbsp;{{ lang('NO') }}</label></dd>
 	</dl>
 	<dl>
-		<dt><label>{L_DL_SHOW_FILE_HASH}</label></dt>
-		<dd><a href="javascript:void(0)" onclick="javascript:help_popup('DL_SHOW_FILE_HASH')" class="nav">{ICON_DL_HELP}</a>&nbsp;<label><input type="radio" class="radio" name="show_file_hash" value="1" {SHOW_FILE_HASH_YES} />&nbsp;{L_YES}</label>&nbsp;<label><input type="radio" class="radio" name="show_file_hash" value="0" {SHOW_FILE_HASH_NO} />&nbsp;{L_NO}</label></dd>
+		<dt><label>{{ lang('DL_CAT_TRAFFIC') }}</label></dt>
+		<dd><a href="javascript:void(0)" onclick="javascript:help_popup('DL_CAT_TRAFFIC', '{{ lang('DL_CAT_TRAFFIC_HELP') }}')" class="nav">{{ ICON_DL_HELP }}</a>&nbsp;<input type="text" name="cat_traffic" size="10" maxlength="10" value="{{ CAT_TRAFFIC }}" />&nbsp;{{ S_CAT_TRAFFIC_RANGE }}</dd>
+	</dl>
+	<dl>
+		<dt><label>{{ lang('DL_SHOW_FILE_HASH') }}</label></dt>
+		<dd><a href="javascript:void(0)" onclick="javascript:help_popup('DL_SHOW_FILE_HASH')" class="nav">{{ ICON_DL_HELP }}</a>&nbsp;<label><input type="radio" class="radio" name="show_file_hash" value="1" {{ SHOW_FILE_HASH_YES }} />&nbsp;{{ lang('YES') }}</label>&nbsp;<label><input type="radio" class="radio" name="show_file_hash" value="0" {{ SHOW_FILE_HASH_NO }} />&nbsp;{{ lang('NO') }}</label></dd>
 	</dl>
 
 </fieldset>
 
-<!-- IF S_SET_USER_ON -->
+{% if S_SET_USER_ON %}
 <fieldset>
 
 	<dl>
-		<dt><label>{L_DL_SET_ADD}</label></dt>
-		<dd><a href="javascript:void(0)" onclick="javascript:help_popup('DL_SET_ADD')" class="nav">{ICON_DL_HELP}</a>&nbsp;<label>{S_SET_USER}</label></dd>
+		<dt><label>{{ lang('DL_SET_ADD') }}</label></dt>
+		<dd><a href="javascript:void(0)" onclick="javascript:help_popup('DL_SET_ADD')" class="nav">{{ ICON_DL_HELP }}</a>&nbsp;<label>{{ S_SET_USER }}</label></dd>
 	</dl>
 	<dl>
-		<dt><label>{L_DL_TOPIC_USER}</label></dt>
-		<dd><a href="javascript:void(0)" onclick="javascript:help_popup('DL_SET_ADD')" class="nav">{ICON_DL_HELP}</a>&nbsp;<input type="text" name="set_user" value="{SET_USER}" class="inputbox autowidth" size="10" /></dd>
+		<dt><label>{{ lang('DL_TOPIC_USER') }}</label></dt>
+		<dd><a href="javascript:void(0)" onclick="javascript:help_popup('DL_SET_ADD')" class="nav">{{ ICON_DL_HELP }}</a>&nbsp;<input type="text" name="set_user" value="{{ SET_USER }}" class="inputbox autowidth" size="10" /></dd>
 	</dl>
 
 </fieldset>
-<!-- ENDIF -->
+{% endif %}
 
-<!-- IF S_ENTER_TOPIC_FORUM -->
+{% if S_ENTER_TOPIC_FORUM %}
 <fieldset>
 
 	<dl>
-		<dt><label>{L_DL_TOPIC_FORUM_T}</label></dt>
-		<dd><a href="javascript:void(0)" onclick="javascript:help_popup('DL_TOPIC_FORUM_C')">{ICON_DL_HELP}</a>&nbsp;&nbsp;<label>{S_DL_TOPIC_FORUM}</label></dd>
+		<dt><label>{{ lang('DL_TOPIC_FORUM_T') }}</label></dt>
+		<dd><a href="javascript:void(0)" onclick="javascript:help_popup('DL_TOPIC_FORUM_C')">{{ ICON_DL_HELP }}</a>&nbsp;&nbsp;<label>{{ S_DL_TOPIC_FORUM }}</label></dd>
 	</dl>
 	<dl>
-		<dt><label>{L_DL_TOPIC_TEXT}</label></dt>
-		<dd><a href="javascript:void(0)" onclick="javascript:help_popup('DL_TOPIC_TEXT')">{ICON_DL_HELP}</a>&nbsp;&nbsp;<label><textarea cols="75" rows="5" class="inputbox autowidth" name="dl_topic_text">{TOPIC_TEXT}</textarea></label></dd>
+		<dt><label>{{ lang('DL_TOPIC_TEXT') }}</label></dt>
+		<dd><a href="javascript:void(0)" onclick="javascript:help_popup('DL_TOPIC_TEXT')">{{ ICON_DL_HELP }}</a>&nbsp;&nbsp;<label><textarea cols="75" rows="5" class="inputbox autowidth" name="dl_topic_text">{{ TOPIC_TEXT }}</textarea></label></dd>
 	</dl>
-	<!-- IF S_TOPIC_USER_ON -->
+	{% if S_TOPIC_USER_ON %}
 	<dl>
-		<dt><label>{L_DL_TOPIC_USER}</label></dt>
-		<dd><a href="javascript:void(0)" onclick="javascript:help_popup('DL_TOPIC_USER')">{ICON_DL_HELP}</a>&nbsp;&nbsp;<label>{S_DL_DIFF_TOPIC_USER}</label>&nbsp;&nbsp;<input type="text" name="dl_topic_user" value="{TOPIC_USER}" class="inputbox autowidth" size="10" /></dd>
+		<dt><label>{{ lang('DL_TOPIC_USER') }}</label></dt>
+		<dd><a href="javascript:void(0)" onclick="javascript:help_popup('DL_TOPIC_USER')">{{ ICON_DL_HELP }}</a>&nbsp;&nbsp;<label>{{ S_DL_DIFF_TOPIC_USER }}</label>&nbsp;&nbsp;<input type="text" name="dl_topic_user" value="{{ TOPIC_USER }}" class="inputbox autowidth" size="10" /></dd>
 	</dl>
-	<!-- ENDIF -->
-	<!-- IF S_TOPIC_DETAILS -->
+	{% endif %}
+	{% if S_TOPIC_DETAILS %}
 	<dl>
-		<dt><label>{L_DL_TOPIC_DETAILS}</label></dt>
-		<dd><a href="javascript:void(0)" onclick="javascript:help_popup('{L_DL_TOPIC_DETAILS_EXPLAIN}')">{ICON_DL_HELP}</a>&nbsp;&nbsp;<label>{S_TOPIC_MORE_DETAILS}</label></dd>
+		<dt><label>{{ lang('DL_TOPIC_DETAILS') }}</label></dt>
+		<dd><a href="javascript:void(0)" onclick="javascript:help_popup('{{ lang('DL_TOPIC_DETAILS_EXPLAIN') }}')">{{ ICON_DL_HELP }}</a>&nbsp;&nbsp;<label>{{ S_TOPIC_MORE_DETAILS }}</label></dd>
 	</dl>
-	<!-- ENDIF -->
+	{% endif %}
 	<dl>
-		<dt><label>{L_POST_TOPIC_AS}</label></dt>
-		<dd><a href="javascript:void(0)" onclick="javascript:help_popup('DL_TOPIC_TYPE')">{ICON_DL_HELP}</a>&nbsp;&nbsp;<label>{S_TOPIC_TYPE}</label></dd>
+		<dt><label>{{ lang('POST_TOPIC_AS') }}</label></dt>
+		<dd><a href="javascript:void(0)" onclick="javascript:help_popup('DL_TOPIC_TYPE')">{{ ICON_DL_HELP }}</a>&nbsp;&nbsp;<label>{{ S_TOPIC_TYPE }}</label></dd>
 	</dl>
 
 </fieldset>
-<!-- ENDIF -->
+{% endif %}
 
 <fieldset class="quick">
-	<input type="submit" name="save_cat" value="{L_SUBMIT}" class="button1" />
-	<input type="reset" name="reset" value="{L_RESET}" class="button2" />
-	{S_HIDDEN_FIELDS}
-	{S_FORM_TOKEN}
+	<input type="submit" name="save_cat" value="{{ lang('SUBMIT') }}" class="button1" />
+	<input type="reset" name="reset" value="{{ lang('RESET') }}" class="button2" />
+	{{ S_HIDDEN_FIELDS }}
+	{{ S_FORM_TOKEN }}
 </fieldset>
 
 </form>

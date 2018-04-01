@@ -1161,6 +1161,8 @@ else if($action == 'delete')
 
 		@unlink(DL_EXT_THUMBS_FOLDER . $dl_file['thumbnail']);
 
+		$topic_drop_mode = $request->variable('topic_drop_mode', 'drop');
+
 		$sql = 'SELECT description, dl_topic FROM ' . DOWNLOADS_TABLE . '
 			WHERE id = ' . (int) $df_id;
 		$result = $db->sql_query($sql);
@@ -1171,7 +1173,8 @@ else if($action == 'delete')
 		{
 			$del_t_id = array();
 			$del_t_id[] = $row['dl_topic'];
-			\oxpus\dlext\includes\classes\ dl_topic::delete_topic($del_t_id);
+			$dl_t_ids[$df_id] = $row['dl_topic'];
+			\oxpus\dlext\includes\classes\ dl_topic::delete_topic($del_t_id, $topic_drop_mode, $dl_t_ids, $helper);
 		}
 
 		$dl_desc = $row['description'];

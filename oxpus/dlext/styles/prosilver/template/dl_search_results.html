@@ -1,6 +1,6 @@
-<!-- INCLUDE dl_header.html -->
+{% INCLUDE 'dl_header.html' %}
 
-	<h2>{L_DL_SEARCH_RESULTS}</h2>
+	<h2>{{ lang('DL_SEARCH_RESULTS') }}</h2>
 
 	<br />
 
@@ -10,51 +10,51 @@
 		<ul class="topiclist">
 			<li class="header">
 				<dl>
-					<dt>{L_DL_FILE_DESCRIPTION}</dt>
+					<dt>{{ lang('DL_FILE_DESCRIPTION') }}</dt>
 					<dd class="lastpost dl-cell-block"><span>&nbsp;</span></dd>
 				</dl>
 			</li>
 		</ul>
 
 		<ul class="topiclist topics">
-		<!-- BEGIN searchresults -->
-			<li class="row<!-- IF searchresults.S_ROW_COUNT is even --> bg1<!-- ELSE --> bg2<!-- ENDIF -->">
+		{% for searchresults in loops.searchresults %}
+			<li class="row{% if searchresults.S_ROW_COUNT is even %} bg1{% else %} bg2{% endif %}">
 				<dl>
 					<dt>
-						<strong>{searchresults.STATUS}</strong> <a href="{searchresults.U_FILE_LINK}" class="topictitle">{searchresults.DESCRIPTION}</a> {searchresults.MINI_ICON}</dt>
-						<div class="postbody"><div class="notice">{searchresults.LONG_DESC}</div></div>
+						<strong>{{ searchresults.STATUS }}</strong> <a href="{{ searchresults.U_FILE_LINK }}" class="topictitle">{{ searchresults.DESCRIPTION }}</a> {{ searchresults.MINI_ICON }}</dt>
+						<div class="postbody"><div class="notice">{{ searchresults.LONG_DESC }}</div></div>
 					</dt>
 					<dd class="lastpost">
-						<div><strong>{L_DL_CAT_NAME}: </strong><a href="{searchresults.U_CAT_LINK}">{searchresults.CAT_NAME}</a></div>
-						<div><strong>{L_DL_FILE_NAME}: </strong>{searchresults.FILE_NAME}</div>
+						<div><strong>{{ lang('DL_CAT_NAME') }}: </strong><a href="{{ searchresults.U_CAT_LINK }}">{{ searchresults.CAT_NAME }}</a></div>
+						<div><strong>{{ lang('DL_FILE_NAME') }}: </strong>{{ searchresults.FILE_NAME }}</div>
 					</dd>
 				</dl>
 			</li>
-		<!-- END searchresults -->
+		{% endfor %}
 		</ul>
 
-		<!-- IF S_NO_RESULTS -->
+		{% if S_NO_RESULTS %}
 		<div class="panel">
 			<div class="inner">
-			<strong>{L_NO_SEARCH_RESULTS}</strong>
+			<strong>{{ lang('NO_SEARCH_RESULTS') }}</strong>
 			</div>
 		</div>
-		<!-- ENDIF -->
+		{% endif %}
 
 		</div>
 	</div>
 
-	<!-- IF .pagination or TOTAL_DL -->
+	{% if loops.pagination|length or TOTAL_DL %}
 		<div class="pagination">
-			{TOTAL_DL}
-			<!-- IF .pagination -->
-				<!-- INCLUDE pagination.html -->
-			<!-- ELSE -->
-				&bull; {PAGE_NUMBER}
-			<!-- ENDIF -->
+			{{ TOTAL_DL }}
+			{% if loops.pagination|length %}
+				{% INCLUDE 'pagination.html' %}
+			{% else %}
+				&bull; {{ PAGE_NUMBER }}
+			{% endif %}
 		</div>
-	<!-- ENDIF -->
+	{% endif %}
 
 <br />
 
-<!-- INCLUDE dl_footer.html -->
+{% INCLUDE 'dl_footer.html' %}

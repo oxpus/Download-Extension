@@ -56,18 +56,18 @@ function init_traffic()
 </script>
 
 
-<h1>{L_TRAFFIC}</h1>
+<h1>{{ lang('TRAFFIC') }}</h1>
 
 <div class="clearfix"></div>
 <fieldset class="permissions">
 
-<!-- BEGIN category -->
-	<!-- IF category.S_FIRST_ROW -->
+{% for category in loops.category %}
+	{% if category.S_FIRST_ROW %}
 	<div class="permissions-category">
 		<ul>
-	<!-- ENDIF -->
-			<li class="permissions-preset-yes<!-- IF category.S_FIRST_ROW --> activetab<!-- ENDIF -->" id="tab{category.S_ROW_COUNT}"><a href="#" onclick="swap_options('{category.S_ROW_COUNT}'); return false;"><span class="tabbg"><span class="colour"></span>{category.CAT_NAME}</span></a></li>
-<!-- END category -->
+	{% endif %}
+			<li class="permissions-preset-yes{% if category.S_FIRST_ROW %} activetab{% endif %}" id="tab{{ category.S_ROW_COUNT }}"><a href="#" onclick="swap_options('{{ category.S_ROW_COUNT }}'); return false;"><span class="tabbg"><span class="colour"></span>{{ category.CAT_NAME }}</span></a></li>
+{% endfor %}
 		</ul>
 	</div>
 
@@ -76,40 +76,40 @@ function init_traffic()
 		<div class="tablewrap">
 
 			<br />
-			<strong>{L_DL_AUTO_TRAFFIC_EXPLAIN}</strong>
+			<strong>{{ lang('DL_AUTO_TRAFFIC_EXPLAIN') }}</strong>
 
-			<form action="{S_CONFIG_ACTION}" method="post" id="auto_traffic">
+			<form action="{{ S_CONFIG_ACTION }}" method="post" id="auto_traffic">
 
 			<fieldset>
 
-				<legend>{L_DL_USERS_WITHOUT_GROUP}</legend>
+				<legend>{{ lang('DL_USERS_WITHOUT_GROUP') }}</legend>
 
 				<dl>
-					<dt><label>{L_DL_USER_AUTO_TRAFFIC}</label></dt>
-					<dd><input name="user_dl_auto_traffic" type="text" size="10" maxlength="50" value="{USER_DL_AUTO_TRAFFIC}" />&nbsp;{S_USER_DATA_RANGE}</dd>
+					<dt><label>{{ lang('DL_USER_AUTO_TRAFFIC') }}</label></dt>
+					<dd><input name="user_dl_auto_traffic" type="text" size="10" maxlength="50" value="{{ USER_DL_AUTO_TRAFFIC }}" />&nbsp;{{ S_USER_DATA_RANGE }}</dd>
 				</dl>
 
 			</fieldset>
 
-			<!-- IF S_GROUP_BLOCK -->
+			{% if S_GROUP_BLOCK %}
 			<fieldset>
 
-				<legend>{L_DL_GROUP_AUTO_TRAFFIC}</legend>
+				<legend>{{ lang('DL_GROUP_AUTO_TRAFFIC') }}</legend>
 
-				<!-- BEGIN group_row -->
+				{% for group_row in loops.group_row %}
 				<dl>
-					<dt><label>{group_row.GROUP_NAME}</label></dt>
-					<dd><input name="group_dl_auto_traffic[{group_row.GROUP_ID}]" type="text" size="10" maxlength="50" value="{group_row.GROUP_DL_AUTO_TRAFFIC}" />&nbsp;{group_row.S_GROUP_DATA_RANGE}</dd>
+					<dt><label>{{ group_row.GROUP_NAME }}</label></dt>
+					<dd><input name="group_dl_auto_traffic[{{ group_row.GROUP_ID }}]" type="text" size="10" maxlength="50" value="{{ group_row.GROUP_DL_AUTO_TRAFFIC }}" />&nbsp;{{ group_row.S_GROUP_DATA_RANGE }}</dd>
 				</dl>
-				<!-- END group_row -->
+				{% endfor %}
 
 			</fieldset>
 
 			<fieldset class="quick">
-				<input type="submit" name="submit" value="{L_SUBMIT}" class="button1" />&nbsp;&nbsp;<input type="reset" value="{L_RESET}" class="button2" />
-				{S_FORM_TOKEN}
+				<input type="submit" name="submit" value="{{ lang('SUBMIT') }}" class="button1" />&nbsp;&nbsp;<input type="reset" value="{{ lang('RESET') }}" class="button2" />
+				{{ S_FORM_TOKEN }}
 			</fieldset>
-			<!-- ENDIF -->
+			{% endif %}
 
 			</form>
 
@@ -121,26 +121,26 @@ function init_traffic()
 		<span class="corners-top"><span></span></span>
 		<div class="tablewrap">
 
-			<form action="{S_PROFILE_ACTION_ALL}" method="post" id="all_traffic">
+			<form action="{{ S_PROFILE_ACTION_ALL }}" method="post" id="all_traffic">
 
 			<fieldset>
 
-				<legend>{L_TRAFFIC_ALL_USERS_ADMIN_EXPLAIN}</legend>
+				<legend>{{ lang('TRAFFIC_ALL_USERS_ADMIN_EXPLAIN') }}</legend>
 
 				<dl>
-					<dt><label>{L_USERS_TRAFFIC_TITLE}</label></dt>
-					<dd><input type="text" name="all_traffic" size="20" maxlength="40" />&nbsp;{S_USER_ALL_RANGE}</dd>
+					<dt><label>{{ lang('USERS_TRAFFIC_TITLE') }}</label></dt>
+					<dd><input type="text" name="all_traffic" size="20" maxlength="40" />&nbsp;{{ S_USER_ALL_RANGE }}</dd>
 				</dl>
 				<dl>
-					<dt><label>{L_DL_FUNCTION}</label></dt>
-					<dd><label><input type="radio" class="radio" name="func" value="add" checked="checked"/>&nbsp;{L_DL_ADD}</label><label><input type="radio" class="radio" name="func" value="set"/>&nbsp;{L_DL_SET}</label></dd>
+					<dt><label>{{ lang('DL_FUNCTION') }}</label></dt>
+					<dd><label><input type="radio" class="radio" name="func" value="add" checked="checked"/>&nbsp;{{ lang('DL_ADD') }}</label><label><input type="radio" class="radio" name="func" value="set"/>&nbsp;{{ lang('DL_SET') }}</label></dd>
 				</dl>
 
 			</fieldset>
 
 			<fieldset class="quick">
-				<input type="submit" name="submit" value="{L_SUBMIT}" class="button1" />&nbsp;&nbsp;<input type="reset" value="{L_RESET}" class="button2" />
-				{S_FORM_TOKEN}
+				<input type="submit" name="submit" value="{{ lang('SUBMIT') }}" class="button1" />&nbsp;&nbsp;<input type="reset" value="{{ lang('RESET') }}" class="button2" />
+				{{ S_FORM_TOKEN }}
 			</fieldset>
 
 			</form>
@@ -153,34 +153,34 @@ function init_traffic()
 		<span class="corners-top"><span></span></span>
 		<div class="tablewrap">
 
-			<form action="{S_PROFILE_ACTION_USER}" method="post" id="user_traffic">
+			<form action="{{ S_PROFILE_ACTION_USER }}" method="post" id="user_traffic">
 
 			<fieldset>
 
-				<legend>{L_TRAFFIC_SINGLE_USER_ADMIN_EXPLAIN}</legend>
+				<legend>{{ lang('TRAFFIC_SINGLE_USER_ADMIN_EXPLAIN') }}</legend>
 
 				<dl>
-					<dt><label>{L_USERNAME}</label></dt>
+					<dt><label>{{ lang('USERNAME') }}</label></dt>
 					<dd>
 						<input type="text medium" name="username" id="username" size="20" maxlength="32" value="" />
 						<br />
-						[ <a href="{U_FIND_USERNAME}" onclick="find_username(this.href); return false;">{L_FIND_USERNAME}</a> ]
+						[ <a href="{{ U_FIND_USERNAME }}" onclick="find_username(this.href); return false;">{{ lang('FIND_USERNAME') }}</a> ]
 					</dd>
 				</dl>
 				<dl>
-					<dt><label>{L_SINGLE_USER_TRAFFIC_TITLE}</label></dt>
-					<dd><input type="text" name="user_traffic" size="20" maxlength="40" />&nbsp;{S_USER_SINGLE_RANGE}</dd>
+					<dt><label>{{ lang('SINGLE_USER_TRAFFIC_TITLE') }}</label></dt>
+					<dd><input type="text" name="user_traffic" size="20" maxlength="40" />&nbsp;{{ S_USER_SINGLE_RANGE }}</dd>
 				</dl>
 				<dl>
-					<dt><label>{L_DL_FUNCTION}</label></dt>
-					<dd><label><input type="radio" class="radio" name="func" value="add" checked="checked"/>&nbsp;{L_DL_ADD}</label><label><input type="radio" class="radio" name="func" value="set" />&nbsp;{L_DL_SET}</label></dd>
+					<dt><label>{{ lang('DL_FUNCTION') }}</label></dt>
+					<dd><label><input type="radio" class="radio" name="func" value="add" checked="checked"/>&nbsp;{{ lang('DL_ADD') }}</label><label><input type="radio" class="radio" name="func" value="set" />&nbsp;{{ lang('DL_SET') }}</label></dd>
 				</dl>
 
 			</fieldset>
 
 			<fieldset class="quick">
-				<input type="submit" name="submit" value="{L_SUBMIT}" class="button1" />&nbsp;&nbsp;<input type="reset" value="{L_RESET}" class="button2" />
-				{S_FORM_TOKEN}
+				<input type="submit" name="submit" value="{{ lang('SUBMIT') }}" class="button1" />&nbsp;&nbsp;<input type="reset" value="{{ lang('RESET') }}" class="button2" />
+				{{ S_FORM_TOKEN }}
 			</fieldset>
 
 			</form>
@@ -189,35 +189,35 @@ function init_traffic()
 		<span class="corners-bottom"><span></span></span>
 	</div>
 
-	<!-- IF S_GROUP_BLOCK -->
+	{% if S_GROUP_BLOCK %}
 	<div class="permissions-panel dl-noshow" id="options3">
 		<span class="corners-top"><span></span></span>
 		<div class="tablewrap">
 
-			<form action="{S_PROFILE_ACTION_GROUP}" method="post" id="group_traffic">
+			<form action="{{ S_PROFILE_ACTION_GROUP }}" method="post" id="group_traffic">
 
 			<fieldset>
 
-				<legend>{L_TRAFFIC_USERGROUP_ADMIN_EXPLAIN}</legend>
+				<legend>{{ lang('TRAFFIC_USERGROUP_ADMIN_EXPLAIN') }}</legend>
 
 				<dl>
-					<dt><label>{L_GROUPS}</label></dt>
-					<dd>{S_GROUP_SELECT}</dd>
+					<dt><label>{{ lang('GROUPS') }}</label></dt>
+					<dd>{{ S_GROUP_SELECT }}</dd>
 				</dl>
 				<dl>
-					<dt><label>{L_USERGROUP_TRAFFIC_TITLE}</label></dt>
-					<dd><input type="text" class="post" name="group_traffic" size="20" maxlength="40" />&nbsp;{S_USER_GROUP_RANGE}</dd>
+					<dt><label>{{ lang('USERGROUP_TRAFFIC_TITLE') }}</label></dt>
+					<dd><input type="text" class="post" name="group_traffic" size="20" maxlength="40" />&nbsp;{{ S_USER_GROUP_RANGE }}</dd>
 				</dl>
 				<dl>
-					<dt><label>{L_DL_FUNCTION}</label></dt>
-					<dd><label><input type="radio" class="radio" name="func" value="add" checked="checked"/>&nbsp;{L_DL_ADD}</label><label><input type="radio" class="radio" name="func" value="set"/>&nbsp;{L_DL_SET}</label></dd>
+					<dt><label>{{ lang('DL_FUNCTION') }}</label></dt>
+					<dd><label><input type="radio" class="radio" name="func" value="add" checked="checked"/>&nbsp;{{ lang('DL_ADD') }}</label><label><input type="radio" class="radio" name="func" value="set"/>&nbsp;{{ lang('DL_SET') }}</label></dd>
 				</dl>
 
 			</fieldset>
 
 			<fieldset class="quick">
-				<input type="submit" name="submit" value="{L_SUBMIT}" class="button1" />&nbsp;&nbsp;<input type="reset" value="{L_RESET}" class="button2" />
-				{S_FORM_TOKEN}
+				<input type="submit" name="submit" value="{{ lang('SUBMIT') }}" class="button1" />&nbsp;&nbsp;<input type="reset" value="{{ lang('RESET') }}" class="button2" />
+				{{ S_FORM_TOKEN }}
 			</fieldset>
 
 			</form>
@@ -225,7 +225,7 @@ function init_traffic()
 		</div>
 		<span class="corners-bottom"><span></span></span>
 	</div>
-	<!-- ENDIF -->
+	{% endif %}
 
 </fieldset>
 
