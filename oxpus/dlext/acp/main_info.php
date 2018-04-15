@@ -17,7 +17,7 @@ class main_info
 		global $config;
 
 		return array(
-			'filename'	=> '\oxpus\dlext\acp\main_info',
+			'filename'	=> '\oxpus\dlext\acp\main_module',
 			'title'		=> 'ACP_DOWNLOADS',
 			'version'	=> $config['dl_ext_version'],
 			'modes'		=> array(

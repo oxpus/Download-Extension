@@ -7,35 +7,54 @@
 <div class="panel">
 	<div class="inner">
 
-	<table width="100%" cellpadding="0" cellspacing="10" border="0" class="table2">
-	<tbody>
-	<tr>
-		<td class="dl-width-75" valign="top">
-			<h3>{{ lang('DL_BUG_REPORT_TITLE') }}</h3><p>{{ REPORT_TITLE }}</p>
-			<h3>{{ lang('DL_BUG_REPORT_TEXT') }}</h3><p>{{ REPORT_TEXT }}</p>
-		</td>
-		<td class="dl-width-25" valign="top">
-			<h3>{{ lang('DL_BUG_REPORT_ID') }}</h3><span>{{ REPORT_ID }}</span>
-			<h3>{{ lang('DL_BUG_REPORT_FILE') }}</h3><span><a href="{{ U_DOWNLOAD_FILE }}" class="genmed">{{ REPORT_FILE }}</a></span>
-			{% if REPORT_FILE_VER %}<h3>{{ lang('DL_HACK_VERSION') }}</h3><span>{{ REPORT_FILE_VER }}</span>{% endif %}
-			<h3>{{ lang('DL_BUG_REPORT_DATE') }}</h3><span>{{ REPORT_DATE }}</span>
-			<h3>{{ lang('DL_BUG_REPORT_AUTHOR') }}</h3><span>{{ REPORT_AUTHOR }}</span>
-			{% if REPORT_PHP %}<h3>{{ lang('DL_BUG_REPORT_PHP') }}</h3><span>{{ REPORT_PHP }}</span>{% endif %}
-			{% if REPORT_DB %}<h3>{{ lang('DL_BUG_REPORT_DB') }}</h3><span>{{ REPORT_DB }}</span>{% endif %}
-			{% if REPORT_FORUM %}<h3>{{ lang('DL_BUG_REPORT_FORUM') }}</h3><span>{{ REPORT_FORUM }}</span>{% endif %}
-			<h3>{{ lang('DL_BUG_REPORT_STATUS') }}</h3><span>{{ REPORT_STATUS }}</span>
-			<h3>{{ lang('DL_BUG_REPORT_STATUS_DATE') }}</h3><span>{{ STATUS_DATE }}</span>
+	<dl class="dl-width-100">
+		<dd class="dl-left dl-width-75 dl-top">
+			<div class="dl-width-95">
+				<h3>{{ lang('DL_BUG_REPORT_TITLE') }}</h3>
+				<div class="title">{{ REPORT_TITLE }}</div>
+				<br />
+				<h3>{{ lang('DL_BUG_REPORT_TEXT') }}</h3>
+				<div class="message">{{ REPORT_TEXT }}</div>
+			</div>
+		</dd>
+		<dd class="dl-right dl-width-25 dl-top">
+			<h3>{{ lang('DL_BUG_REPORT_ID') }}</h3>
+			<span class="value">{{ REPORT_ID }}</span>
+			<h3>{{ lang('DL_BUG_REPORT_FILE') }}</h3>
+			<span class="value"><a href="{{ U_DOWNLOAD_FILE }}" class="genmed">{{ REPORT_FILE }}</a></span>
+			{% if REPORT_FILE_VER %}<h3>{{ lang('DL_HACK_VERSION') }}</h3>
+			<span class="value">{{ REPORT_FILE_VER }}</span>{% endif %}
+			<h3>{{ lang('DL_BUG_REPORT_DATE') }}</h3>
+			<span class="value">{{ REPORT_DATE }}</span>
+			<h3>{{ lang('DL_BUG_REPORT_AUTHOR') }}</h3>
+			<span class="value">{{ REPORT_AUTHOR }}</span>
+			{% if REPORT_PHP %}<h3>{{ lang('DL_BUG_REPORT_PHP') }}</h3>
+			<span class="value">{{ REPORT_PHP }}</span>{% endif %}
+			{% if REPORT_DB %}<h3>{{ lang('DL_BUG_REPORT_DB') }}</h3>
+			<span class="value">{{ REPORT_DB }}</span>{% endif %}
+			{% if REPORT_FORUM %}<h3>{{ lang('DL_BUG_REPORT_FORUM') }}</h3>
+			<span class="value">{{ REPORT_FORUM }}</span>{% endif %}
+			<h3>{{ lang('DL_BUG_REPORT_STATUS') }}</h3>
+			<span class="value">{{ REPORT_STATUS }}</span>
+			<h3>{{ lang('DL_BUG_REPORT_STATUS_DATE') }}</h3>
+			<span class="value">{{ STATUS_DATE }}</span>
 			{% for assign in loops.assign %}
-			<h3>{{ lang('DL_BUG_REPORT_ASSIGNED') }}</h3><span>{{ assign.ASSIGN_TO }}</span>
-			<h3>{{ lang('DL_BUG_REPORT_ASSIGN_DATE') }}</h3><span>{{ assign.ASSIGN_DATE }}</span>
+			<h3>{{ lang('DL_BUG_REPORT_ASSIGNED') }}</h3>
+			<span class="value">{{ assign.ASSIGN_TO }}</span>
+			<h3>{{ lang('DL_BUG_REPORT_ASSIGN_DATE') }}</h3>
+			<span class="value">{{ assign.ASSIGN_DATE }}</span>
 			{% endfor %}
 			{% if S_NO_ASSIGN %}
 			<h3>{{ lang('DL_BUG_REPORT_UNASSIGNED') }}</h3>
 			{% endif %}
 			{% if S_ASSIGN_MOD %}
 			<form action="{{ S_FORM_ASSIGN_ACTION }}" id="assign_user" method="post">
-			<div>{{ S_SELECT_ASSIGN_USER }}&nbsp;<input type="submit" name="submit" value="{{ lang('DL_BUG_REPORT_ASSIGN') }}" class="button2" /></div>
-			<div>{{ S_FORM_TOKEN }}</div></form>
+				<div>
+						{{ S_SELECT_ASSIGN_USER }}&nbsp;
+						<input type="submit" name="submit" value="{{ lang('DL_BUG_REPORT_ASSIGN') }}" class="button2" />
+				</div>
+				<div>{{ S_FORM_TOKEN }}</div>
+			</form>
 			{% endif %}
 			<br />
 			{% if U_BUG_REPORT_EDIT %}
@@ -56,10 +75,8 @@
 				</li>
 			</ul>
 			{% endfor %}
-		</td>
-	</tr>
-	</tbody>
-	</table>
+		</dd>
+	</dl>
 
 	</div>
 </div>

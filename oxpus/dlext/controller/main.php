@@ -20,9 +20,6 @@ class main
 	/* @var string phpEx */
 	protected $php_ext;
 
-	/* @var string table_prefix */
-	protected $table_prefix;
-
 	/* @var Container */
 	protected $phpbb_container;
 
@@ -59,6 +56,11 @@ class main
 	/** @var \phpbb\language\language $language Language object */
 	protected $language;
 
+	/** @var extension owned objects */
+	protected $ext_path;
+	protected $ext_path_web;
+	protected $ext_path_ajax;
+
 	/**
 	* Constructor
 	*
@@ -94,6 +96,21 @@ class main
 		$this->template 				= $template;
 		$this->user 					= $user;
 		$this->language					= $language;
+
+		$this->ext_path					= $this->phpbb_extension_manager->get_extension_path('oxpus/dlext', true);
+		$this->phpbb_path_helper		= $this->phpbb_container->get('path_helper');
+		$this->ext_path_web				= $this->phpbb_path_helper->update_web_root_path($this->ext_path);
+		$this->ext_path_ajax			= $this->ext_path_web . 'assets/javascript/';
+
+		include_once($this->ext_path . 'phpbb/helpers/dl_constants.' . $this->php_ext);
+	}
+
+	private function _dl_init_main_class()
+	{
+		include_once($this->ext_path . 'phpbb/classes/class_dlmod.' . $this->php_ext);
+		$dl_mod = new \oxpus\dlext\phpbb\classes\ dl_mod($this->root_path, $this->php_ext, $this->ext_path);
+		$dl_mod->register();
+		\oxpus\dlext\phpbb\classes\ dl_init::init($this->ext_path);
 	}
 
 	public function handle($view = '')
@@ -112,15 +129,6 @@ class main
 		include($this->root_path . 'includes/functions_display.' . $this->php_ext);
 		include($this->root_path . 'includes/bbcode.' . $this->php_ext);
 
-		// Define the ext path
-		$ext_path					= $this->phpbb_extension_manager->get_extension_path('oxpus/dlext', true);
-		$this->phpbb_path_helper	= $this->phpbb_container->get('path_helper');
-		$ext_path_web				= $this->phpbb_path_helper->update_web_root_path($ext_path);
-		$ext_path_ajax				= $ext_path_web . 'includes/js/ajax/';
-
-		$table_prefix = $this->table_prefix;
-		include_once($ext_path . '/includes/helpers/dl_constants.' . $this->php_ext);
-
 		// Define the basic file storage placement
 		if ($this->config['dl_download_dir'] == 2)
 		{
@@ -129,8 +137,8 @@ class main
 		}
 		else
 		{
-			$filebase_prefix = $ext_path . 'files/';
-			$filebase_web_prefix = $ext_path_web . 'files/';
+			$filebase_prefix = $this->ext_path . 'files/';
+			$filebase_web_prefix = $this->ext_path_web . 'files/';
 		}
 
 		define('DL_EXT_CACHE_FOLDER',		$filebase_prefix . 'cache/');
@@ -144,8 +152,8 @@ class main
 		define('DL_EXT_VER_IMAGES_WFOLDER',	$filebase_web_prefix . 'version/images/');
 
 		$this->template->assign_vars(array(
-			'EXT_DL_PATH_WEB'	=> $ext_path_web,
-			'EXT_DL_PATH_AJAX'	=> $ext_path_ajax,
+			'EXT_DL_PATH_WEB'	=> $this->ext_path_web,
+			'EXT_DL_PATH_AJAX'	=> $this->ext_path_ajax,
 			'ICON_DL_HELP'		=> '<i class="icon fa-info-circle fa-fw dl-icon-yellow"></i>',
 		));
 
@@ -242,7 +250,7 @@ class main
 
 		if ($view == 'help')
 		{
-			include($ext_path . '/includes/helpers/dl_help.' . $this->php_ext);
+			include($this->ext_path . 'phpbb/helpers/dl_help.' . $this->php_ext);
 		}
 
 		if ($view != 'bug_tracker')
@@ -270,7 +278,7 @@ class main
 		*/
 		if ($view == 'ajax' && $df_id)
 		{
-			include($ext_path . '/includes/helpers/dl_ajax.' . $this->php_ext);
+			include($this->ext_path . 'phpbb/helpers/dl_ajax.' . $this->php_ext);
 			$this->db->sql_close();
 			garbage_collection();
 			exit_handler();
@@ -285,16 +293,13 @@ class main
 		*/
 		if ($view == 'rss')
 		{
-			include($ext_path . '/includes/modules/dl_rss.' . $this->php_ext);
+			include($this->ext_path . 'phpbb/dl_rss.' . $this->php_ext);
 		}
 
 		/*
 		* include and create the main class
 		*/
-		include($ext_path . '/includes/classes/class_dlmod.' . $this->php_ext);
-		$dl_mod = new \oxpus\dlext\includes\classes\ dl_mod($this->root_path, $this->php_ext, $ext_path, DL_EXT_CACHE_FOLDER);
-		$dl_mod->register();
-		\oxpus\dlext\includes\classes\ dl_init::init($ext_path);
+		self::_dl_init_main_class();
 
 		/*
 		* set the right values for comments
@@ -358,12 +363,12 @@ class main
 			case 'thumbs':
 			case 'upload':
 
-				$index = \oxpus\dlext\includes\classes\ dl_main::full_index($this->helper);
+				$index = \oxpus\dlext\phpbb\classes\ dl_main::full_index($this->helper);
 			break;
 
 			default:
 
-				$index = ($cat) ? \oxpus\dlext\includes\classes\ dl_main::index($this->helper, $cat) : \oxpus\dlext\includes\classes\ dl_main::index($this->helper);
+				$index = ($cat) ? \oxpus\dlext\phpbb\classes\ dl_main::index($this->helper, $cat) : \oxpus\dlext\phpbb\classes\ dl_main::index($this->helper);
 		}
 
 		/*
@@ -391,12 +396,12 @@ class main
 			$desc_flags			= $row['desc_flags'];
 			$description		= generate_text_for_display($description, $desc_uid, $desc_bitfield, $desc_flags);
 
-			$mini_icon			= \oxpus\dlext\includes\classes\ dl_status::mini_status_file($cat_id, $df_id);
+			$mini_icon			= \oxpus\dlext\phpbb\classes\ dl_status::mini_status_file($cat_id, $df_id);
 
 			$hack_version		= '&nbsp;'.$row['hack_version'];
 
 			$file_status	= array();
-			$file_status	= \oxpus\dlext\includes\classes\ dl_status::status($df_id, $this->helper);
+			$file_status	= \oxpus\dlext\phpbb\classes\ dl_status::status($df_id, $this->helper);
 
 			$status			= $file_status['status_detail'];
 
@@ -411,7 +416,7 @@ class main
 		{
 			$check_cat = ($cat_id) ? $cat_id : $cat;
 
-			$check_index = \oxpus\dlext\includes\classes\ dl_main::full_index($this->helper);
+			$check_index = \oxpus\dlext\phpbb\classes\ dl_main::full_index($this->helper);
 			if (!isset($check_index[$check_cat]))
 			{
 				redirect($this->helper->route('oxpus_dlext_controller'));
@@ -420,7 +425,7 @@ class main
 
 		if ($cat_id)
 		{
-			$cat_auth = \oxpus\dlext\includes\classes\ dl_auth::user_auth($cat_id, 'auth_view');
+			$cat_auth = \oxpus\dlext\phpbb\classes\ dl_auth::user_auth($cat_id, 'auth_view');
 
 			if (!$cat_auth)
 			{
@@ -428,7 +433,7 @@ class main
 			}
 
 			$tmp_nav = array();
-			$dl_nav = \oxpus\dlext\includes\classes\ dl_nav::nav($this->helper, $cat_id, 'url', $tmp_nav);
+			$dl_nav = \oxpus\dlext\phpbb\classes\ dl_nav::nav($this->helper, $cat_id, 'url', $tmp_nav);
 
 			if (isset($dl_nav['link']))
 			{
@@ -530,14 +535,14 @@ class main
 				if ($cat)
 				{
 					$tmp_nav = array();
-					$cat_auth = \oxpus\dlext\includes\classes\ dl_auth::user_auth($cat, 'auth_view');
+					$cat_auth = \oxpus\dlext\phpbb\classes\ dl_auth::user_auth($cat, 'auth_view');
 
 					if (!$cat_auth)
 					{
-						redirect($ext_path);
+						redirect($this->ext_path);
 					}
 
-					$dl_nav = \oxpus\dlext\includes\classes\ dl_nav::nav($this->helper, $cat, 'url', $tmp_nav);
+					$dl_nav = \oxpus\dlext\phpbb\classes\ dl_nav::nav($this->helper, $cat, 'url', $tmp_nav);
 
 					if (sizeof($dl_nav['link']))
 					{
@@ -570,7 +575,7 @@ class main
 		*/
 		if ($view == 'hacks')
 		{
-			include($ext_path . '/includes/modules/dl_hacks_list.' . $this->php_ext);
+			include($this->ext_path . 'phpbb/dl_hacks_list.' . $this->php_ext);
 		}
 
 		if ($view != 'load' && $view != 'broken')
@@ -610,14 +615,14 @@ class main
 				trigger_error($this->language->lang('DL_NO_PERMISSION'), E_USER_WARNING);
 			}
 
-			$todo_access_ids = \oxpus\dlext\includes\classes\ dl_main::full_index($this->helper, 0, 0, 0, 2);
+			$todo_access_ids = \oxpus\dlext\phpbb\classes\ dl_main::full_index($this->helper, 0, 0, 0, 2);
 			$total_todo_ids = sizeof($todo_access_ids);
 
 			if ($action == 'edit')
 			{
 				if ($total_todo_ids > 0 && $this->user->data['is_registered'])
 				{
-					include($ext_path . '/includes/modules/dl_todo.' . $this->php_ext);
+					include($this->ext_path . 'phpbb/dl_todo.' . $this->php_ext);
 				}
 				else
 				{
@@ -627,7 +632,7 @@ class main
 			else
 			{
 				$dl_todo = array();
-				$dl_todo = \oxpus\dlext\includes\classes\ dl_extra::get_todo();
+				$dl_todo = \oxpus\dlext\phpbb\classes\ dl_extra::get_todo();
 
 				page_header($this->language->lang('DL_MOD_TODO'));
 
@@ -637,7 +642,7 @@ class main
 
 				$this->template->assign_vars(array(
 					'U_TODO_ADD'	=> $this->helper->route('oxpus_dlext_controller', array('view' => 'todo', 'action' => 'edit')),
-					'U_DL_TOP'		=> $ext_path,
+					'U_DL_TOP'		=> $this->ext_path,
 				));
 
 				if ($total_todo_ids > 0 && $this->user->data['is_registered'])
@@ -686,9 +691,9 @@ class main
 			else
 			{
 				$cat_auth_tmp = array();
-				$cat_auth_tmp = \oxpus\dlext\includes\classes\ dl_auth::dl_cat_auth($cat_id);
+				$cat_auth_tmp = \oxpus\dlext\phpbb\classes\ dl_auth::dl_cat_auth($cat_id);
 
-				if (($cat_auth_tmp['auth_mod'] || ($this->auth->acl_get('a_') && $this->user->data['is_registered'])) && !\oxpus\dlext\includes\classes\ dl_auth::user_banned())
+				if (($cat_auth_tmp['auth_mod'] || ($this->auth->acl_get('a_') && $this->user->data['is_registered'])) && !\oxpus\dlext\phpbb\classes\ dl_auth::user_banned())
 				{
 					$user_is_mod = true;
 				}
@@ -804,7 +809,7 @@ class main
 			            'CAPTCHA_TEMPLATE'	=> $captcha->get_template(),
 					));
 
-					include($ext_path . '/includes/modules/dl_footer.' . $this->php_ext);
+					include($this->ext_path . 'phpbb/dl_footer.' . $this->php_ext);
 					page_footer();
 				}
 			}
@@ -834,7 +839,7 @@ class main
 					'S_HIDDEN_FIELDS'	=> build_hidden_fields($s_hidden_fields),
 				));
 
-				include($ext_path . '/includes/modules/dl_footer.' . $this->php_ext);
+				include($this->ext_path . 'phpbb/dl_footer.' . $this->php_ext);
 				page_footer();
 			}
 
@@ -848,7 +853,7 @@ class main
 					'broken' => true)) . ' WHERE id = ' . (int) $df_id;
 				$this->db->sql_query($sql);
 
-				$processing_user = \oxpus\dlext\includes\classes\ dl_auth::dl_auth_users($cat_id, 'auth_mod');
+				$processing_user = \oxpus\dlext\phpbb\classes\ dl_auth::dl_auth_users($cat_id, 'auth_mod');
 
 				$report_notify_text = $this->request->variable('report_notify_text', '', true);
 				$report_notify_text = ($report_notify_text) ? $this->language->lang('DL_REPORT_NOTIFY_TEXT', $report_notify_text) : '';
@@ -861,7 +866,7 @@ class main
 					'df_id'					=> $df_id,
 				);
 
-				\oxpus\dlext\includes\classes\ dl_email::send_report($mail_data, $this->helper, $ext_path);
+				\oxpus\dlext\phpbb\classes\ dl_email::send_report($mail_data, $this->helper, $this->ext_path);
 			}
 
 			redirect($this->helper->route('oxpus_dlext_controller', array('view' => 'detail', 'df_id' => $df_id, 'cat_id' => $cat_id)));
@@ -873,7 +878,7 @@ class main
 		if ($view == 'unbroken' && $df_id && $cat_id)
 		{
 			$cat_auth = array();
-			$cat_auth = \oxpus\dlext\includes\classes\ dl_auth::dl_cat_auth($cat_id);
+			$cat_auth = \oxpus\dlext\phpbb\classes\ dl_auth::dl_cat_auth($cat_id);
 
 			if (isset($index[$cat_id]['auth_mod']) && $index[$cat_id]['auth_mod'] || isset($cat_auth['auth_mod']) && $cat_auth['auth_mod'] || ($this->auth->acl_get('a_') && $this->user->data['is_registered']))
 			{
@@ -928,12 +933,12 @@ class main
 		*/
 		if ($view == 'bug_tracker' && $this->user->data['is_registered'])
 		{
-			$bug_tracker = \oxpus\dlext\includes\classes\ dl_auth::bug_tracker();
+			$bug_tracker = \oxpus\dlext\phpbb\classes\ dl_auth::bug_tracker();
 			if ($bug_tracker)
 			{
 				$inc_module = true;
 				page_header($this->language->lang('DL_BUG_TRACKER'));
-				include($ext_path . '/includes/modules/dl_bug_tracker.' . $this->php_ext);
+				include($this->ext_path . 'phpbb/dl_bug_tracker.' . $this->php_ext);
 			}
 			else
 			{
@@ -953,7 +958,7 @@ class main
 			*/
 			$inc_module = true;
 			page_header($this->language->lang('DL_STATS'));
-			include($ext_path . '/includes/modules/dl_stats.' . $this->php_ext);
+			include($this->ext_path . 'phpbb/dl_stats.' . $this->php_ext);
 		}
 		else if ($view == 'user_config')
 		{
@@ -962,21 +967,21 @@ class main
 			*/
 			$inc_module = true;
 			page_header($this->language->lang('DL_CONFIG'));
-			include($ext_path . '/includes/modules/dl_user_config.' . $this->php_ext);
+			include($this->ext_path . 'phpbb/dl_user_config.' . $this->php_ext);
 		}
 		else if ($view == 'detail' || $view == 'comment')
 		{
-			include($ext_path . '/includes/modules/dl_details.' . $this->php_ext);
+			include($this->ext_path . 'phpbb/dl_details.' . $this->php_ext);
 		}
 		else if ($view == 'version')
 		{
-			include($ext_path . '/includes/modules/dl_version.' . $this->php_ext);
+			include($this->ext_path . 'phpbb/dl_version.' . $this->php_ext);
 		}
 		else if ($view == 'thumbs')
 		{
 			if (isset($index[$cat_id]['allow_thumbs']) && $index[$cat_id]['allow_thumbs'] && $this->config['dl_thumb_fsize'])
 			{
-				include($ext_path . '/includes/modules/dl_thumbs.' . $this->php_ext);
+				include($this->ext_path . 'phpbb/dl_thumbs.' . $this->php_ext);
 			}
 			else
 			{
@@ -990,23 +995,23 @@ class main
 			*/
 			$inc_module = true;
 			page_header($this->language->lang('SEARCH').' '.$this->language->lang('DOWNLOADS'));
-			include($ext_path . '/includes/modules/dl_search.' . $this->php_ext);
+			include($this->ext_path . 'phpbb/dl_search.' . $this->php_ext);
 		}
 		else if ($view == 'load')
 		{
-			include($ext_path . '/includes/modules/dl_load.' . $this->php_ext);
+			include($this->ext_path . 'phpbb/dl_load.' . $this->php_ext);
 		}
 		else if ($view == 'upload')
 		{
 			$inc_module = true;
 			page_header($this->language->lang('DL_UPLOAD'));
-			include($ext_path . '/includes/modules/dl_upload.' . $this->php_ext);
+			include($this->ext_path . 'phpbb/dl_upload.' . $this->php_ext);
 		}
 		else if ($view == 'modcp')
 		{
 			if ((isset($index[$cat_id]['total']) && $index[$cat_id]['total']) || in_array($action, array('approve', 'capprove')))
 			{
-				include($ext_path . '/includes/modules/dl_modcp.' . $this->php_ext);
+				include($this->ext_path . 'phpbb/dl_modcp.' . $this->php_ext);
 			}
 			else
 			{
@@ -1102,7 +1107,7 @@ class main
 		{
 			if ($this->config['dl_overview_link_onoff'])
 			{
-				include($ext_path . '/includes/modules/dl_overview.' . $this->php_ext);
+				include($this->ext_path . 'phpbb/dl_overview.' . $this->php_ext);
 			}
 			else
 			{
@@ -1112,7 +1117,7 @@ class main
 
 		if ($view == 'latest' && sizeof($index))
 		{
-			include($ext_path . '/includes/modules/dl_latest.' . $this->php_ext);
+			include($this->ext_path . 'phpbb/dl_latest.' . $this->php_ext);
 		}
 
 		/*
@@ -1120,7 +1125,7 @@ class main
 		*/
 		if (empty($view) && !$inc_module)
 		{
-			include($ext_path . '/includes/modules/dl_cat.' . $this->php_ext);
+			include($this->ext_path . 'phpbb/dl_cat.' . $this->php_ext);
 		}
 
 		$view_check = array('broken', 'bug_tracker', 'comment', 'detail', 'fav', 'latest', 'load', 'modcp', 'overall', 'rss', 'search', 'stat', 'thumbs', 'todo', 'unbroken', 'unfav', 'upload', 'user_config', 'view', 'version');
@@ -1137,7 +1142,7 @@ class main
 		/*
 		* include the mod footer
 		*/
-		include($ext_path . '/includes/modules/dl_footer.' . $this->php_ext);
+		include($this->ext_path . 'phpbb/dl_footer.' . $this->php_ext);
 
 		/*
 		* include the phpBB footer

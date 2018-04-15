@@ -1,20 +1,5 @@
 {% INCLUDE 'dl_header.html' %}
 
-<script type="text/javascript">
-var phpEx					= '{{ PHPEX }}';
-var dlAjaxUrl				= '{{ U_DL_AJAX }}';
-var activeCat				= {{ S_OPEN_PANEL }};
-var LANG_TOO_FEW_CHARS 		= '{{ lang('TOO_FEW_CHARS') }}';
-var LANG_L_NO_TEXT_SELECTED	= '{{ lang('NO_TEXT_SELECTED') }}';
-var	form_name 				= 'postform';
-var	text_name 				= 'message';
-</script>
-<script type="text/javascript" src="{{ T_SUPER_TEMPLATE_PATH }}/editor.js" ></script>
-<script type="text/javascript" src="{{ EXT_DL_PATH_WEB }}includes/js/dl_main.js"></script>
-{% if S_ENABLE_RATE %}
-<script type="text/javascript" src="{{ EXT_DL_PATH_AJAX }}ajax_dl.js"></script>
-{% endif %}
-
 {% if S_CAT_TRAFFIC %}
 <div class="panel bg3"><div class="inner"><span><strong>{{ CAT_TRAFFIC }}</strong></span></div></div>
 {% endif %}

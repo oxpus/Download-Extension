@@ -17,13 +17,9 @@ function select_switch(status)
 </script>
 {% endif %}
 
-{% if S_DL_UCP %}
-<h2>{{ DL_MOD_RELEASE }}</h2>
-{% else %}
-<h2>{{ lang('DL_CONFIG') }}</h2>
+<h2>{% if S_DL_UCP %}{{ DL_MOD_RELEASE }}{% else %}{{ lang('DL_CONFIG') }}{% endif %}</h2>
 
 <br />
-{% endif %}
 
 <form action="{{ S_FORM_ACTION }}" method="post" id="user_dl_config">
 
@@ -175,6 +171,23 @@ function select_switch(status)
 </div>
 {% endif %}
 
+{% if S_DL_UCP_PRIVACY %}
+<div class="panel">
+	<div class="inner">
+
+	<h3>{{ lang('DL_PRIVACY') }}</h3>
+
+	<p>{{ lang('DL_PRIVACY_EXPLAIN') }}</p>
+
+	<a href="{{ U_DL_PRIVACY_BUGS }}" class="button icon-button"><span>{{ lang('DL_PRIVACY_BUGS') }}</span> <i class="icon fa fa-download fa-fw"></i> </a>
+	<a href="{{ U_DL_PRIVACY_COMMENTS }}" class="button icon-button"><span>{{ lang('DL_PRIVACY_COMMENTS') }}</span> <i class="icon fa fa-download fa-fw"></i> </a>
+	<a href="{{ U_DL_PRIVACY_STATS }}" class="button icon-button"><span>{{ lang('DL_PRIVACY_STATS') }}</span> <i class="icon fa fa-download fa-fw"></i> </a>
+
+	</div>
+</div>
+{% endif %}
+
+{% if not S_DL_UCP_PRIVACY %}
 <fieldset class="submit-buttons">
 {% if S_DL_UCP %}
 	<input type="reset" value="{{ lang('RESET') }}" name="reset" class="button2" />&nbsp;<input type="submit" name="submit" value="{{ lang('SUBMIT') }}" class="button1" />
@@ -184,6 +197,7 @@ function select_switch(status)
 {% endif %}
 	{{ S_FORM_TOKEN }}
 </fieldset>
+{% endif %}
 
 </form>
 

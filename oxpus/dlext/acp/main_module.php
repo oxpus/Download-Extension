@@ -81,7 +81,7 @@ class main_module
 		// Define the ext path
 		$ext_path					= $phpbb_extension_manager->get_extension_path('oxpus/dlext', true);
 		$ext_path_web				= $phpbb_path_helper->update_web_root_path($ext_path);
-		$ext_path_ajax				= $ext_path_web . 'includes/js/ajax/';
+		$ext_path_ajax				= $ext_path_web . 'assets/javascript/';
 
 		// Define the basic file storage placement
 		if ($config['dl_download_dir'] == 2)
@@ -105,7 +105,7 @@ class main_module
 		define('DL_EXT_VER_IMAGES_FOLDER',	$filebase_prefix . 'version/images/');
 		define('DL_EXT_VER_IMAGES_WFOLDER',	$filebase_web_prefix . 'version/images/');
 
-		include_once($ext_path . 'includes/helpers/dl_constants.' . $phpEx);
+		include_once($ext_path . 'phpbb/helpers/dl_constants.' . $phpEx);
 
 		$auth->acl($user->data);
 		if (!$auth->acl_get('a_'))
@@ -129,10 +129,10 @@ class main_module
 		/*
 		* include and create the main class
 		*/
-		include($ext_path . 'includes/classes/class_dlmod.' . $phpEx);
-		$dl_mod = new \oxpus\dlext\includes\classes\ dl_mod($phpbb_root_path, $phpEx, $ext_path);
+		include($ext_path . 'phpbb/classes/class_dlmod.' . $phpEx);
+		$dl_mod = new \oxpus\dlext\phpbb\classes\ dl_mod($phpbb_root_path, $phpEx, $ext_path);
 		$dl_mod->register();
-		\oxpus\dlext\includes\classes\ dl_init::init($ext_path);
+		\oxpus\dlext\phpbb\classes\ dl_init::init($ext_path);
 
 		if ($action == 'edit')
 		{
@@ -149,17 +149,19 @@ class main_module
 		/*
 		* create overall mini statistics
 		*/
-		$total_size = \oxpus\dlext\includes\classes\ dl_physical::read_dl_sizes();
-		$total_tsize = \oxpus\dlext\includes\classes\ dl_physical::read_dl_sizes(DL_EXT_THUMBS_FOLDER);
-		$total_vfsize = \oxpus\dlext\includes\classes\ dl_physical::read_dl_sizes(DL_EXT_VER_FILES_FOLDER);
-		$total_vtsize = \oxpus\dlext\includes\classes\ dl_physical::read_dl_sizes(DL_EXT_VER_IMAGES_FOLDER);
-		$total_dl = \oxpus\dlext\includes\classes\ dl_main::get_sublevel_count();
-		$total_extern = sizeof(\oxpus\dlext\includes\classes\ dl_files::all_files(0, '', 'ASC', "AND extern = 1", 0, true, 'id'));
+		$total_size = \oxpus\dlext\phpbb\classes\ dl_physical::read_dl_sizes();
+		$total_tsize = \oxpus\dlext\phpbb\classes\ dl_physical::read_dl_sizes(DL_EXT_THUMBS_FOLDER);
+		$total_vfsize = \oxpus\dlext\phpbb\classes\ dl_physical::read_dl_sizes(DL_EXT_VER_FILES_FOLDER);
+		$total_vtsize = \oxpus\dlext\phpbb\classes\ dl_physical::read_dl_sizes(DL_EXT_VER_IMAGES_FOLDER);
+		$total_dl = \oxpus\dlext\phpbb\classes\ dl_main::get_sublevel_count();
+		$total_extern = sizeof(\oxpus\dlext\phpbb\classes\ dl_files::all_files(0, '', 'ASC', "AND extern = 1", 0, true, 'id'));
 
 		$physical_limit = $config['dl_physical_quota'];
 		$total_size = ($total_size > $physical_limit) ? $physical_limit : $total_size;
 
-		$physical_limit = \oxpus\dlext\includes\classes\ dl_format::dl_size($physical_limit, 2);
+		$physical_limit = \oxpus\dlext\phpbb\classes\ dl_format::dl_size($physical_limit, 2);
+
+		$acp_module_path = $ext_path . 'phpbb/acp/dl_admin_';
 
 		/*
 		* include the choosen module
@@ -230,15 +232,32 @@ class main_module
 					 }
 				}
 
-				$total_size = \oxpus\dlext\includes\classes\ dl_format::dl_size($total_size, 2);
-				$total_tsize = \oxpus\dlext\includes\classes\ dl_format::dl_size($total_tsize, 2);
-				$total_vfsize = \oxpus\dlext\includes\classes\ dl_format::dl_size($total_vfsize, 2);
-				$total_vtsize = \oxpus\dlext\includes\classes\ dl_format::dl_size($total_vtsize, 2);
+				if ($request->variable('dl_privacy', ''))
+				{
+					if (!confirm_box(true))
+					{
+						confirm_box(false, $language->lang('DL_ACP_CONFIRM_PRIVACY'), build_hidden_fields(array(
+							'i'				=> $id,
+							'mode'			=> $mode,
+							'dl_privacy'	=> true,
+						)));
+					 }
+					 else
+					 {
+						\oxpus\dlext\phpbb\classes\ dl_privacy::dl_privacy($db);
+						trigger_error($language->lang('DL_ACP_CONFIRM_RESET_FINISH') . adm_back_link($this->u_action));
+					 }
+				}
 
-				$remain_traffic = \oxpus\dlext\includes\classes\ dl_format::dl_size($config['dl_overall_traffic'] - $config['dl_remain_traffic'], 2);
-				$overall_traffic = \oxpus\dlext\includes\classes\ dl_format::dl_size($config['dl_overall_traffic']);
-				$overall_guest_traffic = \oxpus\dlext\includes\classes\ dl_format::dl_size($config['dl_overall_guest_traffic']);
-				$remain_guest_traffic = \oxpus\dlext\includes\classes\ dl_format::dl_size($config['dl_overall_guest_traffic'] - $config['dl_remain_guest_traffic'], 2);
+				$total_size = \oxpus\dlext\phpbb\classes\ dl_format::dl_size($total_size, 2);
+				$total_tsize = \oxpus\dlext\phpbb\classes\ dl_format::dl_size($total_tsize, 2);
+				$total_vfsize = \oxpus\dlext\phpbb\classes\ dl_format::dl_size($total_vfsize, 2);
+				$total_vtsize = \oxpus\dlext\phpbb\classes\ dl_format::dl_size($total_vtsize, 2);
+
+				$remain_traffic = \oxpus\dlext\phpbb\classes\ dl_format::dl_size($config['dl_overall_traffic'] - $config['dl_remain_traffic'], 2);
+				$overall_traffic = \oxpus\dlext\phpbb\classes\ dl_format::dl_size($config['dl_overall_traffic']);
+				$overall_guest_traffic = \oxpus\dlext\phpbb\classes\ dl_format::dl_size($config['dl_overall_guest_traffic']);
+				$remain_guest_traffic = \oxpus\dlext\phpbb\classes\ dl_format::dl_size($config['dl_overall_guest_traffic'] - $config['dl_remain_guest_traffic'], 2);
 
 				$sql = "SELECT SUM(CASE WHEN todo <> '' THEN 1 ELSE 0 END) as todos, SUM(broken) as broken, sum(klicks) as mclick, sum(overall_klicks) as oclick FROM " . DOWNLOADS_TABLE . '
 						WHERE approve = ' . true;
@@ -251,7 +270,7 @@ class main_module
 				$broken	= $row['broken'];
 
 				$index = array();
-				$index = \oxpus\dlext\includes\classes\ dl_main::full_index();
+				$index = \oxpus\dlext\phpbb\classes\ dl_main::full_index();
 
 				$cats = 0;
 				$subs = 0;
@@ -309,63 +328,30 @@ class main_module
 			break;
 			case 'config':
 				$this->page_title = 'DL_ACP_CONFIG_MANAGEMENT';
-
-				include($ext_path . "includes/admin/dl_admin_config.$phpEx");
-			break;
 			case 'traffic':
 				$this->page_title = 'DL_ACP_TRAFFIC_MANAGEMENT';
-
-				include($ext_path . "includes/admin/dl_admin_traffic.$phpEx");
-			break;
 			case 'categories':
 				$this->page_title = 'DL_ACP_CATEGORIES_MANAGEMENT';
-
-				include($ext_path . "includes/admin/dl_admin_categories.$phpEx");
-			break;
 			case 'files':
 				$this->page_title = 'DL_ACP_FILES_MANAGEMENT';
-
-				include($ext_path . "/includes/admin/dl_admin_files.$phpEx");
-			break;
 			case 'permissions':
 				$this->page_title = 'DL_ACP_PERMISSIONS';
-
-				include($ext_path . "includes/admin/dl_admin_permissions.$phpEx");
-			break;
 			case 'toolbox':
 				$this->page_title = 'DL_MANAGE';
-
-				include($ext_path . "includes/admin/dl_admin_toolbox.$phpEx");
-			break;
 			case 'stats':
 				$this->page_title = 'DL_ACP_STATS_MANAGEMENT';
-
-				include($ext_path . "includes/admin/dl_admin_stats.$phpEx");
-			break;
 			case 'ext_blacklist':
 				$this->page_title = 'DL_EXT_BLACKLIST';
-
-				include($ext_path . "includes/admin/dl_admin_ext_blacklist.$phpEx");
-			break;
 			case 'banlist':
 				$this->page_title = 'DL_ACP_BANLIST';
-
-				include($ext_path . "includes/admin/dl_admin_banlist.$phpEx");
-			break;
 			case 'fields':
 				$this->page_title = 'DL_ACP_FIELDS';
-
-				include($ext_path . "includes/admin/dl_admin_fields.$phpEx");
-			break;
 			case 'browser':
 				$this->page_title = 'DL_ACP_BROWSER';
-
-				include($ext_path . "includes/admin/dl_admin_browser.$phpEx");
-			break;
 			case 'perm_check':
 				$this->page_title = 'DL_ACP_PERM_CHECK';
 
-				include($ext_path . "includes/admin/dl_admin_perm_check.$phpEx");
+				include($acp_module_path . $mode . '.' . $phpEx);
 			break;
 		}
 

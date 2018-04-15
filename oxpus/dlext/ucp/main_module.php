@@ -31,9 +31,9 @@ class main_module
 		// Define the ext path
 		$ext_path					= $phpbb_extension_manager->get_extension_path('oxpus/dlext', true);
 		$ext_path_web				= $phpbb_path_helper->update_web_root_path($ext_path);
-		$ext_path_ajax				= $ext_path_web . 'includes/js/ajax/';
+		$ext_path_ajax				= $ext_path_web . 'assets/javascript/';
 
-		include_once($ext_path . '/includes/helpers/dl_constants.' . $phpEx);
+		include_once($ext_path . 'phpbb/helpers/dl_constants.' . $phpEx);
 
 		// Define the basic file storage placement
 		if ($config['dl_download_dir'] == 2)
@@ -57,17 +57,17 @@ class main_module
 		/*
 		* include and create the main class
 		*/
-		include($ext_path . 'includes/classes/class_dlmod.' . $phpEx);
-		$dl_mod = new \oxpus\dlext\includes\classes\ dl_mod($phpbb_root_path, $phpEx, $ext_path);
+		include($ext_path . 'phpbb/classes/class_dlmod.' . $phpEx);
+		$dl_mod = new \oxpus\dlext\phpbb\classes\ dl_mod($phpbb_root_path, $phpEx, $ext_path);
 		$dl_mod->register();
-		\oxpus\dlext\includes\classes\ dl_init::init($ext_path);
+		\oxpus\dlext\phpbb\classes\ dl_init::init($ext_path);
 
 		$submit			= $request->variable('submit', '');
 		$cancel			= $request->variable('cancel', '');
 		$confirm		= $request->variable('confirm', '');
 		$mode			= $request->variable('mode', 'config');
 
-		$basic_link = $this->u_action . "&amp;mode=$mode";
+		$basic_link = $this->u_action;
 
 		$template->assign_var('S_DL_UCP', true);
 
@@ -234,7 +234,7 @@ class main_module
 				* drop all unaccessable favorites
 				*/
 				$access_cat = array();
-				$access_cat = \oxpus\dlext\includes\classes\ dl_main::full_index('', 0, 0, 0, 1);
+				$access_cat = \oxpus\dlext\phpbb\classes\ dl_main::full_index('', 0, 0, 0, 1);
 				if (sizeof($access_cat))
 				{
 					$sql_access_cat = implode(', ', array_map('intval', $access_cat));
@@ -265,7 +265,7 @@ class main_module
 					{
 						$path_dl_array = array();
 						$tmp_nav = array();
-						$dl_nav = \oxpus\dlext\includes\classes\ dl_nav::nav($helper, $row['cat'], 'links', $tmp_nav);
+						$dl_nav = \oxpus\dlext\phpbb\classes\ dl_nav::nav($helper, $row['cat'], 'links', $tmp_nav);
 
 						$template->assign_block_vars('favorite_row', array(
 							'DL_ID'			=> $row['fav_id'],
@@ -281,6 +281,93 @@ class main_module
 
 				$template->assign_vars(array(
 					'S_FORM_ACTION'	=> $basic_link,
+				));
+
+			break;
+
+			case 'dl_privacy':
+				$this->page_title = 'DL_PRIVACY';
+
+				$template->assign_var('S_DL_UCP_PRIVACY', true);
+
+				$dl_privacy = $request->variable('privacy', '');
+				
+				if ($submit && $dl_privacy)
+				{
+					switch ($dl_privacy)
+					{
+						case 'bug_tracker':
+							$fields = 'df_id, report_title, report_text, report_file_ver, report_date, report_status, report_status_date, report_php, report_db, report_forum';
+							$time_fields = array('report_date', 'report_status_date');
+							$user_field = 'report_author_id';
+							$table = DL_BUGS_TABLE;
+						break;
+						case 'comments':
+							$fields = 'dl_id, username, comment_time, comment_edit_time, comment_text';
+							$time_fields = array('comment_time', 'comment_edit_time');
+							$user_field = 'user_id';
+							$table = DL_COMMENTS_TABLE;
+						break;
+						case 'stats':
+							$fields = 'dl_id, username, traffic, direction, user_ip, browser, time_stamp';
+							$time_fields = array('time_stamp');
+							$user_field = 'user_id';
+							$table = DL_STATS_TABLE;
+						break;
+						default:
+							$table = '';
+					}
+
+					if ($table)
+					{
+						$sql = 'SELECT ' . $fields . ' FROM ' . $table . '
+								WHERE ' . $user_field . ' = ' . (int) $user->data['user_id'];
+						$result = $db->sql_query($sql);
+
+						$output_row = array();
+						$counter = 0;
+
+						while ($row = $db->sql_fetchrow($result))
+						{
+							$output_row[$counter] = array();
+							foreach($row as $field => $value)
+							{
+								if (in_array($field, $time_fields))
+								{
+									$output_row[$counter][] .= "'" . str_replace(',', '', date('r', (int) $value)) . "'";
+								}
+								else
+								{
+									$output_row[$counter][] .= "'" . str_replace("\n", "<br />", $value) . "'";
+								}
+							}
+							++$counter;
+						}
+
+						$db->sql_freeresult($result);
+
+						header("Content-type: text/csv");
+						header("Content-Disposition: attachment; filename=my_dl_" . $dl_privacy . "_data.csv");
+						header("Pragma: no-cache");
+						header("Expires: 0");
+
+						echo $fields . "\n";
+
+						foreach($output_row as $key => $data)
+						{
+							echo implode(', ', $data) . "\n";
+						}
+
+						garbage_collection();
+						exit_handler();
+					}
+				}
+
+				$template->assign_vars(array(
+					'S_FORM_ACTION'			=> $basic_link,
+					'U_DL_PRIVACY_BUGS'		=> $basic_link . '&amp;submit=1&amp;privacy=bug_tracker',
+					'U_DL_PRIVACY_COMMENTS'	=> $basic_link . '&amp;submit=1&amp;privacy=comments',
+					'U_DL_PRIVACY_STATS'	=> $basic_link . '&amp;submit=1&amp;privacy=stats',
 				));
 
 			break;

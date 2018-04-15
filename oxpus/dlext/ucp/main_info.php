@@ -17,12 +17,13 @@ class main_info
 		global $config;
 
 		return array(
-			'filename'	=> '\oxpus\dlext\ucp\main_info',
+			'filename'	=> '\oxpus\dlext\ucp\main_module',
 			'title'		=> 'DOWNLOADS',
 			'version'	=> $config['dl_ext_version'],
 			'modes'		=> array(
-				'config'	=> array('title' => 'DL_CONFIG',	'auth' => 'ext_oxpus/dlext',	'cat' => array('DOWNLOADS')),
-				'favorite'	=> array('title' => 'DL_FAVORITE',	'auth' => 'ext_oxpus/dlext',	'cat' => array('DOWNLOADS')),
+				'config'		=> array('title' => 'DL_CONFIG',	'auth' => 'ext_oxpus/dlext',	'cat' => array('DOWNLOADS')),
+				'favorite'		=> array('title' => 'DL_FAVORITE',	'auth' => 'ext_oxpus/dlext',	'cat' => array('DOWNLOADS')),
+				'dl_privacy'	=> array('title' => 'DL_PRIVACY',	'auth' => 'ext_oxpus/dlext',	'cat' => array('DOWNLOADS')),
 			),
 		);
 	}

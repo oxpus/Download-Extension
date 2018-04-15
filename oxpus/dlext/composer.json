@@ -1,9 +1,9 @@
 {
 	"name": "oxpus/dlext",
 	"type": "phpbb-extension",
-	"description": "Download Extension for phpBB 3.1",
+	"description": "Download Extension for phpBB 3.2",
 	"homepage": "https://phpbb3.oxpus.net",
-	"version": "7.2.13",
+	"version": "7.3.0",
 	"time": "2015-05-11",
 	"license": "GPL-2.0",
 	"authors": [{
