@@ -93,6 +93,8 @@ if($action == 'edit' || $action == 'add')
 		$desc_flags			= (isset($dl_file['desc_flags'])) ? $dl_file['desc_flags'] : 0;
 		$warn_uid			= (isset($dl_file['warn_uid'])) ? $dl_file['warn_uid'] : '';
 		$warn_flags			= (isset($dl_file['warn_flags'])) ? $dl_file['warn_flags'] : 0;
+		$todo_uid			= (isset($dl_file['todo_uid'])) ? $dl_file['todo_uid'] : '';
+		$todo_flags			= (isset($dl_file['todo_flags'])) ? $dl_file['todo_flags'] : 0;
 
 		$text_ary		= generate_text_for_edit($mod_desc, $mod_desc_uid, $mod_desc_flags);
 		$mod_desc		= $text_ary['text'];
@@ -105,6 +107,9 @@ if($action == 'edit' || $action == 'add')
 
 		$text_ary		= generate_text_for_edit($warning, $warn_uid, $warn_flags);
 		$warning		= $text_ary['text'];
+
+		$text_ary		= generate_text_for_edit($todo, $todo_uid, $todo_flags);
+		$todo			= $text_ary['text'];
 
 		$tmp_ary				= \oxpus\dlext\phpbb\classes\ dl_format::dl_size($file_traffic, 2, 'select');
 		$file_traffic_out		= $tmp_ary['size_out'];
@@ -502,17 +507,36 @@ else if($action == 'save')
 		$allow_bbcode			= ($config['allow_bbcode']) ? true : false;
 		$allow_urls				= true;
 		$allow_smilies			= ($config['allow_smilies']) ? true : false;
-		$desc_uid				= $desc_bitfield = $mod_desc_uid = $mod_desc_bitfield = $long_desc_uid = $long_desc_bitfield = $warn_uid = $warn_bitfield = '';
-		$desc_flags				= $mod_desc_flags = $long_desc_flags = $warn_flags = 0;
+		$desc_uid				= $desc_bitfield = $mod_desc_uid = $mod_desc_bitfield = $long_desc_uid = $long_desc_bitfield = $warn_uid = $warn_bitfield = $todo_uid = $todo_bitfield = '';
+		$desc_flags				= $mod_desc_flags = $long_desc_flags = $warn_flags = $todo_flags = 0;
 
-		generate_text_for_storage($description, $desc_uid, $desc_bitfield, $desc_flags, $allow_bbcode, true, $allow_smilies);
-		generate_text_for_storage($long_desc, $long_desc_uid, $long_desc_bitfield, $long_desc_flags, $allow_bbcode, true, $allow_smilies);
-		generate_text_for_storage($mod_desc, $mod_desc_uid, $mod_desc_bitfield, $mod_desc_flags, $allow_bbcode, true, $allow_smilies);
-		generate_text_for_storage($warning, $warn_uid, $warn_bitfield, $warn_flags, $allow_bbcode, true, $allow_smilies);
-
-		if (!$description)
+		if ($description)
+		{
+			generate_text_for_storage($description, $desc_uid, $desc_bitfield, $desc_flags, $allow_bbcode, true, $allow_smilies);
+		}
+		else
 		{
 			trigger_error($language->lang('NO_SUBJECT'), E_USER_WARNING);
+		}
+
+		if ($long_desc)
+		{
+			generate_text_for_storage($long_desc, $long_desc_uid, $long_desc_bitfield, $long_desc_flags, $allow_bbcode, true, $allow_smilies);
+		}
+
+		if ($mod_desc)
+		{
+			generate_text_for_storage($mod_desc, $mod_desc_uid, $mod_desc_bitfield, $mod_desc_flags, $allow_bbcode, true, $allow_smilies);
+		}
+
+		if ($warning)
+		{
+			generate_text_for_storage($warning, $warn_uid, $warn_bitfield, $warn_flags, $allow_bbcode, true, $allow_smilies);
+		}
+
+		if ($todo)
+		{
+			generate_text_for_storage($todo, $todo_flags, $todo_bitfield, $todo_uid, $allow_bbcode, true, $allow_smilies);
 		}
 
 		$send_notify			= $request->variable('send_notify', 0);
@@ -868,6 +892,8 @@ else if($action == 'save')
 			{
 				$user->add_lang('posting');
 
+				$min_pic_width = 1;
+
 				$factory = $phpbb_container->get('files.factory');
 				$allowed_imagetypes = array('gif','png','jpg','bmp');
 				$upload = $factory->get('upload')
@@ -922,6 +948,7 @@ else if($action == 'save')
 
 						$upload_file['name'] = $df_id . '_' . $thumb_name;
 						$thumb_file->set_upload_ary($upload_file);
+						$dest_folder = str_replace($phpbb_root_path, '', substr(DL_EXT_THUMBS_FOLDER, 0, -1));
 
 						$error = $thumb_file->move_file($dest_folder, false, false, CHMOD_ALL);
 						$thumb_message = '<br />' . $language->lang('DL_THUMB_UPLOAD');

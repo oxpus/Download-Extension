@@ -119,12 +119,15 @@ class main_listener implements EventSubscriberInterface
 		);
 	}
 
-	private function _dl_init_main_class()
+	private function _dl_init_main_class($init = true)
 	{
 		include_once($this->ext_path . 'phpbb/classes/class_dlmod.' . $this->php_ext);
 		$dl_mod = new \oxpus\dlext\phpbb\classes\ dl_mod($this->root_path, $this->php_ext, $this->ext_path);
 		$dl_mod->register();
-		\oxpus\dlext\phpbb\classes\ dl_init::init($this->ext_path);
+		if ($init)
+		{
+			\oxpus\dlext\phpbb\classes\ dl_init::init($this->ext_path);
+		}
 	}
 
 	public function core_user_setup($event)
@@ -297,7 +300,7 @@ class main_listener implements EventSubscriberInterface
 	{
 		if (!$this->config['dl_traffic_off'])
 		{
-			self::_dl_init_main_class();
+			self::_dl_init_main_class(false);
 
 			$user_traffic = \oxpus\dlext\phpbb\classes\ dl_format::dl_size($event['member']['user_traffic'], 2, 'combine');
 
@@ -540,7 +543,7 @@ class main_listener implements EventSubscriberInterface
 	// Using privacy protection by tas2580
 	public function tas2580_privacyprotection_delete_ip_after($event)
 	{
-		self::_dl_init_main_class();
+		self::_dl_init_main_class(false);
 
 		return \oxpus\dlext\phpbb\classes\ dl_privacy::dl_privacy($this->db);
 	}

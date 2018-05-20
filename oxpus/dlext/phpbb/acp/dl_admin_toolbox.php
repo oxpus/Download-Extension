@@ -148,9 +148,9 @@ if ($action == 'check_file_sizes')
 		{
 			$sql_new = 'UPDATE ' . DOWNLOADS_TABLE . ' SET ' . $db->sql_build_array('UPDATE', array(
 					'file_size' => $check_file_size)) . ' WHERE id = ' . (int) $file_id;
-			$result = $db->sql_query($sql_new);
+			$result_new = $db->sql_query($sql_new);
 
-			if (!$result)
+			if (!$result_new)
 			{
 				$message .= $file_desc . '<br />';
 			}

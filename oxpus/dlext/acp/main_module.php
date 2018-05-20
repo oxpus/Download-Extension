@@ -328,31 +328,45 @@ class main_module
 			break;
 			case 'config':
 				$this->page_title = 'DL_ACP_CONFIG_MANAGEMENT';
+			break;
 			case 'traffic':
 				$this->page_title = 'DL_ACP_TRAFFIC_MANAGEMENT';
+			break;
 			case 'categories':
 				$this->page_title = 'DL_ACP_CATEGORIES_MANAGEMENT';
+			break;
 			case 'files':
 				$this->page_title = 'DL_ACP_FILES_MANAGEMENT';
+			break;
 			case 'permissions':
 				$this->page_title = 'DL_ACP_PERMISSIONS';
+			break;
 			case 'toolbox':
 				$this->page_title = 'DL_MANAGE';
+			break;
 			case 'stats':
 				$this->page_title = 'DL_ACP_STATS_MANAGEMENT';
+			break;
 			case 'ext_blacklist':
 				$this->page_title = 'DL_EXT_BLACKLIST';
+			break;
 			case 'banlist':
 				$this->page_title = 'DL_ACP_BANLIST';
+			break;
 			case 'fields':
 				$this->page_title = 'DL_ACP_FIELDS';
+			break;
 			case 'browser':
 				$this->page_title = 'DL_ACP_BROWSER';
+			break;
 			case 'perm_check':
 				$this->page_title = 'DL_ACP_PERM_CHECK';
-
-				include($acp_module_path . $mode . '.' . $phpEx);
 			break;
+		}
+
+		if ($mode != 'overview')
+		{
+			include($acp_module_path . $mode . '.' . $phpEx);
 		}
 
 		$template->assign_vars(array(
