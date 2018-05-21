@@ -1073,23 +1073,23 @@ else
 								}
 							}
 
-							$sql = 'SELECT file_type, real_name FROM ' . DL_VER_FILES_TABLE . '
+							$sql_real = 'SELECT file_type, real_name FROM ' . DL_VER_FILES_TABLE . '
 								WHERE ' . $this->db->sql_in_set('dl_id', $dl_ids);
-							$result = $this->db->sql_query($sql);
+							$result_real = $this->db->sql_query($sql_real);
 
-							while ($row = $this->db->sql_fetchrow($result))
+							while ($row_real = $this->db->sql_fetchrow($result_real))
 							{
-								switch ($row['file_type'])
+								switch ($row_real['file_type'])
 								{
 									case 1:
-										@unlink(DL_EXT_VER_IMAGES_FOLDER . $row['real_name']);
+										@unlink(DL_EXT_VER_IMAGES_FOLDER . $row_real['real_name']);
 									break;
 									default:
-										@unlink(DL_EXT_VER_FILES_FOLDER . $row['real_name']);
+										@unlink(DL_EXT_VER_FILES_FOLDER . $row_real['real_name']);
 								}
 							}
 
-							$this->db->sql_freeresult($result);
+							$this->db->sql_freeresult($result_real);
 						}
 
 						if ($row['dl_topic'])
