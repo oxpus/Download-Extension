@@ -354,7 +354,7 @@ class main_listener implements EventSubscriberInterface
 			else
 			{
 				$filebase_prefix = $this->ext_path . 'files/';
-				$filebase_web_prefix = $rhis->ext_path_web . 'files/';
+				$filebase_web_prefix = $this->ext_path_web . 'files/';
 			}
 
 			define('DL_EXT_CACHE_FOLDER',		$filebase_prefix . 'cache/');
