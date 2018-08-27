@@ -210,6 +210,11 @@ class main_listener implements EventSubscriberInterface
 			$dl_mod_link_show = true;
 		}
 
+		if (!$this->config['dl_global_guests'] && !$this->user->data['is_registered'])
+		{
+			$dl_mod_link_show = false;
+		}
+
 		if ($dl_mod_link_show)
 		{
 			$dl_main_link = $this->helper->route('oxpus_dlext_controller');
@@ -263,9 +268,9 @@ class main_listener implements EventSubscriberInterface
 					));
 				}
 			}
-		}
 
-		self::dl_add_download_message($event);
+			self::dl_add_download_message($event);
+		}
 	}
 
 	public function core_viewonline_overwrite_location($event)

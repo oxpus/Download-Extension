@@ -248,6 +248,14 @@ class main
 			$view = '';
 		}
 
+		if (!$this->config['dl_global_guests'] && !$this->user->data['is_registered'])
+		{
+			$view = '';
+			$dl_mod_link_show = false;
+			$dl_mod_is_active = false;
+			$dl_mod_is_active_for_admins = false;
+		}
+
 		if ($view == 'help')
 		{
 			include($this->ext_path . 'phpbb/helpers/dl_help.' . $this->php_ext);

@@ -347,6 +347,7 @@ $lang = array_merge($lang, array(
 	'DL_FUNCTION'					=> 'Funktion',
 
 	'DL_GB'						=> 'GiB',
+	'DL_GLOBAL_GUESTS'			=> 'Grundlegender Zugriff für Gäste',
 	'DL_GO'						=> 'Los',
 	'DL_GOTO'					=> 'Gehe zu Kategorie',
 	'DL_GREEN_EXPLAIN'			=> 'Download! Kein Abzug vom Benutzerkonto.',

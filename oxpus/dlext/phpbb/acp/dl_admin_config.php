@@ -140,23 +140,27 @@ switch ($view)
 			'vars'	=> array(
 				'legend1'				=> '',
 
+				'dl_global_guests'		=> array('lang' => 'DL_GLOBAL_GUESTS',	'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_GLOBAL_GUESTS'),
+
+				'legend2'				=> '',
+
 				'dl_use_ext_blacklist'	=> array('lang' => 'DL_USE_EXT_BLACKLIST',	'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_USE_EXT_BLACKLIST'),
 
-				'legend2'				=> 'DL_ANTISPAM',
+				'legend3'				=> 'DL_ANTISPAM',
 
 				'dl_antispam_posts'		=> array('lang' => 'DL_ANTISPAM_POSTS',		'validate' => 'int',	'type' => 'text:5:10',		'explain' => false,		'help_key' => 'DL_ANTISPAM'),
 				'dl_antispam_hours'		=> array('lang' => 'DL_ANTISPAM_HOURS',		'validate' => 'int',	'type' => 'text:5:10',		'explain' => false,		'help_key' => 'DL_ANTISPAM'),
 
-				'legend3'				=> '',
+				'legend4'				=> '',
 
 				'dl_download_vc'		=> array('lang' => 'DL_VISUAL_CONFIRMATION',	'validate' => 'int',	'type' => 'select',		'explain' => true,		'help_key' => 'DL_VISUAL_CONFIRMATION',		'function' => 'select_dl_vc',		'params' => array('{CONFIG_VALUE}')),
 				'dl_report_broken_vc'	=> array('lang' => 'DL_REPORT_BROKEN_VC',		'validate' => 'int',	'type' => 'select',		'explain' => false,		'help_key' => 'DL_REPORT_BROKEN_VC',		'function' => 'select_report_vc',	'params' => array('{CONFIG_VALUE}')),
 
-				'legend4'				=> '',
+				'legend5'				=> '',
 
 				'dl_stats_perm'		=> array('lang' => 'DL_STAT_PERM',	'validate' => 'int',	'type' => 'select',		'explain' => false,		'help_key' => 'DL_STAT_PERM',	'function' => 'select_stat_perm',	'params' => array('{CONFIG_VALUE}')),
 
-				'legend5'				=> '',
+				'legend6'				=> '',
 
 				'dl_prevent_hotlink'	=> array('lang' => 'DL_PREVENT_HOTLINK',	'validate' => 'int',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_PREVENT_HOTLINK'),
 				'dl_hotlink_action'		=> array('lang' => 'DL_HOTLINK_ACTION',		'validate' => 'int',	'type' => 'select',			'explain' => false,		'help_key' => 'DL_HOTLINK_ACTION',		'function' => 'select_hotlink_action',	'params' => array('{CONFIG_VALUE}')),
