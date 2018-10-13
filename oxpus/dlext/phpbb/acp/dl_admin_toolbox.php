@@ -419,13 +419,13 @@ if ($action == 'browse' || $action == '' || $action == 'unassigned')
 					$slash = ($path) ? '/' : '';
 					$dirs[] = $path . $slash . $file . '|~|<a href="' . $basic_link . '&amp;action=browse&amp;path=' . $path . $slash . $file . '">' . $file . '</a>';
 
-					$sh = @opendir(DL_EXT_FILES_FOLDER . $path . '/' . $file);
+					$sh = @opendir(DL_EXT_FILES_FOLDER . $path . $file);
 
 					$content_count = 0;
 
 					while (false !== ($subfile = @readdir($sh)))
 					{
-						if (substr($subfile,0,1)!="." && strpos($subfile, 'index.htm') !== false)
+						if ($subfile{0} <> '.' && substr($subfile, 0, 9) <> 'index.htm')
 						{
 							$content_count++;
 						}
