@@ -5,7 +5,7 @@
 	"homepage": "https://phpbb3.oxpus.net",
 	"version": "7.3.2",
 	"time": "2015-05-11",
-	"license": "GPL-2.0",
+	"license": "GPL-2.0-only",
 	"authors": [{
 			"name": "Karsten Ude",
 			"username": "oxpus",
