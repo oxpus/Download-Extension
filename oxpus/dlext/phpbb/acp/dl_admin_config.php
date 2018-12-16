@@ -42,7 +42,7 @@ switch ($view)
 			'vars'	=> array(
 				'legend1'				=> '',
 
-				'dl_download_dir'	=> array('lang' => 'DOWNLOAD_PATH',		'validate' => 'int',	'type' => 'select',			'explain' => true,		'help_key' => 'DOWNLOAD_PATH',			'function' => 'select_filebase',	'params' => array('{CONFIG_VALUE}')),
+				'dl_download_dir'	=> array('lang' => 'DOWNLOAD_PATH',		'validate' => 'int',	'type' => 'select',			'explain' => true,		'help_key' => 'DOWNLOAD_PATH',				'function' => 'select_filebase',	'params' => array('{CONFIG_VALUE}')),
 				'dl_base_switch'	=> array('lang' => 'DL_BASE_SWITCH',	'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => ''),
 
 				'legend2'				=> '',
@@ -55,7 +55,7 @@ switch ($view)
 
 				'legend3'				=> '',
 
-				'dl_off_now_time'	=> array('lang' => 'DL_OFF_NOW_TIME',		'validate' => 'bool',	'type' => 'custom',			'explain' => false,		'help_key' => 'DL_OFF_NOW_TIME', 				'function' => 'mod_disable',	'params' => array('{CONFIG_VALUE}')),
+				'dl_off_now_time'	=> array('lang' => 'DL_OFF_NOW_TIME',		'validate' => 'bool',	'type' => 'custom',			'explain' => false,		'help_key' => 'DL_OFF_NOW_TIME', 		'function' => 'mod_disable',	'params' => array('{CONFIG_VALUE}')),
 				'dl_off_from'		=> array('lang' => 'DL_OFF_PERIOD',			'validate' => 'string',	'type' => 'text:5:5',		'explain' => false,		'help_key' => 'DL_OFF_PERIOD'),
 				'dl_off_till'		=> array('lang' => 'DL_OFF_PERIOD_TILL',	'validate' => 'string',	'type' => 'text:5:5',		'explain' => false,		'help_key' => 'DL_OFF_PERIOD_TILL'),
 				'dl_on_admins'		=> array('lang' => 'DL_ON_ADMINS',			'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_ON_ADMINS'),
@@ -64,7 +64,7 @@ switch ($view)
 				'legend4'				=> '',
 
 				'dl_set_add'		=> array('lang' => 'DL_SET_ADD',			'validate' => 'int',	'type' => 'select',		'explain' => false,		'help_key' => 'DL_SET_ADD', 				'function' => 'select_topic_user',	'params' => array('{CONFIG_VALUE}')),
-				'dl_set_user'		=> array('lang' => 'DL_TOPIC_USER_OTHER',	'validate' => 'int',	'type' => 'text:5:5',	'explain' => false,		'help_key' => 'DL_SET_ADD'),
+				'dl_set_user'		=> array('lang' => 'DL_TOPIC_USER_OTHER',	'validate' => 'string',	'type' => 'custom',		'explain' => false,		'help_key' => 'DL_SET_ADD',					'function' => 'select_dl_user', 	'params' => array('{CONFIG_VALUE}', 'dl_set_user')),
 			)
 		);
 	break;
@@ -321,7 +321,7 @@ switch ($view)
 
 				'dl_enable_dl_topic'		=> array('lang' => 'DL_ENABLE_TOPIC',			'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_ENABLE_TOPIC'),
 				'dl_diff_topic_user'		=> array('lang' => 'DL_TOPIC_USER',				'validate' => 'int',	'type' => 'select',			'explain' => false,		'help_key' => 'DL_TOPIC_USER',			'function' => 'select_topic_user',		'params' => array('{CONFIG_VALUE}')),
-				'dl_topic_user'				=> array('lang' => 'DL_TOPIC_USER_OTHER',		'validate' => 'int',	'type' => 'text:5:10',		'explain' => false,		'help_key' => 'DL_TOPIC_USER'),
+				'dl_topic_user'				=> array('lang' => 'DL_TOPIC_USER_OTHER',		'validate' => 'string',	'type' => 'custom',			'explain' => false,		'help_key' => 'DL_TOPIC_USER',			'function' => 'select_dl_user',			'params'  => array('{CONFIG_VALUE}', 'dl_topic_user')),
 				'dl_topic_forum'			=> array('lang' => 'DL_TOPIC_FORUM',			'validate' => 'int',	'type' => 'select',			'explain' => false,		'help_key' => 'DL_TOPIC_FORUM',			'function' => 'select_dl_forum',		'params' => array('{CONFIG_VALUE}')),
 				'dl_topic_text'				=> array('lang' => 'DL_TOPIC_TEXT',				'validate' => 'string',	'type' => 'custom',			'explain' => false,		'help_key' => 'DL_TOPIC_TEXT',			'function' => 'textarea_input',			'params' => array('{CONFIG_VALUE}', 'dl_topic_text', 75, 5)),
 				'dl_topic_more_details'		=> array('lang' => 'DL_TOPIC_DETAILS',			'validate' => 'int',	'type' => 'select',			'explain' => false,		'help_key' => 'DL_TOPIC_DETAILS',		'function' => 'select_topic_details',	'params' => array('{CONFIG_VALUE}')),
@@ -413,6 +413,11 @@ foreach ($display_vars['vars'] as $config_name => $null)
 			}
 		}
 
+		if ($config_name == 'dl_set_user' ||$config_name == 'dl_topic_user')
+		{
+			$this->new_config[$config_name] = $config_value = \oxpus\dlext\phpbb\classes\ dl_extra::dl_user_switch(0, $config_value, $submit);
+		}
+
 		if ($config_name == 'dl_thumb_xsize' || $config_name == 'dl_thumb_ysize')
 		{
 			$this->new_config[$config_name] = $config_value = intval($config_value);
@@ -483,6 +488,13 @@ foreach ($display_vars['vars'] as $config_name => $null)
 		}
 
 		$config->set($config_name, $config_value, false);
+	}
+	else
+	{
+		if ($config_name == 'dl_set_user' || $config_name == 'dl_topic_user')
+		{
+			$this->new_config[$config_name] = $config_value = \oxpus\dlext\phpbb\classes\ dl_extra::dl_user_switch($config_value);
+		}	
 	}
 }
 
@@ -960,7 +972,6 @@ function select_dl_ext_stats($value)
 	return $s_select;
 }
 
-
 function select_topic_type($value)
 {
 	global $language;
@@ -972,4 +983,14 @@ function select_topic_type($value)
 	$s_select = str_replace('value="' . $value . '">', 'value="' . $value . '" selected="selected">', $s_select);
 
 	return $s_select;
+}
+
+function select_dl_user($value, $config)
+{
+	global $language, $phpbb_root_path, $phpEx;
+
+	$input_field = '<input class="text medium" type="text" id="' . $config . '" name="config[' . $config . ']" value="' . $value . '" />';
+	$input_field .= '<br />&nbsp;&nbsp;&nbsp;&nbsp;[ <a href="' . append_sid("{$phpbb_root_path}memberlist.$phpEx", 'mode=searchuser&amp;form=acp_dl_config&amp;field=' . $config . '&amp;select_single=true') . '" onclick="find_username(this.href); return false;">' . $language->lang('FIND_USERNAME') . '</a> ]';
+
+	return $input_field;
 }

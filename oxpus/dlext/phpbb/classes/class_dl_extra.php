@@ -147,4 +147,50 @@ class dl_extra extends dl_mod
 
 		return $catlist;
 	}
+
+	public static function dl_user_switch($user_id = 0, $username = '', $update = false)
+	{
+		global $db;
+
+		$value = '';
+
+		if ($update && $username)
+		{
+			$sql = 'SELECT user_id
+				FROM ' . USERS_TABLE . "
+				WHERE username_clean = '" . $db->sql_escape(utf8_clean_string($username)) . "'";
+			$result = $db->sql_query($sql);
+			$user_id = (int) $db->sql_fetchfield('user_id');
+			$db->sql_freeresult($result);
+
+			if (!$user_id)
+			{
+				$value = 0;
+			}
+			else
+			{
+				$value = $user_id;
+			}
+		}
+		else if ($user_id > 0)
+		{
+			$sql = 'SELECT username_clean
+				FROM ' . USERS_TABLE . '
+				WHERE user_id = ' . (int) $user_id;
+			$result = $db->sql_query($sql);
+			$username = $db->sql_fetchfield('username_clean');
+			$db->sql_freeresult($result);
+
+			if (!$username)
+			{
+				$value = '';
+			}
+			else
+			{
+				$value = $username;
+			}
+		}
+
+		return $value;
+	}
 }

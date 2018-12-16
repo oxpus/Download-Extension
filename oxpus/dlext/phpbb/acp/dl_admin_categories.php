@@ -67,13 +67,13 @@ $topic_forum		= $request->variable('dl_topic_forum', 0);
 $topic_text			= $request->variable('dl_topic_text', '', true);
 $cat_icon			= $request->variable('cat_icon', '', true);
 $diff_topic_user	= $request->variable('diff_topic_user', $config['dl_diff_topic_user']);
-$topic_user			= $request->variable('topic_user', $config['dl_topic_user']);
+$topic_user			= $request->variable('dl_topic_user', '', true);
 $topic_more_details	= $request->variable('topic_more_details', 1);
 $show_file_hash		= $request->variable('show_file_hash', 0);
 $idx_type			= $request->variable('type', 'c');
 $topic_type			= $request->variable('topic_type', POST_NORMAL);
 $set_add			= $request->variable('set_add', 0);
-$set_user			= $request->variable('set_user', 0);
+$set_user			= $request->variable('set_user', '', true);
 
 $error = false;
 $error_msg = '';
@@ -359,10 +359,10 @@ if($action == 'edit' || $action == 'add')
 		'PERMS_COPY_FROM'		=> $perms_copy_from,
 		'TOPIC_TEXT'			=> $topic_text,
 		'CAT_ICON'				=> $cat_icon,
-		'TOPIC_USER'			=> $topic_user,
+		'TOPIC_USER'			=> \oxpus\dlext\phpbb\classes\ dl_extra::dl_user_switch($topic_user),
 		'SHOW_FILE_HASH_YES'	=> $show_file_hash_yes,
 		'SHOW_FILE_HASH_NO'		=> $show_file_hash_no,
-		'SET_USER'				=> $set_user,
+		'SET_USER'				=> \oxpus\dlext\phpbb\classes\ dl_extra::dl_user_switch($set_user),
 
 		'S_TOPIC_TYPE'			=> $s_topic_type,
 		'S_CAT_PATH'			=> $s_path_select,
@@ -371,6 +371,8 @@ if($action == 'edit' || $action == 'add')
 		'S_CATEGORY_ACTION'		=> $basic_link,
 		'S_DL_DIFF_TOPIC_USER'	=> $s_topic_user_select,
 		'S_SET_USER'			=> $s_set_user_select,
+		'S_USER_SELECT'			=> append_sid("{$phpbb_root_path}memberlist.$phpEx", 'mode=searchuser&amp;form=dl_edit_cat&amp;field=set_user&amp;select_single=true'),
+		'S_USER_SELECT_2'			=> append_sid("{$phpbb_root_path}memberlist.$phpEx", 'mode=searchuser&amp;form=dl_edit_cat&amp;field=dl_topic_user&amp;select_single=true'),
 		'S_TOPIC_MORE_DETAILS'	=> $s_topic_more_details,
 		'S_ERROR'				=> $error,
 		'S_HIDDEN_FIELDS'		=> build_hidden_fields($s_hidden_fields),
@@ -469,12 +471,43 @@ else if($action == 'save_cat')
 		$db->sql_freeresult($result);
 	}
 
+	$topic_user = \oxpus\dlext\phpbb\classes\ dl_extra::dl_user_switch(0, $topic_user, true);
+	$set_user = \oxpus\dlext\phpbb\classes\ dl_extra::dl_user_switch(0, $set_user, true);
+
+	// Check download user-id
+	if ($set_add)
+	{
+		if (!$set_user)
+		{
+			$set_user = 0;
+			$set_add = 0;
+		}
+		else
+		{
+			$sql = 'SELECT * FROM ' . USERS_TABLE . ' WHERE user_id = ' . (int) $set_user;
+			$result = $db->sql_query($sql);
+			$user_exists = $db->sql_affectedrows($result);
+			$db->sql_freeresult($result);
+
+			if (!$user_exists)
+			{
+				$set_user = 0;
+				$set_add = 0;
+			}
+		}
+	}
+	else
+	{
+		$set_user = 0;
+	}
+
 	// Check topic user-id
 	if ($diff_topic_user)
 	{
 		if (!$topic_user)
 		{
-			$topic_user = $user->data['user_id'];
+			$topic_user = 0;
+			$diff_topic_user = 0;
 		}
 		else
 		{
@@ -485,9 +518,14 @@ else if($action == 'save_cat')
 
 			if (!$user_exists)
 			{
-				$topic_user = $user->data['user_id'];
+				$topic_user = 0;
+				$diff_topic_user = 0;
 			}
 		}
+	}
+	else
+	{
+		$topic_user = 0;
 	}
 
 	if($cat_id)
