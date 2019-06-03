@@ -1,13 +1,13 @@
-Subject: Nouveau statut pour le rapport de bugs sur « {SITENAME} »
+Subject: Nouveau statut pour le rapport de bugs sur Â«Â {SITENAME}Â Â»
 
 Bonjour {USERNAME},
 
-Vous recevez cet e-mail car le statut du rapport de bugs « {REPORT_TITLE} » sur « {SITENAME} » a été modifié.
-Nouveau statut : {STATUS}.
+Vous recevez cet e-mail car le statut du rapport de bugs Â«Â {REPORT_TITLE}Â Â» sur Â«Â {SITENAME}Â Â» a Ã©tÃ© modifiÃ©.
+Nouveau statutÂ : {STATUS}.
 
 {STATUS_TEXT}
 
-Pour plus de détails, suivez ce lien :
+Pour plus de dÃ©tails, suivez ce lienÂ :
 
 {U_BUG_REPORT}
 
