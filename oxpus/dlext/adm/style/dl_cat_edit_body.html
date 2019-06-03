@@ -104,8 +104,8 @@
 		<dd><a href="javascript:void(0)" onclick="javascript:help_popup('DL_SET_ADD')" class="nav">{{ ICON_DL_HELP }}</a>&nbsp;<label>{{ S_SET_USER }}</label></dd>
 	</dl>
 	<dl>
-		<dt><label>{{ lang('DL_TOPIC_USER') }}</label></dt>
-		<dd><a href="javascript:void(0)" onclick="javascript:help_popup('DL_SET_ADD')" class="nav">{{ ICON_DL_HELP }}</a>&nbsp;<input type="text" name="set_user" value="{{ SET_USER }}" class="inputbox autowidth" size="10" /></dd>
+		<dt><label>{{ lang('SELECT') }}</label></dt>
+		<dd><a href="javascript:void(0)" onclick="javascript:help_popup('DL_SET_ADD')" class="nav">{{ ICON_DL_HELP }}</a>&nbsp;<input type="text" id="set_user" name="set_user" value="{{ SET_USER }}" class="inputbox autowidth" size="32" /><br />&nbsp;&nbsp;&nbsp;[ <a href="{{ S_USER_SELECT }}" onclick="find_username(this.href); return false;" >{{ lang('FIND_USERNAME') }}</a> ]</dd>
 	</dl>
 
 </fieldset>
@@ -125,7 +125,7 @@
 	{% if S_TOPIC_USER_ON %}
 	<dl>
 		<dt><label>{{ lang('DL_TOPIC_USER') }}</label></dt>
-		<dd><a href="javascript:void(0)" onclick="javascript:help_popup('DL_TOPIC_USER')">{{ ICON_DL_HELP }}</a>&nbsp;&nbsp;<label>{{ S_DL_DIFF_TOPIC_USER }}</label>&nbsp;&nbsp;<input type="text" name="dl_topic_user" value="{{ TOPIC_USER }}" class="inputbox autowidth" size="10" /></dd>
+		<dd><a href="javascript:void(0)" onclick="javascript:help_popup('DL_TOPIC_USER')">{{ ICON_DL_HELP }}</a>&nbsp;&nbsp;<label>{{ S_DL_DIFF_TOPIC_USER }}</label><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="dl_topic_user" id="dl_topic_user" value="{{ TOPIC_USER }}" class="inputbox autowidth" size="32" /><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[ <a href="{{ S_USER_SELECT_2 }}" onclick="find_username(this.href); return false;" >{{ lang('FIND_USERNAME') }}</a> ]</dd>
 	</dl>
 	{% endif %}
 	{% if S_TOPIC_DETAILS %}

@@ -104,6 +104,13 @@
 			<dd><input type="hidden" name="action" value="reset_cache" /><input class="button2" type="submit" id="reset_cache" name="reset_cache" value="{{ lang('RUN') }}" /></dd>
 		</dl>
 	</form>
+
+	<form id="dl_privacy" method="post" action="{{ U_ACTION }}">
+		<dl>
+			<dt><label for="dl_privacy">{{ lang('DL_PRIVACY_IPS') }}</label></dt>
+			<dd><input type="hidden" name="action" value="dl_privacy" /><input class="button2" type="submit" id="dl_privacy" name="dl_privacy" value="{{ lang('RUN') }}" /></dd>
+		</dl>
+	</form>
 </fieldset>
 {% else %}
 {% if S_DL_TRAFFIC_OFF %}<br /><div>{{ lang('DL_TRAFFIC_OFF_EXPLAIN') }}</div>{% endif %}
