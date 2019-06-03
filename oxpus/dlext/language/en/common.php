@@ -581,7 +581,7 @@ $lang = array_merge($lang, array(
 	'DL_REPORT_BROKEN_VC'				=> 'Visual confirmation to report a broken download',
 	'DL_REPORT_BROKEN_VC_MISMATCH'		=> 'The confirmation code for this report was wrong. Please go back and retry.',
 	'DL_REPORT_CONFIRM_CODE'			=> 'Please enter the confirmation code here to report this download as broken:',
-	'DL_REPORT_NOTIFY_TEXT'				=> "---------------------------\n\nThe user have entered the following message about this:\n\n%s\n\n",
+	'DL_REPORT_NOTIFY_TEXT'				=> '---------------------------\n\nThe user have entered the following message about this:\n\n%s\n\n',
 	'DL_REPORT_REASON'					=> 'Reason for your report',
 
 	'DL_RSS_ACTION_D_TXT'			=> 'Display the following message',
