@@ -1,9 +1,9 @@
-Subject: Téléchargement cassé
+Subject: TÃ©lÃ©chargement cassÃ©
 
 Bonjour {USERNAME},
 
-Vous recevez cet e-mail car « {REPORTER} » a rapporté un lien de téléchargement erroné sur « {SITENAME} ».
-Cliquez sur le lien suivant pour analyser ce rapport :
+Vous recevez cet e-mail car Â«Â {REPORTER}Â Â» a rapportÃ© un lien de tÃ©lÃ©chargement erronÃ© sur Â«Â {SITENAME}Â Â».
+Cliquez sur le lien suivant pour analyser ce rapportÂ :
 
 ---------------------------
 {U_DOWNLOAD}

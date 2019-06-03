@@ -1,18 +1,18 @@
-Subject: Nouveau téléchargement
+Subject: Nouveau tÃ©lÃ©chargement
 
 Bonjour {USERNAME},
 
-Vous recevez cet e-mail car il y a un nouveau téléchargement dans la catégorie « {CATEGORY} » sur « {SITENAME} » :
+Vous recevez cet e-mail car il y a un nouveau tÃ©lÃ©chargement dans la catÃ©gorie Â«Â {CATEGORY}Â Â» sur Â«Â {SITENAME}Â Â»Â :
 
 ---------------------------
 {DOWNLOAD}
 {DESCRIPTION}
 ---------------------------
 
-Si vous voulez voir ce nouveau téléchargement, cliquez sur le lien suivant :
+Si vous voulez voir ce nouveau tÃ©lÃ©chargement, cliquez sur le lien suivantÂ :
 
 {U_CATEGORY}
 
-Rappel : si vous ne voulez plus être notifié des nouveaux téléchargements, modifiez les paramètres de votre profil.
+RappelÂ : si vous ne voulez plus Ãªtre notifiÃ© des nouveaux tÃ©lÃ©chargements, modifiez les paramÃ¨tres de votre profil.
 
 {BOARD_EMAIL}

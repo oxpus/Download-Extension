@@ -1,9 +1,9 @@
-Subject: Rapport de bugs sur « {SITENAME} »
+Subject: Rapport de bugs sur Â«Â {SITENAME}Â Â»
 
 Bonjour {USERNAME},
 
-Vous recevez cet e-mail car un rapport de bugs sur « {SITENAME} » a été envoyé pour être analysé.
-Pour plus de détails, suivez ce lien :
+Vous recevez cet e-mail car un rapport de bugs sur Â«Â {SITENAME}Â Â» a Ã©tÃ© envoyÃ© pour Ãªtre analysÃ©.
+Pour plus de dÃ©tails, suivez ce lienÂ :
 
 {U_BUG_REPORT}
 

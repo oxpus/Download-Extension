@@ -1,18 +1,18 @@
-Subject: Téléchargement modifié
+Subject: TÃ©lÃ©chargement modifiÃ©
 
 Bonjour {USERNAME},
 
-Vous recevez cet e-mail car le téléchargement suivant, de la catégorie « {CATEGORY} » sur « {SITENAME} », a été modifié :
+Vous recevez cet e-mail car le tÃ©lÃ©chargement suivant, de la catÃ©gorie Â«Â {CATEGORY}Â Â» sur Â«Â {SITENAME}Â Â», a Ã©tÃ© modifiÃ©Â :
 
 ---------------------------
 {DOWNLOAD}
 {DESCRIPTION}
 ---------------------------
 
-Si vous voulez voir ce téléchargement, cliquez sur le lien suivant :
+Si vous voulez voir ce tÃ©lÃ©chargement, cliquez sur le lien suivantÂ :
 
 {U_CATEGORY}
 
-Rappel : si vous ne voulez plus être notifié des téléchargements édités, modifiez les paramètres de votre profil.
+RappelÂ : si vous ne voulez plus Ãªtre notifiÃ© des tÃ©lÃ©chargements Ã©ditÃ©s, modifiez les paramÃ¨tres de votre profil.
 
 {BOARD_EMAIL}

@@ -1,18 +1,18 @@
-Subject: Nouveau commentaire d’un téléchargement
+Subject: Nouveau commentaire dâ€™un tÃ©lÃ©chargement
 
 Bonjour {USERNAME},
 
-Vous recevez cet e-mail car il y a un nouveau commentaire sur un téléchargement que vous surveillez sur « {SITENAME} » :
+Vous recevez cet e-mail car il y a un nouveau commentaire sur un tÃ©lÃ©chargement que vous surveillez sur Â«Â {SITENAME}Â Â»Â :
 
 ---------------------------
 Category {CATEGORY}
 Download {DOWNLOAD}
 ---------------------------
 
-Si vous voulez voir ce commentaire, cliquez sur le lien suivant :
+Si vous voulez voir ce commentaire, cliquez sur le lien suivantÂ :
 
 {U_DOWNLOAD}
 
-Rappel : si vous ne voulez plus être notifié des nouveaux commentaires des téléchargements, modifiez les paramètres de votre profil.
+RappelÂ : si vous ne voulez plus Ãªtre notifiÃ© des nouveaux commentaires des tÃ©lÃ©chargements, modifiez les paramÃ¨tres de votre profil.
 
 {BOARD_EMAIL}
