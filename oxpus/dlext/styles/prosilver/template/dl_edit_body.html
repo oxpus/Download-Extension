@@ -316,7 +316,7 @@
 {% endif %}
 
 	<dl>
-		<dt><label{% if download_fields.FIELD_ID %} for="{{ download_fields.FIELD_ID }}"{% endif %}>{{ download_fields.LANG_NAME }}:{% if download_fields.S_REQUIRED %} *{% endif %}</label>
+		<dt><label{% if download_fields.FIELD_ID %} for="{{ download_fields.FIELD_ID }}"{% endif %}>{{ download_fields.LANG_NAME }}{{ lang('COLON') }}{% if download_fields.S_REQUIRED %} *{% endif %}</label>
 		{% if download_fields.LANG_EXPLAIN %}<br /><span>{{ download_fields.LANG_EXPLAIN }}</span>{% endif %}</dt>
 		{% if download_fields.ERROR %}<dd class="error">{{ download_fields.ERROR }}</dd>{% endif %}
 		<dd>{{ download_fields.FIELD }}</dd>

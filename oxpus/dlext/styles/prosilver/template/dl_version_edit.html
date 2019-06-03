@@ -74,7 +74,7 @@
 
 			{% for files in loops.files %}
 			<dl{% if files.S_ROW_COUNT is even %} class="row bg2"{% endif %}>
-				<dt>{{ lang('DL_FILE_NAME') }}: {{ files.FILE_NAME }}</dt>
+				<dt>{{ lang('DL_FILE_NAME') }}{{ lang('COLON') }} {{ files.FILE_NAME }}</dt>
 				<dd>
 					<input type="text" maxlength="255" name="ver_title[{{ files.VER_FILE_ID }}]" value="{{ files.NAME }}" class="inputbox autowidth" />
 					 &nbsp; <input type="checkbox" value="{{ files.VER_FILE_ID }}" name="ver_title_del[]" /> {{ lang('DL_DELETE') }}
