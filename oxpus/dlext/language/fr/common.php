@@ -594,7 +594,7 @@ $lang = array_merge($lang, array(
 	'DL_REPORT_BROKEN_VC'				=> 'Confirmation visuelle pour rapporter un problème de téléchargement',
 	'DL_REPORT_BROKEN_VC_MISMATCH'		=> 'Le code de confirmation pour ce rapport est incorrect. Veuillez recommencer s’il vous plait.',
 	'DL_REPORT_CONFIRM_CODE'			=> 'Merci de saisir le code de confirmation pour rapporter ce problème de téléchargement :',
-	'DL_REPORT_NOTIFY_TEXT'				=> '---------------------------\n\nL’utilisateur a saisi le message suivant pour ce :\n\n%s\n\n',
+	'DL_REPORT_NOTIFY_TEXT'				=> "---------------------------\n\nL’utilisateur a saisi le message suivant pour ce :\n\n%s\n\n",
 	'DL_REPORT_REASON'					=> 'Raison de votre rapport',
 
 	'DL_RSS_ACTION_D_TXT'			=> 'Afficher le message suivant',
