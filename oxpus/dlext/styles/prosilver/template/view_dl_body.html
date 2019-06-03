@@ -97,7 +97,7 @@
 
 	{% for thumbnail in loops.thumbnail %}
 	{% if thumbnail.S_FIRST_ROW %}
-	<h3>{{ lang('DL_IMAGES') }}:</h3>
+	<h3>{{ lang('DL_IMAGES') }}{{ lang('COLON') }}</h3>
 	<ul class="dl-detail-row">
 	{% endif %}
 		{% if S_DL_POPUPIMAGE %}
@@ -292,7 +292,7 @@
     	{% if S_DL_FIELDS %}
 		<br />
 		{% for custom_fields in loops.custom_fields %}
-		<h3>{{ custom_fields.DL_FIELD_NAME }}:</h3>
+		<h3>{{ custom_fields.DL_FIELD_NAME }}{{ lang('COLON') }}</h3>
 		<p>{{ custom_fields.DL_FIELD_VALUE }}</p>
 		<br />
 		{% endfor %}

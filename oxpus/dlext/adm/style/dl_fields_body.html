@@ -18,17 +18,17 @@
 		<fieldset>
 			<legend>{{ lang('TITLE') }}</legend>
 		<dl>
-			<dt><label>{{ lang('FIELD_TYPE') }}:</label><br /><span>{{ lang('FIELD_TYPE_EXPLAIN') }}</span></dt>
+			<dt><label>{{ lang('FIELD_TYPE') }}{{ lang('COLON') }}</label><br /><span>{{ lang('FIELD_TYPE_EXPLAIN') }}</span></dt>
 			<dd><strong>{{ FIELD_TYPE }}</strong></dd>
 		</dl>
 		{% if S_EDIT_MODE %}
 		<dl>
-			<dt><label>{{ lang('FIELD_IDENT') }}:</label><br /><span>{{ lang('FIELD_IDENT_EXPLAIN') }}</span></dt>
+			<dt><label>{{ lang('FIELD_IDENT') }}{{ lang('COLON') }}</label><br /><span>{{ lang('FIELD_IDENT_EXPLAIN') }}</span></dt>
 			<dd><input type="hidden" name="field_ident" value="{{ FIELD_IDENT }}" /><strong>{{ FIELD_IDENT }}</strong></dd>
 		</dl>
 		{% else %}
 		<dl>
-			<dt><label for="field_ident">{{ lang('FIELD_IDENT') }}:</label><br /><span>{{ lang('FIELD_IDENT_EXPLAIN') }}</span></dt>
+			<dt><label for="field_ident">{{ lang('FIELD_IDENT') }}{{ lang('COLON') }}</label><br /><span>{{ lang('FIELD_IDENT_EXPLAIN') }}</span></dt>
 			<dd><input class="text medium" type="text" id="field_ident" name="field_ident" value="{{ FIELD_IDENT }}" /></dd>
 		</dl>
 		{% endif %}
@@ -37,7 +37,7 @@
 		<fieldset>
 			<legend>{{ lang('DL_FIELDS_REQUIRED') }}</legend>
 		<dl>
-			<dt><label for="field_required">{{ lang('DL_FIELDS_REQUIRED') }}:</label><br /><span>{{ lang('DL_FIELDS_REQUIRED_EXPLAIN') }}</span></dt>
+			<dt><label for="field_required">{{ lang('DL_FIELDS_REQUIRED') }}{{ lang('COLON') }}</label><br /><span>{{ lang('DL_FIELDS_REQUIRED_EXPLAIN') }}</span></dt>
 			<dd><input type="checkbox" class="radio" id="field_required" name="field_required" value="1"{% if S_FIELD_REQUIRED %} checked="checked"{% endif %} /></dd>
 		</dl>
 		</fieldset>
@@ -51,22 +51,22 @@
 		<fieldset>
 			<legend>{{ lang('LANG_SPECIFIC') }}</legend>
 		<dl>
-			<dt><label for="lang_name">{{ lang('USER_FIELD_NAME') }}:</label></dt>
+			<dt><label for="lang_name">{{ lang('USER_FIELD_NAME') }}{{ lang('COLON') }}</label></dt>
 			<dd><input class="text medium" type="text" id="lang_name" name="lang_name" value="{{ LANG_NAME }}" /></dd>
 		</dl>
 		<dl>
-			<dt><label for="lang_explain">{{ lang('FIELD_DESCRIPTION') }}:</label><br /><span>{{ lang('FIELD_DESCRIPTION_EXPLAIN') }}</span></dt>
+			<dt><label for="lang_explain">{{ lang('FIELD_DESCRIPTION') }}{{ lang('COLON') }}</label><br /><span>{{ lang('FIELD_DESCRIPTION_EXPLAIN') }}</span></dt>
 			<dd><textarea id="lang_explain" name="lang_explain" rows="3" cols="80">{{ LANG_EXPLAIN }}</textarea></dd>
 		</dl>
 		{% if S_TEXT or S_STRING %}
 			<dl>
-				<dt><label for="lang_default_value">{{ lang('DEFAULT_VALUE') }}:</label><br /><span>{{ lang('DEFAULT_VALUE_EXPLAIN') }}</span></dt>
+				<dt><label for="lang_default_value">{{ lang('DEFAULT_VALUE') }}{{ lang('COLON') }}</label><br /><span>{{ lang('DEFAULT_VALUE_EXPLAIN') }}</span></dt>
 				<dd>{% if S_STRING %}<input class="text medium" type="text" id="lang_default_value" name="lang_default_value" value="{{ LANG_DEFAULT_VALUE }}" />{% else %}<textarea id="lang_default_value" name="lang_default_value" rows="5" cols="80">{{ LANG_DEFAULT_VALUE }}</textarea>{% endif %}</dd>
 			</dl>
 		{% endif %}
 		{% if S_BOOL or S_DROPDOWN %}
 			<dl>
-				<dt><label for="lang_options">{{ lang('ENTRIES') }}:</label>
+				<dt><label for="lang_options">{{ lang('ENTRIES') }}{{ lang('COLON') }}</label>
 					{% if S_EDIT_MODE and S_DROPDOWN %}
 						<br /><span>{{ lang('EDIT_DROPDOWN_LANG_EXPLAIN') }}</span>
 					{% else %}
@@ -95,7 +95,7 @@
 			<legend>{{ lang('TITLE') }}</legend>
 		{% for option in loops.option %}
 			<dl>
-				<dt><label>{{ option.TITLE }}:</label>{% if option.EXPLAIN %}<br /><span>{{ option.EXPLAIN }}</span>{% endif %}</dt>
+				<dt><label>{{ option.TITLE }}{{ lang('COLON') }}</label>{% if option.EXPLAIN %}<br /><span>{{ option.EXPLAIN }}</span>{% endif %}</dt>
 				<dd>{{ option.FIELD }}</dd>
 			</dl>
 		{% endfor %}
@@ -118,7 +118,7 @@
 				<legend>{{ options.LANGUAGE }}</legend>
 			{% for field in options.field %}
 				<dl>
-					<dt><label>{{ field.L_TITLE }}:</label>{% if field.L_EXPLAIN %}<br /><span>{{ field.L_EXPLAIN }}</span>{% endif %}</dt>
+					<dt><label>{{ field.L_TITLE }}{{ lang('COLON') }}</label>{% if field.L_EXPLAIN %}<br /><span>{{ field.L_EXPLAIN }}</span>{% endif %}</dt>
 					{{ field.FIELD }}
 				</dl>
 			{% endfor %}
