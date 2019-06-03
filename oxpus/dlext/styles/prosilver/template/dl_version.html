@@ -19,7 +19,7 @@
 		<div class="panel">
 
 			<div class="postbody dl-width-100">
-				<h3>{{ lang('DL_HACK_VERSION') }}: {{ VER_VERSION }}</h3>
+				<h3>{{ lang('DL_HACK_VERSION') }}{{ lang('COLON') }} {{ VER_VERSION }}</h3>
 				{% if not S_ACTIVE %}<br /><div class="rules">{{ lang('DL_NOT_ACTIVE') }}</div>{% endif %}
 				{% if U_VER_EDIT %}
 				<ul class="post-buttons">
@@ -33,12 +33,12 @@
 				<div class="content">{{ VER_DESC }}</div>
 			</div>
 
-			<div class="notice dl-text-center"><strong>{{ lang('DL_FILE_NAME') }}:</strong> {{ FILE_NAME }}{% if FILE_SIZE %}, <strong>{{ lang('DL_FILE_SIZE') }}:</strong> {{ FILE_SIZE }}{% endif %}</div>
+			<div class="notice dl-text-center"><strong>{{ lang('DL_FILE_NAME') }}{{ lang('COLON') }}</strong> {{ FILE_NAME }}{% if FILE_SIZE %}, <strong>{{ lang('DL_FILE_SIZE') }}{{ lang('COLON') }}</strong> {{ FILE_SIZE }}{% endif %}</div>
 
 			{% for images in loops.images %}
 			{% if images.S_FIRST_ROW %}
 			<br />
-			<h3>{{ lang('DL_IMAGES') }}:</h3>
+			<h3>{{ lang('DL_IMAGES') }}{{ lang('COLON') }}</h3>
 			<dl>
 				<ul class="dl-detail-row">
 			{% endif %}
@@ -52,7 +52,7 @@
 			{% for files in loops.files %}
 			{% if files.S_FIRST_ROW %}
 			<br />
-			<h3>{{ lang('DL_FILES_TITLE') }}:</h3>
+			<h3>{{ lang('DL_FILES_TITLE') }}{{ lang('COLON') }}</h3>
 			<dl>
 				<ul class="dl-detail-row">
 			{% endif %}
