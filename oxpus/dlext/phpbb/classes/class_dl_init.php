@@ -180,6 +180,7 @@ class dl_init extends dl_mod
 		if ($config['dl_use_ext_blacklist'])
 		{
 			$blacklist_ary = dl_cache::obtain_dl_blacklist();
+			$ext_blacklist = array();
 			if (is_array($blacklist_ary) && sizeof($blacklist_ary))
 			{
 				$ext_blacklist = array_unique($blacklist_ary);
@@ -278,7 +279,7 @@ class dl_init extends dl_mod
 		*/
 		$dl_index = dl_cache::obtain_dl_cats();
 
-		if (sizeof($dl_index) > 0 && is_array($dl_index))
+		if (is_array($dl_index) && sizeof($dl_index) > 0)
 		{
 			foreach($dl_index as $key => $value)
 			{
