@@ -36,7 +36,7 @@
 					<span class="forum-image">{{ downloads.MINI_IMG }}</span>
 					{% if downloads.CAT_ICON %}<span class="forum-image"><img src="{{ downloads.CAT_ICON }}" alt="" title="{{ downloads.CAT_NAME }}" /></span>{% endif %}
 					<a href="{{ downloads.U_CAT_VIEW }}" class="forumtitle" title="">{{ downloads.CAT_NAME }}</a><br />
-					<div class="dl-index-desc{% if S_ENABLE_DESC_HIDE %} noshow{% endif %}" id="desc_{{ downloads.CAT_ID }}"><br />{{ downloads.CAT_DESC }}</div>
+					<div class="dl-index-desc{% if S_ENABLE_DESC_HIDE %} noshow{% endif %} list-inner" id="desc_{{ downloads.CAT_ID }}"><br />{{ downloads.CAT_DESC }}</div>
 					{% if downloads.pagination|length %}
 					<div class="pagination">
 						<ul>

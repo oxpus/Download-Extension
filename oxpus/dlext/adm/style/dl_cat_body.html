@@ -21,7 +21,7 @@
 {% for categories in loops.categories %}
 <tr valign="top" class="row1">
 	<td class="dl-width-30p"><img src="{{ categories.CAT_FOLDER }}" alt="{{ categories.CAT_NAME }}" title="{{ categories.CAT_NAME }}" /></td>
-	<td><div class="forumtitle">{% if categories.CAT_ICON %}<img src="{{ categories.CAT_ICON }}" alt="{{ categories.CAT_NAME }}" title="{{ categories.CAT_NAME }}" />&nbsp;{% endif %}
+	<td class="dl-width-75"><div class="forumtitle">{% if categories.CAT_ICON %}<img src="{{ categories.CAT_ICON }}" alt="{{ categories.CAT_NAME }}" title="{{ categories.CAT_NAME }}" />&nbsp;{% endif %}
 		{% if categories.U_CAT_OPEN %}<a href="{{ categories.U_CAT_OPEN }}" title="">{% endif %}<strong>{{ categories.CAT_NAME }}</strong>{% if categories.U_CAT_OPEN %}</a>{% endif %}</div>{% if categories.CAT_DESCRIPTION %}<br /><span>{{ categories.CAT_DESCRIPTION }}</span>{% endif %}</td>
 	<td class="dl-text-center">
 		{% if categories.S_FIRST_ROW && not categories.S_LAST_ROW %}

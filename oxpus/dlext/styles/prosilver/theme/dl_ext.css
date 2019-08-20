@@ -76,10 +76,10 @@
 .footer-box
 {
     display: none;
-    z-index: 2;
+    z-index: 5;
     width: 40%;
-    position: absolute;
-    top: 30%;
+    position: fixed;
+    bottom: 20%;
     left: 30%;
     border: 1px solid #ccc;
     background: none repeat scroll 0 0 #FFFFFF;
@@ -91,7 +91,7 @@
 #dl_new_bg, #dl_help_bg
 {
     display:none;
-    z-index:1;
+    z-index: 1;
     position: fixed;
     height:100%;
     width:100%;
