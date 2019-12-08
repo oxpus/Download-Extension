@@ -18,7 +18,7 @@
 				<dt><span class="forum-image">{{ subcats.MINI_IMG }}</span>
 					<span class="forum-image">{% if subcats.CAT_ICON %}<img src="{{ subcats.CAT_ICON }}" alt="" title="{{ subcats.CAT_NAME }}" />{% else %}&nbsp;{% endif %}</span>
 					<a href="{{ subcats.U_CAT_VIEW }}" class="forumtitle" title="">{{ subcats.CAT_NAME }}</a><br />
-					<div class="dl-index-desc{% if S_ENABLE_DESC_HIDE %} noshow{% endif %}" id="desc_{{ subcats.CAT_ID }}"><br />{{ subcats.CAT_DESC }}</div>
+					<div class="dl-index-desc{% if S_ENABLE_DESC_HIDE %} noshow{% endif %} list-inner" id="desc_{{ subcats.CAT_ID }}"><br />{{ subcats.CAT_DESC }}</div>
 					{% if subcats.pagination|length %}
 					<div class="pagination">
 						<ul>
