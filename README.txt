@@ -2,5 +2,5 @@ Hotschi Download Extension
 
 Based on phpBB 3.2.x
 Original by Hotschi
-Latest release 7.3.4
-(c) 2002 - 2019 OXPUS networks
+Latest release 8.0.0
+(c) 2002 - 2020 OXPUS networks
