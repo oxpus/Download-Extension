@@ -4,7 +4,7 @@
  * Hotschi's Downloads. An extension for the phpBB Forum Software package.
  * French translation by phpBB-fr.com (Darky et EnYgma), panteror (http://www.dowfrance.com) & Galixte (http://www.galixte.com)
  *
- * @copyright (c) 2014-2019 OXPUS <https://www.oxpus.net>
+ * @copyright (c) 2002-2020 OXPUS <https://www.oxpus.net>
  * @license GNU General Public License, version 2 (GPL-2.0-only)
  *
  */

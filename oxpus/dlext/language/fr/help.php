@@ -4,7 +4,7 @@
  * Hotschi's Downloads. An extension for the phpBB Forum Software package.
  * French translation by phpBB-fr.com (Darky et EnYgma), panteror (http://www.dowfrance.com) & Galixte (http://www.galixte.com)
  *
- * @copyright (c) 2014-2019 OXPUS <https://www.oxpus.net>
+ * @copyright (c) 2002-2020 OXPUS <https://www.oxpus.net>
  * @license GNU General Public License, version 2 (GPL-2.0-only)
  *
  */
@@ -190,7 +190,6 @@ $lang = array_merge($lang, array(
 	'HELP_DL_TRAFFICS_USERS_GROUPS'		=> 'L’option précédente sera appliquée pour les groupes d’utilisateurs suivants et leurs membres, sachant que la précédente option permet de limiter le trafic.',
 	'HELP_DL_TRAFFICS_GUESTS'			=> 'Active ou désactive le trafic global pour les invités.<br>Si cette option est désactivée, les invités pourront, en fonction de leurs permissions, télécharger ou transférer des fichiers sans limite.<br>Parce que cette option peut provoquer beaucoup de trafic pour votre forum et votre serveur, il n’est pas recommandé de désactiver celle-ci.',
 
-	'HELP_DL_UCONF_LINK'			=> 'Affiche le lien de la configuration des téléchargements dans le pied de page des téléchargements.<br>La configuration des téléchargements ne sera pas affectée par cette option.',
 	'HELP_DL_UPLOAD_FILE'			=> 'Charger un fichier depuis votre ordinateur.<br>La taille du fichier sera plus petite que celle affichée et l’extension du fichier ne sera pas inclue dans la liste que vous pouvez voir dans ce champ.',
 	'HELP_DL_UPLOAD_TRAFFIC_COUNT'	=> 'Si l’option est activée, le trafic des chargements sera inférieur au trafic mensuel global.<br>Après que la limite globale soit atteinte, aucun chargement ne sera possible et les nouveaux téléchargements devront être chargés avec un client FTP ou ajoutés via le Panneau d’administration.',
 	'HELP_DL_USE_EXT_BLACKLIST'		=> 'Si vous activez cette liste noire, toutes les extensions de fichiers saisies seront bloquées.',
@@ -198,8 +197,6 @@ $lang = array_merge($lang, array(
 	'HELP_DL_USER_TRAFFIC_ONCE'		=> 'Choisissez si les téléchargements devraient diminuer le trafic des utilisateurs lors du premier téléchargement d’un fichier.<br><strong>Remarque :</strong><br>Cette option NE modifiera PAS le statut du téléchargement !',
 
 	'HELP_DL_VISUAL_CONFIRMATION'	=> 'Activez cette option pour laisser l’utilisateur saisir un code de confirmation afin d’accéder au téléchargement.<br>Si l’utilisateur ne saisit pas le code ou s’il saisit un code incorrect, l’outil « Téléchargements » affichera un message et lui bloquera le téléchargement.',
-
-	'HELP_DOWNLOAD_PATH'			=> 'Le chemin relatif après le dossier racine de votre forum PhpBB.<br>Lors de l’installation, par défaut, le chemin est « dl_mod/downloads/ ».<br>Pour éviter les problèmes, renommez vos dossiers correctement si vous utilisez Unix/Linux.<br>Le slash à la fin du nom du dossier est important, mais il ne faut pas ajouter un slash au début.<br>Ce sous-dossier et tous les sous-dossiers inclus doivent avoir un CHMOD 777, afin que l’outil « Téléchargements » fonctionne correctement.<br>Après ce dossier, vous devez créer un ou plusieurs sous-dossiers qui contiendront tous les fichiers physiques.<br>Il est recommandé de créer un sous-dossier pour chaque groupe de catégories.<br>Ce sous-dossier doit être saisi comme chemin de la catégorie avec les mêmes syntaxes du dossier principal, mais sans utiliser le dossier principal (voir l’aide de la gestion des catégories).<br>Vous pouvez créer plusieurs sous-dossiers en utilisant un client FTP ou en utilisant la Boite à Outils (voir le lien en bas à gauche de cette page).',
 
 	'HELP_NUMBER_RECENT_DL_ON_PORTAL'	=> 'Le nombre des derniers téléchargements que l’utilisateur peut voir sur le portail.<br>Le bloc utilise la date de dernière mise à jour des téléchargements, de sorte qu’il peut être possible d’avoir un ancien téléchargement en haut de cette liste.',
 ));

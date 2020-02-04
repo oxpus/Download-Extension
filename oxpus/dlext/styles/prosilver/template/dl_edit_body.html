@@ -6,6 +6,41 @@
 
 <form action="{{ S_DOWNLOADS_ACTION }}" method="post" {{ ENCTYPE }} id="dl_edit">
 
+{% if S_VERSION_ON %}
+<div class="dl-edit-version panel dl-edit-box-light">
+	<div class="inner">
+
+	<h3>{{ lang('DL_VERSION') }}</h3>
+
+	<fieldset>
+
+		<dl>
+			<dt><label class="dl-green">{{ lang('DL_VERSION_ADD_NEW') }}</label></dt>
+			<dd><label><input type="radio" name="file_ver_opt" class="radio" value="0" checked="checked" /></label></dd>
+		</dl>
+		<dl>
+			<dt><label class="dl-blue">{{ lang('DL_VERSION_ADD_OLD') }}</label></dt>
+			<dd><label><input type="radio" name="file_ver_opt" class="radio" value="1" /></label></dd>
+		</dl>
+		<dl>
+			<dt><label class="dl-yellow">{{ lang('DL_VERSION_REPLACE') }}</label></dt>
+			<dd><input type="radio" name="file_ver_opt" class="radio" value="2" /> &raquo; {{ S_SELECT_VERSION }}<br />
+				<span class="small">{{ lang('DL_VERSION_REPLACE_EXPLAIN') }}</span></dd>
+		</dl>
+		{% if S_SELECT_VER_DEL %}<br />
+		<dl>
+			<dt><label class="dl-red">{{ lang('DL_VERSION_DELETE') }}</label></dt>
+			<dd><input type="radio" name="file_ver_opt" class="radio" value="3" /> &raquo; {{ S_SELECT_VER_DEL }}<br />
+				<span class="small">{{ lang('DL_VERSION_DELETE_EXPLAIN') }}</span></dd>
+		</dl>
+		{% endif %}
+
+	</fieldset>
+
+	</div>
+</div>
+{% endif %}
+
 <div class="panel dl-edit-box-light">
 	<div class="inner">
 
@@ -75,33 +110,15 @@
 			<input type="text" name="hack_version" size="10" maxlength="32" value="{{ HACK_VERSION }}" class="inputbox autowidth" />
 		</dd>
 	</dl>
-	{% if S_VERSION_ON %}
-	<dl class="dl-edit-version">
-		<dt><label>{{ lang('DL_VERSION') }}</label></dt>
-		<dd>
-			<label class="dl-green"><input type="radio" name="file_ver_opt" class="radio" value="0" checked="checked" />&nbsp;{{ lang('DL_VERSION_ADD_NEW') }}</label><br />
-			<label class="dl-blue"><input type="radio" name="file_ver_opt" class="radio" value="1" />&nbsp;{{ lang('DL_VERSION_ADD_OLD') }}</label><br />
-			<label class="dl-yellow"><input type="radio" name="file_ver_opt" class="radio" value="2" />&nbsp;{{ lang('DL_VERSION_REPLACE') }}</label><br />
-			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&raquo;&nbsp;{{ S_SELECT_VERSION }}<br />
-			<span class="small">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ lang('DL_VERSION_REPLACE_EXPLAIN') }}</span><br />
-			{% if S_SELECT_VER_DEL %}
-			<br />
-			<label class="dl-red"><input type="radio" name="file_ver_opt" class="radio" value="3" />&nbsp;{{ lang('DL_VERSION_DELETE') }}</label><br />
-			&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&raquo;&nbsp;{{ S_SELECT_VER_DEL }}<br /><div class="notice">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ lang('DL_VERSION_DELETE_EXPLAIN') }}</div>
-			{% endif %}
-		</dd>
-	</dl>
-	{% endif %}
 	{% if S_ALLOW_THUMBS %}
 	<dl>
 		<dt><label>{{ lang('DL_THUMB') }}</label></dt>
 		<dd>
 			<a href="javascript:void(0)" onclick="javascript:help_popup('{{ lang('DL_THUMBNAIL_EXPLAIN') }}')" title="{{ lang('INFORMATION') }}">{{ ICON_DL_HELP }}</a>
 			{% if S_THUMBNAIL %}
-			<img src="{{ THUMBNAIL }}" alt="" title="" class="dl-thumb-box" /><br /><label><input type="checkbox" class="permissions_checkbox" name="del_thumb" value="1" />&nbsp;{{ lang('DELETE') }}</label>
-			<br /><br />
+			<img src="{{ THUMBNAIL }}" alt="{{ lang('DL_THUMB') }}" title="" class="dl-thumb-box" />&nbsp;<label><input type="checkbox" class="permissions_checkbox" name="del_thumb" value="1" />&nbsp;{{ lang('DELETE') }}</label>
 			{% endif %}
-			<input type="file" name="thumb_name" class="inputbox" size="46" /><br /><span class="small">{{ DL_THUMBNAIL_SECOND }}</span>
+			<br /><br /><input type="file" name="thumb_name" class="inputbox" size="46" /><br /><span class="small">{{ DL_THUMBNAIL_SECOND }}</span>
 		</dd>
 	</dl>
 	{% endif %}
@@ -133,63 +150,8 @@
 		</dd>
 	</dl>
 	{% endif %}
-	{% if S_MODCP %}
-	<dl class="navbar dl-edit-box-medium">
-		<dt>
-			<label>{{ lang('DL_APPROVE') }}</label>
-		</dt>
-		<dd>
-			<a href="javascript:void(0)" onclick="javascript:help_popup('{{ lang('DL_APPROVE_EXPLAIN') }}')" title="{{ lang('INFORMATION') }}">{{ ICON_DL_HELP }}</a>
-			<input type="checkbox" class="permissions_checkbox" name="approve" value="1" {{ APPROVE }} />
-		</dd>
-	</dl>
-	{% endif %}
-	{% if S_CHANGE_TIME %}
-	<dl class="navbar dl-edit-box-medium">
-		<dt>
-			<label>{{ lang('DL_NO_CHANGE_EDIT_TIME') }}</label>
-		</dt>
-		<dd>
-			<a href="javascript:void(0)" onclick="javascript:help_popup('{{ lang('CHANGE_TIME_EXPLAIN') }}')" title="{{ lang('INFORMATION') }}">{{ ICON_DL_HELP }}</a>
-			<input type="checkbox" class="permissions_checkbox" name="change_time" value="1" />
-		</dd>
-	</dl>
-	{% endif %}
-	{% if S_CLICK_RESET %}
-	<dl class="navbar dl-edit-box-medium">
-		<dt>
-			<label>{{ lang('DL_KLICKS_RESET') }}</label>
-		</dt>
-		<dd>
-			<a href="javascript:void(0)" onclick="javascript:help_popup('{{ lang('CLICK_RESET_EXPLAIN') }}')" title="{{ lang('INFORMATION') }}">{{ ICON_DL_HELP }}</a>
-			<input type="checkbox" class="permissions-checkbox" name="click_reset" value="1" />
-		</dd>
-	</dl>
-	{% endif %}
-	{% if S_POPUP_NOTIFY %}
-	<dl class="navbar dl-edit-box-medium">
-		<dt>
-			<label>{{ lang('DL_DISABLE_POPUP') }}</label>
-		</dt>
-		<dd>
-			<a href="javascript:void(0)" onclick="javascript:help_popup('{{ lang('DISABLE_POPUP_EXPLAIN') }}')" title="{{ lang('INFORMATION') }}">{{ ICON_DL_HELP }}</a>
-			<input type="checkbox" class="permissions_checkbox" name="disable_popup_notify" value="1" />
-		</dd>
-	</dl>
-	{% endif %}
-	{% if S_EMAIL_BLOCK %}
-	<dl class="navbar dl-edit-box-medium">
-		<dt>
-			<label>{{ lang('DL_DISABLE_EMAIL') }}</label>
-		</dt>
-		<dd>
-			<a href="javascript:void(0)" onclick="javascript:help_popup('{{ lang('DL_SEND_NOTIFY_EXPLAIN') }}')" title="{{ lang('INFORMATION') }}">{{ ICON_DL_HELP }}</a>
-			<input type="checkbox" class="permissions_checkbox" name="send_notify" value="1" />
-		</dd>
-	</dl>
-	{% endif %}
 
-	</fieldset>
+</fieldset>
 
 	</div>
 </div>
@@ -330,9 +292,69 @@
 {% endif %}
 {% endfor %}
 
+<fieldset>
+
+	{% if S_MODCP %}
+	<dl class="navbar dl-edit-box-medium-green">
+		<dt>
+			<label>{{ lang('DL_APPROVE') }}</label>
+		</dt>
+		<dd>
+			<a href="javascript:void(0)" onclick="javascript:help_popup('{{ lang('DL_APPROVE_EXPLAIN') }}')" title="{{ lang('INFORMATION') }}">{{ ICON_DL_HELP }}</a>
+			<input type="checkbox" class="permissions_checkbox" name="approve" value="1" {{ APPROVE }} />
+		</dd>
+	</dl>
+	{% endif %}
+	{% if S_CHANGE_TIME %}
+	<dl class="navbar dl-edit-box-medium">
+		<dt>
+			<label>{{ lang('DL_NO_CHANGE_EDIT_TIME') }}</label>
+		</dt>
+		<dd>
+			<a href="javascript:void(0)" onclick="javascript:help_popup('{{ lang('CHANGE_TIME_EXPLAIN') }}')" title="{{ lang('INFORMATION') }}">{{ ICON_DL_HELP }}</a>
+			<input type="checkbox" class="permissions_checkbox" name="change_time" value="1" />
+		</dd>
+	</dl>
+	{% endif %}
+	{% if S_CLICK_RESET %}
+	<dl class="navbar dl-edit-box-medium">
+		<dt>
+			<label>{{ lang('DL_KLICKS_RESET') }}</label>
+		</dt>
+		<dd>
+			<a href="javascript:void(0)" onclick="javascript:help_popup('{{ lang('CLICK_RESET_EXPLAIN') }}')" title="{{ lang('INFORMATION') }}">{{ ICON_DL_HELP }}</a>
+			<input type="checkbox" class="permissions-checkbox" name="click_reset" value="1" />
+		</dd>
+	</dl>
+	{% endif %}
+	{% if S_POPUP_NOTIFY %}
+	<dl class="navbar dl-edit-box-medium">
+		<dt>
+			<label>{{ lang('DL_DISABLE_POPUP') }}</label>
+		</dt>
+		<dd>
+			<a href="javascript:void(0)" onclick="javascript:help_popup('{{ lang('DISABLE_POPUP_EXPLAIN') }}')" title="{{ lang('INFORMATION') }}">{{ ICON_DL_HELP }}</a>
+			<input type="checkbox" class="permissions_checkbox" name="disable_popup_notify" value="1" />
+		</dd>
+	</dl>
+	{% endif %}
+	{% if S_EMAIL_BLOCK %}
+	<dl class="navbar dl-edit-box-medium">
+		<dt>
+			<label>{{ lang('DL_DISABLE_EMAIL') }}</label>
+		</dt>
+		<dd>
+			<a href="javascript:void(0)" onclick="javascript:help_popup('{{ lang('DL_SEND_NOTIFY_EXPLAIN') }}')" title="{{ lang('INFORMATION') }}">{{ ICON_DL_HELP }}</a>
+			<input type="checkbox" class="permissions_checkbox" name="send_notify" value="1" />
+		</dd>
+	</dl>
+	{% endif %}
+
+</fieldset>
+
 <fieldset class="submit-buttons dl-right">
-	<input type="submit" name="submit" value="{{ lang('SUBMIT') }}" class="button icon-button" />&nbsp;&nbsp;
-	<input type="reset" name="reset" value="{{ lang('RESET') }}" class="button icon-button" />
+	<input type="submit" name="submit" value="{{ lang('SUBMIT') }}" class="button{% if S_DL_MCP %}1{% else %} icon-button{% endif %}" />&nbsp;&nbsp;
+	<input type="reset" name="reset" value="{{ lang('RESET') }}" class="button{% if S_DL_MCP %}2{% else %} icon-button{% endif %}" />
 </fieldset>
 
 <div class="clear"></div>
@@ -343,4 +365,8 @@
 
 <br />
 
+{% if S_DL_MCP %}
+{% INCLUDE 'mcp_footer.html' %}
+{% else %}
 {% INCLUDE 'dl_footer.html' %}
+{% endif %}

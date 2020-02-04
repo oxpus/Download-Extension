@@ -1,0 +1,78 @@
+{% INCLUDE 'overall_header.html' %}
+
+<h1>{{ lang('DL_USER_AGENTS') }}</h1>
+
+{% if S_LIST_AGENTS %}
+
+	<br /><p>{{ lang('DL_USER_AGENTS_LIST') }}</p><br />
+
+	<form action="{{ S_FORM_ACTION }}" method="post" id="add_browser">
+	<p class="dl-text-right">
+		<input type="text" size="20" name="agent_name" class="inputbox autowidth" value="" />&nbsp;
+		<input type="submit" name="submit" class="button1" value="{{ lang('DL_ADD_BROWSER') }}" />&nbsp;
+		<input type="hidden" name="new_browser" value="1" />
+		{{ S_FORM_TOKEN }}
+	</p>
+	</form>
+
+	<table width="100%" cellpadding="2" cellspacing="1">
+	<thead>
+	<tr>
+		<th>{{ lang('DL_USER_AGENT_TITLE') }}</th>
+		<th>{{ lang('OPTIONS') }}</th>
+	</tr>
+	</thead>
+	<tbody>
+	{% for user_agents in loops.user_agents %}
+	<tr class="row{% if user_agents.S_ROW_COUNT is even %}1{% else %}2{% endif %}">
+		<td>{{ user_agents.AGENT_NAME }}</td>
+		<td class="dl-width-10"><a href="{{ user_agents.U_EDIT }}">{{ ICON_EDIT }}</a>&nbsp;<a href="{{ user_agents.U_DELETE }}">{{ ICON_DELETE }}</a></td>
+	</tr>
+	{% endfor %}
+	</tbody>
+	</table>
+
+	{% if loops.pagination|length or TOTAL_DL %}
+		<div class="pagination">
+			{{ TOTAL_DL }}
+			{% if loops.pagination|length %}
+				{% INCLUDE 'pagination.html' %}
+			{% else %}
+				&bull; {{ PAGE_NUMBER }}
+			{% endif %}
+		</div>
+	{% endif %}
+
+{% else %}
+
+	<br /><p>{{ lang('DL_USER_AGENTS_EDIT') }}</p><br />
+
+	<form action="{{ S_FORM_ACTION }}" method="post" id="edit_browser">
+
+	<fieldset>
+
+		<dl>
+			<dt><label>{{ lang('DL_USER_AGENT_TITLE') }}</label><br /><span class="small">{{ lang('DL_USER_AGENT_EXPLAIN') }}</span></dt>
+			<dd><input type="text" size="20" class="inputbox autowidth" name="agent_name" value="{{ AGENT_TITLE }}" /></dd>
+		</dl>
+		<dl>
+			<dt><label>{{ lang('DL_USER_AGENTS') }}</label><br /><span class="small">{{ lang('DL_USER_AGENTS_EXPLAIN') }}</span></dt>
+			<dd><textarea cols="50" rows="10" class="inputbox autowidth" name="agent_browser">{{ AGENT_BROWSER }}</textarea></dd>
+		</dl>
+
+		<p class="submit-buttons">
+			<input type="submit" name="submit" value="{{ lang('SUBMIT') }}" class="button1" />
+			<input type="hidden" name="agent_id" value="{{ AGENT_ID }}" />
+			{{ S_FORM_TOKEN }}
+		</p>
+	</fieldset>
+
+	</form>
+
+{% endif %}
+
+<br />
+
+<fieldset class="submit-buttons">{{ DL_MOD_RELEASE }}</fieldset>
+
+{% INCLUDE 'overall_footer.html' %}

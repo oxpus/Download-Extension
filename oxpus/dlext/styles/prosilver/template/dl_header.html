@@ -1,3 +1,6 @@
+{% if S_DL_MCP %}
+{% INCLUDE 'mcp_header.html' %}
+{% else %}
 {% INCLUDE 'overall_header.html' %}
 
 {% if S_MODS_CHECK %}
@@ -6,4 +9,5 @@
 		<strong>{{ lang('STAGE_VERSION_CHECK') }}{{ lang('COLON') }}</strong> {{ NOT_UP_TO_DATE }}
 	</div>
 </div>
+{% endif %}
 {% endif %}

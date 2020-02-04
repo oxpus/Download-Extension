@@ -1,0 +1,83 @@
+{% INCLUDE 'dl_header.html' %}
+
+<script type="text/javascript">
+// <![CDATA[
+function select_switch(status)
+{
+	for (i = 0; i < document.forms.dl_modcp.length; i++)
+	{
+		document.forms.dl_modcp.elements[i].checked = status;
+	}
+}
+// ]]>
+</script>
+
+<h2>{{ lang('DL_MODCP_APPROVE') }}</h2>
+
+<br />
+
+<form action="{{ S_DL_MODCP_ACTION }}" method="post" id="dl_modcp">
+
+<div class="panel">
+	<div class="inner">
+		
+	<table class="table1">
+		<thead>
+		<tr>
+			<th class="name">{{ lang('DL_DOWNLOAD') }}</th>
+			<th class="name">{{ lang('DL_CAT_NAME') }}</th>
+			<th class="center" colspan="2">{{ lang('OPTIONS') }}</th>
+		</tr>
+		</thead>
+		<tbody>
+		{% for approve_row in loops.approve_row %}
+		<tr class="{% if approve_row.S_ROW_COUNT is even %}bg1{% else %}bg2{% endif %}">
+			<td>{{ approve_row.MINI_ICON }}&nbsp;<a href="{{ approve_row.U_DOWNLOAD }}" class="topictitle">{{ approve_row.DESCRIPTION }}</a></td>
+			<td><a href="{{ approve_row.U_CAT_VIEW }}">{{ approve_row.CAT_NAME }}</a></td>
+			<td class="center">
+				<a href="{{ approve_row.U_EDIT }}" title="{{ lang('DL_EDIT_FILE') }}" class="button button-icon-only">
+					<i class="icon fa-pencil fa-fw" aria-hidden="true"></i><span class="sr-only">{{ lang('DL_EDIT_FILE') }}</span>
+				</a>
+				<a href="{{ approve_row.U_DELETE }}" title="{{ lang('DL_DELETE') }}" class="button button-icon-only">
+					<i class="icon fa-times fa-fw" aria-hidden="true"></i><span class="sr-only">{{ lang('DL_DELETE') }}</span>
+				</a>
+			</td>
+			<td class="center"><input type="checkbox" class="permissions-checkbox" name="dlo_id[]" value="{{ approve_row.FILE_ID }}" /></td>
+		</tr>
+		{% else %}
+		<tr class="bg1"><td class="center" colspan="3"><b>{L_DL_NO_APPROVE}</b></td></tr>
+		{% endfor %}
+		</tbody>
+	</table>
+
+	</div>
+</div>
+
+<ul class="linklist">
+	<li class="rightside">
+		<span><a href="javascript:select_switch(true);">{{ lang('DL_MARK_ALL') }}</a> &bull; <a href="javascript:select_switch(false);">{{ lang('DL_UNMARK') }}</a></span>
+	</li>
+</ul>
+
+{% if loops.pagination|length or TOTAL_DL %}
+	<div class="pagination">
+		{{ TOTAL_DL }}
+		{% if loops.pagination|length %}
+			{% INCLUDE 'pagination.html' %}
+		{% else %}
+			&bull; {{ PAGE_NUMBER }}
+		{% endif %}
+	</div>
+{% endif %}
+
+<fieldset class="submit-buttons">
+	<input type="submit" name="submit" value="{{ lang('DL_APPROVE') }}" class="button1" />
+	{{ S_FORM_TOKEN }}
+	{{ S_HIDDEN_FIELDS }}
+</fieldset>
+
+</form>
+
+<br />
+
+{% INCLUDE 'mcp_footer.html' %}

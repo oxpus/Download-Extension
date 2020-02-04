@@ -23,7 +23,7 @@
 				<dl>
 					<dt>
 						<div class="posts">
-						<a href="{{ todolist_row.FILE_LINK }}" class="forumtitle">{{ todolist_row.FILENAME }}</a>&nbsp;<span>{{ todolist_row.HACK_VERSION }}</span>
+						<a href="{{ todolist_row.FILE_LINK }}" class="forumtitle">{{ todolist_row.FILENAME }}&nbsp;{{ todolist_row.HACK_VERSION }}</a>
 						<ul class="post-buttons">
 							<li>
 								<a href="{{ todolist_row.U_TODO_EDIT }}" title="{{ lang('DL_EDIT_FILE') }}" class="button button-icon-only">
@@ -37,7 +37,8 @@
 							</li>
 						</ul>
 						</div>
-						<div class="notice">{{ todolist_row.TODO }}</div>
+						<br /><hr />
+						<div class="postbody">{{ todolist_row.TODO }}</div>
 					</dt>
 				</dl>
 			</li>
@@ -56,15 +57,11 @@
 	<div class="panel">
 		<div class="inner">
 
-		<h3>{% if S_ADD_TODO %}{{ lang('DL_TODO_ADD') }}{% else %}{{ lang('DL_TODO_EDIT') }}{% endif %}</h3>
+		<h3>{% if S_ADD_TODO %}{{ lang('DL_TODO_ADD') }}{% else %}{{ lang('DL_TODO_EDIT') }}{% endif %}{{ lang('COLON') }} {{ DL_FILE_DESCRIPTION }} {{ S_DOWNLOAD }}</h3>
 
 		<fieldset>
 
 		<table width="100%">
-		<tr>
-			<td class="dl-width-15"><strong>{{ DL_FILE_DESCRIPTION }}</strong></td>
-			<td class="dl-width-85">{{ S_DOWNLOAD }}</td>
-		</tr>
 		<tr>
 			<td class="dl-width-15 dl-text-top"><strong>{{ lang('DL_MOD_TODO') }}</strong></td>
 			<td class="dl-width-85"><textarea name="todo" rows="10" cols="100" class="inputbox">{{ TODO_TEXT }}</textarea></td>

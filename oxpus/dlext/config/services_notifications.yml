@@ -1,0 +1,16 @@
+services:
+    oxpus.dlext.notification.type.dlext:
+        class: oxpus\dlext\notification\dlext
+        shared: false
+        arguments:
+            - '@dbal.conn'
+            - '@language'
+            - '@user'
+            - '@auth'
+            - '%core.root_path%'
+            - '%core.php_ext%'
+            - '%tables.user_notifications%'
+            - '@controller.helper'
+            - '@language'
+        tags:
+            - { name: notification.type }

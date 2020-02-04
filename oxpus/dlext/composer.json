@@ -1,20 +1,19 @@
 {
 	"name": "oxpus/dlext",
 	"type": "phpbb-extension",
-	"description": "Download Extension for phpBB 3.2",
+	"description": "Download Extension",
 	"homepage": "https://phpbb3.oxpus.net",
-	"version": "7.3.5",
-	"time": "2015-05-11",
+	"version": "8.0.0",
+	"time": "2019-01-31",
 	"license": "GPL-2.0-only",
 	"authors": [{
 			"name": "Karsten Ude",
-			"username": "oxpus",
 			"email": "karsten.ude@oxpus.net",
 			"homepage": "https://www.oxpus.net",
 			"role": "Lead Developer"
 		}],
 	"require": {
-		"php": ">=5.4.0"
+		"php": ">=7.0.0"
 	},
 	"extra": {
 		"display-name": "Hotschi's Downloads",

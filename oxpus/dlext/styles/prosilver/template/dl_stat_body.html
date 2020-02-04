@@ -23,7 +23,7 @@
 				<dl>
 					<dd class="dl-width-5 dl-cell-block dl-text-center dl-text-big">{{ top_ten_latest.POS }}</dd>
 					<dd class="dl-width-75 dl-cell-block"><a href="{{ top_ten_latest.U_FILE_LINK }}" class="forumtitle">{{ top_ten_latest.DESCRIPTION }}</a><br /><span>{{ lang('DL_CAT_NAME') }}{{ lang('COLON') }} {{ top_ten_latest.CAT_NAME }}</span></dd>
-					<dd class="dl-width-20 dl-cell-block">{{ top_ten_latest.USER_LINK }}<br /><span class="small">{{ top_ten_latest.DL_TIME }}</span></dd>
+					<dd class="dl-width-20 dl-cell-block">{{ top_ten_latest.USER_LINK }}<br /><span class="small"><time datetime="{{ top_ten_latest.DL_TIME_RFC }}">{{ top_ten_latest.DL_TIME }}</time></span></dd>
 				</dl>
 			</li>
 			{% endfor %}
@@ -53,7 +53,7 @@
 				<dl>
 					<dd class="dl-width-5 dl-cell-block dl-text-center dl-text-big">{{ top_ten_uploads.POS }}</dd>
 					<dd class="dl-width-75 dl-cell-block"><a href="{{ top_ten_uploads.U_FILE_LINK }}" class="forumtitle">{{ top_ten_uploads.DESCRIPTION }}</a><br /><span>{{ lang('DL_CAT_NAME') }}{{ lang('COLON') }} {{ top_ten_uploads.CAT_NAME }}</span></dd>
-					<dd class="dl-width-20 dl-cell-block">{{ top_ten_uploads.USER_LINK }}<br /><span class="small">{{ top_ten_uploads.DL_TIME }}</span></dd>
+					<dd class="dl-width-20 dl-cell-block">{{ top_ten_uploads.USER_LINK }}<br /><span class="small"><time datetime="{{ top_ten_uploads.DL_TIME_RFC }}">{{ top_ten_uploads.DL_TIME }}</time></span></dd>
 				</dl>
 			</li>
 			{% endfor %}

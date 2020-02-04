@@ -1,0 +1,18 @@
+Subject: Nueva Descarga
+
+Hola {USERNAME},
+
+Recibe este correo electrónico debido a una descarga nueva o editada en {SITENAME} en la categoría {CATEGORY} que debe ser aprobada:
+
+---------------------------
+{DOWNLOAD}
+{DESCRIPTION}
+---------------------------
+
+Si quiere aprobar esta descarga, haga clic en el siguiente enlace:
+
+{U_APPROVE}
+
+Recuerde que siempre puede elegir no ser notificado sobre descargas nuevas o editadas cambiando la configuración apropiada en su perfil de descargas.
+
+{BOARD_EMAIL}

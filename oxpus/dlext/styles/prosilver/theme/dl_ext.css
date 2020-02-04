@@ -256,8 +256,14 @@ div.dl_new_close:hover, div.dl_help_close:hover, .dl-close-footer:hover
     border-bottom: 1px #555555 solid;
 }
 
+.dl-edit-box-medium-green {
+    background-color: #b1fdb1;
+    border-right: 1px #555555 solid;
+    border-bottom: 1px #555555 solid;
+}
+
 .dl-edit-version {
-    background-color: #ffeeee;
+    background-color: #ffeeee !important;
 }
 
 .dl-thumb-box {

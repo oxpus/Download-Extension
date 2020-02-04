@@ -3,7 +3,7 @@
 /**
 *
 * @package phpBB Extension - Oxpus Downloads
-* @copyright (c) 2014 OXPUS - www.oxpus.net
+* @copyright (c) 2002-2020 OXPUS - www.oxpus.net
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
 */
@@ -38,11 +38,9 @@ class dl_commons extends \phpbb\db\migration\migration
 
 	public function add_fulltext_index()
 	{
-		global $request;
+		global $phpbb_container;
 
-		$action = $request->variable('action', '');
-
-		if ($action == 'delete_data')
+		if ($phpbb_container->get('request')->variable('action', '') == 'delete_data')
 		{
 			return;
 		}
@@ -99,11 +97,9 @@ class dl_commons extends \phpbb\db\migration\migration
 
 	public function prepare_banlist()
 	{
-		global $request;
+		global $phpbb_container;
 
-		$action = $request->variable('action', '');
-
-		if ($action == 'delete_data')
+		if ($phpbb_container->get('request')->variable('action', '') == 'delete_data')
 		{
 			return;
 		}
@@ -113,11 +109,9 @@ class dl_commons extends \phpbb\db\migration\migration
 
 	public function add_default_blacklist_extentions()
 	{
-		global $request;
+		global $phpbb_container;
 
-		$action = $request->variable('action', '');
-
-		if ($action == 'delete_data')
+		if ($phpbb_container->get('request')->variable('action', '') == 'delete_data')
 		{
 			return;
 		}
@@ -145,11 +139,9 @@ class dl_commons extends \phpbb\db\migration\migration
 
 	public function first_reset_remain_traffic()
 	{
-		global $request;
+		global $phpbb_container;
 
-		$action = $request->variable('action', '');
-
-		if ($action == 'delete_data')
+		if ($phpbb_container->get('request')->variable('action', '') == 'delete_data')
 		{
 			return;
 		}

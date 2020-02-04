@@ -1,0 +1,122 @@
+services:
+    oxpus.dlext.dlext_auth:
+        class: oxpus\dlext\controller\classes\dlext_auth
+        arguments:
+            - '@service_container'
+            - '@ext.manager'
+            - '@user'
+            - '@auth'
+            - '@config'
+            - '@dbal.conn'
+            - '@oxpus.dlext.dlext_cache'
+            - '@oxpus.dlext.dlext_init'
+    oxpus.dlext.dlext_cache:
+        class: oxpus\dlext\controller\classes\dlext_cache
+        arguments:
+            - '@service_container'
+            - '@dbal.conn'
+            - '%core.php_ext%'
+    oxpus.dlext.dlext_counter:
+        class: oxpus\dlext\controller\classes\dlext_counter
+        arguments:
+            - '@service_container'
+            - '@dbal.conn'
+            - '@oxpus.dlext.dlext_auth'
+            - '@oxpus.dlext.dlext_main'
+    oxpus.dlext.dlext_email:
+        class: oxpus\dlext\controller\classes\dlext_email
+        arguments:
+            - '@service_container'
+            - '@ext.manager'
+            - '@user'
+            - '@config'
+            - '@dbal.conn'
+            - '@controller.helper'
+            - '@oxpus.dlext.dlext_auth'
+            - '@oxpus.dlext.dlext_init'
+    oxpus.dlext.dlext_extra:
+        class: oxpus\dlext\controller\classes\dlext_extra
+        arguments:
+            - '@service_container'
+            - '@dbal.conn'
+            - '@oxpus.dlext.dlext_auth'
+            - '@oxpus.dlext.dlext_files'
+            - '@oxpus.dlext.dlext_init'
+            - '@oxpus.dlext.dlext_main'
+    oxpus.dlext.dlext_files:
+        class: oxpus\dlext\controller\classes\dlext_files
+        arguments:
+            - '@service_container'
+            - '@dbal.conn'
+    oxpus.dlext.dlext_format:
+        class: oxpus\dlext\controller\classes\dlext_format
+        arguments:
+            - '@service_container'
+            - '@config'
+    oxpus.dlext.dlext_hacklist:
+        class: oxpus\dlext\controller\classes\dlext_hacklist
+        arguments:
+            - '@service_container'
+            - '@dbal.conn'
+            - '@oxpus.dlext.dlext_auth'
+    oxpus.dlext.dlext_init:
+        class: oxpus\dlext\controller\classes\dlext_init
+        arguments:
+            - '%core.root_path%'
+            - '%core.php_ext%'
+            - '@service_container'
+            - '@ext.manager'
+            - '@dbal.conn'
+            - '@config'
+            - '@oxpus.dlext.dlext_cache'
+    oxpus.dlext.dlext_main:
+        class: oxpus\dlext\controller\classes\dlext_main
+        arguments:
+            - '@service_container'
+            - '@dbal.conn'
+            - '@controller.helper'
+            - '@oxpus.dlext.dlext_auth'
+            - '@oxpus.dlext.dlext_init'
+    oxpus.dlext.dlext_nav:
+        class: oxpus\dlext\controller\classes\dlext_nav
+        arguments:
+            - '@service_container'
+            - '@controller.helper'
+            - '@oxpus.dlext.dlext_auth'
+            - '@oxpus.dlext.dlext_init'
+    oxpus.dlext.dlext_physical:
+        class: oxpus\dlext\controller\classes\dlext_physical
+        arguments:
+            - '@service_container'
+            - '@ext.manager'
+            - '@dbal.conn'
+            - '@oxpus.dlext.dlext_files'
+            - '@oxpus.dlext.dlext_format'
+    oxpus.dlext.dlext_privacy:
+        class: oxpus\dlext\controller\classes\dlext_privacy
+        arguments:
+            - '@service_container'
+            - '@dbal.conn'
+    oxpus.dlext.dlext_status:
+        class: oxpus\dlext\controller\classes\dlext_status
+        arguments:
+            - '@service_container'
+            - '@config'
+            - '@controller.helper'
+            - '@oxpus.dlext.dlext_auth'
+            - '@oxpus.dlext.dlext_format'
+            - '@oxpus.dlext.dlext_init'
+            - '@oxpus.dlext.dlext_main'
+    oxpus.dlext.dlext_topic:
+        class: oxpus\dlext\controller\classes\dlext_topic
+        arguments:
+            - '@service_container'
+            - '@user'
+            - '@auth'
+            - '@config'
+            - '@dbal.conn'
+            - '@controller.helper'
+            - '@oxpus.dlext.dlext_auth'
+            - '@oxpus.dlext.dlext_format'
+            - '@oxpus.dlext.dlext_init'
+ 

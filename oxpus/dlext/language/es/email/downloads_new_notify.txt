@@ -1,0 +1,18 @@
+Subject: Nueva Descarga
+
+Hola {USERNAME},
+
+Ha recibido este email porque hay una nueva descarga en {SITENAME} en la categoría {CATEGORY}:
+
+---------------------------
+{DOWNLOAD}
+{DESCRIPTION}
+---------------------------
+
+Si quiere echar un vistazo a esta descarga, haga clic en el siguiente enlace:
+
+{U_CATEGORY}
+
+Recuerde que siempre puede elegir no ser notificado sobre descargas nuevas o actualizadas cambiando la configuración apropiada en su perfil de descargas.
+
+{BOARD_EMAIL}

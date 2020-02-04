@@ -8,7 +8,7 @@
 <div class="rules"><div class="inner"><span>{{ CAT_RULE }}</span></div></div>
 {% endif %}
 
-<h2 class="dl-left">{{ STATUS }} {{ DESCRIPTION }}{{ HACK_VERSION }} {{ MINI_IMG }}</h2>
+<h2 class="dl-left">{{ STATUS }} {{ DESCRIPTION }} {{ HACK_VERSION }} {{ MINI_IMG }}</h2>
 
 <br />
 
@@ -46,7 +46,7 @@
 		{% if S_REAL_FILETIME %}
 			<dl>
 				<dt><label>{{ lang('DL_REAL_FILETIME') }}</label></dt>
-				<dd class="lastpost dl-cell-block"><label>{{ REAL_FILETIME }}</label></dd>
+				<dd class="lastpost dl-cell-block"><label><time datetime="{{ REAL_FILETIME_RFC }}">{{ REAL_FILETIME }}</time></label></dd>
 			</dl>
 		{% endif %}
 		{% if S_HACKLIST %}
@@ -141,7 +141,7 @@
 				&nbsp;<span class="dl-red small"> &raquo; {{ lang('DL_NOT_ACTIVE') }} &laquo; </span>
 				{% endif %}
                 </div>
-				<div> {{ ver_cell.VER_TIME }}</div>
+				<div><time datetime="{{ ver_cell.VER_TIME_RFC }}">{{ ver_cell.VER_TIME }}</time></div>
 				<div class="content">{{ ver_cell.VER_DESC }} </div>
 			</div>
 		</dt>
@@ -209,7 +209,7 @@
 						<div class="avatar-container">{{ comment_row.POSTER_AVATAR }}</div>
 					</dt>
 					<dd class="profile-contact">
-						{{ comment_row.POSTER }}<br /><span class="small">{{ comment_row.POST_TIME }}</span>
+						{{ comment_row.POSTER }}<br /><span class="small"><time datetime="{{ comment_row.POST_TIME_RFC }}">{{ comment_row.POST_TIME }}</time></span>
 					</dd>
 				</dl>
 				<div class="postbody">

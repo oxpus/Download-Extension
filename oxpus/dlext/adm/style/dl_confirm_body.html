@@ -1,14 +1,11 @@
-{% if S_DELETE_VERSIONS %}
-	{% INCLUDE 'overall_header.html' %}
-{% endif %}
+{% INCLUDE 'overall_header.html' %}
 
-<h1>{{ MESSAGE_TITLE }}</h1>
-
-<form action="{{ S_CONFIRM_ACTION }}" method="post">
+<form id="confirm" method="post" action="{{ S_CONFIRM_ACTION }}">
 
 <fieldset>
 
-	<h3>{{ MESSAGE_TEXT }}</h3>
+	<h1>{MESSAGE_TITLE}</h1>
+	<p>{MESSAGE_TEXT}</p>
 
 	{% if S_DELETE_FILES_CONFIRM %}
 	<br />
@@ -17,39 +14,41 @@
 		<dt><label>{{ lang('DL_DELETE_FILE_CONFIRM') }}</label></dt>
 		<dd><input type="checkbox" class="permissions-checkbox" name="del_file" value="1" /></dd>
 	</dl>
+	{% endif %}
 
+	{% if S_DELETE_TOPIC_CONFIRM %}
 	<br />
 
 	<dl>
 		<dt><label>{{ lang('DL_TOPIC_DROP_MODE') }}</label></dt>
 		<dd>
-			<input type="radio" class="checkbox" name="topic_drop_mode" id="tdmd" value="drop" checked="checked" /><label for="tdmd">{{ lang('DL_TOPIC_DROP_MODE_DELETE') }}</label>
-			<input type="radio" class="checkbox" name="topic_drop_mode" id="tdmc" value="close" /><label for="tdmc">{{ lang('DL_TOPIC_DROP_MODE_CLOSE') }}</label>
+			<input type="radio" class="checkbox" name="topic_drop_mode" id="tdmd" value="drop" checked="checked" /> <label for="tdmd">{{ lang('DL_TOPIC_DROP_MODE_DELETE') }}</label>
+			<input type="radio" class="checkbox" name="topic_drop_mode" id="tdmc" value="close" /> <label for="tdmc">{{ lang('DL_TOPIC_DROP_MODE_CLOSE') }}</label>
 		</dd>
 	</dl>
 	{% endif %}
 
-	{% if S_CHOOSE_NEW_CAT %}
+	{% if S_SWITCH_CAT %}
 	<br />
 
 	<dl>
-		<dt>{{ lang('SWITCH_CAT') }}</dt>
+		<dt>{{ lang('DL_DELETE_CAT_CONFIRM') }}</dt>
 		<dd>{{ S_SWITCH_CAT }}</dd>
 	</dl>
 	{% endif %}
 
 	<br />
 
-	<p class="submit-buttons">
-		<span><input type="submit" name="confirm" value="{{ lang('YES') }}" class="button1" />&nbsp;&nbsp;<input type="submit" name="cancel" value="{{ lang('NO') }}" class="button2" /></span>
-		{{ S_FORM_TOKEN }}
+	<div style="text-align: center;">
+		<input type="submit" name="confirm" value="{{ lang('YES') }}" class="button1" />&nbsp;
+		<input type="submit" name="cancel" value="{{ lang('NO') }}" class="button2" />
 		{{ S_HIDDEN_FIELDS }}
-	</p>
+	</div>
 
 </fieldset>
 
 </form>
 
-{% if S_DELETE_VERSIONS %}
-	{% INCLUDE 'overall_footer.html' %}
-{% endif %}
+<fieldset class="submit-buttons">{{ DL_MOD_RELEASE }}</fieldset>
+
+{% INCLUDE 'overall_footer.html' %}

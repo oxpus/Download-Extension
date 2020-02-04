@@ -1,6 +1,14 @@
+/**
+*
+* @package phpBB Extension - Oxpus Downloads
+* @copyright (c) 2015-2020 OXPUS - www.oxpus.net
+* @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
+*
+*/
+
 function help_popup(help_key) {
 	$.ajax({
-        url: ajax_path + '&help_key=' + help_key,
+        url: ajax_path + '?help_key=' + help_key,
         type: "GET",
         success: function (data) { AJAXDLHelpDisplay(data); }
     });

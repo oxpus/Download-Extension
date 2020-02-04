@@ -23,7 +23,7 @@
 		{% for todolist_row in loops.todolist_row %}
 			<li class="row">
 				<dl>
-					<dt><a href="{{ todolist_row.FILE_LINK }}" class="forumtitle">{{ todolist_row.FILENAME }}</a>&nbsp;<span>{{ todolist_row.HACK_VERSION }}</span><br /><div class="postbody"><div class="notice">{{ todolist_row.TODO }}</div></div></dt>
+					<dt><a href="{{ todolist_row.FILE_LINK }}" class="forumtitle">{{ todolist_row.FILENAME }}&nbsp;{{ todolist_row.HACK_VERSION }}</a></dt>
 					<ul class="post-buttons">
 						<li>
 							<a href="{{ todolist_row.U_TODO_EDIT }}" title="{{ lang('DL_EDIT_FILE') }}" class="button button-icon-only">
@@ -37,6 +37,8 @@
 						</li>
 					</ul>
 				</dl>
+				<hr />
+				<div class="postbody">{{ todolist_row.TODO }}</div>
 			</li>
 		{% endfor %}
 		</ul>

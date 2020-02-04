@@ -35,7 +35,7 @@ var dlAjaxUrl = '{{ U_DL_AJAX }}';
 					<dd class="topics">{{ downloads.FILE_SIZE }}</dd>
 					<dd class="posts">{{ downloads.FILE_KLICKS }} | {{ downloads.FILE_OVERALL_KLICKS }}</dd>
 					{% if S_ENABLE_RATE %}
-					<dd class="lastpost">{% if downloads.RATING_IMG %}<div id="rating_{{ downloads.DF_ID }}">{{ downloads.RATING_IMG }}</div>&nbsp;{{ downloads.RATINGS }}{% endif %}</dd>
+					<dd class="lastpost">{% if downloads.RATING_IMG %}<div id="rating_{{ downloads.DF_ID }}">{{ downloads.RATING_IMG }}<br />{{ downloads.RATINGS }}</div>{% endif %}</dd>
 					{% endif %}
 				</dl>
 			</li>

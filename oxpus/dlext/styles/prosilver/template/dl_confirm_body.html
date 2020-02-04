@@ -1,4 +1,4 @@
-{% INCLUDE 'dl_header.html' %}
+{% INCLUDE 'overall_header.html' %}
 
 <br />
 
@@ -21,6 +21,8 @@
 			<dt><label>{{ lang('DL_DELETE_FILE_CONFIRM') }}</label></dt>
 			<dd><input type="checkbox" class="permissions-checkbox" name="del_file" value="1" /></dd>
 		</dl>
+		{% endif %}
+		{% if S_DELETE_TOPIC_CONFIRM %}
 		<dl>
 			<dt><label>{{ lang('DL_TOPIC_DROP_MODE') }}</label></dt>
 			<dd>
@@ -39,12 +41,12 @@
 		{{ S_FORM_TOKEN }}
 		{{ S_HIDDEN_FIELDS }}
 
-		</fieldset>
+	</fieldset>
 
-		</form>
+	</form>
 
-		</div>
 	</div>
+</div>
 
 <br />
 

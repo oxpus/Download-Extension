@@ -3,7 +3,7 @@
 /**
 *
 * @package phpBB Extension - Oxpus Downloads
-* @copyright (c) 2014 OXPUS - www.oxpus.net
+* @copyright (c) 2002-2020 OXPUS - www.oxpus.net
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
 */
@@ -18,6 +18,25 @@ namespace oxpus\dlext\notification;
 */
 class dlext extends \phpbb\notification\type\base
 {
+	/**
+	* Get notification type name
+	*
+	* @return string
+	*/
+	public function get_type()
+	{
+		return 'oxpus.dlext.notification.type.dlext';
+	}
+	/**
+	* Notification option data (for outputting to the user)
+	*
+	* @var bool|array False if the service should use it's default data
+	* 					Array of data (including keys 'id', 'lang', and 'group')
+	*/
+	public static $notification_option = array(
+		'lang'	=> 'NEW_DOWNLOAD_NOTIFICATION',
+	);
+
 	/** @var \phpbb\db\driver\driver_interface */
 	protected $db;
 
@@ -47,23 +66,13 @@ class dlext extends \phpbb\notification\type\base
 	}
 
 	/**
-	* Get notification type name
-	*
-	* @return string
-	*/
-	public function get_type()
-	{
-		return 'oxpus.dlext.notification.type.dlext';
-	}
-
-	/**
 	* Is this type available to the current user (defines whether or not it will be shown in the UCP Edit notification options)
 	*
 	* @return bool True/False whether or not this is available to the user
 	*/
 	public function is_available()
 	{
-		return false;
+		return true;
 	}
 
 	/**
@@ -115,16 +124,14 @@ class dlext extends \phpbb\notification\type\base
 		return $users;
 	}
 
-	/**
-	* Users needed to query before this notification can be displayed
-	*
-	* @return array Array of user_ids
-	*/
-	public function users_to_query()
-	{
-		return array();
-	}
 
+	/**
+	* Get the user's avatar
+	*/
+	public function get_avatar()
+	{
+		return 0;
+	}
 	/**
 	* Get the HTML formatted title of this notification
 	*
@@ -136,13 +143,14 @@ class dlext extends \phpbb\notification\type\base
 	}
 
 	/**
-	* Get the url to this item
-	*
-	* @return string URL
-	*/
-	public function get_url()
+	 * Get the HTML formatted reference of the notification
+	 *
+	 * @return string
+	 */
+	public function get_reference()
 	{
-		return $this->helper->route('oxpus_dlext_controller', array('view' => 'latest'));
+		//return true;
+		//return censor_text($this->get_data('album_name'));
 	}
 
 	/**
@@ -154,13 +162,32 @@ class dlext extends \phpbb\notification\type\base
 	{
 		return false;
 	}
-
 	/**
 	* Get email template variables
 	*
 	* @return array
 	*/
 	public function get_email_template_variables()
+	{
+		return array();
+	}
+
+	/**
+	* Get the url to this item
+	*
+	* @return string URL
+	*/
+	public function get_url()
+	{
+		return $this->helper->route('oxpus_dlext_latest');
+	}
+
+	/**
+	 * Users needed to query before this notification can be displayed
+	 *
+	 * @return array Array of user_ids
+	 */
+	public function users_to_query()
 	{
 		return array();
 	}

@@ -1,6 +1,60 @@
-oxpus_dlext_controller:
-    path: /dlext/
-    defaults: { _controller: oxpus.dlext.controller:handle }
-oxpus_dlext_page_controller:
-    path: /dlext/
-    defaults: { _controller: oxpus.dlext.controller:handle }
+oxpus_dlext_ajax:
+    path: /dlext/ajax
+    defaults: { _controller: oxpus.dlext.ajax:handle }
+oxpus_dlext_broken:
+    path: /dlext/broken
+    defaults: { _controller: oxpus.dlext.broken:handle }
+oxpus_dlext_details:
+    path: /dlext/details
+    defaults: { _controller: oxpus.dlext.details:handle }
+oxpus_dlext_fav:
+    path: /dlext/fav
+    defaults: { _controller: oxpus.dlext.fav:handle }
+oxpus_dlext_feed:
+    path: /dlext/feed
+    defaults: { _controller: oxpus.dlext.feed:handle }
+oxpus_dlext_hacklist:
+    path: /hacklist
+    defaults: { _controller: oxpus.dlext.hacklist:handle }
+oxpus_dlext_help:
+    path: /dlext/help
+    defaults: { _controller: oxpus.dlext.help:handle }
+oxpus_dlext_index:
+    path: /dlext/index
+    defaults: { _controller: oxpus.dlext.index:handle }
+oxpus_dlext_latest:
+    path: /dlext/latest
+    defaults: { _controller: oxpus.dlext.latest:handle }
+oxpus_dlext_load:
+    path: /dlext/load
+    defaults: { _controller: oxpus.dlext.load:handle }
+oxpus_dlext_overall:
+    path: /dlext/overall
+    defaults: { _controller: oxpus.dlext.overall:handle }
+oxpus_dlext_search:
+    path: /dlext/search
+    defaults: { _controller: oxpus.dlext.search:handle }
+oxpus_dlext_stats:
+    path: /dlext/stats
+    defaults: { _controller: oxpus.dlext.stats:handle }
+oxpus_dlext_thumbs:
+    path: /dlext/thumbs
+    defaults: { _controller: oxpus.dlext.thumbs:handle }
+oxpus_dlext_todo:
+    path: /dlext/todo
+    defaults: { _controller: oxpus.dlext.todo:handle }
+oxpus_dlext_tracker:
+    path: /dlext/tracker
+    defaults: { _controller: oxpus.dlext.tracker:handle }
+oxpus_dlext_unbroken:
+    path: /dlext/unbroken
+    defaults: { _controller: oxpus.dlext.unbroken:handle }
+oxpus_dlext_unfav:
+    path: /dlext/unfav
+    defaults: { _controller: oxpus.dlext.unfav:handle }
+oxpus_dlext_upload:
+    path: /dlext/upload
+    defaults: { _controller: oxpus.dlext.upload:handle }
+oxpus_dlext_version:
+    path: /dlext/version
+    defaults: { _controller: oxpus.dlext.version:handle }

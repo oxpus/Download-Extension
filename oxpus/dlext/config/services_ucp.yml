@@ -1,0 +1,36 @@
+services:
+    oxpus.dlext.ucp_config_controller:
+        class: oxpus\dlext\controller\ucp\ucp_config_controller
+        arguments:
+            - '@request'
+            - '@dbal.conn'
+            - '@user'
+            - '@language'
+            - '@config'
+            - '@template'
+    oxpus.dlext.ucp_privacy_controller:
+        class: oxpus\dlext\controller\ucp\ucp_privacy_controller
+        arguments:
+            - '@ext.manager'
+            - '%core.php_ext%'
+            - '@request'
+            - '@template'
+            - '@user'
+            - '@dbal.conn'
+            - '@service_container'
+    oxpus.dlext.ucp_favorite_controller:
+        class: oxpus\dlext\controller\ucp\ucp_favorite_controller
+        arguments:
+            - '@ext.manager'
+            - '%core.root_path%'
+            - '%core.php_ext%'
+            - '@config'
+            - '@request'
+            - '@dbal.conn'
+            - '@user'
+            - '@language'
+            - '@template'
+            - '@controller.helper'
+            - '@service_container'
+            - '@oxpus.dlext.dlext_main'
+            - '@oxpus.dlext.dlext_nav'

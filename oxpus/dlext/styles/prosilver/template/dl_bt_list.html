@@ -17,7 +17,7 @@
 		<li class="header">
 			<dl>
 				<dt>{{ lang('DL_BUG_REPORT_TITLE_DETAILS') }}</dt>
-				<dd class="posts">{% if S_REPORT_TEXT %}<br />{{ lang('DL_BUG_REPORT_PHP') }} {{ lang('DL_BUG_REPORT_DB') }} {{ lang('DL_BUG_REPORT_FORUM') }}{% else %}&nbsp;{% endif %}</dd>
+				<dd class="posts">{{ lang('DL_BUG_REPORT_PHP') }} {{ lang('DL_BUG_REPORT_DB') }} {{ lang('DL_BUG_REPORT_FORUM') }}</dd>
 				<dd class="time">{{ lang('DL_BUG_REPORT_STATUS') }}</dd>
 			</dl>
 		</li>
@@ -32,30 +32,30 @@
 						<li>
 							<a href="{{ bug_tracker_row.REPORT_DETAIL }}" title="{{ lang('DL_BUG_REPORT_DETAIL') }}" class="button button-icon-only">
 								<i class="icon fa-pencil fa-fw" aria-hidden="true"></i><span class="sr-only">{{ lang('DL_BUG_REPORT_DETAIL') }}</span>
-							</a>
+							</a>&nbsp;
 						</li>
 						{% for modext in bug_tracker_row.modext %}
 						<li>
 							<a href="{{ modext.U_DELETE }}" title="{{ lang('DL_DELETE') }}" class="button button-icon-only">
 								<i class="icon fa-times fa-fw" aria-hidden="true"></i><span class="sr-only">{{ lang('DL_DELETE') }}</span>
-							</a>
+							</a>&nbsp;
 						</li>
 						{% endfor %}
 					</ul>
 					<label>{{ bug_tracker_row.REPORT_ID }}&nbsp;&bull;&nbsp;{{ bug_tracker_row.REPORT_TITLE }}</label>
 					<br /><strong>{{ bug_tracker_row.REPORT_FILE }} {{ bug_tracker_row.REPORT_FILE_VER }}</strong>
-					<br /><span>{{ lang('DL_BUG_REPORT_DATE') }} {{ bug_tracker_row.REPORT_DATE }}
+					<br /><span>{{ lang('DL_BUG_REPORT_DATE') }} <time datetime="{{ bug_tracker_row.REPORT_DATE_RFC }}">{{ bug_tracker_row.REPORT_DATE }}</time>
 					<br />{{ lang('DL_BUG_REPORT_AUTHOR') }} {{ bug_tracker_row.REPORT_AUTHOR_LINK }}</span>
 					{% if S_REPORT_TEXT %}<hr /><span class="small"><i>{{ bug_tracker_row.REPORT_TEXT }}</i></span>{% endif %}
 					</div>
 				</dt>
 				<dd class="posts">
-					{% if bug_tracker_row.REPORT_PHP or bug_tracker_row.REPORT_DB or bug_tracker_row.REPORT_FORUM %}<div class="small">{{ bug_tracker_row.REPORT_PHP }}</div><div class="small">{{ bug_tracker_row.REPORT_DB }}</div><div class="small">{{ bug_tracker_row.REPORT_FORUM }}</div>{% endif %}
+					<div class="small">{{ bug_tracker_row.REPORT_PHP }}</div><div class="small">{{ bug_tracker_row.REPORT_DB }}</div><div class="small">{{ bug_tracker_row.REPORT_FORUM }}</div>
 				</dd>
 				<dd class="time"><span>
-				{{ bug_tracker_row.REPORT_STATUS_DATE }}&nbsp;<b>{{ bug_tracker_row.REPORT_STATUS }}</b></span>
+					<time datetime="{{ bug_tracker_row.REPORT_STATUS_DATE_RFC }}">{{ bug_tracker_row.REPORT_STATUS_DATE }}</time>&nbsp;<b>{{ bug_tracker_row.REPORT_STATUS }}</b></span>
 					{% for assign in bug_tracker_row.assign %}
-					&nbsp;{{ lang('DL_BUG_REPORT_ASSIGN_DATE') }}&nbsp;{{ assign.REPORT_ASSIGN_DATE }}
+					&nbsp;{{ lang('DL_BUG_REPORT_ASSIGN_DATE') }}&nbsp;<time datetime="{{ assign.REPORT_ASSIGN_DATE_RFC }}">{{ assign.REPORT_ASSIGN_DATE }}</time>
 					&nbsp;{{ assign.REPORT_ASSIGN_LINK }}
 					{% endfor %}
 					{% if S_NO_ASSIGN %}

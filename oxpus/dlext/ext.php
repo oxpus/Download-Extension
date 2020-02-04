@@ -3,7 +3,7 @@
 /**
 *
 * @package phpBB Extension - Oxpus Downloads
-* @copyright (c) 2014 OXPUS - www.oxpus.net
+* @copyright (c) 2002-2020 OXPUS - www.oxpus.net
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
 */
@@ -15,7 +15,7 @@ class ext extends \phpbb\extension\base
 	public function is_enableable()
 	{
 		$config = $this->container->get('config');
-		return phpbb_version_compare($config['version'], '3.1.3', '>=');
+		return phpbb_version_compare($config['version'], '3.2.0', '>=');
 	}
 
 	public function enable_step($old_state)

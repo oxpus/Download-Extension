@@ -1,0 +1,116 @@
+{% INCLUDE 'dl_header.html' %}
+
+<script type="text/javascript">
+// <![CDATA[
+function select_switch(status)
+{
+	doc_length = '{{ MAX_DOWNLOADS }}';
+
+	for (i = 0; i < doc_length; i++)
+	{
+		dl_file = document.getElementById('dlo_id_' + i);
+		if (status)
+		{
+			dl_file.checked = 'checked';
+		}
+		else
+		{
+			dl_file.checked = '';
+		}
+	}
+}
+// ]]>
+</script>
+
+<h2>{{ lang('DL_MODCP_MANAGE') }}</h2>
+
+<br />
+
+<div class="panel">
+	<div class="inner">
+		{S_SELECT_MCP_CAT}
+	</div>
+</div>
+	
+<form method="post" id="select_user" action="{{ S_DL_MODCP_ACTION }}" >
+
+<div class="panel">
+	<div class="inner">
+
+	<table class="table1">
+		<thead>
+		<tr>
+			<th class="name">{{ lang('DL_DOWNLOAD') }}</th>
+			<th class="name">{{ lang('DL_HACK_AUTOR') }}</th>
+			<th class="center">{{ lang('OPTIONS') }}</th>
+		</tr>
+		</thead>
+		<tbody>
+		{% for manage_row in loops.manage_row %}
+		<tr class="{% if manage_row.S_ROW_COUNT is even %}bg1{% else %}bg2{% endif %}">
+			<td>{{ manage_row.MINI_ICON }}&nbsp;<a href="{{ manage_row.U_DOWNLOAD }}" class="forumtitle">{{ manage_row.DESCRIPTION }}</a></dt>
+			<td>{{ manage_row.USERNAME }}</dd>
+			<td class="center dl-cell-block">
+				&nbsp;<input type="checkbox" class="permissions-checkbox" name="dlo_id[]" id="dlo_id_{{ manage_row.S_ROW_COUNT }}" value="{{ manage_row.FILE_ID }}" />&nbsp;
+				{% if SORT %}
+				&nbsp;<a href="{{ manage_row.U_UP }}" class="button button-icon-only"><i class="icon fa-chevron-up fa-fw" aria-hidden="true" title="{{ lang('DL_UP') }}"></i><span class="sr-only">{{ lang('DL_UP') }}</span></a>
+				&nbsp;<a href="{{ manage_row.U_DOWN }}" class="button button-icon-only"><i class="icon fa-chevron-down fa-fw" aria-hidden="true" title="{{ lang('DL_DOWN') }}"></i><span class="sr-only">{{ lang('DL_DOWN') }}</span></a>
+				{% endif %}
+				&nbsp;<a href="{{ manage_row.U_EDIT }}" class="button button-icon-only"><i class="icon fa-pencil fa-fw" aria-hidden="true" title="{{ lang('DL_EDIT_FILE') }}"></i><span class="sr-only">{{ lang('DL_EDIT_FILE') }}</span></a>
+			</td>
+		</tr>
+		{% else %}
+		<tr class="bg1"><td class="center" colspan="3"><b>{L_DL_EMPTY_CATEGORY}</b></td></tr> 
+		{% endfor %}
+		</tbody>
+	</table>
+
+	</div>
+</div>
+
+<div class="panel">
+	<div class="inner">
+
+	<fieldset class="submit-buttons">
+		{% if not S_MODCP_BUTTON %}
+		<select name="action">
+			<option value="manage">{{ lang('DL_MODCP_MOD_SELECT') }}</option>
+			<option value="sort">{{ lang('DL_ORDER') }}</option>
+			<option value="move">{{ lang('DL_MOVE') }}</option>
+			<option value="delete">{{ lang('DL_DELETE') }}</option>
+			<option value="lock">{{ lang('DL_LOCK') }}</option>
+			<option value="assign">{{ lang('DL_ASSIGN') }}</option>
+		</select>
+		&nbsp;{{ S_CAT_SELECT }}&nbsp;
+		<input type="text" name="username" id="username" value="" class="inputbox autowidth" size="20" /> [ <a href="{{ U_FIND_USERNAME }}" onclick="find_username(this.href); return false;">{{ lang('FIND_USERNAME') }}</a> ]
+		{% endif %}
+		&nbsp;<input type="submit" class="button2" value="{% if not S_MODCP_BUTTON %}{{ lang('SUBMIT') }}{% else %}{{ lang('BACK_TO_PREV') }}{% endif %}" />
+	</fieldset>
+
+	{{ S_HIDDEN_FIELDS }}
+
+	</div>
+</div>
+
+</form>
+
+{% if loops.pagination|length or TOTAL_DL %}
+	<div class="pagination">
+		{{ TOTAL_DL }}
+		{% if loops.pagination|length %}
+			{% INCLUDE 'pagination.html' %}
+		{% else %}
+			&bull; {{ PAGE_NUMBER }}
+		{% endif %}
+	</div>
+{% endif %}
+
+<ul class="linklist">
+	<li class="rightside">
+		<span>{% if S_SORT_ASC %}<a href="{{ U_SORT_ASC }}">{{ DL_ABC }}</a> &bull; {% endif %}<a href="javascript:select_switch(true);">{{ lang('DL_MARK_ALL') }}</a> &bull; <a href="javascript:select_switch(false);">{{ lang('DL_UNMARK') }}</a></span>
+	</li>
+</ul>
+
+<br />
+
+{% INCLUDE 'mcp_footer.html' %}

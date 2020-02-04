@@ -1,0 +1,78 @@
+{% INCLUDE 'overall_header.html' %}
+
+<h1>{{ lang('DL_FILES_TITLE') }}</h1>
+
+<br />
+
+<form method="post" action="{{ S_DOWNLOADS_ACTION }}" id="add_dl">
+
+	<p class="submit-buttons">
+		<input type="submit" class="button1" name="submit" value="{{ lang('ADD_NEW_DOWNLOAD') }}" />
+		<input type="hidden" name="action" value="add" />
+		{{ S_HIDDEN_FIELDS }}
+	</p>
+
+</form>
+
+<form action="{{ S_DOWNLOADS_ACTION }}" method="post" id="cat_id" onsubmit="if(this.options[this.selectedIndex].value == -1){ return false; }">
+
+<fieldset>
+
+	<dl>
+		<dt><label>{{ CATEGORIES }}</label>&nbsp;<input type="submit" value="{{ lang('GO') }}" class="button1" />{% if S_LIST_DOWNLOADS %}&nbsp;<span>{{ DL_COUNT }}</span>{% endif %}</dt>
+		<dd>{% if S_LIST_DOWNLOADS %}<a href="{{ U_DOWNLOAD_ORDER_ALL }}">{{ SORT }}</a>{% else %}<span>{{ lang('DL_EMPTY_CATEGORY') }}</span>{% endif %}</dd>
+	</dl>
+
+</fieldset>
+
+</form>
+
+{% if S_LIST_DOWNLOADS %}
+<table width="100%" cellpadding="3" cellspacing="1" border="0" class="forumline">
+<thead>
+<tr>
+	<th>#</th>
+	<th>{{ lang('DL_NAME') }}<br />{{ lang('DL_FILE_NAME') }}</th>
+	<th>{{ DL_FILE_SIZE }}</th>
+	<th>{{ lang('DL_IS_FREE') }}<br />{{ lang('DL_EXTERN') }}</th>
+	<th>{{ lang('DL_KLICKS') }}<br />{{ lang('DL_OVERALL_KLICKS') }}</th>
+	<th>{{ lang('DL_TRAFFIC') }}<br />{{ lang('DL_HACKS_LIST') }}</th>
+	<th>{{ lang('ACTION') }}</th>
+</tr>
+</thead>
+<tbody>
+{% for downloads in loops.downloads %}
+<tr>
+	<td><span>{{ downloads.FILE_ID }}</span></td>
+	<td><span>{{ downloads.TEST }} <b>{{ downloads.DESCRIPTION }}</b>&nbsp;{{ downloads.VERSION }}</span><br /><span>{{ downloads.FILE_NAME }}</span><br /><span>{{ downloads.UNAPPROVED }}</span></td>
+	<td><span>{{ downloads.FILE_SIZE }}</span></td>
+	<td><span>{{ downloads.FILE_FREE_EXTERN }}</span></td>
+	<td><span>{{ downloads.FILE_KLICKS }}<br />{{ downloads.FILE_OVERALL_KLICKS }}</span></td>
+	<td><span>{{ downloads.FILE_TRAFFIC }}<br />{{ downloads.hacklist }}</span></td>
+	<td>
+		{% if downloads.S_FIRST_ROW && not downloads.S_LAST_ROW %}
+		{{ ICON_MOVE_UP_DISABLED }}
+		<a href="{{ downloads.U_DOWNLOAD_MOVE_DOWN }}" class="gensmall">{{ ICON_MOVE_DOWN }}</a>
+		{% elseif not downloads.S_FIRST_ROW && not downloads.S_LAST_ROW%}
+		<a href="{{ downloads.U_DOWNLOAD_MOVE_UP }}" class="gensmall">{{ ICON_MOVE_UP }}</a>
+		<a href="{{ downloads.U_DOWNLOAD_MOVE_DOWN }}" class="gensmall">{{ ICON_MOVE_DOWN }}</a>
+		{% elseif downloads.S_LAST_ROW && not downloads.S_FIRST_ROW %}
+		<a href="{{ downloads.U_DOWNLOAD_MOVE_UP }}" class="gensmall">{{ ICON_MOVE_UP }}</a>
+		{{ ICON_MOVE_DOWN_DISABLED }}
+		{% else %}
+		{{ ICON_MOVE_UP_DISABLED }}
+		{{ ICON_MOVE_DOWN_DISABLED }}
+		{% endif %}
+		<a href="{{ downloads.U_FILE_EDIT }}">{{ ICON_EDIT }}</a>
+		<a href="{{ downloads.U_FILE_DELETE }}" class="gensmall">{{ ICON_DELETE }}</a>
+	</td>
+</tr>
+{% endfor %}
+</tbody>
+</table>
+<br />
+{% endif %}
+
+<fieldset class="submit-buttons">{{ DL_MOD_RELEASE }}</fieldset>
+
+{% INCLUDE 'overall_footer.html' %}

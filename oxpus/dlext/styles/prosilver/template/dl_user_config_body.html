@@ -1,14 +1,11 @@
-{% if S_DL_UCP %}
 {% INCLUDE 'ucp_header.html' %}
-{% else %}
-{% INCLUDE 'dl_header.html' %}
-{% endif %}
+
 {% if S_FAV_BLOCK %}
 <script type="text/javascript">
 // <![CDATA[
 function select_switch(status)
 {
-	for (i = {% if S_DL_UCP %}0{% else %}19{% endif %}; i < document.forms.user_dl_config.length; i++)
+	for (i = 0; i < document.forms.user_dl_config.length; i++)
 	{
 		document.forms.user_dl_config.elements[i].checked = status;
 	}
@@ -17,7 +14,7 @@ function select_switch(status)
 </script>
 {% endif %}
 
-<h2>{% if S_DL_UCP %}{{ DL_MOD_RELEASE }}{% else %}{{ lang('DL_CONFIG') }}{% endif %}</h2>
+<h2>{{ DL_MOD_RELEASE }}</h2>
 
 <br />
 
@@ -141,33 +138,28 @@ function select_switch(status)
 
 	<h3>{{ lang('DL_FAVORITE') }}</h3>
 
-	<fieldset>
-
-		<table class="table1 dl-width-100">
+	<table class="table1 dl-width-100">
 		<thead>
-		<tr class="bg3">
-			<td class="dl-width-90"><strong>{{ lang('DOWNLOADS') }}</strong></td>
-			<td class="dl-width-10"><strong>{{ lang('DL_DELETE') }}</strong></td>
+		<tr>
+			<td class="name dl-width-90"><strong>{{ lang('DOWNLOADS') }}</strong></td>
+			<td class="center dl-width-10"><strong>{{ lang('DL_DELETE') }}</strong></td>
 		</tr>
 		</thead>
 		<tbody>
 		{% for favorite_row in loops.favorite_row %}
 		<tr class="bg{% if favorite_row.S_ROW_COUNT is even %}1{% else %}2{% endif %}">
 			<td class="dl-width-90"><a href="{{ favorite_row.U_DOWNLOAD }}" class="topictitle">{{ favorite_row.DOWNLOAD }}</a><div class="small">{{ favorite_row.DL_CAT }}</div></td>
-			<td class="dl-width-10"><input type="checkbox" name="fav_id[]" value="{{ favorite_row.DL_ID }}" /></td>
+			<td class="center dl-width-10"><input type="checkbox" name="fav_id[]" value="{{ favorite_row.DL_ID }}" /></td>
 		</tr>
 		{% endfor %}
 		</tbody>
-		</table>
-
-	</fieldset>
+	</table>
 
 	</div>
 </div>
 
 <div class="dl-right">
-	<a href="javascript:select_switch(true);">{{ lang('DL_MARK_ALL') }}</a> ::
-	<a href="javascript:select_switch(false);">{{ lang('DL_UNMARK') }}</a>
+	<a href="javascript:select_switch(true);">{{ lang('DL_MARK_ALL') }}</a> &bull; <a href="javascript:select_switch(false);">{{ lang('DL_UNMARK') }}</a>
 </div>
 {% endif %}
 
@@ -203,8 +195,4 @@ function select_switch(status)
 
 <br />
 
-{% if S_DL_UCP %}
 {% INCLUDE 'ucp_footer.html' %}
-{% else %}
-{% INCLUDE 'dl_footer.html' %}
-{% endif %}

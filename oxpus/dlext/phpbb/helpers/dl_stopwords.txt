@@ -1,4 +1,0 @@
-download
-mod
-phpbb
-ext

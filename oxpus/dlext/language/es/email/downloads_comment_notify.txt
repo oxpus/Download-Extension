@@ -1,0 +1,18 @@
+Subject: Nuevo comentario de Descarga
+
+Hola {USERNAME},
+
+Ha recibido este email porque hay un nuevo comentario de descarga en {SITENAME} para una de sus descargas suscritas:
+
+---------------------------
+Category {CATEGORY}
+Download {DOWNLOAD}
+---------------------------
+
+Si quiere echar un vistazo a este comentario, haga clic en el siguiente enlace:
+
+{U_DOWNLOAD}
+
+Recuerde que siempre puede optar por no ser notificado de nuevos comentarios cambiando la configuración apropiada en su perfil de descargas.
+
+{BOARD_EMAIL}

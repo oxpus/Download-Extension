@@ -1,3 +1,6 @@
+{% if S_DL_MCP %}
+{% INCLUDE 'mcp_footer.html' %}
+{% else %}
 <br />
 
 {% if S_FOOTER_NAV_ON %}
@@ -5,7 +8,6 @@
 	<div class="inner">
 	<ul id="nav-breadcrumbs_footer" class="nav-breadcrumbs linklist" role="menubar">
         <li>{{ S_DL_JUMPBOX }}</li>
-		{% if S_U_CONFIG_LINK %}<li data-last-responsive="true" class="rightside"><a href="{{ U_DL_CONFIG }}"><i class="icon fa-gears fa-fw" aria-hidden="true"></i> <span><strong>{{ lang('DL_CONFIG') }}</strong></span></a></li>{% endif %}
 		{% if S_TODO_LINK %}<li data-last-responsive="true" class="rightside"><a href="{{ U_DL_TODOLIST }}"><i class="icon fa-codepen fa-fw" aria-hidden="true"></i> <span><strong>{{ lang('DL_MOD_TODO') }}</strong></span></a></li>{% endif %}
 		{% if S_STATS_VIEW_ON %}<li data-last-responsive="true" class="rightside"><a href="{{ U_DL_STATS }}"><i class="icon fa-bar-chart fa-fw" aria-hidden="true"></i> <span><strong>{{ lang('DL_STATS') }}</strong></span></a></li>{% endif %}
 		{% if U_DL_OVERALL_VIEW %}<li data-last-responsive="true" class="rightside"><a href="{{ U_DL_OVERALL_VIEW }}"><i class="icon fa-list fa-fw" aria-hidden="true"></i> <span><strong>{{ lang('DL_OVERVIEW') }}</strong></span></a></li>{% endif %}
@@ -18,7 +20,6 @@
 {% endif %}
 
 {% if S_DL_MOD_OFFLINE_ADMINS %}
-
 <br />
 
 <div class="rules">
@@ -106,5 +107,7 @@
 	{% if S_DL_TRANSLATION %}&bull;&nbsp;{{ lang('DL_TRANSLATION') }}{% endif %}
 	{% if U_DL_RSS_FEED %}&bull;&nbsp;<a href="{{ U_DL_RSS_FEED }}">{{ lang('DL_ACP_CONF_RSS') }}</a>{% endif %}
 </div>
+
+{% endif %}
 
 {% INCLUDE 'overall_footer.html' %}

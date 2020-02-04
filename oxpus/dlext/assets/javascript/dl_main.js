@@ -1,4 +1,12 @@
 /**
+*
+* @package phpBB Extension - Oxpus Downloads
+* @copyright (c) 2015-2020 OXPUS - www.oxpus.net
+* @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
+*
+*/
+
+/**
 * Show/hide option panels
 * value = suffix for ID to show
 * adv = we are opening advanced permissions

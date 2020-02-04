@@ -1,0 +1,176 @@
+services:
+    oxpus.dlext.acp_banlist_controller:
+        class: oxpus\dlext\controller\acp\acp_banlist_controller
+        arguments:
+            - '%core.php_ext%'
+            - '@service_container'
+            - '@ext.manager'
+            - '@path_helper'
+            - '@dbal.conn'
+            - '@log'
+            - '@auth'
+            - '@user'
+    oxpus.dlext.acp_browser_controller:
+        class: oxpus\dlext\controller\acp\acp_browser_controller
+        arguments:
+            - '%core.php_ext%'
+            - '@service_container'
+            - '@ext.manager'
+            - '@path_helper'
+            - '@dbal.conn'
+            - '@log'
+            - '@auth'
+            - '@user'
+    oxpus.dlext.acp_categories_controller:
+        class: oxpus\dlext\controller\acp\acp_categories_controller
+        arguments:
+            - '%core.root_path%'
+            - '%core.php_ext%'
+            - '@service_container'
+            - '@ext.manager'
+            - '@path_helper'
+            - '@dbal.conn'
+            - '@log'
+            - '@auth'
+            - '@user'
+            - '@oxpus.dlext.dlext_extra'
+            - '@oxpus.dlext.dlext_format'
+            - '@oxpus.dlext.dlext_main'
+            - '@oxpus.dlext.dlext_nav'
+            - '@oxpus.dlext.dlext_physical'
+    oxpus.dlext.acp_config_controller:
+        class: oxpus\dlext\controller\acp\acp_config_controller
+        arguments:
+            - '%core.root_path%'
+            - '%core.php_ext%'
+            - '@service_container'
+            - '@ext.manager'
+            - '@path_helper'
+            - '@dbal.conn'
+            - '@log'
+            - '@auth'
+            - '@user'
+            - '@oxpus.dlext.dlext_extra'
+            - '@oxpus.dlext.dlext_format'
+            - '@oxpus.dlext.dlext_physical'
+    oxpus.dlext.acp_ext_blacklist_controller:
+        class: oxpus\dlext\controller\acp\acp_ext_blacklist_controller
+        arguments:
+            - '%core.php_ext%'
+            - '@service_container'
+            - '@ext.manager'
+            - '@path_helper'
+            - '@dbal.conn'
+            - '@log'
+            - '@auth'
+            - '@user'
+    oxpus.dlext.acp_fields_controller:
+        class: oxpus\dlext\controller\acp\acp_fields_controller
+        arguments:
+            - '%core.root_path%'
+            - '%core.php_ext%'
+            - '@service_container'
+            - '@ext.manager'
+            - '@path_helper'
+            - '@dbal.conn'
+            - '@log'
+            - '@auth'
+            - '@user'
+    oxpus.dlext.acp_files_controller:
+        class: oxpus\dlext\controller\acp\acp_files_controller
+        arguments:
+            - '%core.php_ext%'
+            - '@service_container'
+            - '@ext.manager'
+            - '@path_helper'
+            - '@dbal.conn'
+            - '@log'
+            - '@auth'
+            - '@user'
+            - '@oxpus.dlext.dlext_auth'
+            - '@oxpus.dlext.dlext_email'
+            - '@oxpus.dlext.dlext_extra'
+            - '@oxpus.dlext.dlext_files'
+            - '@oxpus.dlext.dlext_format'
+            - '@oxpus.dlext.dlext_main'
+            - '@oxpus.dlext.dlext_topic'
+    oxpus.dlext.acp_overview_controller:
+        class: oxpus\dlext\controller\acp\acp_overview_controller
+        arguments:
+            - '%core.php_ext%'
+            - '@service_container'
+            - '@ext.manager'
+            - '@path_helper'
+            - '@dbal.conn'
+            - '@auth'
+            - '@user'
+            - '@oxpus.dlext.dlext_files'
+            - '@oxpus.dlext.dlext_format'
+            - '@oxpus.dlext.dlext_main'
+            - '@oxpus.dlext.dlext_privacy'
+            - '@oxpus.dlext.dlext_physical'
+    oxpus.dlext.acp_perm_check_controller:
+        class: oxpus\dlext\controller\acp\acp_perm_check_controller
+        arguments:
+            - '%core.root_path%'
+            - '%core.php_ext%'
+            - '@service_container'
+            - '@ext.manager'
+            - '@path_helper'
+            - '@dbal.conn'
+            - '@auth'
+            - '@user'
+            - '@oxpus.dlext.dlext_auth'
+            - '@oxpus.dlext.dlext_format'
+            - '@oxpus.dlext.dlext_main'
+    oxpus.dlext.acp_permissions_controller:
+        class: oxpus\dlext\controller\acp\acp_permissions_controller
+        arguments:
+            - '%core.php_ext%'
+            - '@service_container'
+            - '@ext.manager'
+            - '@path_helper'
+            - '@dbal.conn'
+            - '@log'
+            - '@auth'
+            - '@user'
+            - '@oxpus.dlext.dlext_extra'
+            - '@oxpus.dlext.dlext_main'
+    oxpus.dlext.acp_stats_controller:
+        class: oxpus\dlext\controller\acp\acp_stats_controller
+        arguments:
+            - '%core.php_ext%'
+            - '@service_container'
+            - '@ext.manager'
+            - '@path_helper'
+            - '@dbal.conn'
+            - '@log'
+            - '@auth'
+            - '@user'
+            - '@oxpus.dlext.dlext_format'
+    oxpus.dlext.acp_toolbox_controller:
+        class: oxpus\dlext\controller\acp\acp_toolbox_controller
+        arguments:
+            - '%core.php_ext%'
+            - '@service_container'
+            - '@ext.manager'
+            - '@path_helper'
+            - '@dbal.conn'
+            - '@log'
+            - '@auth'
+            - '@user'
+            - '@oxpus.dlext.dlext_extra'
+            - '@oxpus.dlext.dlext_format'
+            - '@oxpus.dlext.dlext_physical'
+    oxpus.dlext.acp_traffic_controller:
+        class: oxpus\dlext\controller\acp\acp_traffic_controller
+        arguments:
+            - '%core.php_ext%'
+            - '@service_container'
+            - '@ext.manager'
+            - '@path_helper'
+            - '@dbal.conn'
+            - '@log'
+            - '@auth'
+            - '@user'
+            - '@oxpus.dlext.dlext_init'

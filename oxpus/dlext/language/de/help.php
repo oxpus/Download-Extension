@@ -3,7 +3,7 @@
 /**
 *
 * @package phpBB Extension - Oxpus Downloads
-* @copyright (c) 2014 OXPUS - www.oxpus.net
+* @copyright (c) 2002-2020 OXPUS - www.oxpus.net
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
 */
@@ -180,7 +180,6 @@ $lang = array_merge($lang, array(
 	'HELP_DL_TRAFFICS_USERS_GROUPS'		=> 'Die vorangegangene Einstellung wird auf die hier eingestellten Benutzergruppen und deren Mitglieder angewendet, sofern das Limit auf Benutzergruppen einstellt wurde.',
 	'HELP_DL_TRAFFICS_GUESTS'			=> 'Aktiviert oder deaktiviert den Gesamttraffic für Gäste.<br />Ist diese Option deaktiviert, können Gäste Dateien je nach Berechtigung unendlich oft herunterladen, bzw. auch hochladen.<br />Da diese Option einen dauerhaften Traffic für dein Forum und damit den Server bedeuten können, wodurch dieser bis hin zum kompletten Stillstand belastet werden kann, wird nicht empfohlen, diese Option zu deaktivieren.',
 
-	'HELP_DL_UCONF_LINK'			=> 'Schaltet im Fußbereich der Download Extension den Link zur Benutzer Konfiguration ab. Die Einstellungen bleiben von dieser Option unberührt.',
 	'HELP_DL_UPLOAD_FILE'			=> 'Die von Deinem Computer hochzuladene Datei.<br />Stelle sicher, daß die DateiGröße kleiner als die angezeigte Größe ist und die Dateierweiterung nicht in der Liste enthalten ist, die Du unterhalb dieses Feldes sehen kannst.',
 	'HELP_DL_UPLOAD_TRAFFIC_COUNT'	=> 'Wenn diese Option aktiviert ist, werden auch Uploads vom monatlichen Gesamttraffic abgezogen.<br />Bei Erreichen des Gesamttraffics sind dann Uploads ebenfalls nicht mehr möglich und neue Downloads können nur noch mittels FTP Client hochgeladen und im ACP eingebunden werden.',
 	'HELP_DL_USE_EXT_BLACKLIST'		=> 'Wenn Du die Blackliste aktivierst, werden die eingetragenen Dateiendungen beim Hochladen oder Bearbeiten eines Downloads blockiert.',
@@ -188,8 +187,6 @@ $lang = array_merge($lang, array(
 	'HELP_DL_USER_TRAFFIC_ONCE'		=> 'Wähle, ob Downloads den Benutzer nur einmal Traffic abziehen sollen und danach nicht mehr erneut.<br /><strong>Beachte:</strong><br />Diese Option ändert nicht den Status des Downloads selber!',
 
 	'HELP_DL_VISUAL_CONFIRMATION'	=> 'Aktiviere diese Option, um Benutzer einen angezeigten 5stelligen Bestätigungscode eingeben zulassen, damit der Download der Datei zugelassen wird.<br />Wenn der Benutzer keinen Code eingegeben hat oder der Code falsch ist, wird die Extension nur eine Meldung anzeigen und den Download nicht freigeben.<br />Ist diese Option abgeschaltet, muss der Benutzer keinen Code eingeben und kann direkt aus den Details die Dateien herunterladen.',
-
-	'HELP_DOWNLOAD_PATH'			=> 'Dieses ist der relative Pfad unterhalb Deines phpBB Root Ordners für die Verwaltung der Downloads.<br />Nach der Neuinstallation dieser Erweiterung ist der Pfad auf "forumroot/ext/oxpus/dlext/files/downloads/" eingestellt. Dieses kann mittels Einstellung im ACP geändert werden, wodurch sich die Ablage in den Ordner "forumroot/store/oxpus/dl/ext/downloads/" verschiebt.<br />Berücksichtige bitte, dass bei einem bereits umfangreicheren Download Bereich die automatische Änderung des Ablageortes dauern und ggf. auch zu Fehlern führen kann. In diesem Fall bitte die nachfolgende Option aktivieren, damit die Ablage umgestellt, die Dateien aber manuell (z. B. per FTP-Client) verschoben werden können.<br />Unterhalb des Basis-Ordners ist auch mindestens ein weiterer Ordner anzulegen, der die Dateien physisch beinhaltet.<br />Empfohlen wird zumindest ein Ordner je inhaltlich passender Kategoriegruppe.<br />Dieser Ordner ist dann mit der gleichen Mimik wie auch der Hauptordner als Pfad in den Kategorien einzutragen, allerdings ohne diesen Hauptordner (siehe dazu auch die Hilfe in der Kategorieverwaltung).<br />Du kannst die Unterordner mit einem FTP Client oder mit der Toolbox (siehe Auswahlliste oben rechts auf dieser Seite) anlegen.',
 
 	'HELP_NUMBER_RECENT_DL_ON_PORTAL'	=> 'Die Anzahl letzter Downloads, die der Benutzer auf dem Portal sieht.<br />Dabei wird die letzte Änderungszeit der Downloads verwendet, so daß auch ältere Downloads wieder ganz oben auf der Liste stehen können.',
 ));

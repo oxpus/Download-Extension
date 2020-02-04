@@ -73,7 +73,7 @@
 					<div class="dl-padding-left-1">
 						<a href="{{ downloads.U_CAT_LAST_LINK }}">{{ downloads.CAT_LAST_DL }}</a><br />
 	                    <a href="{{ downloads.U_CAT_LAST_USER }}">{{ downloads.CAT_LAST_USER }}</a>
-						{% if downloads.CAT_LAST_TIME %}&nbsp;{{ downloads.CAT_LAST_TIME }}{% endif %}
+						{% if downloads.CAT_LAST_TIME %}&nbsp;<time datetime="{{ downloads.CAT_LAST_TIME_RFC }}">{{ downloads.CAT_LAST_TIME }}</time>{% endif %}
 					</div>
 					{% endif %}
                 </dd>

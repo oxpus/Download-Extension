@@ -3,7 +3,7 @@
 /**
 *
 * @package phpBB Extension - Oxpus Downloads
-* @copyright (c) 2014 OXPUS - www.oxpus.net
+* @copyright (c) 2002-2020 OXPUS - www.oxpus.net
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
 */
@@ -177,7 +177,6 @@ $lang = array_merge($lang, array(
 	'HELP_DL_TRAFFICS_USERS_GROUPS'		=> 'The last option will be applied to the following user groups and their members, while the last option will limit the traffic for them.',
 	'HELP_DL_TRAFFICS_GUESTS'			=> 'Enable or disable the overall traffic for guests.<br />If this option was disabled, guests can based on their permission unlimited download and upload files.<br />Because this option can cause many traffic for your forum and stress the server while guests can unlimited download and upload files, the server can slow down until a totally deadlock. So it is not recommended to disable this option.',
 
-	'HELP_DL_UCONF_LINK'			=> 'Switch the link for the user configuration in the download footer on or off. >The user configuration are not affected while changing this option.',
 	'HELP_DL_UPLOAD_FILE'			=> 'The upload file from your computer.<br />Be sure, the file size will be smaller as shown and the file Extension will not included the list you can see under this field.',
 	'HELP_DL_UPLOAD_TRAFFIC_COUNT'	=> 'If the option is enabled, uploads will lower down the monthly overall traffic, too.<br />After the overall limit will be reached no upload will be possible and new downloads must be uploaded with a ftp client and added in the ACP.',
 	'HELP_DL_USE_EXT_BLACKLIST'		=> 'If you enable the blacklist all entered file types will be blocked for new uploaded or edited downloads.',
@@ -185,8 +184,6 @@ $lang = array_merge($lang, array(
 	'HELP_DL_USER_TRAFFIC_ONCE'		=> 'Choose, if downloads should only decrease the user traffic only for the first time downloading a file.<br /><strong>Regard:</strong><br />This option will NOT change the download status itself!',
 
 	'HELP_DL_VISUAL_CONFIRMATION'	=> 'Enable this option to let the user enter a displayed 5 digits confirmation code to access the download.<br />If the user will not enter the code or the code will be wrong the Extension will just display a message and stop the download.',
-
-	'HELP_DOWNLOAD_PATH'			=> 'The relative path under your phpBB root folder.<br />On first installation of this package the storage will be set to "forumroot/ext/oxpus/dlext/files/downloads/".This can be changed in the ACP within the extensions settings to "forumroot/store/oxpus/dlext/downloads/".<br />Regard if you will still manage a huge number of downloads the automatic storage movement will take a while or can produce errors. In this case activate the next option to switch over to the alternative storage place and move the files manually into the destination folder (e.g. within a FTP client).<br />Under this basic folder you must create one or more sub-folders which will contains all physical files.<br />It is recommended to create a sub-folder for each logical group of categories.<br />This sub-folder must be entered as path in the category with the same syntax as the main folder, but without using the main folder (for more read the help in the category management).<br />You can create more sub-folders by using a ftp client or by using the Toolbox (see the drop down on the top right of this page).',
 
 	'HELP_NUMBER_RECENT_DL_ON_PORTAL'	=> 'The number of latest downloads the user which see on the portal.<br />The block uses the last edit time for this list, so it can be possible to have an older download on top of this list.',
 ));
