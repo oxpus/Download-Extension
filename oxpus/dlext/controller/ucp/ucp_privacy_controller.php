@@ -81,8 +81,6 @@ class ucp_privacy_controller implements ucp_privacy_interface
 		$submit		= $this->request->variable('submit', '');
 		$dl_privacy	= $this->request->variable('privacy', '');
 
-		$this->template->assign_var('S_DL_UCP_PRIVACY', true);
-		
 		if ($submit && $dl_privacy)
 		{
 			switch ($dl_privacy)
@@ -142,12 +140,20 @@ class ucp_privacy_controller implements ucp_privacy_interface
 				header("Pragma: no-cache");
 				header("Expires: 0");
 
-				echo $fields . "\n";
+				$this->template->set_filenames(array(
+					'body'	=> 'dl_privacy.html',
+				));
+
+				$this->template->assign_var('FIELDS', $fields);
 
 				foreach($output_row as $key => $data)
 				{
-					echo implode(', ', $data) . "\n";
+					$this->template->assign_block_vars('fields_row', array(
+						'DATA'	=> implode(', ', $data),
+					));
 				}
+
+				$this->template->display('body');
 
 				garbage_collection();
 				exit_handler();
@@ -155,6 +161,7 @@ class ucp_privacy_controller implements ucp_privacy_interface
 		}
 
 		$this->template->assign_vars(array(
+			'S_DL_UCP_PRIVACY'		=> true,
 			'S_FORM_ACTION'			=> $this->u_action,
 			'U_DL_PRIVACY_BUGS'		=> $this->u_action . '&amp;submit=1&amp;privacy=tracker',
 			'U_DL_PRIVACY_COMMENTS'	=> $this->u_action . '&amp;submit=1&amp;privacy=comments',

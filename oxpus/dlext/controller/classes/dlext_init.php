@@ -99,9 +99,9 @@ class dlext_init implements dlext_init_interface
 	{
 		$browser_name = 'n/a';
 
-		if (file_exists($this->ext_path . 'phpbb/includes/user_agents.inc') && $client)
+		if (file_exists($this->ext_path . 'phpbb/includes/user_agents.' . $this->php_ext) && $client)
 		{
-			include($this->ext_path . 'phpbb/includes/user_agents.inc');
+			include($this->ext_path . 'phpbb/includes/user_agents.' . $this->php_ext);
 		}
 		else
 		{

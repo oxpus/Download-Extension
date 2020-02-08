@@ -96,7 +96,7 @@ class acp_browser_controller implements acp_browser_interface
 		include_once($this->ext_path . 'phpbb/includes/acm_init.' . $this->phpEx);
 
 		$file_exist = false;
-		$data_file = $this->ext_path . 'phpbb/includes/user_agents.inc';
+		$data_file = $this->ext_path . 'phpbb/includes/user_agents.' . $this->phpEx;
 
 		if (file_exists($data_file))
 		{
