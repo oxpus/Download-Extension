@@ -67,7 +67,7 @@
 	<tbody>
 	{% for perm_row in loops.perm_row %}
 	<tr class="row{% if perm_row.S_ROW_COUNT is even %}4{% else %}3{% endif %}">
-		<td>{{ perm_row.GROUP_NAME }}</td>
+		<td>{% if perm_row.GROUP_SEP %}<strong>{% endif %}{{ perm_row.GROUP_NAME }}{% if perm_row.GROUP_SEP %}</strong>{% endif %}</td>
 		<td>{{ perm_row.AUTH_VIEW }}</td>
 		<td>{{ perm_row.AUTH_DL }}</td>
 		<td>{{ perm_row.AUTH_UP }}</td>
@@ -90,7 +90,7 @@
 		<dd>
 			{% if not S_AUTH_ALL_USERS and not S_AUTH_GROUPS %}{{ S_GROUP_SELECT }}{% else %}
 			{% for preselected_groups in loops.preselected_groups %}
-			{{ preselected_groups.GROUP_NAME }}<br />
+			{% if preselected_groups.GROUP_SEP %}<strong>{% endif %}{{ preselected_groups.GROUP_NAME }}{% if preselected_groups.GROUP_SEP %}</strong>{% endif %}<br />
 			{% endfor %}
 			{% endif %}
 		</dd>

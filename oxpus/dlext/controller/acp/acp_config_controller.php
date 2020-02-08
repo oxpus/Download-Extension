@@ -306,8 +306,9 @@ class acp_config_controller implements acp_config_interface
 		
 			break;
 			case 'traffic':
-				$sql = 'SELECT group_id, group_name, group_type FROM ' . GROUPS_TABLE . "
-					WHERE group_name NOT IN ('GUESTS', 'BOTS')";
+				$sql = 'SELECT group_id, group_name, group_type FROM ' . GROUPS_TABLE . '
+						WHERE ' . $this->db->sql_in_set('group_name', array('GUESTS', 'BOTS'), true) . '
+						ORDER BY group_type DESC, group_name';
 				$result = $this->db->sql_query($sql);
 				$total_groups = $this->db->sql_affectedrows($result);
 		
@@ -319,24 +320,25 @@ class acp_config_controller implements acp_config_interface
 				while ($row = $this->db->sql_fetchrow($result))
 				{
 					$group_name = ($row['group_type'] == GROUP_SPECIAL) ? $this->language->lang('G_' . $row['group_name']) : $row['group_name'];
+					$group_sep = ($row['group_type'] == GROUP_SPECIAL) ? ' class="sep"' : '';
 					$group_id = $row['group_id'];
 		
 					if (in_array($group_id, $traffics_overall_group_ids) && $this->config['dl_traffics_overall'] > 1)
 					{
-						$s_groups_overall_select .= '<option value="' . $group_id . '" selected="selected">' . $group_name . '</option>';
+						$s_groups_overall_select .= '<option value="' . $group_id . '" selected="selected"' . $group_sep . '>' . $group_name . '</option>';
 					}
 					else
 					{
-						$s_groups_overall_select .= '<option value="' . $group_id . '">' . $group_name . '</option>';
+						$s_groups_overall_select .= '<option value="' . $group_id . '"' . $group_sep . '>' . $group_name . '</option>';
 					}
 		
 					if (in_array($group_id, $traffics_users_group_ids) && $this->config['dl_traffics_users'] > 1)
 					{
-						$s_groups_users_select .= '<option value="' . $group_id . '" selected="selected">' . $group_name . '</option>';
+						$s_groups_users_select .= '<option value="' . $group_id . '" selected="selected"' . $group_sep . '>' . $group_name . '</option>';
 					}
 					else
 					{
-						$s_groups_users_select .= '<option value="' . $group_id . '">' . $group_name . '</option>';
+						$s_groups_users_select .= '<option value="' . $group_id . '"' . $group_sep . '>' . $group_name . '</option>';
 					}
 				}
 		

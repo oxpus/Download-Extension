@@ -249,7 +249,8 @@ class acp_traffic_controller implements acp_traffic_interface
 					if ($traffic_bytes)
 					{
 						$sql = 'SELECT group_type, group_name FROM ' . GROUPS_TABLE . '
-							WHERE group_id = ' . (int) $group_id;
+								WHERE group_id = ' . (int) $group_id . '
+								ORDER BY group_type DESC, group_name';
 						$result = $this->db->sql_query($sql);
 						$row = $this->db->sql_fetchrow($result);
 						$this->db->sql_freeresult($result);
@@ -302,7 +303,7 @@ class acp_traffic_controller implements acp_traffic_interface
 				case 'auto':
 		
 					$sql = 'SELECT group_type, group_name, group_id FROM ' . GROUPS_TABLE . '
-						ORDER BY group_name';
+							ORDER BY group_type DESC, group_name';
 					$result = $this->db->sql_query($sql);
 		
 					while($row = $this->db->sql_fetchrow($result))
@@ -332,7 +333,7 @@ class acp_traffic_controller implements acp_traffic_interface
 						}
 		
 						$sql = 'UPDATE ' . GROUPS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', array(
-							'group_dl_auto_traffic' => $traffic)) . ' WHERE group_id = ' . (int) $group_id;
+								'group_dl_auto_traffic' => $traffic)) . ' WHERE group_id = ' . (int) $group_id;
 						$this->db->sql_query($sql);
 		
 						$this->phpbb_log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_AUTO_TR_GRP', false, array($group_name, $group_traffic_ary[$group_id], $data_group_range[$group_id]));
@@ -384,7 +385,7 @@ class acp_traffic_controller implements acp_traffic_interface
 		$s_select_datasize .= '</select>';
 		
 		$sql = 'SELECT group_id, group_name, group_dl_auto_traffic, group_type FROM ' . GROUPS_TABLE . '
-			ORDER BY group_name';
+				ORDER BY group_type DESC, group_name';
 		$result = $this->db->sql_query($sql);
 		$total_groups = $this->db->sql_affectedrows($result);
 		
@@ -424,16 +425,18 @@ class acp_traffic_controller implements acp_traffic_interface
 				$s_group_data_range = '<select name="data_group_range[' . $row['group_id'] . ']">' . $s_group_data_range;
 		
 				$group_name = ($row['group_type'] == GROUP_SPECIAL) ? $this->language->lang('G_' . $row['group_name']) : $row['group_name'];
+				$group_sep = ($row['group_type'] == GROUP_SPECIAL) ? ' class="sep"' : '';
 		
 				$this->template->assign_block_vars('group_row',array(
 					'GROUP_ID'				=> $row['group_id'],
 					'GROUP_NAME'			=> $group_name,
+					'GROUP_SPECIAL'			=> ($row['group_type'] == GROUP_SPECIAL) ? true : false,
 					'GROUP_DL_AUTO_TRAFFIC'	=> $group_traffic,
 		
 					'S_GROUP_DATA_RANGE'	=> $s_group_data_range)
 				);
 		
-				$s_select_list .= '<option value="' . $row['group_id'] . '">' . $group_name . '</option>';
+				$s_select_list .= '<option value="' . $row['group_id'] . '"' . $group_sep . '>' . $group_name . '</option>';
 			}
 		
 			$s_select_list .= '</select>';

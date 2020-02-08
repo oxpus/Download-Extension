@@ -206,7 +206,7 @@ class acp_permissions_controller implements acp_permissions_interface
 				$sql = 'SELECT a.*, g.group_name, g.group_type FROM ' . DL_AUTH_TABLE . ' a, ' . GROUPS_TABLE . ' g
 					WHERE a.cat_id = ' . (int) $cat_id . '
 						AND a.group_id = g.group_id
-					ORDER BY g.group_name';
+					ORDER BY g.group_type DESC, g.group_name';
 				$result = $this->db->sql_query($sql);
 		
 				$this->template->assign_var('S_SHOW_PERMS', true);
@@ -219,9 +219,11 @@ class acp_permissions_controller implements acp_permissions_interface
 					$auth_mod	= ($row['auth_mod']) ? '<strong>' . $this->language->lang('YES') . '</strong>' : $this->language->lang('NO');
 		
 					$group_name = ($row['group_type'] == GROUP_SPECIAL) ? $this->language->lang('G_' . $row['group_name']) : $row['group_name'];
+					$group_sep = ($row['group_type'] == GROUP_SPECIAL) ? true : false;
 		
 					$this->template->assign_block_vars('perm_row', array(
 						'GROUP_NAME'	=> $group_name,
+						'GROUP_SEP'		=> $group_sep,
 						'AUTH_VIEW'		=> $auth_view,
 						'AUTH_DL'		=> $auth_dl,
 						'AUTH_UP'		=> $auth_up,
@@ -472,11 +474,11 @@ class acp_permissions_controller implements acp_permissions_interface
 						$this->db->sql_query($sql);
 		
 						$sql = 'SELECT group_type, group_name FROM ' . GROUPS_TABLE . '
-							WHERE group_id = ' . (int) $s_presel_groups[$j];
+								WHERE group_id = ' . (int) $s_presel_groups[$j];
 						$result = $this->db->sql_query($sql);
 						$row = $this->db->sql_fetchrow($result);
 						$this->db->sql_freeresult($result);
-						$group_name = ($row['group_type'] == GROUP_SPECIAL) ? $this->language->lang('G_' . $row['group_name']) : $row['group_name'];
+						$group_name = ($row['group_type'] == GROUP_SPECIAL) ? '<strong>' . $this->language->lang('G_' . $row['group_name']) . '</strong>' : $row['group_name'];
 		
 						$this->phpbb_log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_CAT_PERM_GRP', false, array($cat_name, $group_name, $log_auth_view, $log_auth_dl, $log_auth_up, $log_auth_mod));
 					}
@@ -513,7 +515,7 @@ class acp_permissions_controller implements acp_permissions_interface
 			if (!$view_perm)
 			{
 				$sql = 'SELECT group_id, group_name, group_type FROM ' . GROUPS_TABLE . '
-					ORDER BY group_name';
+						ORDER BY group_type DESC, group_name';
 				$result = $this->db->sql_query($sql);
 		
 				$total_groups = $this->db->sql_affectedrows($result);
@@ -536,21 +538,24 @@ class acp_permissions_controller implements acp_permissions_interface
 					$s_group_select .= '<optgroup label="' . $this->language->lang('USERGROUPS') . '">';
 		
 					$group_data = array();
+					$group_sepr = array();
 		
 					while($row = $this->db->sql_fetchrow($result))
 					{
 						$group_id = $row['group_id'];
 						$group_name = ($row['group_type'] == GROUP_SPECIAL) ? $this->language->lang('G_' . $row['group_name']) : $row['group_name'];
+						$group_sep = ($row['group_type'] == GROUP_SPECIAL) ? ' class="sep"' : '';
 		
 						$group_data[$group_id] = $group_name;
+						$group_sepr[$group_id] = $group_sep;
 		
 						if (in_array($group_id, $s_presel_groups) && (isset($s_presel_groups[0]) && $s_presel_groups[0] != -1))
 						{
-							$s_group_select .= '<option value="' . $group_id . '" selected="selected">' . $group_name . '</option>';
+							$s_group_select .= '<option value="' . $group_id . '" selected="selected"' . $group_sep . '>' . $group_name . '</option>';
 						}
 						else
 						{
-							$s_group_select .= '<option value="' . $group_id . '">' . $group_name . '</option>';
+							$s_group_select .= '<option value="' . $group_id . '"' . $group_sep . '>' . $group_name . '</option>';
 						}
 					}
 		
@@ -568,15 +573,18 @@ class acp_permissions_controller implements acp_permissions_interface
 						if ($s_presel_groups[$i] <> -1)
 						{
 							$group_name = $group_data[$s_presel_groups[$i]];
+							$group_sep = $group_sepr[$s_presel_groups[$i]];
 						}
 						else
 						{
 							$group_name = $this->language->lang('DL_ALL');
+							$group_sep = '';
 						}
 		
 						$this->template->assign_block_vars('preselected_groups', array(
-							'GROUP_NAME' => $group_name)
-						);
+							'GROUP_NAME'	=> $group_name,
+							'GROUP_SEP'		=> $group_sep,
+						));
 		
 						$s_hidden_fields = array_merge($s_hidden_fields, array('group_select[' . $i . ']' => $s_presel_groups[$i]));
 					}

@@ -100,7 +100,7 @@ function init_traffic()
 
 				{% for group_row in loops.group_row %}
 				<dl>
-					<dt><label>{{ group_row.GROUP_NAME }}</label></dt>
+					<dt>{% if group_row.GROUP_SPECIAL %}<strong>{{ group_row.GROUP_NAME }}</strong>{% else %}{{ group_row.GROUP_NAME }}{% endif %}</dt>
 					<dd><input name="group_dl_auto_traffic[{{ group_row.GROUP_ID }}]" type="text" size="10" maxlength="50" value="{{ group_row.GROUP_DL_AUTO_TRAFFIC }}" />&nbsp;{{ group_row.S_GROUP_DATA_RANGE }}</dd>
 				</dl>
 				{% endfor %}
