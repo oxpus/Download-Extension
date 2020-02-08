@@ -822,7 +822,7 @@ class custom_profile
 
 		$sql = 'SELECT f.field_type, f.field_ident, f.field_default_value, l.lang_default_value
 			FROM ' . $table_prefix . self::DL_LANG_TABLE . ' l, ' . $table_prefix . self::DL_FIELDS_TABLE . ' f
-			WHERE l.lang_id = ' . $this->get_iso_lang_id() . '
+			WHERE l.lang_id = ' . (string) $this->get_iso_lang_id() . '
 				' . ((sizeof($sql_not_in)) ? ' AND ' . $db->sql_in_set('f.field_ident', $sql_not_in, true) : '') . '
 				AND l.field_id = f.field_id';
 		$result = $db->sql_query($sql);

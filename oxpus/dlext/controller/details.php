@@ -607,7 +607,7 @@ class details
 							$sql = 'SELECT user_email, username, user_lang FROM ' . USERS_TABLE . '
 								WHERE user_id <> ' . (int) $this->user->data['user_id'] . '
 									AND user_allow_fav_download_email = 1
-									AND user_allow_fav_comment_email = 1' . $sql_fav_user;
+									AND user_allow_fav_comment_email = 1' . (string) $sql_fav_user;
 
 							$mail_data = array(
 								'query'				=> $sql,

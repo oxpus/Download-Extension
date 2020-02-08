@@ -404,7 +404,7 @@ class listener implements EventSubscriberInterface
 
 					$sql = 'SELECT topic_poster
 						FROM ' . TOPICS_TABLE . '
-						WHERE topic_id = ' . $event['topic_id'];
+						WHERE topic_id = ' . (int) $event['topic_id'];
 					$result = $this->db->sql_query($sql);
 					$poster_id = $this->db->sql_fetchfield('topic_poster');
 					$this->db->sql_freeresult($result);
@@ -415,7 +415,7 @@ class listener implements EventSubscriberInterface
 
 					$sql = 'SELECT poster_id
 						FROM ' . POSTS_TABLE . '
-						WHERE post_id = ' . $event['post_id'];
+						WHERE post_id = ' . (int) $event['post_id'];
 					$result = $this->db->sql_query($sql);
 					$poster_id = $this->db->sql_fetchfield('poster_id');
 					$this->db->sql_freeresult($result);

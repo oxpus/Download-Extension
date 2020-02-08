@@ -1035,7 +1035,7 @@ class tracker
 
 						if ($sql_where)
 						{
-							$sql_array['WHERE'] = str_replace('# AND', '', '#' . $sql_where);
+							$sql_array['WHERE'] = str_replace('# AND', '', '#' . (string) $sql_where);
 						}
 
 						if (isset($sql_array['WHERE']))
