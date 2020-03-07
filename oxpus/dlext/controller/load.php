@@ -219,8 +219,6 @@ class load
 			$check_status['auth_dl'] = true;
 		}
 
-		$browser = $this->dlext_init->dl_client($this->user->data['session_browser']);
-
 		// Prepare the captcha permissions for the current user
 		$captcha_active = false;
 		$user_is_guest = false;
@@ -514,7 +512,6 @@ class load
 						'traffic'		=> $dl_file['file_size'],
 						'direction'		=> 0,
 						'user_ip'		=> $this->user->data['session_ip'],
-						'browser'		=> $browser,
 						'time_stamp'	=> time()));
 					$this->db->sql_query($sql);
 				}

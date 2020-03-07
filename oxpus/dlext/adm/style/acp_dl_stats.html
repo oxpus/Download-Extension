@@ -26,7 +26,7 @@
 		<th>{{ lang('DOWNLOADS') }}<br />{{ lang('DL_CAT_NAME') }}</th>
 		<th>{{ lang('TRAFFIC') }}</th>
 		<th>{{ lang('TIME') }}<br />{{ lang('DL_DIRECTION') }}</th>
-		<th>{{ lang('DL_BROWSER') }}<br />{{ lang('DL_IP') }}</th>
+		<th>{{ lang('DL_IP') }}</th>
 		<th>&nbsp;</th>
 	</tr>
 	</thead>
@@ -37,7 +37,7 @@
 		<td><b><a href="{{ dl_stat_row.U_DL_LINK }}">{{ dl_stat_row.DESCRIPTION }}</a></b><br /><a href="{{ dl_stat_row.U_CAT_LINK }}">{{ dl_stat_row.CAT_NAME }}</a></td>
 		<td><span>{{ dl_stat_row.TRAFFIC }}</span></td>
 		<td><time datetime="{{ dl_stat_row.TIME_STAMP_RFC }}">{{ dl_stat_row.TIME_STAMP }}</time><br /><span>{{ dl_stat_row.DIRECTION }}</span></td>
-		<td><span>{{ dl_stat_row.BROWSER }}<br />{{ dl_stat_row.USER_IP }}</span></td>
+		<td><span>{{ dl_stat_row.USER_IP }}</span></td>
 		<td><input type="checkbox" class="permissions-checkbox" name="del_id[{{ dl_stat_row.S_ROW_COUNT }}]" value="{{ dl_stat_row.ID }}" /></td>
 	</tr>
 	{% endfor %}

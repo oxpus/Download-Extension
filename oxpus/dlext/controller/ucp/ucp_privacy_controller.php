@@ -98,7 +98,7 @@ class ucp_privacy_controller implements ucp_privacy_interface
 					$table = DL_COMMENTS_TABLE;
 				break;
 				case 'stats':
-					$fields = 'dl_id, username, traffic, direction, user_ip, browser, time_stamp';
+					$fields = 'dl_id, username, traffic, direction, user_ip, time_stamp';
 					$time_fields = array('time_stamp');
 					$user_field = 'user_id';
 					$table = DL_STATS_TABLE;

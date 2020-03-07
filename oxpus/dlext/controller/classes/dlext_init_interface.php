@@ -47,13 +47,4 @@ interface dlext_init_interface
 	 * @access public
 	*/
 	public function dl_file_icon();
-
-	/**
-	 * Fetch the user browser client to check against the banlist
-	 * 
-	 * @param string $client users agent string
-	 * @return string clear browsername
-	 * @access public
-	*/
-	public function dl_client($client);
 }

@@ -480,7 +480,6 @@ class listener implements EventSubscriberInterface
 		$permission['a_dl_blacklist']	= array('lang' => 'ACL_A_DL_BLACKLIST',		'cat' => 'downloads');
 		$permission['a_dl_toolbox']		= array('lang' => 'ACL_A_DL_TOOLBOX',		'cat' => 'downloads');
 		$permission['a_dl_fields']		= array('lang' => 'ACL_A_DL_FIELDS',		'cat' => 'downloads');
-		$permission['a_dl_browser']		= array('lang' => 'ACL_A_DL_BROWSER',		'cat' => 'downloads');
 		$permission['a_dl_perm_check']	= array('lang' => 'ACL_A_DL_PERM_CHECK',	'cat' => 'downloads');
 		$event['permissions'] = $permission;
 	}

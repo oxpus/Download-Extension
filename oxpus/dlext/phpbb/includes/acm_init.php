@@ -62,9 +62,6 @@ $save_cat			= $this->request->variable('save_cat', '');
 $set_user			= $this->request->variable('set_user', '', true);
 $sort_order			= $this->request->variable('sort_order', '');
 $sorting			= $this->request->variable('sorting', '');
-$sub_a_br			= $this->request->variable('agent_browser', '', true);
-$sub_a_id			= $this->request->variable('agent_id', '');
-$sub_a_txt			= $this->request->variable('agent_name', '', true);
 $submit				= $this->request->variable('submit', '');
 $test				= $this->request->variable('test', '', true);
 $tmp_m1				= $this->request->variable('edit_banlist', '');
@@ -73,7 +70,6 @@ $todo				= $this->request->variable('todo', '', true);
 $topic_drop_mode	= $this->request->variable('topic_drop_mode', 'drop');
 $topic_text			= $this->request->variable('dl_topic_text', '', true);
 $topic_user			= $this->request->variable('dl_topic_user', '', true);
-$user_agent			= $this->request->variable('user_agent', '', true);
 $user_ip			= $this->request->variable('user_ip', '');
 $username			= $this->request->variable('username', '', true);
 $view				= $this->request->variable('view', 'general');
@@ -85,7 +81,6 @@ $z					= $this->request->variable('z', '');
 /*
 * fetch numbers
 */
-$agent_id			= $this->request->variable('agent_id', 0);
 $all_traffic		= $this->request->variable('all_traffic', 0);
 $allow_mod_desc		= $this->request->variable('allow_mod_desc', 0);
 $allow_thumbs		= $this->request->variable('allow_thumbs', 0);
@@ -121,7 +116,6 @@ $group_traffic		= $this->request->variable('group_traffic', 0);
 $guests				= $this->request->variable('guests', 0);
 $hacklist			= $this->request->variable('hacklist', 0);
 $mod_list			= $this->request->variable('mod_list', 0);
-$new_browser		= $this->request->variable('new_browser', 0);
 $new_cat_id			= $this->request->variable('new_cat_id', 0);
 $must_approve		= $this->request->variable('must_approve', 1);
 $perms_copy_from	= $this->request->variable('perms_copy_from', 0);

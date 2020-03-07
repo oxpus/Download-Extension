@@ -40,6 +40,5 @@ $lang = array_merge($lang, array(
 	'ACL_A_DL_BLACKLIST'	=> 'Kann die Blackliste der Dateiendungen verwalten',
 	'ACL_A_DL_TOOLBOX'		=> 'Kann die Toolbox verwenden',
 	'ACL_A_DL_FIELDS'		=> 'Kann benutzerdefinierte Felder verwalten',
-	'ACL_A_DL_BROWSER'		=> 'Kann User Agents verwalten',
 	'ACL_A_DL_PERM_CHECK'	=> 'Kann Benutzerberechtigungen überprüfen',
 ));

@@ -159,10 +159,6 @@ class acp_stats_controller implements acp_stats_interface
 				$sql_order_by = 'user_ip ' . $sql_order_dir . ', time_stamp DESC';
 				break;
 		
-			case 'agent':
-				$sql_order_by = 'browser ' . $sql_order_dir . ', time_stamp DESC';
-				break;
-		
 			case 'time':
 				$sql_order_by = 'time_stamp ' . $sql_order_dir;
 				break;
@@ -177,7 +173,6 @@ class acp_stats_controller implements acp_stats_interface
 		$s_sort_order .= '<option value="cat">' . $this->language->lang('DL_CAT_NAME') . '</option>';
 		$s_sort_order .= '<option value="size">' . $this->language->lang('TRAFFIC') . '</option>';
 		$s_sort_order .= '<option value="ip">' . $this->language->lang('DL_IP') . '</option>';
-		$s_sort_order .= '<option value="agent">' . $this->language->lang('DL_BROWSER') . '</option>';
 		$s_sort_order .= '<option value="time">' . $this->language->lang('TIME') . '</option>';
 		$s_sort_order .= '</select>';
 		$s_sort_order = str_replace('value="' . $sorting . '">', 'value="' . $sorting . '" selected="selected">', $s_sort_order);
@@ -198,11 +193,6 @@ class acp_stats_controller implements acp_stats_interface
 			case 'id':
 				$search_filter_by = 'description';
 				$filter_by = 'id';
-				break;
-		
-			case 'agent':
-				$search_filter_by = 'browser';
-				$filter_by = 'agent';
 				break;
 		
 			case 'username':
@@ -338,7 +328,6 @@ class acp_stats_controller implements acp_stats_interface
 					'TRAFFIC'			=> ($row['traffic'] == -1) ? $this->language->lang('DL_EXTERN') : $this->dlext_format->dl_size($row['traffic']),
 					'DIRECTION'			=> $direction,
 					'USER_IP'			=> $row['user_ip'],
-					'BROWSER'			=> $row['browser'],
 					'TIME_STAMP'		=> $this->user->format_date($row['time_stamp']),
 					'TIME_STAMP_RFC'	=> gmdate(DATE_RFC3339, $row['time_stamp']),
 					'ID'				=> $row['dl_id'],

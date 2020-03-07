@@ -191,6 +191,21 @@ class dlext_physical implements dlext_physical_interface
 		fclose($f);
 	}
 
+	public function _create_htaccess($path)
+	{
+		if (!@file_exists($path))
+		{
+			return;
+		}
+
+		$f = fopen($path . '.htaccess', 'w');
+		fwrite($f, "<Files *>\n");
+		fwrite($f, "	Order Allow,Deny\n");
+		fwrite($f, "	Allow from All\n");
+		fwrite($f, "</Files>\n");
+		fclose($f);
+	}
+
 	public function check_folders()
 	{
 		if (!defined('DL_EXT_FILEBASE_PATH'))
@@ -239,6 +254,16 @@ class dlext_physical implements dlext_physical_interface
 		if(!@file_exists(DL_EXT_FILEBASE_PATH . 'version/images/'))
 		{
 			$this->_create_folder(DL_EXT_FILEBASE_PATH . 'version/images/');
+		}
+
+		if (!@file_exists(DL_EXT_FILEBASE_PATH . 'thumbs/.htaccess'))
+		{
+			$this->_create_htaccess(DL_EXT_FILEBASE_PATH . 'thumbs/');
+		}
+
+		if (!@file_exists(DL_EXT_FILEBASE_PATH . 'version/images/.htaccess'))
+		{
+			$this->_create_htaccess(DL_EXT_FILEBASE_PATH . 'version/images/');
 		}
 	}
 

@@ -115,22 +115,20 @@ class acp_banlist_controller implements acp_banlist_interface
 				$sql = 'UPDATE ' . DL_BANLIST_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', array(
 					'user_id'		=> $user_id,
 					'user_ip'		=> $user_ip,
-					'user_agent'	=> $user_agent,
 					'username'		=> $username,
 					'guests'		=> $guests)) . ' WHERE ban_id = ' . (int) $ban_id;
 		
-				$this->phpbb_log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_BAN_EDIT', false, array($this->user->data['user_id'] . ' ~ ' . $username, $user_ip, $user_agent, $guests));
+				$this->phpbb_log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_BAN_EDIT', false, array($this->user->data['user_id'] . ' ~ ' . $username, $user_ip, $guests));
 			}
 			else
 			{
 				$sql = 'INSERT INTO ' . DL_BANLIST_TABLE . ' ' . $this->db->sql_build_array('INSERT', array(
 					'user_id'		=> $user_id,
 					'user_ip'		=> $user_ip,
-					'user_agent'	=> $user_agent,
 					'username'		=> $username,
 					'guests'		=> $guests));
 		
-				$this->phpbb_log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_BAN_ADD', false, array($user_id . ' ~ ' . $username, $user_ip, $user_agent, $guests));
+				$this->phpbb_log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_BAN_ADD', false, array($user_id . ' ~ ' . $username, $user_ip, $guests));
 			}
 		
 			$this->db->sql_query($sql);
@@ -187,7 +185,6 @@ class acp_banlist_controller implements acp_banlist_interface
 				$user2 = $row['user2'];
 				$user_id = $row['user_id'];
 				$user_ip = $row['user_ip'];
-				$user_agent = $row['user_agent'];
 				$username = $row['username'];
 				$guests = ($row['guests']) ? $this->language->lang('YES') : $this->language->lang('NO');
 		
@@ -195,7 +192,6 @@ class acp_banlist_controller implements acp_banlist_interface
 					'BAN_ID'		=> $ban_id,
 					'USER_ID'		=> $user_id . (($user2) ? ' &raquo; ' . $user2 : ''),
 					'USER_IP'		=> ($user_ip != '') ? $user_ip : '',
-					'USER_AGENT'	=> $user_agent,
 					'USERNAME'		=> $username,
 					'GUESTS'		=> $guests)
 				);
@@ -220,7 +216,6 @@ class acp_banlist_controller implements acp_banlist_interface
 					$ban_id		= $row['ban_id'];
 					$user_id	= $row['user_id'];
 					$user_ip	= ($row['user_ip'] != '') ? $row['user_ip'] : '';
-					$user_agent	= $row['user_agent'];
 					$username	= $row['username'];
 					$guests		= $row['guests'];
 		
@@ -233,7 +228,6 @@ class acp_banlist_controller implements acp_banlist_interface
 				$ban_id		= '';
 				$user_id	= '';
 				$user_ip	= '';
-				$user_agent	= '';
 				$username	= '';
 				$guests		= '';
 			}
@@ -245,7 +239,6 @@ class acp_banlist_controller implements acp_banlist_interface
 		
 				'DL_USER_ID'			=> $user_id,
 				'DL_USER_IP'			=> $user_ip,
-				'DL_USER_AGENT'			=> $user_agent,
 				'DL_USERNAME'			=> $username,
 				'CHECKED_YES'			=> ($guests) ? 'checked="checked"' : '',
 				'CHECKED_NO'			=> (!$guests) ? 'checked="checked"' : '',

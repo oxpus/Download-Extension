@@ -40,6 +40,5 @@ $lang = array_merge($lang, array(
 	'ACL_A_DL_BLACKLIST'	=> 'Puede gestionar la lista negra de extensiones de archivo',
 	'ACL_A_DL_TOOLBOX'		=> 'Puede utilizar la caja de herramientas',
 	'ACL_A_DL_FIELDS'		=> 'Puede gestionar los campos definidos por el usuario',
-	'ACL_A_DL_BROWSER'		=> 'Puede gestionar agentes de usuario',
 	'ACL_A_DL_PERM_CHECK'	=> 'Puede probar los permisos del usuario',
 ));

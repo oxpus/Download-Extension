@@ -220,7 +220,6 @@ class dlext_auth implements dlext_auth_interface
 		$sql = 'SELECT ban_id FROM ' . DL_BANLIST_TABLE . '
 			WHERE user_id = ' . (int) $this->user->data['user_id'] . "
 				OR user_ip = '" . $this->db->sql_escape($this->user->data['user_ip']) . "'
-				OR user_agent " . $this->db->sql_like_expression($this->dlext_init->dl_client($this->user->data['session_browser'])) . "
 				OR username = '" . $this->db->sql_escape($this->user->data['username']) . "'
 				$sql_guests";
 		$result = $this->db->sql_query($sql);

@@ -555,8 +555,6 @@ class upload
 						$stat_prune = $this->dlext_main->dl_prune_stats($cat_id, $index[$cat_id]['stats_prune']);
 					}
 
-					$browser = $this->dlext_init->dl_client($this->user->data['session_browser']);
-
 					$sql = 'INSERT INTO ' . DL_STATS_TABLE . ' ' . $this->db->sql_build_array('INSERT', array(
 						'cat_id'		=> $cat_id,
 						'id'			=> $next_id,
@@ -565,7 +563,6 @@ class upload
 						'traffic'		=> $file_size,
 						'direction'		=> 1,
 						'user_ip'		=> $this->user->data['session_ip'],
-						'browser'		=> $browser,
 						'time_stamp'	=> time()));
 					$this->db->sql_query($sql);
 				}

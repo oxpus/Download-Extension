@@ -10,17 +10,6 @@ services:
             - '@log'
             - '@auth'
             - '@user'
-    oxpus.dlext.acp_browser_controller:
-        class: oxpus\dlext\controller\acp\acp_browser_controller
-        arguments:
-            - '%core.php_ext%'
-            - '@service_container'
-            - '@ext.manager'
-            - '@path_helper'
-            - '@dbal.conn'
-            - '@log'
-            - '@auth'
-            - '@user'
     oxpus.dlext.acp_categories_controller:
         class: oxpus\dlext\controller\acp\acp_categories_controller
         arguments:
