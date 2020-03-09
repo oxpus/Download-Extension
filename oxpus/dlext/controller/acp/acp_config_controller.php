@@ -574,6 +574,7 @@ class acp_config_controller implements acp_config_interface
 		
 			// Purge the extension cache
 			@unlink(DL_EXT_CACHE_PATH . 'data_dl_auth.' . $this->phpEx);
+			@unlink(DL_EXT_CACHE_PATH . 'data_dl_auth_groups.' . $this->phpEx);
 			@unlink(DL_EXT_CACHE_PATH . 'data_dl_black.' . $this->phpEx);
 			@unlink(DL_EXT_CACHE_PATH . 'data_dl_cat_counts.' . $this->phpEx);
 			@unlink(DL_EXT_CACHE_PATH . 'data_dl_cats.' . $this->phpEx);

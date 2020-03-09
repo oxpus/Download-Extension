@@ -44,8 +44,23 @@ class dlext_cache implements dlext_cache_interface
 	{
 		if (($dl_index = $this->get('_dl_cats')) === false)
 		{
-			$sql = "SELECT * FROM " . DL_CAT_TABLE . '
-					ORDER BY parent, sort';
+			$sql_array = array(
+				'SELECT'	=> 'c.*, t.cat_traffic_use',
+			
+				'FROM'		=> array(DL_CAT_TABLE => 'c'),
+			);
+
+			$sql_array['LEFT_JOIN'] = array();
+
+			$sql_array['LEFT_JOIN'][] = array(
+				'FROM'	=> array(DL_CAT_TRAF_TABLE => 't'),
+				'ON'	=> 't.cat_id = c.id'
+			);
+		
+			$sql_array['ORDER_BY'] = 'parent, sort';
+
+			$sql = $this->db->sql_build_query('SELECT', $sql_array);
+
 			$result = $this->db->sql_query($sql);
 
 			while ($row = $this->db->sql_fetchrow($result))
@@ -57,23 +72,12 @@ class dlext_cache implements dlext_cache_interface
 				$dl_index[$row['id']]['auth_up_real'] = $dl_index[$row['id']]['auth_up'];
 				$dl_index[$row['id']]['auth_mod_real'] = $dl_index[$row['id']]['auth_mod'];
 				$dl_index[$row['id']]['cat_name_nav'] = $dl_index[$row['id']]['cat_name'];
-				$dl_index[$row['id']]['cat_traffic_use'] = 0;
 			}
 
 			$this->db->sql_freeresult($result);
 
 			$this->put('_dl_cats', $dl_index);
 		}
-
-		$sql = "SELECT cat_id, cat_traffic_use FROM " . DL_CAT_TRAF_TABLE;
-		$result = $this->db->sql_query($sql);
-
-		while ($row = $this->db->sql_fetchrow($result))
-		{
-			$dl_index[$row['cat_id']]['cat_traffic_use'] = $row['cat_traffic_use'];
-		}
-
-		$this->db->sql_freeresult($result);
 
 		return $dl_index;
 	}
@@ -130,25 +134,20 @@ class dlext_cache implements dlext_cache_interface
 	*/
 	public function obtain_dl_files($dl_new_time, $dl_edit_time)
 	{
-		$sl_file = array();
-		$dl_file['new'] = array();
-		$dl_file['new_sum'] = array();
-		$dl_file['edit'] = array();
-		$dl_file['edit_sum'] = array();
-		$dl_file['id'] = array();
-
 		if (!$dl_new_time && !$dl_edit_time)
 		{
 			return $dl_file;
 		}
 
-		$dl_new_time		= intval($dl_new_time);
-		$dl_edit_time		= intval($dl_edit_time);
+		$dl_new_time		= (int) $dl_new_time;
+		$dl_edit_time		= (int) $dl_edit_time;
 
-		$cache_release_time = max($dl_new_time, $dl_edit_time) * 86400;
+		$cache_release_time = 86400;
 
 		if (($dl_file = $this->get('_dl_file_preset')) === false)
 		{
+			$dl_file = array();
+
 			$cur_time = time();
 			$sql_time_preset = '';
 
@@ -173,42 +172,37 @@ class dlext_cache implements dlext_cache_interface
 						$sql_time_preset";
 			$result = $this->db->sql_query($sql);
 
-			$total_presets = $this->db->sql_affectedrows($result);
-
-			if ($total_presets)
+			while ($row = $this->db->sql_fetchrow($result))
 			{
-				while ($row = $this->db->sql_fetchrow($result))
+				$dl_id = $row['id'];
+				$cat_id = $row['cat'];
+				$change_time = $row['change_time'];
+				$add_time = $row['add_time'];
+
+				if (!isset($dl_file['new'][$cat_id]))
 				{
-					$dl_id = $row['id'];
-					$cat_id = $row['cat'];
-					$change_time = $row['change_time'];
-					$add_time = $row['add_time'];
-
-					if (!isset($dl_file['new'][$cat_id]))
-					{
-						$dl_file['new'][$cat_id][$dl_id] = 0;
-					}
-					if (!isset($dl_file['new_sum'][$cat_id]))
-					{
-						$dl_file['new_sum'][$cat_id] = 0;
-					}
-					if (!isset($dl_file['edit'][$cat_id]))
-					{
-						$dl_file['edit'][$cat_id][$dl_id] = 0;
-					}
-					if (!isset($dl_file['edit_sum'][$cat_id]))
-					{
-						$dl_file['edit_sum'][$cat_id] = 0;
-					}
-
-					$count_new = ($change_time == $add_time && ((time() - $change_time)) / 86400 <= $dl_new_time && $dl_new_time > 0) ? 1 : 0;
-					$count_edit = ($change_time != $add_time && ((time() - $change_time) / 86400) <= $dl_edit_time && $dl_edit_time > 0) ? 1 : 0;
-
-					$dl_file['new'][$cat_id][$dl_id] = $count_new;
-					$dl_file['new_sum'][$cat_id] += $count_new;
-					$dl_file['edit'][$cat_id][$dl_id] = $count_edit;
-					$dl_file['edit_sum'][$cat_id] += $count_edit;
+					$dl_file['new'][$cat_id][$dl_id] = 0;
 				}
+				if (!isset($dl_file['new_sum'][$cat_id]))
+				{
+					$dl_file['new_sum'][$cat_id] = 0;
+				}
+				if (!isset($dl_file['edit'][$cat_id]))
+				{
+					$dl_file['edit'][$cat_id][$dl_id] = 0;
+				}
+				if (!isset($dl_file['edit_sum'][$cat_id]))
+				{
+					$dl_file['edit_sum'][$cat_id] = 0;
+				}
+
+				$count_new = ($change_time == $add_time && ((time() - $change_time)) / 86400 <= $dl_new_time && $dl_new_time > 0) ? 1 : 0;
+				$count_edit = ($change_time != $add_time && ((time() - $change_time) / 86400) <= $dl_edit_time && $dl_edit_time > 0) ? 1 : 0;
+
+				$dl_file['new'][$cat_id][$dl_id] = $count_new;
+				$dl_file['new_sum'][$cat_id] += $count_new;
+				$dl_file['edit'][$cat_id][$dl_id] = $count_edit;
+				$dl_file['edit_sum'][$cat_id] += $count_edit;
 			}
 
 			$this->db->sql_freeresult($result);
@@ -254,7 +248,9 @@ class dlext_cache implements dlext_cache_interface
 				if ($total_perms > 1)
 				{
 					$auth_cat = array_unique($auth_cat);
+					$group_perm_ids = array_unique($group_perm_ids);
 					sort($auth_cat);
+					sort($group_perm_ids);
 				}
 			}
 
@@ -266,6 +262,67 @@ class dlext_cache implements dlext_cache_interface
 		}
 
 		return $dl_auth_perm;
+	}
+
+	/**
+	 * Download MOD Auth Group Settings Cache
+	*/
+	public function obtain_dl_access_groups($auth_cat, $group_perm_ids, $user_id)
+	{
+		$dl_auth_groups = array();
+
+		if (($dl_auth_groups = $this->get('_dl_auth_groups')) === false)
+		{
+			$sql = 'SELECT user_id, group_id FROM ' . USER_GROUP_TABLE . '
+				WHERE ' . $this->db->sql_in_set('group_id', array_map('intval', $group_perm_ids)) . '
+					AND user_pending <> ' . true;
+			$result = $this->db->sql_query($sql);
+
+			while ($row = $this->db->sql_fetchrow($result))
+			{
+				$dl_auth_groups[$row['user_id']][]	= $row['group_id'];
+			}
+			$this->db->sql_freeresult($result);
+
+			$this->put('_dl_auth_groups', $dl_auth_groups);
+		}
+
+		$group_ids = $dl_auth_groups[$user_id];
+
+		for ($i = 0; $i < sizeof($auth_cat); $i++)
+		{
+			$auth_view = $auth_dl = $auth_up = $auth_mod = 0;
+			$cat = $auth_cat[$i];
+
+			for ($j = 0; $j < sizeof($group_ids); $j++)
+			{
+				$user_group = $group_ids[$j];
+
+				if (isset($auth_perm[$cat][$user_group]['auth_view']) && $auth_perm[$cat][$user_group]['auth_view'] == true)
+				{
+					$auth_view = true;
+				}
+				if (isset($auth_perm[$cat][$user_group]['auth_dl']) && $auth_perm[$cat][$user_group]['auth_dl'] == true)
+				{
+					$auth_dl = true;
+				}
+				if (isset($auth_perm[$cat][$user_group]['auth_up']) && $auth_perm[$cat][$user_group]['auth_up'] == true)
+				{
+					$auth_up = true;
+				}
+				if (isset($auth_perm[$cat][$user_group]['auth_mod']) && $auth_perm[$cat][$user_group]['auth_mod'] == true)
+				{
+					$auth_mod = true;
+				}
+			}
+
+			$cat_auth_array[$cat]['auth_view'] = $auth_view;
+			$cat_auth_array[$cat]['auth_dl'] = $auth_dl;
+			$cat_auth_array[$cat]['auth_up'] = $auth_up;
+			$cat_auth_array[$cat]['auth_mod'] = $auth_mod;
+		}
+
+		return $cat_auth_array;
 	}
 
 	/**

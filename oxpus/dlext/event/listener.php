@@ -136,6 +136,8 @@ class listener implements EventSubscriberInterface
 			'core.modify_posting_parameters'		=> 'core_modify_posting_parameters',
 			'core.modify_text_for_display_before'	=> 'core_modify_text_for_display_before',
 			'core.permissions'						=> 'core_add_permission_cat',
+			'core.group_add_user_after'				=> 'core_group_change_user_after',
+			'core.group_delete_user_after'			=> 'core_group_change_user_after',
 
 			// Events by extensions
 			'tas2580.privacyprotection_delete_ip_after'		=> 'tas2580_privacyprotection_delete_ip_after',
@@ -618,5 +620,15 @@ class listener implements EventSubscriberInterface
 				}
 			}
 		}
+	}
+
+	public function core_group_change_user_after($event)
+	{
+		if (!defined('DL_EXT_CACHE_PATH'))
+		{
+			$this->phpbb_container->get('oxpus.dlext.constants')->init();
+		}
+
+		@unlink(DL_EXT_CACHE_PATH . 'data_dl_auth_groups.' . $this->phpEx);
 	}
 }

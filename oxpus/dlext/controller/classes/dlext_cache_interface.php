@@ -59,6 +59,16 @@ interface dlext_cache_interface
 	public function obtain_dl_auth();
 
 	/**
+	 * Download MOD Auth Group Settings Cache
+	 * @param array $auth_cat category ids used in auth table
+	 * @param int $group_perm_ids group ids used in auth table
+	 * @param int $user_id user id to proof permissions fore
+	 * @return array complete download auth group data based on user groups
+	 * @access public
+	*/
+	public function obtain_dl_access_groups($auth_cat, $group_perm_ids, $user_id);
+
+	/**
 	 * Get saved cache object
 	 * 
 	 * @param string $var_name name of the cache file

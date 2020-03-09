@@ -493,6 +493,8 @@ class load
 							$sql = 'UPDATE ' . DL_CAT_TRAF_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', array(
 								'cat_traffic_use' => $cat_traffic_use)) . ' WHERE cat_id = ' . (int) $cat_id;
 							$this->db->sql_query($sql);
+
+							@unlink(DL_EXT_CACHE_PATH . 'data_dl_cats.' . $this->phpEx);
 						}
 					}
 				}

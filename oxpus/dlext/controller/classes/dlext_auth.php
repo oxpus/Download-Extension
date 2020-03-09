@@ -77,50 +77,7 @@ class dlext_auth implements dlext_auth_interface
 
 		if (sizeof($group_perm_ids) != 0)
 		{
-			$sql = 'SELECT group_id FROM ' . USER_GROUP_TABLE . '
-				WHERE ' . $this->db->sql_in_set('group_id', array_map('intval', $group_perm_ids)) . '
-					AND user_id = ' . (int) $user_id . '
-					AND user_pending <> ' . true;
-			$result = $this->db->sql_query($sql);
-
-			while ($row = $this->db->sql_fetchrow($result))
-			{
-				$group_ids[] = $row['group_id'];
-			}
-			$this->db->sql_freeresult($result);
-
-			for ($i = 0; $i < sizeof($auth_cat); $i++)
-			{
-				$auth_view = $auth_dl = $auth_up = $auth_mod = 0;
-				$cat = $auth_cat[$i];
-
-				for ($j = 0; $j < sizeof($group_ids); $j++)
-				{
-					$user_group = $group_ids[$j];
-
-					if (isset($auth_perm[$cat][$user_group]['auth_view']) && $auth_perm[$cat][$user_group]['auth_view'] == true)
-					{
-						$auth_view = true;
-					}
-					if (isset($auth_perm[$cat][$user_group]['auth_dl']) && $auth_perm[$cat][$user_group]['auth_dl'] == true)
-					{
-						$auth_dl = true;
-					}
-					if (isset($auth_perm[$cat][$user_group]['auth_up']) && $auth_perm[$cat][$user_group]['auth_up'] == true)
-					{
-						$auth_up = true;
-					}
-					if (isset($auth_perm[$cat][$user_group]['auth_mod']) && $auth_perm[$cat][$user_group]['auth_mod'] == true)
-					{
-						$auth_mod = true;
-					}
-				}
-
-				$cat_auth_array[$cat]['auth_view'] = $auth_view;
-				$cat_auth_array[$cat]['auth_dl'] = $auth_dl;
-				$cat_auth_array[$cat]['auth_up'] = $auth_up;
-				$cat_auth_array[$cat]['auth_mod'] = $auth_mod;
-			}
+			$cat_auth_array = $this->dlext_cache->obtain_dl_access_groups($auth_cat, $group_perm_ids, $user_id);
 		}
 
 		return $cat_auth_array;

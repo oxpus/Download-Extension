@@ -152,6 +152,7 @@ class acp_overview_controller implements acp_overview_interface
 				$cache->destroy('config');
 
 				@unlink(DL_EXT_CACHE_PATH . 'data_dl_auth.' . $this->phpEx);
+				@unlink(DL_EXT_CACHE_PATH . 'data_dl_auth_groups.' . $this->phpEx);
 				@unlink(DL_EXT_CACHE_PATH . 'data_dl_black.' . $this->phpEx);
 				@unlink(DL_EXT_CACHE_PATH . 'data_dl_cat_counts.' . $this->phpEx);
 				@unlink(DL_EXT_CACHE_PATH . 'data_dl_cats.' . $this->phpEx);
