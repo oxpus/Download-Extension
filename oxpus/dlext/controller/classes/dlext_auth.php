@@ -172,18 +172,7 @@ class dlext_auth implements dlext_auth_interface
 
 	public function user_banned()
 	{
-		$sql_guests = ($this->user_logged_in()) ? '' : ' OR guests = 1 ';
-
-		$sql = 'SELECT ban_id FROM ' . DL_BANLIST_TABLE . '
-			WHERE user_id = ' . (int) $this->user->data['user_id'] . "
-				OR user_ip = '" . $this->db->sql_escape($this->user->data['user_ip']) . "'
-				OR username = '" . $this->db->sql_escape($this->user->data['username']) . "'
-				$sql_guests";
-		$result = $this->db->sql_query($sql);
-		$total_ban_ids = $this->db->sql_affectedrows($result);
-		$this->db->sql_freeresult($result);
-
-		return ($total_ban_ids) ? true : false;
+		return DL_USER_IS_BANNED;
 	}
 
 	public function user_logged_in()

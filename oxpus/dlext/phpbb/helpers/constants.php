@@ -197,5 +197,18 @@ class constants
 		define('DL_GUESTS_TRAFFICS', ((!$this->config['dl_traffic_off'] && $this->config['dl_traffics_guests']) ? true : false));
 		define('DL_OVERALL_TRAFFICS', $dl_overall_traffics);
 		define('DL_USERS_TRAFFICS', $dl_users_traffics);
+
+		$sql_guests = ($this->user->data['is_registered']) ? '' : ' OR guests = 1 ';
+
+		$sql = 'SELECT ban_id FROM ' . DL_BANLIST_TABLE . '
+			WHERE user_id = ' . (int) $this->user->data['user_id'] . "
+				OR user_ip = '" . $this->db->sql_escape($this->user->data['user_ip']) . "'
+				OR username = '" . $this->db->sql_escape($this->user->data['username']) . "'
+				$sql_guests";
+		$result = $this->db->sql_query($sql);
+		$total_ban_ids = $this->db->sql_affectedrows($result);
+		$this->db->sql_freeresult($result);
+
+		define('DL_USER_IS_BANNED', (($total_ban_ids) ? true : false));
 	}
 }
