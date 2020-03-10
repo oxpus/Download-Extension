@@ -75,19 +75,7 @@ class dlext_init implements dlext_init_interface
 
 	public function dl_file_p()
 	{
-		$dl_file_p = array();
-
-		$sql = 'SELECT id, cat, file_name, real_file, file_size, extern, free, file_traffic, klicks FROM ' . DOWNLOADS_TABLE . '
-				WHERE approve = ' . true;
-		$result = $this->db->sql_query($sql);
-
-		while ($row = $this->db->sql_fetchrow($result))
-		{
-			$dl_file_p[$row['id']] = $row;
-		}
-		$this->db->sql_freeresult($result);
-
-		return $dl_file_p;
+		return $this->dlext_cache->obtain_dl_file_p();
 	}
 
 	public function dl_file_icon()

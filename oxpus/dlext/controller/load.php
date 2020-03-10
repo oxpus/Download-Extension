@@ -415,6 +415,8 @@ class load
 					'down_user'			=> $this->user->data['user_id'])) . ' WHERE id = ' . (int) $df_id;
 				$this->db->sql_query($sql);
 
+				@unlink(DL_EXT_CACHE_PATH . 'data_dl_file_p.' . $this->phpEx);
+
 				if ($this->user->data['is_registered'] && !$dl_file['free'] && !$dl_file['extern'] && !$this->config['dl_traffic_off'] && DL_USERS_TRAFFICS == true)
 				{
 					$count_user_traffic = true;

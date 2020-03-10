@@ -920,6 +920,7 @@ class mcp_edit
 
 					// Purge the files cache
 					@unlink(DL_EXT_CACHE_PATH . 'data_dl_cat_counts.' . $this->php_ext);
+					@unlink(DL_EXT_CACHE_PATH . 'data_dl_file_p.' . $this->php_ext);
 					@unlink(DL_EXT_CACHE_PATH . 'data_dl_file_preset.' . $this->php_ext);
 				}
 			}

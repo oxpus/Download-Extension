@@ -326,6 +326,31 @@ class dlext_cache implements dlext_cache_interface
 	}
 
 	/**
+	 * Download MOD File preload
+	*/
+	public function obtain_dl_file_p()
+	{
+		$dl_file_p = array();
+
+		if (($dl_file_p = $this->get('_dl_file_p')) === false)
+		{
+			$sql = 'SELECT id, cat, file_name, real_file, file_size, extern, free, file_traffic, klicks FROM ' . DOWNLOADS_TABLE . '
+					WHERE approve = ' . true;
+			$result = $this->db->sql_query($sql);
+
+			while ($row = $this->db->sql_fetchrow($result))
+			{
+				$dl_file_p[$row['id']] = $row;
+			}
+			$this->db->sql_freeresult($result);
+
+			$this->put('_dl_file_p', $dl_file_p);
+		}
+
+		return $dl_file_p;
+	}
+
+	/**
 	* Get saved cache object
 	*/
 	public function get($var_name)

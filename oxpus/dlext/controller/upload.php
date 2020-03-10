@@ -645,6 +645,7 @@ class upload
 
 				// Purge the files cache
 				@unlink(DL_EXT_CACHE_PATH . 'data_dl_cat_counts.' . $this->php_ext);
+				@unlink(DL_EXT_CACHE_PATH . 'data_dl_file_p.' . $this->php_ext);
 				@unlink(DL_EXT_CACHE_PATH . 'data_dl_file_preset.' . $this->php_ext);
 
 				meta_refresh(3, $this->helper->route('oxpus_dlext_index', array('cat' => $cat_id)));

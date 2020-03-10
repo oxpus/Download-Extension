@@ -139,7 +139,9 @@ class acp_toolbox_controller implements acp_toolbox_interface
 						WHERE real_file = '" . $this->db->sql_escape($files_name[$i]) . "'
 							AND " . $this->db->sql_in_set('cat', $index, true);
 					$this->db->sql_query($sql);
-		
+
+					@unlink(DL_EXT_CACHE_PATH . 'data_dl_file_p.' . $this->phpEx);
+					
 					$this->phpbb_log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_FILE_DROP', false, array($files_name[$i]));
 				}
 			}
@@ -164,7 +166,9 @@ class acp_toolbox_controller implements acp_toolbox_interface
 					$sql = 'UPDATE ' . DOWNLOADS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', array(
 						'cat' => $file_assign)) . ' WHERE ' . $this->db->sql_in_set('cat', $index, true) . " AND real_file = '" . $this->db->sql_escape($files_name[$i]) . "'";
 					$this->db->sql_query($sql);
-		
+
+					@unlink(DL_EXT_CACHE_PATH . 'data_dl_file_p.' . $this->phpEx);
+					
 					$this->phpbb_log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_FILE_ADD', false, array($files_name[$i]));
 				}
 			}
@@ -240,7 +244,9 @@ class acp_toolbox_controller implements acp_toolbox_interface
 					$sql_new = 'UPDATE ' . DOWNLOADS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', array(
 							'file_size' => $check_file_size)) . ' WHERE id = ' . (int) $file_id;
 					$result_new = $this->db->sql_query($sql_new);
-		
+
+					@unlink(DL_EXT_CACHE_PATH . 'data_dl_file_p.' . $this->phpEx);
+					
 					if (!$result_new)
 					{
 						$message .= $file_desc . '<br />';

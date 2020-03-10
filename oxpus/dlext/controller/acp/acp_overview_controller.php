@@ -121,6 +121,8 @@ class acp_overview_controller implements acp_overview_interface
 				$sql = 'UPDATE ' . DOWNLOADS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', array('klicks' => 0));
 				$this->db->sql_query($sql);
 
+				@unlink(DL_EXT_CACHE_PATH . 'data_dl_file_p.' . $this->phpEx);
+
 				trigger_error($this->language->lang('DL_ACP_CONFIRM_RESET_FINISH') . adm_back_link($this->u_action));
 			}
 		}
@@ -156,6 +158,7 @@ class acp_overview_controller implements acp_overview_interface
 				@unlink(DL_EXT_CACHE_PATH . 'data_dl_black.' . $this->phpEx);
 				@unlink(DL_EXT_CACHE_PATH . 'data_dl_cat_counts.' . $this->phpEx);
 				@unlink(DL_EXT_CACHE_PATH . 'data_dl_cats.' . $this->phpEx);
+				@unlink(DL_EXT_CACHE_PATH . 'data_dl_file_p.' . $this->phpEx);
 				@unlink(DL_EXT_CACHE_PATH . 'data_dl_file_presets.' . $this->phpEx);
 
 				trigger_error($this->language->lang('DL_ACP_CONFIRM_RESET_FINISH') . adm_back_link($this->u_action));

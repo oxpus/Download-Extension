@@ -588,6 +588,8 @@ class listener implements EventSubscriberInterface
 					'klicks' => 0));
 				$this->db->sql_query($sql);
 
+				@unlink(DL_EXT_CACHE_PATH . 'data_dl_file_p.' . $this->php_ext);
+
 				$this->config->set('dl_click_reset_time', time(), false);
 			}
 		}

@@ -1120,6 +1120,7 @@ class acp_files_controller implements acp_files_interface
 		
 			// Purge the files cache
 			@unlink(DL_EXT_CACHE_PATH . 'data_dl_cat_counts.' . $this->phpEx);
+			@unlink(DL_EXT_CACHE_PATH . 'data_dl_file_p.' . $this->phpEx);
 			@unlink(DL_EXT_CACHE_PATH . 'data_dl_file_preset.' . $this->phpEx);
 		
 			$ver_message = '';

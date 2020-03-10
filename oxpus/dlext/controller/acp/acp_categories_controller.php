@@ -880,6 +880,7 @@ class acp_categories_controller implements acp_categories_interface
 				// Purge the categories cache
 				@unlink(DL_EXT_CACHE_PATH . 'data_dl_cats.' . $this->phpEx);
 				@unlink(DL_EXT_CACHE_PATH . 'data_dl_auth.' . $this->phpEx);
+				@unlink(DL_EXT_CACHE_PATH . 'data_dl_file_p.' . $this->phpEx);
 				@unlink(DL_EXT_CACHE_PATH . 'data_dl_file_preset.' . $this->phpEx);
 				@unlink(DL_EXT_CACHE_PATH . 'data_dl_cat_counts.' . $this->phpEx);
 		
