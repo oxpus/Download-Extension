@@ -34,6 +34,7 @@ class dlext_topic implements dlext_topic_interface
 	protected $dlext_auth;
 	protected $dlext_format;
 	protected $dlext_init;
+	protected $dl_index;
 
 	/**
 	* Constructor
@@ -73,12 +74,12 @@ class dlext_topic implements dlext_topic_interface
 
 		$this->root_path	= $this->dlext_init->root_path();
 		$this->php_ext		= $this->dlext_init->php_ext();
+
+		$this->dl_index		= $this->dlext_auth->dl_index();
 	}
 
 	public function gen_dl_topic($dl_id, $force = false)
 	{
-		$dl_index = $this->dlext_auth->dl_index();
-
 		if (!$this->config['dl_enable_dl_topic'])
 		{
 			return;
@@ -119,14 +120,14 @@ class dlext_topic implements dlext_topic_interface
 
 		if ($this->config['dl_topic_title_catname'])
 		{
-			$dl_title .= ' - ' . $dl_index[$cat_id]['cat_name_nav'];
+			$dl_title .= ' - ' . $this->dl_index[$cat_id]['cat_name_nav'];
 		}
 
 		$topic_text_add = "\n[b]" . $this->language->lang('DL_NAME') . ":[/b] " . $description;
 
 		if ($this->config['dl_topic_post_catname'])
 		{
-			$topic_text_add .= "\n[b]" . $this->language->lang('DL_CAT_NAME') . ":[/b] " . $dl_index[$cat_id]['cat_name_nav'];
+			$topic_text_add .= "\n[b]" . $this->language->lang('DL_CAT_NAME') . ":[/b] " . $this->dl_index[$cat_id]['cat_name_nav'];
 		}
 
 		$sql = 'SELECT username, user_colour
@@ -170,15 +171,15 @@ class dlext_topic implements dlext_topic_interface
 
 		if ($this->config['dl_topic_forum'] == -1)
 		{
-			$topic_forum	= $dl_index[$cat_id]['dl_topic_forum'];
-			$topic_text		= $dl_index[$cat_id]['dl_topic_text'];
-			$topic_type		= $dl_index[$cat_id]['dl_topic_type'];
+			$topic_forum	= $this->dl_index[$cat_id]['dl_topic_forum'];
+			$topic_text		= $this->dl_index[$cat_id]['dl_topic_text'];
+			$topic_type		= $this->dl_index[$cat_id]['dl_topic_type'];
 
-			if ($dl_index[$cat_id]['topic_more_details'] == 1)
+			if ($this->dl_index[$cat_id]['topic_more_details'] == 1)
 			{
 				$topic_text .= $topic_text_add;
 			}
-			else if ($dl_index[$cat_id]['topic_more_details'] == 2)
+			else if ($this->dl_index[$cat_id]['topic_more_details'] == 2)
 			{
 				$topic_text = $topic_text_add . "\n\n" . $topic_text;
 			}
@@ -206,7 +207,7 @@ class dlext_topic implements dlext_topic_interface
 
 		$reset_perms = false;
 
-		if (!$this->config['dl_diff_topic_user'] || ($this->config['dl_diff_topic_user'] == 2 && !$dl_index[$cat_id]['diff_topic_user']))
+		if (!$this->config['dl_diff_topic_user'] || ($this->config['dl_diff_topic_user'] == 2 && !$this->dl_index[$cat_id]['diff_topic_user']))
 		{
 			$sql_tmp = 'SELECT user_id
 						FROM ' . USERS_TABLE . '
@@ -246,17 +247,17 @@ class dlext_topic implements dlext_topic_interface
 
 			$this->db->sql_freeresult($result_tmp);
 		}
-		else if ($this->config['dl_diff_topic_user'] == 2 && $dl_index[$cat_id]['diff_topic_user'])
+		else if ($this->config['dl_diff_topic_user'] == 2 && $this->dl_index[$cat_id]['diff_topic_user'])
 		{
 			$sql_tmp = 'SELECT user_id
 						FROM ' . USERS_TABLE . '
-						WHERE user_id = ' . (int) $dl_index[$cat_id]['topic_user'];
+						WHERE user_id = ' . (int) $this->dl_index[$cat_id]['topic_user'];
 			$result_tmp = $this->db->sql_query($sql_tmp);
 
 			if ($this->db->sql_affectedrows($result_tmp))
 			{
 				//Get category topic_user permissions
-				$dl_topic_user_id = $dl_index[$cat_id]['topic_user'];
+				$dl_topic_user_id = $this->dl_index[$cat_id]['topic_user'];
 				$reset_perms = true;
 			}
 			else
@@ -408,8 +409,6 @@ class dlext_topic implements dlext_topic_interface
 
 	public function update_topic($topic_id, $dl_id, $topic_drop_mode = '')
 	{
-		$dl_index = $this->dlext_auth->dl_index();
-
 		if (!$topic_id || !$dl_id)
 		{
 			return;
@@ -458,14 +457,14 @@ class dlext_topic implements dlext_topic_interface
 
 		if ($this->config['dl_topic_title_catname'])
 		{
-			$dl_title .= ' - ' . $dl_index[$cat_id]['cat_name_nav'];
+			$dl_title .= ' - ' . $this->dl_index[$cat_id]['cat_name_nav'];
 		}
 
 		$topic_text_add = "\n[b]" . $this->language->lang('DL_NAME') . ":[/b] " . $description;
 
 		if ($this->config['dl_topic_post_catname'])
 		{
-			$topic_text_add .= "\n[b]" . $this->language->lang('DL_CAT_NAME') . ":[/b] " . $dl_index[$cat_id]['cat_name_nav'];
+			$topic_text_add .= "\n[b]" . $this->language->lang('DL_CAT_NAME') . ":[/b] " . $this->dl_index[$cat_id]['cat_name_nav'];
 		}
 
 		$sql = 'SELECT username, user_colour
@@ -509,15 +508,15 @@ class dlext_topic implements dlext_topic_interface
 
 		if ($this->config['dl_topic_forum'] == -1)
 		{
-			$topic_forum		= $dl_index[$cat_id]['dl_topic_forum'];
-			$topic_text			= $dl_index[$cat_id]['dl_topic_text'];
-			$topic_type			= $dl_index[$cat_id]['dl_topic_type'];
+			$topic_forum		= $this->dl_index[$cat_id]['dl_topic_forum'];
+			$topic_text			= $this->dl_index[$cat_id]['dl_topic_text'];
+			$topic_type			= $this->dl_index[$cat_id]['dl_topic_type'];
 
-			if ($dl_index[$cat_id]['topic_more_details'] == 1)
+			if ($this->dl_index[$cat_id]['topic_more_details'] == 1)
 			{
 				$topic_text .= $topic_text_add;
 			}
-			else if ($dl_index[$cat_id]['topic_more_details'] == 2)
+			else if ($this->dl_index[$cat_id]['topic_more_details'] == 2)
 			{
 				$topic_text = $topic_text_add . "\n\n" . $topic_text;
 			}
@@ -545,7 +544,7 @@ class dlext_topic implements dlext_topic_interface
 
 		$reset_perms = false;
 
-		if (!$this->config['dl_diff_topic_user'] || ($this->config['dl_diff_topic_user'] == 2 && !$dl_index[$cat_id]['diff_topic_user']))
+		if (!$this->config['dl_diff_topic_user'] || ($this->config['dl_diff_topic_user'] == 2 && !$this->dl_index[$cat_id]['diff_topic_user']))
 		{
 			$sql_tmp = 'SELECT user_id
 						FROM ' . USERS_TABLE . '
@@ -585,17 +584,17 @@ class dlext_topic implements dlext_topic_interface
 
 			$this->db->sql_freeresult($result_tmp);
 		}
-		else if ($this->config['dl_diff_topic_user'] == 2 && $dl_index[$cat_id]['diff_topic_user'])
+		else if ($this->config['dl_diff_topic_user'] == 2 && $this->dl_index[$cat_id]['diff_topic_user'])
 		{
 			$sql_tmp = 'SELECT user_id
 						FROM ' . USERS_TABLE . '
-						WHERE user_id = ' . (int) $dl_index[$cat_id]['topic_user'];
+						WHERE user_id = ' . (int) $this->dl_index[$cat_id]['topic_user'];
 			$result_tmp = $this->db->sql_query($sql_tmp);
 
 			if ($this->db->sql_affectedrows($result_tmp))
 			{
 				//Get category topic_user permissions
-				$dl_topic_user_id = $dl_index[$cat_id]['topic_user'];
+				$dl_topic_user_id = $this->dl_index[$cat_id]['topic_user'];
 				$reset_perms = true;
 			}
 			else

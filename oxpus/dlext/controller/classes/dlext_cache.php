@@ -35,6 +35,11 @@ class dlext_cache implements dlext_cache_interface
 	{
 		$this->db 		= $db;
 		$this->php_ext	= '.' . $php_ext;
+
+		if (!defined('DL_AUTH_TABLE'))
+		{
+			$phpbb_container->get('oxpus.dlext.constants')->init();
+		}
 	}
 
 	/**

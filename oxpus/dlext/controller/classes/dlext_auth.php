@@ -28,6 +28,8 @@ class dlext_auth implements dlext_auth_interface
 
 	protected $dlext_cache;
 	protected $dlext_init;
+	protected $dl_auth_perm;
+	protected $dl_index;
 
 	/**
 	* Constructor
@@ -61,17 +63,18 @@ class dlext_auth implements dlext_auth_interface
 
 		$this->dlext_cache	= $dlext_cache;
 		$this->dlext_init	= $dlext_init;
+		
+		$this->dl_auth_perm	= $this->dlext_cache->obtain_dl_auth();
+		$this->dl_index		= $this->dlext_cache->obtain_dl_cats();
 	}
 
 	public function dl_auth()
 	{
 		$cat_auth_array = $group_ids = array();
 
-		$dl_auth_perm = $this->dlext_cache->obtain_dl_auth();
-
-		$auth_cat = (isset($dl_auth_perm['auth_cat'])) ? $dl_auth_perm['auth_cat'] : array();
-		$group_perm_ids = (isset($dl_auth_perm['group_perm_ids'])) ? $dl_auth_perm['group_perm_ids'] : array();
-		$auth_perm = (isset($dl_auth_perm['auth_perm'])) ? $dl_auth_perm['auth_perm'] : array();
+		$auth_cat = (isset($this->dl_auth_perm['auth_cat'])) ? $this->dl_auth_perm['auth_cat'] : array();
+		$group_perm_ids = (isset($this->dl_auth_perm['group_perm_ids'])) ? $this->dl_auth_perm['group_perm_ids'] : array();
+		$auth_perm = (isset($this->dl_auth_perm['auth_perm'])) ? $this->dl_auth_perm['auth_perm'] : array();
 
 		$user_id = ($this->user->data['user_perm_from']) ? $this->user->data['user_perm_from'] : $this->user->data['user_id'];
 
@@ -87,7 +90,6 @@ class dlext_auth implements dlext_auth_interface
 	{
 		$dl_auth		= $this->dl_auth();
 		$user_logged_in	= $this->user_logged_in();
-		$this->dl_index = $this->dlext_cache->obtain_dl_cats();
 
 		if (is_array($this->dl_index) && sizeof($this->dl_index) > 0)
 		{
@@ -211,10 +213,9 @@ class dlext_auth implements dlext_auth_interface
 
 	public function user_auth($cat_id, $perm)
 	{
-		$dl_index	= $this->dl_index();
 		$dl_auth	= $this->dl_auth();
 
-		if ((isset($dl_auth[$cat_id][$perm]) && $dl_auth[$cat_id][$perm]) || (isset($dl_index[$cat_id][$perm]) && $dl_index[$cat_id][$perm]) || $this->user_admin())
+		if ((isset($dl_auth[$cat_id][$perm]) && $dl_auth[$cat_id][$perm]) || (isset($this->dl_index[$cat_id][$perm]) && $this->dl_index[$cat_id][$perm]) || $this->user_admin())
 		{
 			return true;
 		}
@@ -224,8 +225,6 @@ class dlext_auth implements dlext_auth_interface
 
 	public function stats_perm()
 	{
-		$dl_index = $this->dl_index();
-
 		$stats_view = false;
 
 		switch($this->config['dl_stats_perm'])
@@ -242,9 +241,9 @@ class dlext_auth implements dlext_auth_interface
 			break;
 
 			case 2:
-				foreach ($dl_index as $key => $value)
+				foreach ($this->dl_index as $key => $value)
 				{
-					if ($this->user_auth($dl_index[$key]['id'], 'auth_mod'))
+					if ($this->user_auth($this->dl_index[$key]['id'], 'auth_mod'))
 					{
 						$stats_view = true;
 						break;
@@ -268,11 +267,9 @@ class dlext_auth implements dlext_auth_interface
 
 	public function cat_auth_comment_read($cat_id)
 	{
-		$dl_index = $this->dl_index();
-
 		$auth_cread = false;
 
-		switch($dl_index[$cat_id]['auth_cread'])
+		switch($this->dl_index[$cat_id]['auth_cread'])
 		{
 			case 0:
 				$auth_cread = true;
@@ -308,11 +305,9 @@ class dlext_auth implements dlext_auth_interface
 
 	public function cat_auth_comment_post($cat_id)
 	{
-		$dl_index = $this->dl_index();
-
 		$auth_cpost = false;
 
-		switch($dl_index[$cat_id]['auth_cpost'])
+		switch($this->dl_index[$cat_id]['auth_cpost'])
 		{
 			case 0:
 				$auth_cpost = true;
@@ -348,16 +343,14 @@ class dlext_auth implements dlext_auth_interface
 
 	public function dl_auth_users($cat_id, $perm)
 	{
-		$dl_index = $this->dl_index();
-
-		if (!is_array($dl_index) || !sizeof($dl_index))
+		if (!is_array($this->dl_index) || !sizeof($this->dl_index))
 		{
 			return 0;
 		}
 
 		$user_ids = array();
 
-		if ($dl_index[$cat_id][$perm])
+		if ($this->dl_index[$cat_id][$perm])
 		{
 			$sql = 'SELECT user_id FROM ' . USERS_TABLE . '
 				WHERE user_id <> ' . ANONYMOUS . '
@@ -419,18 +412,16 @@ class dlext_auth implements dlext_auth_interface
 
 	public function bug_tracker()
 	{
-		$dl_index = $this->dl_index();
-
-		if (!is_array($dl_index) || !sizeof($dl_index))
+		if (!is_array($this->dl_index) || !sizeof($this->dl_index))
 		{
 			return false;
 		}
 
 		$bug_tracker = false;
 
-		foreach($dl_index as $cat_id => $value)
+		foreach($this->dl_index as $cat_id => $value)
 		{
-			if (isset($dl_index[$cat_id]['bug_tracker']) && $dl_index[$cat_id]['bug_tracker'])
+			if (isset($this->dl_index[$cat_id]['bug_tracker']) && $this->dl_index[$cat_id]['bug_tracker'])
 			{
 				$bug_tracker = true;
 				break;
