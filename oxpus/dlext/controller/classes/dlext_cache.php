@@ -292,6 +292,11 @@ class dlext_cache implements dlext_cache_interface
 			$this->put('_dl_auth_groups', $dl_auth_groups);
 		}
 
+		if (!isset($dl_auth_groups[$user_id]) || !$dl_auth_groups[$user_id][0])
+		{
+			return array();
+		}
+
 		$group_ids = $dl_auth_groups[$user_id];
 
 		for ($i = 0; $i < sizeof($auth_cat); $i++)
