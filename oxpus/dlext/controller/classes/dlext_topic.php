@@ -120,7 +120,7 @@ class dlext_topic implements dlext_topic_interface
 
 		if ($this->config['dl_topic_title_catname'])
 		{
-			$dl_title .= ' - ' . $this->dl_index[$cat_id]['cat_name_nav'];
+			$dl_title .= ' (' . $this->dl_index[$cat_id]['cat_name_nav'] . ')';
 		}
 
 		$topic_text_add = "\n[b]" . $this->language->lang('DL_NAME') . ":[/b] " . $description;

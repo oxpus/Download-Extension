@@ -81,6 +81,7 @@
 </div>
 {% endif %}
 
+{% if S_FOOTER_STATS %}
 <div class="button stats-footer" id="stats-footer">{{ lang('DL_FOOTER') }}</div>
 <div id="footer" class="footer-box"><a class="icon dl-close-footer" onclick="javascript:show_area('footer', false);"></a>
 <div class="small">
@@ -99,6 +100,7 @@
   	{% if not S_HIDE_FOOTER_DATA %}<br />{% endif %}
 </div>
 </div>
+{% endif %}
 
 <div class="clear"></div>
 

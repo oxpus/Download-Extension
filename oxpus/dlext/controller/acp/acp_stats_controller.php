@@ -211,7 +211,6 @@ class acp_stats_controller implements acp_stats_interface
 		$s_filter .= '<option value="username">' . $this->language->lang('USERNAME') . '</option>';
 		$s_filter .= '<option value="id">' . $this->language->lang('DOWNLOADS') . '</option>';
 		$s_filter .= '<option value="cat">' . $this->language->lang('DL_CAT_NAME') . '</option>';
-		$s_filter .= '<option value="agent">' . $this->language->lang('DL_BROWSER') . '</option>';
 		$s_filter .= '</select>';
 		$s_filter = str_replace('value="' . $filtering . '">', 'value="' . $filtering . '" selected="selected">', $s_filter);
 		

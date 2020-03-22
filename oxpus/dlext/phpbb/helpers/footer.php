@@ -205,6 +205,10 @@ class footer implements footer_interface
 					$this->template->assign_block_vars('total_stat', array(
 						'TOTAL_STAT' => $this->language->lang('DL_TOTAL_STAT', $total_dl, $total_size, $physical_limit, $total_extern))
 					);
+
+					$this->template->assign_vars(array(
+						'S_FOOTER_STATS'	=> true,
+					));
 				}
 			}
 
@@ -279,6 +283,7 @@ class footer implements footer_interface
 					'EXT_STATS_OVERALL_TRAFFIC'			=> $this->language->lang('DL_OVERALL_TRAFFIC') . ': ' . $overall_traffic,
 					'EXT_STATS_OVERALL_GUESTS_TRAFFIC'	=> $this->language->lang('DL_OVERALL_GUEST_TRAFFIC') . ': ' . $overall_guest_traffic,
 					'EXT_STATS_MONTH_CLICKS'			=> $this->language->lang('DL_KLICKS') . ': ' . $total_cur_clicks,
+					'S_FOOTER_STATS'					=> true,
 				));
 			}
 

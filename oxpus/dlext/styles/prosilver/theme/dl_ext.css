@@ -25,17 +25,13 @@
 
 .dlbutton1
 {
-    background-color: #fafafa;
     float: left !important;
-    border: 2px #555555 solid;
     width: 40% !important;
     text-align: center;
 }
 .dlbutton2
 {
-    background-color: #fafafa;
     float: right !important;
-    border: 2px #555555 solid;
     width: 40% !important;
     text-align: center;
 }

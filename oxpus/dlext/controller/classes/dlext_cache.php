@@ -272,7 +272,7 @@ class dlext_cache implements dlext_cache_interface
 	/**
 	 * Download MOD Auth Group Settings Cache
 	*/
-	public function obtain_dl_access_groups($auth_cat, $group_perm_ids, $user_id)
+	public function obtain_dl_access_groups($auth_cat, $group_perm_ids, $user_id, $auth_perm)
 	{
 		$dl_auth_groups = array();
 

@@ -80,7 +80,7 @@ class dlext_auth implements dlext_auth_interface
 
 		if (sizeof($group_perm_ids) != 0)
 		{
-			$cat_auth_array = $this->dlext_cache->obtain_dl_access_groups($auth_cat, $group_perm_ids, $user_id);
+			$cat_auth_array = $this->dlext_cache->obtain_dl_access_groups($auth_cat, $group_perm_ids, $user_id, $auth_perm);
 		}
 
 		return $cat_auth_array;

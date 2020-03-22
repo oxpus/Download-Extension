@@ -1110,8 +1110,13 @@ class acp_categories_controller implements acp_categories_interface
 		
 				if (($idx_type == 'c' && $cur_cat['parent'] == $cat_parent) || $idx_type == 'f')
 				{
-					$cat_name = ($idx_type == 'c') ? $cur_cat['cat_name_nav'] : $cur_cat['cat_name'];
-					$cat_description = $cur_cat['description'];
+					$cat_name			= ($idx_type == 'c') ? $cur_cat['cat_name_nav'] : $cur_cat['cat_name'];
+					$cat_desc			= $cur_cat['description'];
+					$cat_uid			= $cur_cat['desc_uid'];
+					$cat_bitfield		= $cur_cat['desc_bitfield'];
+					$cat_flags			= $cur_cat['desc_flags'];
+					$cat_description	= generate_text_for_display($cat_desc, $cat_uid, $cat_bitfield, $cat_flags);
+
 					$cat_icon = $cur_cat['cat_icon'];
 		
 					$cat_edit = "{$this->u_action}&amp;action=edit&amp;cat_id=$cat_id";

@@ -32,11 +32,11 @@
 		{% for downloads in loops.downloads %}
 		<li class="row dlTooltip" id="{{ downloads.CAT_ID }}">
 			<dl>
-				<dt>
+				<dt{% if S_ENABLE_DESC_HIDE %} title="{{ downloads.CAT_DESC }}"{% endif %}>
 					<span class="forum-image">{{ downloads.MINI_IMG }}</span>
 					{% if downloads.CAT_ICON %}<span class="forum-image"><img src="{{ downloads.CAT_ICON }}" alt="" title="{{ downloads.CAT_NAME }}" /></span>{% endif %}
-					<a href="{{ downloads.U_CAT_VIEW }}" class="forumtitle" title="">{{ downloads.CAT_NAME }}</a><br />
-					<div class="dl-index-desc{% if S_ENABLE_DESC_HIDE %} noshow{% endif %} list-inner" id="desc_{{ downloads.CAT_ID }}"><br />{{ downloads.CAT_DESC }}</div>
+					<a href="{{ downloads.U_CAT_VIEW }}" class="forumtitle">{{ downloads.CAT_NAME }}</a><br />
+					{% if not S_ENABLE_DESC_HIDE %}<div class="dl-index-desc list-inner"><br />{{ downloads.CAT_DESC }}</div>{% endif %}
 					{% if downloads.pagination|length %}
 					<div class="pagination">
 						<ul>

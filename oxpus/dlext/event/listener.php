@@ -65,6 +65,8 @@ class listener implements EventSubscriberInterface
 	protected $dlext_format;
 	protected $dlext_privacy;
 
+	protected $dl_index;
+
 	/**
 	* Constructor
 	*
@@ -120,6 +122,8 @@ class listener implements EventSubscriberInterface
 		$this->dlext_auth				= $dlext_auth;
 		$this->dlext_format				= $dlext_format;
 		$this->dlext_privacy			= $dlext_privacy;
+
+		$this->dl_index					= $this->dlext_auth->dl_index();
 	}
 
 	static public function getSubscribedEvents()
@@ -459,6 +463,7 @@ class listener implements EventSubscriberInterface
 
 		$content = str_replace($replacements, $placeholders, $content);
 		$content = preg_replace_callback('#(">)(.*?)(\/dlext\/--QUESTIONAIRE--view=detail--AMPERSAND--df_id=)(\d+)(.*?)(<\/URL>)#i', array('self', '_dl_mod_callback'), $content);
+		$content = preg_replace_callback('#(">)(.*?)(\/dlext\/details--QUESTIONAIRE--df_id=)(\d+)(.*?)(<\/URL>)#i', array('self', '_dl_mod_callback'), $content);
 		$content = str_replace($placeholders, $replacements, $content);
 
 		$event['text'] = $content;
@@ -518,7 +523,7 @@ class listener implements EventSubscriberInterface
 			$this->phpbb_container->get('oxpus.dlext.constants')->init();
 		}
 
-		$sql = 'SELECT description, desc_uid, desc_bitfield, desc_flags FROM ' . DOWNLOADS_TABLE . '
+		$sql = 'SELECT cat, description, desc_uid, desc_bitfield, desc_flags FROM ' . DOWNLOADS_TABLE . '
 			WHERE id = ' . (int) $part[4];
 		$result = $this->db->sql_query($sql);
 		$row = $this->db->sql_fetchrow($result);
@@ -527,6 +532,7 @@ class listener implements EventSubscriberInterface
 		$desc_uid		= $row['desc_uid'];
 		$desc_bitfield	= $row['desc_bitfield'];
 		$desc_flags		= $row['desc_flags'];
+		$cat_id			= $row['cat'];
 
 		$this->db->sql_freeresult($result);
 
@@ -534,6 +540,11 @@ class listener implements EventSubscriberInterface
 
 		if ($title)
 		{
+			if ($this->config['dl_topic_title_catname'])
+			{
+				$title .= ' (' . $this->dl_index[$cat_id]['cat_name_nav'] . ')';
+			}
+	
 			return '">' . $title . '</URL>';
 		}
 		else
@@ -631,6 +642,6 @@ class listener implements EventSubscriberInterface
 			$this->phpbb_container->get('oxpus.dlext.constants')->init();
 		}
 
-		@unlink(DL_EXT_CACHE_PATH . 'data_dl_auth_groups.' . $this->phpEx);
+		@unlink(DL_EXT_CACHE_PATH . 'data_dl_auth_groups.' . $this->php_ext);
 	}
 }

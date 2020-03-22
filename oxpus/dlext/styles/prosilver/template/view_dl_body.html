@@ -325,14 +325,14 @@
 
 <ul class="linklist navlinks">
 {% if S_VC %}
-<li class="panel dlbutton1">
+<li class="dlbutton1">
 {% if CAPTCHA_TEMPLATE %}
 	{% DEFINE CAPTCHA_TAB_INDEX = 8 %}
 	{% INCLUDE ''~ CAPTCHA_TEMPLATE ~'' %}
 {% endif %}
 </li>
 {% endif %}
-<li class="panel dlbutton2">
+<li class="dlbutton2">
 	<div>
 		{{ download_button.S_DL_VERSION }}<br /><button type="submit" name="submit" id="submit" class="downloadbtn"><i class="icon fa-download fa-fw" area-hidden="true"></i> {{ lang('DL_DOWNLOAD') }}</button>
 		<input type="hidden" name="hotlink_id" value="{{ download_button.S_HOTLINK_ID }}" />

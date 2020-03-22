@@ -15,10 +15,10 @@
 		{% for subcats in loops.subcats %}
 		<li class="row dlTooltip" id="{{ subcats.CAT_ID }}">
 			<dl>
-				<dt><span class="forum-image">{{ subcats.MINI_IMG }}</span>
+				<dt{% if S_ENABLE_DESC_HIDE %} title="{{ subcats.CAT_DESC }}"{% endif %}><span class="forum-image">{{ subcats.MINI_IMG }}</span>
 					<span class="forum-image">{% if subcats.CAT_ICON %}<img src="{{ subcats.CAT_ICON }}" alt="" title="{{ subcats.CAT_NAME }}" />{% else %}&nbsp;{% endif %}</span>
-					<a href="{{ subcats.U_CAT_VIEW }}" class="forumtitle" title="">{{ subcats.CAT_NAME }}</a><br />
-					<div class="dl-index-desc{% if S_ENABLE_DESC_HIDE %} noshow{% endif %} list-inner" id="desc_{{ subcats.CAT_ID }}"><br />{{ subcats.CAT_DESC }}</div>
+					<a href="{{ subcats.U_CAT_VIEW }}" class="forumtitle">{{ subcats.CAT_NAME }}</a><br />
+					{% if not S_ENABLE_DESC_HIDE %}<div class="dl-index-desc list-inner"><br />{{ subcats.CAT_DESC }}</div>{% endif %}
 					{% if subcats.pagination|length %}
 					<div class="pagination">
 						<ul>

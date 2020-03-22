@@ -254,7 +254,17 @@ class index
 				if ($cat_desc)
 				{
 					$cat_desc = censor_text($cat_desc);
-					$cat_desc = generate_text_for_display($cat_desc, $cat_uid, $cat_bitfield, $cat_flags);
+
+					if (isset($this->config['dl_index_desc_hide']) && $this->config['dl_index_desc_hide'])
+					{
+						strip_bbcode($cat_desc, $cat_uid);
+						//$text_ary = generate_text_for_edit($cat_desc, $cat_uid, $cat_flags);
+						//$cat_desc = $text_ary['text'];
+					}
+					else
+					{
+						$cat_desc = generate_text_for_display($cat_desc, $cat_uid, $cat_bitfield, $cat_flags);
+					}
 				}
 		
 				$mini_icon = array();
@@ -317,7 +327,7 @@ class index
 		
 					$cat_pages = true;
 				}
-		
+
 				$this->template->assign_block_vars($block, array(
 					'MINI_IMG'			=> $mini_cat_icon,
 					'SUBLEVEL'			=> $cat_sublevel,
