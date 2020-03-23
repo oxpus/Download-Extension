@@ -38,12 +38,14 @@
 
 .downloadbtn
 {
+    background-color: #00aa00;
     display: block;
-    background-color: #005500;
     font-size: 3em;
     text-align: center;
     margin: 10px auto;
     padding: 10px;
+    border-left: none;
+    border-top: none;
     border-right: 3px #aaaaaa solid;
     border-bottom: 3px #aaaaaa solid;
     border-radius: 10px;
@@ -52,9 +54,9 @@
 
 .downloadbtn:hover
 {
-    background-color: #00aa00;
-    border-left: 3px #444444 solid;
-    border-top: 3px #444444 solid;
+    background-color: #005500;
+    border-left: 3px #ffffff solid;
+    border-top: 3px #ffffff solid;
     border-right: none;
     border-bottom: none;
 }

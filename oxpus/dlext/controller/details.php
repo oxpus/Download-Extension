@@ -1173,17 +1173,7 @@ class details
 					'modcp'			=> $modcp,
 					'cat_id'		=> $cat_id,
 					'hotlink_id'	=> $hotlink_id,
-					'submit'		=> true,
 				);
-
-				if (!$captcha_active)
-				{
-					$s_hidden_fields = array_merge($s_hidden_fields, array('view' => 'load'));
-				}
-				else
-				{
-					$s_hidden_fields = array_merge($s_hidden_fields, array('view' => 'detail'));
-				}
 
 				if (!$ver_can_edit && !$user_can_alltimes_load)
 				{
@@ -1235,7 +1225,6 @@ class details
 
 				$this->template->assign_block_vars('download_button', array(
 					'S_HIDDEN_FIELDS'	=> build_hidden_fields($s_hidden_fields),
-					'S_HOTLINK_ID'		=> $hotlink_id,
 					'S_DL_WINDOW'		=> ($dl_files['extern'] && $this->config['dl_ext_new_window']) ? 'target="_blank"' : '',
 					'S_DL_VERSION'		=> $s_select_version,
 					'U_DOWNLOAD'		=> $this->helper->route('oxpus_dlext_details'),
@@ -1249,15 +1238,14 @@ class details
 
 					$this->template->assign_var('S_VC', true);
 
-					$captcha_factory = $this->phpbb_container->get('captcha.factory');
-					$captcha = $captcha_factory->get_instance($this->config['captcha_plugin']);
+					$captcha = $this->phpbb_container->get('captcha.factory')->get_instance($this->config['captcha_plugin']);
 					$captcha->init(CONFIRM_POST);
 
 					if ($submit)
 					{
 						$vc_response = $captcha->validate();
 
-						if ($vc_response)
+						if ($vc_response !== false)
 						{
 							$error[] = $vc_response;
 						}
@@ -1267,25 +1255,19 @@ class details
 							$captcha->reset();
 							$code_match = true;
 						}
-						else if (sizeof($error))
+						else
 						{
 							$this->template->assign_block_vars('dl_error', array(
 								'DL_ERROR' => $error[0],
 							));
 						}
-						else if ($captcha->is_solved())
-						{
-							$s_hidden_c_fields = $captcha->get_hidden_fields();
-							$code_match = false;
-						}
 					}
 
-					if (!$captcha->is_solved() || !$code_match)
+					if (!$code_match)
 					{
 						$this->template->assign_vars(array(
-							'S_HIDDEN_FIELDS'	=> (isset($s_hidden_c_fields)) ? build_hidden_fields($s_hidden_c_fields) : '',
-							'S_CONFIRM_CODE'	=> true,
 							'CAPTCHA_TEMPLATE'	=> $captcha->get_template(),
+							'S_HIDDEN_FIELDS'	=> build_hidden_fields($captcha->get_hidden_fields()),
 						));
 					}
 				}
@@ -1302,15 +1284,19 @@ class details
 						trigger_error($this->language->lang('FORM_INVALID'), E_USER_WARNING);
 					}
 
-					$code = $this->request->variable('confirm_code', '');
+					$code = $this->request->variable('confirm_id', '');
+					if (!$code)
+					{
+						$code = $this->request->variable('confirm_code', '');
+					}
 
 					if ($code)
 					{
 						$sql = 'INSERT INTO ' . DL_HOTLINK_TABLE . ' ' . $this->db->sql_build_array('INSERT', array(
 							'user_id'		=> $this->user->data['user_id'],
 							'session_id'	=> $this->user->data['session_id'],
-							'hotlink_id'	=> 'dlvc',
-							'code'			=> $code));
+							'hotlink_id'	=> $code,
+							'code'			=> 'dlvc'));
 						$this->db->sql_query($sql);
 					}
 

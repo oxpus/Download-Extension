@@ -321,7 +321,7 @@
 {% for download_button in loops.download_button %}
 <br />
 <div id="dl_mod_button">
-<form action="{{ download_button.U_DOWNLOAD }}" method="post" id="download" {{ download_button.S_DL_WINDOW }} onsubmit="hideDlButton();">
+<form action="{{ download_button.U_DOWNLOAD }}" method="post" name="download" id="download" {{ download_button.S_DL_WINDOW }}>
 
 <ul class="linklist navlinks">
 {% if S_VC %}
@@ -334,8 +334,7 @@
 {% endif %}
 <li class="dlbutton2">
 	<div>
-		{{ download_button.S_DL_VERSION }}<br /><button type="submit" name="submit" id="submit" class="downloadbtn"><i class="icon fa-download fa-fw" area-hidden="true"></i> {{ lang('DL_DOWNLOAD') }}</button>
-		<input type="hidden" name="hotlink_id" value="{{ download_button.S_HOTLINK_ID }}" />
+		{{ download_button.S_DL_VERSION }}<br /><input type="submit" name="submit" id="submit" onclick="hideDlButton();" class="downloadbtn" value="{{ lang('DL_DOWNLOAD') }}" />
 		{{ download_button.S_HIDDEN_FIELDS }}{{ S_HIDDEN_FIELDS }}{{ S_FORM_TOKEN_DOWNLOAD }}
 	</div>
 	{% if S_TRAFFICFREE_DL %}<div class="small dl-text-center dl-red">{{ lang('DL_CAN_DOWNLOAD_TRAFFIC') }}</div>{% endif %}

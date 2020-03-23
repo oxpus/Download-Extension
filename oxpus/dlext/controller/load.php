@@ -297,12 +297,12 @@ class load
 				$sql_where = " AND session_id = '" . $this->db->sql_escape($this->user->data['session_id']) . "' ";
 			}
 
-			$sql = 'SELECT code FROM ' . DL_HOTLINK_TABLE . '
+			$sql = 'SELECT hotlink_id FROM ' . DL_HOTLINK_TABLE . '
 				WHERE user_id = ' . (int) $this->user->data['user_id'] . "
-					AND hotlink_id = 'dlvc'
+					AND code = 'dlvc'
 					$sql_where";
 			$result = $this->db->sql_query($sql);
-			$row_code = $this->db->sql_fetchfield('code');
+			$row_code = $this->db->sql_fetchfield('hotlink_id');
 			$this->db->sql_freeresult($result);
 
 			if ($row_code != $code)
