@@ -179,9 +179,15 @@ class acp_config_controller implements acp_config_interface
 						'legend3'				=> '',
 		
 						'dl_show_real_filetime'		=> array('lang' => 'DL_SHOW_REAL_FILETIME',		'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_SHOW_REAL_FILETIME'),
-						'dl_file_hash_algo'			=> array('lang' => 'DL_FILE_HASH_ALGO',			'validate' => 'string',	'type' => 'select',			'explain' => false,		'help_key' => 'DL_FILE_HASH_ALGO',					'function' => array($this, 'select_dl_hash_algo'),	'params' => array('{CONFIG_VALUE}')),
+						'dl_file_hash_algo'			=> array('lang' => 'DL_FILE_HASH_ALGO',			'validate' => 'string',	'type' => 'select',			'explain' => false,		'help_key' => 'DL_FILE_HASH_ALGO',		'function' => array($this, 'select_dl_hash_algo'),	'params' => array('{CONFIG_VALUE}')),
 						'dl_ext_new_window'			=> array('lang' => 'DL_EXT_NEW_WINDOW',			'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_EXT_NEW_WINDOW'),
 						'dl_report_broken_message'	=> array('lang' => 'DL_REPORT_BROKEN_MESSAGE',	'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_REPORT_BROKEN_MESSAGE'),
+
+						'legend4'				=> '',
+		
+						'dl_nav_link_main'			=> array('lang' => 'DL_NAV_LINK_MAIN',			'validate' => 'string',	'type' => 'select',			'explain' => false,		'help_key' => false,		'function' => array($this, 'select_nav_link_pos'),	'params' => array('{CONFIG_VALUE}')),
+						'dl_nav_link_hacks'			=> array('lang' => 'DL_NAV_LINK_HACKS',			'validate' => 'string',	'type' => 'select',			'explain' => false,		'help_key' => false,		'function' => array($this, 'select_nav_link_pos'),	'params' => array('{CONFIG_VALUE}')),
+						'dl_nav_link_tracker'		=> array('lang' => 'DL_NAV_LINK_TRACKER',		'validate' => 'string',	'type' => 'select',			'explain' => false,		'help_key' => false,		'function' => array($this, 'select_nav_link_pos'),	'params' => array('{CONFIG_VALUE}')),
 					)
 				);
 		
@@ -205,7 +211,7 @@ class acp_config_controller implements acp_config_interface
 				if ($fulltext_dl_search_enabled)
 				{
 					$display_vars['vars'] = array_merge($display_vars['vars'], array(
-						'legend4'				=> '',
+						'legend5'				=> '',
 		
 						'dl_similar_dl'		=> array('lang' => 'DL_SIMILAR_DL_OPTION',		'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_SIMILAR_DL'),
 						'dl_similar_limit'	=> array('lang' => 'DL_SIMILAR_DL_LIMIT',		'validate' => 'int',	'type' => 'text:3:5',		'explain' => false,		'help_key' => 'DL_SIMILAR_DL_LIMIT'),
@@ -991,5 +997,25 @@ class acp_config_controller implements acp_config_interface
 		$input_field .= '<br />&nbsp;&nbsp;&nbsp;&nbsp;[ <a href="' . append_sid("{$this->root_path}memberlist.{$this->phpEx}", 'mode=searchuser&amp;form=acp_dl_config&amp;field=' . $config . '&amp;select_single=true') . '" onclick="find_username(this.href); return false;">' . $this->language->lang('FIND_USERNAME') . '</a> ]';
 
 		return $input_field;
+	}
+
+	public function select_nav_link_pos($value)
+	{
+		$s_select = '<option value="HIDE">'   . $this->language->lang('DL_NAV_LINK_HIDE')  . '</option>';	// Link hidden / for uses in extensions
+		$s_select .= '<option value="NHQLB">' . $this->language->lang('DL_NAV_LINK_NHQLB') . '</option>';	// navbar_header_quick_links_before
+		$s_select .= '<option value="NHQLA">' . $this->language->lang('DL_NAV_LINK_NHQLA') . '</option>';	// navbar_header_quick_links_after
+		$s_select .= '<option value="OHNP">'  . $this->language->lang('DL_NAV_LINK_OHNP')  . '</option>';	// overall_header_navigation_prepend
+		$s_select .= '<option value="OHNA">'  . $this->language->lang('DL_NAV_LINK_OHNA')  . '</option>';	// overall_header_navigation_append [DEFAULT]
+		$s_select .= '<option value="NHUPA">' . $this->language->lang('DL_NAV_LINK_NHUPA') . '</option>';	// navbar_header_user_profile_append
+		$s_select .= '<option value="NHPLB">' . $this->language->lang('DL_NAV_LINK_NHPLB') . '</option>';	// navbar_header_profile_list_before
+		$s_select .= '<option value="NHPLA">' . $this->language->lang('DL_NAV_LINK_NHPLA') . '</option>';	// navbar_header_profile_list_after
+		$s_select .= '<option value="NHUPP">' . $this->language->lang('DL_NAV_LINK_NHUPP') . '</option>';	// navbar_header_user_profile_prepend
+		$s_select .= '<option value="OFTlA">' . $this->language->lang('DL_NAV_LINK_OFTlA') . '</option>';	// overall_footer_teamlink_after
+		$s_select .= '<option value="OFTlB">' . $this->language->lang('DL_NAV_LINK_OFTlB') . '</option>';	// overall_footer_teamlink_before
+		$s_select .= '<option value="OFTzA">' . $this->language->lang('DL_NAV_LINK_OFTzA') . '</option>';	// overall_footer_timezone_after
+		$s_select .= '<option value="OFTzB">' . $this->language->lang('DL_NAV_LINK_OFTzB') . '</option>';	// overall_footer_timezone_before
+		$s_select = str_replace('value="' . $value . '">', 'value="' . $value . '" selected="selected">', $s_select);
+
+		return $s_select;
 	}
 }

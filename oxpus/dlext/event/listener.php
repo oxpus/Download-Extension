@@ -279,6 +279,7 @@ class listener implements EventSubscriberInterface
 
 			$this->_dl_add_download_message($event);
 			$this->_dl_reset_values();
+			$this->_dl_navi_links();
 		}
 	}
 
@@ -462,8 +463,8 @@ class listener implements EventSubscriberInterface
 		$placeholders	= array('--AMPERSAND--', '--QUESTIONAIRE--');
 
 		$content = str_replace($replacements, $placeholders, $content);
-		$content = preg_replace_callback('#(">)(.*?)(\/dlext\/--QUESTIONAIRE--view=detail--AMPERSAND--df_id=)(\d+)(.*?)(<\/URL>)#i', array('self', '_dl_mod_callback'), $content);
-		$content = preg_replace_callback('#(">)(.*?)(\/dlext\/details--QUESTIONAIRE--df_id=)(\d+)(.*?)(<\/URL>)#i', array('self', '_dl_mod_callback'), $content);
+		$content = preg_replace_callback('#()(.*?)(\/dlext\/--QUESTIONAIRE--view=detail--AMPERSAND--df_id=)(\d+)(.*?)(<\/URL>)#i', array('self', '_dl_mod_callback'), $content);
+		$content = preg_replace_callback('#()(.*?)(\/dlext\/details--QUESTIONAIRE--df_id=)(\d+)(.*?)(<\/URL>)#i', array('self', '_dl_mod_callback'), $content);
 		$content = str_replace($placeholders, $replacements, $content);
 
 		$event['text'] = $content;
@@ -545,7 +546,7 @@ class listener implements EventSubscriberInterface
 				$title .= ' (' . $this->dl_index[$cat_id]['cat_name_nav'] . ')';
 			}
 	
-			return '">' . $title . '</URL>';
+			return '' . $title . '</URL>';
 		}
 		else
 		{
@@ -643,5 +644,55 @@ class listener implements EventSubscriberInterface
 		}
 
 		@unlink(DL_EXT_CACHE_PATH . 'data_dl_auth_groups.' . $this->php_ext);
+	}
+
+	private function _dl_navi_links()
+	{
+		$this->template->assign_vars(array(
+			'S_DL_NAV_MAIN_NHQLB'		=> ($this->config['dl_nav_link_main'] == 'NHQLB') ? true : false,
+			'S_DL_NAV_MAIN_NHQLA'		=> ($this->config['dl_nav_link_main'] == 'NHQLA') ? true : false,
+			'S_DL_NAV_MAIN_OHNP' 		=> ($this->config['dl_nav_link_main'] == 'OHNP') ? true : false,
+			'S_DL_NAV_MAIN_OHNA' 		=> ($this->config['dl_nav_link_main'] == 'OHNA') ? true : false,
+			'S_DL_NAV_MAIN_NHUPP'		=> ($this->config['dl_nav_link_main'] == 'NHUPP') ? true : false,
+			'S_DL_NAV_MAIN_NHUP' 		=> ($this->config['dl_nav_link_main'] == 'NHUP') ? true : false,
+			'S_DL_NAV_MAIN_NHPLB'		=> ($this->config['dl_nav_link_main'] == 'NHPLB') ? true : false,
+			'S_DL_NAV_MAIN_NHPLA'		=> ($this->config['dl_nav_link_main'] == 'NHPLA') ? true : false,
+			'S_DL_NAV_MAIN_NHUA'		=> ($this->config['dl_nav_link_main'] == 'NHUA') ? true : false,
+			'S_DL_NAV_MAIN_NHUPA'		=> ($this->config['dl_nav_link_main'] == 'NHUPA') ? true : false,
+			'S_DL_NAV_MAIN_OFTzB'		=> ($this->config['dl_nav_link_main'] == 'OFTzB') ? true : false,
+			'S_DL_NAV_MAIN_OFTzA'		=> ($this->config['dl_nav_link_main'] == 'OFTzA') ? true : false,
+			'S_DL_NAV_MAIN_OFTlB'		=> ($this->config['dl_nav_link_main'] == 'OFTlB') ? true : false,
+			'S_DL_NAV_MAIN_OFTlA'		=> ($this->config['dl_nav_link_main'] == 'OFTlA') ? true : false,
+
+			'S_DL_NAV_HACKS_NHQLB'		=> ($this->config['dl_nav_link_hacks'] == 'NHQLB') ? true : false,
+			'S_DL_NAV_HACKS_NHQLA'		=> ($this->config['dl_nav_link_hacks'] == 'NHQLA') ? true : false,
+			'S_DL_NAV_HACKS_OHNP' 		=> ($this->config['dl_nav_link_hacks'] == 'OHNP') ? true : false,
+			'S_DL_NAV_HACKS_OHNA' 		=> ($this->config['dl_nav_link_hacks'] == 'OHNA') ? true : false,
+			'S_DL_NAV_HACKS_NHUPP'		=> ($this->config['dl_nav_link_hacks'] == 'NHUPP') ? true : false,
+			'S_DL_NAV_HACKS_NHUP' 		=> ($this->config['dl_nav_link_hacks'] == 'NHUP') ? true : false,
+			'S_DL_NAV_HACKS_NHPLB'		=> ($this->config['dl_nav_link_hacks'] == 'NHPLB') ? true : false,
+			'S_DL_NAV_HACKS_NHPLA'		=> ($this->config['dl_nav_link_hacks'] == 'NHPLA') ? true : false,
+			'S_DL_NAV_HACKS_NHUA'		=> ($this->config['dl_nav_link_hacks'] == 'NHUA') ? true : false,
+			'S_DL_NAV_HACKS_NHUPA'		=> ($this->config['dl_nav_link_hacks'] == 'NHUPA') ? true : false,
+			'S_DL_NAV_HACKS_OFTzB'		=> ($this->config['dl_nav_link_hacks'] == 'OFTzB') ? true : false,
+			'S_DL_NAV_HACKS_OFTzA'		=> ($this->config['dl_nav_link_hacks'] == 'OFTzA') ? true : false,
+			'S_DL_NAV_HACKS_OFTlB'		=> ($this->config['dl_nav_link_hacks'] == 'OFTlB') ? true : false,
+			'S_DL_NAV_HACKS_OFTlA'		=> ($this->config['dl_nav_link_hacks'] == 'OFTlA') ? true : false,
+
+			'S_DL_NAV_TRACKER_NHQLB'	=> ($this->config['dl_nav_link_tracker'] == 'NHQLB') ? true : false,
+			'S_DL_NAV_TRACKER_NHQLA'	=> ($this->config['dl_nav_link_tracker'] == 'NHQLA') ? true : false,
+			'S_DL_NAV_TRACKER_OHNP' 	=> ($this->config['dl_nav_link_tracker'] == 'OHNP') ? true : false,
+			'S_DL_NAV_TRACKER_OHNA' 	=> ($this->config['dl_nav_link_tracker'] == 'OHNA') ? true : false,
+			'S_DL_NAV_TRACKER_NHUPP'	=> ($this->config['dl_nav_link_tracker'] == 'NHUPP') ? true : false,
+			'S_DL_NAV_TRACKER_NHUP' 	=> ($this->config['dl_nav_link_tracker'] == 'NHUP') ? true : false,
+			'S_DL_NAV_TRACKER_NHPLB'	=> ($this->config['dl_nav_link_tracker'] == 'NHPLB') ? true : false,
+			'S_DL_NAV_TRACKER_NHPLA'	=> ($this->config['dl_nav_link_tracker'] == 'NHPLA') ? true : false,
+			'S_DL_NAV_TRACKER_NHUA'		=> ($this->config['dl_nav_link_tracker'] == 'NHUA') ? true : false,
+			'S_DL_NAV_TRACKER_NHUPA'	=> ($this->config['dl_nav_link_tracker'] == 'NHUPA') ? true : false,
+			'S_DL_NAV_TRACKER_OFTzB'	=> ($this->config['dl_nav_link_tracker'] == 'OFTzB') ? true : false,
+			'S_DL_NAV_TRACKER_OFTzA'	=> ($this->config['dl_nav_link_tracker'] == 'OFTzA') ? true : false,
+			'S_DL_NAV_TRACKER_OFTlB'	=> ($this->config['dl_nav_link_tracker'] == 'OFTlB') ? true : false,
+			'S_DL_NAV_TRACKER_OFTlA'	=> ($this->config['dl_nav_link_tracker'] == 'OFTlA') ? true : false,
+		));
 	}
 }

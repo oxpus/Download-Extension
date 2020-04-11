@@ -269,7 +269,7 @@ class version
 		{
 			$file_size_out = $this->language->lang('DL_NOT_AVAILIBLE');
 		}
-		
+
 		$cat_name = $index[$cat_id]['cat_name'];
 		$cat_view = $index[$cat_id]['nav_path'];
 		$cat_desc = $index[$cat_id]['description'];

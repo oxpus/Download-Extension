@@ -171,6 +171,7 @@ switch ($nav_view)
 	case 'tracker':
 	case 'thumbs':
 	case 'upload':
+	case 'version':
 
 		$index = $this->dlext_main->full_index();
 	break;

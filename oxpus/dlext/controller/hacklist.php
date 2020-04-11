@@ -206,6 +206,11 @@ class hacklist
 				if ($hacklist[$cat_id])
 				{
 					$hack_name				= $dl_files[$i]['description'];
+					$desc_uid				= $dl_files[$i]['desc_uid'];
+					$desc_bitfield			= $dl_files[$i]['desc_bitfield'];
+					$desc_flags				= $dl_files[$i]['desc_flags'];
+					$hack_name			= generate_text_for_display($hack_name, $desc_uid, $desc_bitfield, $desc_flags);
+			
 					$hack_author			= ($dl_files[$i]['hack_author'] != '') ? $dl_files[$i]['hack_author'] : 'n/a';
 					$hack_author_email		= $dl_files[$i]['hack_author_email'];
 					$hack_author_website	= $dl_files[$i]['hack_author_website'];
@@ -215,13 +220,9 @@ class hacklist
 					$description			= $dl_files[$i]['long_desc'];
 					$uid					= $dl_files[$i]['long_desc_uid'];
 					$bitfield				= $dl_files[$i]['long_desc_bitfield'];
-					$flags					= $dl_files[$i]['long_desc_flags'];
+					$flags					= (isset($dl_files[$i]['long_desc_flags'])) ? $dl_files[$i]['long_desc_flags'] : 0;
 
-					if ($uid)
-					{
-						$text_ary = generate_text_for_display($description, $uid, $bitfield, $flags);
-						$description = (isset($text_ary['text'])) ? $text_ary['text'] : $description;
-					}
+					$description = generate_text_for_display($description, $uid, $bitfield, $flags);
 
 					$this->template->assign_block_vars('listrow', array(
 						'CAT_NAME'				=> $hacklist[$cat_id],

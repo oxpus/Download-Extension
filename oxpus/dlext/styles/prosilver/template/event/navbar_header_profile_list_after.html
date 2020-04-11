@@ -1,0 +1,21 @@
+{% if U_DL_NAVI and S_DL_NAV_MAIN_NHPLA %}
+<li>
+	<a href="{{ U_DL_NAVI }}" role="menuitem">
+		<i class="icon fa-download fa-fw" aria-hidden="true"></i><span>{{ lang('DOWNLOADS') }}</span>
+	</a>
+</li>
+{% endif %}
+{% if U_DL_HACKS_LIST and S_DL_NAV_HACKS_NHPLA %}
+<li>
+	<a href="{{ U_DL_HACKS_LIST }}" role="menuitem">
+		<i class="icon fa-map fa-fw" aria-hidden="true"></i><span>{{ lang('DL_HACKS_LIST') }}</span>
+	</a>
+</li>
+{% endif %}
+{% if U_DL_BUG_TRACKER and S_DL_NAV_TRACKER_NHPLA %}
+<li>
+	<a href="{{ U_DL_BUG_TRACKER }}" role="menuitem">
+		<i class="icon fa-bug fa-fw" aria-hidden="true"></i><span>{{ lang('DL_BUG_TRACKER') }}</span>
+	</a>
+</li>
+{% endif %}
