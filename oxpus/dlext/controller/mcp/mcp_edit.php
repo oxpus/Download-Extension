@@ -14,8 +14,6 @@ use Symfony\Component\DependencyInjection\Container;
 
 class mcp_edit
 {
-	protected $u_action;
-
 	/* @var string phpBB root path */
 	protected $root_path;
 
@@ -141,21 +139,17 @@ class mcp_edit
 		$this->dlext_topic				= $dlext_topic;
 	}
 
-	public function set_action($u_action)
-	{
-		$this->u_action = $u_action;
-	}
-
 	public function handle()
 	{
 		$nav_view = 'modcp';
+		$modcp_mode = 'edit';
 
 		// Include the default base init script
 		include_once($this->ext_path . 'phpbb/includes/base_init.' . $this->php_ext);
 
 		if (!$df_id)
 		{
-			redirect($this->u_action . '&amp;mode=mcp_manage&amp;cat_id=' . $cat_id);
+			redirect($this->helper->route('oxpus_dlext_mcp_manage', array('cat_id' => $cat_id)));
 		}
 
 		if ($cancel && $file_option == 3)
@@ -164,7 +158,6 @@ class mcp_edit
 		}
 
 		$own_edit = false;
-		$deny_modcp = true;
 		
 		if ($this->config['dl_edit_own_downloads'])
 		{
@@ -185,42 +178,15 @@ class mcp_edit
 			$access_cat[0] = $cat_id;
 			$deny_modcp = false;
 		}
-		else
-		{
-			$access_cat = array();
-			$access_cat = $this->dlext_main->full_index(0, 0, 0, 2);
-		}
-		
-		$cat_auth = array();
-		$cat_auth = $this->dlext_auth->dl_cat_auth($cat_id);
-		
-		if (sizeof($access_cat) || $this->auth->acl_get('a_'))
-		{
-			$deny_modcp = false;
-		}
-
-		$dl_index = $this->dlext_auth->dl_index();
-
-		if (isset($dl_index[$cat_id]['auth_mod']) && $dl_index[$cat_id]['auth_mod'])
-		{
-			$deny_modcp = false;
-		}
 
 		unset($dl_index);
 
-		if ($cat_auth['auth_mod'])
-		{
-			$deny_modcp = false;
-		}
-		
 		if ($deny_modcp)
 		{
 			trigger_error($this->language->lang('DL_NO_PERMISSION'));
 		}
 
 		add_form_key('dl_modcp');
-
-		$this->template->assign_var('S_DL_MCP', true);
 
 		// Initiate custom fields
 		include($this->ext_path . 'phpbb/includes/fields.' . $this->php_ext);
@@ -943,7 +909,7 @@ class mcp_edit
 			}
 			else
 			{
-				$meta_url		= $this->u_action . '&amp;mode=mcp_manage&amp;cat_id=' . $cat_id;
+				$meta_url		= $this->helper->route('oxpus_dlext_mcp_manage', array('cat_id' => $cat_id));
 				$return_string	= ($action == 'approve') ? $this->language->lang('CLICK_RETURN_MODCP_APPROVE') : $this->language->lang('CLICK_RETURN_MODCP_MANAGE');
 				$message		= $this->language->lang('DOWNLOAD_UPDATED') . $thumb_message . '<br /><br />' . sprintf($return_string, '<a href="' . $meta_url . '">', '</a>') . $ver_message;
 			}
@@ -1266,7 +1232,7 @@ class mcp_edit
 			'S_FILE_EXT_SIZE_RANGE'	=> $s_file_ext_size_range,
 			'S_HACKLIST'			=> $s_hacklist,
 			'S_UPLOAD_TRAFFIC'		=> $s_upload_traffic,
-			'S_DOWNLOADS_ACTION'	=> $this->u_action . '&amp;mode=mcp_edit',
+			'S_DOWNLOADS_ACTION'	=> $this->helper->route('oxpus_dlext_mcp_edit'),
 			'S_HIDDEN_FIELDS'		=> build_hidden_fields($s_hidden_fields))
 		);
 
@@ -1275,5 +1241,7 @@ class mcp_edit
 		$cp->generate_profile_fields($this->user->get_iso_lang_id());
 
 		$this->template->assign_var('S_VERSION_ON', true);
+
+		return $this->helper->render('dl_mcp_edit.html', $this->language->lang('MCP'));
 	}
 }

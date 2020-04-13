@@ -28,7 +28,6 @@ class dlext_email implements dlext_email_interface
 
 	protected $root_path;
 	protected $php_ext;
-	protected $u_mcp_link;
 	protected $ext_path;
 
 	protected $language;
@@ -69,7 +68,6 @@ class dlext_email implements dlext_email_interface
 
 		$this->root_path	= $this->dlext_init->root_path();
 		$this->php_ext		= $this->dlext_init->php_ext();
-		$this->u_mcp_link	= append_sid($this->root_path . 'mcp.' . $this->php_ext, 'i=-oxpus-dlext-mcp-main_module', true, $this->user->session_id);
 		$this->ext_path		= $phpbb_extension_manager->get_extension_path('oxpus/dlext', true);
 	}
 
@@ -102,7 +100,7 @@ class dlext_email implements dlext_email_interface
 				'DOWNLOAD'		=> strip_tags(htmlspecialchars_decode($mail_data['description'])),
 				'DESCRIPTION'	=> strip_tags(htmlspecialchars_decode($mail_data['long_desc'])),
 				'CATEGORY'		=> strip_tags(htmlspecialchars_decode($mail_data['cat_name'])),
-				'U_APPROVE'		=> generate_board_url(true) . $this->u_mcp_link . '&amp;mode=mcp_approve',
+				'U_APPROVE'		=> generate_board_url(true) . $this->helper->route('oxpus_dlext_mcp_approve'),
 				'U_CATEGORY'	=> generate_board_url(true) . $this->helper->route('oxpus_dlext_index', array('cat' => $cat_id), false, ''),
 			));
 
@@ -209,7 +207,7 @@ class dlext_email implements dlext_email_interface
 				'CATEGORY'		=> strip_tags(htmlspecialchars_decode($mail_data['cat_name'])),
 				'USERNAME'		=> strip_tags(htmlspecialchars_decode($row['username'])),
 				'DOWNLOAD'		=> strip_tags(htmlspecialchars_decode($mail_data['description'])),
-				'U_APPROVE'		=> generate_board_url(true) . $this->u_mcp_link . '&amp;mode=mcp_capprove',
+				'U_APPROVE'		=> generate_board_url(true) . $this->helper->route('oxpus_dlext_mcp_capprove'),
 				'U_DOWNLOAD'	=> generate_board_url(true) . $this->helper->route('oxpus_dlext_details', array('view' => 'comment', 'action' => 'view', 'cat_id' => $cat_id, 'df_id' => $df_id), false, ''),
 			));
 			$messenger->send(NOTIFY_EMAIL);

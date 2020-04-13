@@ -55,7 +55,6 @@ class index
 
 	/** @var extension owned objects */
 	protected $ext_path;
-	protected $u_mcp_link;
 
 	protected $dlext_auth;
 	protected $dlext_files;
@@ -120,9 +119,6 @@ class index
 		$this->ext_path					= $this->phpbb_extension_manager->get_extension_path('oxpus/dlext', true);
 		$this->ext_path_web				= $this->phpbb_path_helper->update_web_root_path($this->ext_path);
 		$this->ext_path_ajax			= $this->ext_path_web . 'assets/javascript/';
-
-		$this->u_mcp_link				= append_sid("{$root_path}mcp.$php_ext", 'i=-oxpus-dlext-mcp-main_module', true, $this->user->session_id);
-
 
 		$this->dlext_auth				= $dlext_auth;
 		$this->dlext_files				= $dlext_files;
@@ -623,7 +619,7 @@ class index
 					'FILE_KLICKS'			=> $file_klicks,
 					'FILE_OVERALL_KLICKS'	=> $file_overall_klicks,
 					'DF_ID'					=> $file_id,
-					'U_DIRECT_EDIT'			=> ($cat_edit_link) ? $this->u_mcp_link . '&amp;mode=mcp_edit&amp;cat_id=' . $cat . '&amp;df_id=' . $file_id : '',
+					'U_DIRECT_EDIT'			=> ($cat_edit_link) ? $this->helper->route('oxpus_dlext_mcp_edit', array('cat_id' => $cat, 'df_id' => $file_id)) : '',
 					'U_FILE'				=> $file_url)
 				);
 		

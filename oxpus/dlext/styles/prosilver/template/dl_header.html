@@ -1,13 +1,27 @@
-{% if S_DL_MCP %}
-{% INCLUDE 'mcp_header.html' %}
-{% else %}
 {% INCLUDE 'overall_header.html' %}
 
-{% if S_MODS_CHECK %}
-<div class="rules">
-	<div class="inner">
-		<strong>{{ lang('STAGE_VERSION_CHECK') }}{{ lang('COLON') }}</strong> {{ NOT_UP_TO_DATE }}
-	</div>
+{% if S_DL_MCP %}
+
+<h2>{{ lang('MCP') }}</h2>
+
+<div id="tabs" class="tabs">
+	<ul>
+		<li class="tab{% if S_MCP_TAB_MANAGE %} activetab{% endif %}"><a href="{{ U_DL_MCP_MANAGE }}">{{ lang('DL_MODCP_MANAGE') }}</a></li>
+		<li class="tab{% if S_MCP_TAB_EDIT %} activetab{% endif %}"><a href="{{ U_DL_MCP_EDIT }}">{{ lang('DL_MODCP_EDIT') }}</a></li>
+		<li class="tab{% if S_MCP_TAB_APPROVE %} activetab{% endif %}"><a href="{{ U_DL_MCP_APPROVE }}">{{ lang('DL_MODCP_APPROVE') }}</a></li>
+		<li class="tab{% if S_MCP_TAB_CAPPROVE %} activetab{% endif %}"><a href="{{ U_DL_MCP_CAPPROVE }}">{{ lang('DL_MODCP_CAPPROVE') }}</a></li>
+	</ul>
 </div>
-{% endif %}
+<div class="panel bg3">
+	<div class="inner">
+		<div style="width: 100%;">
+			<div id="cp-menu" class="cp-menu">
+				<div class="navigation responsive-hide" id="navigation" role="navigation">
+					<ul>
+						<li id="active-subsection" class="active-subsection"><a href=""><span>{{ MCP_TAB_MODULE }}</span></a></li>
+					</ul>
+				</div>
+			</div>
+			<div id="cp-main" class="cp-main mcp-main panel-container">
+
 {% endif %}

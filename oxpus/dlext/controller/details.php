@@ -1577,7 +1577,7 @@ class details
 			'U_BUG_TRACKER'		=> $this->helper->route('oxpus_dlext_tracker', array('df_id' => $df_id)),
 
 			'U_TOPIC'			=> append_sid($this->root_path . 'viewtopic.' . $this->php_ext, 't=' . $dl_files['dl_topic']),
-			'U_EDIT'			=> append_sid($this->root_path . 'mcp.' . $this->php_ext, 'i=-oxpus-dlext-mcp-main_module&amp;mode=mcp_edit&amp;df_id=' . $file_id . '&amp;cat_id=' . $cat_id, true, $this->user->session_id),
+			'U_EDIT'			=> $this->helper->route('oxpus_dlext_mcp_edit', array('df_id' => $file_id, 'cat_id' => $cat_id)),
 			'U_EDIT_THUMBS'		=> $this->helper->route('oxpus_dlext_thumbs', array('df_id' => $file_id, 'cat_id' => $cat_id)),
 			'U_FAVORITE'		=> $u_favorite,
 			'U_DL_SEARCH'		=> $this->helper->route('oxpus_dlext_search', array('view' => 'search')),

@@ -49,7 +49,6 @@ class footer implements footer_interface
 	protected $cat_id;
 	protected $df_id;
 	protected $index;
-	protected $u_mcp_link;
 	protected $ext_path;
 	protected $ext_path_web;
 	protected $ext_path_ajax;
@@ -108,7 +107,6 @@ class footer implements footer_interface
 
 		$this->request 			= $this->phpbb_container->get('request');
 
-		$this->u_mcp_link		= append_sid("{$root_path}mcp.$php_ext", 'i=-oxpus-dlext-mcp-main_module', true, $this->user->session_id);
 		$this->ext_path			= $phpbb_extension_manager->get_extension_path('oxpus/dlext', true);
 		$this->ext_path_web		= $phpbb_path_helper->update_web_root_path($this->ext_path);
 		$this->ext_path_ajax	= $this->ext_path_web . 'assets/javascript/';
@@ -137,11 +135,6 @@ class footer implements footer_interface
 	{
 		if (sizeof($this->index) || $this->cat_id)
 		{
-			if ($this->cat_id)
-			{
-				$mcp_cat = $this->cat_id;
-			}
-
 			include($this->ext_path . 'phpbb/includes/base_init' . $this->dlext_init->php_ext());
 			include($this->ext_path . 'phpbb/includes/sort_init' . $this->dlext_init->php_ext());
 
@@ -155,7 +148,7 @@ class footer implements footer_interface
 				$approve_string = ($total_approve == 1) ? $this->language->lang('DL_APPROVE_OVERVIEW_ONE') : $this->language->lang('DL_APPROVE_OVERVIEW');
 				$this->template->assign_block_vars('approve', array(
 					'L_APPROVE_DOWNLOADS' => sprintf($approve_string, $total_approve),
-					'U_APPROVE_DOWNLOADS' => $this->u_mcp_link . '&amp;mode=mcp_approve',
+					'U_APPROVE_DOWNLOADS' => $this->helper->route('oxpus_dlext_mcp_approve'),
 				));
 			}
 
@@ -169,7 +162,7 @@ class footer implements footer_interface
 				$approve_comment_string = ($total_comment_approve == 1) ? $this->language->lang('DL_APPROVE_OVERVIEW_ONE_COMMENT') : $this->language->lang('DL_APPROVE_OVERVIEW_COMMENTS');
 				$this->template->assign_block_vars('approve_comments', array(
 					'L_APPROVE_COMMENTS' => sprintf($approve_comment_string, $total_comment_approve),
-					'U_APPROVE_COMMENTS' => $this->u_mcp_link . '&amp;mode=mcp_capprove',
+					'U_APPROVE_COMMENTS' => $this->helper->route('oxpus_dlext_mcp_capprove'),
 				));
 			}
 

@@ -208,17 +208,76 @@ if ($nav_view <> 'broken' && $nav_view <> 'load')
 	$this->db->sql_query($sql);
 }
 
-$u_mcp_link	= append_sid("{$this->root_path}mcp.$this->php_ext", 'i=-oxpus-dlext-mcp-main_module&amp;mode=mcp_manage', true, $this->user->session_id);
-if (!isset($mcp_cat))
-{
-	$mcp_cat = ($cat_id) ? $cat_id : $cat;
-}
-
 $this->template->assign_vars(array(
 	'EXT_DL_PATH_WEB'	=> $this->ext_path_web,
 	'EXT_DL_PATH_AJAX'	=> $this->ext_path_ajax,
 	'ICON_DL_HELP'		=> '<i class="icon fa-info-circle fa-fw dl-icon-yellow"></i>',
 
-	'U_MCP'				=> ($mcp_cat && $this->dlext_auth->user_auth($mcp_cat, 'auth_mod')) ? $u_mcp_link . '&amp;cat_id=' . $mcp_cat : $u_mcp_link,
 	'U_HELP_POPUP'		=> $this->helper->route('oxpus_dlext_help'),
 ));
+
+if (!isset($mcp_cat))
+{
+	$mcp_cat = ($cat_id) ? $cat_id : $cat;
+}
+
+$deny_modcp = true;
+		
+$access_cat = array();
+$access_cat = $this->dlext_main->full_index(0, 0, 0, 2);
+
+$cat_auth = array();
+$cat_auth = $this->dlext_auth->dl_cat_auth($mcp_cat);
+
+if (sizeof($access_cat) || $this->auth->acl_get('a_'))
+{
+	$deny_modcp = false;
+}
+
+if (isset($index[$mcp_cat]['auth_mod']) && $index[$mcp_cat]['auth_mod'])
+{
+	$deny_modcp = false;
+}
+
+if ($cat_auth['auth_mod'])
+{
+	$deny_modcp = false;
+}
+
+if (!$deny_modcp)
+{
+	$mcp_mode = false;
+
+	if (isset($modcp_mode))
+	{
+		$mcp_mode = $modcp_mode;
+	}
+
+	switch($mcp_mode)
+	{
+		case 'manage':
+			$l_mcp_module = $this->language->lang('DL_MANAGE');
+		break;
+		case 'edit':
+			$l_mcp_module = $this->language->lang('DL_EDIT_FILE');
+		break;
+		default:
+			$l_mcp_module = $this->language->lang('DL_MODCP_QUEUE');
+	}
+	$this->template->assign_vars(array(
+		'MCP_TAB_MODULE'		=> $l_mcp_module,
+
+		'S_DL_MCP'				=> ($nav_view == 'modcp') ? true : false,
+		'S_MCP_TAB_MANAGE'		=> ($mcp_mode == 'manage') ? true : false,
+		'S_MCP_TAB_EDIT'		=> ($mcp_mode == 'edit') ? true : false,
+		'S_MCP_TAB_APPROVE'		=> ($mcp_mode == 'approve') ? true : false,
+		'S_MCP_TAB_CAPPROVE'	=> ($mcp_mode == 'capprove') ? true : false,
+
+		'U_DL_MCP_MANAGE'		=> $this->helper->route('oxpus_dlext_mcp_manage'),
+		'U_DL_MCP_EDIT'			=> $this->helper->route('oxpus_dlext_mcp_edit'),
+		'U_DL_MCP_APPROVE'		=> $this->helper->route('oxpus_dlext_mcp_approve'),
+		'U_DL_MCP_CAPPROVE'		=> $this->helper->route('oxpus_dlext_mcp_capprove'),
+
+		'U_MCP'					=> ($mcp_cat && $this->dlext_auth->user_auth($mcp_cat, 'auth_mod')) ? $this->helper->route('oxpus_dlext_mcp_manage', array('cat_id' => $mcp_cat)) : $this->helper->route('oxpus_dlext_mcp_manage'),
+	));
+}

@@ -466,6 +466,7 @@ $lang = array_merge($lang, array(
 	'DL_MODCP_MANAGE'				=> 'Manage downloads',
 	'DL_MODCP_MOD_AUTH'				=> '%sModerator Panel%s',
 	'DL_MODCP_MOD_SELECT'			=> 'Select an option',
+	'DL_MODCP_QUEUE'				=> 'Moderation Queue',
 	'DL_MOVE'						=> 'Move to',
 	'DL_MUST_APPROVE'				=> 'Uploads into this category must be approved',
 	'DL_MUST_BE_APPROVE_COMMENT'	=> 'This comment must be approved by an moderator or administrator!',

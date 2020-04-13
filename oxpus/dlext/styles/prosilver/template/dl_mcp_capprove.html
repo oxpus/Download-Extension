@@ -16,6 +16,8 @@ function select_switch(status)
 
 <br />
 
+{% if S_DL_MODCP_ACTION %}
+
 <form action="{{ S_DL_MODCP_ACTION }}" method="post" id="dl_modcp">
 
 <div class="panel">
@@ -78,7 +80,14 @@ function select_switch(status)
 
 </form>
 
+{% else %}
+<div class="panel">
+	<div class="inner">
+		<span>{{ lang('DL_NO_PERMISSION') }}</span>
+	</div>
+</div>
+{% endif %}
 
 <br />
 
-{% INCLUDE 'mcp_footer.html' %}
+{% INCLUDE 'dl_footer.html' %}

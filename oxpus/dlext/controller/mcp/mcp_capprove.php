@@ -14,8 +14,6 @@ use Symfony\Component\DependencyInjection\Container;
 
 class mcp_capprove
 {
-	protected $u_action;
-
 	/* @var string phpBB root path */
 	protected $root_path;
 
@@ -120,58 +118,39 @@ class mcp_capprove
 		$this->dlext_main				= $dlext_main;
 	}
 
-	public function set_action($u_action)
-	{
-		$this->u_action = $u_action;
-	}
-
 	public function handle()
 	{
 		$nav_view = 'modcp';
+		$modcp_mode = 'capprove';
 
 		// Include the default base init script
 		include_once($this->ext_path . 'phpbb/includes/base_init.' . $this->php_ext);
 
 		$action = ($delete) ? 'delete' : $action;
 
-		$deny_modcp = true;
-		
-		$access_cat = array();
-		$access_cat = $this->dlext_main->full_index(0, 0, 0, 2);
-		
-		$cat_auth = array();
-		$cat_auth = $this->dlext_auth->dl_cat_auth($cat_id);
-		
-		if (sizeof($access_cat) || $this->auth->acl_get('a_'))
-		{
-			$deny_modcp = false;
-		}
-
-		$dl_index = $this->dlext_auth->dl_index();
-
-		if (isset($dl_index[$cat_id]['auth_mod']) && $dl_index[$cat_id]['auth_mod'])
-		{
-			$deny_modcp = false;
-		}
-
 		unset($dl_index);
 
-		if ($cat_auth['auth_mod'])
+		if (!$deny_modcp)
 		{
-			$deny_modcp = false;
-		}
-		
-		if ($deny_modcp)
-		{
-			trigger_error($this->language->lang('DL_NO_PERMISSION'));
-		}
+			add_form_key('dl_modcp');
 
-		add_form_key('dl_modcp');
+			if ($action == 'delete')
+			{
+				if (!empty($dlo_id))
+				{
+					if (!check_form_key('dl_modcp'))
+					{
+						trigger_error('FORM_INVALID');
+					}
 
-		$this->template->assign_var('S_DL_MCP', true);
+					$sql = 'DELETE FROM ' . DL_COMMENTS_TABLE . '
+						WHERE ' . $this->db->sql_in_set('dl_id', $dlo_id);
+					$this->db->sql_query($sql);
+				}
 
-		if ($action == 'delete')
-		{
+				$dlo_id = array();
+			}
+
 			if (!empty($dlo_id))
 			{
 				if (!check_form_key('dl_modcp'))
@@ -179,112 +158,100 @@ class mcp_capprove
 					trigger_error('FORM_INVALID');
 				}
 
-				$sql = 'DELETE FROM ' . DL_COMMENTS_TABLE . '
-					WHERE ' . $this->db->sql_in_set('dl_id', $dlo_id);
+				$sql = 'UPDATE ' . DL_COMMENTS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', array(
+					'approve' => true)) . ' WHERE ' . $this->db->sql_in_set('dl_id', $dlo_id);
 				$this->db->sql_query($sql);
 			}
 
-			$dlo_id = array();
-		}
+			$sql_access_cats = ($this->auth->acl_get('a_') && $this->user->data['is_registered']) ? '' : ' AND ' . $this->db->sql_in_set('c.cat_id', $access_cat);
 
-		if (!empty($dlo_id))
-		{
-			if (!check_form_key('dl_modcp'))
+			$sql = 'SELECT COUNT(c.dl_id) AS total FROM ' . DL_COMMENTS_TABLE . " c
+				WHERE c.approve = 0
+					$sql_access_cats";
+			$result = $this->db->sql_query($sql);
+			$total_approve = $this->db->sql_fetchfield('total');
+			$this->db->sql_freeresult($result);
+
+			$sql = 'SELECT d.cat, d.id, d.description, d.desc_uid, d.desc_bitfield, d.desc_flags, c.comment_text, c.com_uid, c.com_bitfield, c.com_flags, c.user_id, c.username, c.dl_id FROM ' . DOWNLOADS_TABLE . ' d, ' . DL_COMMENTS_TABLE . " c
+				WHERE d.id = c.id
+					AND c.approve = 0
+					$sql_access_cats
+				ORDER BY d.cat, d.description";
+			$result = $this->db->sql_query_limit($sql, $this->config['dl_links_per_page'], $start);
+
+			while ($row = $this->db->sql_fetchrow($result))
 			{
-				trigger_error('FORM_INVALID');
+				$cat_id		= $row['cat'];
+				$cat_name	= $index[$cat_id]['cat_name'];
+				$cat_name	= str_replace('&nbsp;&nbsp;|', '', $cat_name);
+				$cat_name	= str_replace('___&nbsp;', '', $cat_name);
+				$cat_view	= $index[$cat_id]['nav_path'];
+
+				$description	= $row['description'];
+				$desc_uid		= $row['desc_uid'];
+				$desc_bitfield	= $row['desc_bitfield'];
+				$desc_flags		= $row['desc_flags'];
+				$description	= generate_text_for_display($description, $desc_uid, $desc_bitfield, $desc_flags);
+
+				$comment_text	= $row['comment_text'];
+				$com_uid		= $row['com_uid'];
+				$com_bitfield	= $row['com_bitfield'];
+				$com_flags		= $row['com_flags'];
+				$comment_text	= generate_text_for_display($comment_text, $com_uid, $com_bitfield, $com_flags);
+
+				$file_id = $row['id'];
+
+				$comment_id = $row['dl_id'];
+
+				$comment_user_id	= $row['user_id'];
+				$comment_username	= $row['username'];
+				$comment_user_link	= ($comment_user_id <> ANONYMOUS) ? append_sid($this->root_path . 'memberlist.' . $this->php_ext, "mode=viewprofile&amp;u=$comment_user_id") : '';
+
+				$this->template->assign_block_vars('approve_row', array(
+					'CAT_NAME'			=> $cat_name,
+					'FILE_ID'			=> $file_id,
+					'DESCRIPTION'		=> $description,
+					'COMMENT_USERNAME'	=> $comment_username,
+					'COMMENT_TEXT'		=> $comment_text,
+					'COMMENT_ID'		=> $comment_id,
+
+					'U_CAT_VIEW'	=> $cat_view,
+					'U_USER_LINK'	=> $comment_user_link,
+					'U_EDIT'		=> $this->helper->route('oxpus_dlext_details', array('view' => 'comment', 'action' => 'edit', 'df_id' => $file_id, 'cat_id' => $cat_id, 'dl_id' => $comment_id)),
+					'U_DOWNLOAD'	=> $this->helper->route('oxpus_dlext_details', array('df_id' => $file_id)),
+				));
 			}
+			$this->db->sql_freeresult($result);
 
-			$sql = 'UPDATE ' . DL_COMMENTS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', array(
-				'approve' => true)) . ' WHERE ' . $this->db->sql_in_set('dl_id', $dlo_id);
-			$this->db->sql_query($sql);
-		}
-
-		$sql_access_cats = ($this->auth->acl_get('a_') && $this->user->data['is_registered']) ? '' : ' AND ' . $this->db->sql_in_set('c.cat_id', $access_cat);
-
-		$sql = 'SELECT COUNT(c.dl_id) AS total FROM ' . DL_COMMENTS_TABLE . " c
-			WHERE c.approve = 0
-				$sql_access_cats";
-		$result = $this->db->sql_query($sql);
-		$total_approve = $this->db->sql_fetchfield('total');
-		$this->db->sql_freeresult($result);
-
-		$sql = 'SELECT d.cat, d.id, d.description, d.desc_uid, d.desc_bitfield, d.desc_flags, c.comment_text, c.com_uid, c.com_bitfield, c.com_flags, c.user_id, c.username, c.dl_id FROM ' . DOWNLOADS_TABLE . ' d, ' . DL_COMMENTS_TABLE . " c
-			WHERE d.id = c.id
-				AND c.approve = 0
-				$sql_access_cats
-			ORDER BY d.cat, d.description";
-		$result = $this->db->sql_query_limit($sql, $this->config['dl_links_per_page'], $start);
-
-		while ($row = $this->db->sql_fetchrow($result))
-		{
-			$cat_id		= $row['cat'];
-			$cat_name	= $index[$cat_id]['cat_name'];
-			$cat_name	= str_replace('&nbsp;&nbsp;|', '', $cat_name);
-			$cat_name	= str_replace('___&nbsp;', '', $cat_name);
-			$cat_view	= $index[$cat_id]['nav_path'];
-
-			$description	= $row['description'];
-			$desc_uid		= $row['desc_uid'];
-			$desc_bitfield	= $row['desc_bitfield'];
-			$desc_flags		= $row['desc_flags'];
-			$description	= generate_text_for_display($description, $desc_uid, $desc_bitfield, $desc_flags);
-
-			$comment_text	= $row['comment_text'];
-			$com_uid		= $row['com_uid'];
-			$com_bitfield	= $row['com_bitfield'];
-			$com_flags		= $row['com_flags'];
-			$comment_text	= generate_text_for_display($comment_text, $com_uid, $com_bitfield, $com_flags);
-
-			$file_id = $row['id'];
-
-			$comment_id = $row['dl_id'];
-
-			$comment_user_id	= $row['user_id'];
-			$comment_username	= $row['username'];
-			$comment_user_link	= ($comment_user_id <> ANONYMOUS) ? append_sid($this->root_path . 'memberlist.' . $this->php_ext, "mode=viewprofile&amp;u=$comment_user_id") : '';
-
-			$this->template->assign_block_vars('approve_row', array(
-				'CAT_NAME'			=> $cat_name,
-				'FILE_ID'			=> $file_id,
-				'DESCRIPTION'		=> $description,
-				'COMMENT_USERNAME'	=> $comment_username,
-				'COMMENT_TEXT'		=> $comment_text,
-				'COMMENT_ID'		=> $comment_id,
-
-				'U_CAT_VIEW'	=> $cat_view,
-				'U_USER_LINK'	=> $comment_user_link,
-				'U_EDIT'		=> $this->helper->route('oxpus_dlext_details', array('view' => 'comment', 'action' => 'edit', 'df_id' => $file_id, 'cat_id' => $cat_id, 'dl_id' => $comment_id)),
-				'U_DOWNLOAD'	=> $this->helper->route('oxpus_dlext_details', array('df_id' => $file_id)),
-			));
-		}
-		$this->db->sql_freeresult($result);
-
-		$s_hidden_fields = array(
-			'cat_id'	=> $cat_id,
-			'start'		=> $start
-		);
-
-		if ($total_approve > $this->config['dl_links_per_page'])
-		{
-			$pagination = $this->phpbb_container->get('pagination');
-			$pagination->generate_template_pagination(
-				$this->u_action . '&amp;mode=mcp_capprove&amp;cat_id=' . $cat_id,
-				'pagination',
-				'start',
-				$total_approve,
-				$this->config['dl_links_per_page'],
-				$page_start
+			$s_hidden_fields = array(
+				'cat_id'	=> $cat_id,
+				'start'		=> $start
 			);
 
+			if ($total_approve > $this->config['dl_links_per_page'])
+			{
+				$pagination = $this->phpbb_container->get('pagination');
+				$pagination->generate_template_pagination(
+					$this->helper->route('oxpus_dlext_mcp_capprove', array('cat_id' => $cat_id)),
+					'pagination',
+					'start',
+					$total_approve,
+					$this->config['dl_links_per_page'],
+					$page_start
+				);
+
+				$this->template->assign_vars(array(
+					'PAGE_NUMBER'	=> $pagination->on_page($total_approve, $this->config['dl_links_per_page'], $page_start),
+					'TOTAL_DL'		=> $this->language->lang('VIEW_DOWNLOADS', $total_approve),
+				));
+			}
+
 			$this->template->assign_vars(array(
-				'PAGE_NUMBER'	=> $pagination->on_page($total_approve, $this->config['dl_links_per_page'], $page_start),
-				'TOTAL_DL'		=> $this->language->lang('VIEW_DOWNLOADS', $total_approve),
-			));
+				'S_DL_MODCP_ACTION'	=> $this->helper->route('oxpus_dlext_mcp_capprove'),
+				'S_HIDDEN_FIELDS'	=> build_hidden_fields($s_hidden_fields))
+			);
 		}
 
-		$this->template->assign_vars(array(
-			'S_DL_MODCP_ACTION'	=> $this->u_action . '&amp;mode=mcp_capprove',
-			'S_HIDDEN_FIELDS'	=> build_hidden_fields($s_hidden_fields))
-		);
+		return $this->helper->render('dl_mcp_capprove.html', $this->language->lang('MCP'));
 	}
 }

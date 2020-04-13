@@ -26,6 +26,8 @@ function select_switch(status)
 
 <br />
 
+{% if S_SELECT_MCP_CAT %}
+
 <div class="panel">
 	<div class="inner">
 		{S_SELECT_MCP_CAT}
@@ -113,4 +115,14 @@ function select_switch(status)
 
 <br />
 
-{% INCLUDE 'mcp_footer.html' %}
+{% else %}
+
+<div class="panel">
+	<div class="inner">
+		<span>{{ lang('DL_NO_PERMISSION') }}</span>
+	</div>
+</div>
+
+{% endif %}
+
+{% INCLUDE 'dl_footer.html' %}
