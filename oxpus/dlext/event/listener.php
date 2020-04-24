@@ -130,18 +130,19 @@ class listener implements EventSubscriberInterface
 	{
 		return array(
 			// Board default events
-			'core.user_setup'						=> 'core_user_setup',
-			'core.page_header'						=> 'core_page_header',
-			'core.viewonline_overwrite_location'	=> 'core_viewonline_overwrite_location',
-			'core.memberlist_view_profile'			=> 'core_memberlist_view_profile',
-			'core.update_username'					=> 'core_update_username',
-			'core.delete_user_after'				=> 'core_delete_user_after',
-			'core.submit_post_end'					=> 'core_submit_post_end',
-			'core.modify_posting_parameters'		=> 'core_modify_posting_parameters',
-			'core.modify_text_for_display_before'	=> 'core_modify_text_for_display_before',
-			'core.permissions'						=> 'core_add_permission_cat',
-			'core.group_add_user_after'				=> 'core_group_change_user_after',
-			'core.group_delete_user_after'			=> 'core_group_change_user_after',
+			'core.user_setup'							=> 'core_user_setup',
+			'core.page_header'							=> 'core_page_header',
+			'core.viewonline_overwrite_location'		=> 'core_viewonline_overwrite_location',
+			'core.memberlist_view_profile'				=> 'core_memberlist_view_profile',
+			'core.update_username'						=> 'core_update_username',
+			'core.delete_user_after'					=> 'core_delete_user_after',
+			'core.submit_post_end'						=> 'core_submit_post_end',
+			'core.modify_posting_parameters'			=> 'core_modify_posting_parameters',
+			'core.modify_text_for_display_before'		=> 'dlext_modify_text_for_dl_link',
+			'core.modify_format_display_text_before'	=> 'dlext_modify_text_for_dl_link',
+			'core.permissions'							=> 'core_add_permission_cat',
+			'core.group_add_user_after'					=> 'core_group_change_user_after',
+			'core.group_delete_user_after'				=> 'core_group_change_user_after',
 
 			// Events by extensions
 			'tas2580.privacyprotection_delete_ip_after'		=> 'tas2580_privacyprotection_delete_ip_after',
@@ -455,17 +456,13 @@ class listener implements EventSubscriberInterface
 		}
 	}
 
-	public function core_modify_text_for_display_before($event)
+	public function dlext_modify_text_for_dl_link($event)
 	{
 		$content = $event['text'];
 
-		$replacements	= array('&amp;', '?');
-		$placeholders	= array('--AMPERSAND--', '--QUESTIONAIRE--');
-
-		$content = str_replace($replacements, $placeholders, $content);
-		$content = preg_replace_callback('#()(.*?)(\/dlext\/--QUESTIONAIRE--view=detail--AMPERSAND--df_id=)(\d+)(.*?)(<\/URL>)#i', array('self', '_dl_mod_callback'), $content);
-		$content = preg_replace_callback('#()(.*?)(\/dlext\/details--QUESTIONAIRE--df_id=)(\d+)(.*?)(<\/URL>)#i', array('self', '_dl_mod_callback'), $content);
-		$content = str_replace($placeholders, $replacements, $content);
+		$content = preg_replace_callback('#<a href="((.*?)">(.*?)(df_id=)(\d+))<\/a>#i', array('self', '_dl_mod_callback'), $content);
+		$content = preg_replace_callback('#<\/s>(.*?)(df_id=)(\d+)<e>#i', array('self', '_dl_mod_callback'), $content);
+		$content = preg_replace_callback('#<LINK_TEXT text="(.*?)">(.*?)(df_id=)(\d+)<\/LINK_TEXT>#i', array('self', '_dl_mod_callback'), $content);
 
 		$event['text'] = $content;
 	}
@@ -524,8 +521,24 @@ class listener implements EventSubscriberInterface
 			$this->phpbb_container->get('oxpus.dlext.constants')->init();
 		}
 
+		if (isset($part[5]) && (int) $part[5])
+		{
+			$dl_id = $part[5];
+			$link_text = 'preview';
+		}
+		else if (isset($part[4]) && (int) $part[4])
+		{
+			$dl_id = $part[4];
+			$link_text = 'link_text';
+		}
+		else
+		{
+			$dl_id = $part[3];
+			$link_text = 'postlink';
+		}
+
 		$sql = 'SELECT cat, description, desc_uid, desc_bitfield, desc_flags FROM ' . DOWNLOADS_TABLE . '
-			WHERE id = ' . (int) $part[4];
+			WHERE id = ' . (int) $dl_id;
 		$result = $this->db->sql_query($sql);
 		$row = $this->db->sql_fetchrow($result);
 
@@ -546,7 +559,19 @@ class listener implements EventSubscriberInterface
 				$title .= ' (' . $this->dl_index[$cat_id]['cat_name_nav'] . ')';
 			}
 	
-			return '' . $title . '</URL>';
+			switch ($link_text)
+			{
+				case 'preview':
+					$link_title = '<a href="' . $part[2] . '">' . $title . '</a>';
+				break;
+				case 'link_text':
+					$link_title = '<LINK_TEXT text="' . $title . '">' . $title . '</LINK_TEXT>';
+				break;
+				case 'postlink':
+					$link_title = '</s>' . $title . '<e>';
+			}
+
+			return $link_title;
 		}
 		else
 		{
