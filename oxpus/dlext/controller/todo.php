@@ -55,6 +55,7 @@ class todo
 	protected $ext_path_web;
 	protected $ext_path_ajax;
 
+	protected $dlext_auth;
 	protected $dlext_extra;
 	protected $dlext_files;
 	protected $dlext_main;
@@ -88,6 +89,7 @@ class todo
 		\phpbb\template\template $template,
 		\phpbb\user $user,
 		\phpbb\language\language $language,
+		$dlext_auth,
 		$dlext_extra,
 		$dlext_files,
 		$dlext_main
@@ -110,6 +112,7 @@ class todo
 		$this->ext_path_web				= $this->phpbb_path_helper->update_web_root_path($this->ext_path);
 		$this->ext_path_ajax			= $this->ext_path_web . 'assets/javascript/';
 
+		$this->dlext_auth				= $dlext_auth;
 		$this->dlext_extra				= $dlext_extra;
 		$this->dlext_files				= $dlext_files;
 		$this->dlext_main				= $dlext_main;

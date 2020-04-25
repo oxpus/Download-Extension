@@ -55,9 +55,9 @@ class hacklist
 	protected $ext_path_web;
 	protected $ext_path_ajax;
 
+	protected $dlext_auth;
 	protected $dlext_hacklist;
 	protected $dlext_main;
-	protected $dlext_user;
 
 	/**
 	* Constructor
@@ -88,6 +88,7 @@ class hacklist
 		\phpbb\controller\helper $helper,
 		\phpbb\user $user,
 		\phpbb\db\driver\driver_interface $db,
+		$dlext_auth,
 		$dlext_hacklist,
 		$dlext_main
 	)
@@ -109,6 +110,7 @@ class hacklist
 		$this->ext_path_web				= $this->phpbb_path_helper->update_web_root_path($this->ext_path);
 		$this->ext_path_ajax			= $this->ext_path_web . 'assets/javascript/';
 
+		$this->dlext_auth				= $dlext_auth;
 		$this->dlext_hacklist			= $dlext_hacklist;
 		$this->dlext_main				= $dlext_main;
 	}

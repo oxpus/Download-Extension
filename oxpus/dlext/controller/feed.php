@@ -46,6 +46,7 @@ class feed
 	protected $ext_path_web;
 	protected $ext_path_ajax;
 
+	protected $dlext_auth;
 	protected $dlext_files;
 	protected $dlext_main;
 	protected $dlext_status;
@@ -86,6 +87,7 @@ class feed
 		$this->ext_path_web		= $phpbb_path_helper->update_web_root_path($this->ext_path);
 		$this->ext_path_ajax	= $this->ext_path_web . 'assets/javascript/';
 
+		$this->dlext_auth		= $dlext_auth;
 		$this->dlext_files		= $dlext_files;
 		$this->dlext_main		= $dlext_main;
 		$this->dlext_status		= $dlext_status;

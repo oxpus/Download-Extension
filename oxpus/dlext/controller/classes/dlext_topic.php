@@ -282,7 +282,7 @@ class dlext_topic implements dlext_topic_interface
 			$topic_title = utf8_normalize_nfc($this->language->lang('DL_TOPIC_SUBJECT', $dl_title));
 		}
 
-		$topic_text .= "\n\n[b]" . $this->language->lang('DL_VIEW_LINK') . ':[/b] [url=' . $this->helper->route('oxpus_dlext_details', array('df_id' => $dl_id), true, '') . ']' . $dl_title . '[/url]';
+		$topic_text .= "\n\n[b]" . $this->language->lang('DL_VIEW_LINK') . ':[/b] [url=' . generate_board_url(true) . $this->helper->route('oxpus_dlext_details', array('df_id' => $dl_id), true, '') . ']' . $dl_title . '[/url]';
 
 		$poll			= array();
 		$update_message	= false;
@@ -625,7 +625,7 @@ class dlext_topic implements dlext_topic_interface
 		}
 		else
 		{
-			$topic_text .= "\n\n[b]" . $this->language->lang('DL_VIEW_LINK') . ':[/b] [url=' . $this->helper->route('oxpus_dlext_details', array('df_id' => $dl_id), true, '') . ']' . $dl_title . '[/url]';
+			$topic_text .= "\n\n[b]" . $this->language->lang('DL_VIEW_LINK') . ':[/b] [url=' . generate_board_url(true) . $this->helper->route('oxpus_dlext_details', array('df_id' => $dl_id), true, '') . ']' . $dl_title . '[/url]';
 		}
 
 		$poll = $forum_data = $post_data = array();
