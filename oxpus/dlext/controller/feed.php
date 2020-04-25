@@ -67,6 +67,7 @@ class feed
 		\phpbb\language\language $language,
 		\phpbb\extension\manager $phpbb_extension_manager,
 		Container $phpbb_container,
+		$dlext_auth,
 		$dlext_files,
 		$dlext_main,
 		$dlext_status
