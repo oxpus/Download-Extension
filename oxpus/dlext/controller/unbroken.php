@@ -108,6 +108,7 @@ class unbroken
 		$this->request					= $request;
 		$this->template 				= $template;
 		$this->user 					= $user;
+		$this->language					= $language;
 
 		$this->ext_path					= $this->phpbb_extension_manager->get_extension_path('oxpus/dlext', true);
 		$this->ext_path_web				= $this->phpbb_path_helper->update_web_root_path($this->ext_path);

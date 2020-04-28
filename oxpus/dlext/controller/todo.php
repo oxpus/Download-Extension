@@ -38,6 +38,9 @@ class todo
 	/* @var \phpbb\controller\helper */
 	protected $helper;
 
+	/* @var \phpbb\auth\auth */
+	protected $auth;
+
 	/* @var \phpbb\request\request_interface */
 	protected $request;
 
@@ -85,6 +88,7 @@ class todo
 		\phpbb\db\driver\driver_interface $db,
 		\phpbb\config\config $config,
 		\phpbb\controller\helper $helper,
+		\phpbb\auth\auth $auth,
 		\phpbb\request\request_interface $request,
 		\phpbb\template\template $template,
 		\phpbb\user $user,
@@ -103,6 +107,7 @@ class todo
 		$this->db 						= $db;
 		$this->config 					= $config;
 		$this->helper 					= $helper;
+		$this->auth						= $auth;
 		$this->request					= $request;
 		$this->template 				= $template;
 		$this->user 					= $user;

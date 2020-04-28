@@ -44,6 +44,9 @@ class hacklist
 	/* @var \phpbb\controller\helper */
 	protected $helper;
 
+	/* @var \phpbb\auth\auth */
+	protected $auth;
+
 	/* @var \phpbb\user */
 	protected $user;
 
@@ -86,6 +89,7 @@ class hacklist
 		\phpbb\extension\manager $phpbb_extension_manager,
 		\phpbb\path_helper $phpbb_path_helper,
 		\phpbb\controller\helper $helper,
+		\phpbb\auth\auth $auth,
 		\phpbb\user $user,
 		\phpbb\db\driver\driver_interface $db,
 		$dlext_auth,
@@ -103,6 +107,7 @@ class hacklist
 		$this->phpbb_extension_manager 	= $phpbb_extension_manager;
 		$this->phpbb_path_helper		= $phpbb_path_helper;
 		$this->helper 					= $helper;
+		$this->auth						= $auth;
 		$this->user						= $user;
 		$this->db						= $db;
 

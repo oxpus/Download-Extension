@@ -29,6 +29,9 @@ class feed
 	/* @var \phpbb\controller\helper */
 	protected $helper;
 
+	/* @var \phpbb\auth\auth */
+	protected $auth;
+
 	/* @var \phpbb\template\template */
 	protected $template;
 
@@ -61,6 +64,7 @@ class feed
 		\phpbb\db\driver\driver_interface $db,
 		\phpbb\config\config $config,
 		\phpbb\controller\helper $helper,
+		\phpbb\auth\auth $auth,
 		\phpbb\template\template $template,
 		\phpbb\user $user,
 		\phpbb\request\request_interface $request,
@@ -78,6 +82,7 @@ class feed
 		$this->db				= $db;
 		$this->config			= $config;
 		$this->helper			= $helper;
+		$this->auth				= $auth;
 		$this->template 		= $template;
 		$this->user				= $user;
 		$this->request			= $request;
