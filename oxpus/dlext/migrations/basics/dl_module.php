@@ -10,6 +10,8 @@
 
 namespace oxpus\dlext\migrations\basics;
 
+use phpbb\module\exception\module_exception;
+
 class dl_module extends \phpbb\db\migration\migration
 {
 	public function effectively_installed()
@@ -24,35 +26,76 @@ class dl_module extends \phpbb\db\migration\migration
 
 	public function update_data()
 	{
-		return array(
-			array('module.add', array(
- 				'acp',
- 				'ACP_CAT_DOT_MODS',
- 				'ACP_DOWNLOADS'
- 			)),
-			array('module.add', array(
-				'acp',
-				'ACP_DOWNLOADS',
-				array(
-					'module_basename'	=> '\oxpus\dlext\acp\main_module',
-					'modes'				=> array('overview','config','traffic','categories','files','permissions','stats','banlist','ext_blacklist','toolbox','fields','browser'),
-				),
-			)),
-			array('module.add', array(
-				 'ucp',
-				 false,
- 				'DOWNLOADS'
- 			)),
-			array('module.add', array(
-				'ucp',
-				'DOWNLOADS',
-				array(
-					'module_basename'	=> '\oxpus\dlext\ucp\main_module',
-					'modes'				=> array('config','favorite'),
-				),
-			)),
+		global $phpbb_container;
 
-			array('config.add', array('dl_use_hacklist', '1')),
-		);
+		if ($phpbb_container->get('request')->variable('action', '') == 'delete_data')
+		{
+			$module_manager = $phpbb_container->get('module.manager');
+
+			$module_basenames = array('\oxpus\dlext\ucp\main_module', '\oxpus\dlext\acp\main_module');
+
+			$sql = 'SELECT module_id, module_class
+					FROM ' . MODULES_TABLE . '
+					WHERE ' . $this->db->sql_in_set('module_basename', $module_basenames);
+			$result = $this->db->sql_query($sql);
+
+			while ($row = $this->db->sql_fetchrow($result))
+			{
+				$module_id		= $row['module_id'];
+				$module_class	= $row['module_class'];
+
+				$module_manager->delete_module($module_id, $module_class);
+			}
+
+			$this->db->sql_freeresult($result);
+
+			return array(
+				array('module.add', array(
+					'acp',
+					'ACP_CAT_DOT_MODS',
+					'ACP_DOWNLOADS'
+				)),
+				array('module.add', array(
+					'ucp',
+					false,
+					'DOWNLOADS'
+				)),
+
+				array('config.add', array('dl_use_hacklist', '1')),
+			);
+		}
+		else
+		{
+			return array(
+				array('module.add', array(
+					'acp',
+					'ACP_CAT_DOT_MODS',
+					'ACP_DOWNLOADS'
+				)),
+				array('module.add', array(
+					'acp',
+					'ACP_DOWNLOADS',
+					array(
+						'module_basename'	=> '\oxpus\dlext\acp\main_module',
+						'modes'				=> array('overview','config','traffic','categories','files','permissions','stats','banlist','ext_blacklist','toolbox','fields','browser'),
+					),
+				)),
+				array('module.add', array(
+					'ucp',
+					false,
+					'DOWNLOADS'
+				)),
+				array('module.add', array(
+					'ucp',
+					'DOWNLOADS',
+					array(
+						'module_basename'	=> '\oxpus\dlext\ucp\main_module',
+						'modes'				=> array('config','favorite'),
+					),
+				)),
+
+				array('config.add', array('dl_use_hacklist', '1')),
+			);
+		}
 	}
 }

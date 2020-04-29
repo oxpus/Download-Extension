@@ -30,6 +30,15 @@ class main_info
 				'ucp_favorite'	=> array(
 					'title' => 'DL_FAVORITE',	'auth' => 'ext_oxpus/dlext',	'cat' => array('DOWNLOADS')
 				),
+				'config'		=> array(
+					'title' => 'DL_CONFIG',		'auth' => 'ext_oxpus/dlext',	'cat' => array('DOWNLOADS')
+				),
+				'favorite'		=> array(
+					'title' => 'DL_FAVORITE',	'auth' => 'ext_oxpus/dlext',	'cat' => array('DOWNLOADS')
+				),
+				'dl_privacy'	=> array(
+					'title' => 'DL_PRIVACY',	'auth' => 'ext_oxpus/dlext',	'cat' => array('DOWNLOADS')
+				),
 			),
 		);
 	}

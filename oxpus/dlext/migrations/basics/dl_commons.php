@@ -10,6 +10,8 @@
 
 namespace oxpus\dlext\migrations\basics;
 
+use phpbb\db\tools\tools;
+
 class dl_commons extends \phpbb\db\migration\migration
 {
 	public function effectively_installed()
@@ -27,7 +29,6 @@ class dl_commons extends \phpbb\db\migration\migration
 		return array(
 			// At least run some foreign routines
 			array('custom', array(array($this, 'add_fulltext_index'))),
-			array('custom', array(array($this, 'prepare_banlist'))),
 			array('custom', array(array($this, 'add_default_blacklist_extentions'))),
 			array('custom', array(array($this, 'first_reset_remain_traffic'))),
 
@@ -41,6 +42,15 @@ class dl_commons extends \phpbb\db\migration\migration
 		global $phpbb_container;
 
 		if ($phpbb_container->get('request')->variable('action', '') == 'delete_data')
+		{
+			return;
+		}
+
+		$tools = $phpbb_container->get('dbal.tools');
+
+		$check_index = $tools->sql_index_exists($this->table_prefix . 'downloads', 'desc_search');
+
+		if ($check_index)
 		{
 			return;
 		}
@@ -95,18 +105,6 @@ class dl_commons extends \phpbb\db\migration\migration
 		$this->db->sql_query($statement);
 	}
 
-	public function prepare_banlist()
-	{
-		global $phpbb_container;
-
-		if ($phpbb_container->get('request')->variable('action', '') == 'delete_data')
-		{
-			return;
-		}
-
-		$this->db->sql_query('INSERT INTO ' . $this->table_prefix . 'dl_banlist ' . $this->db->sql_build_array('INSERT', array('user_agent' => 'n/a')));
-	}
-
 	public function add_default_blacklist_extentions()
 	{
 		global $phpbb_container;
@@ -151,6 +149,8 @@ class dl_commons extends \phpbb\db\migration\migration
 			array('config_name' => 'dl_remain_traffic', 'config_value' => '0'),
 		);
 
+		$this->db->sql_return_on_error(true);
 		$this->db->sql_multi_insert($this->table_prefix . 'dl_rem_traf', $sql_insert);
+		$this->db->sql_return_on_error(false);
 	}
 }

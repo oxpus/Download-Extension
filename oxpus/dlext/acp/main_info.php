@@ -54,6 +54,9 @@ class main_info
 				'fields'		=> array(
 					'title' => 'DL_ACP_FIELDS',					'auth' => 'ext_oxpus/dlext && acl_a_dl_fields',			'cat' => array('ACP_DOWNLOADS')
 				),
+				'browser'		=> array(
+					'title' => 'DL_ACP_BROWSER',				'auth' => 'ext_oxpus/dlext && acl_a_dl_browser',		'cat' => array('ACP_DOWNLOADS')
+				),
 				'perm_check'	=> array(
 					'title' => 'DL_ACP_PERM_CHECK',				'auth' => 'ext_oxpus/dlext && acl_a_dl_perm_check',		'cat' => array('ACP_DOWNLOADS')
 				),

@@ -38,6 +38,8 @@ class prepare_8_0_0 extends \phpbb\db\migration\migration
 
 	public function move_remain_traffic()
 	{
+		$this->db->sql_return_on_error(true);
+
 		$sql = 'SELECT * FROM ' . $this->table_prefix . 'dl_rem_traf';
 		$result = $this->db->sql_query($sql);
 		while ($row = $this->db->sql_fetchrow($result))
@@ -45,6 +47,8 @@ class prepare_8_0_0 extends \phpbb\db\migration\migration
 			$this->config->set($row['config_name'], $row['config_value']);
 		}
 		$this->db->sql_freeresult($result);
+
+		$this->db->sql_return_on_error(false);
 	}
 
 	public function move_download_files()

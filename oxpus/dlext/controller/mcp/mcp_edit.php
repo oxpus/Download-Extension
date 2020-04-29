@@ -467,7 +467,7 @@ class mcp_edit
 						$i = 1;
 						while (file_exists(DL_EXT_FILEBASE_PATH. 'downloads/' . $dl_path . $real_file_new))
 						{
-							$real_file_new = $i . md5($file_name);
+							$real_file_new = md5($i . $file_name) . '.' . $file_extension;
 							$i++;
 						}
 
@@ -668,31 +668,34 @@ class mcp_edit
 
 						$new_version = $this->db->sql_nextid();
 					}
-					else if ($file_option == 2 && $file_version)
+					else if ($file_option == 2)
 					{
-						$sql = 'SELECT * FROM ' . DL_VERSIONS_TABLE . '
-							WHERE dl_id = ' . (int) $df_id . '
-								AND ver_id = ' . (int) $file_version;
-						$result = $this->db->sql_query($sql);
-						$row = $this->db->sql_fetchrow($result);
-						$this->db->sql_freeresult($result);
-
 						if ($file_new)
 						{
 							@unlink(DL_EXT_FILEBASE_PATH. 'downloads/' . $dl_path . $real_old_file);
 						}
 
-						$sql = 'UPDATE ' . DL_VERSIONS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', array(
-							'ver_file_name'		=> ($file_new) ? $file_name : $row['ver_file_name'],
-							'ver_real_file'		=> ($file_new) ? $real_file_new : $row['ver_real_file'],
-							'ver_file_hash'		=> ($file_new) ? $file_hash : $row['ver_file_hash'],
-							'ver_file_size'		=> ($file_new) ? $file_size : $row['ver_file_size'],
-							'ver_change_time'	=> time(),
-							'ver_change_user'	=> $this->user->data['user_id'],
-							'ver_version'		=> $hack_version,
-						)) . ' WHERE dl_id = ' . (int) $df_id . ' AND ver_id = ' . (int) $file_version;
+						if ($file_version)
+						{
+							$sql = 'SELECT * FROM ' . DL_VERSIONS_TABLE . '
+								WHERE dl_id = ' . (int) $df_id . '
+									AND ver_id = ' . (int) $file_version;
+							$result = $this->db->sql_query($sql);
+							$row = $this->db->sql_fetchrow($result);
+							$this->db->sql_freeresult($result);
 
-						$this->db->sql_query($sql);
+							$sql = 'UPDATE ' . DL_VERSIONS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', array(
+								'ver_file_name'		=> ($file_new) ? $file_name : $row['ver_file_name'],
+								'ver_real_file'		=> ($file_new) ? $real_file_new : $row['ver_real_file'],
+								'ver_file_hash'		=> ($file_new) ? $file_hash : $row['ver_file_hash'],
+								'ver_file_size'		=> ($file_new) ? $file_size : $row['ver_file_size'],
+								'ver_change_time'	=> time(),
+								'ver_change_user'	=> $this->user->data['user_id'],
+								'ver_version'		=> $hack_version,
+							)) . ' WHERE dl_id = ' . (int) $df_id . ' AND ver_id = ' . (int) $file_version;
+
+							$this->db->sql_query($sql);
+						}
 					}
 
 					unset($sql_array);
@@ -730,7 +733,7 @@ class mcp_edit
 						'warning'				=> $warning,
 						'mod_desc'				=> $mod_desc);
 
-					if (!$file_option || ($file_option == 2 && !$file_version && $hack_version))
+					if (!$file_option || ($file_option == 2 && !$file_version))
 					{
 						$sql_array = array_merge($sql_array, array(
 							'file_name'				=> $file_name,
