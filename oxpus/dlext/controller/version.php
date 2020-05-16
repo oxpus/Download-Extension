@@ -499,7 +499,7 @@ class version
 		
 			// Update release itself
 			$ver_version	= $this->request->variable('ver_version', '', true);
-			$ver_text		= $this->request->variable('ver_text', '', true);
+			$ver_text		= $this->request->variable('message', '', true);
 			$ver_active		= $this->request->variable('ver_active', 0);
 		
 			$allow_bbcode		= ($this->config['allow_bbcode']) ? true : false;
