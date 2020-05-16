@@ -21,47 +21,47 @@ class release_7_2_3 extends \phpbb\db\migration\migration
 
 	static public function depends_on()
 	{
-		return array('\oxpus\dlext\migrations\v720\release_7_2_2');
+		return ['\oxpus\dlext\migrations\v720\release_7_2_2'];
 	}
 
 	public function update_data()
 	{
-		return array(
+		return [
 			// Set the current version
-			array('config.update', array('dl_ext_version', $this->dl_ext_version)),
+			['config.update', ['dl_ext_version', $this->dl_ext_version]],
 
 			// Add new options
-			array('config.add', array('dl_topic_type', POST_NORMAL)),
+			['config.add', ['dl_topic_type', POST_NORMAL]],
 
 			// Remove deprecated options
-			array('config.remove', array('dl_latest_comments')),
+			['config.remove', ['dl_latest_comments']],
 
 			// The needed permissions
-			array('permission.add', array('a_dl_perm_check')),
+			['permission.add', ['a_dl_perm_check']],
 
 			// Join permissions to administrators
-			array('permission.permission_set', array('ROLE_ADMIN_FULL', 'a_dl_perm_check')),
+			['permission.permission_set', ['ROLE_ADMIN_FULL', 'a_dl_perm_check']],
 
 			// Need to add the module later than the permission settings to avoid an error on uninstalling the extension
-			array('module.add', array(
+			['module.add', [
 				'acp',
 				'ACP_DOWNLOADS',
-				array(
+				[
 					'module_basename'	=> '\oxpus\dlext\acp\main_module',
-					'modes'				=> array('perm_check'),
-				),
-			)),
-		);
+					'modes'				=> ['perm_check'],
+				],
+			]],
+		];
 	}
 
 	public function update_schema()
 	{
-		return array(
-			'add_columns'	=> array(
-				$this->table_prefix . 'downloads_cat'		=> array(
-					'dl_topic_type'			=> array('BOOL', POST_NORMAL),
-				),
-			),
-		);
+		return [
+			'add_columns'	=> [
+				$this->table_prefix . 'downloads_cat'	=> [
+					'dl_topic_type'		=> ['BOOL', POST_NORMAL],
+				],
+			],
+		];
 	}
 }

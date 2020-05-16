@@ -108,7 +108,7 @@ class constants
 					AND ug.user_pending <> ' . true;
 			$result = $this->db->sql_query($sql);
 
-			$user_group_ids = array();
+			$user_group_ids = [];
 
 			while ($row = $this->db->sql_fetchrow($result))
 			{

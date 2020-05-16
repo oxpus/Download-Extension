@@ -149,7 +149,7 @@ class details
 		/*
 		* set the right values for comments
 		*/
-		if (in_array($action, array('view', 'save', 'delete', 'edit')))
+		if (in_array($action, ['view', 'save', 'delete', 'edit']))
 		{
 			$nav_view = 'comment';
 		}
@@ -167,7 +167,7 @@ class details
 		/*
 		* default entry point for download details
 		*/
-		$dl_files = array();
+		$dl_files = [];
 		$dl_files = $this->dlext_files->all_files(0, '', 'ASC', '', $df_id, $modcp, '*');
 
 		if (!$dl_files)
@@ -180,7 +180,7 @@ class details
 			trigger_error('DL_NO_PERMISSION');
 		}
 
-		$check_status = array();
+		$check_status = [];
 		$check_status = $this->dlext_status->status($df_id);
 
 		/*
@@ -191,6 +191,8 @@ class details
 		$long_desc_bitfield	= $dl_files['long_desc_bitfield'];
 		$long_desc_flags	= (isset($dl_files['long_desc_flags'])) ? $dl_files['long_desc_flags'] : 0;
 		$long_desc			= generate_text_for_display($long_desc, $long_desc_uid, $long_desc_bitfield, $long_desc_flags);
+
+		$broken				= $dl_files['broken'];
 
 		$status				= $check_status['status_detail'];
 		$file_name			= $check_status['file_detail'];
@@ -213,7 +215,7 @@ class details
 
 		$hack_version		= '&nbsp;'.$dl_files['hack_version'];
 
-		$cat_auth = array();
+		$cat_auth = [];
 		$cat_auth = $this->dlext_auth->dl_cat_auth($cat_id);
 
 		/*
@@ -310,15 +312,17 @@ class details
 		$result = $this->db->sql_query($sql);
 		$total_images = $this->db->sql_affectedrows($result);
 
+		$thumbs_ary = [];
+		$i = 1;
+
 		if ($total_images)
 		{
 			$s_dl_popupimage = true;
 
-			$thumbs_ary = array();
-
 			while ($row = $this->db->sql_fetchrow($result))
 			{
-				$thumbs_ary[] = $row;
+				$thumbs_ary[$i] = $row;
+				++$i;
 			}
 		}
 
@@ -487,20 +491,20 @@ class details
 
 				if ($dl_id)
 				{
-					$sql = 'UPDATE ' . DL_COMMENTS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', array(
+					$sql = 'UPDATE ' . DL_COMMENTS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', [
 						'comment_edit_time'	=> time(),
 						'comment_text'		=> $comment_text,
 						'com_uid'			=> $com_uid,
 						'com_bitfield'		=> $com_bitfield,
 						'com_flags'			=> $com_flags,
-						'approve'			=> $approve)) . ' WHERE dl_id = ' . (int) $dl_id;
+						'approve'			=> $approve]) . ' WHERE dl_id = ' . (int) $dl_id;
 					$this->db->sql_query($sql);
 
 					$comment_message = $this->language->lang('DL_COMMENT_UPDATED');
 				}
 				else
 				{
-					$sql = 'INSERT INTO ' . DL_COMMENTS_TABLE . ' ' . $this->db->sql_build_array('INSERT', array(
+					$sql = 'INSERT INTO ' . DL_COMMENTS_TABLE . ' ' . $this->db->sql_build_array('INSERT', [
 						'id'				=> $df_id,
 						'cat_id'			=> $cat_id,
 						'user_id'			=> $this->user->data['user_id'],
@@ -511,7 +515,7 @@ class details
 						'com_uid'			=> $com_uid,
 						'com_bitfield'		=> $com_bitfield,
 						'com_flags'			=> $com_flags,
-						'approve'			=> $approve));
+						'approve'			=> $approve]);
 					$this->db->sql_query($sql);
 
 					$comment_message = $this->language->lang('DL_COMMENT_ADDED');
@@ -525,19 +529,19 @@ class details
 						WHERE ' . $this->db->sql_in_set('user_id', explode(',', $processing_user)) . '
 							OR user_type = ' . USER_FOUNDER;
 
-					$mail_data = array(
+					$mail_data = [
 						'query'				=> $sql,
 						'email_template'	=> 'downloads_approve_comment',
 						'cat_id'			=> $cat_id,
 						'df_id'				=> $df_id,
 						'description'		=> $description,
 						'cat_name'			=> $index[$cat_id]['cat_name_nav'],
-					);
+					];
 
 					$this->dlext_email->send_comment_notify($mail_data);
 
 					$approve_message	= '';
-					$return_parameters	= array('view' => 'comment', 'action' => 'view', 'cat_id' => $cat_id, 'df_id' => $df_id);
+					$return_parameters	= ['view' => 'comment', 'action' => 'view', 'cat_id' => $cat_id, 'df_id' => $df_id];
 					$return_text		= $this->language->lang('CLICK_RETURN_COMMENTS');
 				}
 				else
@@ -546,7 +550,7 @@ class details
 						WHERE fav_dl_id = ' . (int) $df_id;
 					$result = $this->db->sql_query($sql);
 
-					$fav_user = array();
+					$fav_user = [];
 
 					while ($row = $this->db->sql_fetchrow($result))
 					{
@@ -609,21 +613,21 @@ class details
 									AND user_allow_fav_download_email = 1
 									AND user_allow_fav_comment_email = 1' . (string) $sql_fav_user;
 
-							$mail_data = array(
+							$mail_data = [
 								'query'				=> $sql,
 								'email_template'	=> 'downloads_comment_notify',
 								'cat_id'			=> $cat_id,
 								'df_id'				=> $df_id,
 								'description'		=> $description,
 								'cat_name'			=> $index[$cat_id]['cat_name_nav'],
-							);
+							];
 
 							$this->dlext_email->send_comment_notify($mail_data);
 						}
 					}
 
 					$approve_message	= '<br />' . $this->language->lang('DL_MUST_BE_APPROVE_COMMENT');
-					$return_parameters	= array('df_id' => $df_id);
+					$return_parameters	= ['df_id' => $df_id];
 					$return_text		= $this->language->lang('CLICK_RETURN_DOWNLOAD_DETAILS');
 				}
 
@@ -654,7 +658,7 @@ class details
 
 					if (!$total_comments)
 					{
-						redirect($this->helper->route('oxpus_dlext_details', array('df_id' => $df_id)));
+						redirect($this->helper->route('oxpus_dlext_details', ['df_id' => $df_id]));
 					}
 					else
 					{
@@ -663,13 +667,13 @@ class details
 				}
 				else
 				{
-					$s_hidden_fields = array(
+					$s_hidden_fields = [
 						'cat_id'	=> $cat_id,
 						'df_id'		=> $df_id,
 						'dl_id'		=> $dl_id,
 						'action'	=> 'delete',
 						'view'		=> 'comment'
-					);
+					];
 
 					confirm_box(false, $this->language->lang('DELETE_MESSAGE_CONFIRM'), build_hidden_fields($s_hidden_fields));
 				}
@@ -697,13 +701,13 @@ class details
 					$comment_text	= $text_ary['text'];
 				}
 
-				$s_hidden_fields = array(
+				$s_hidden_fields = [
 					'dl_id'		=> $dl_id,
 					'df_id'		=> $df_id,
 					'cat_id'	=> $cat_id,
 					'action'	=> 'save',
 					'view'		=> 'comment'
-				);
+				];
 
 				add_form_key('dl_comment_posting', '_COMMENT');
 
@@ -722,7 +726,7 @@ class details
 				// BBCode-Block
 				display_custom_bbcodes();
 
-				$this->template->assign_vars(array(
+				$this->template->assign_vars([
 					'COMMENT_TEXT'		=> $comment_text,
 
 					'S_BBCODE_ALLOWED'	=> $bbcode_status,
@@ -734,8 +738,8 @@ class details
 					'S_COMMENT_POST_ACTION'	=> $this->helper->route('oxpus_dlext_details'),
 					'S_HIDDEN_POST_FIELDS'	=> build_hidden_fields($s_hidden_fields),
 
-					'U_MORE_SMILIES'		=> $this->helper->route('oxpus_dlext_details', array('action' => 'smilies')),
-				));
+					'U_MORE_SMILIES'		=> $this->helper->route('oxpus_dlext_details', ['action' => 'smilies']),
+				]);
 			}
 
 			$sql = 'SELECT * FROM ' . DL_COMMENTS_TABLE . '
@@ -750,18 +754,18 @@ class details
 			{
 				$pagination = $this->phpbb_container->get('pagination');
 				$pagination->generate_template_pagination(
-					array(
-						'routes' => array(
+					[
+						'routes' => [
 							'oxpus_dlext_details',
 							'oxpus_dlext_details',
-						),
-						'params' => array('view' => 'comment', 'action' => 'view', 'cat_id' => $cat_id, 'df_id' => $df_id),
-					), 'pagination', 'start', $real_comment_exists, $this->config['dl_links_per_page'], $page_start);
+						],
+						'params' => ['view' => 'comment', 'action' => 'view', 'cat_id' => $cat_id, 'df_id' => $df_id],
+					], 'pagination', 'start', $real_comment_exists, $this->config['dl_links_per_page'], $page_start);
 
-				$this->template->assign_vars(array(
+				$this->template->assign_vars([
 					'PAGE_NUMBER'	=> $pagination->on_page($real_comment_exists, $this->config['dl_links_per_page'], $page_start),
 					'TOTAL_DL'		=> $this->language->lang('DL_COMMENTS_COUNT', $real_comment_exists),
-				));
+				]);
 			}
 
 			if ($real_comment_exists)
@@ -778,12 +782,12 @@ class details
 
 				while ($row = $this->db->sql_fetchrow($result))
 				{
-					$avatar_row = array(
+					$avatar_row = [
 						'avatar'		=> $row['user_avatar'],
 						'avatar_type'	=> $row['user_avatar_type'],
 						'avatar_width'	=> $row['user_avatar_width'],
 						'avatar_height'	=> $row['user_avatar_height'],
-					);
+					];
 
 					$poster_id			= $row['user_id'];
 					$poster				= $row['username'];
@@ -811,10 +815,10 @@ class details
 						$edited_by = '';
 					}
 
-					$u_delete_comment	= $this->helper->route('oxpus_dlext_details', array('view' => 'comment', 'action' => 'delete', 'cat_id' => $cat_id, 'df_id' => $df_id, 'dl_id' => $dl_id));
-					$u_edit_comment		= $this->helper->route('oxpus_dlext_details', array('view' => 'comment', 'action' => 'edit', 'cat_id' => $cat_id, 'df_id' => $df_id, 'dl_id' => $dl_id));
+					$u_delete_comment	= $this->helper->route('oxpus_dlext_details', ['view' => 'comment', 'action' => 'delete', 'cat_id' => $cat_id, 'df_id' => $df_id, 'dl_id' => $dl_id]);
+					$u_edit_comment		= $this->helper->route('oxpus_dlext_details', ['view' => 'comment', 'action' => 'edit', 'cat_id' => $cat_id, 'df_id' => $df_id, 'dl_id' => $dl_id]);
 
-					$this->template->assign_block_vars('comment_row', array(
+					$this->template->assign_block_vars('comment_row', [
 						'EDITED_BY'		=> $edited_by,
 						'POSTER'		=> get_username_string('full', $poster_id, $poster, $poster_color),
 						'POSTER_AVATAR'	=> $poster_avatar,
@@ -825,11 +829,11 @@ class details
 
 						'U_DELETE_COMMENT'	=> $u_delete_comment,
 						'U_EDIT_COMMENT'	=> ($deny_post) ? '' : $u_edit_comment,
-					));
+					]);
 
 					if (($poster_id == $this->user->data['user_id'] || $cat_auth['auth_mod'] || $index[$cat_id]['auth_mod'] || $this->auth->acl_get('a_')) && $this->user->data['is_registered'] && !$deny_post)
 					{
-						$this->template->assign_block_vars('comment_row.action_button', array());
+						$this->template->assign_block_vars('comment_row.action_button', []);
 					}
 				}
 
@@ -842,7 +846,9 @@ class details
 		*/
 		$hash_method = $this->config['dl_file_hash_algo'];
 		$func_hash = $hash_method . '_file';
-		$hash_table_tmp = $hash_table = $hash_ary = array();
+		$hash_table_tmp = [];
+		$hash_table = [];
+		$hash_ary = [];
 		$hash_tab = false;
 		$ver_tab = false;
 		$ver_can_edit = false;
@@ -881,7 +887,8 @@ class details
 
 			if ($total_releases)
 			{
-				$version_array = $ver_key_ary = array();
+				$version_array = [];
+				$ver_key_ary = [];
 
 				while ($row = $this->db->sql_fetchrow($result))
 				{
@@ -920,16 +927,16 @@ class details
 
 						$ver_tmp = ($row['ver_version']) ? $row['ver_version'] : $row['ver_change_time'];
 						$ver_key_ary[] = $ver_tmp;
-						$version_array[$ver_tmp] = array(
+						$version_array[$ver_tmp] = [
 							'VER_TITLE'			=> $dl_key,
 							'VER_TIME'			=> $this->user->format_date($row['ver_change_time']),
 							'VER_TIME_RFC'		=> gmdate(DATE_RFC3339, $row['ver_change_time']),
 							'VER_DESC'			=> $ver_desc,
 							'VER_ACTIVE'		=> $row['ver_active'],
 							'S_USER_PERM'		=> $ver_can_edit,
-							'U_VERSION'			=> $this->helper->route('oxpus_dlext_version', array('action' => 'detail', 'ver_id' => $row['ver_id'], 'df_id' => $df_id)),
-							'U_VERSION_EDIT'	=> $this->helper->route('oxpus_dlext_version', array('action' => 'edit', 'ver_id' => $row['ver_id'], 'df_id' => $df_id)),
-						);
+							'U_VERSION'			=> $this->helper->route('oxpus_dlext_version', ['action' => 'detail', 'ver_id' => $row['ver_id'], 'df_id' => $df_id]),
+							'U_VERSION_EDIT'	=> $this->helper->route('oxpus_dlext_version', ['action' => 'edit', 'ver_id' => $row['ver_id'], 'df_id' => $df_id]),
+						];
 					}
 				}
 
@@ -958,12 +965,12 @@ class details
 			{
 				foreach ($hash_table as $key => $value)
 				{
-					$this->template->assign_block_vars('hash_row', array(
+					$this->template->assign_block_vars('hash_row', [
 						'DL_VERSION'		=> $key,
 						'DL_FILE_NAME'		=> $value['file'],
 						'DL_HASH_METHOD'	=> $value['type'],
 						'DL_HASH'			=> $value['hash'],
-					));
+					]);
 				}
 
 				$hash_tab = true;
@@ -973,9 +980,7 @@ class details
 		/*
 		* generate page
 		*/
-		$this->template->set_filenames(array(
-			'body' => 'view_dl_body.html')
-		);
+		$this->template->set_filenames(['body' => 'view_dl_body.html']);
 
 		$user_id = $this->user->data['user_id'];
 		$username = $this->user->data['username'];
@@ -1155,10 +1160,10 @@ class details
 				{
 					$hotlink_id = md5($this->user->data['user_id'] . time() . $df_id . $this->user->data['session_id']);
 
-					$sql = 'INSERT INTO ' . DL_HOTLINK_TABLE . ' ' . $this->db->sql_build_array('INSERT', array(
+					$sql = 'INSERT INTO ' . DL_HOTLINK_TABLE . ' ' . $this->db->sql_build_array('INSERT', [
 						'user_id'		=> $this->user->data['user_id'],
 						'session_id'	=> $this->user->data['session_id'],
-						'hotlink_id'	=> $hotlink_id));
+						'hotlink_id'	=> $hotlink_id]);
 					$this->db->sql_query($sql);
 				}
 				else
@@ -1166,14 +1171,14 @@ class details
 					$hotlink_id = '';
 				}
 
-				$error = array();
+				$error = [];
 
-				$s_hidden_fields = array(
+				$s_hidden_fields = [
 					'df_id'			=> $df_id,
 					'modcp'			=> $modcp,
 					'cat_id'		=> $cat_id,
 					'hotlink_id'	=> $hotlink_id,
-				);
+				];
 
 				if (!$ver_can_edit && !$user_can_alltimes_load)
 				{
@@ -1195,7 +1200,7 @@ class details
 				{
 					$s_select_version = '<select name="file_version">';
 					$s_select_version .= '<option value="0" selected="selected">' . $this->language->lang('DL_VERSION_CURRENT') . '</option>';
-					$version_array = array();
+					$version_array = [];
 
 					while ($row = $this->db->sql_fetchrow($result))
 					{
@@ -1223,12 +1228,12 @@ class details
 
 				$this->db->sql_freeresult($result);
 
-				$this->template->assign_block_vars('download_button', array(
+				$this->template->assign_block_vars('download_button', [
 					'S_HIDDEN_FIELDS'	=> build_hidden_fields($s_hidden_fields),
 					'S_DL_WINDOW'		=> ($dl_files['extern'] && $this->config['dl_ext_new_window']) ? 'target="_blank"' : '',
 					'S_DL_VERSION'		=> $s_select_version,
 					'U_DOWNLOAD'		=> $this->helper->route('oxpus_dlext_details'),
-				));
+				]);
 
 				add_form_key('dl_load', '_DOWNLOAD');
 
@@ -1257,18 +1262,18 @@ class details
 						}
 						else
 						{
-							$this->template->assign_block_vars('dl_error', array(
-								'DL_ERROR' => $error[0],
-							));
+							$this->template->assign_block_vars('dl_error', [
+								'DL_ERROR' => $error[0]
+							]);
 						}
 					}
 
 					if (!$code_match)
 					{
-						$this->template->assign_vars(array(
+						$this->template->assign_vars([
 							'CAPTCHA_TEMPLATE'	=> $captcha->get_template(),
 							'S_HIDDEN_FIELDS'	=> build_hidden_fields($captcha->get_hidden_fields()),
-						));
+						]);
 					}
 				}
 				else
@@ -1292,15 +1297,15 @@ class details
 
 					if ($code)
 					{
-						$sql = 'INSERT INTO ' . DL_HOTLINK_TABLE . ' ' . $this->db->sql_build_array('INSERT', array(
+						$sql = 'INSERT INTO ' . DL_HOTLINK_TABLE . ' ' . $this->db->sql_build_array('INSERT', [
 							'user_id'		=> $this->user->data['user_id'],
 							'session_id'	=> $this->user->data['session_id'],
 							'hotlink_id'	=> $code,
-							'code'			=> 'dlvc'));
+							'code'			=> 'dlvc']);
 						$this->db->sql_query($sql);
 					}
 
-					redirect($this->helper->route('oxpus_dlext_load', array('hotlink_id' => $hotlink_id, 'code' => $code, 'df_id' => $df_id, 'modcp' => $modcp, 'cat_id' => $cat_id, 'file_version' => $file_version)));
+					redirect($this->helper->route('oxpus_dlext_load', ['hotlink_id' => $hotlink_id, 'code' => $code, 'df_id' => $df_id, 'modcp' => $modcp, 'cat_id' => $cat_id, 'file_version' => $file_version]));
 				}
 			}
 		}
@@ -1369,39 +1374,34 @@ class details
 
 			if ($first_thumb_exists)
 			{
+				$first_thumbs = [0 => [
+					'img_id'	=> 0,
+					'dl_id'		=> $df_id,
+					'img_name'	=> $dl_files['thumbnail'],
+					'img_title'	=> $description,
+				]];
+	
 				if ($more_thumbs_exists)
 				{
-					$thumbs_ary = array_merge(array(0 => array(
-						'img_id'	=> 0,
-						'dl_id'		=> $df_id,
-						'img_name'	=> $dl_files['thumbnail'],
-						'img_title'	=> $description,
-					)), $thumbs_ary);
+					$first_thumbs += $thumbs_ary;
+				}
 
-				}
-				else
-				{
-					$thumbs_ary = array(0 => array(
-						'img_id'	=> 0,
-						'dl_id'		=> $df_id,
-						'img_name'	=> $dl_files['thumbnail'],
-						'img_title'	=> $description,
-					));
-				}
+				$thumbs_ary = $first_thumbs;
+				unset($first_thumbs);
 			}
 
 			if ($first_thumb_exists || $more_thumbs_exists)
 			{
-				$drop_images = array();
+				$drop_images = [];
 
 				foreach ($thumbs_ary as $key => $value)
 				{
 					if (@file_exists(DL_EXT_FILEBASE_PATH . 'thumbs/' . $thumbs_ary[$key]['img_name']))
 					{
-						$this->template->assign_block_vars('thumbnail', array(
+						$this->template->assign_block_vars('thumbnail', [
 							'THUMBNAIL_LINK'	=> append_sid(DL_EXT_FILEBASE_PATH . 'thumbs/' . str_replace(" ", "%20", $thumbs_ary[$key]['img_name'])),
-							'THUMBNAIL_NAME'	=> $thumbs_ary[$key]['img_title'])
-						);
+							'THUMBNAIL_NAME'	=> $thumbs_ary[$key]['img_title'],
+						]);
 					}
 					else
 					{
@@ -1478,13 +1478,13 @@ class details
 			if ($fav_id)
 			{
 				$l_favorite = $this->language->lang('DL_FAVORITE_DROP');
-				$u_favorite = $this->helper->route('oxpus_dlext_unfav', array('df_id' => $df_id, 'cat_id' => $cat_id, 'fav_id' => $fav_id));
+				$u_favorite = $this->helper->route('oxpus_dlext_unfav', ['df_id' => $df_id, 'cat_id' => $cat_id, 'fav_id' => $fav_id]);
 				$this->template->assign_var('S_FAV_ACTIVE', true);
 			}
 			else
 			{
 				$l_favorite = $this->language->lang('DL_FAVORITE_ADD');
-				$u_favorite = $this->helper->route('oxpus_dlext_fav', array('df_id' => $df_id, 'cat_id' => $cat_id, 'fav_id' => $fav_id));
+				$u_favorite = $this->helper->route('oxpus_dlext_fav', ['df_id' => $df_id, 'cat_id' => $cat_id, 'fav_id' => $fav_id]);
 			}
 		}
 		else
@@ -1514,7 +1514,7 @@ class details
 		/*
 		* Send the values to the template to be able to read something *g*
 		*/
-		$this->template->assign_vars(array(
+		$this->template->assign_vars([
 			'HASH_TAB'			=> $hash_tab,
 			'FAVORITE'			=> $l_favorite,
 			'EDIT_IMG'			=> $this->language->lang('DL_EDIT_FILE'),
@@ -1540,6 +1540,7 @@ class details
 			'RATINGS'				=> $rating_count_text,
 			'DF_ID'					=> $df_id,
 			'PHPEX'					=> $this->php_ext,
+			'BROKEN'				=> $broken,
 			'MOD_TODO'				=> $mod_todo,
 			'MOD_TEST'				=> ($s_mod_test) ? $mod_test : false,
 			'MOD_DESC'				=> ($s_mod_desc) ? $mod_desc : false,
@@ -1572,28 +1573,28 @@ class details
 			'S_OPEN_PANEL'		=> ($view == 'comment' && $s_comments_tab) ? 2 : 0,
 			'S_POST_COMMENT'	=> ($s_comments_tab && !$deny_post) ? true : false,
 
-			'U_REPORT'			=> $this->helper->route('oxpus_dlext_unbroken', array('df_id' => $df_id, 'cat_id' => $cat_id)),
-			'U_BROKEN_DOWNLOAD' => $this->helper->route('oxpus_dlext_broken', array('df_id' => $df_id, 'cat_id' => $cat_id)),
-			'U_BUG_TRACKER'		=> $this->helper->route('oxpus_dlext_tracker', array('df_id' => $df_id)),
+			'U_REPORT'			=> $this->helper->route('oxpus_dlext_unbroken', ['df_id' => $df_id, 'cat_id' => $cat_id]),
+			'U_BROKEN_DOWNLOAD' => $this->helper->route('oxpus_dlext_broken', ['df_id' => $df_id, 'cat_id' => $cat_id]),
+			'U_BUG_TRACKER'		=> $this->helper->route('oxpus_dlext_tracker', ['df_id' => $df_id]),
 
 			'U_TOPIC'			=> append_sid($this->root_path . 'viewtopic.' . $this->php_ext, 't=' . $dl_files['dl_topic']),
-			'U_EDIT'			=> $this->helper->route('oxpus_dlext_mcp_edit', array('df_id' => $file_id, 'cat_id' => $cat_id)),
-			'U_EDIT_THUMBS'		=> $this->helper->route('oxpus_dlext_thumbs', array('df_id' => $file_id, 'cat_id' => $cat_id)),
+			'U_EDIT'			=> $this->helper->route('oxpus_dlext_mcp_edit', ['df_id' => $file_id, 'cat_id' => $cat_id]),
+			'U_EDIT_THUMBS'		=> $this->helper->route('oxpus_dlext_thumbs', ['df_id' => $file_id, 'cat_id' => $cat_id]),
 			'U_FAVORITE'		=> $u_favorite,
-			'U_DL_SEARCH'		=> $this->helper->route('oxpus_dlext_search', array('view' => 'search')),
+			'U_DL_SEARCH'		=> $this->helper->route('oxpus_dlext_search', ['view' => 'search']),
 			'U_DL_AJAX'			=> $this->helper->route('oxpus_dlext_ajax'),
-		));
+		]);
 
 		/**
 		* Custom Download Fields
 		* Taken from memberlist.php phpBB 3.0.7-PL1
 		*/
-		$dl_fields = array();
+		$dl_fields = [];
 		include($this->ext_path . 'phpbb/includes/fields.' . $this->php_ext);
 		$cp = new \oxpus\dlext\phpbb\includes\custom_profile();
 
 		$dl_fields = $cp->generate_profile_fields_template('grab', $file_id);
-		$dl_fields = (isset($dl_fields[$file_id])) ? $cp->generate_profile_fields_template('show', false, $dl_fields[$file_id]) : array();
+		$dl_fields = (isset($dl_fields[$file_id])) ? $cp->generate_profile_fields_template('show', false, $dl_fields[$file_id]) : [];
 
 		if (isset($dl_fields['row']) && sizeof($dl_fields['row']))
 		{
@@ -1613,20 +1614,20 @@ class details
 			}
 		}
 
-		$detail_cat_names = array(
+		$detail_cat_names = [
 			0 => $this->language->lang('DL_DETAIL'),
 			1 => ($ver_tab) ? $this->language->lang('DL_VERSIONS') : '',
 			2 => ($s_comments_tab) ? $this->language->lang('DL_COMMENTS') : '',
-		);
+		];
 
 		for ($i = 0; $i < sizeof($detail_cat_names); $i++)
 		{
 			if ($detail_cat_names[$i])
 			{
-				$this->template->assign_block_vars('category', array(
+				$this->template->assign_block_vars('category', [
 					'CAT_NAME'	=> $detail_cat_names[$i],
 					'CAT_ID'	=> $i,
-				));
+				]);
 			}
 		}
 
@@ -1638,7 +1639,6 @@ class details
 			$sql = 'SELECT id, description, desc_uid, desc_bitfield, desc_flags FROM ' . DOWNLOADS_TABLE . "
 				WHERE MATCH (description) AGAINST ('" . $this->db->sql_escape($description) . "')
 					AND id <> " . (int) $df_id . '
-					AND cat = ' . (int) $cat_id . '
 				ORDER BY description';
 			$result = $this->db->sql_query_limit($sql, $this->config['dl_similar_limit']);
 
@@ -1651,10 +1651,10 @@ class details
 				$desc_flags		= (isset($dl_files['desc_flags'])) ? $dl_files['desc_flags'] : 0;
 				$similar_desc	= generate_text_for_display($similar_desc, $desc_uid, $desc_bitfield, $desc_flags);
 
-				$this->template->assign_block_vars('similar_dl', array(
+				$this->template->assign_block_vars('similar_dl', [
 					'DOWNLOAD'		=> $similar_desc,
-					'U_DOWNLOAD'	=> $this->helper->route('oxpus_dlext_details', array('df_id' => $similar_id)),
-				));
+					'U_DOWNLOAD'	=> $this->helper->route('oxpus_dlext_details', ['df_id' => $similar_id]),
+				]);
 			}
 
 			$this->db->sql_freeresult($result);

@@ -92,7 +92,7 @@ class dlext_format implements dlext_format_interface
 
 		$output_value = round($output_value, $rnd);
 
-		$data_out = ($out_type == 'combine') ? $output_value . $output_desc : array('size_out' => $output_value, 'range' => $output_desc);
+		$data_out = ($out_type == 'combine') ? $output_value . $output_desc : ['size_out' => $output_value, 'range' => $output_desc];
 
 		return $data_out;
 	}

@@ -1,0 +1,113 @@
+<h2>{{ lang('DL_STATS') }}</h2>
+
+<div class="lside">
+
+	<table class="table2 zebra-table no-header" data-no-responsive-header="true">
+		<thead>
+		<tr>
+			<th>{{ lang('STATISTIC') }}</th>
+			<th>{{ lang('VALUE') }}</th>
+		</tr>
+		</thead>
+
+		<tbody>
+		<tr>
+			<td class="tabled">{{ lang('DL_ACP_MAIN_STATS_TRAFFIC') }}{{ lang('COLON') }}</td>
+			<td class="tabled"><span class="{% if S_DL_TRAFFIC_OFF %}dl-red{% else %}dl-green{% endif %}"><strong>{% if S_DL_TRAFFIC_OFF %}{{ lang('DL_ACP_MAIN_STATS_TRAFFIC_OFF') }}{% else %}{{ lang('DL_ACP_MAIN_STATS_TRAFFIC_ON') }}{% endif %}</strong></span></td>
+		</tr>
+		<tr>
+			<td class="tabled">{{ lang('DL_ACP_MAIN_STATS_TOTAL_NUM') }}{{ lang('COLON') }}</td>
+			<td class="tabled"><strong>{{ TOTAL_NUM }}</strong></td>
+		</tr>
+		<tr>
+			<td class="tabled">{{ lang('DL_ACP_MAIN_STATS_TOTAL_LIMIT') }}{{ lang('COLON') }}</td>
+			<td class="tabled"><strong>{{ TOTAL_LIMIT }}</strong></td>
+		</tr>
+		{% if not S_DL_TRAFFIC_OFF %}
+		<tr>
+			<td class="tabled">{{ lang('DL_ACP_MAIN_STATS_TOTAL_TRAFFIC') }}{{ lang('COLON') }}</td>
+			<td class="tabled"><strong>{{ OVERALL_TRAFFIC }}</strong></td>
+		</tr>
+		<tr>
+			<td class="tabled">{{ lang('DL_ACP_MAIN_STATS_TOTAL_GTRAFFIC') }}{{ lang('COLON') }}</td>
+			<td class="tabled"><strong>{{ OVERALL_GTRAFFIC }}</strong></td>
+		</tr>
+		{% endif %}
+		<tr>
+			<td class="tabled">{{ lang('DL_OVERALL_KLICKS') }}{{ lang('COLON') }}</td>
+			<td class="tabled"><strong>{{ OCLICKS }}</strong></td>
+		</tr>
+		<tr>
+			<td class="tabled">{{ lang('DL_ACP_MAIN_STATS_CATEGORIES') }}{{ lang('COLON') }}</td>
+			<td class="tabled"><strong>{{ CATEGORIES }}</strong></td>
+		</tr>
+		<tr>
+			<td class="tabled">{{ lang('DL_ACP_MAIN_STATS_TOTAL_TSIZE') }}{{ lang('COLON') }}</td>
+			<td class="tabled"><strong>{{ TOTAL_THUMBS_SIZE }}</strong></td>
+		</tr>
+		<tr>
+			<td class="tabled">{{ lang('DL_ACP_MAIN_STATS_TOTAL_VFSIZE') }}{{ lang('COLON') }}</td>
+			<td class="tabled"><strong>{{ TOTAL_VERSION_FSIZE }}</strong></td>
+		</tr>
+		<tr>
+			<td class="tabled">{{ lang('DL_ACP_MAIN_STATS_TOTAL_TODOS') }}{{ lang('COLON') }}</td>
+			<td class="tabled"><strong class="color: {% if TOTAL_TODOS %}dl-red{% else %}dl-green{% endif %}">{{ TOTAL_TODOS }}</strong></td>
+		</tr>
+		</tbody>
+	</table>
+
+	<table class="table2 zebra-table no-header" data-no-responsive-header="true">
+		<thead>
+		<tr>
+			<th>{{ lang('STATISTIC') }}</th>
+			<th>{{ lang('VALUE') }}</th>
+		</tr>
+		</thead>
+
+		<tbody>
+		<tr>
+			<td class="tabled">{{ lang('DL_VERSION_CHECK') }}{{ lang('COLON') }}</td>
+			<td class="tabled"><strong>{{ DL_MOD_VERSION_SIMPLE }}</strong></td>
+		</tr>
+		<tr>
+			<td class="tabled">{{ lang('DL_ACP_MAIN_STATS_TOTAL_EXTERN') }}{{ lang('COLON') }}</td>
+			<td class="tabled"><strong>{{ TOTAL_EXTERN }}</strong></td>
+		</tr>
+		<tr>
+			<td class="tabled">{{ lang('DL_ACP_MAIN_STATS_TOTAL_SIZE') }}{{ lang('COLON') }}</td>
+			<td class="tabled"><strong>{{ TOTAL_SIZE }}</strong></td>
+		</tr>
+		{% if not S_DL_TRAFFIC_OFF %}
+		<tr>
+			<td class="tabled">{{ lang('DL_ACP_MAIN_STATS_REMAIN_TRAFFIC') }}{{ lang('COLON') }}</td>
+			<td class="tabled"><strong>{{ REMAIN_TRAFFIC }}</strong></td>
+		</tr>
+		<tr>
+			<td class="tabled">{{ lang('DL_ACP_MAIN_STATS_REMAIN_GTRAFFIC') }}{{ lang('COLON') }}</td>
+			<td class="tabled"><strong>{{ REMAIN_GTRAFFIC }}</strong></td>
+		</tr>
+		{% endif %}
+		<tr>
+			<td class="tabled">{{ lang('DL_KLICKS') }}{{ lang('COLON') }}</td>
+			<td class="tabled"><strong>{{ MCLICKS }}</strong></td>
+		</tr>
+		<tr>
+			<td class="tabled">{{ lang('DL_ACP_MAIN_STATS_SUBCATEGORIES') }}{{ lang('COLON') }}</td>
+			<td class="tabled"><strong>{{ SUBCATEGORIES }}</strong></td>
+		</tr>
+		<tr>
+			<td class="tabled">{{ lang('DL_ACP_MAIN_STATS_TOTAL_VERSIONS') }}{{ lang('COLON') }}</td>
+			<td class="tabled"><strong>{{ TOTAL_VERSIONS }}</strong></td>
+		</tr>
+		<tr>
+			<td class="tabled">{{ lang('DL_ACP_MAIN_STATS_TOTAL_TFSIZE') }}{{ lang('COLON') }}</td>
+			<td class="tabled"><strong>{{ TOTAL_VERSION_TSIZE }}</strong></td>
+		</tr>
+		<tr>
+			<td class="tabled">{{ lang('DL_ACP_MAIN_STATS_TOTAL_BROKEN') }}{{ lang('COLON') }}</td>
+			<td class="tabled"><strong class="color: {% if TOTAL_BROKEN %}dl-red{% else %}dl-green{% endif %}">{{ TOTAL_BROKEN }}</strong></td>
+		</tr>
+		</tbody>
+	</table>
+
+</div>

@@ -17,30 +17,30 @@ class main_info
 {
 	function module()
 	{
-		return array(
+		return [
 			'filename'	=> '\oxpus\dlext\ucp\main_module',
 			'title'		=> 'DOWNLOADS',
-			'modes'		=> array(
-				'ucp_config'	=> array(
-					'title' => 'DL_CONFIG',		'auth' => 'ext_oxpus/dlext',	'cat' => array('DOWNLOADS')
-				),
-				'ucp_privacy'	=> array(
-					'title' => 'DL_PRIVACY',	'auth' => 'ext_oxpus/dlext',	'cat' => array('DOWNLOADS')
-				),
-				'ucp_favorite'	=> array(
-					'title' => 'DL_FAVORITE',	'auth' => 'ext_oxpus/dlext',	'cat' => array('DOWNLOADS')
-				),
-				'config'		=> array(
-					'title' => 'DL_CONFIG',		'auth' => 'ext_oxpus/dlext',	'cat' => array('DOWNLOADS')
-				),
-				'favorite'		=> array(
-					'title' => 'DL_FAVORITE',	'auth' => 'ext_oxpus/dlext',	'cat' => array('DOWNLOADS')
-				),
-				'dl_privacy'	=> array(
-					'title' => 'DL_PRIVACY',	'auth' => 'ext_oxpus/dlext',	'cat' => array('DOWNLOADS')
-				),
-			),
-		);
+			'modes'		=> [
+				'ucp_config'	=> [
+					'title' => 'DL_CONFIG',		'auth' => 'ext_oxpus/dlext',	'cat' => ['DOWNLOADS']
+				],
+				'ucp_privacy'	=> [
+					'title' => 'DL_PRIVACY',	'auth' => 'ext_oxpus/dlext',	'cat' => ['DOWNLOADS']
+				],
+				'ucp_favorite'	=> [
+					'title' => 'DL_FAVORITE',	'auth' => 'ext_oxpus/dlext',	'cat' => ['DOWNLOADS']
+				],
+				'config'		=> [
+					'title' => 'DL_CONFIG',		'auth' => 'ext_oxpus/dlext',	'cat' => ['DOWNLOADS']
+				],
+				'favorite'		=> [
+					'title' => 'DL_FAVORITE',	'auth' => 'ext_oxpus/dlext',	'cat' => ['DOWNLOADS']
+				],
+				'dl_privacy'	=> [
+					'title' => 'DL_PRIVACY',	'auth' => 'ext_oxpus/dlext',	'cat' => ['DOWNLOADS']
+				],
+			],
+		];
 	}
 
 	function install()

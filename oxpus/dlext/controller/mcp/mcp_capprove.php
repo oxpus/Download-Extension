@@ -148,7 +148,7 @@ class mcp_capprove
 					$this->db->sql_query($sql);
 				}
 
-				$dlo_id = array();
+				$dlo_id = [];
 			}
 
 			if (!empty($dlo_id))
@@ -158,8 +158,8 @@ class mcp_capprove
 					trigger_error('FORM_INVALID');
 				}
 
-				$sql = 'UPDATE ' . DL_COMMENTS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', array(
-					'approve' => true)) . ' WHERE ' . $this->db->sql_in_set('dl_id', $dlo_id);
+				$sql = 'UPDATE ' . DL_COMMENTS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', [
+					'approve' => true]) . ' WHERE ' . $this->db->sql_in_set('dl_id', $dlo_id);
 				$this->db->sql_query($sql);
 			}
 
@@ -207,7 +207,7 @@ class mcp_capprove
 				$comment_username	= $row['username'];
 				$comment_user_link	= ($comment_user_id <> ANONYMOUS) ? append_sid($this->root_path . 'memberlist.' . $this->php_ext, "mode=viewprofile&amp;u=$comment_user_id") : '';
 
-				$this->template->assign_block_vars('approve_row', array(
+				$this->template->assign_block_vars('approve_row', [
 					'CAT_NAME'			=> $cat_name,
 					'FILE_ID'			=> $file_id,
 					'DESCRIPTION'		=> $description,
@@ -217,39 +217,39 @@ class mcp_capprove
 
 					'U_CAT_VIEW'	=> $cat_view,
 					'U_USER_LINK'	=> $comment_user_link,
-					'U_EDIT'		=> $this->helper->route('oxpus_dlext_details', array('view' => 'comment', 'action' => 'edit', 'df_id' => $file_id, 'cat_id' => $cat_id, 'dl_id' => $comment_id)),
-					'U_DOWNLOAD'	=> $this->helper->route('oxpus_dlext_details', array('df_id' => $file_id)),
-				));
+					'U_EDIT'		=> $this->helper->route('oxpus_dlext_details', ['view' => 'comment', 'action' => 'edit', 'df_id' => $file_id, 'cat_id' => $cat_id, 'dl_id' => $comment_id]),
+					'U_DOWNLOAD'	=> $this->helper->route('oxpus_dlext_details', ['df_id' => $file_id]),
+				]);
 			}
 			$this->db->sql_freeresult($result);
 
-			$s_hidden_fields = array(
+			$s_hidden_fields = [
 				'cat_id'	=> $cat_id,
 				'start'		=> $start
-			);
+			];
 
 			if ($total_approve > $this->config['dl_links_per_page'])
 			{
 				$pagination = $this->phpbb_container->get('pagination');
 				$pagination->generate_template_pagination(
-					$this->helper->route('oxpus_dlext_mcp_capprove', array('cat_id' => $cat_id)),
-					'pagination',
-					'start',
-					$total_approve,
-					$this->config['dl_links_per_page'],
-					$page_start
-				);
+					[
+						'routes' => [
+							'oxpus_dlext_mcp_capprove',
+							'oxpus_dlext_mcp_capprove',
+						],
+						'params' => ['cat_id' => $cat_id],
+					], 'pagination', 'start', $total_approve, $this->config['dl_links_per_page'], $page_start);
 
-				$this->template->assign_vars(array(
+				$this->template->assign_vars([
 					'PAGE_NUMBER'	=> $pagination->on_page($total_approve, $this->config['dl_links_per_page'], $page_start),
 					'TOTAL_DL'		=> $this->language->lang('VIEW_DOWNLOADS', $total_approve),
-				));
+				]);
 			}
 
-			$this->template->assign_vars(array(
+			$this->template->assign_vars([
 				'S_DL_MODCP_ACTION'	=> $this->helper->route('oxpus_dlext_mcp_capprove'),
-				'S_HIDDEN_FIELDS'	=> build_hidden_fields($s_hidden_fields))
-			);
+				'S_HIDDEN_FIELDS'	=> build_hidden_fields($s_hidden_fields),
+			]);
 		}
 
 		return $this->helper->render('dl_mcp_capprove.html', $this->language->lang('MCP'));

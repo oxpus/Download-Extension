@@ -49,19 +49,15 @@ class dlext_cache implements dlext_cache_interface
 	{
 		if (($dl_index = $this->get('_dl_cats')) === false)
 		{
-			$sql_array = array(
+			$sql_array = [
 				'SELECT'	=> 'c.*, t.cat_traffic_use',
-			
-				'FROM'		=> array(DL_CAT_TABLE => 'c'),
-			);
-
-			$sql_array['LEFT_JOIN'] = array();
-
-			$sql_array['LEFT_JOIN'][] = array(
-				'FROM'	=> array(DL_CAT_TRAF_TABLE => 't'),
+				'FROM'		=> [DL_CAT_TABLE => 'c'],
+			];
+			$sql_array['LEFT_JOIN'] = [];
+			$sql_array['LEFT_JOIN'][] = [
+				'FROM'	=> [DL_CAT_TRAF_TABLE => 't'],
 				'ON'	=> 't.cat_id = c.id'
-			);
-		
+			];
 			$sql_array['ORDER_BY'] = 'parent, sort';
 
 			$sql = $this->db->sql_build_query('SELECT', $sql_array);
@@ -151,7 +147,7 @@ class dlext_cache implements dlext_cache_interface
 
 		if (($dl_file = $this->get('_dl_file_preset')) === false)
 		{
-			$dl_file = array();
+			$dl_file = [];
 
 			$cur_time = time();
 			$sql_time_preset = '';
@@ -223,7 +219,7 @@ class dlext_cache implements dlext_cache_interface
 	*/
 	public function obtain_dl_auth()
 	{
-		$auth_cat = $group_perm_ids = $auth_perm = array();
+		$auth_cat = $group_perm_ids = $auth_perm = [];
 
 		if (($dl_auth_perm = $this->get('_dl_auth')) === false)
 		{
@@ -274,7 +270,7 @@ class dlext_cache implements dlext_cache_interface
 	*/
 	public function obtain_dl_access_groups($auth_cat, $group_perm_ids, $user_id, $auth_perm)
 	{
-		$dl_auth_groups = array();
+		$dl_auth_groups = [];
 
 		if (($dl_auth_groups = $this->get('_dl_auth_groups')) === false)
 		{
@@ -294,7 +290,7 @@ class dlext_cache implements dlext_cache_interface
 
 		if (!isset($dl_auth_groups[$user_id]) || !$dl_auth_groups[$user_id][0])
 		{
-			return array();
+			return [];
 		}
 
 		$group_ids = $dl_auth_groups[$user_id];
@@ -340,7 +336,7 @@ class dlext_cache implements dlext_cache_interface
 	*/
 	public function obtain_dl_file_p()
 	{
-		$dl_file_p = array();
+		$dl_file_p = [];
 
 		if (($dl_file_p = $this->get('_dl_file_p')) === false)
 		{

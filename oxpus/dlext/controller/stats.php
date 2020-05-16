@@ -144,7 +144,7 @@ class stats
 
 		if (sizeof($index))
 		{
-			$access_cats = array();
+			$access_cats = [];
 			$access_cats = $this->dlext_main->full_index(0, 0, 0, 1);
 
 			if (sizeof($access_cats))
@@ -183,19 +183,19 @@ class stats
 						$dl_time		= $this->user->format_date($row['last_time']);
 						$dl_time_rfc	= gmdate(DATE_RFC3339, $row['last_time']);
 
-						$file_link		= $this->helper->route('oxpus_dlext_details', array('df_id' => $file_id));
+						$file_link		= $this->helper->route('oxpus_dlext_details', ['df_id' => $file_id]);
 
 						$user_link		= get_username_string('full', $row['down_user'], $row['username'], $row['user_colour']);
 
-						$this->template->assign_block_vars('top_ten_latest', array(
+						$this->template->assign_block_vars('top_ten_latest', [
 							'POS'			=> $dl_pos,
 							'DESCRIPTION'	=> $description,
 							'U_FILE_LINK'	=> $file_link,
 							'CAT_NAME'		=> $cat_name,
 							'USER_LINK'		=> $user_link,
 							'DL_TIME'		=> $dl_time,
-							'DL_TIME_RFC'	=> $dl_time_rfc)
-						);
+							'DL_TIME_RFC'	=> $dl_time_rfc,
+						]);
 
 						$dl_pos++;
 					}
@@ -231,19 +231,19 @@ class stats
 						$dl_time		= $this->user->format_date($row['add_time']);
 						$dl_time_rfc	= gmdate(DATE_RFC3339, $row['add_time']);
 
-						$file_link		= $this->helper->route('oxpus_dlext_details', array('df_id' => $file_id));
+						$file_link		= $this->helper->route('oxpus_dlext_details', ['df_id' => $file_id]);
 
 						$user_link		= get_username_string('full', $row['add_user'], $row['username'], $row['user_colour']);
 
-						$this->template->assign_block_vars('top_ten_uploads', array(
+						$this->template->assign_block_vars('top_ten_uploads', [
 							'POS'			=> $dl_pos,
 							'DESCRIPTION'	=> $description,
 							'U_FILE_LINK'	=> $file_link,
 							'CAT_NAME'		=> $cat_name,
 							'USER_LINK'		=> $user_link,
 							'DL_TIME'		=> $dl_time,
-							'DL_TIME_RFC'	=> $dl_time_rfc)
-						);
+							'DL_TIME_RFC'	=> $dl_time_rfc,
+						]);
 
 						$dl_pos++;
 					}
@@ -275,15 +275,15 @@ class stats
 						$cat_name		= $row['cat_name'];
 						$dl_klicks		= $row['klicks'];
 
-						$file_link		= $this->helper->route('oxpus_dlext_details', array('df_id' => $file_id));
+						$file_link		= $this->helper->route('oxpus_dlext_details', ['df_id' => $file_id]);
 
-						$this->template->assign_block_vars('top_ten_dl_cur_month', array(
+						$this->template->assign_block_vars('top_ten_dl_cur_month', [
 							'POS'			=> $dl_pos,
 							'DESCRIPTION'	=> $description,
 							'U_FILE_LINK'	=> $file_link,
 							'CAT_NAME'		=> $cat_name,
-							'DL_KLICKS'		=> $dl_klicks)
-						);
+							'DL_KLICKS'		=> $dl_klicks,
+						]);
 
 						$dl_pos++;
 					}
@@ -315,15 +315,15 @@ class stats
 						$cat_name		= $row['cat_name'];
 						$dl_klicks		= $row['overall_klicks'];
 
-						$file_link		= $this->helper->route('oxpus_dlext_details', array('df_id' => $file_id));
+						$file_link		= $this->helper->route('oxpus_dlext_details', ['df_id' => $file_id]);
 
-						$this->template->assign_block_vars('top_ten_dl_overall', array(
+						$this->template->assign_block_vars('top_ten_dl_overall', [
 							'POS'			=> $dl_pos,
 							'DESCRIPTION'	=> $description,
 							'U_FILE_LINK'	=> $file_link,
 							'CAT_NAME'		=> $cat_name,
-							'DL_KLICKS'		=> $dl_klicks)
-						);
+							'DL_KLICKS'		=> $dl_klicks,
+						]);
 
 						$dl_pos++;
 					}
@@ -357,15 +357,15 @@ class stats
 							$cat_name		= $row['cat_name'];
 							$dl_traffic		= $this->dlext_format->dl_size($row['month_traffic']);
 
-							$file_link		= $this->helper->route('oxpus_dlext_details', array('df_id' => $file_id));
+							$file_link		= $this->helper->route('oxpus_dlext_details', ['df_id' => $file_id]);
 
-							$this->template->assign_block_vars('top_ten_traffic_cur_month', array(
+							$this->template->assign_block_vars('top_ten_traffic_cur_month', [
 								'POS'			=> $dl_pos,
 								'DESCRIPTION'	=> $description,
 								'U_FILE_LINK'	=> $file_link,
 								'CAT_NAME'		=> $cat_name,
-								'DL_TRAFFIC'	=> $dl_traffic,)
-							);
+								'DL_TRAFFIC'	=> $dl_traffic,
+							]);
 
 							$dl_pos++;
 						}
@@ -397,15 +397,15 @@ class stats
 							$cat_name		= $row['cat_name'];
 							$dl_traffic		= $this->dlext_format->dl_size($row['overall_traffic']);
 
-							$file_link		= $this->helper->route('oxpus_dlext_details', array('df_id' => $file_id));
+							$file_link		= $this->helper->route('oxpus_dlext_details', ['df_id' => $file_id]);
 
-							$this->template->assign_block_vars('top_ten_traffic_overall', array(
+							$this->template->assign_block_vars('top_ten_traffic_overall', [
 								'POS'			=> $dl_pos,
 								'DESCRIPTION'	=> $description,
 								'U_FILE_LINK'	=> $file_link,
 								'CAT_NAME'		=> $cat_name,
-								'DL_TRAFFIC'	=> $dl_traffic)
-							);
+								'DL_TRAFFIC'	=> $dl_traffic,
+							]);
 
 							$dl_pos++;
 						}
@@ -445,11 +445,11 @@ class stats
 					{
 						$user_link		= get_username_string('full', $row['user_id'], $row['username'], $row['user_colour']);
 
-						$this->template->assign_block_vars('top_ten_dl_counts', array(
+						$this->template->assign_block_vars('top_ten_dl_counts', [
 							'POS'			=> $dl_pos,
 							'USER_LINK'		=> $user_link,
-							'DL_COUNTS'		=> $row['dl_counts'])
-						);
+							'DL_COUNTS'		=> $row['dl_counts'],
+						]);
 
 						$dl_pos++;
 					}
@@ -486,11 +486,11 @@ class stats
 
 							$dl_traffic	= $this->dlext_format->dl_size($row['dl_traffic']);
 
-							$this->template->assign_block_vars('top_ten_dl_traffic', array(
+							$this->template->assign_block_vars('top_ten_dl_traffic', [
 								'POS'			=> $dl_pos,
 								'USER_LINK'		=> $user_link,
-								'DL_TRAFFIC'	=> $dl_traffic)
-							);
+								'DL_TRAFFIC'	=> $dl_traffic,
+							]);
 
 							$dl_pos++;
 						}
@@ -524,11 +524,11 @@ class stats
 					{
 						$user_link		= get_username_string('full', $row['user_id'], $row['username'], $row['user_colour']);
 
-						$this->template->assign_block_vars('top_ten_up_counts', array(
+						$this->template->assign_block_vars('top_ten_up_counts', [
 							'POS'			=> $dl_pos,
 							'USER_LINK'		=> $user_link,
-							'DL_COUNTS'		=> $row['dl_counts'])
-						);
+							'DL_COUNTS'		=> $row['dl_counts'],
+						]);
 
 						$dl_pos++;
 					}
@@ -565,11 +565,11 @@ class stats
 
 							$dl_traffic	= $this->dlext_format->dl_size($row['dl_traffic']);
 
-							$this->template->assign_block_vars('top_ten_up_traffic', array(
+							$this->template->assign_block_vars('top_ten_up_traffic', [
 								'POS'			=> $dl_pos,
-								'USER_LINK'	=> $user_link,
-								'DL_TRAFFIC'	=> $dl_traffic)
-							);
+								'USER_LINK'		=> $user_link,
+								'DL_TRAFFIC'	=> $dl_traffic,
+							]);
 
 							$dl_pos++;
 						}
@@ -587,9 +587,7 @@ class stats
 			redirect($this->helper->route('oxpus_dlext_index'));
 		}
 
-		$this->template->set_filenames(array(
-			'body' => 'dl_stat_body.html')
-		);
+		$this->template->set_filenames(['body' => 'dl_stat_body.html']);
 
 		/*
 		* include the mod footer

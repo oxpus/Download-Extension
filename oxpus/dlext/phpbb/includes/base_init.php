@@ -63,11 +63,11 @@ $bt_filter	= $this->request->variable('bt_filter', -1);
 $modcp		= $this->request->variable('modcp', 0);
 $next_id	= $this->request->variable('next_id', 0);
 
-$dlo_id		= $this->request->variable('dlo_id', array(0 => 0));
+$dlo_id		= $this->request->variable('dlo_id', [0 => 0]);
 
 $file_option	= $this->request->variable('file_ver_opt', 0);
 $file_version	= $this->request->variable('file_version', 0);
-$file_ver_del	= $this->request->variable('file_ver_del', array(0));
+$file_ver_del	= $this->request->variable('file_ver_del', [0]);
 
 $dl_mod_is_active = true;
 $dl_mod_link_show = true;
@@ -159,7 +159,7 @@ include_once($this->root_path . 'includes/bbcode.' . $this->php_ext);
 /*
 * get the needed index
 */
-$index = array();
+$index = [];
 
 switch ($nav_view)
 {
@@ -191,7 +191,7 @@ if ($nav_view <> 'broken' && $nav_view <> 'load')
 			WHERE session_user_id = ' . ANONYMOUS;
 		$result = $this->db->sql_query($sql);
 
-		$guest_sids = array('0');
+		$guest_sids = ['0'];
 
 		while ($row = $this->db->sql_fetchrow($result))
 		{
@@ -208,25 +208,30 @@ if ($nav_view <> 'broken' && $nav_view <> 'load')
 	$this->db->sql_query($sql);
 }
 
-$this->template->assign_vars(array(
+$this->template->assign_vars([
 	'EXT_DL_PATH_WEB'	=> $this->ext_path_web,
 	'EXT_DL_PATH_AJAX'	=> $this->ext_path_ajax,
 	'ICON_DL_HELP'		=> '<i class="icon fa-info-circle fa-fw dl-icon-yellow"></i>',
 
 	'U_HELP_POPUP'		=> $this->helper->route('oxpus_dlext_help'),
-));
+]);
 
 if (!isset($mcp_cat))
 {
 	$mcp_cat = ($cat_id) ? $cat_id : $cat;
 }
 
+if (!$mcp_cat && isset($this->cat_id))
+{
+	$mcp_cat = $this->cat_id;
+}
+
 $deny_modcp = true;
 		
-$access_cat = array();
+$access_cat = [];
 $access_cat = $this->dlext_main->full_index(0, 0, 0, 2);
 
-$cat_auth = array();
+$cat_auth = [];
 $cat_auth = $this->dlext_auth->dl_cat_auth($mcp_cat);
 
 if (sizeof($access_cat) || $this->auth->acl_get('a_'))
@@ -264,20 +269,23 @@ if (!$deny_modcp)
 		default:
 			$l_mcp_module = $this->language->lang('DL_MODCP_QUEUE');
 	}
-	$this->template->assign_vars(array(
+
+	$this->template->assign_vars([
 		'MCP_TAB_MODULE'		=> $l_mcp_module,
 
 		'S_DL_MCP'				=> ($nav_view == 'modcp') ? true : false,
 		'S_MCP_TAB_MANAGE'		=> ($mcp_mode == 'manage') ? true : false,
 		'S_MCP_TAB_EDIT'		=> ($mcp_mode == 'edit') ? true : false,
 		'S_MCP_TAB_APPROVE'		=> ($mcp_mode == 'approve') ? true : false,
+		'S_MCP_TAB_BROKEN'		=> ($mcp_mode == 'broken') ? true : false,
 		'S_MCP_TAB_CAPPROVE'	=> ($mcp_mode == 'capprove') ? true : false,
 
 		'U_DL_MCP_MANAGE'		=> $this->helper->route('oxpus_dlext_mcp_manage'),
 		'U_DL_MCP_EDIT'			=> $this->helper->route('oxpus_dlext_mcp_edit'),
 		'U_DL_MCP_APPROVE'		=> $this->helper->route('oxpus_dlext_mcp_approve'),
+		'U_DL_MCP_BROKEN'		=> $this->helper->route('oxpus_dlext_mcp_broken'),
 		'U_DL_MCP_CAPPROVE'		=> $this->helper->route('oxpus_dlext_mcp_capprove'),
 
-		'U_MCP'					=> ($mcp_cat && $this->dlext_auth->user_auth($mcp_cat, 'auth_mod')) ? $this->helper->route('oxpus_dlext_mcp_manage', array('cat_id' => $mcp_cat)) : $this->helper->route('oxpus_dlext_mcp_manage'),
-	));
+		'U_MCP'					=> ($mcp_cat && $this->dlext_auth->user_auth($mcp_cat, 'auth_mod')) ? $this->helper->route('oxpus_dlext_mcp_manage', ['view' => 'toolbox', 'cat_id' => $mcp_cat]) : $this->helper->route('oxpus_dlext_mcp_manage'),
+	]);
 }

@@ -21,30 +21,30 @@ class release_7_2_11 extends \phpbb\db\migration\migration
 
 	static public function depends_on()
 	{
-		return array('\oxpus\dlext\migrations\v720\release_7_2_10');
+		return ['\oxpus\dlext\migrations\v720\release_7_2_10'];
 	}
 
 	public function update_data()
 	{
-		return array(
+		return [
 			// Set the current version
-			array('config.update', array('dl_ext_version', $this->dl_ext_version)),
+			['config.update', ['dl_ext_version', $this->dl_ext_version]],
 
 			// Add new configurations
-			array('config.add', array('dl_set_add', 0)),
-			array('config.add', array('dl_set_user', 0)),
-		);
+			['config.add', ['dl_set_add', 0]],
+			['config.add', ['dl_set_user', 0]],
+		];
 	}
 
 	public function update_schema()
 	{
-		return array(
-			'add_columns'	=> array(
-				$this->table_prefix . 'downloads_cat'		=> array(
-					'dl_set_add'	=> array('UINT:11', 0),
-					'dl_set_user'	=> array('UINT:11', 0),
-				),
-			),
-		);
+		return [
+			'add_columns'	=> [
+				$this->table_prefix . 'downloads_cat'	=> [
+					'dl_set_add'	=> ['UINT:11', 0],
+					'dl_set_user'	=> ['UINT:11', 0],
+				],
+			],
+		];
 	}
 }

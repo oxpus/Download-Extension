@@ -149,7 +149,7 @@ class tracker
 						AND c.id = d.cat';
 				$result = $this->db->sql_query($sql);
 
-				$dl_ids = array();
+				$dl_ids = [];
 
 				while ($row = $this->db->sql_fetchrow($result))
 				{
@@ -200,7 +200,7 @@ class tracker
 				/*
 				* check the user permissions for all download categories
 				*/
-				$bug_access_cats = array();
+				$bug_access_cats = [];
 				$bug_access_cats = $this->dlext_main->full_index(0, 0, 0, 1);
 
 				$report_title		= $this->request->variable('report_title', '', true);
@@ -209,6 +209,7 @@ class tracker
 				$report_php			= $this->request->variable('report_php', '', true);
 				$report_db			= $this->request->variable('report_db', '', true);
 				$report_forum		= $this->request->variable('report_forum', '', true);
+				$new_user_id		= $this->request->variable('user_assign', 0);
 
 				$allow_bbcode	= ($this->config['allow_bbcode']) ? true : false;
 				$allow_urls		= true;
@@ -217,24 +218,58 @@ class tracker
 				$bug_bitfield	= '';
 				$bug_flags		= 0;
 
-				if ($preview && $this->user->data['is_registered'])
+				$error_txt = [];
+				$error = false;
+
+				if ($preview || $action == 'save')
 				{
-					// check form
 					if (!check_form_key('posting'))
 					{
-						trigger_error($this->language->lang('FORM_INVALID'), E_USER_WARNING);
+						$error_txt[] = $this->language->lang('FORM_INVALID');
+						$error = true;
 					}
 
 					if (!$report_title)
 					{
-						trigger_error($this->language->lang('DL_BUG_REPORT_NO_TITLE'), E_USER_WARNING);
+						$error_txt[] = $this->language->lang('DL_BUG_REPORT_NO_TITLE');
+						$error = true;
 					}
 
 					if (!$report_text)
 					{
-						trigger_error($this->language->lang('DL_BUG_REPORT_NO_TEXT'), E_USER_WARNING);
+						$error_txt[] = $this->language->lang('DL_BUG_REPORT_NO_TEXT');
+						$error = true;
+					}
+				}
+				else if ($action == 'status' || $action == 'assign')
+				{
+					if (!check_form_key('posting'))
+					{
+						$error_txt[] = $this->language->lang('FORM_INVALID');
+						$error = true;
 					}
 
+					if ($action == 'assign' && !$new_user_id)
+					{
+						$error_txt[] = $this->language->lang('DL_NO_PERMISSIONS');
+						$error = true;
+					}
+				}
+
+				if ($error)
+				{
+					if ($fav_id)
+					{
+						$action = 'edit';
+					}
+					else
+					{
+						$action = 'add';
+					}
+				}
+
+				if (!$error && $preview && $this->user->data['is_registered'])
+				{
 					$preview_title	= $report_title;
 					$preview_text	= $report_text;
 
@@ -243,10 +278,10 @@ class tracker
 
 					$this->template->assign_var('S_PREVIEW', true);
 
-					$this->template->assign_vars(array(
+					$this->template->assign_vars([
 						'PREVIEW_TITLE'	=> $preview_title,
 						'PREVIEW_TEXT'	=> $preview_text,
-					));
+					]);
 
 					$action = ($fav_id && $this->dlext_auth->user_admin()) ? 'edit' : 'add';
 				}
@@ -254,29 +289,13 @@ class tracker
 				/*
 				* save new or edited bug report
 				*/
-				if ($action == 'save' && $this->user->data['is_registered'])
+				if (!$error && $action == 'save' && $this->user->data['is_registered'])
 				{
-					// check form
-					if (!check_form_key('posting'))
-					{
-						trigger_error($this->language->lang('FORM_INVALID'), E_USER_WARNING);
-					}
-
-					if (!$report_title)
-					{
-						trigger_error($this->language->lang('DL_BUG_REPORT_NO_TITLE'), E_USER_WARNING);
-					}
-
-					if (!$report_text)
-					{
-						trigger_error($this->language->lang('DL_BUG_REPORT_NO_TEXT'), E_USER_WARNING);
-					}
-
 					generate_text_for_storage($report_text, $bug_uid, $bug_bitfield, $bug_flags, $allow_bbcode, $allow_urls, $allow_smilies);
 
 					if ($fav_id && $this->dlext_auth->user_admin())
 					{
-						$sql = 'UPDATE ' . DL_BUGS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', array(
+						$sql = 'UPDATE ' . DL_BUGS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', [
 							'df_id'					=> $df_id,
 							'report_title'			=> $report_title,
 							'report_text'			=> $report_text,
@@ -289,12 +308,12 @@ class tracker
 							'report_status_date'	=> time(),
 							'report_php'			=> $report_php,
 							'report_db'				=> $report_db,
-							'report_forum'			=> $report_forum)) . ' WHERE report_id = ' . (int) $fav_id;
+							'report_forum'			=> $report_forum]) . ' WHERE report_id = ' . (int) $fav_id;
 						$this->db->sql_query($sql);
 					}
 					else
 					{
-						$sql = 'INSERT INTO ' . DL_BUGS_TABLE . ' ' . $this->db->sql_build_array('INSERT', array(
+						$sql = 'INSERT INTO ' . DL_BUGS_TABLE . ' ' . $this->db->sql_build_array('INSERT', [
 							'df_id'					=> $df_id,
 							'report_title'			=> $report_title,
 							'report_text'			=> $report_text,
@@ -307,27 +326,25 @@ class tracker
 							'report_status_date'	=> time(),
 							'report_php'			=> $report_php,
 							'report_db'				=> $report_db,
-							'report_forum'			=> $report_forum));
+							'report_forum'			=> $report_forum]);
 						$this->db->sql_query($sql);
 
 						$fav_id = $this->db->sql_nextid();
 
-						$sql = 'INSERT INTO ' . DL_BUG_HISTORY_TABLE . ' ' . $this->db->sql_build_array('INSERT', array(
+						$sql = 'INSERT INTO ' . DL_BUG_HISTORY_TABLE . ' ' . $this->db->sql_build_array('INSERT', [
 							'df_id'				=> $df_id,
 							'report_id'			=> $fav_id,
 							'report_his_type'	=> 'status',
 							'report_his_date'	=>  time(),
-							'report_his_value'	=> '0:' . $this->user->data['username']));
+							'report_his_value'	=> '0:' . $this->user->data['username']]);
 						$this->db->sql_query($sql);
 					}
 
-					$link_array = array('df_id' => $df_id);
+					$link_array = ['df_id' => $df_id];
+
 					if ($fav_id && $this->dlext_auth->user_admin())
 					{
-						$link_array = array_merge($link_array, array(
-							'action' => 'detail',
-							'fav_id' => $fav_id,
-						));
+						$link_array += ['action' => 'detail', 'fav_id' => $fav_id];
 					}
 
 					$message = $this->language->lang('DL_BUG_REPORT_ADDED') . '<br /><br />' . $this->language->lang('CLICK_RETURN_BUG_TRACKER', '<a href="' . $this->helper->route('oxpus_dlext_tracker', $link_array) . '">', '</a>');
@@ -338,14 +355,8 @@ class tracker
 				/*
 				* add new status to report
 				*/
-				if ($action == 'status' && $fav_id && $allow_bug_mod)
+				if (!$error && $action == 'status' && $fav_id && $allow_bug_mod)
 				{
-					// check form
-					if (!check_form_key('bt_status'))
-					{
-						trigger_error($this->language->lang('FORM_INVALID'), E_USER_WARNING);
-					}
-
 					$new_status			= $this->request->variable('new_status', '', true);
 					$new_status_text	= $this->request->variable('new_status_text', '', true);
 					$new_status_text	= str_replace(':', '', $new_status_text);
@@ -362,30 +373,30 @@ class tracker
 
 					$this->db->sql_freeresult($result);
 
-					$sql = 'INSERT INTO ' . DL_BUG_HISTORY_TABLE . ' ' . $this->db->sql_build_array('INSERT', array(
+					$sql = 'INSERT INTO ' . DL_BUG_HISTORY_TABLE . ' ' . $this->db->sql_build_array('INSERT', [
 						'df_id'				=> $df_id,
 						'report_id'			=> $fav_id,
 						'report_his_type'	=> 'status',
 						'report_his_date'	=> time(),
-						'report_his_value'	=> $new_status . ':' . $this->user->data['username'] . ':' . $new_status_text));
+						'report_his_value'	=> $new_status . ':' . $this->user->data['username'] . ':' . $new_status_text]);
 					$this->db->sql_query($sql);
 
-					$sql = 'UPDATE ' . DL_BUGS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', array(
+					$sql = 'UPDATE ' . DL_BUGS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', [
 						'report_status'			=> $new_status,
-						'report_status_date'	=> time())) . ' WHERE report_id = ' . (int) $fav_id;
+						'report_status_date'	=> time()]) . ' WHERE report_id = ' . (int) $fav_id;
 					$this->db->sql_query($sql);
 
 					// Send email to report author about new status if it will not be the current one
 					if ($report_author_id <> $this->user->data['user_id'])
 					{
-						$mail_data = array(
+						$mail_data = [
 							'email_template'	=> 'dl_bt_status',
 							'report_author_id'	=> $report_author_id,
 							'new_status_text'	=> $new_status_text,
 							'report_title'		=> $report_title,
 							'report_status'		=> $report_status,
 							'fav_id'			=> $fav_id,
-						);
+						];
 
 						$this->dlext_email->send_bt_status($mail_data);
 					}
@@ -396,21 +407,8 @@ class tracker
 				/*
 				* assign bug report to team member
 				*/
-				if ($action == 'assign' && $df_id && $fav_id && $allow_bug_mod)
+				if (!$error && $action == 'assign' && $df_id && $fav_id && $allow_bug_mod)
 				{
-					// check form
-					if (!check_form_key('bt_status'))
-					{
-						trigger_error($this->language->lang('FORM_INVALID'), E_USER_WARNING);
-					}
-
-					$new_user_id = $this->request->variable('user_assign', 0);
-
-					if (!$new_user_id)
-					{
-						trigger_error($this->language->lang('DL_NO_PERMISSIONS'), E_USER_WARNING);
-					}
-
 					$sql = 'SELECT username, user_email, user_lang FROM ' . USERS_TABLE . '
 						WHERE user_id = ' . (int) $new_user_id;
 					$result = $this->db->sql_query($sql);
@@ -422,29 +420,29 @@ class tracker
 
 					$this->db->sql_freeresult($result);
 
-					$sql = 'INSERT INTO ' . DL_BUG_HISTORY_TABLE . ' ' . $this->db->sql_build_array('INSERT', array(
+					$sql = 'INSERT INTO ' . DL_BUG_HISTORY_TABLE . ' ' . $this->db->sql_build_array('INSERT', [
 						'df_id'				=> $df_id,
 						'report_id'			=> $fav_id,
 						'report_his_type'	=> 'assign',
 						'report_his_date'	=> time(),
-						'report_his_value'	=> $new_user_id . ':' . $report_assign_user));
+						'report_his_value'	=> $new_user_id . ':' . $report_assign_user]);
 					$this->db->sql_query($sql);
 
-					$sql = 'UPDATE ' . DL_BUGS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', array(
+					$sql = 'UPDATE ' . DL_BUGS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', [
 						'report_assign_id'		=> $new_user_id,
-						'report_assign_date'	=> time())) . ' WHERE report_id = ' . (int) $fav_id;
+						'report_assign_date'	=> time()]) . ' WHERE report_id = ' . (int) $fav_id;
 					$this->db->sql_query($sql);
 
 					// Send email to new assigned user if it will not be the current one
 					if ($new_user_id <> $this->user->data['user_id'])
 					{
-						$mail_data = array(
+						$mail_data = [
 							'email_template'	=> 'dl_bt_assign',
 							'user_lang'			=> $report_assign_user_lang,
 							'user_mail'			=> $report_assign_user_email,
 							'username'			=> $report_assign_user,
 							'fav_id'			=> $fav_id,
-						);
+						];
 
 						$this->dlext_email->send_bt_assign($mail_data);
 					}
@@ -455,24 +453,27 @@ class tracker
 				/*
 				* view current details from bug report
 				*/
-				if ($action == 'detail' && $fav_id)
+				if (!$error && $action == 'detail' && $fav_id)
 				{
 					unset($sql_array);
 
-					$sql_array = array(
+					$sql_array = [
 						'SELECT'	=> 'b.*, d.description AS report_file, u1.username AS report_author, u1.user_colour AS report_colour, u2.username AS report_assign, u2.user_colour AS report_assign_col',
-						'FROM'		=> array(DL_BUGS_TABLE => 'b'));
-
-					$sql_array['LEFT_JOIN'] = array();
-					$sql_array['LEFT_JOIN'][] = array(
-						'FROM'		=> array(DOWNLOADS_TABLE => 'd'),
-						'ON'		=> 'b.df_id = d.id');
-					$sql_array['LEFT_JOIN'][] = array(
-						'FROM'		=> array(USERS_TABLE => 'u1'),
-						'ON'		=> 'u1.user_id = b.report_author_id');
-					$sql_array['LEFT_JOIN'][] = array(
-						'FROM'		=> array(USERS_TABLE => 'u2'),
-						'ON'		=> 'u2.user_id = b.report_assign_id');
+						'FROM'		=> [DL_BUGS_TABLE => 'b']
+					];
+					$sql_array['LEFT_JOIN'] = [];
+					$sql_array['LEFT_JOIN'][] = [
+						'FROM'		=> [DOWNLOADS_TABLE => 'd'],
+						'ON'		=> 'b.df_id = d.id'
+					];
+					$sql_array['LEFT_JOIN'][] = [
+						'FROM'		=> [USERS_TABLE => 'u1'],
+						'ON'		=> 'u1.user_id = b.report_author_id'
+					];
+					$sql_array['LEFT_JOIN'][] = [
+						'FROM'		=> [USERS_TABLE => 'u2'],
+						'ON'		=> 'u2.user_id = b.report_assign_id'
+					];
 
 					$sql_array['WHERE'] = 'b.report_id = ' . (int) $fav_id . ' AND ' . $this->db->sql_in_set('d.cat', $bug_access_cats);
 
@@ -509,34 +510,34 @@ class tracker
 					// Change status in the report was new and a team member will open the details
 					if (!$report_status && $allow_bug_mod)
 					{
-						$sql = 'INSERT INTO ' . DL_BUG_HISTORY_TABLE . ' ' . $this->db->sql_build_array('INSERT', array(
+						$sql = 'INSERT INTO ' . DL_BUG_HISTORY_TABLE . ' ' . $this->db->sql_build_array('INSERT', [
 							'df_id'				=> $report_file_id,
 							'report_id'			=> $report_id,
 							'report_his_type'	=> 'status',
 							'report_his_date'	=> time(),
-							'report_his_value'	=> '1:' . $this->user->data['username']));
+							'report_his_value'	=> '1:' . $this->user->data['username']]);
 						$this->db->sql_query($sql);
 
 						$report_status = 1;
 						$report_status_date = time();
 
-						$sql = 'UPDATE ' . DL_BUGS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', array(
+						$sql = 'UPDATE ' . DL_BUGS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', [
 							'report_status'			=> $report_status,
-							'report_status_date'	=> $report_status_date)) . ' WHERE report_id = ' . (int) $report_id;
+							'report_status_date'	=> $report_status_date]) . ' WHERE report_id = ' . (int) $report_id;
 						$this->db->sql_query($sql);
 					}
 
-					$u_report_file_link		= $this->helper->route('oxpus_dlext_details', array('df_id' => $report_file_id));
+					$u_report_file_link		= $this->helper->route('oxpus_dlext_details', ['df_id' => $report_file_id]);
 					$report_author_link		= get_username_string('full', $report_author_id, $report_author, $report_author_col);
 
 					if ($report_assign_id)
 					{
-						$this->template->assign_block_vars('assign', array(
+						$this->template->assign_block_vars('assign', [
 							'ASSIGN_TO'			=> get_username_string('full', $report_assign_id, $report_assign, $report_assign_col),
 							'ASSIGN_DATE'		=> $this->user->format_date($report_assign_date),
 							'ASSIGN_DATE_RFC'	=> gmdate(DATE_RFC3339, $report_assign_date),
-							'U_ASSIGN_TO'		=> append_sid($this->root_path . 'memberlist.' . $this->php_ext, "mode=viewprofile&amp;u=$report_assign_id"))
-						);
+							'U_ASSIGN_TO'		=> append_sid($this->root_path . 'memberlist.' . $this->php_ext, "mode=viewprofile&amp;u=$report_assign_id"),
+						]);
 					}
 					else
 					{
@@ -549,11 +550,9 @@ class tracker
 					$report_title	= censor_text($report_title);
 					$report_text	= censor_text($report_text);
 
-					$this->template->set_filenames(array(
-						'body' => 'dl_bt_detail.html')
-					);
+					$this->template->set_filenames(['body' => 'dl_bt_detail.html']);
 
-					$this->template->assign_vars(array(
+					$this->template->assign_vars([
 						'REPORT_ID'			=> $report_id,
 						'REPORT_FILE'		=> $report_file,
 						'REPORT_TITLE'		=> $report_title,
@@ -572,7 +571,7 @@ class tracker
 						'U_DOWNLOAD_FILE'	=> $u_report_file_link,
 						'U_DOWNLOAD'		=> $this->helper->route('oxpus_dlext_index'),
 						'U_BUG_TRACKER'		=> $this->helper->route('oxpus_dlext_tracker'),
-					));
+					]);
 
 					// Begin report history
 					$sql = 'SELECT * FROM ' . DL_BUG_HISTORY_TABLE . '
@@ -611,12 +610,12 @@ class tracker
 								$output_text .= (isset($output_data[2])) ? '</span><hr /><span>' . str_replace("\n", "<br />", $output_data[2]) : '';
 							}
 
-							$this->template->assign_block_vars('history_row', array(
+							$this->template->assign_block_vars('history_row', [
 								'VALUE'		=> $output_value,
 								'DATE'		=> $output_date,
 								'DATE_RFC'	=> $output_date_rfc,
-								'TEXT'		=> $output_text)
-							);
+								'TEXT'		=> $output_text,
+							]);
 						}
 					}
 
@@ -624,9 +623,9 @@ class tracker
 
 					if ($allow_bug_mod)
 					{
-						$this->template->assign_block_vars('delete', array(
-							'U_DELETE' => $this->helper->route('oxpus_dlext_tracker', array('df_id' => $report_file_id, 'fav_id' => $report_id, 'action' => 'delete')),
-						));
+						$this->template->assign_block_vars('delete', [
+							'U_DELETE' => $this->helper->route('oxpus_dlext_tracker', ['df_id' => $report_file_id, 'fav_id' => $report_id, 'action' => 'delete']),
+						]);
 
 						if ($report_status < 4)
 						{
@@ -637,7 +636,7 @@ class tracker
 								GROUP BY ug.user_id';
 							$result = $this->db->sql_query($sql);
 
-							$user_ids = array(0);
+							$user_ids = [0];
 
 							while ($row = $this->db->sql_fetchrow($result))
 							{
@@ -668,10 +667,10 @@ class tracker
 								$s_select_assign_member .= '</select>';
 								$s_select_assign_member = str_replace('<option value="'.$this->user->data['user_id'].'">', '<option value="'.$this->user->data['user_id'].'" selected="selected">', $s_select_assign_member);
 
-								$this->template->assign_vars(array(
-									'S_FORM_ASSIGN_ACTION' => $this->helper->route('oxpus_dlext_tracker', array('action' => 'assign', 'df_id' => $report_file_id, 'fav_id' => $fav_id)),
-									'S_SELECT_ASSIGN_USER' => $s_select_assign_member)
-								);
+								$this->template->assign_vars([
+									'S_FORM_ASSIGN_ACTION' => $this->helper->route('oxpus_dlext_tracker', ['action' => 'assign', 'df_id' => $report_file_id, 'fav_id' => $fav_id]),
+									'S_SELECT_ASSIGN_USER' => $s_select_assign_member,
+								]);
 							}
 
 							$this->db->sql_freeresult($result);
@@ -701,19 +700,19 @@ class tracker
 
 							$s_select_status = '<select name="new_status">' . $s_select_status . '</select>';
 
-							$this->template->assign_vars(array(
-								'S_FORM_STATUS_ACTION' => $this->helper->route('oxpus_dlext_tracker', array('action' => 'status', 'df_id' => $report_file_id, 'fav_id' => $fav_id)),
-								'S_SELECT_STATUS' => $s_select_status)
-							);
+							$this->template->assign_vars([
+								'S_FORM_STATUS_ACTION' => $this->helper->route('oxpus_dlext_tracker', ['action' => 'status', 'df_id' => $report_file_id, 'fav_id' => $fav_id]),
+								'S_SELECT_STATUS' => $s_select_status,
+							]);
 						}
 					}
 
 					if ($this->dlext_auth->user_admin())
 					{
-						$this->template->assign_vars(array(
+						$this->template->assign_vars([
 							'I_BUG_REPORT'		=> $this->user->img('icon_post_edit', 'EDIT_POST'),
-							'U_BUG_REPORT_EDIT'	=> $this->helper->route('oxpus_dlext_tracker', array('action' => 'edit', 'fav_id' => $fav_id)),
-						));
+							'U_BUG_REPORT_EDIT'	=> $this->helper->route('oxpus_dlext_tracker', ['action' => 'edit', 'fav_id' => $fav_id]),
+						]);
 					}
 
 					add_form_key('bt_status');
@@ -724,15 +723,13 @@ class tracker
 				*/
 				if (($action == 'add' && $this->user->data['is_registered']) || ($action == 'edit' && $this->dlext_auth->user_admin() && $fav_id))
 				{
-					$this->template->set_filenames(array(
-						'body' => 'dl_bt_add.html')
-					);
+					$this->template->set_filenames(['body' => 'dl_bt_add.html']);
 
-					$s_hidden_fields = array('action' => 'save');
+					$s_hidden_fields = ['action' => 'save'];
 
 					if ($action == 'edit')
 					{
-						$s_hidden_fields = array_merge($s_hidden_fields, array('fav_id' => $fav_id));
+						$s_hidden_fields += ['fav_id' => $fav_id];
 					}
 
 					$sql = 'SELECT c.cat_name, d.id, d.description, d.desc_uid, d.desc_bitfield, d.desc_flags FROM ' . DOWNLOADS_TABLE . ' d, ' . DL_CAT_TABLE . ' c
@@ -821,7 +818,9 @@ class tracker
 						$report_text		= $text_ary['text'];
 					}
 
-					$this->template->assign_vars(array(
+					$this->template->assign_vars([
+						'ERROR'				=> ($error) ? implode('<br />', $error_txt) : false,
+
 						'REPORT_TITLE'		=> ($preview) ? $report_title : '',
 						'REPORT_TEXT'		=> ($preview) ? $report_text : '',
 						'REPORT_FILE_VER'	=> ($preview) ? $report_file_ver : '',
@@ -839,10 +838,10 @@ class tracker
 						'S_HIDDEN_FIELDS'	=> build_hidden_fields($s_hidden_fields),
 						'S_SELECT_DOWNLOAD'	=> $s_select_download,
 
-						'U_MORE_SMILIES'	=> $this->helper->route('oxpus_dlext_details', array('action' => 'smilies')),
+						'U_MORE_SMILIES'	=> $this->helper->route('oxpus_dlext_details', ['action' => 'smilies']),
 						'U_DOWNLOAD'		=> $this->helper->route('oxpus_dlext_index'),
 						'U_BUG_TRACKER'		=> $this->helper->route('oxpus_dlext_tracker'),
-					));
+					]);
 
 					page_footer();
 				}
@@ -866,11 +865,11 @@ class tracker
 					}
 					else
 					{
-						$s_hidden_fields = array(
+						$s_hidden_fields = [
 							'df_id'		=> $df_id,
 							'fav_id'	=> $fav_id,
 							'action'	=> 'delete'
-						);
+						];
 
 						confirm_box(false, $this->language->lang('DL_CONFIRM_DELETE_BUG_REPORT'), build_hidden_fields($s_hidden_fields));
 					}
@@ -884,9 +883,7 @@ class tracker
 				if (!$action)
 				{
 					// Load board header and send default values to template
-					$this->template->set_filenames(array(
-						'body' => 'dl_bt_list.html')
-					);
+					$this->template->set_filenames(['body' => 'dl_bt_list.html']);
 
 					unset($sql_array);
 
@@ -897,7 +894,7 @@ class tracker
 						ORDER BY report_status';
 					$result = $this->db->sql_query($sql);
 
-					$job_status_count = array();
+					$job_status_count = [];
 
 					while ($row = $this->db->sql_fetchrow($result))
 					{
@@ -925,17 +922,17 @@ class tracker
 					$s_select_filter .= '</select>';
 					$s_select_filter = str_replace('value="'.$bt_filter.'">', 'value="'.$bt_filter.'" selected="selected">', $s_select_filter);
 
-					$this->template->assign_vars(array(
+					$this->template->assign_vars([
 						'S_SELECT_FILTER'			=> $s_select_filter,
 						'S_FORM_ACTION'				=> $this->helper->route('oxpus_dlext_tracker'),
-						'S_FORM_ADD_ACTION'			=> $this->helper->route('oxpus_dlext_tracker', array('action' => 'add', 'df_id' => 0, 'fav_id' => 0)),
-						'S_FORM_FILTER_ACTION'		=> $this->helper->route('oxpus_dlext_tracker', array('df_id' => $df_id)),
-						'S_FORM_OWN_ACTION'			=> $this->helper->route('oxpus_dlext_tracker', array('df_id' => $df_id, 'bt_show' => 'own')),
-						'S_FORM_ASSIGN_ACTION'		=> $this->helper->route('oxpus_dlext_tracker', array('df_id' => $df_id, 'bt_show' => 'assign')),
+						'S_FORM_ADD_ACTION'			=> $this->helper->route('oxpus_dlext_tracker', ['action' => 'add', 'df_id' => 0, 'fav_id' => 0]),
+						'S_FORM_FILTER_ACTION'		=> $this->helper->route('oxpus_dlext_tracker', ['df_id' => $df_id]),
+						'S_FORM_OWN_ACTION'			=> $this->helper->route('oxpus_dlext_tracker', ['df_id' => $df_id, 'bt_show' => 'own']),
+						'S_FORM_ASSIGN_ACTION'		=> $this->helper->route('oxpus_dlext_tracker', ['df_id' => $df_id, 'bt_show' => 'assign']),
 
 						'U_DOWNLOAD'				=> $this->helper->route('oxpus_dlext_index'),
 						'U_BUG_TRACKER'				=> $this->helper->route('oxpus_dlext_tracker'),
-					));
+					]);
 
 					/*
 					* view bug tracker - detail overview for given download
@@ -995,18 +992,18 @@ class tracker
 					{
 						$pagination = $this->phpbb_container->get('pagination');
 						$pagination->generate_template_pagination(
-							array(
-								'routes' => array(
+							[
+								'routes' => [
 									'oxpus_dlext_tracker',
 									'oxpus_dlext_tracker',
-								),
-								'params' => array('df_id' => $df_id),
-							), 'pagination', 'start', $total_reports, $this->config['dl_links_per_page'], $page_start);
+								],
+								'params' => ['df_id' => $df_id],
+							], 'pagination', 'start', $total_reports, $this->config['dl_links_per_page'], $page_start);
 							
-						$this->template->assign_vars(array(
+						$this->template->assign_vars([
 							'PAGE_NUMBER'	=> $pagination->on_page($total_reports, $this->config['dl_links_per_page'], $page_start),
 							'TOTAL_DL'		=> $this->language->lang('VIEW_BUG_REPORTS', $total_reports),
-						));
+						]);
 					}
 
 					if ($total_reports)
@@ -1018,20 +1015,23 @@ class tracker
 
 						unset($sql_array);
 
-						$sql_array = array(
+						$sql_array = [
 							'SELECT'	=> 'b.*, d.id, d.description AS report_file, u1.username AS report_author, u1.user_colour AS report_colour, u2.username AS report_assign, u2.user_colour AS assign_colour',
-							'FROM'		=> array(DL_BUGS_TABLE => 'b'));
-
-						$sql_array['LEFT_JOIN'] = array();
-						$sql_array['LEFT_JOIN'][] = array(
-							'FROM'		=> array(DOWNLOADS_TABLE => 'd'),
-							'ON'		=> 'b.df_id = d.id');
-						$sql_array['LEFT_JOIN'][] = array(
-							'FROM'		=> array(USERS_TABLE => 'u1'),
-							'ON'		=> 'u1.user_id = b.report_author_id');
-						$sql_array['LEFT_JOIN'][] = array(
-							'FROM'		=> array(USERS_TABLE => 'u2'),
-							'ON'		=> 'u2.user_id = b.report_assign_id');
+							'FROM'		=> [DL_BUGS_TABLE => 'b']
+						];
+						$sql_array['LEFT_JOIN'] = [];
+						$sql_array['LEFT_JOIN'][] = [
+							'FROM'		=> [DOWNLOADS_TABLE => 'd'],
+							'ON'		=> 'b.df_id = d.id'
+						];
+						$sql_array['LEFT_JOIN'][] = [
+							'FROM'		=> [USERS_TABLE => 'u1'],
+							'ON'		=> 'u1.user_id = b.report_author_id'
+						];
+						$sql_array['LEFT_JOIN'][] = [
+							'FROM'		=> [USERS_TABLE => 'u2'],
+							'ON'		=> 'u2.user_id = b.report_assign_id'
+						];
 
 						if ($sql_where)
 						{
@@ -1091,7 +1091,7 @@ class tracker
 							$report_title		= censor_text($report_title);
 							$report_text		= censor_text($report_text);
 
-							$this->template->assign_block_vars('bug_tracker_row', array(
+							$this->template->assign_block_vars('bug_tracker_row', [
 								'REPORT_ID'				=> $report_id,
 								'REPORT_TITLE'			=> $report_title,
 								'REPORT_TEXT'			=> $report_text,
@@ -1104,7 +1104,7 @@ class tracker
 
 								'REPORT_FILE'			=> $report_file,
 								'REPORT_FILE_VER'		=> $report_file_ver,
-								'REPORT_FILE_LINK'		=> $this->helper->route('oxpus_dlext_details', array('df_id' => $report_dl_id)),
+								'REPORT_FILE_LINK'		=> $this->helper->route('oxpus_dlext_details', ['df_id' => $report_dl_id]),
 
 								'REPORT_AUTHOR_LINK'	=> get_username_string('full', $report_author_id, $report_author, $report_colour),
 
@@ -1112,16 +1112,16 @@ class tracker
 								'REPORT_STATUS_DATE'		=> $this->user->format_date($report_status_date),
 								'REPORT_STATUS_DATE_RFC'	=> gmdate(DATE_RFC3339, $report_status_date),
 
-								'REPORT_DETAIL'			=> $this->helper->route('oxpus_dlext_tracker', array('fav_id' => $report_id, 'action' => 'detail')),
-							));
+								'REPORT_DETAIL'			=> $this->helper->route('oxpus_dlext_tracker', ['fav_id' => $report_id, 'action' => 'detail']),
+							]);
 
 							if ($report_assign_id)
 							{
-								$this->template->assign_block_vars('bug_tracker_row.assign', array(
+								$this->template->assign_block_vars('bug_tracker_row.assign', [
 									'REPORT_ASSIGN_LINK'		=> get_username_string('full', $report_assign_id, $report_assign, $report_assign_col),
 									'REPORT_ASSIGN_DATE'		=> $this->user->format_date($report_assign_date),
 									'REPORT_ASSIGN_DATE_RFC'	=> gmdate(DATE_RFC3339, $report_assign_date),
-								));
+								]);
 							}
 							else
 							{
@@ -1130,17 +1130,17 @@ class tracker
 
 							if ($allow_bug_mod)
 							{
-								$this->template->assign_block_vars('bug_tracker_row.modext', array(
-									'U_DELETE' => $this->helper->route('oxpus_dlext_tracker', array('df_id' => $report_dl_id, 'fav_id' => $report_id, 'action' => 'delete')),
-								));
+								$this->template->assign_block_vars('bug_tracker_row.modext', [
+									'U_DELETE' => $this->helper->route('oxpus_dlext_tracker', ['df_id' => $report_dl_id, 'fav_id' => $report_id, 'action' => 'delete']),
+								]);
 
-								$this->template->assign_block_vars('bug_tracker_row.status_mod', array(
-									'U_STATUS' => $this->helper->route('oxpus_dlext_tracker', array('df_id' => $report_dl_id, 'fav_id' => $report_id, 'action' => 'status')),
-								));
+								$this->template->assign_block_vars('bug_tracker_row.status_mod', [
+									'U_STATUS' => $this->helper->route('oxpus_dlext_tracker', ['df_id' => $report_dl_id, 'fav_id' => $report_id, 'action' => 'status']),
+								]);
 							}
 							else
 							{
-								$this->template->assign_block_vars('bug_tracker_row.no_status_mod', array());
+								$this->template->assign_block_vars('bug_tracker_row.no_status_mod', []);
 							}
 						}
 

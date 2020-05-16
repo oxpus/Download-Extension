@@ -128,7 +128,7 @@ class listener implements EventSubscriberInterface
 
 	static public function getSubscribedEvents()
 	{
-		return array(
+		return [
 			// Board default events
 			'core.user_setup'							=> 'core_user_setup',
 			'core.page_header'							=> 'core_page_header',
@@ -143,10 +143,11 @@ class listener implements EventSubscriberInterface
 			'core.permissions'							=> 'core_add_permission_cat',
 			'core.group_add_user_after'					=> 'core_group_change_user_after',
 			'core.group_delete_user_after'				=> 'core_group_change_user_after',
+			'core.ucp_display_module_before'			=> 'core_ucp_display_module_before',
 
 			// Events by extensions
-			'tas2580.privacyprotection_delete_ip_after'		=> 'tas2580_privacyprotection_delete_ip_after',
-		);
+			'tas2580.privacyprotection_delete_ip_after'	=> 'tas2580_privacyprotection_delete_ip_after',
+		];
 	}
 
 	public function core_user_setup($event)
@@ -154,17 +155,17 @@ class listener implements EventSubscriberInterface
 		$this->phpbb_container->get('oxpus.dlext.constants')->init();
 
 		$lang_set_ext = $event['lang_set_ext'];
-		$lang_set_ext[] = array(
+		$lang_set_ext[] = [
 			'ext_name' => 'oxpus/dlext',
 			'lang_set' => 'common',
-		);
+		];
 
 		if (defined('ADMIN_START'))
 		{
-			$lang_set_ext[] = array(
+			$lang_set_ext[] = [
 				'ext_name' => 'oxpus/dlext',
 				'lang_set' => 'permissions_dl_ext',
-			);
+			];
 		}
 
 		$event['lang_set_ext'] = $lang_set_ext;
@@ -175,10 +176,10 @@ class listener implements EventSubscriberInterface
 		$dl_mod_is_active = true;
 		$dl_mod_link_show = true;
 
-		$this->template->assign_vars(array(
+		$this->template->assign_vars([
 			'EXT_DL_PATH'			=> $this->ext_path,
 			'EXT_DL_PATH_WEB'		=> $this->ext_path_web,
-		));
+		]);
 
 		if (isset($this->config['dl_active']) && !$this->config['dl_active'])
 		{
@@ -194,7 +195,7 @@ class listener implements EventSubscriberInterface
 					$off_from = (substr($this->config['dl_off_from'], 0, 2) * 60) + (substr($this->config['dl_off_from'], -2));
 					$off_till = (substr($this->config['dl_off_till'], 0, 2) * 60) + (substr($this->config['dl_off_till'], -2));
 
-					if ($curr_time >= $off_from && $curr_time < $off_till)
+					if ($curr_time >= $off_from && $curr_time <= $off_till)
 					{
 						$dl_mod_is_active = false;
 					}
@@ -228,9 +229,9 @@ class listener implements EventSubscriberInterface
 		{
 			$dl_main_link = $this->helper->route('oxpus_dlext_index');
 
-			$this->template->assign_vars(array(
+			$this->template->assign_vars([
 				'U_DL_NAVI'		=> $dl_main_link,
-			));
+			]);
 
 			if (isset($this->config['dl_use_hacklist']) && $this->config['dl_use_hacklist'])
 			{
@@ -247,9 +248,9 @@ class listener implements EventSubscriberInterface
 					{
 						$dl_hacks_link = $this->helper->route('oxpus_dlext_hacklist');
 
-						$this->template->assign_vars(array(
+						$this->template->assign_vars([
 							'U_DL_HACKS_LIST'	=> $dl_hacks_link,
-						));
+						]);
 					}
 				}
 				$this->db->sql_freeresult($result);
@@ -272,9 +273,9 @@ class listener implements EventSubscriberInterface
 				{
 					$dl_bt_link = $this->helper->route('oxpus_dlext_tracker');
 
-					$this->template->assign_vars(array(
+					$this->template->assign_vars([
 						'U_DL_BUG_TRACKER'	=> $dl_bt_link,
-					));
+					]);
 				}
 			}
 
@@ -305,14 +306,39 @@ class listener implements EventSubscriberInterface
 
 	public function core_memberlist_view_profile($event)
 	{
+		$member	= $event['member'];
+
+		$username	= $member['username'];
+		$user_id	= $member['user_id'];
+
+		$sql = 'SELECT COUNT(id) as total
+				FROM ' . DOWNLOADS_TABLE . ' 
+				WHERE add_user = ' . (int) $user_id;
+		$result = $this->db->sql_query($sql);
+		$total_downloads = $this->db->sql_fetchfield('total');
+		$this->db->sql_freeresult($result);
+
+		$sql = 'SELECT COUNT(id) as total
+				FROM ' . DL_COMMENTS_TABLE . ' 
+				WHERE user_id = ' . (int) $user_id;
+		$result = $this->db->sql_query($sql);
+		$total_comments = $this->db->sql_fetchfield('total');
+		$this->db->sql_freeresult($result);
+
+		$this->template->assign_vars([
+			'DL_COMMENTS'		=> $total_comments,
+			'DL_DOWNLOADS'		=> $total_downloads,
+			'U_DL_DOWNLOADS'	=> ($total_downloads) ? $this->helper->route('oxpus_dlext_search', ['search_author' => $username]) : '',
+		]);
+
 		if (!$this->config['dl_traffic_off'])
 		{
-			$user_traffic = $this->dlext_format->dl_size($event['member']['user_traffic'], 2, 'combine');
+			$user_traffic = $this->dlext_format->dl_size($member['user_traffic'], 2, 'combine');
 
-			$this->template->assign_block_vars('custom_fields', array(
+			$this->template->assign_block_vars('custom_fields', [
 				'PROFILE_FIELD_NAME'	=> $this->language->lang('DL_REMAIN_USER_TRAFFIC'),
 				'PROFILE_FIELD_VALUE'	=> $user_traffic,
-			));
+			]);
 		}
 	}
 
@@ -323,7 +349,7 @@ class listener implements EventSubscriberInterface
 			$this->phpbb_container->get('oxpus.dlext.constants')->init();
 		}
 
-		$update_ary = array(DL_BANLIST_TABLE, DL_COMMENTS_TABLE, DL_STATS_TABLE);
+		$update_ary = [DL_BANLIST_TABLE, DL_COMMENTS_TABLE, DL_STATS_TABLE];
 
 		foreach ($update_ary as $table)
 		{
@@ -341,7 +367,7 @@ class listener implements EventSubscriberInterface
 			$this->phpbb_container->get('oxpus.dlext.constants')->init();
 		}
 
-		$table_ary = array(DL_NOTRAF_TABLE);
+		$table_ary = [DL_NOTRAF_TABLE];
 
 		// Delete the miscellaneous (non-post) data for the user
 		foreach ($table_ary as $table)
@@ -460,9 +486,9 @@ class listener implements EventSubscriberInterface
 	{
 		$content = $event['text'];
 
-		$content = preg_replace_callback('#<a href="((.*?)">(.*?)(df_id=)(\d+))<\/a>#i', array('self', '_dl_mod_callback'), $content);
-		$content = preg_replace_callback('#<\/s>(.*?)(df_id=)(\d+)<e>#i', array('self', '_dl_mod_callback'), $content);
-		$content = preg_replace_callback('#<LINK_TEXT text="(.*?)">(.*?)(df_id=)(\d+)<\/LINK_TEXT>#i', array('self', '_dl_mod_callback'), $content);
+		$content = preg_replace_callback('#<a href="((.*?)">(.*?)(df_id=)(\d+))<\/a>#i', ['self', '_dl_mod_callback'], $content);
+		$content = preg_replace_callback('#<\/s>(.*?)(df_id=)(\d+)<e>#i', ['self', '_dl_mod_callback'], $content);
+		$content = preg_replace_callback('#<LINK_TEXT text="(.*?)">(.*?)(df_id=)(\d+)<\/LINK_TEXT>#i', ['self', '_dl_mod_callback'], $content);
 
 		$event['text'] = $content;
 	}
@@ -474,18 +500,18 @@ class listener implements EventSubscriberInterface
 		$event['categories'] = $perm_cat;
 
 		$permission = $event['permissions'];
-		$permission['a_dl_overview']	= array('lang' => 'ACL_A_DL_OVERVIEW',		'cat' => 'downloads');
-		$permission['a_dl_config']		= array('lang' => 'ACL_A_DL_CONFIG',		'cat' => 'downloads');
-		$permission['a_dl_traffic']		= array('lang' => 'ACL_A_DL_TRAFFIC',		'cat' => 'downloads');
-		$permission['a_dl_categories']	= array('lang' => 'ACL_A_DL_CATEGORIES',	'cat' => 'downloads');
-		$permission['a_dl_files']		= array('lang' => 'ACL_A_DL_FILES',			'cat' => 'downloads');
-		$permission['a_dl_permissions']	= array('lang' => 'ACL_A_DL_PERMISSIONS',	'cat' => 'downloads');
-		$permission['a_dl_stats']		= array('lang' => 'ACL_A_DL_STATS',			'cat' => 'downloads');
-		$permission['a_dl_banlist']		= array('lang' => 'ACL_A_DL_BANLIST',		'cat' => 'downloads');
-		$permission['a_dl_blacklist']	= array('lang' => 'ACL_A_DL_BLACKLIST',		'cat' => 'downloads');
-		$permission['a_dl_toolbox']		= array('lang' => 'ACL_A_DL_TOOLBOX',		'cat' => 'downloads');
-		$permission['a_dl_fields']		= array('lang' => 'ACL_A_DL_FIELDS',		'cat' => 'downloads');
-		$permission['a_dl_perm_check']	= array('lang' => 'ACL_A_DL_PERM_CHECK',	'cat' => 'downloads');
+		$permission['a_dl_overview']	= ['lang' => 'ACL_A_DL_OVERVIEW',		'cat' => 'downloads'];
+		$permission['a_dl_config']		= ['lang' => 'ACL_A_DL_CONFIG',			'cat' => 'downloads'];
+		$permission['a_dl_traffic']		= ['lang' => 'ACL_A_DL_TRAFFIC',		'cat' => 'downloads'];
+		$permission['a_dl_categories']	= ['lang' => 'ACL_A_DL_CATEGORIES',		'cat' => 'downloads'];
+		$permission['a_dl_files']		= ['lang' => 'ACL_A_DL_FILES',			'cat' => 'downloads'];
+		$permission['a_dl_permissions']	= ['lang' => 'ACL_A_DL_PERMISSIONS',	'cat' => 'downloads'];
+		$permission['a_dl_stats']		= ['lang' => 'ACL_A_DL_STATS',			'cat' => 'downloads'];
+		$permission['a_dl_banlist']		= ['lang' => 'ACL_A_DL_BANLIST',		'cat' => 'downloads'];
+		$permission['a_dl_blacklist']	= ['lang' => 'ACL_A_DL_BLACKLIST',		'cat' => 'downloads'];
+		$permission['a_dl_toolbox']		= ['lang' => 'ACL_A_DL_TOOLBOX',		'cat' => 'downloads'];
+		$permission['a_dl_fields']		= ['lang' => 'ACL_A_DL_FIELDS',			'cat' => 'downloads'];
+		$permission['a_dl_perm_check']	= ['lang' => 'ACL_A_DL_PERM_CHECK',		'cat' => 'downloads'];
 		$event['permissions'] = $permission;
 	}
 
@@ -506,11 +532,11 @@ class listener implements EventSubscriberInterface
 
 			$new_dl_link = $this->helper->route('oxpus_dlext_latest');
 
-			$this->template->assign_vars(array(
+			$this->template->assign_vars([
 				'NEW_DOWNLOAD_MESSAGE'	=> $this->language->lang('NEW_DOWNLOAD', $new_dl_link),
 				'S_NEW_DL_POPUP'		=> ($this->user->data['user_dl_note_type'] == 1) ? true : false,
 				'S_NEW_DL_MESSAGE'		=> ($this->user->data['user_dl_note_type'] == 0) ? true : false,
-			));
+			]);
 		}
 	}
 
@@ -604,8 +630,8 @@ class listener implements EventSubscriberInterface
 				$this->config->set('dl_remain_traffic', 0);
 				$this->config->set('dl_remain_guest_traffic', 0);
 
-				$sql = 'UPDATE ' . DL_CAT_TRAF_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', array(
-					'cat_traffic_use' => 0));
+				$sql = 'UPDATE ' . DL_CAT_TRAF_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', [
+					'cat_traffic_use' => 0]);
 				$this->db->sql_query($sql);
 
 				$this->config->set('dl_traffic_retime', $this->config['dl_traffic_retime'], false);
@@ -621,8 +647,8 @@ class listener implements EventSubscriberInterface
 
 			if ($auto_click_reset_month < $current_month)
 			{
-				$sql = 'UPDATE ' . DOWNLOADS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', array(
-					'klicks' => 0));
+				$sql = 'UPDATE ' . DOWNLOADS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', [
+					'klicks' => 0]);
 				$this->db->sql_query($sql);
 
 				@unlink(DL_EXT_CACHE_PATH . 'data_dl_file_p.' . $this->php_ext);
@@ -652,9 +678,9 @@ class listener implements EventSubscriberInterface
 
 				if ($new_user_traffic > $this->user->data['user_traffic'])
 				{
-					$sql = 'UPDATE ' . USERS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', array(
+					$sql = 'UPDATE ' . USERS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', [
 						'user_traffic'			=> $new_user_traffic,
-						'user_dl_update_time'	=> time())) . ' WHERE user_id = ' . (int) $this->user->data['user_id'];
+						'user_dl_update_time'	=> time()]) . ' WHERE user_id = ' . (int) $this->user->data['user_id'];
 					$this->db->sql_query($sql);
 				}
 			}
@@ -671,9 +697,39 @@ class listener implements EventSubscriberInterface
 		@unlink(DL_EXT_CACHE_PATH . 'data_dl_auth_groups.' . $this->php_ext);
 	}
 
+	public function core_ucp_display_module_before($event)
+	{
+		$mode = $event['mode'];
+
+		if ($mode == '' || $mode == 'front')
+		{
+			$user_id = $this->user->data['user_id'];
+
+			$sql = 'SELECT COUNT(id) as total
+					FROM ' . DOWNLOADS_TABLE . ' 
+					WHERE add_user = ' . (int) $user_id;
+			$result = $this->db->sql_query($sql);
+			$total_downloads = $this->db->sql_fetchfield('total');
+			$this->db->sql_freeresult($result);
+
+			$sql = 'SELECT COUNT(id) as total
+					FROM ' . DL_COMMENTS_TABLE . ' 
+					WHERE user_id = ' . (int) $user_id;
+			$result = $this->db->sql_query($sql);
+			$total_comments = $this->db->sql_fetchfield('total');
+			$this->db->sql_freeresult($result);
+
+			$this->template->assign_vars([
+				'DL_COMMENTS'		=> $total_comments,
+				'DL_DOWNLOADS'		=> $total_downloads,
+				'U_DL_DOWNLOADS'	=> ($total_downloads) ? $this->helper->route('oxpus_dlext_search', ['search_author' => $this->user->data['username']]) : '',
+			]);
+		}
+	}
+
 	private function _dl_navi_links()
 	{
-		$this->template->assign_vars(array(
+		$this->template->assign_vars([
 			'S_DL_NAV_MAIN_NHQLB'		=> ($this->config['dl_nav_link_main'] == 'NHQLB') ? true : false,
 			'S_DL_NAV_MAIN_NHQLA'		=> ($this->config['dl_nav_link_main'] == 'NHQLA') ? true : false,
 			'S_DL_NAV_MAIN_OHNP' 		=> ($this->config['dl_nav_link_main'] == 'OHNP') ? true : false,
@@ -718,6 +774,6 @@ class listener implements EventSubscriberInterface
 			'S_DL_NAV_TRACKER_OFTzA'	=> ($this->config['dl_nav_link_tracker'] == 'OFTzA') ? true : false,
 			'S_DL_NAV_TRACKER_OFTlB'	=> ($this->config['dl_nav_link_tracker'] == 'OFTlB') ? true : false,
 			'S_DL_NAV_TRACKER_OFTlA'	=> ($this->config['dl_nav_link_tracker'] == 'OFTlA') ? true : false,
-		));
+		]);
 	}
 }

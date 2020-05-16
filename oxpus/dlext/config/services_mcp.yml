@@ -18,6 +18,25 @@ services:
             - '@oxpus.dlext.dlext_auth'
             - '@oxpus.dlext.dlext_main'
             - '@oxpus.dlext.dlext_topic'
+    oxpus.dlext.mcp_broken:
+        class: oxpus\dlext\controller\mcp\mcp_broken
+        arguments:
+            - '%core.root_path%'
+            - '%core.php_ext%'
+            - '@service_container'
+            - '@ext.manager'
+            - '@path_helper'
+            - '@dbal.conn'
+            - '@config'
+            - '@controller.helper'
+            - '@auth'
+            - '@request'
+            - '@template'
+            - '@user'
+            - '@language'
+            - '@oxpus.dlext.dlext_auth'
+            - '@oxpus.dlext.dlext_main'
+            - '@oxpus.dlext.dlext_topic'
     oxpus.dlext.mcp_capprove:
         class: oxpus\dlext\controller\mcp\mcp_capprove
         arguments:
@@ -78,6 +97,7 @@ services:
             - '@user'
             - '@language'
             - '@oxpus.dlext.dlext_auth'
+            - '@oxpus.dlext.dlext_counter'
             - '@oxpus.dlext.dlext_extra'
             - '@oxpus.dlext.dlext_files'
             - '@oxpus.dlext.dlext_main'

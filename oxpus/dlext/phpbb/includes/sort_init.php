@@ -76,7 +76,7 @@ if (!$this->config['dl_sort_preform'] && $this->user->data['user_dl_sort_opt'])
 	$selected_sort_0 = ($order == 'ASC') ? ' selected="selected"' : '';
 	$selected_sort_1 = ($order == 'DESC') ? ' selected="selected"' : '';
 
-	$this->template->assign_vars(array(
+	$this->template->assign_vars([
 		'SELECTED_0'		=> $selected_0,
 		'SELECTED_1'		=> $selected_1,
 		'SELECTED_2'		=> $selected_2,
@@ -89,7 +89,7 @@ if (!$this->config['dl_sort_preform'] && $this->user->data['user_dl_sort_opt'])
 
 		'SELECTED_SORT_0'	=> $selected_sort_0,
 		'SELECTED_SORT_1'	=> $selected_sort_1,
-	));
+	]);
 }
 else
 {

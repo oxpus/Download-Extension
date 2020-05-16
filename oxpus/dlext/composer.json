@@ -3,7 +3,7 @@
 	"type": "phpbb-extension",
 	"description": "Download Extension",
 	"homepage": "https://phpbb3.oxpus.net",
-	"version": "8.0.13",
+	"version": "8.0.14",
 	"time": "2020-04-28",
 	"license": "GPL-2.0-only",
 	"authors": [{

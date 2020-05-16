@@ -19,7 +19,7 @@ if (!defined('IN_PHPBB'))
 
 if (empty($lang) || !is_array($lang))
 {
-	$lang = array();
+	$lang = [];
 }
 
 // DEVELOPERS PLEASE NOTE
@@ -38,7 +38,7 @@ if (empty($lang) || !is_array($lang))
 // ’ « » “ ” …
 //
 
-$lang = array_merge($lang, array(
+$lang = array_merge($lang, [
 	'HELP_TITLE' => 'Aide en ligne de l’outil « Téléchargements »',
 
 	'DL_NO_HELP_AVIABLE' => 'Il n’y a pas d’aide disponible pour cette option',
@@ -199,4 +199,4 @@ $lang = array_merge($lang, array(
 	'HELP_DL_VISUAL_CONFIRMATION'	=> 'Activez cette option pour laisser l’utilisateur saisir un code de confirmation afin d’accéder au téléchargement.<br>Si l’utilisateur ne saisit pas le code ou s’il saisit un code incorrect, l’outil « Téléchargements » affichera un message et lui bloquera le téléchargement.',
 
 	'HELP_NUMBER_RECENT_DL_ON_PORTAL'	=> 'Le nombre des derniers téléchargements que l’utilisateur peut voir sur le portail.<br>Le bloc utilise la date de dernière mise à jour des téléchargements, de sorte qu’il peut être possible d’avoir un ancien téléchargement en haut de cette liste.',
-));
+]);

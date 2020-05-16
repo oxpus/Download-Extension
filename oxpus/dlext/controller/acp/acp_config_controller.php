@@ -120,76 +120,79 @@ class acp_config_controller implements acp_config_interface
 		
 		$this->language->add_lang('posting');
 		
-		$s_hidden_fields = array();
+		$s_hidden_fields = [];
 		
 		switch ($view)
 		{
 			default:
 			case 'general':
-				$display_vars = array(
+				$display_vars = [
 					'title'	=> 'DL_ACP_CONF_GENERAL',
-					'vars'	=> array(
+					'vars'	=> [
 						'legend1'				=> '',
 		
-						'dl_active'			=> array('lang' => 'DL_ACTIVE',			'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_ACTIVE'),
-						'dl_traffic_off'	=> array('lang' => 'DL_TRAFFIC_OFF',	'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_TRAFFIC_OFF'),
-						'dl_stop_uploads'	=> array('lang' => 'DL_STOP_UPLOADS',	'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_STOP_UPLOADS'),
-						'dl_use_hacklist'	=> array('lang' => 'DL_USE_HACKLIST',	'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_USE_HACKLIST'),
-						'dl_todo_onoff'		=> array('lang' => 'DL_USE_TODOLIST',	'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_USE_TODOLIST'),
+						'dl_active'			=> ['lang' => 'DL_ACTIVE',			'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_ACTIVE'],
+						'dl_traffic_off'	=> ['lang' => 'DL_TRAFFIC_OFF',		'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_TRAFFIC_OFF'],
+						'dl_stop_uploads'	=> ['lang' => 'DL_STOP_UPLOADS',	'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_STOP_UPLOADS'],
+						'dl_use_hacklist'	=> ['lang' => 'DL_USE_HACKLIST',	'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_USE_HACKLIST'],
+						'dl_todo_onoff'		=> ['lang' => 'DL_USE_TODOLIST',	'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_USE_TODOLIST'],
 		
 						'legend2'				=> '',
 		
-						'dl_off_now_time'	=> array('lang' => 'DL_OFF_NOW_TIME',		'validate' => 'bool',	'type' => 'custom',			'explain' => false,		'help_key' => 'DL_OFF_NOW_TIME', 		'function' => array($this, 'mod_disable'),	'params' => array('{CONFIG_VALUE}')),
-						'dl_off_from'		=> array('lang' => 'DL_OFF_PERIOD',			'validate' => 'string',	'type' => 'text:5:5',		'explain' => false,		'help_key' => 'DL_OFF_PERIOD'),
-						'dl_off_till'		=> array('lang' => 'DL_OFF_PERIOD_TILL',	'validate' => 'string',	'type' => 'text:5:5',		'explain' => false,		'help_key' => 'DL_OFF_PERIOD_TILL'),
-						'dl_on_admins'		=> array('lang' => 'DL_ON_ADMINS',			'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_ON_ADMINS'),
-						'dl_off_hide'		=> array('lang' => 'DL_OFF_HIDE',			'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_OFF_HIDE'),
+						'dl_off_now_time'	=> ['lang' => 'DL_OFF_NOW_TIME',		'validate' => 'bool',	'type' => 'custom',			'explain' => false,		'help_key' => 'DL_OFF_NOW_TIME', 		'function' => [$this, 'mod_disable'],	'params' => ['{CONFIG_VALUE}']],
+						'dl_off_from'		=> ['lang' => 'DL_OFF_PERIOD',			'validate' => 'string',	'type' => 'text:5:5',		'explain' => false,		'help_key' => 'DL_OFF_PERIOD'],
+						'dl_off_till'		=> ['lang' => 'DL_OFF_PERIOD_TILL',		'validate' => 'string',	'type' => 'text:5:5',		'explain' => false,		'help_key' => 'DL_OFF_PERIOD_TILL'],
+						'dl_on_admins'		=> ['lang' => 'DL_ON_ADMINS',			'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_ON_ADMINS'],
+						'dl_off_hide'		=> ['lang' => 'DL_OFF_HIDE',			'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_OFF_HIDE'],
 		
 						'legend3'				=> '',
 		
-						'dl_set_add'		=> array('lang' => 'DL_SET_ADD',			'validate' => 'int',	'type' => 'select',		'explain' => false,		'help_key' => 'DL_SET_ADD', 				'function' => array($this, 'select_topic_user'),	'params' => array('{CONFIG_VALUE}')),
-						'dl_set_user'		=> array('lang' => 'DL_TOPIC_USER_OTHER',	'validate' => 'string',	'type' => 'custom',		'explain' => false,		'help_key' => 'DL_SET_ADD',					'function' => array($this, 'select_dl_user'), 	'params' => array('{CONFIG_VALUE}', 'dl_set_user')),
-					)
-				);
+						'dl_set_add'		=> ['lang' => 'DL_SET_ADD',				'validate' => 'int',	'type' => 'select',		'explain' => false,		'help_key' => 'DL_SET_ADD', 				'function' => [$this, 'select_topic_user'],	'params' => ['{CONFIG_VALUE}']],
+						'dl_set_user'		=> ['lang' => 'DL_TOPIC_USER_OTHER',	'validate' => 'string',	'type' => 'custom',		'explain' => false,		'help_key' => 'DL_SET_ADD',					'function' => [$this, 'select_dl_user'], 	'params' => ['{CONFIG_VALUE}', 'dl_set_user']],
+					]
+				];
 			break;
 			case 'view':
-				$display_vars = array(
+				$display_vars = [
 					'title'	=> 'DL_ACP_CONF_VIEW',
-					'vars'	=> array(
+					'vars'	=> [
 						'legend1'				=> '',
 		
-						'dl_icon_free_for_reg'		=> array('lang' => 'DL_ICON_FREE_FOR_REG',		'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_ICON_FREE_FOR_REG'),
-						'dl_new_time'				=> array('lang' => 'DL_NEW_TIME',				'validate' => 'string',	'type' => 'text:3:4',		'explain' => false,		'help_key' => 'DL_NEW_TIME'),
-						'dl_edit_time'				=> array('lang' => 'DL_EDIT_TIME',				'validate' => 'string',	'type' => 'text:3:4',		'explain' => false,		'help_key' => 'DL_EDIT_TIME'),
-						'dl_show_footer_legend'		=> array('lang' => 'DL_SHOW_FOOTER_LEGEND',		'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_SHOW_FOOTER_LEGEND'),
-						'dl_show_footer_stat'		=> array('lang' => 'DL_SHOW_FOOTER_STAT',		'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_SHOW_FOOTER_STAT'),
-						'dl_mini_stats_ext'			=> array('lang' => 'DL_SHOW_FOOTER_EXT_STATS',	'validate' => 'int',	'type' => 'select',			'explain' => false,		'help_key' => 'DL_SHOW_FOOTER_EXT_STATS',	'function' => array($this, 'select_dl_ext_stats'),	'params' => array('{CONFIG_VALUE}')),
-						'dl_overview_link_onoff'	=> array('lang' => 'DL_OVERVIEW_LINK',			'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_OVERVIEW_LINK'),
-						'dl_todo_link_onoff'		=> array('lang' => 'DL_TODO_LINK',				'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_TODO_LINK'),
-						'dl_enable_jumpbox'			=> array('lang' => 'DL_ENABLE_JUMPBOX',			'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_ENABLE_JUMPBOX'),
-						'dl_cat_edit'				=> array('lang' => 'DL_CAT_EDIT_LINK',			'validate' => 'int',	'type' => 'select',			'explain' => false,		'help_key' => 'DL_CAT_EDIT_LINK',		'function' => array($this, 'select_dl_cat_edit'),	'params' => array('{CONFIG_VALUE}')),
+						'dl_icon_free_for_reg'		=> ['lang' => 'DL_ICON_FREE_FOR_REG',		'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_ICON_FREE_FOR_REG'],
+						'dl_new_time'				=> ['lang' => 'DL_NEW_TIME',				'validate' => 'string',	'type' => 'text:3:4',		'explain' => false,		'help_key' => 'DL_NEW_TIME'],
+						'dl_edit_time'				=> ['lang' => 'DL_EDIT_TIME',				'validate' => 'string',	'type' => 'text:3:4',		'explain' => false,		'help_key' => 'DL_EDIT_TIME'],
+						'dl_show_footer_legend'		=> ['lang' => 'DL_SHOW_FOOTER_LEGEND',		'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_SHOW_FOOTER_LEGEND'],
+						'dl_show_footer_stat'		=> ['lang' => 'DL_SHOW_FOOTER_STAT',		'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_SHOW_FOOTER_STAT'],
+						'dl_mini_stats_ext'			=> ['lang' => 'DL_SHOW_FOOTER_EXT_STATS',	'validate' => 'int',	'type' => 'select',			'explain' => false,		'help_key' => 'DL_SHOW_FOOTER_EXT_STATS',	'function' => [$this, 'select_dl_ext_stats'],	'params' => ['{CONFIG_VALUE}']],
+						'dl_overview_link_onoff'	=> ['lang' => 'DL_OVERVIEW_LINK',			'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_OVERVIEW_LINK'],
+						'dl_todo_link_onoff'		=> ['lang' => 'DL_TODO_LINK',				'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_TODO_LINK'],
+						'dl_enable_jumpbox'			=> ['lang' => 'DL_ENABLE_JUMPBOX',			'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_ENABLE_JUMPBOX'],
+						'dl_cat_edit'				=> ['lang' => 'DL_CAT_EDIT_LINK',			'validate' => 'int',	'type' => 'select',			'explain' => false,		'help_key' => 'DL_CAT_EDIT_LINK',		'function' => [$this, 'select_dl_cat_edit'],	'params' => ['{CONFIG_VALUE}']],
 		
 						'legend2'				=> '',
 		
-						'dl_links_per_page'			=> array('lang' => 'DL_LINKS_PER_PAGE',			'validate' => 'string',	'type' => 'text:3:4',		'explain' => false,		'help_key' => 'DL_LINKS_PER_PAGE'),
-						'dl_shorten_extern_links'	=> array('lang' => 'DL_SHORTEN_EXTERN_LINKS',	'validate' => 'string',	'type' => 'text:3:4',		'explain' => false,		'help_key' => 'DL_SHORTEN_EXTERN_LINKS'),
-						'dl_index_desc_hide'		=> array('lang' => 'DL_INDEX_DESC_HIDE',		'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_INDEX_DESC_HIDE'),
-						'dl_limit_desc_on_index'	=> array('lang' => 'DL_LIMIT_DESC_ON_INDEX',	'validate' => 'string',	'type' => 'text:5:10',		'explain' => false,		'help_key' => 'DL_LIMIT_DESC_ON_INDEX'),
+						'dl_links_per_page'			=> ['lang' => 'DL_LINKS_PER_PAGE',			'validate' => 'string',	'type' => 'text:3:4',		'explain' => false,		'help_key' => 'DL_LINKS_PER_PAGE'],
+						'dl_shorten_extern_links'	=> ['lang' => 'DL_SHORTEN_EXTERN_LINKS',	'validate' => 'string',	'type' => 'text:3:4',		'explain' => false,		'help_key' => 'DL_SHORTEN_EXTERN_LINKS'],
+						'dl_index_desc_hide'		=> ['lang' => 'DL_INDEX_DESC_HIDE',			'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_INDEX_DESC_HIDE'],
+						'dl_desc_index'				=> ['lang' => 'DL_ENABLE_INDEX_DESC',		'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_INDEX_DESC_DOWNLOAD'],
+						'dl_limit_desc_on_index'	=> ['lang' => 'DL_LIMIT_DESC_ON_INDEX',		'validate' => 'string',	'type' => 'text:5:10',		'explain' => false,		'help_key' => 'DL_LIMIT_DESC_ON_INDEX'],
+						'dl_desc_search'			=> ['lang' => 'DL_ENABLE_SEARCH_DESC',		'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_SEARCH_DESC_DOWNLOAD'],
+						'dl_limit_desc_on_search'	=> ['lang' => 'DL_LIMIT_DESC_ON_SEARCH',	'validate' => 'string',	'type' => 'text:5:10',		'explain' => false,		'help_key' => 'DL_LIMIT_DESC_ON_SEARCH'],
 		
 						'legend3'				=> '',
 		
-						'dl_show_real_filetime'		=> array('lang' => 'DL_SHOW_REAL_FILETIME',		'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_SHOW_REAL_FILETIME'),
-						'dl_file_hash_algo'			=> array('lang' => 'DL_FILE_HASH_ALGO',			'validate' => 'string',	'type' => 'select',			'explain' => false,		'help_key' => 'DL_FILE_HASH_ALGO',		'function' => array($this, 'select_dl_hash_algo'),	'params' => array('{CONFIG_VALUE}')),
-						'dl_ext_new_window'			=> array('lang' => 'DL_EXT_NEW_WINDOW',			'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_EXT_NEW_WINDOW'),
-						'dl_report_broken_message'	=> array('lang' => 'DL_REPORT_BROKEN_MESSAGE',	'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_REPORT_BROKEN_MESSAGE'),
+						'dl_show_real_filetime'		=> ['lang' => 'DL_SHOW_REAL_FILETIME',		'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_SHOW_REAL_FILETIME'],
+						'dl_file_hash_algo'			=> ['lang' => 'DL_FILE_HASH_ALGO',			'validate' => 'string',	'type' => 'select',			'explain' => false,		'help_key' => 'DL_FILE_HASH_ALGO',		'function' => [$this, 'select_dl_hash_algo'],	'params' => ['{CONFIG_VALUE}']],
+						'dl_ext_new_window'			=> ['lang' => 'DL_EXT_NEW_WINDOW',			'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_EXT_NEW_WINDOW'],
+						'dl_report_broken_message'	=> ['lang' => 'DL_REPORT_BROKEN_MESSAGE',	'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_REPORT_BROKEN_MESSAGE'],
 
 						'legend4'				=> '',
 		
-						'dl_nav_link_main'			=> array('lang' => 'DL_NAV_LINK_MAIN',			'validate' => 'string',	'type' => 'select',			'explain' => false,		'help_key' => false,		'function' => array($this, 'select_nav_link_pos'),	'params' => array('{CONFIG_VALUE}')),
-						'dl_nav_link_hacks'			=> array('lang' => 'DL_NAV_LINK_HACKS',			'validate' => 'string',	'type' => 'select',			'explain' => false,		'help_key' => false,		'function' => array($this, 'select_nav_link_pos'),	'params' => array('{CONFIG_VALUE}')),
-						'dl_nav_link_tracker'		=> array('lang' => 'DL_NAV_LINK_TRACKER',		'validate' => 'string',	'type' => 'select',			'explain' => false,		'help_key' => false,		'function' => array($this, 'select_nav_link_pos'),	'params' => array('{CONFIG_VALUE}')),
-					)
-				);
+						'dl_nav_link_main'			=> ['lang' => 'DL_NAV_LINK_MAIN',			'validate' => 'string',	'type' => 'select',			'explain' => false,		'help_key' => false,		'function' => [$this, 'select_nav_link_pos'],	'params' => ['{CONFIG_VALUE}']],
+						'dl_nav_link_hacks'			=> ['lang' => 'DL_NAV_LINK_HACKS',			'validate' => 'string',	'type' => 'select',			'explain' => false,		'help_key' => false,		'function' => [$this, 'select_nav_link_pos'],	'params' => ['{CONFIG_VALUE}']],
+						'dl_nav_link_tracker'		=> ['lang' => 'DL_NAV_LINK_TRACKER',		'validate' => 'string',	'type' => 'select',			'explain' => false,		'help_key' => false,		'function' => [$this, 'select_nav_link_pos'],	'params' => ['{CONFIG_VALUE}']],
+					]
+				];
 		
 				$fulltext_dl_search_enabled = false;
 				global $dbms;
@@ -210,83 +213,91 @@ class acp_config_controller implements acp_config_interface
 		
 				if ($fulltext_dl_search_enabled)
 				{
-					$display_vars['vars'] = array_merge($display_vars['vars'], array(
+					$display_vars['vars'] += [
 						'legend5'				=> '',
 		
-						'dl_similar_dl'		=> array('lang' => 'DL_SIMILAR_DL_OPTION',		'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_SIMILAR_DL'),
-						'dl_similar_limit'	=> array('lang' => 'DL_SIMILAR_DL_LIMIT',		'validate' => 'int',	'type' => 'text:3:5',		'explain' => false,		'help_key' => 'DL_SIMILAR_DL_LIMIT'),
-					));
+						'dl_similar_dl'		=> ['lang' => 'DL_SIMILAR_DL_OPTION',		'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_SIMILAR_DL'],
+						'dl_similar_limit'	=> ['lang' => 'DL_SIMILAR_DL_LIMIT',		'validate' => 'int',	'type' => 'text:3:5',		'explain' => false,		'help_key' => 'DL_SIMILAR_DL_LIMIT'],
+					];
 				}
 				else
 				{
-					$s_hidden_fields = array('dl_similar_limit' => 0, 'dl_similar_dl' => 0);
+					$s_hidden_fields = ['dl_similar_limit' => 0, 'dl_similar_dl' => 0];
 				}
 		
 			break;
 			case 'protect':
-				$display_vars = array(
+				$display_vars = [
 					'title'	=> 'DL_ACP_CONF_PROTECT',
-					'vars'	=> array(
+					'vars'	=> [
 						'legend1'				=> '',
 		
-						'dl_global_guests'		=> array('lang' => 'DL_GLOBAL_GUESTS',	'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_GLOBAL_GUESTS'),
+						'dl_global_guests'		=> ['lang' => 'DL_GLOBAL_GUESTS',		'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_GLOBAL_GUESTS'],
 		
 						'legend2'				=> '',
 		
-						'dl_use_ext_blacklist'	=> array('lang' => 'DL_USE_EXT_BLACKLIST',	'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_USE_EXT_BLACKLIST'),
+						'dl_use_ext_blacklist'	=> ['lang' => 'DL_USE_EXT_BLACKLIST',	'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_USE_EXT_BLACKLIST'],
 		
 						'legend3'				=> 'DL_ANTISPAM',
 		
-						'dl_antispam_posts'		=> array('lang' => 'DL_ANTISPAM_POSTS',		'validate' => 'int',	'type' => 'text:5:10',		'explain' => false,		'help_key' => 'DL_ANTISPAM'),
-						'dl_antispam_hours'		=> array('lang' => 'DL_ANTISPAM_HOURS',		'validate' => 'int',	'type' => 'text:5:10',		'explain' => false,		'help_key' => 'DL_ANTISPAM'),
+						'dl_antispam_posts'		=> ['lang' => 'DL_ANTISPAM_POSTS',		'validate' => 'int',	'type' => 'text:5:10',		'explain' => false,		'help_key' => 'DL_ANTISPAM'],
+						'dl_antispam_hours'		=> ['lang' => 'DL_ANTISPAM_HOURS',		'validate' => 'int',	'type' => 'text:5:10',		'explain' => false,		'help_key' => 'DL_ANTISPAM'],
 		
 						'legend4'				=> '',
 		
-						'dl_download_vc'		=> array('lang' => 'DL_VISUAL_CONFIRMATION',	'validate' => 'int',	'type' => 'select',		'explain' => true,		'help_key' => 'DL_VISUAL_CONFIRMATION',		'function' => array($this, 'select_dl_vc'),		'params' => array('{CONFIG_VALUE}')),
-						'dl_report_broken_vc'	=> array('lang' => 'DL_REPORT_BROKEN_VC',		'validate' => 'int',	'type' => 'select',		'explain' => false,		'help_key' => 'DL_REPORT_BROKEN_VC',		'function' => array($this, 'select_report_vc'),	'params' => array('{CONFIG_VALUE}')),
+						'dl_download_vc'		=> ['lang' => 'DL_VISUAL_CONFIRMATION',	'validate' => 'int',	'type' => 'select',		'explain' => true,		'help_key' => 'DL_VISUAL_CONFIRMATION',		'function' => [$this, 'select_dl_vc'],		'params' => ['{CONFIG_VALUE}']],
+						'dl_report_broken_vc'	=> ['lang' => 'DL_REPORT_BROKEN_VC',	'validate' => 'int',	'type' => 'select',		'explain' => false,		'help_key' => 'DL_REPORT_BROKEN_VC',		'function' => [$this, 'select_report_vc'],	'params' => ['{CONFIG_VALUE}']],
 		
 						'legend5'				=> '',
 		
-						'dl_stats_perm'		=> array('lang' => 'DL_STAT_PERM',	'validate' => 'int',	'type' => 'select',		'explain' => false,		'help_key' => 'DL_STAT_PERM',	'function' => array($this, 'select_stat_perm'),	'params' => array('{CONFIG_VALUE}')),
+						'dl_stats_perm'			=> ['lang' => 'DL_STAT_PERM',	'validate' => 'int',	'type' => 'select',		'explain' => false,		'help_key' => 'DL_STAT_PERM',	'function' => [$this, 'select_stat_perm'],	'params' => ['{CONFIG_VALUE}']],
 		
 						'legend6'				=> '',
 		
-						'dl_prevent_hotlink'	=> array('lang' => 'DL_PREVENT_HOTLINK',	'validate' => 'int',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_PREVENT_HOTLINK'),
-						'dl_hotlink_action'		=> array('lang' => 'DL_HOTLINK_ACTION',		'validate' => 'int',	'type' => 'select',			'explain' => false,		'help_key' => 'DL_HOTLINK_ACTION',		'function' => array($this, 'select_hotlink_action'),	'params' => array('{CONFIG_VALUE}')),
-					)
-				);
+						'dl_prevent_hotlink'	=> ['lang' => 'DL_PREVENT_HOTLINK',	'validate' => 'int',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_PREVENT_HOTLINK'],
+						'dl_hotlink_action'		=> ['lang' => 'DL_HOTLINK_ACTION',	'validate' => 'int',	'type' => 'select',			'explain' => false,		'help_key' => 'DL_HOTLINK_ACTION',		'function' => [$this, 'select_hotlink_action'],	'params' => ['{CONFIG_VALUE}']],
+					]
+				];
 			break;
 			case 'limit':
-				$display_vars = array(
+				$display_vars = [
 					'title'	=> 'DL_ACP_CONF_LIMIT',
-					'vars'	=> array(
+					'vars'	=> [
 						'legend1'				=> '',
-		
-						'dl_report_broken'			=> array('lang' => 'DL_REPORT_BROKEN',		'validate' => 'int',	'type' => 'select',			'explain' => false,		'help_key' => 'DL_REPORT_BROKEN_LOCK',		'function' => array($this, 'select_report_action'),	'params' => array('{CONFIG_VALUE}')),
-						'dl_report_broken_lock'		=> array('lang' => 'DL_REPORT_BROKEN_LOCK',	'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_REPORT_BROKEN'),
-						'dl_sort_preform'			=> array('lang' => 'DL_SORT_PREFORM',		'validate' => 'int',	'type' => 'select',			'explain' => false,		'help_key' => 'DL_SORT_PREFORM',			'function' => array($this, 'select_sort'),			'params' => array('{CONFIG_VALUE}')),
-						'dl_posts'					=> array('lang' => 'DL_POSTS',				'validate' => 'int',	'type' => 'text:3:4',		'explain' => false,		'help_key' => 'DL_POSTS'),
-		
+
+						'dl_physical_quota'		=> ['lang' => 'DL_PHYSICAL_QUOTA',		'validate' => 'int',	'type' => 'custom',		'explain' => false,		'help_key' => 'DL_PHYSICAL_QUOTA',	'function' => [$this, 'select_size'],	'params' => ['{CONFIG_VALUE}', 'dl_physical_quota', '10', '20', 'dl_x_quota', 'gb', true]],
+
 						'legend2'				=> '',
 		
-						'dl_edit_own_downloads'		=> array('lang' => 'DL_EDIT_OWN_DOWNLOADS',	'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_EDIT_OWN_DOWNLOADS'),
+						'dl_report_broken'			=> ['lang' => 'DL_REPORT_BROKEN',		'validate' => 'int',	'type' => 'select',			'explain' => false,		'help_key' => 'DL_REPORT_BROKEN',			'function' => [$this, 'select_report_action'],	'params' => ['{CONFIG_VALUE}']],
+						'dl_report_broken_lock'		=> ['lang' => 'DL_REPORT_BROKEN_LOCK',	'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_REPORT_BROKEN_LOCK'],
+						'dl_sort_preform'			=> ['lang' => 'DL_SORT_PREFORM',		'validate' => 'int',	'type' => 'select',			'explain' => false,		'help_key' => 'DL_SORT_PREFORM',			'function' => [$this, 'select_sort'],			'params' => ['{CONFIG_VALUE}']],
+						'dl_posts'					=> ['lang' => 'DL_POSTS',				'validate' => 'int',	'type' => 'text:3:4',		'explain' => false,		'help_key' => 'DL_POSTS'],
 		
 						'legend3'				=> '',
 		
-						'dl_guest_stats_show'		=> array('lang' => 'DL_GUEST_STATS_SHOW',	'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_GUEST_STATS_SHOW'),
+						'dl_edit_own_downloads'		=> ['lang' => 'DL_EDIT_OWN_DOWNLOADS',	'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_EDIT_OWN_DOWNLOADS'],
 		
 						'legend4'				=> '',
 		
-						'dl_thumb_fsize'				=> array('lang' => 'DL_THUMB_MAX_SIZE',		'validate' => 'int',	'type' => 'custom',		'explain' => false,		'help_key' => 'DL_THUMB_MAX_SIZE',	 	'function' => array($this, 'select_size'),	'params' => array('{CONFIG_VALUE}', 'dl_thumb_fsize', '10', '20', 'dl_f_quote', 'mb', false)),
-						'dl_thumb_xsize'				=> array('lang' => 'DL_THUMB_MAX_DIM_X',	'validate' => 'int',	'type' => 'text:5:5',	'explain' => false,		'help_key' => 'DL_THUMB_MAX_DIM_X'),
-						'dl_thumb_ysize'				=> array('lang' => 'DL_THUMB_MAX_DIM_Y',	'validate' => 'int',	'type' => 'text:5:5',	'explain' => false,		'help_key' => 'DL_THUMB_MAX_DIM_Y'),
+						'dl_guest_stats_show'		=> ['lang' => 'DL_GUEST_STATS_SHOW',	'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_GUEST_STATS_SHOW'],
 		
 						'legend5'				=> '',
 		
-						'dl_enable_rate'			=> array('lang' => 'DL_ENABLE_RATE',	'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_ENABLE_RATE'),
-						'dl_rate_points'			=> array('lang' => 'DL_RATE_POINTS',	'validate' => 'int',	'type' => 'text:3:3',		'explain' => false,		'help_key' => 'DL_RATE_POINTS'),
-					)
-				);
+						'dl_latest_type'		=> ['lang' => 'DL_LATEST_DOWNLOADS',		'validate' => 'int',	'type' => 'select',		'explain' => false,		'help_key' => 'DL_LATEST_DOWNLOADS',		'function' => [$this, 'select_latest_type'],		'params' => ['{CONFIG_VALUE}']],
+
+						'legend6'				=> '',
+		
+						'dl_thumb_fsize'				=> ['lang' => 'DL_THUMB_MAX_SIZE',	'validate' => 'int',	'type' => 'custom',		'explain' => false,		'help_key' => 'DL_THUMB_MAX_SIZE',	 	'function' => [$this, 'select_size'],	'params' => ['{CONFIG_VALUE}', 'dl_thumb_fsize', '10', '20', 'dl_f_quote', 'mb', false]],
+						'dl_thumb_xsize'				=> ['lang' => 'DL_THUMB_MAX_DIM_X',	'validate' => 'int',	'type' => 'text:5:5',	'explain' => false,		'help_key' => 'DL_THUMB_MAX_DIM_X'],
+						'dl_thumb_ysize'				=> ['lang' => 'DL_THUMB_MAX_DIM_Y',	'validate' => 'int',	'type' => 'text:5:5',	'explain' => false,		'help_key' => 'DL_THUMB_MAX_DIM_Y'],
+		
+						'legend7'				=> '',
+		
+						'dl_enable_rate'			=> ['lang' => 'DL_ENABLE_RATE',	'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_ENABLE_RATE'],
+						'dl_rate_points'			=> ['lang' => 'DL_RATE_POINTS',	'validate' => 'int',	'type' => 'text:3:3',		'explain' => false,		'help_key' => 'DL_RATE_POINTS'],
+					]
+				];
 		
 				$sql = 'SELECT ext_name FROM ' . EXT_TABLE;
 				$result = $this->db->sql_query($sql);
@@ -303,17 +314,17 @@ class acp_config_controller implements acp_config_interface
 		
 				if ($portal_exists)
 				{
-					$display_vars['vars'] = array_merge($display_vars['vars'], array(
-						'legend6'				=> '',
+					$display_vars['vars'] += [
+						'legend8'				=> '',
 		
-						'dl_recent_downloads'	=> array('lang' => 'NUMBER_RECENT_DL_ON_PORTAL',	'validate' => 'int',	'type' => 'text:3:4',	'explain' => false,		'help_key' => 'NUMBER_RECENT_DL_ON_PORTAL'),
-					));
+						'dl_recent_downloads'	=> ['lang' => 'NUMBER_RECENT_DL_ON_PORTAL',	'validate' => 'int',	'type' => 'text:3:4',	'explain' => false,		'help_key' => 'NUMBER_RECENT_DL_ON_PORTAL'],
+					];
 				}
 		
 			break;
 			case 'traffic':
 				$sql = 'SELECT group_id, group_name, group_type FROM ' . GROUPS_TABLE . '
-						WHERE ' . $this->db->sql_in_set('group_name', array('GUESTS', 'BOTS'), true) . '
+						WHERE ' . $this->db->sql_in_set('group_name', ['GUESTS', 'BOTS'], true) . '
 						ORDER BY group_type DESC, group_name';
 				$result = $this->db->sql_query($sql);
 				$total_groups = $this->db->sql_affectedrows($result);
@@ -352,100 +363,96 @@ class acp_config_controller implements acp_config_interface
 		
 				$select_size = ($total_groups < 10) ? $total_groups : 10;
 		
-				$display_vars = array(
+				$display_vars = [
 					'title'	=> 'DL_ACP_CONF_TRAFFIC',
-					'vars'	=> array(
+					'vars'	=> [
 						'legend1'				=> '',
 		
-						'dl_physical_quota'		=> array('lang' => 'DL_PHYSICAL_QUOTA',		'validate' => 'int',	'type' => 'custom',		'explain' => false,		'help_key' => 'DL_PHYSICAL_QUOTA',	'function' => array($this, 'select_size'),	'params' => array('{CONFIG_VALUE}', 'dl_physical_quota', '10', '20', 'dl_x_quota', 'gb', true)),
+						'dl_traffics_founder'			=> ['lang' => 'DL_TRAFFICS_FOUNDER',			'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_TRAFFICS_FOUNDER'],
+						'dl_traffics_overall'			=> ['lang' => 'DL_TRAFFICS_OVERALL',			'validate' => 'int',	'type' => 'select',			'explain' => false,		'help_key' => 'DL_TRAFFICS_OVERALL',			'function' => [$this, 'select_traffic'],	'params' => ['{CONFIG_VALUE}', $total_groups]],
+						'dl_traffics_overall_groups'	=> ['lang' => 'DL_TRAFFICS_OVERALL_GROUPS',								'type' => 'custom',			'explain' => false,		'help_key' => 'DL_TRAFFICS_OVERALL_GROUPS',		'function' => [$this, 'select_traffic_multi'],	'params' => ['dl_traffics_overall_groups', $s_groups_overall_select, $select_size]],
+						'dl_traffics_users'				=> ['lang' => 'DL_TRAFFICS_USERS',				'validate' => 'int',	'type' => 'select',			'explain' => false,		'help_key' => 'DL_TRAFFICS_USERS',				'function' => [$this, 'select_traffic'],	'params' => ['{CONFIG_VALUE}', $total_groups]],
+						'dl_traffics_users_groups'		=> ['lang' => 'DL_TRAFFICS_USERS_GROUPS',								'type' => 'custom',			'explain' => false,		'help_key' => 'DL_TRAFFICS_USERS_GROUPS',		'function' => [$this, 'select_traffic_multi'],	'params' => ['dl_traffics_users_groups', $s_groups_users_select, $select_size]],
+						'dl_traffics_guests'			=> ['lang' => 'DL_TRAFFICS_GUESTS',				'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_TRAFFICS_GUESTS'],
 		
 						'legend2'				=> '',
 		
-						'dl_traffics_founder'			=> array('lang' => 'DL_TRAFFICS_FOUNDER',			'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_TRAFFICS_FOUNDER'),
-						'dl_traffics_overall'			=> array('lang' => 'DL_TRAFFICS_OVERALL',			'validate' => 'int',	'type' => 'select',			'explain' => false,		'help_key' => 'DL_TRAFFICS_OVERALL',			'function' => array($this, 'select_traffic'),	'params' => array('{CONFIG_VALUE}', $total_groups)),
-						'dl_traffics_overall_groups'	=> array('lang' => 'DL_TRAFFICS_OVERALL_GROUPS',							'type' => 'custom',			'explain' => false,		'help_key' => 'DL_TRAFFICS_OVERALL_GROUPS',		'function' => array($this, 'select_traffic_multi'),	'params' => array('dl_traffics_overall_groups', $s_groups_overall_select, $select_size)),
-						'dl_traffics_users'				=> array('lang' => 'DL_TRAFFICS_USERS',				'validate' => 'int',	'type' => 'select',			'explain' => false,		'help_key' => 'DL_TRAFFICS_USERS',				'function' => array($this, 'select_traffic'),	'params' => array('{CONFIG_VALUE}', $total_groups)),
-						'dl_traffics_users_groups'		=> array('lang' => 'DL_TRAFFICS_USERS_GROUPS',								'type' => 'custom',			'explain' => false,		'help_key' => 'DL_TRAFFICS_USERS_GROUPS',		'function' => array($this, 'select_traffic_multi'),	'params' => array('dl_traffics_users_groups', $s_groups_users_select, $select_size)),
-						'dl_traffics_guests'			=> array('lang' => 'DL_TRAFFICS_GUESTS',			'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_TRAFFICS_GUESTS'),
+						'dl_overall_traffic'			=> ['lang' => 'DL_OVERALL_TRAFFIC',			'validate' => 'int',	'type' => 'custom',		'explain' => false,		'help_key' => 'DL_OVERALL_TRAFFIC',			'function' => [$this, 'select_size'],	'params' => ['{CONFIG_VALUE}', 'dl_overall_traffic', '10', '20', 'dl_x_over', 'gb', true]],
+						'dl_overall_guest_traffic'		=> ['lang' => 'DL_OVERALL_GUEST_TRAFFIC',	'validate' => 'int',	'type' => 'custom',		'explain' => false,		'help_key' => 'DL_OVERALL_GUEST_TRAFFIC',	'function' => [$this, 'select_size'],	'params' => ['{CONFIG_VALUE}', 'dl_overall_guest_traffic', '10', '20', 'dl_x_g_over', 'gb', true]],
 		
 						'legend3'				=> '',
 		
-						'dl_overall_traffic'			=> array('lang' => 'DL_OVERALL_TRAFFIC',		'validate' => 'int',	'type' => 'custom',		'explain' => false,		'help_key' => 'DL_OVERALL_TRAFFIC',			'function' => array($this, 'select_size'),	'params' => array('{CONFIG_VALUE}', 'dl_overall_traffic', '10', '20', 'dl_x_over', 'gb', true)),
-						'dl_overall_guest_traffic'		=> array('lang' => 'DL_OVERALL_GUEST_TRAFFIC',	'validate' => 'int',	'type' => 'custom',		'explain' => false,		'help_key' => 'DL_OVERALL_GUEST_TRAFFIC',	'function' => array($this, 'select_size'),	'params' => array('{CONFIG_VALUE}', 'dl_overall_guest_traffic', '10', '20', 'dl_x_g_over', 'gb', true)),
+						'dl_enable_post_dl_traffic'		=> ['lang' => 'DL_ENABLE_POST_TRAFFIC',		'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_ENABLE_POST_TRAFFIC'],
+						'dl_newtopic_traffic'			=> ['lang' => 'DL_NEWTOPIC_TRAFFIC',		'validate' => 'int',	'type' => 'custom',			'explain' => false,		'help_key' => 'DL_NEWTOPIC_TRAFFIC',		'function' => [$this, 'select_size'],	'params' => ['{CONFIG_VALUE}', 'dl_newtopic_traffic', '10', '20', 'dl_x_new', 'gb', false]],
+						'dl_reply_traffic'				=> ['lang' => 'DL_REPLY_TRAFFIC',			'validate' => 'int',	'type' => 'custom',			'explain' => false,		'help_key' => 'DL_REPLY_TRAFFIC',			'function' => [$this, 'select_size'],	'params' => ['{CONFIG_VALUE}', 'dl_reply_traffic', '10', '20', 'dl_x_reply', 'gb', false]],
+						'dl_drop_traffic_postdel'		=> ['lang' => 'DL_DROP_TRAFFIC_POSTDEL',	'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_DROP_TRAFFIC_POSTDEL'],
 		
 						'legend4'				=> '',
 		
-						'dl_enable_post_dl_traffic'		=> array('lang' => 'DL_ENABLE_POST_TRAFFIC',	'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_ENABLE_POST_TRAFFIC'),
-						'dl_newtopic_traffic'			=> array('lang' => 'DL_NEWTOPIC_TRAFFIC',		'validate' => 'int',	'type' => 'custom',			'explain' => false,		'help_key' => 'DL_NEWTOPIC_TRAFFIC',		'function' => array($this, 'select_size'),	'params' => array('{CONFIG_VALUE}', 'dl_newtopic_traffic', '10', '20', 'dl_x_new', 'gb', false)),
-						'dl_reply_traffic'				=> array('lang' => 'DL_REPLY_TRAFFIC',			'validate' => 'int',	'type' => 'custom',			'explain' => false,		'help_key' => 'DL_REPLY_TRAFFIC',			'function' => array($this, 'select_size'),	'params' => array('{CONFIG_VALUE}', 'dl_reply_traffic', '10', '20', 'dl_x_reply', 'gb', false)),
-						'dl_drop_traffic_postdel'		=> array('lang' => 'DL_DROP_TRAFFIC_POSTDEL',	'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_DROP_TRAFFIC_POSTDEL'),
+						'dl_delay_auto_traffic'		=> ['lang' => 'DL_DELAY_AUTO_TRAFFIC',		'validate' => 'int',	'type' => 'text:3:4',	'explain' => false,		'help_key' => 'DL_DELAY_AUTO_TRAFFIC'],
+						'dl_delay_post_traffic'		=> ['lang' => 'DL_DELAY_POST_TRAFFIC',		'validate' => 'int',	'type' => 'text:3:4',	'explain' => false,		'help_key' => 'DL_DELAY_POST_TRAFFIC'],
 		
 						'legend5'				=> '',
 		
-						'dl_delay_auto_traffic'		=> array('lang' => 'DL_DELAY_AUTO_TRAFFIC',		'validate' => 'int',	'type' => 'text:3:4',	'explain' => false,		'help_key' => 'DL_DELAY_AUTO_TRAFFIC'),
-						'dl_delay_post_traffic'		=> array('lang' => 'DL_DELAY_POST_TRAFFIC',		'validate' => 'int',	'type' => 'text:3:4',	'explain' => false,		'help_key' => 'DL_DELAY_POST_TRAFFIC'),
-		
-						'legend6'				=> '',
-		
-						'dl_user_traffic_once'		=> array('lang' => 'DL_USER_TRAFFIC_ONCE',		'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_USER_TRAFFIC_ONCE'),
-						'dl_upload_traffic_count'	=> array('lang' => 'DL_UPLOAD_TRAFFIC_COUNT',	'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_UPLOAD_TRAFFIC_COUNT'),
-					)
-				);
+						'dl_user_traffic_once'		=> ['lang' => 'DL_USER_TRAFFIC_ONCE',		'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_USER_TRAFFIC_ONCE'],
+						'dl_upload_traffic_count'	=> ['lang' => 'DL_UPLOAD_TRAFFIC_COUNT',	'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_UPLOAD_TRAFFIC_COUNT'],
+					]
+				];
 			break;
 			case 'message':
-				$display_vars = array(
+				$display_vars = [
 					'title'	=> 'DL_ACP_CONF_MESSAGE',
-					'vars'	=> array(
+					'vars'	=> [
 						'legend1'				=> '',
 		
-						'dl_disable_email'			=> array('lang' => 'DL_DISABLE_EMAIL',			'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_DISABLE_EMAIL'),
-						'dl_disable_popup'			=> array('lang' => 'DL_DISABLE_POPUP',			'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_DISABLE_POPUP'),
-						'dl_disable_popup_notify'	=> array('lang' => 'DL_DISABLE_POPUP_NOTIFY',	'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_DISABLE_POPUP_NOTIFY'),
-					)
-				);
+						'dl_disable_email'			=> ['lang' => 'DL_DISABLE_EMAIL',			'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_DISABLE_EMAIL'],
+						'dl_disable_popup'			=> ['lang' => 'DL_DISABLE_POPUP',			'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_DISABLE_POPUP'],
+						'dl_disable_popup_notify'	=> ['lang' => 'DL_DISABLE_POPUP_NOTIFY',	'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_DISABLE_POPUP_NOTIFY'],
+					]
+				];
 			break;
 			case 'topic':
-				$display_vars = array(
+				$display_vars = [
 					'title'	=> 'DL_ACP_CONF_TOPIC',
-					'vars'	=> array(
+					'vars'	=> [
 						'legend1'				=> '',
 		
-						'dl_enable_dl_topic'		=> array('lang' => 'DL_ENABLE_TOPIC',			'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_ENABLE_TOPIC'),
-						'dl_diff_topic_user'		=> array('lang' => 'DL_TOPIC_USER',				'validate' => 'int',	'type' => 'select',			'explain' => false,		'help_key' => 'DL_TOPIC_USER',			'function' => array($this, 'select_topic_user'),		'params' => array('{CONFIG_VALUE}')),
-						'dl_topic_user'				=> array('lang' => 'DL_TOPIC_USER_OTHER',		'validate' => 'string',	'type' => 'custom',			'explain' => false,		'help_key' => 'DL_TOPIC_USER',			'function' => array($this, 'select_dl_user'),			'params'  => array('{CONFIG_VALUE}', 'dl_topic_user')),
-						'dl_topic_forum'			=> array('lang' => 'DL_TOPIC_FORUM',			'validate' => 'int',	'type' => 'select',			'explain' => false,		'help_key' => 'DL_TOPIC_FORUM',			'function' => array($this, 'select_dl_forum'),		'params' => array('{CONFIG_VALUE}')),
-						'dl_topic_text'				=> array('lang' => 'DL_TOPIC_TEXT',				'validate' => 'string',	'type' => 'custom',			'explain' => false,		'help_key' => 'DL_TOPIC_TEXT',			'function' => array($this, 'textarea_input'),			'params' => array('{CONFIG_VALUE}', 'dl_topic_text', 75, 5)),
-						'dl_topic_more_details'		=> array('lang' => 'DL_TOPIC_DETAILS',			'validate' => 'int',	'type' => 'select',			'explain' => false,		'help_key' => 'DL_TOPIC_DETAILS',		'function' => array($this, 'select_topic_details'),	'params' => array('{CONFIG_VALUE}')),
-						'dl_topic_title_catname'	=> array('lang' => 'DL_TOPIC_TITLE_CATNAME',	'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_TOPIC_TITLE_CATNAME'),
-						'dl_topic_post_catname'		=> array('lang' => 'DL_TOPIC_POST_CATNAME',		'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_TOPIC_POST_CATNAME'),
-						'dl_topic_type'				=> array('lang' => 'POST_TOPIC_AS',				'validate' => 'bool',	'type' => 'select',			'explain' => false,		'help_key' => 'DL_TOPIC_TYPE', 			'function' => array($this, 'select_topic_type'),		'params' => array('{CONFIG_VALUE}')),
-					)
-				);
+						'dl_enable_dl_topic'		=> ['lang' => 'DL_ENABLE_TOPIC',			'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_ENABLE_TOPIC'],
+						'dl_diff_topic_user'		=> ['lang' => 'DL_TOPIC_USER',				'validate' => 'int',	'type' => 'select',			'explain' => false,		'help_key' => 'DL_TOPIC_USER',			'function' => [$this, 'select_topic_user'],		'params' => ['{CONFIG_VALUE}']],
+						'dl_topic_user'				=> ['lang' => 'DL_TOPIC_USER_OTHER',		'validate' => 'string',	'type' => 'custom',			'explain' => false,		'help_key' => 'DL_TOPIC_USER',			'function' => [$this, 'select_dl_user'],			'params'  => ['{CONFIG_VALUE}', 'dl_topic_user']],
+						'dl_topic_forum'			=> ['lang' => 'DL_TOPIC_FORUM',				'validate' => 'int',	'type' => 'select',			'explain' => false,		'help_key' => 'DL_TOPIC_FORUM',			'function' => [$this, 'select_dl_forum'],		'params' => ['{CONFIG_VALUE}']],
+						'dl_topic_text'				=> ['lang' => 'DL_TOPIC_TEXT',				'validate' => 'string',	'type' => 'custom',			'explain' => false,		'help_key' => 'DL_TOPIC_TEXT',			'function' => [$this, 'textarea_input'],			'params' => ['{CONFIG_VALUE}', 'dl_topic_text', 75, 5]],
+						'dl_topic_more_details'		=> ['lang' => 'DL_TOPIC_DETAILS',			'validate' => 'int',	'type' => 'select',			'explain' => false,		'help_key' => 'DL_TOPIC_DETAILS',		'function' => [$this, 'select_topic_details'],	'params' => ['{CONFIG_VALUE}']],
+						'dl_topic_title_catname'	=> ['lang' => 'DL_TOPIC_TITLE_CATNAME',		'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_TOPIC_TITLE_CATNAME'],
+						'dl_topic_post_catname'		=> ['lang' => 'DL_TOPIC_POST_CATNAME',		'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_TOPIC_POST_CATNAME'],
+						'dl_topic_type'				=> ['lang' => 'POST_TOPIC_AS',				'validate' => 'bool',	'type' => 'select',			'explain' => false,		'help_key' => 'DL_TOPIC_TYPE', 			'function' => [$this, 'select_topic_type'],		'params' => ['{CONFIG_VALUE}']],
+					]
+				];
 			break;
 			case 'rss':
-				$display_vars = array(
+				$display_vars = [
 					'title'	=> 'DL_ACP_CONF_RSS',
-					'vars'	=> array(
+					'vars'	=> [
 						'legend1'				=> '',
 		
-						'dl_rss_enable'			=> array('lang' => 'DL_RSS_ENABLE',					'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_RSS_ENABLE'),
-						'dl_rss_off_action'		=> array('lang' => 'DL_RSS_OFF_ACTION',				'validate' => 'int',	'type' => 'select',			'explain' => false,		'help_key' => 'DL_RSS_OFF_ACTION',			'function' => array($this, 'select_rss_off_action'),	'params' => array('{CONFIG_VALUE}')),
-						'dl_rss_off_text'		=> array('lang' => 'DL_RSS_OFF_TEXT',				'validate' => 'string',	'type' => 'custom',			'explain' => false,		'help_key' => 'DL_RSS_OFF_TEXT',			'function' => array($this, 'textarea_input'),			'params' => array('{CONFIG_VALUE}', 'dl_rss_off_text', 75, 5)),
-						'dl_rss_cats'			=> array('lang' => 'DL_RSS_CATS',					'validate' => 'int',	'type' => 'custom',			'explain' => false,		'help_key' => 'DL_RSS_CATS', 				'function' => array($this, 'select_rss_cats'),		'params' => array('{CONFIG_VALUE}')),
-						'dl_rss_perms'			=> array('lang' => 'DL_RSS_PERMS',					'validate' => 'bool',	'type' => 'custom',			'explain' => false,		'help_key' => 'DL_RSS_PERMS', 				'function' => array($this, 'rss_perm'),				'params' => array('{CONFIG_VALUE}')),
-						'dl_rss_number'			=> array('lang' => 'DL_RSS_NUMBER',					'validate' => 'int',	'type' => 'text:3:5',		'explain' => false,		'help_key' => 'DL_RSS_NUMBER'),
-						'dl_rss_select'			=> array('lang' => 'DL_RSS_SELECT',					'validate' => 'bool',	'type' => 'custom',			'explain' => false,		'help_key' => 'DL_RSS_SELECT', 				'function' => array($this, 'rss_select'),				'params' => array('{CONFIG_VALUE}')),
-						'dl_rss_new_update'		=> array('lang' => 'DL_RSS_NEW_UPDATE',				'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_RSS_NEW_UPDATE'),
-						'dl_rss_desc_length'	=> array('lang' => 'DL_RSS_DESC_LENGTH',			'validate' => 'int',	'type' => 'select',			'explain' => false,		'help_key' => 'DL_RSS_DESC_LENGTH',			'function' => array($this, 'select_rss_length'),		'params' => array('{CONFIG_VALUE}')),
-						'dl_rss_desc_shorten'	=> array('lang' => 'DL_RSS_DESC_LENGTH_SHORTEN',	'validate' => 'int',	'type' => 'text:5:5',		'explain' => false,		'help_key' => 'DL_RSS_DESC_LENGTH_SHORTEN'),
-					)
-				);
+						'dl_rss_enable'			=> ['lang' => 'DL_RSS_ENABLE',					'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_RSS_ENABLE'],
+						'dl_rss_off_action'		=> ['lang' => 'DL_RSS_OFF_ACTION',				'validate' => 'int',	'type' => 'select',			'explain' => false,		'help_key' => 'DL_RSS_OFF_ACTION',			'function' => [$this, 'select_rss_off_action'],	'params' => ['{CONFIG_VALUE}']],
+						'dl_rss_off_text'		=> ['lang' => 'DL_RSS_OFF_TEXT',				'validate' => 'string',	'type' => 'custom',			'explain' => false,		'help_key' => 'DL_RSS_OFF_TEXT',			'function' => [$this, 'textarea_input'],			'params' => ['{CONFIG_VALUE}', 'dl_rss_off_text', 75, 5]],
+						'dl_rss_cats'			=> ['lang' => 'DL_RSS_CATS',					'validate' => 'int',	'type' => 'custom',			'explain' => false,		'help_key' => 'DL_RSS_CATS', 				'function' => [$this, 'select_rss_cats'],		'params' => ['{CONFIG_VALUE}']],
+						'dl_rss_perms'			=> ['lang' => 'DL_RSS_PERMS',					'validate' => 'bool',	'type' => 'custom',			'explain' => false,		'help_key' => 'DL_RSS_PERMS', 				'function' => [$this, 'rss_perm'],				'params' => ['{CONFIG_VALUE}']],
+						'dl_rss_number'			=> ['lang' => 'DL_RSS_NUMBER',					'validate' => 'int',	'type' => 'text:3:5',		'explain' => false,		'help_key' => 'DL_RSS_NUMBER'],
+						'dl_rss_select'			=> ['lang' => 'DL_RSS_SELECT',					'validate' => 'bool',	'type' => 'custom',			'explain' => false,		'help_key' => 'DL_RSS_SELECT', 				'function' => [$this, 'rss_select'],				'params' => ['{CONFIG_VALUE}']],
+						'dl_rss_new_update'		=> ['lang' => 'DL_RSS_NEW_UPDATE',				'validate' => 'bool',	'type' => 'radio:yes_no',	'explain' => false,		'help_key' => 'DL_RSS_NEW_UPDATE'],
+						'dl_rss_desc_length'	=> ['lang' => 'DL_RSS_DESC_LENGTH',				'validate' => 'int',	'type' => 'select',			'explain' => false,		'help_key' => 'DL_RSS_DESC_LENGTH',			'function' => [$this, 'select_rss_length'],		'params' => ['{CONFIG_VALUE}']],
+						'dl_rss_desc_shorten'	=> ['lang' => 'DL_RSS_DESC_LENGTH_SHORTEN',		'validate' => 'int',	'type' => 'text:5:5',		'explain' => false,		'help_key' => 'DL_RSS_DESC_LENGTH_SHORTEN'],
+					]
+				];
 			break;
 		}
 		
 		$this->new_config = $this->config;
-		$cfg_array = (isset($_REQUEST['config'])) ? $this->request->variable('config', array('' => ''), true) : $this->new_config;
-		$error = array();
+		$cfg_array = (isset($_REQUEST['config'])) ? $this->request->variable('config', ['' => ''], true) : $this->new_config;
+		$error = [];
 		
 		// We validate the complete config if whished
 		validate_config_vars($display_vars['vars'], $cfg_array, $error);
@@ -472,7 +479,7 @@ class acp_config_controller implements acp_config_interface
 					$this->new_config[$config_name] = $config_value = intval($config_value);
 				}
 		
-				if (in_array($config_name, array('dl_thumb_fsize', 'dl_physical_quota', 'dl_overall_traffic', 'dl_overall_guest_traffic', 'dl_newtopic_traffic', 'dl_reply_traffic', 'dl_method_quota')))
+				if (in_array($config_name, ['dl_thumb_fsize', 'dl_physical_quota', 'dl_overall_traffic', 'dl_overall_guest_traffic', 'dl_newtopic_traffic', 'dl_reply_traffic', 'dl_method_quota']))
 				{
 					$this->new_config[$config_name] = $config_value = $this->dlext_format->resize_value($config_name, $config_value);
 				}
@@ -495,7 +502,7 @@ class acp_config_controller implements acp_config_interface
 				if ($config_name == 'dl_rss_cats')
 				{
 					$this->new_config['dl_rss_cats_select'] = '-';
-					$rss_cats_select = $this->request->variable('dl_rss_cats_select', array(0));
+					$rss_cats_select = $this->request->variable('dl_rss_cats_select', [0]);
 		
 					if (sizeof($rss_cats_select))
 					{
@@ -552,8 +559,8 @@ class acp_config_controller implements acp_config_interface
 			// Refetch all multi select fields which are not provided by the forum default methods
 			if ($view == 'traffic')
 			{
-				$dl_traffic_overall_groups	= $this->request->variable('dl_traffics_overall_groups', array(0));
-				$dl_traffics_users_groups	= $this->request->variable('dl_traffics_users_groups', array(0));
+				$dl_traffic_overall_groups	= $this->request->variable('dl_traffics_overall_groups', [0]);
+				$dl_traffics_users_groups	= $this->request->variable('dl_traffics_users_groups', [0]);
 		
 				$this->new_config['dl_traffics_overall_groups'] = implode(',', $dl_traffic_overall_groups);
 				$this->new_config['dl_traffics_users_groups'] = implode(',', $dl_traffics_users_groups);
@@ -595,16 +602,16 @@ class acp_config_controller implements acp_config_interface
 			$error[] = $this->language->lang('DL_TRAFFIC_OFF_EXPLAIN');
 		}
 		
-		$acl_cat_names = array(
-			0 => array($this->language->lang('DL_ACP_CONF_GENERAL'),	'general'),
-			1 => array($this->language->lang('DL_ACP_CONF_VIEW'),		'view'),
-			2 => array($this->language->lang('DL_ACP_CONF_PROTECT'),	'protect'),
-			3 => array($this->language->lang('DL_ACP_CONF_LIMIT'),	'limit'),
-			4 => array($this->language->lang('DL_ACP_CONF_TRAFFIC'),	'traffic'),
-			5 => array($this->language->lang('DL_ACP_CONF_MESSAGE'),	'message'),
-			6 => array($this->language->lang('DL_ACP_CONF_TOPIC'),	'topic'),
-			7 => array($this->language->lang('DL_ACP_CONF_RSS'),		'rss'),
-		);
+		$acl_cat_names = [
+			0 => [$this->language->lang('DL_ACP_CONF_GENERAL'),	'general'],
+			1 => [$this->language->lang('DL_ACP_CONF_VIEW'),	'view'],
+			2 => [$this->language->lang('DL_ACP_CONF_PROTECT'),	'protect'],
+			3 => [$this->language->lang('DL_ACP_CONF_LIMIT'),	'limit'],
+			4 => [$this->language->lang('DL_ACP_CONF_TRAFFIC'),	'traffic'],
+			5 => [$this->language->lang('DL_ACP_CONF_MESSAGE'),	'message'],
+			6 => [$this->language->lang('DL_ACP_CONF_TOPIC'),	'topic'],
+			7 => [$this->language->lang('DL_ACP_CONF_RSS'),		'rss'],
+		];
 		
 		$mode_select = '';
 		
@@ -622,7 +629,7 @@ class acp_config_controller implements acp_config_interface
 		
 		$this->user->add_lang('acp/users');
 		
-		$this->template->assign_vars(array(
+		$this->template->assign_vars([
 			'L_TITLE'			=> $this->language->lang('DL_CONFIG'),
 			'L_TITLE_PAGE'		=> $this->language->lang($display_vars['title']),
 
@@ -634,8 +641,8 @@ class acp_config_controller implements acp_config_interface
 			'S_MODE_SELECT'		=> $mode_select,
 			'U_MODE_SELECT'		=> $this->u_action,
 		
-			'U_ACTION'			=> $this->u_action . '&amp;view=' . $view)
-		);
+			'U_ACTION'			=> $this->u_action . '&amp;view=' . $view,
+		]);
 		
 		// Output relevant page
 		foreach ($display_vars['vars'] as $config_key => $vars)
@@ -647,10 +654,10 @@ class acp_config_controller implements acp_config_interface
 		
 			if (strpos($config_key, 'legend') !== false && strpos($config_key, '_legend') === false)
 			{
-				$this->template->assign_block_vars('options', array(
+				$this->template->assign_block_vars('options', [
 					'S_LEGEND'		=> true,
-					'LEGEND'		=> ($this->language->lang($vars)) ? $this->language->lang($vars) : $vars)
-				);
+					'LEGEND'		=> ($this->language->lang($vars)) ? $this->language->lang($vars) : $vars,
+				]);
 		
 				continue;
 			}
@@ -672,15 +679,14 @@ class acp_config_controller implements acp_config_interface
 		
 			$help_key = $vars['help_key'];
 		
-			$this->template->assign_block_vars('options', array(
+			$this->template->assign_block_vars('options', [
 				'KEY'			=> $config_key,
 				'TITLE'			=> ($this->language->lang($vars['lang'])) ? $this->language->lang($vars['lang']) : $vars['lang'],
 				'S_EXPLAIN'		=> $vars['explain'],
 				'TITLE_EXPLAIN'	=> $l_explain,
 				'CONTENT'		=> $content,
 				'HELP_KEY'		=> $help_key,
-				)
-			);
+			]);
 		
 			unset($display_vars['vars'][$config_key]);
 		}
@@ -693,7 +699,7 @@ class acp_config_controller implements acp_config_interface
 	{
 		$user = $this->user;
 
-		$radio_ary = array(1 => 'DL_OFF_NOW', 0 => 'DL_OFF_TIME');
+		$radio_ary = [1 => 'DL_OFF_NOW', 0 => 'DL_OFF_TIME'];
 
 		return h_radio('config[dl_off_now_time]', $radio_ary, $value, 'dl_off_now_time');
 	}
@@ -702,7 +708,7 @@ class acp_config_controller implements acp_config_interface
 	{
 		$user = $this->user;
 
-		$radio_ary = array(1 => 'DL_RSS_USER', 0 => 'DL_RSS_GUESTS');
+		$radio_ary = [1 => 'DL_RSS_USER', 0 => 'DL_RSS_GUESTS'];
 
 		return h_radio('config[dl_rss_perms]', $radio_ary, $value, 'dl_rss_perms');
 	}
@@ -711,7 +717,7 @@ class acp_config_controller implements acp_config_interface
 	{
 		$user = $this->user;
 
-		$radio_ary = array(1 => 'DL_RSS_SELECT_LAST', 0 => 'DL_RSS_SELECT_RANDOM');
+		$radio_ary = [1 => 'DL_RSS_SELECT_LAST', 0 => 'DL_RSS_SELECT_RANDOM'];
 
 		return h_radio('config[dl_rss_select]', $radio_ary, $value, 'dl_rss_select');
 	}
@@ -1014,6 +1020,16 @@ class acp_config_controller implements acp_config_interface
 		$s_select .= '<option value="OFTlB">' . $this->language->lang('DL_NAV_LINK_OFTlB') . '</option>';	// overall_footer_teamlink_before
 		$s_select .= '<option value="OFTzA">' . $this->language->lang('DL_NAV_LINK_OFTzA') . '</option>';	// overall_footer_timezone_after
 		$s_select .= '<option value="OFTzB">' . $this->language->lang('DL_NAV_LINK_OFTzB') . '</option>';	// overall_footer_timezone_before
+		$s_select = str_replace('value="' . $value . '">', 'value="' . $value . '" selected="selected">', $s_select);
+
+		return $s_select;
+	}
+
+	public function select_latest_type($value)
+	{
+		$s_select = '<option value="0">' . $this->language->lang('DL_LATEST_TYPE_OFF') . '</option>'; 
+		$s_select .= '<option value="1">' . $this->language->lang('DL_LATEST_TYPE_DEFAULT') . '</option>'; 
+		$s_select .= '<option value="2">' . $this->language->lang('DL_LATEST_TYPE_COMPLETE') . '</option>'; 
 		$s_select = str_replace('value="' . $value . '">', 'value="' . $value . '" selected="selected">', $s_select);
 
 		return $s_select;

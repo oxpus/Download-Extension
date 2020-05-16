@@ -29,6 +29,7 @@
     width: 40% !important;
     text-align: center;
 }
+
 .dlbutton2
 {
     float: right !important;
@@ -270,11 +271,45 @@ div.dl_new_close:hover, div.dl_help_close:hover, .dl-close-footer:hover
 }
 
 .dl-footer-alert {
-    background-color: #FFAA44;
+    background-color: #ffaa44;
 }
 
 .dl-cell-block {
     display: block !important;
+}
+
+.dl-intent {
+    padding-left: 1em !important;
+}
+
+.panel>.inner>ul.topiclist>.header>dl>dd.dl-cell-block {
+    color: #000000;
+    font-weight: bold;
+    border-bottom: 1px #000000 solid;
+}
+
+.topiclist.dlext {
+    border: none;
+    background: none;
+}
+
+.topiclist.dlext>li.row {
+    border-top: none;
+    border-left: none;
+    border-right: none;
+    border-bottom: 1px #ffffff solid;
+}
+
+table.zebra-list tr.dl-reported:nth-child(odd) td {
+	background-color: #ECD5D8 !important;
+}
+
+table.zebra-list tr.dl-reported:nth-child(even) td {
+	background-color: #ECD5D8 !important;
+}
+
+.dl-reported {
+    background-color: #ECD5D8 !important;
 }
 
 .dl-width-5 {
@@ -295,6 +330,10 @@ div.dl_new_close:hover, div.dl_help_close:hover, .dl-close-footer:hover
 
 .dl-width-25 {
     width: 25%;
+}
+
+.dl-width-30 {
+    width: 30%;
 }
 
 .dl-width-40 {
@@ -327,6 +366,15 @@ div.dl_new_close:hover, div.dl_help_close:hover, .dl-close-footer:hover
 
 .dl-width-100 {
     width: 100%;
+}
+
+.dl-option-row {
+    height: 1.5em;
+    vertical-align: middle;
+}
+
+.dl-comment-height {
+    max-height: 100px;
 }
 
 .title {
@@ -370,6 +418,13 @@ div.dl_new_close:hover, div.dl_help_close:hover, .dl-close-footer:hover
 .dl-subfolder-small {
     max-width: 10px;
     max-height: 10px;
+}
+
+.dl-a-button {
+    line-height: 1.5;
+    padding-top: 1px !important;
+    padding-bottom: 1px !important;
+    vertical-align: middle !important;
 }
 
 @media only screen and (max-width: 1220px), only screen and (max-device-width: 1220px) {

@@ -138,8 +138,8 @@ class acp_perm_check_controller implements acp_perm_check_interface
 				}
 		
 				// Fetch category permissions
-				$cat_perm_ary   = array();
-				$dl_index       = array();
+				$cat_perm_ary   = [];
+				$dl_index       = [];
 				$dl_index       = $this->dlext_main->full_index();
 		
 				foreach ($dl_index as $cat_id => $value)
@@ -163,7 +163,7 @@ class acp_perm_check_controller implements acp_perm_check_interface
 				}
 		
 				// General user permissions
-				$this->template->assign_vars(array(
+				$this->template->assign_vars([
 					'USER_IS_ADMIN'         => $this->dlext_auth->user_admin(),
 					'USER_IS_BANNED'        => $this->dlext_auth->user_banned(),
 					'USER_CAN_VIEW_STATS'   => $this->dlext_auth->stats_perm(),
@@ -173,11 +173,11 @@ class acp_perm_check_controller implements acp_perm_check_interface
 					'CHECK_USERNAME'        => $this->user->data['username'],
 		
 					'U_BACK'				=> $this->u_action,
-				));
+				]);
 		
 				foreach($cat_perm_ary as $cat_id => $data_ary)
 				{
-					$this->template->assign_block_vars('cat_row', array(
+					$this->template->assign_block_vars('cat_row', [
 						'CAT_NAME'  => $data_ary['cat_name'],
 						'CAT_VIEW'  => $data_ary['auth_view'],
 						'CAT_DL'    => $data_ary['auth_dl'],
@@ -185,7 +185,7 @@ class acp_perm_check_controller implements acp_perm_check_interface
 						'CAT_MOD'   => $data_ary['auth_mod'],
 						'CAT_CREAD' => $data_ary['comment_read'],
 						'CAT_CPOST' => $data_ary['comment_post'],
-					));
+					]);
 				}
 		
 				// Reset userdata to the real current user and reinit the download classes to get the right content
@@ -202,12 +202,12 @@ class acp_perm_check_controller implements acp_perm_check_interface
 		
 		$u_user_select = append_sid("{$this->root_path}memberlist.{$this->phpEx}", "mode=searchuser&amp;form=select_user&amp;field=check_user&amp;select_single=true");
 		
-		$this->template->assign_vars(array(
+		$this->template->assign_vars([
 			'S_FORM_ACTION'     => $this->u_action,
 			'S_DL_PERM_CHECK'   => true,
 			'S_DISPLAY_PERMS'   => $s_display_perms,
 		
 			'U_FIND_USERNAME'   => $u_user_select,
-		));
+		]);
 	}
 }

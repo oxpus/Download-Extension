@@ -21,53 +21,53 @@ class release_7_1_0 extends \phpbb\db\migration\migration
 
 	static public function depends_on()
 	{
-		return array('\oxpus\dlext\migrations\v700\release_7_0_19');
+		return ['\oxpus\dlext\migrations\v700\release_7_0_19'];
 	}
 
 	public function update_data()
 	{
-		return array(
+		return [
 			// Set the current version
-			array('config.update', array('dl_ext_version', $this->dl_ext_version)),
-		);
+			['config.update', ['dl_ext_version', $this->dl_ext_version]],
+		];
 	}
 
 	public function update_schema()
 	{
-		return array(
-			'add_tables'	=> array(
-				$this->table_prefix . 'dl_ver_files' => array(
-					'COLUMNS'		=> array(
-						'ver_file_id'	=> array('UINT', null, 'auto_increment'),
-						'dl_id'			=> array('INT:11', 0),
-						'ver_id'		=> array('INT:11', 0),
-						'real_name'		=> array('VCHAR', ''),
-						'file_name'		=> array('VCHAR', ''),
-						'file_title'	=> array('VCHAR', ''),
-						'file_type'		=> array('BOOL', 0),	// 0 = files, 1 = images
-					),
+		return [
+			'add_tables'	=> [
+				$this->table_prefix . 'dl_ver_files' => [
+					'COLUMNS'		=> [
+						'ver_file_id'	=> ['UINT', null, 'auto_increment'],
+						'dl_id'			=> ['INT:11', 0],
+						'ver_id'		=> ['INT:11', 0],
+						'real_name'		=> ['VCHAR', ''],
+						'file_name'		=> ['VCHAR', ''],
+						'file_title'	=> ['VCHAR', ''],
+						'file_type'		=> ['BOOL', 0],	// 0 = files, 1 = images
+					],
 					'PRIMARY_KEY'	=> 'ver_file_id'
-				),
-			),
+				],
+			],
 
-			'add_columns'	=> array(
-				$this->table_prefix . 'dl_versions'		=> array(
-					'ver_text'			=> array('MTEXT_UNI', ''),
-					'ver_uid'			=> array('CHAR:8', ''),
-					'ver_bitfield'		=> array('VCHAR', ''),
-					'ver_flags'			=> array('UINT:11', 0),
-					'ver_active'		=> array('BOOL', 0),
-				),
-			),
-		);
+			'add_columns'	=> [
+				$this->table_prefix . 'dl_versions'		=> [
+					'ver_text'			=> ['MTEXT_UNI', ''],
+					'ver_uid'			=> ['CHAR:8', ''],
+					'ver_bitfield'		=> ['VCHAR', ''],
+					'ver_flags'			=> ['UINT:11', 0],
+					'ver_active'		=> ['BOOL', 0],
+				],
+			],
+		];
 	}
 
 	public function revert_schema()
 	{
-		return array(
-			'drop_tables' => array(
+		return [
+			'drop_tables' => [
 				$this->table_prefix . 'dl_ver_files',
-			),
-		);
+			],
+		];
 	}
 }

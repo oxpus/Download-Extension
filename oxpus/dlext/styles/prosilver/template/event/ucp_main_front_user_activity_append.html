@@ -1,0 +1,9 @@
+{% if DL_DOWNLOADS %}
+<dt>{{ lang('DL_DOWNLOADS_COUNT') }}{L_COLON}</dt>
+<dd>{{ DL_DOWNLOADS }} | <strong><a href="{{ U_DL_DOWNLOADS }}">{{ lang('DL_VIEW_DOWNLOADS') }}</a></strong></dd>
+{% endif %}
+
+{% if DL_COMMENTS %}
+<dt>{{ lang('DL_COMMENTS_PROFILE') }}{L_COLON}</dt>
+<dd>{{ DL_COMMENTS }}</dd>
+{% endif %}

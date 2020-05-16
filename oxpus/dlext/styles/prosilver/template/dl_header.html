@@ -6,9 +6,10 @@
 
 <div id="tabs" class="tabs">
 	<ul>
-		<li class="tab{% if S_MCP_TAB_MANAGE %} activetab{% endif %}"><a href="{{ U_DL_MCP_MANAGE }}">{{ lang('DL_MODCP_MANAGE') }}</a></li>
+		<li class="tab{% if S_MCP_TAB_MANAGE %} activetab{% endif %}"><a href="{{ U_DL_MCP_MANAGE }}">{{ lang('DOWNLOADS') }}</a></li>
 		<li class="tab{% if S_MCP_TAB_EDIT %} activetab{% endif %}"><a href="{{ U_DL_MCP_EDIT }}">{{ lang('DL_MODCP_EDIT') }}</a></li>
 		<li class="tab{% if S_MCP_TAB_APPROVE %} activetab{% endif %}"><a href="{{ U_DL_MCP_APPROVE }}">{{ lang('DL_MODCP_APPROVE') }}</a></li>
+		<li class="tab{% if S_MCP_TAB_BROKEN %} activetab{% endif %}"><a href="{{ U_DL_MCP_BROKEN }}">{{ lang('DL_MODCP_BROKEN') }}</a></li>
 		<li class="tab{% if S_MCP_TAB_CAPPROVE %} activetab{% endif %}"><a href="{{ U_DL_MCP_CAPPROVE }}">{{ lang('DL_MODCP_CAPPROVE') }}</a></li>
 	</ul>
 </div>
@@ -18,7 +19,14 @@
 			<div id="cp-menu" class="cp-menu">
 				<div class="navigation responsive-hide" id="navigation" role="navigation">
 					<ul>
+						{% if U_DL_MCP_MANAGE_OVERVIEW %}
+						<li id="active-subsection" class="active{% if S_DL_MCP_OVERVIEW %}-subsection{% endif %}"><a href="{{ U_DL_MCP_MANAGE_OVERVIEW }}"><span>{{ lang('DL_OVERVIEW') }}</span></a></li>
+						{% endif %}
+						{% if U_DL_MCP_MANAGE_TOOLBOX %}
+						<li id="active-subsection" class="active{% if S_DL_MCP_TOOLBOX %}-subsection{% endif %}"><a href="{{ U_DL_MCP_MANAGE_TOOLBOX }}"><span>{{ lang('DL_MODCP_MANAGE') }}</span></a></li>
+						{% else %}
 						<li id="active-subsection" class="active-subsection"><a href=""><span>{{ MCP_TAB_MODULE }}</span></a></li>
+						{% endif %}
 					</ul>
 				</div>
 			</div>

@@ -14,8 +14,6 @@ function select_switch(status)
 
 <h2>{{ lang('DL_MODCP_CAPPROVE') }}</h2>
 
-<br />
-
 {% if S_DL_MODCP_ACTION %}
 
 <form action="{{ S_DL_MODCP_ACTION }}" method="post" id="dl_modcp">
@@ -46,7 +44,7 @@ function select_switch(status)
 			<td class="center"><input type="checkbox" class="permissions-checkbox" name="dlo_id[]" value="{{ approve_row.COMMENT_ID }}" /></td>
 		</tr>
 		{% else %}
-		<tr class="bg1"><td class="center" colspan="3"><b>{L_DL_NO_CAPPROVE}</b></td></tr>
+		<tr class="bg1"><td class="center" colspan="3"><b>{{ lang('DL_NO_CAPPROVE') }}</b></td></tr>
 		{% endfor %}
 		</tbody>
 	</table>

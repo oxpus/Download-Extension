@@ -146,7 +146,7 @@ class upload
 		$inc_module = true;
 		page_header($this->language->lang('DL_UPLOAD'));
 
-		$cat_auth = array();
+		$cat_auth = [];
 		$cat_auth = $this->dlext_auth->dl_cat_auth($cat_id);
 
 		$physical_size = $this->dlext_physical->read_dl_sizes();
@@ -265,7 +265,7 @@ class upload
 				$form_name = 'dl_name';
 				$file = $this->request->file($form_name);
 				$extension = str_replace('.', '', trim(strrchr(strtolower($file['name']), '.')));
-				$allowed_extensions = array($extension);
+				$allowed_extensions = [$extension];
 				$upload = $factory->get('upload')
 					->set_allowed_extensions($allowed_extensions)
 					->set_disallowed_content((isset($this->config['mime_triggers']) ? explode('|', $this->config['mime_triggers']) : false));
@@ -287,7 +287,7 @@ class upload
 					}
 				}
 
-				$upload_file->error = array();
+				$upload_file->error = [];
 
 				$error_count = sizeof($upload_file->error);
 				if ($error_count > 1 && $file_name)
@@ -348,7 +348,7 @@ class upload
 			if ($this->config['dl_thumb_fsize'] && $index[$cat_id]['allow_thumbs'])
 			{
 				$min_pic_width = 10;
-				$allowed_imagetypes = array('gif','png','jpg','bmp');
+				$allowed_imagetypes = ['gif','png','jpg','bmp'];
 
 				$factory = $this->phpbb_container->get('files.factory');
 				$upload_image = $factory->get('upload')
@@ -378,7 +378,7 @@ class upload
 					trigger_error(implode('<br />', $thumb_file->error), E_USER_ERROR);
 				}
 
-				$thumb_file->error = array();
+				$thumb_file->error = [];
 
 				if ($thumb_name)
 				{
@@ -401,7 +401,7 @@ class upload
 			}
 
 			// validate custom profile fields
-			$error = $cp_data = $cp_error = array();
+			$error = $cp_data = $cp_error = [];
 			$cp->submit_cp_field($this->user->get_iso_lang_id(), $cp_data, $error);
 
 			// Stop here, if custom fields are invalid!
@@ -466,42 +466,43 @@ class upload
 					$test = $require = $warning = $mod_desc = '';
 				}
 
-				$sql_array = array(
-						'file_name'				=> $file_name,
-						'real_file'				=> $real_file,
-						'file_hash'				=> $file_hash,
-						'cat'					=> $cat_id,
-						'description'			=> $description,
-						'long_desc'				=> $long_desc,
-						'free'					=> $file_free,
-						'extern'				=> $file_extern,
-						'desc_uid'				=> $desc_uid,
-						'desc_bitfield'			=> $desc_bitfield,
-						'desc_flags'			=> $desc_flags,
-						'long_desc_uid'			=> $long_desc_uid,
-						'long_desc_bitfield'	=> $long_desc_bitfield,
-						'long_desc_flags'		=> $long_desc_flags,
-						'hacklist'				=> $hacklist,
-						'hack_author'			=> $hack_author,
-						'hack_author_email'		=> $hack_author_email,
-						'hack_author_website'	=> $hack_author_website,
-						'hack_version'			=> $hack_version,
-						'hack_dl_url'			=> $hack_dl_url,
-						'todo'					=> $todo,
-						'approve'				=> $approve,
-						'file_size'				=> $file_size,
-						'change_time'			=> $current_time,
-						'add_time'				=> $current_time,
-						'change_user'			=> $current_user,
-						'add_user'				=> $current_user,
-						'test'					=> $test,
-						'req'					=> $require,
-						'warning'				=> $warning,
-						'mod_desc'				=> $mod_desc,
-						'file_traffic'			=> $file_traffic,
-						'todo_uid'				=> $todo_uid,
-						'todo_bitfield'			=> $todo_bitfield,
-						'todo_flags'			=> $todo_flags);
+				$sql_array = [
+					'file_name'				=> $file_name,
+					'real_file'				=> $real_file,
+					'file_hash'				=> $file_hash,
+					'cat'					=> $cat_id,
+					'description'			=> $description,
+					'long_desc'				=> $long_desc,
+					'free'					=> $file_free,
+					'extern'				=> $file_extern,
+					'desc_uid'				=> $desc_uid,
+					'desc_bitfield'			=> $desc_bitfield,
+					'desc_flags'			=> $desc_flags,
+					'long_desc_uid'			=> $long_desc_uid,
+					'long_desc_bitfield'	=> $long_desc_bitfield,
+					'long_desc_flags'		=> $long_desc_flags,
+					'hacklist'				=> $hacklist,
+					'hack_author'			=> $hack_author,
+					'hack_author_email'		=> $hack_author_email,
+					'hack_author_website'	=> $hack_author_website,
+					'hack_version'			=> $hack_version,
+					'hack_dl_url'			=> $hack_dl_url,
+					'todo'					=> $todo,
+					'approve'				=> $approve,
+					'file_size'				=> $file_size,
+					'change_time'			=> $current_time,
+					'add_time'				=> $current_time,
+					'change_user'			=> $current_user,
+					'add_user'				=> $current_user,
+					'test'					=> $test,
+					'req'					=> $require,
+					'warning'				=> $warning,
+					'mod_desc'				=> $mod_desc,
+					'file_traffic'			=> $file_traffic,
+					'todo_uid'				=> $todo_uid,
+					'todo_bitfield'			=> $todo_bitfield,
+					'todo_flags'			=> $todo_flags,
+				];
 
 				if (!$cat_auth['auth_mod'] && !$index[$cat_id]['auth_mod'] && !$index[$cat_id]['allow_mod_desc'] && !($this->auth->acl_get('a_') && $this->user->data['is_registered']))
 				{
@@ -509,14 +510,15 @@ class upload
 				}
 				else
 				{
-					$sql_array = array_merge($sql_array, array(
+					$sql_array += [
 						'mod_list'				=> $mod_list,
 						'mod_desc_uid'			=> $mod_desc_uid,
 						'mod_desc_bitfield'		=> $mod_desc_bitfield,
 						'mod_desc_flags'		=> $mod_desc_flags,
 						'warn_uid'				=> $warn_uid,
 						'warn_bitfield'			=> $warn_bitfield,
-						'warn_flags'			=> $warn_flags));
+						'warn_flags'			=> $warn_flags,
+					];
 
 					$sql = 'INSERT INTO ' . DOWNLOADS_TABLE . ' ' . $this->db->sql_build_array('INSERT', $sql_array);
 				}
@@ -539,8 +541,8 @@ class upload
 
 					$thumb_message = '<br />' . $this->language->lang('DL_THUMB_UPLOAD');
 
-					$sql = 'UPDATE ' . DOWNLOADS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', array(
-						'thumbnail' => $next_id . '_' . $thumb_name)) . ' WHERE id = ' . (int) $next_id;
+					$sql = 'UPDATE ' . DOWNLOADS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', [
+						'thumbnail' => $next_id . '_' . $thumb_name]) . ' WHERE id = ' . (int) $next_id;
 					$this->db->sql_query($sql);
 				}
 				else
@@ -555,7 +557,7 @@ class upload
 						$stat_prune = $this->dlext_main->dl_prune_stats($cat_id, $index[$cat_id]['stats_prune']);
 					}
 
-					$sql = 'INSERT INTO ' . DL_STATS_TABLE . ' ' . $this->db->sql_build_array('INSERT', array(
+					$sql = 'INSERT INTO ' . DL_STATS_TABLE . ' ' . $this->db->sql_build_array('INSERT', [
 						'cat_id'		=> $cat_id,
 						'id'			=> $next_id,
 						'user_id'		=> $this->user->data['user_id'],
@@ -563,7 +565,7 @@ class upload
 						'traffic'		=> $file_size,
 						'direction'		=> 1,
 						'user_ip'		=> $this->user->data['session_ip'],
-						'time_stamp'	=> time()));
+						'time_stamp'	=> time()]);
 					$this->db->sql_query($sql);
 				}
 
@@ -578,7 +580,7 @@ class upload
 							AND ' . $this->db->sql_in_set('user_id', explode(',', $processing_user));
 
 					$notification = $this->phpbb_container->get('notification_manager');
-					$notification_data = array('notification_id' => $next_id);
+					$notification_data = ['notification_id' => $next_id];
 					$notification->add_notifications('oxpus.dlext.notification.type.dlext', $notification_data);
 
 					$this->dlext_topic->gen_dl_topic($next_id);
@@ -597,22 +599,22 @@ class upload
 
 				if (!$this->config['dl_disable_email'] && !$send_notify)
 				{
-					$mail_data = array(
+					$mail_data = [
 						'query'				=> $sql,
 						'email_template'	=> $email_template,
 						'description'		=> $description,
 						'long_desc'			=> $long_desc,
 						'cat_name'			=> $index[$cat_id]['cat_name_nav'],
 						'cat_id'			=> $cat_id,
-					);
+					];
 
 					$this->dlext_email->send_dl_notify($mail_data);
 				}
 
 				if (!$this->config['dl_disable_popup'] && !$disable_popup_notify && $approve)
 				{
-					$sql = 'UPDATE ' . USERS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', array(
-						'user_new_download' => 1)) . '
+					$sql = 'UPDATE ' . USERS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', [
+						'user_new_download' => 1]) . '
 							WHERE user_allow_new_download_popup = 1
 							AND ' . $this->db->sql_in_set('user_id', explode(',', $processing_user));
 					$this->db->sql_query($sql);
@@ -637,10 +639,10 @@ class upload
 
 				$approve_message = ($approve) ? '' : '<br />' . $this->language->lang('DL_MUST_BE_APPROVED');
 
-				$message = $this->language->lang('DOWNLOAD_ADDED') . $thumb_message . $approve_message . '<br /><br />' . $this->language->lang('CLICK_RETURN_DOWNLOADS', '<a href="' . $this->helper->route('oxpus_dlext_index', array('cat' => $cat_id)) . '">', '</a>');
+				$message = $this->language->lang('DOWNLOAD_ADDED') . $thumb_message . $approve_message . '<br /><br />' . $this->language->lang('CLICK_RETURN_DOWNLOADS', '<a href="' . $this->helper->route('oxpus_dlext_index', ['cat' => $cat_id]) . '">', '</a>');
 				if ($cat_auth['auth_up'])
 				{
-					$message .= '<br /><br />' . $this->language->lang('DL_UPLOAD_ONE_MORE', '<a href="' . $this->helper->route('oxpus_dlext_upload', array('cat_id' => $cat_id)) . '">', '</a>');
+					$message .= '<br /><br />' . $this->language->lang('DL_UPLOAD_ONE_MORE', '<a href="' . $this->helper->route('oxpus_dlext_upload', ['cat_id' => $cat_id]) . '">', '</a>');
 				}
 
 				// Purge the files cache
@@ -648,15 +650,13 @@ class upload
 				@unlink(DL_EXT_CACHE_PATH . 'data_dl_file_p.' . $this->php_ext);
 				@unlink(DL_EXT_CACHE_PATH . 'data_dl_file_preset.' . $this->php_ext);
 
-				meta_refresh(3, $this->helper->route('oxpus_dlext_index', array('cat' => $cat_id)));
+				meta_refresh(3, $this->helper->route('oxpus_dlext_index', ['cat' => $cat_id]));
 
 				trigger_error($message);
 			}
 		}
 
-		$this->template->set_filenames(array(
-			'body' => 'dl_edit_body.html')
-		);
+		$this->template->set_filenames(['body' => 'dl_edit_body.html']);
 
 		$bg_row = 0;
 
@@ -672,7 +672,7 @@ class upload
 			$bg_row = 1;
 		}
 
-		if (!$this->config['dl_disable_popup'] && $this->config['dl_disable_popup_notify'])
+		if (!$this->config['dl_disable_popup'])
 		{
 			$this->template->assign_var('S_POPUP_NOTIFY', true);
 			$bg_row = 1;
@@ -707,17 +707,17 @@ class upload
 
 		$thumbnail_explain = $this->language->lang('DL_THUMB_DIM_SIZE', $this->config['dl_thumb_xsize'], $this->config['dl_thumb_ysize'], $this->dlext_format->dl_size($this->config['dl_thumb_fsize']));
 
-		$s_hidden_fields = array();
+		$s_hidden_fields = [];
 
 		if (!$cat_auth['auth_mod'] && !$index[$cat_id]['auth_mod'] && !($this->auth->acl_get('a_') && $this->user->data['is_registered']))
 		{
 			$approve = ($index[$cat_id]['must_approve']) ? 0 : true;
-			$s_hidden_fields = array_merge($s_hidden_fields, array('approve' => $approve));
+			$s_hidden_fields += ['approve' => $approve];
 		}
 
 		if ($this->config['dl_disable_email'])
 		{
-			$s_hidden_fields = array_merge($s_hidden_fields, array('send_notify' => 0));
+			$s_hidden_fields += ['send_notify' => 0];
 		}
 
 		$ext_blacklist = $this->dlext_auth->get_ext_blacklist();
@@ -766,7 +766,7 @@ class upload
 		$file_size			= $file_size_ary['size_out'];
 		$file_size_range	= $file_size_ary['range'];
 
-		$this->template->assign_vars(array(
+		$this->template->assign_vars([
 			'DL_FILES_TITLE'			=> $dl_files_page_title,
 			'DL_THUMBNAIL_SECOND'		=> $thumbnail_explain,
 			'EXT_BLACKLIST'				=> $blacklist_explain,
@@ -826,7 +826,7 @@ class upload
 			'S_DOWNLOADS_ACTION'	=> $this->helper->route('oxpus_dlext_upload'),
 			'S_HIDDEN_FIELDS'		=> build_hidden_fields($s_hidden_fields),
 			'S_ADD_DL'				=> true,
-		));
+		]);
 
 		// Init and display the custom fields with the existing data
 		$cp->get_profile_fields($df_id);

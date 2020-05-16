@@ -68,10 +68,10 @@ class ajax
 
 		if ($dl_id && $rate_point)
 		{
-			$sql = 'INSERT INTO ' . DL_RATING_TABLE . ' ' . $this->db->sql_build_array('INSERT', array(
+			$sql = 'INSERT INTO ' . DL_RATING_TABLE . ' ' . $this->db->sql_build_array('INSERT', [
 				'rate_point'	=> $rate_point,
 				'user_id'		=> $this->user->data['user_id'],
-				'dl_id'			=> $dl_id));
+				'dl_id'			=> $dl_id]);
 			$this->db->sql_query($sql);
 		
 			$sql = 'SELECT AVG(rate_point) AS rating, COUNT(rate_point) AS total FROM ' . DL_RATING_TABLE . '
@@ -83,8 +83,8 @@ class ajax
 			$total_ratings = $row['total'];
 			$this->db->sql_freeresult($result);
 		
-			$sql = 'UPDATE ' . DOWNLOADS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', array(
-				'rating' => $new_rating)) . ' WHERE id = ' . (int) $dl_id;
+			$sql = 'UPDATE ' . DOWNLOADS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', [
+				'rating' => $new_rating]) . ' WHERE id = ' . (int) $dl_id;
 			$this->db->sql_query($sql);
 		
 			$rate_img = '';
@@ -107,22 +107,20 @@ class ajax
 				$rate_img .= '<br />' . $this->language->lang('DL_RATING_MORE', $total_ratings);
 			}
 		
-			$json_out = json_encode(array('rate_img' => $rate_img, 'dl_id' => $dl_id));
+			$json_out = json_encode(['rate_img' => $rate_img, 'dl_id' => $dl_id]);
 		
-			$http_headers = array(
+			$http_headers = [
 				'Content-type' => 'text/html; charset=UTF-8',
 				'Cache-Control' => 'private, no-cache="set-cookie"',
 				'Expires' => gmdate('D, d M Y H:i:s', time()) . ' GMT',
-			);
+			];
 		
 			foreach ($http_headers as $hname => $hval)
 			{
 				header((string) $hname . ': ' . (string) $hval);
 			}
 		
-			$this->template->set_filenames(array(
-				'body' => 'dl_json.html')
-			);
+			$this->template->set_filenames(['body' => 'dl_json.html']);
 			$this->template->assign_var('JSON_OUTPUT', $json_out);
 			$this->template->display('body');
 		}

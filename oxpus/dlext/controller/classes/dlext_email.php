@@ -93,7 +93,7 @@ class dlext_email implements dlext_email_interface
 			$messenger->template($mail_data['email_template'], $row['user_lang'], $mail_template_path);
 			$messenger->to($row['user_email'], $row['username']);
 
-			$messenger->assign_vars(array(
+			$messenger->assign_vars([
 				'SITENAME'		=> $this->config['sitename'],
 				'BOARD_EMAIL'	=> $this->config['board_email_sig'],
 				'USERNAME'		=> htmlspecialchars_decode($row['username']),
@@ -101,8 +101,8 @@ class dlext_email implements dlext_email_interface
 				'DESCRIPTION'	=> strip_tags(htmlspecialchars_decode($mail_data['long_desc'])),
 				'CATEGORY'		=> strip_tags(htmlspecialchars_decode($mail_data['cat_name'])),
 				'U_APPROVE'		=> generate_board_url(true) . $this->helper->route('oxpus_dlext_mcp_approve'),
-				'U_CATEGORY'	=> generate_board_url(true) . $this->helper->route('oxpus_dlext_index', array('cat' => $cat_id), false, ''),
-			));
+				'U_CATEGORY'	=> generate_board_url(true) . $this->helper->route('oxpus_dlext_index', ['cat' => $cat_id], false, ''),
+			]);
 
 			$messenger->send(NOTIFY_EMAIL);
 		}
@@ -141,15 +141,15 @@ class dlext_email implements dlext_email_interface
 		$messenger->template($mail_data['email_template'], $row['user_lang'], $mail_template_path);
 		$messenger->to($row['user_email'], $row['username']);
 
-		$messenger->assign_vars(array(
+		$messenger->assign_vars([
 			'SITENAME'		=> $this->config['sitename'],
 			'BOARD_EMAIL'	=> $this->config['board_email_sig'],
 			'USERNAME'		=> $this->user->data['username'],
 			'REPORT_TITLE'	=> strip_tags(htmlspecialchars_decode($mail_data['report_title'])),
 			'STATUS'		=> strip_tags(htmlspecialchars_decode($this->language->lang('DL_REPORT_STATUS_' . $mail_data['report_status']))),
 			'STATUS_TEXT'	=> strip_tags(htmlspecialchars_decode($status_text)),
-			'U_BUG_REPORT'	=> generate_board_url(true) . $this->helper->route('oxpus_dlext_tracker', array('action' => 'detail', 'fav_id' => (int) $mail_data['fav_id']), false, ''),
-		));
+			'U_BUG_REPORT'	=> generate_board_url(true) . $this->helper->route('oxpus_dlext_tracker', ['action' => 'detail', 'fav_id' => (int) $mail_data['fav_id']], false, ''),
+		]);
 
 		$messenger->send(NOTIFY_EMAIL);
 		$messenger->save_queue();
@@ -169,12 +169,12 @@ class dlext_email implements dlext_email_interface
 		$messenger->template($mail_data['email_template'], $row['user_lang'], $mail_template_path);
 		$messenger->to($mail_data['user_mail'], $mail_data['username']);
 
-		$messenger->assign_vars(array(
+		$messenger->assign_vars([
 			'SITENAME'		=> $this->config['sitename'],
 			'BOARD_EMAIL'	=> $this->config['board_email_sig'],
 			'USERNAME'		=> $this->user->data['username'],
-			'U_BUG_REPORT'	=> generate_board_url(true) . $this->helper->route('oxpus_dlext_tracker', array('action' => 'detail', 'fav_id' => (int) $mail_data['fav_id']), false, ''),
-		));
+			'U_BUG_REPORT'	=> generate_board_url(true) . $this->helper->route('oxpus_dlext_tracker', ['action' => 'detail', 'fav_id' => (int) $mail_data['fav_id']], false, ''),
+		]);
 
 		$messenger->send(NOTIFY_EMAIL);
 		$messenger->save_queue();
@@ -201,15 +201,15 @@ class dlext_email implements dlext_email_interface
 			$messenger->template($mail_data['email_template'], $row['user_lang'], $mail_template_path);
 			$messenger->to($row['user_email'], $row['username']);
 
-			$messenger->assign_vars(array(
+			$messenger->assign_vars([
 				'SITENAME'		=> $this->config['sitename'],
 				'BOARD_EMAIL'	=> $this->config['board_email_sig'],
 				'CATEGORY'		=> strip_tags(htmlspecialchars_decode($mail_data['cat_name'])),
 				'USERNAME'		=> strip_tags(htmlspecialchars_decode($row['username'])),
 				'DOWNLOAD'		=> strip_tags(htmlspecialchars_decode($mail_data['description'])),
 				'U_APPROVE'		=> generate_board_url(true) . $this->helper->route('oxpus_dlext_mcp_capprove'),
-				'U_DOWNLOAD'	=> generate_board_url(true) . $this->helper->route('oxpus_dlext_details', array('view' => 'comment', 'action' => 'view', 'cat_id' => $cat_id, 'df_id' => $df_id), false, ''),
-			));
+				'U_DOWNLOAD'	=> generate_board_url(true) . $this->helper->route('oxpus_dlext_details', ['view' => 'comment', 'action' => 'view', 'cat_id' => $cat_id, 'df_id' => $df_id], false, ''),
+			]);
 			$messenger->send(NOTIFY_EMAIL);
 		}
 
@@ -245,14 +245,14 @@ class dlext_email implements dlext_email_interface
 			$messenger->template($mail_data['email_template'], $row['user_lang'], $mail_template_path);
 			$messenger->to($row['user_email'], $row['username']);
 
-			$messenger->assign_vars(array(
+			$messenger->assign_vars([
 				'SITENAME'				=> $this->config['sitename'],
 				'BOARD_EMAIL'			=> $this->config['board_email_sig'],
 				'REPORTER'				=> strip_tags(htmlspecialchars_decode($username)),
 				'REPORT_NOTIFY_TEXT'	=> strip_tags(htmlspecialchars_decode($mail_data['report_notify_text'])),
 				'USERNAME'				=> strip_tags(htmlspecialchars_decode($row['username'])),
-				'U_DOWNLOAD'			=> generate_board_url(true) . $this->helper->route('oxpus_dlext_details', array('cat_id' => $cat_id, 'df_id' => $df_id), false, ''),
-			));
+				'U_DOWNLOAD'			=> generate_board_url(true) . $this->helper->route('oxpus_dlext_details', ['cat_id' => $cat_id, 'df_id' => $df_id], false, ''),
+			]);
 
 			$messenger->send(NOTIFY_EMAIL);
 		}

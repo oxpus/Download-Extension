@@ -21,17 +21,17 @@ class release_7_2_8 extends \phpbb\db\migration\migration
 
 	static public function depends_on()
 	{
-		return array('\oxpus\dlext\migrations\v720\release_7_2_7');
+		return ['\oxpus\dlext\migrations\v720\release_7_2_7'];
 	}
 
 	public function update_data()
 	{
-		return array(
+		return [
 			// Set the current version
-			array('config.update', array('dl_ext_version', $this->dl_ext_version)),
+			['config.update', ['dl_ext_version', $this->dl_ext_version]],
 
-			array('config.remove', array('dl_method')),
-			array('config.remove', array('dl_method_quota')),
-		);
+			['config.remove', ['dl_method']],
+			['config.remove', ['dl_method_quota']],
+		];
 	}
 }

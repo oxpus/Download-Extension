@@ -88,10 +88,13 @@ class navigation implements navigation_interface
 			/*
 			* Build the navigation and check the permissions for the user
 			*/
-			$nav_string = array();
+			$nav_string = [];
 
-			$nav_string['link'][] =  $this->helper->route('oxpus_dlext_index');
-			$nav_string['name'][] = $this->language->lang('DL_CAT_TITLE');
+			if ($this->nav_mode != 'hacks')
+			{
+				$nav_string['link'][] =  $this->helper->route('oxpus_dlext_index');
+				$nav_string['name'][] = $this->language->lang('DL_CAT_TITLE');
+			}
 
 			if ($this->cat_id)
 			{
@@ -102,7 +105,7 @@ class navigation implements navigation_interface
 					redirect($this->helper->route('oxpus_dlext_index'));
 				}
 	
-				$tmp_nav = array();
+				$tmp_nav = [];
 				$dl_nav = $this->dlext_nav->nav($this->cat_id, 'url', $tmp_nav);
 	
 				if (isset($dl_nav['link']))
@@ -140,7 +143,7 @@ class navigation implements navigation_interface
 					$description		= generate_text_for_display($description, $desc_uid, $desc_bitfield, $desc_flags);
 
 					$nav_string['name'][] = $this->language->lang('DL_DETAIL') . ': ' . $description;
-					$nav_string['link'][] = $this->helper->route('oxpus_dlext_details', array('df_id' => $this->df_id));
+					$nav_string['link'][] = $this->helper->route('oxpus_dlext_details', ['df_id' => $this->df_id]);
 				break;
 				case 'thumbs':
 					$sql = 'SELECT description, desc_uid, desc_bitfield, desc_flags FROM ' . DOWNLOADS_TABLE . '
@@ -154,19 +157,19 @@ class navigation implements navigation_interface
 					$description		= generate_text_for_display($description, $desc_uid, $desc_bitfield, $desc_flags);
 
 					$nav_string['name'][] = $this->language->lang('DL_DETAIL') . ' ' . $description;
-					$nav_string['link'][] = $this->helper->route('oxpus_dlext_details', array('df_id' => $this->df_id));
+					$nav_string['link'][] = $this->helper->route('oxpus_dlext_details', ['df_id' => $this->df_id]);
 					$nav_string['name'][] = $this->language->lang('DL_EDIT_THUMBS');
-					$nav_string['link'][] = $this->helper->route('oxpus_dlext_thumbs', array('df_id' => $this->df_id, 'cat_id' => $this->cat_id));
+					$nav_string['link'][] = $this->helper->route('oxpus_dlext_thumbs', ['df_id' => $this->df_id, 'cat_id' => $this->cat_id]);
 				break;
 				case 'upload':
 					$nav_string['name'][] = $this->language->lang('DL_UPLOAD');
-					$nav_string['link'][] = $this->helper->route('oxpus_dlext_upload', array('cat_id' => $this->cat_id));
+					$nav_string['link'][] = $this->helper->route('oxpus_dlext_upload', ['cat_id' => $this->cat_id]);
 				break;
 				case 'tracker':
 					$nav_string['name'][] = $this->language->lang('DL_BUG_TRACKER');
-					$nav_string['link'][] = $this->helper->route('oxpus_dlext_tracker', array('df_id' => $this->df_id));
+					$nav_string['link'][] = $this->helper->route('oxpus_dlext_tracker', ['df_id' => $this->df_id]);
 				break;
-				case 'stat':
+				case 'stats':
 					$nav_string['name'][] = $this->language->lang('DL_STATS');
 					$nav_string['link'][] = $this->helper->route('oxpus_dlext_stats');
 				break;
@@ -185,17 +188,17 @@ class navigation implements navigation_interface
 					if (isset($action) && $action == 'edit')
 					{
 						$nav_string['name'][] = $this->language->lang('DL_EDIT_FILE');
-						$nav_string['link'][] = $this->helper->route('oxpus_dlext_todo', array('action' => 'edit'));
+						$nav_string['link'][] = $this->helper->route('oxpus_dlext_todo', ['action' => 'edit']);
 					}
 				break;
 			}
 
 			for ($i = 0; $i < sizeof($nav_string['name']); $i++)
 			{
-				$this->template->assign_block_vars('navlinks', array(
+				$this->template->assign_block_vars('navlinks', [
 					'FORUM_NAME'	=> $nav_string['name'][$i],
 					'U_VIEW_FORUM'	=> $nav_string['link'][$i],
-				));
+				]);
 			}
 
 			if (isset($index_cat_name))

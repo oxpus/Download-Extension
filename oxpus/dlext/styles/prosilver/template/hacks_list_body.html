@@ -16,14 +16,13 @@
 	{% endif %}
 
 	<div class="forabg">
-
 		<div class="inner">
 		<ul class="topiclist">
 			<li class="header">
 				<dl>
-					<dd class="dl-width-40 dl-cell-block">{{ lang('DL_NAME') }}</dd>
-					<dd class="dl-width-40 dl-cell-block">{{ lang('DL_FILE_DESCRIPTION') }}</dd>
-					<dd class="dl-width-20 dl-cell-block">{{ lang('DL_HACK_AUTOR') }}</dd>
+					<dd class="dl-width-40 dl-cell-block dl-intent">{{ lang('DL_NAME') }}</dd>
+					<dd class="dl-width-40 dl-cell-block dl-intent">{{ lang('DL_FILE_DESCRIPTION') }}</dd>
+					<dd class="dl-width-20 dl-cell-block dl-intent">{{ lang('DL_HACK_AUTOR') }}</dd>
 				</dl>
 			</li>
 		</ul>
@@ -31,9 +30,9 @@
 		{% for listrow in loops.listrow %}
 			<li class="row{% if listrow.S_ROW_COUNT is even %} bg1{% else %} bg2{% endif %}">
 				<dl>
-					<dd class="dl-width-40 dl-cell-block"><div class="dl-text-big">{{ listrow.HACK_NAME }}</div><div class="notice">&nbsp;<b>{{ lang('DL_CAT_NAME') }}{{ lang('COLON') }}</b> {{ listrow.CAT_NAME }}</div></dd>
-					<dd class="dl-width-40 dl-cell-block">{{ listrow.HACK_DESCRIPTION }}</dd>
-					<dd class="dl-width-20 dl-cell-block">
+					<dd class="dl-width-40 dl-cell-block dl-intent"><div class="dl-text-big">{{ listrow.HACK_NAME }}</div><div class="notice">&nbsp;<b>{{ lang('DL_CAT_NAME') }}{{ lang('COLON') }}</b> {{ listrow.CAT_NAME }}</div></dd>
+					<dd class="dl-width-40 dl-cell-block dl-intent">{{ listrow.HACK_DESCRIPTION }}</dd>
+					<dd class="dl-width-20 dl-cell-block dl-intent">
 						{{ listrow.HACK_AUTHOR }}
 						<br />
 						{{ listrow.HACK_AUTHOR_WEBSITE }}

@@ -22,13 +22,13 @@ if (!defined('IN_PHPBB'))
 
 if (empty($lang) || !is_array($lang))
 {
-	$lang = array();
+	$lang = [];
 }
 
 /*
 * no help found?
 */
-$lang = array_merge($lang, array(
+$lang = array_merge($lang, [
 	'HELP_TITLE'				=> 'Download Extension Online Hilfe',
 
 	'DL_NO_HELP_AVIABLE'		=> 'Für dieses Thema steht keine Hilfe zur Verfügung.',
@@ -189,4 +189,4 @@ $lang = array_merge($lang, array(
 	'HELP_DL_VISUAL_CONFIRMATION'	=> 'Aktiviere diese Option, um Benutzer einen angezeigten 5stelligen Bestätigungscode eingeben zulassen, damit der Download der Datei zugelassen wird.<br />Wenn der Benutzer keinen Code eingegeben hat oder der Code falsch ist, wird die Extension nur eine Meldung anzeigen und den Download nicht freigeben.<br />Ist diese Option abgeschaltet, muss der Benutzer keinen Code eingeben und kann direkt aus den Details die Dateien herunterladen.',
 
 	'HELP_NUMBER_RECENT_DL_ON_PORTAL'	=> 'Die Anzahl letzter Downloads, die der Benutzer auf dem Portal sieht.<br />Dabei wird die letzte Änderungszeit der Downloads verwendet, so daß auch ältere Downloads wieder ganz oben auf der Liste stehen können.',
-));
+]);

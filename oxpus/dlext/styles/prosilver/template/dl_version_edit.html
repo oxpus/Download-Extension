@@ -14,16 +14,35 @@
 
 <br />
 
-<form action="{{ S_FORM_ACTION }}" method="post" {{ ENCTYPE }} name="ver_edit" id="ver_edit">
+<form action="{{ S_FORM_ACTION }}" method="post" {{ ENCTYPE }} name="postform">
 
-<div class="panel bg2">
-	<div class="panel">
-		<fieldset>
+<div class="panel dl-edit-box-light">
+	<div class="inner">
+
+	<div class="panel dl-edit-box-medium">
+		<div class="inner">
+		
+		<fieldset class="fields1">
 			<legend><h3>{{ lang('DL_VERSION') }}</h3></legend>
 
 			<dl>
 				<dt><label>{{ lang('DL_FILE_DESCRIPTION') }}</label></dt>
-				<dd><textarea name="ver_text" rows="4" cols="100" class="inputbox">{{ VER_TEXT }}</textarea></dd>
+				<dd>
+					{% for smiley in loops.smiley %}
+					{% if smiley.S_FIRST_ROW %}
+					<div id="smiley-box" class="smiley-box">
+					{% endif %}
+						<a href="#" onclick="insert_text('{smiley.A_SMILEY_CODE}', true); return false;"><img src="{smiley.SMILEY_IMG}" width="{smiley.SMILEY_WIDTH}" height="{smiley.SMILEY_HEIGHT}" alt="{smiley.SMILEY_CODE}" title="{smiley.SMILEY_DESC}" /></a>
+					{% if smiley.S_LAST_ROW %}
+						<a href="{U_MORE_SMILIES}" onclick="window.open('{U_MORE_SMILIES}', '_blank', 'HEIGHT=200,resizable=yes,scrollbars=yes,WIDTH=400'); return false;">{L_MORE_SMILIES}</a>
+					</div>
+					{% endif %}
+					{% endfor %}
+					{% INCLUDE 'posting_buttons.html' %}
+					<div id="message-box" class="message-box">
+						<textarea name="message" rows="5" cols="50" class="dl-comment-height inputbox autowidth">{{ VER_TEXT }}</textarea>
+					</div>
+				</dd>
 			</dl>
 			<dl>
 				<dt><label>{{ lang('DL_HACK_VERSION') }}</label></dt>
@@ -35,10 +54,14 @@
 			</dl>
 
 		</fieldset>
+
+		</div>
 	</div>
 
-	<div class="panel">
-		<fieldset>
+	<div class="panel dl-edit-box-medium">
+		<div class="inner">
+	
+		<fieldset class="fields1">
 			<legend><h3>{{ lang('DL_IMAGES') }}</h3></legend>
 
 			{% for images in loops.images %}
@@ -57,7 +80,7 @@
 
 			<dl>
 				<dt><label>{{ lang('DL_THUMB') }}</label></dt>
-				<dd><input type="file" size="46" name="ver_new_image" class="inputbox" /></dd>
+				<dd><input type="file" size="30" name="ver_new_image" class="inputbox autowidth" /></dd>
 			</dl>
 			<dl>
 				<dt><label>{{ lang('DL_FILE_DESCRIPTION') }}</label></dt>
@@ -66,10 +89,14 @@
 				</dd>
 			</dl>
 		</fieldset>
+
+		</div>
 	</div>
 
-	<div class="panel">
-		<fieldset>
+	<div class="panel dl-edit-box-medium">
+		<div class="inner">
+	
+		<fieldset class="fields1">
 			<legend><h3>{{ lang('DL_FILES_TITLE') }}</h3></legend>
 
 			{% for files in loops.files %}
@@ -86,21 +113,20 @@
 
 			<dl>
 				<dt><label>{{ lang('DL_FILE_NAME') }}</label></dt>
-				<dd>
-					<input type="file" size="46" name="ver_new_file" class="inputbox" />
-				</dd>
+				<dd><input type="file" size="30" name="ver_new_file" class="inputbox autowidth" /></dd>
 			</dl>
 			<dl>
 				<dt><label>{{ lang('DL_FILE_DESCRIPTION') }}</label></dt>
-				<dd>
-					<input type="text" maxlength="255" name="ver_new_file_title" value="" class="inputbox autowidth" />
-				</dd>
+				<dd><input type="text" maxlength="255" name="ver_new_file_title" value="" class="inputbox autowidth" /></dd>
 			</dl>
 		</fieldset>
 
-		<fieldset class="submit-buttons">
-			<input type="submit" name="submit" value="{{ lang('SUBMIT') }}" class="button icon-button" />&nbsp;&nbsp;
-		</fieldset>
+		</div>
+	</div>
+
+	<fieldset class="submit-buttons">
+		<input type="submit" name="submit" value="{{ lang('SUBMIT') }}" class="button icon-button" />&nbsp;&nbsp;
+	</fieldset>
 
 	</div>
 </div>

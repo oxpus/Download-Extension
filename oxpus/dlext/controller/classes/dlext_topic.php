@@ -282,9 +282,9 @@ class dlext_topic implements dlext_topic_interface
 			$topic_title = utf8_normalize_nfc($this->language->lang('DL_TOPIC_SUBJECT', $dl_title));
 		}
 
-		$topic_text .= "\n\n[b]" . $this->language->lang('DL_VIEW_LINK') . ':[/b] [url=' . generate_board_url(true) . $this->helper->route('oxpus_dlext_details', array('df_id' => $dl_id), true, '') . ']' . $dl_title . '[/url]';
+		$topic_text .= "\n\n[b]" . $this->language->lang('DL_VIEW_LINK') . ':[/b] [url=' . generate_board_url(true) . $this->helper->route('oxpus_dlext_details', ['df_id' => $dl_id], true, '') . ']' . $dl_title . '[/url]';
 
-		$poll			= array();
+		$poll			= [];
 		$update_message	= false;
 
 		$sql = 'SELECT forum_parents, forum_name
@@ -320,7 +320,7 @@ class dlext_topic implements dlext_topic_interface
 		$message_parser->parse($bbcode_status, $url_status, $smilies_status, $img_status, $flash_status, $quote_status, $url_status);
 		$message_md5 = md5($message_parser->message);
 
-		$data = array(
+		$data = [
 			'topic_title'			=> $topic_title,
 			'topic_first_post_id'	=> 0,
 			'topic_last_post_id'	=> 0,
@@ -351,7 +351,7 @@ class dlext_topic implements dlext_topic_interface
 			'bbcode_uid'			=> $message_parser->bbcode_uid,
 			'message'				=> $message_parser->message,
 			'topic_status'			=> ITEM_UNLOCKED,
-		);
+		];
 
 		if (!function_exists('submit_post'))
 		{
@@ -362,8 +362,8 @@ class dlext_topic implements dlext_topic_interface
 
 		$dl_topic_id = (int) $data['topic_id'];
 
-		$sql = 'UPDATE ' . DOWNLOADS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', array(
-			'dl_topic' => $dl_topic_id)) . ' WHERE id = ' . (int) $dl_id;
+		$sql = 'UPDATE ' . DOWNLOADS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', [
+			'dl_topic' => $dl_topic_id]) . ' WHERE id = ' . (int) $dl_id;
 		$this->db->sql_query($sql);
 
 		if ($reset_perms)
@@ -375,7 +375,7 @@ class dlext_topic implements dlext_topic_interface
 		return;
 	}
 
-	public function delete_topic($topic_ids, $topic_drop_mode = 'drop', $dl_ids = array())
+	public function delete_topic($topic_ids, $topic_drop_mode = 'drop', $dl_ids = [])
 	{
 		if (!$topic_ids)
 		{
@@ -384,7 +384,7 @@ class dlext_topic implements dlext_topic_interface
 
 		if (!is_array($topic_ids))
 		{
-			$topic_ids = array($topic_ids);
+			$topic_ids = [$topic_ids];
 		}
 
 		if ($topic_drop_mode == 'drop')
@@ -625,10 +625,10 @@ class dlext_topic implements dlext_topic_interface
 		}
 		else
 		{
-			$topic_text .= "\n\n[b]" . $this->language->lang('DL_VIEW_LINK') . ':[/b] [url=' . generate_board_url(true) . $this->helper->route('oxpus_dlext_details', array('df_id' => $dl_id), true, '') . ']' . $dl_title . '[/url]';
+			$topic_text .= "\n\n[b]" . $this->language->lang('DL_VIEW_LINK') . ':[/b] [url=' . generate_board_url(true) . $this->helper->route('oxpus_dlext_details', ['df_id' => $dl_id], true, '') . ']' . $dl_title . '[/url]';
 		}
 
-		$poll = $forum_data = $post_data = array();
+		$poll = $forum_data = $post_data = [];
 		$update_message	= true;
 
 		$sql = 'SELECT forum_parents, forum_name
@@ -671,7 +671,7 @@ class dlext_topic implements dlext_topic_interface
 		$message_parser->parse($bbcode_status, $url_status, $smilies_status, $img_status, $flash_status, $quote_status, $url_status);
 		$message_md5 = md5($message_parser->message);
 
-		$data = array(
+		$data = [
 			'topic_title'				=> $topic_title,
 			'topic_first_post_id'		=> (int) $post_data['topic_first_post_id'],
 			'topic_last_post_id'		=> (int) $post_data['topic_last_post_id'],
@@ -704,7 +704,7 @@ class dlext_topic implements dlext_topic_interface
 			'topic_posts_approved'		=> $post_data['topic_posts_approved'],
 			'topic_posts_unapproved'	=> $post_data['topic_posts_unapproved'],
 			'topic_posts_softdeleted'	=> $post_data['topic_posts_softdeleted'],
-		);
+		];
 
 		if (!function_exists('submit_post'))
 		{
@@ -715,7 +715,7 @@ class dlext_topic implements dlext_topic_interface
 
 		if ($topic_drop_mode)
 		{
-			$sql = 'UPDATE ' . TOPICS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', array('topic_status' => ITEM_LOCKED)) . ' WHERE topic_id = ' . (int) $topic_id;
+			$sql = 'UPDATE ' . TOPICS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', ['topic_status' => ITEM_LOCKED]) . ' WHERE topic_id = ' . (int) $topic_id;
 			$this->db->sql_query($sql);
 		}
 

@@ -133,21 +133,26 @@ class thumbs
 		// Include the default base init script
 		include_once($this->ext_path . 'phpbb/includes/base_init.' . $this->php_ext);
 
+		if ($cancel)
+		{
+			redirect($this->helper->route('oxpus_dlext_details', ['df_id' => $df_id]));
+		}
+
 		if (isset($index[$cat_id]['allow_thumbs']) && $index[$cat_id]['allow_thumbs'] && $this->config['dl_thumb_fsize'])
 		{
-			$cat_auth = array();
+			$cat_auth = [];
 			$cat_auth = $this->dlext_auth->dl_cat_auth($cat_id);
 			
 			/*
 			* default entry point for download details
 			*/
-			$dl_files = array();
+			$dl_files = [];
 			$dl_files = $this->dlext_files->all_files(0, '', 'ASC', '', $df_id, 0, '*');
 			
 			/*
 			* check the permissions
 			*/
-			$check_status = array();
+			$check_status = [];
 			$check_status = $this->dlext_status->status($df_id);
 		
 			if (!$dl_files['id'])
@@ -190,7 +195,7 @@ class thumbs
 			{
 				$this->template->assign_var('S_DL_POPUPIMAGE', true);
 			
-				$thumbs_ary = array();
+				$thumbs_ary = [];
 			
 				while ($row = $this->db->sql_fetchrow($result))
 				{
@@ -257,7 +262,7 @@ class thumbs
 				if ($this->config['dl_thumb_fsize'] && $index[$cat_id]['allow_thumbs'])
 				{
 					$min_pic_width = 10;
-					$allowed_imagetypes = array('gif','png','jpg','bmp');
+					$allowed_imagetypes = ['gif','png','jpg','bmp'];
 			
 					$upload = $factory->get('upload')
 						->set_allowed_extensions($allowed_imagetypes)
@@ -286,7 +291,7 @@ class thumbs
 						trigger_error(implode('<br />', $thumb_file->error), E_USER_ERROR);
 					}
 			
-					$thumb_file->error = array();
+					$thumb_file->error = [];
 			
 					if ($thumb_name)
 					{
@@ -349,45 +354,54 @@ class thumbs
 			
 				if ($img_id)
 				{
-					$sql_array = array(
-							'img_name'		=> $img_link,
-							'img_title'		=> $img_title,
-					);
+					$sql_array = [
+						'img_name'	=> $img_link,
+						'img_title'	=> $img_title,
+					];
 			
 					$sql = 'UPDATE ' . DL_IMAGES_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', $sql_array) . ' WHERE img_id = ' . (int) $img_id . ' AND dl_id = ' . (int) $df_id;
 					$this->db->sql_query($sql);
+
+					$success_message = true;
 				}
-				else
+				else if (isset($thumb_name) && $thumb_name != '')
 				{
-					$sql_array = array(
-							'img_id'		=> $img_id,
-							'dl_id'			=> $df_id,
-							'img_name'		=> $img_link,
-							'img_title'		=> $img_title,
-					);
+					$sql_array = [
+						'img_id'	=> $img_id,
+						'dl_id'		=> $df_id,
+						'img_name'	=> $img_link,
+						'img_title'	=> $img_title,
+					];
 			
 					$sql = 'INSERT INTO ' . DL_IMAGES_TABLE . ' ' . $this->db->sql_build_array('INSERT', $sql_array);
 					$this->db->sql_query($sql);
+
+					$success_message = true;
 				}
-			
-				meta_refresh(3, $this->helper->route('oxpus_dlext_thumbs', array('df_id' => $df_id, 'cat_id' => $cat_id)));
-			
-				$message = $thumb_message . '<br /><br />' . $this->language->lang('CLICK_RETURN_THUMBS', '<a href="' . $this->helper->route('oxpus_dlext_thumbs', array('df_id' => $df_id, 'cat_id' => $cat_id)) . '">', '</a>');
-			
-				trigger_error($message);
+				else
+				{
+					$success_message = false;
+				}
+
+				if ($success_message)
+				{
+					meta_refresh(3, $this->helper->route('oxpus_dlext_thumbs', ['df_id' => $df_id, 'cat_id' => $cat_id]));
+				
+					$message = $thumb_message . '<br /><br />' . $this->language->lang('CLICK_RETURN_THUMBS', '<a href="' . $this->helper->route('oxpus_dlext_thumbs', ['df_id' => $df_id, 'cat_id' => $cat_id]) . '">', '</a>');
+				
+					trigger_error($message);
+				}
 			}
 			
-			$this->template->set_filenames(array(
-				'body' => 'dl_thumbs_body.html')
-			);
+			$this->template->set_filenames(['body' => 'dl_thumbs_body.html']);
 			
 			add_form_key('dl_thumbs');
 			
-			$s_hidden_fields = array(
+			$s_hidden_fields = [
 				'img_id'		=> $img_id,
 				'edit_img_link'	=> $edit_img_link,
 				'df_id'			=> $df_id,
-			);
+			];
 			
 			$thumb_max_size = $this->language->lang('DL_THUMB_DIM_SIZE', $this->config['dl_thumb_xsize'], $this->config['dl_thumb_ysize'], $this->dlext_format->dl_size($this->config['dl_thumb_fsize']));
 			
@@ -397,17 +411,17 @@ class thumbs
 
 			while ($row = $this->db->sql_fetchrow($result))
 			{
-				$this->template->assign_block_vars('thumbnails', array(
+				$this->template->assign_block_vars('thumbnails', [
 					'IMG_LINK'	=> append_sid(DL_EXT_FILEBASE_PATH . 'thumbs/' . str_replace(" ", "%20", $row['img_name'])),
 					'IMG_TITLE'	=> $row['img_title'],
 			
-					'U_DELETE'	=> $this->helper->route('oxpus_dlext_thumbs', array('action' => 'delete', 'cat_id' => $cat_id, 'df_id' => $df_id, 'img_id' => $row['img_id'])),
-					'U_EDIT'	=> $this->helper->route('oxpus_dlext_thumbs', array('action' => 'edit', 'cat_id' => $cat_id, 'df_id' => $df_id, 'img_id' => $row['img_id'])),
-				));
+					'U_DELETE'	=> $this->helper->route('oxpus_dlext_thumbs', ['action' => 'delete', 'cat_id' => $cat_id, 'df_id' => $df_id, 'img_id' => $row['img_id']]),
+					'U_EDIT'	=> $this->helper->route('oxpus_dlext_thumbs', ['action' => 'edit', 'cat_id' => $cat_id, 'df_id' => $df_id, 'img_id' => $row['img_id']]),
+				]);
 			}
 			$this->db->sql_freeresult($result);
 			
-			$this->template->assign_vars(array(
+			$this->template->assign_vars([
 				'DESCRIPTION'		=> $description,
 				'MINI_IMG'			=> $mini_icon,
 				'HACK_VERSION'		=> $hack_version,
@@ -419,8 +433,8 @@ class thumbs
 				'ENCTYPE'			=> 'enctype="multipart/form-data"',
 			
 				'S_FORM_ACTION'		=> $this->helper->route('oxpus_dlext_thumbs'),
-				'S_HIDDEN_FIELDS'	=> build_hidden_fields($s_hidden_fields))
-			);
+				'S_HIDDEN_FIELDS'	=> build_hidden_fields($s_hidden_fields),
+			]);
 
 			/*
 			* include the mod footer

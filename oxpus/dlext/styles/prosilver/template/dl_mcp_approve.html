@@ -14,8 +14,6 @@ function select_switch(status)
 
 <h2>{{ lang('DL_MODCP_APPROVE') }}</h2>
 
-<br />
-
 {% if S_DL_MODCP_ACTION %}
 
 <form action="{{ S_DL_MODCP_ACTION }}" method="post" id="dl_modcp">
@@ -23,7 +21,7 @@ function select_switch(status)
 <div class="panel">
 	<div class="inner">
 		
-	<table class="table1">
+	<table class="table1 zebra-list">
 		<thead>
 		<tr>
 			<th class="name">{{ lang('DL_DOWNLOAD') }}</th>
@@ -33,7 +31,7 @@ function select_switch(status)
 		</thead>
 		<tbody>
 		{% for approve_row in loops.approve_row %}
-		<tr class="{% if approve_row.S_ROW_COUNT is even %}bg1{% else %}bg2{% endif %}">
+		<tr{% if approve_row.BROKEN %} class="dl-reported"{% endif %}>
 			<td>{{ approve_row.MINI_ICON }}&nbsp;<a href="{{ approve_row.U_DOWNLOAD }}" class="topictitle">{{ approve_row.DESCRIPTION }}</a></td>
 			<td><a href="{{ approve_row.U_CAT_VIEW }}">{{ approve_row.CAT_NAME }}</a></td>
 			<td class="center">
@@ -47,7 +45,7 @@ function select_switch(status)
 			<td class="center"><input type="checkbox" class="permissions-checkbox" name="dlo_id[]" value="{{ approve_row.FILE_ID }}" /></td>
 		</tr>
 		{% else %}
-		<tr class="bg1"><td class="center" colspan="3"><b>{L_DL_NO_APPROVE}</b></td></tr>
+		<tr class="bg1"><td class="center" colspan="3"><b>{{ lang('DL_NO_APPROVE') }}</b></td></tr>
 		{% endfor %}
 		</tbody>
 	</table>

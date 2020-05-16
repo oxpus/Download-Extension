@@ -91,7 +91,7 @@ class ucp_config_controller implements ucp_config_interface
 			$user_dl_sort_dir				= $this->request->variable('user_dl_sort_dir', 0);
 			$user_dl_sub_on_index			= $this->request->variable('user_dl_sub_on_index', 0);
 
-			$sql = 'UPDATE ' . USERS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', array(
+			$sql = 'UPDATE ' . USERS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', [
 				'user_allow_new_download_popup'	=> $user_allow_new_download_popup,
 				'user_allow_fav_download_popup'	=> $user_allow_fav_download_popup,
 				'user_allow_new_download_email'	=> $user_allow_new_download_email,
@@ -101,7 +101,7 @@ class ucp_config_controller implements ucp_config_interface
 				'user_dl_sort_fix'				=> $user_dl_sort_fix,
 				'user_dl_sort_opt'				=> $user_dl_sort_opt,
 				'user_dl_sort_dir'				=> $user_dl_sort_dir,
-				'user_dl_sub_on_index'			=> $user_dl_sub_on_index)) . ' WHERE user_id = ' . (int) $this->user->data['user_id'];
+				'user_dl_sub_on_index'			=> $user_dl_sub_on_index]) . ' WHERE user_id = ' . (int) $this->user->data['user_id'];
 			$this->db->sql_query($sql);
 
 			$message = $this->language->lang('DL_USER_CONFIG_SAVED', '<a href="' . $this->u_action . '">', '</a>');
@@ -168,7 +168,7 @@ class ucp_config_controller implements ucp_config_interface
 
 		add_form_key('dl_ucp');
 
-		$this->template->assign_vars(array(
+		$this->template->assign_vars([
 			'DL_MOD_RELEASE'					=> $this->language->lang('DL_MOD_VERSION_PUBLIC'),
 
 			'ALLOW_NEW_DOWNLOAD_POPUP_YES'		=> $allow_new_popup_yes,
@@ -195,6 +195,6 @@ class ucp_config_controller implements ucp_config_interface
 			'S_DL_SORT_USER_DIR'				=> $s_user_dl_sort_dir,
 
 			'S_FORM_ACTION'						=> $this->u_action,
-		));
+		]);
 	}
 }

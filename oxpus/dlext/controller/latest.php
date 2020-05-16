@@ -139,10 +139,15 @@ class latest
 		*/
 		include_once($this->ext_path . 'phpbb/includes/sort_init.' . $this->php_ext);
 
+		if (!$this->config['dl_latest_type'])
+		{
+			redirect($this->helper->route('oxpus_dlext_index'));
+		}
+
 		if ($next_id)
 		{
 			$notification = $this->phpbb_container->get('notification_manager');
-			$notification_data = array('notification_id' => $next_id);
+			$notification_data = ['notification_id' => $next_id];
 			$notification->delete_notifications('oxpus.dlext.notification.type.dlext', $notification_data);
 		}
 		
@@ -151,32 +156,41 @@ class latest
 		$sql = 'SELECT dl_id, user_id FROM ' . DL_RATING_TABLE;
 		$result = $this->db->sql_query($sql);
 		
-		$ratings = array();
+		$ratings = [];
 		while ($row = $this->db->sql_fetchrow($result))
 		{
 			$ratings[$row['dl_id']][] = $row['user_id'];
 		}
 		$this->db->sql_freeresult($result);
 		
-		$this->template->set_filenames(array(
-			'body' => 'dl_overview_body.html')
-		);
+		$this->template->set_filenames(['body' => 'dl_overview_body.html']);
 		
-		$this->template->assign_vars(array(
+		$this->template->assign_vars([
 			'S_FORM_ACTION'		=> $this->helper->route('oxpus_dlext_overall'),
 		
 			'U_DL_INDEX'		=> $this->helper->route('oxpus_dlext_index'),
 			'U_DL_AJAX'			=> $this->helper->route('oxpus_dlext_ajax'),
 		
-			'PAGE_NAME'			=> $this->language->lang('DL_LATEST_DOWNLOADS'))
-		);
+			'PAGE_NAME'			=> $this->language->lang('DL_LATEST_DOWNLOADS'),
+		]);
 		
-		$check_add_time		= time() - ($this->config['dl_new_time'] * 86400);
-		$check_edit_time	= time() - ($this->config['dl_edit_time'] * 86400);
+		if ($this->config['dl_latest_type'] == 1)
+		{
+			$check_add_time		= time() - ($this->config['dl_new_time'] * 86400);
+			$check_edit_time	= time() - ($this->config['dl_edit_time'] * 86400);
+
+			$sql_latest_where = 'AND (add_time >= ' . (int) $check_add_time . ' OR change_time >= ' . (int) $check_edit_time . ')';
+			$sql_sort_by = ($sql_sort_by == 'sort') ? 'cat, sort' : $sql_sort_by;
+			$sql_sort_order = $sql_order;
+		}
+		else
+		{
+			$sql_latest_where = '';
+			$sql_sort_by = 'change_time';
+			$sql_sort_order = 'DESC';
+		}
 		
-		$sql_latest_where = 'AND (add_time >= ' . (int) $check_add_time . ' OR change_time >= ' . (int) $check_edit_time . ')';
-		
-		$dl_files = array();
+		$dl_files = [];
 		$dl_files = $this->dlext_files->all_files(0, '', '', $sql_latest_where, 0, 0, 'id, cat');
 		
 		$total_files = 0;
@@ -186,8 +200,9 @@ class latest
 			for ($i = 0; $i < sizeof($dl_files); $i++)
 			{
 				$cat_id = $dl_files[$i]['cat'];
-				$cat_auth = array();
+				$cat_auth = [];
 				$cat_auth = $this->dlext_auth->dl_cat_auth($cat_id);
+
 				if (isset($cat_auth['auth_view']) && $cat_auth['auth_view'] || isset($index[$cat_id]['auth_view']) && $index[$cat_id]['auth_view'] || ($this->auth->acl_get('a_') && $this->user->data['is_registered']))
 				{
 					$total_files++;
@@ -208,32 +223,31 @@ class latest
 		{
 			$pagination = $this->phpbb_container->get('pagination');
 			$pagination->generate_template_pagination(
-				array(
-					'routes' => array(
+				[
+					'routes' => [
 						'oxpus_dlext_latest',
 						'oxpus_dlext_latest',
-					),
-					'params' => array('sort_by' => $sort_by, 'order' => $order),
-				), 'pagination', 'start', $total_files, $this->config['dl_links_per_page'], $page_start);
+					],
+					'params' => ['sort_by' => $sort_by, 'order' => $order],
+				], 'pagination', 'start', $total_files, $this->config['dl_links_per_page'], $page_start);
 		
-			$this->template->assign_vars(array(
+			$this->template->assign_vars([
 				'PAGE_NUMBER'	=> $pagination->on_page($total_files, $this->config['dl_links_per_page'], $page_start),
 				'TOTAL_DL'		=> $this->language->lang('VIEW_DOWNLOADS', $total_files),
-			));
+			]);
 		}
 		
-		$sql_sort_by = ($sql_sort_by == 'sort') ? 'cat, sort' : $sql_sort_by;
-		
-		$dl_files = array();
-		$dl_files = $this->dlext_files->all_files(0, '', '', $sql_latest_where . ' ORDER BY ' . $sql_sort_by . ' ' . $sql_order . ' LIMIT ' . $start . ', ' . $this->config['dl_links_per_page'], 0, 0, 'cat, id, description, desc_uid, desc_bitfield, desc_flags, hack_version, extern, file_size, klicks, overall_klicks, rating');
+		$dl_files = [];
+		$dl_files = $this->dlext_files->all_files(0, $sql_sort_by, $sql_sort_order, $sql_latest_where, 0, 0, 'cat, id, description, desc_uid, desc_bitfield, desc_flags, hack_version, extern, file_size, klicks, overall_klicks, rating', $this->config['dl_links_per_page'], $start);
 		
 		if (sizeof($dl_files))
 		{
 			for ($i = 0; $i < sizeof($dl_files); $i++)
 			{
 				$cat_id = $dl_files[$i]['cat'];
-				$cat_auth = array();
+				$cat_auth = [];
 				$cat_auth = $this->dlext_auth->dl_cat_auth($cat_id);
+
 				if (isset($cat_auth['auth_view']) && $cat_auth['auth_view'] || isset($index[$cat_id]['auth_view']) && $index[$cat_id]['auth_view'] || ($this->auth->acl_get('a_') && $this->user->data['is_registered']))
 				{
 					$cat_name = $index[$cat_id]['cat_name'];
@@ -251,11 +265,11 @@ class latest
 					$description = censor_text($description);
 					$description = generate_text_for_display($description, $desc_uid, $desc_bitfield, $desc_flags);
 		
-					$dl_link = $this->helper->route('oxpus_dlext_details', array('df_id' => $file_id));
+					$dl_link = $this->helper->route('oxpus_dlext_details', ['df_id' => $file_id]);
 		
 					$hack_version = '&nbsp;'.$dl_files[$i]['hack_version'];
 		
-					$dl_status = array();
+					$dl_status = [];
 					$dl_status = $this->dlext_status->status($file_id);
 					$status = $dl_status['status'];
 		
@@ -296,7 +310,7 @@ class latest
 						$rating_count_text = $this->language->lang('DL_RATING_NONE');
 					}
 		
-					$this->template->assign_block_vars('downloads', array(
+					$this->template->assign_block_vars('downloads', [
 						'CAT_NAME'				=> $cat_name,
 						'DESCRIPTION'			=> $mini_file_icon.$description,
 						'FILE_KLICKS'			=> $file_klicks,
@@ -309,8 +323,8 @@ class latest
 						'DF_ID'					=> $file_id,
 		
 						'U_CAT_VIEW'			=> $cat_view,
-						'U_DL_LINK'				=> $dl_link)
-					);
+						'U_DL_LINK'				=> $dl_link,
+					]);
 				}
 			}
 		

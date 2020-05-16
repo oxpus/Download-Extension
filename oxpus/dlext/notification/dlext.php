@@ -33,9 +33,9 @@ class dlext extends \phpbb\notification\type\base
 	* @var bool|array False if the service should use it's default data
 	* 					Array of data (including keys 'id', 'lang', and 'group')
 	*/
-	public static $notification_option = array(
+	public static $notification_option = [
 		'lang'	=> 'NEW_DOWNLOAD_NOTIFICATION',
-	);
+	];
 
 	/** @var \phpbb\db\driver\driver_interface */
 	protected $db;
@@ -105,7 +105,7 @@ class dlext extends \phpbb\notification\type\base
 	* @param array $options Options for finding users for notification
 	* @return array
 	*/
-	public function find_users_for_notification($data, $options = array())
+	public function find_users_for_notification($data, $options = [])
 	{
 		// Grab all registered users (excluding bots and guests)
 		$sql = 'SELECT user_id
@@ -114,7 +114,7 @@ class dlext extends \phpbb\notification\type\base
 				AND user_dl_note_type = 2';
 		$result = $this->db->sql_query($sql);
 
-		$users = array();
+		$users = [];
 		while ($row = $this->db->sql_fetchrow($result))
 		{
 			$users[$row['user_id']] = $this->notification_manager->get_default_methods();
@@ -169,7 +169,7 @@ class dlext extends \phpbb\notification\type\base
 	*/
 	public function get_email_template_variables()
 	{
-		return array();
+		return [];
 	}
 
 	/**
@@ -189,7 +189,7 @@ class dlext extends \phpbb\notification\type\base
 	 */
 	public function users_to_query()
 	{
-		return array();
+		return [];
 	}
 
 	/**
@@ -200,7 +200,7 @@ class dlext extends \phpbb\notification\type\base
 	* @param array $pre_create_data Data from pre_create_insert_array()
 	*
 	*/
-	public function create_insert_array($data, $pre_create_data = array())
+	public function create_insert_array($data, $pre_create_data = [])
 	{
 		parent::create_insert_array($data, $pre_create_data);
 	}

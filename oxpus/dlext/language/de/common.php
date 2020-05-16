@@ -22,10 +22,10 @@ if (!defined('IN_PHPBB'))
 
 if (empty($lang) || !is_array($lang))
 {
-	$lang = array();
+	$lang = [];
 }
 
-$lang = array_merge($lang, array(
+$lang = array_merge($lang, [
    	'DL_LOG_CAT_PERM_DROP'	=> '<strong>Berechtigungen für Kategorien zurückgesetzt</strong><br />» %1$s',
 
 	'ACP_DOWNLOADS'		=> 'Downloads',
@@ -77,7 +77,9 @@ $lang = array_merge($lang, array(
 	'DL_ACP_MAIN_STATS_REMAIN_OFF'		=> 'verbraucht',
 	'DL_ACP_MAIN_STATS_REMAIN_TRAFFIC'	=> 'Verbleibender Traffic für reg. Benutzer',
 	'DL_ACP_MAIN_STATS_SUBCATEGORIES'	=> 'Unterkategorien',
+	'DL_ACP_MAIN_STATS_TOTAL_APPROVE'	=> 'Anzahl freizugebender Downloads',
 	'DL_ACP_MAIN_STATS_TOTAL_BROKEN'	=> 'Anzahl gemeldeter Downloads',
+	'DL_ACP_MAIN_STATS_TOTAL_CAPPROVE'	=> 'Anzahl freizugebender Kommentare',
 	'DL_ACP_MAIN_STATS_TOTAL_EXTERN'	=> 'davon externe Downloads',
 	'DL_ACP_MAIN_STATS_TOTAL_GTRAFFIC'	=> 'Trafficlimit für Gäste',
 	'DL_ACP_MAIN_STATS_TOTAL_LIMIT'		=> 'Limit Downloadverzeichnisse',
@@ -122,9 +124,9 @@ $lang = array_merge($lang, array(
 	'DL_APPROVE'						=> 'Freigeben',
 	'DL_APPROVE_COMMENTS'				=> 'Neue Kommentare freigeben',
 	'DL_APPROVE_OVERVIEW'				=> 'Es sind %s Downloads freizugeben. Klick hier, um diese zu prüfen',
-	'DL_APPROVE_OVERVIEW_COMMENTS'		=> 'Es sind %s freizugebende Kommentare vorhanden. Klicke auf diesen Text, um sie zu prüfen.',
-	'DL_APPROVE_OVERVIEW_ONE'			=> 'Es ist %s Download freizugeben. Klick hier, um diesen zu prüfen',
-	'DL_APPROVE_OVERVIEW_ONE_COMMENT'	=> 'Es ist 1 freizugebender Kommentar vorhanden. Klicke auf diesen Text, um ihn zu prüfen.',
+	'DL_APPROVE_OVERVIEW_COMMENTS'		=> 'Es sind %s freizugebende Kommentare vorhanden. Klicke hier, um sie zu prüfen.',
+	'DL_APPROVE_OVERVIEW_ONE'			=> 'Es ist ein Download freizugeben. Klick hier, um diesen zu prüfen',
+	'DL_APPROVE_OVERVIEW_ONE_COMMENT'	=> 'Es ist ein freizugebender Kommentar vorhanden. Klicke hier, um ihn zu prüfen.',
 	'DL_ASSIGN'							=> 'Autor zuordnen',
 	'DL_AUTH_CPOST'						=> 'Kommentare schreiben',
 	'DL_AUTH_CREAD'						=> 'Kommentare lesen',
@@ -145,6 +147,8 @@ $lang = array_merge($lang, array(
 	'DL_BROKEN'						=> 'Melde defekten Download',
 	'DL_BROKEN_CUR'					=> 'Dieser Download ist aktuell als defekt gemeldet',
 	'DL_BROKEN_MOD'					=> 'Setze defekten Download zurück',
+	'DL_BROKEN_OVERVIEW'			=> 'Es sind %s Downloads als defekt gemeldet worden. Klicke hier, um sie zu prüfen.',
+	'DL_BROKEN_OVERVIEW_ONE'		=> 'Es ist ein Download als defekt gemeldet worden. Klick hier, um diesen zu prüfen',
 	'DL_BUG_REPORT_ADDED'			=> 'Fehlerbericht erfolgreich abgesendet',
 	'DL_BUG_REPORT_ASSIGN'			=> 'zuordnen',
 	'DL_BUG_REPORT_ASSIGN_DATE'		=> 'Zugeordnet am',
@@ -224,6 +228,7 @@ $lang = array_merge($lang, array(
 	'DL_COMMENTS_COUNT'					=> '%s Kommentare',
 	'DL_COMMENTS_DELETE'				=> 'Lösche Kommentare',
 	'DL_COMMENTS_DELETE_ALL'			=> 'Lösche alle Kommentare',
+	'DL_COMMENTS_PROFILE'				=> 'Downloadkommentare',
 	'DL_CONFIG'							=> 'Download Konfiguration',
 	'DL_CONFIG_EXPLAIN'					=> 'Hier kannst Du verschiedene Funktionen der Download Extension ein-/ausschalten und verschiedene Einstellungen vornehmen.',
 	'DL_CONFIG_UPDATED'					=> 'Downloadkonfiguration erfolgreich gespeichert',
@@ -279,9 +284,11 @@ $lang = array_merge($lang, array(
 	'DL_EDIT_THUMBS'			=> 'Bilder verwalten',
 	'DL_EDIT_TIME'				=> 'Tage, die ein geänderter Download markiert bleibt',
 	'DL_EMPTY_CATEGORY'			=> 'Diese Kategorie beinhaltet keine Downloads',
+	'DL_ENABLE_INDEX_DESC'		=> 'Aktiviere Downloadbeschreibungen in den Kategorien',
 	'DL_ENABLE_JUMPBOX'			=> 'Jumpbox im Download Fußbereich aktivieren',
 	'DL_ENABLE_POST_TRAFFIC'	=> 'Aktiviere Trafficzuschlag durch Posten',
 	'DL_ENABLE_RATE'			=> 'Bewertungssystem aktivieren',
+	'DL_ENABLE_SEARCH_DESC'		=> 'Aktiviere Downloadbeschreibungen in den Suchergebnissen',
 	'DL_ENABLE_TOPIC'			=> 'Erstelle ein Thema je Download',
 	'DL_EXT_BLACKLIST'			=> 'Blackliste Dateiendungen',
 	'DL_EXT_BLACKLIST_EXPLAIN'	=> 'Alle hier eingetragenen Dateiendungen sind für Uploads mit dieser Extension deaktiviert.<br />Im Administrator Panel werden diese Dateiendungen ebenfalls berücksichtigt.<br />Bestehende Downloads sind hiervon nicht betroffen.',
@@ -387,9 +394,14 @@ $lang = array_merge($lang, array(
 	'DL_LATEST_COMMENTS'		=> 'Zeige die letzten X Kommentare in den Download Details',
 	'DL_LATEST_DOWNLOAD'		=> 'Letzter Download',
 	'DL_LATEST_DOWNLOADS'		=> 'Letzte Downloads',
+	'DL_LATEST_TYPE_OFF'		=> 'Deaktiviert',
+	'DL_LATEST_TYPE_DEFAULT'	=> 'neue und geänderte Downloads',
+	'DL_LATEST_TYPE_COMPLETE'	=> 'alle Downloads',
+	'DL_LATEST_TYPE_OFF'		=> 'Deaktiviert',
 	'DL_LATEST_UPLOADS'			=> 'Letzte Uploads',
 	'DL_LATEST_VERSION'			=> 'Letzte Version',
 	'DL_LIMIT_DESC_ON_INDEX'	=> 'Begrenze die Download-Beschreibung auf dem Index',
+	'DL_LIMIT_DESC_ON_SEARCH'	=> 'Begrenze die Download-Beschreibung in den Suchergebnissen',
 	'DL_LINKS_PER_PAGE'			=> 'Downloads pro Seite',
 	'DL_LOCK'					=> 'Sperren',
 
@@ -461,6 +473,7 @@ $lang = array_merge($lang, array(
 	'DL_MOD_VERSION_PUBLIC'			=> 'Download Extension &copy; by Hotschi, Demolition Fabi, OXPUS',
 	'DL_MOD_WARNING'				=> 'Achtung',
 	'DL_MODCP_APPROVE'				=> 'Downloads freigeben',
+	'DL_MODCP_BROKEN'				=> 'Gemeldete Downloads',
 	'DL_MODCP_CAPPROVE'				=> 'Kommentare freigeben',
 	'DL_MODCP_EDIT'					=> 'Downloads bearbeiten',
 	'DL_MODCP_MANAGE'				=> 'Downloads verwalten',
@@ -720,10 +733,10 @@ $lang = array_merge($lang, array(
 	'DL_UNMARK'					=> 'Alle Markierungen aufheben',
 	'DL_UP'						=> 'hoch',
 	'DL_UP_TO_DATE'				=> '%s ist aktuell',
-	'DL_UPLOAD'					=> 'Eine Datei hochladen',
+	'DL_UPLOAD'					=> 'Download erstellen',
 	'DL_UPLOAD_ERROR'			=> 'Fehler beim Hochladen dieser Datei. Bitte gehe zurück und versuche es erneut.<br />Kontaktiere den Admin, wenn der Fehler weiterhin existiert.',
 	'DL_UPLOAD_FILE'			=> 'Hochladen',
-	'DL_UPLOAD_MAX_FILESIZE'	=> 'Maximal erlaubte DateiGröße für Uploads: %s',
+	'DL_UPLOAD_MAX_FILESIZE'	=> 'Maximal erlaubte Dateigröße: %s',
 	'DL_UPLOAD_ONE_MORE'		=> '%sKlick hier, um einen weiteren Download zu erstellen%s',
 	'DL_UPLOAD_TRAFFIC'			=> 'Die Größe hochgeladener Dateien wird vom Gesamttraffic abgezogen. Bedenke dieses bei der Wahl der Dateigröße!',
 	'DL_UPLOAD_TRAFFIC_COUNT'	=> 'Verringere den Gesamttraffic ebenso für Uploads',
@@ -754,6 +767,7 @@ $lang = array_merge($lang, array(
 	'DL_VERSION_REPLACE_EXPLAIN'	=> 'Es erfolgt nur eine Aktualisierung des Downloads, wenn keine neue Datei hochgeladen wird.',
 	'DL_VERSIONS'					=> 'Versionen',
 	'DL_VIEW_COMMENTS'				=> 'Anzeigen',
+	'DL_VIEW_DOWNLOADS'				=> 'Downloads anzeigen',
 	'DL_VIEW_LINK'					=> 'Download anzeigen',
 	'DL_VIEW_PERM'					=> 'Effektive Berechtigungen anzeigen',
 	'DL_VISUAL_CONFIRMATION'		=> 'Visuelle Bestätigung, um Dateien herunterzuladen',
@@ -856,4 +870,4 @@ $lang = array_merge($lang, array(
 	--------------------
 	%s
 	--------------------',
-));
+]);

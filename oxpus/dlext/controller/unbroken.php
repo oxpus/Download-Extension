@@ -128,17 +128,17 @@ class unbroken
 		*/
 		if ($df_id && $cat_id)
 		{
-			$cat_auth = array();
+			$cat_auth = [];
 			$cat_auth = $this->dlext_auth->dl_cat_auth($cat_id);
 
 			if (isset($index[$cat_id]['auth_mod']) && $index[$cat_id]['auth_mod'] || isset($cat_auth['auth_mod']) && $cat_auth['auth_mod'] || ($this->auth->acl_get('a_') && $this->user->data['is_registered']))
 			{
-				$sql = 'UPDATE ' . DOWNLOADS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', array(
-					'broken' => 0)) . ' WHERE id = ' . (int) $df_id;
+				$sql = 'UPDATE ' . DOWNLOADS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', [
+					'broken' => 0]) . ' WHERE id = ' . (int) $df_id;
 				$this->db->sql_query($sql);
 			}
 
-			redirect($this->helper->route('oxpus_dlext_details', array('df_id' => $df_id, 'cat_id' => $cat_id)));
+			redirect($this->helper->route('oxpus_dlext_details', ['df_id' => $df_id, 'cat_id' => $cat_id]));
 		}
 
 		redirect($this->helper->route('oxpus_dlext_index'));

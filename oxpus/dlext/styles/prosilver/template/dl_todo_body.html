@@ -1,50 +1,89 @@
 {% INCLUDE 'dl_header.html' %}
 
-<h2 class="solo dl-left">{{ lang('DL_MOD_TODO') }}</h2>
-
-{% if S_TODO_EDIT %}<br /><ul class="linklist dl-right"><li class="rightside"><a href="{{ U_TODO_ADD }}" class="button icon-button">{{ lang('DL_TODO_ADD') }}</a></li></ul><br />{% endif %}
+<h2>{{ lang('DL_MOD_TODO') }}</h2>
 
 {% if S_NO_TODOLIST %}
-<br /><br /><div class="panel"><strong>{{ lang('DL_NO_MOD_TODO') }}</strong></div>
+<div class="panel"><strong>{{ lang('DL_NO_MOD_TODO') }}</strong></div>
 {% else %}
 
-<div class="forabg">
+{% for todolist_row in loops.todolist_row %}
+<div class="panel">
 	<div class="inner">
 
-		<ul class="topiclist">
-			<li class="header">
-				<dl>
-					<dt>{{ lang('DL_MOD_TODO') }}</dt>
-				</dl>
-			</li>
-		</ul>
-
-		<ul class="topiclist forums">
-		{% for todolist_row in loops.todolist_row %}
-			<li class="row">
-				<dl>
-					<dt><a href="{{ todolist_row.FILE_LINK }}" class="forumtitle">{{ todolist_row.FILENAME }}&nbsp;{{ todolist_row.HACK_VERSION }}</a></dt>
-					<ul class="post-buttons">
-						<li>
-							<a href="{{ todolist_row.U_TODO_EDIT }}" title="{{ lang('DL_EDIT_FILE') }}" class="button button-icon-only">
-								<i class="icon fa-pencil fa-fw" aria-hidden="true"></i><span class="sr-only">{{ lang('DL_EDIT_FILE') }}</span>
-							</a>
-						</li>
-						<li>
-							<a href="{{ todolist_row.U_TODO_DELETE }}" title="{{ lang('DL_DELETE') }}" class="button button-icon-only">
-								<i class="icon fa-times fa-fw" aria-hidden="true"></i><span class="sr-only">{{ lang('DL_DELETE') }}</span>
-							</a>
-						</li>
-					</ul>
-				</dl>
-				<hr />
-				<div class="postbody">{{ todolist_row.TODO }}</div>
-			</li>
-		{% endfor %}
-		</ul>
+		<dl>
+			<dt>
+				<div class="posts">
+				<h3><a href="{{ todolist_row.FILE_LINK }}" class="forumtitle">{{ todolist_row.FILENAME }}&nbsp;{{ todolist_row.HACK_VERSION }}</a></h3>
+				<ul class="post-buttons">
+					<li>
+						<a href="{{ todolist_row.U_TODO_EDIT }}" title="{{ lang('DL_EDIT_FILE') }}" class="button button-icon-only">
+							<i class="icon fa-pencil fa-fw" aria-hidden="true"></i><span class="sr-only">{{ lang('DL_EDIT_FILE') }}</span>
+						</a>
+					</li>
+					<li>
+						<a href="{{ todolist_row.U_TODO_DELETE }}" title="{{ lang('DL_DELETE') }}" class="button button-icon-only">
+							<i class="icon fa-times fa-fw" aria-hidden="true"></i><span class="sr-only">{{ lang('DL_DELETE') }}</span>
+						</a>
+					</li>
+				</ul>
+				</div>
+				<div class="postbody"><div class="content">{{ todolist_row.TODO }}</div></div>
+			</dt>
+		</dl>
 
 	</div>
 </div>
+{% endfor %}
+
+{% endif %}
+
+{% if S_TODO_ADD %}
+<br />
+
+<form action="{{ S_FORM_ACTION }}" method="post" name="postform">
+
+	<div class="panel">
+		<div class="inner">
+
+		<h3>{% if S_ADD_TODO %}{{ lang('DL_TODO_ADD') }}{{ lang('COLON') }} {{ S_DOWNLOAD }}{% else %}{{ lang('DL_TODO_EDIT') }}{% endif %}</h3>
+
+		<fieldset>
+
+		<table width="100%">
+		<tr>
+			<td class="dl-width-15 dl-text-top"><br /><strong>{% if S_ADD_TODO %}{{ lang('DL_MOD_TODO') }}{% else %}{{ S_DOWNLOAD }} {{ HACK_VERSION }}{% endif %}</strong></td>
+			<td class="dl-width-70 dl-text-top">
+				{% INCLUDE 'posting_buttons.html' %}
+				<textarea name="message" id="message" rows="10" cols="100" class="inputbox autowidth">{{ TODO_TEXT }}</textarea>
+			</td>
+			<td class="dl-width-15 dl-text-top">
+				{% for smiley in loops.smiley %}
+				{% if smiley.S_FIRST_ROW %}
+				<br /><br /><div class="dl-width-100 smiley-box">
+				{% endif %}
+					<a href="#" onclick="insert_text('{smiley.A_SMILEY_CODE}', true); return false;"><img src="{smiley.SMILEY_IMG}" width="{smiley.SMILEY_WIDTH}" height="{smiley.SMILEY_HEIGHT}" alt="{smiley.SMILEY_CODE}" title="{smiley.SMILEY_DESC}" /></a>
+				{% if smiley.S_LAST_ROW %}
+					<a href="{U_MORE_SMILIES}" onclick="window.open('{U_MORE_SMILIES}', '_blank', 'HEIGHT=200,resizable=yes,scrollbars=yes,WIDTH=400'); return false;">{L_MORE_SMILIES}</a>
+				</div>
+				{% endif %}
+				{% endfor %}
+			</td>
+		</tr>
+		</table>
+
+		</fieldset>
+
+		</div>
+	</div>
+
+	<fieldset class="submit-buttons">
+		<input type="submit" name="submit" value="{{ lang('SUBMIT') }}" class="button icon-button" />&nbsp;&nbsp;
+		<input type="reset" name="reset" value="{{ lang('RESET') }}" class="button icon-button" />
+		{{ S_FORM_TOKEN }}
+		{{ S_HIDDEN_FIELDS }}
+	</fieldset>
+
+</form>
 {% endif %}
 
 <br />

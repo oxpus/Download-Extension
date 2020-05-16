@@ -12,7 +12,19 @@
 
 <br />
 
-<div class="dl-right"><a href="{{ U_DL_SEARCH }}" class="button icon-button">{{ lang('DL_SEARCH_DOWNLOAD') }}</a></div>
+<div id="search-box" class="search-box dl-right" role="search" style="margin-right: 0.7em;">
+	<form action="{{ U_DL_SEARCH }}" method="post" id="news_search">
+		<fieldset>
+			<input name="search_keywords" id="search_keywords" type="search" maxlength="255" title="{{ lang('DL_SEARCH_DOWNLOAD') }}" class="inputbox search tiny" size="20" value="" placeholder="{{ lang('DL_SEARCH_DOWNLOAD') }}" />
+			<button class="button button-search" type="submit" title="{{ lang('SEARCH') }}">
+				<i class="icon fa-search fa-fw" aria-hidden="true"></i><span class="sr-only">{{ lang('SEARCH') }}</span>
+			</button>
+			<a href="{{ U_DL_SEARCH }}" class="button button-search-end" title="{{ lang('SEARCH_ADV') }}">
+				<i class="icon fa-cog fa-fw" aria-hidden="true"></i><span class="sr-only">{{ lang('SEARCH_ADV') }}</span>
+			</a>
+		</fieldset>
+	</form>
+</div>
 
 <div class="clear"></div>
 
@@ -26,7 +38,7 @@
 {% endfor %}
 </div>
 
-<div class="panel dlext{% if S_OPEN_PANEL <> 0 %} noshow{% endif %}" id="options0">
+<div class="panel dlext{% if S_OPEN_PANEL <> 0 %} noshow{% endif %}{% if BROKEN %} dl-reported{% endif %}" id="options0">
 
 	<div class="dl-width-50 dl-left">
 
@@ -162,13 +174,13 @@
 
 	<form action="{{ S_COMMENT_POST_ACTION }}" method="post" id="postform" onsubmit="return checkQuickForm(this)">
 
-	<div class="panel" id="postingbox">
+	<div class="post" id="postingbox">
 		<div class="inner">
 
 			<fieldset>
 				<div>{% INCLUDE 'posting_buttons.html' %}</div>
 				{% if loops.smiley|length %}
-				<div id="smiley-box">
+				<div id="smiley-box" class="smiley-box">
 					<strong>{{ lang('SMILIES') }}</strong><br />
 					{% for smiley in loops.smiley %}
 						<a href="#" onclick="insert_text('{{ smiley.A_SMILEY_CODE }}', true); return false;"><img src="{{ smiley.SMILEY_IMG }}" width="{{ smiley.SMILEY_WIDTH }}" height="{{ smiley.SMILEY_HEIGHT }}" alt="{{ smiley.SMILEY_CODE }}" title="{{ smiley.SMILEY_DESC }}" /></a>
@@ -177,8 +189,8 @@
 				</div>
 				{% endif %}
 				<br />
-				<div id="message-box">
-					<textarea name="message" id="message" rows="5" cols="76" tabindex="3" onselect="storeCaret(this);" onclick="storeCaret(this);" onkeyup="storeCaret(this);" class="inputbox">{{ COMMENT_TEXT }}</textarea>
+				<div id="message-box" class="message-box">
+					<textarea name="message" id="message" rows="5" cols="76" tabindex="3" class="dl-comment-height inputbox autowidth">{{ COMMENT_TEXT }}</textarea>
 				</div>
 			</fieldset>
 
@@ -201,26 +213,26 @@
 	<h3>{{ lang('DL_COMMENTS') }}</h3>
 	{% endif %}
 
-	<div class="dl-edit-box-light panel">
+	<div class="dl-edit-box-medium panel">
 		<div class="inner">
 			<div class="posts">
 				<dl class="postprofile">
 					<dt>
 						<div class="avatar-container">{{ comment_row.POSTER_AVATAR }}</div>
+						{% for action_button in comment_row.action_button %}
+						<ul class="post-buttons">
+							<li><a class="button button-icon-only" href="{{ comment_row.U_EDIT_COMMENT }}" title="{{ lang('EDIT_POST') }}"><i class="icon fa-pencil fa-fw" aria-hidden="true"></i><span>{{ lang('EDIT_POST') }}</span></a></li>
+							<li><a class="button button-icon-only" href="{{ comment_row.U_DELETE_COMMENT }}" title="{{ lang('DELETE_POST') }}"><i class="icon fa-times fa-fw" aria-hidden="true"></i><span>{{ lang('DELETE') }}</span></a></li>
+						</ul>
+						{% endfor %}
 					</dt>
 					<dd class="profile-contact">
 						{{ comment_row.POSTER }}<br /><span class="small"><time datetime="{{ comment_row.POST_TIME_RFC }}">{{ comment_row.POST_TIME }}</time></span>
+						{% if comment_row.EDITED_BY %}<div class="notice">{{ comment_row.EDITED_BY }}</div>{% endif %}
 					</dd>
 				</dl>
 				<div class="postbody">
-					{% for action_button in comment_row.action_button %}
-					<ul class="post-buttons">
-							<li><a class="button button-icon-only" href="{{ comment_row.U_EDIT_COMMENT }}" title="{{ lang('EDIT_POST') }}"><i class="icon fa-pencil fa-fw" aria-hidden="true"></i><span>{{ lang('EDIT_POST') }}</span></a></li>
-							<li><a class="button button-icon-only" href="{{ comment_row.U_DELETE_COMMENT }}" title="{{ lang('DELETE_POST') }}"><i class="icon fa-times fa-fw" aria-hidden="true"></i><span>{{ lang('DELETE') }}</span></a></li>
-					</ul>
-					{% endfor %}
 					<div class="content">{{ comment_row.MESSAGE }}</div>
-					{% if comment_row.EDITED_BY %}<div class="notice">{{ comment_row.EDITED_BY }}</div>{% endif %}
 				</div>
 			</div>
 		</div>
@@ -361,11 +373,11 @@
 
 {% for similar_dl in loops.similar_dl %}
 {% if similar_dl.S_FIRST_ROW %}
-<br /><h3>{{ lang('DL_SIMILAR_DL') }}</h3>
+<br />
+<h3>{{ lang('DL_SIMILAR_DL') }}</h3>
 {% endif %}
-<dl>
-	<dt><a href="{{ similar_dl.U_DOWNLOAD }}">{{ similar_dl.DOWNLOAD }}</a></dt>
-</dl>
+<a href="{{ similar_dl.U_DOWNLOAD }}">{{ similar_dl.DOWNLOAD }}</a>
+{% if similar_dl.S_LAST_ROW %}<br /><br />{% else %}&nbsp;&bull;&nbsp;{% endif %}
 {% endfor %}
 
 {% INCLUDE 'dl_footer.html' %}

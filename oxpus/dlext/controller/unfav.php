@@ -134,7 +134,7 @@ class unfav
 					AND fav_user_id = ' . (int) $this->user->data['user_id'];
 			$this->db->sql_query($sql);
 
-			redirect($this->helper->route('oxpus_dlext_details', array('df_id' => $df_id, 'cat_id' => $cat_id)));
+			redirect($this->helper->route('oxpus_dlext_details', ['df_id' => $df_id, 'cat_id' => $cat_id]));
 		}
 
 		redirect($this->helper->route('oxpus_dlext_index'));

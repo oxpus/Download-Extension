@@ -114,7 +114,7 @@ class feed
 			// Switch user to anonymous to prepare the correct permissions, if wanted
 			if (!$this->config['dl_rss_perms'])
 			{
-				$perm_backup = array('user_backup' => $this->user->data);
+				$perm_backup = ['user_backup' => $this->user->data];
 
 				// sql to get the users info
 				$sql = 'SELECT *
@@ -136,7 +136,7 @@ class feed
 			}
 
 			// Get the possible categories
-			$access_cats = array();
+			$access_cats = [];
 			$access_cats = $this->dlext_main->full_index(0, 0, 0, 1);
 
 			// Does we have some cats? miau ...
@@ -175,16 +175,14 @@ class feed
 
 				$rss = true;
 
-				$dl_files = array();
+				$dl_files = [];
 				$dl_files = $this->dlext_files->all_files(0, $sql_sort_by, $sql_order_by , $sql_where_cats, 0, 0, $sql_fields, $sql_limit);
 
 				if (sizeof($dl_files))
 				{
 					header("Content-Type: application/rss+xml");
 
-					$this->template->set_filenames(array(
-						'body'	=> 'dl_rss.xml',
-					));
+					$this->template->set_filenames(['body' => 'dl_rss.xml']);
 
 					for ($i = 0; $i < sizeof($dl_files); $i++)
 					{
@@ -241,14 +239,14 @@ class feed
 							$mini_status = '';
 						}
 
-						$this->template->assign_block_vars('dl_rss_feed', array(
+						$this->template->assign_block_vars('dl_rss_feed', [
 							'DL_RSS_TITLE'	=> $description,
 							'DL_RSS_MINI_S'	=> $mini_status,
 							'DL_RSS_DESC'	=> $long_desc,
 							'DL_RSS_TIME'	=> $last_time,
 
-							'U_DL_RSS'		=> generate_board_url(true) . $this->helper->route('oxpus_dlext_details', array('df_id' => $dl_id)),
-						));
+							'U_DL_RSS'		=> generate_board_url(true) . $this->helper->route('oxpus_dlext_details', ['df_id' => $dl_id]),
+						]);
 					}
 
 					$display_feed = true;
@@ -280,7 +278,7 @@ class feed
 			}
 		}
 
-		$this->template->assign_vars(array(
+		$this->template->assign_vars([
 			'SITENAME'				=> $this->config['sitename'],
 			'BOARD_URL'				=> generate_board_url() . '/',
 			'DL_RSS_TIME_TMP'   	=> $timetmp,
@@ -290,7 +288,7 @@ class feed
 			'S_CONTENT_ENCODING'	=> 'utf-8',
 
 			'U_DL_RSS'				=> generate_board_url(true) . $this->helper->route('oxpus_dlext_feed'),
-		));
+		]);
 
 		page_footer();
 	}

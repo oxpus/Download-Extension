@@ -21,20 +21,20 @@ class dl_commons extends \phpbb\db\migration\migration
 
 	static public function depends_on()
 	{
-		return array('\oxpus\dlext\migrations\basics\dl_perms');
+		return ['\oxpus\dlext\migrations\basics\dl_perms'];
 	}
 
 	public function update_data()
 	{
-		return array(
+		return [
 			// At least run some foreign routines
-			array('custom', array(array($this, 'add_fulltext_index'))),
-			array('custom', array(array($this, 'add_default_blacklist_extentions'))),
-			array('custom', array(array($this, 'first_reset_remain_traffic'))),
+			['custom', [[$this, 'add_fulltext_index']]],
+			['custom', [[$this, 'add_default_blacklist_extentions']]],
+			['custom', [[$this, 'first_reset_remain_traffic']]],
 
 			// Preset the config data
-			array('config.add', array('dl_cat_edit', '1')),
-		);
+			['config.add', ['dl_cat_edit', '1']],
+		];
 	}
 
 	public function add_fulltext_index()
@@ -114,23 +114,23 @@ class dl_commons extends \phpbb\db\migration\migration
 			return;
 		}
 
-		$sql_insert = array(
-			array('extention'	=> 'asp'),
-			array('extention'	=> 'cgi'),
-			array('extention'	=> 'dhtm'),
-			array('extention'	=> 'dhtml'),
-			array('extention'	=> 'exe'),
-			array('extention'	=> 'htm'),
-			array('extention'	=> 'html'),
-			array('extention'	=> 'jar'),
-			array('extention'	=> 'js'),
-			array('extention'	=> 'php'),
-			array('extention'	=> 'php3'),
-			array('extention'	=> 'pl'),
-			array('extention'	=> 'sh'),
-			array('extention'	=> 'shtm'),
-			array('extention'	=> 'shtml'),
-		);
+		$sql_insert = [
+			['extention'	=> 'asp'],
+			['extention'	=> 'cgi'],
+			['extention'	=> 'dhtm'],
+			['extention'	=> 'dhtml'],
+			['extention'	=> 'exe'],
+			['extention'	=> 'htm'],
+			['extention'	=> 'html'],
+			['extention'	=> 'jar'],
+			['extention'	=> 'js'],
+			['extention'	=> 'php'],
+			['extention'	=> 'php3'],
+			['extention'	=> 'pl'],
+			['extention'	=> 'sh'],
+			['extention'	=> 'shtm'],
+			['extention'	=> 'shtml'],
+		];
 
 		$this->db->sql_multi_insert($this->table_prefix . 'dl_ext_blacklist', $sql_insert);
 	}
@@ -144,10 +144,10 @@ class dl_commons extends \phpbb\db\migration\migration
 			return;
 		}
 
-		$sql_insert = array(
-			array('config_name' => 'dl_remain_guest_traffic', 'config_value' => '0'),
-			array('config_name' => 'dl_remain_traffic', 'config_value' => '0'),
-		);
+		$sql_insert = [
+			['config_name' => 'dl_remain_guest_traffic', 'config_value' => '0'],
+			['config_name' => 'dl_remain_traffic', 'config_value' => '0'],
+		];
 
 		$this->db->sql_return_on_error(true);
 		$this->db->sql_multi_insert($this->table_prefix . 'dl_rem_traf', $sql_insert);

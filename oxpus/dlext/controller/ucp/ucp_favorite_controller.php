@@ -122,7 +122,7 @@ class ucp_favorite_controller implements ucp_favorite_interface
 			/*
 			* drop all choosen favorites
 			*/
-			$fav_id = $this->request->variable('fav_id', array(0 => ''));
+			$fav_id = $this->request->variable('fav_id', [0 => '']);
 
 			if (sizeof($fav_id))
 			{
@@ -140,7 +140,7 @@ class ucp_favorite_controller implements ucp_favorite_interface
 		/*
 		* drop all unaccessable favorites
 		*/
-		$access_cat = array();
+		$access_cat = [];
 		$access_cat = $this->dlext_main->full_index(0, 0, 0, 1);
 
 		if (sizeof($access_cat))
@@ -167,16 +167,16 @@ class ucp_favorite_controller implements ucp_favorite_interface
 		{
 			while ($row = $this->db->sql_fetchrow($result))
 			{
-				$path_dl_array = array();
-				$tmp_nav = array();
+				$path_dl_array = [];
+				$tmp_nav = [];
 				$dl_nav = $this->dlext_nav->nav($row['cat'], 'links', $tmp_nav);
 
-				$this->template->assign_block_vars('favorite_row', array(
+				$this->template->assign_block_vars('favorite_row', [
 					'DL_ID'			=> $row['fav_id'],
 					'DL_CAT'		=> $dl_nav,
 					'DOWNLOAD'		=> $row['description'],
-					'U_DOWNLOAD'	=> $this->helper->route('oxpus_dlext_details', array('df_id' => $row['id'], 'cat_id' => $row['cat'])),
-				));
+					'U_DOWNLOAD'	=> $this->helper->route('oxpus_dlext_details', ['df_id' => $row['id'], 'cat_id' => $row['cat']]),
+				]);
 			}
 		}
 
@@ -184,9 +184,9 @@ class ucp_favorite_controller implements ucp_favorite_interface
 
 		add_form_key('dl_ucp');
 
-		$this->template->assign_vars(array(
+		$this->template->assign_vars([
 			'DL_MOD_RELEASE'	=> $this->language->lang('DL_MOD_VERSION_PUBLIC'),
 			'S_FORM_ACTION'		=> $this->u_action,
-		));
+		]);
 	}
 }

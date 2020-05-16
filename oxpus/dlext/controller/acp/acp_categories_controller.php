@@ -129,7 +129,7 @@ class acp_categories_controller implements acp_categories_interface
 			$action = ($save_cat) ? 'save_cat' : $action;
 		}
 		
-		$index = array();
+		$index = [];
 		$index = $this->dlext_main->full_index();
 
 		if (!sizeof($index) && $action != 'save_cat')
@@ -150,18 +150,20 @@ class acp_categories_controller implements acp_categories_interface
 			$path = '/';
 		}
 
+		$s_hidden_fields = [];
+
 		if ($action == 'save_cat' && $path && !@file_exists(DL_EXT_FILEBASE_PATH. 'downloads/' . $path) || substr($path, -1, 1) <> '/')
 		{
 			$error = true;
 			$error_msg = $this->language->lang('DL_PATH_NOT_EXIST', $path, DL_EXT_FILEBASE_PATH. 'downloads/', DL_EXT_FILEBASE_PATH. 'downloads/' . $path);
 			$action = ($cat_id) ? 'edit' : 'add';
 			$submit = true;
-			$s_hidden_fields = array('cat_id' => $cat_id);
+			$s_hidden_fields += ['cat_id' => $cat_id];
 		}
 
 		if ($action == 'edit' || $action == 'add')
 		{
-			$s_hidden_fields = (isset($s_hidden_fields)) ? array_merge($s_hidden_fields, array('action' => 'save_cat')) : array('action' => 'save_cat');
+			$s_hidden_fields += ['action' => 'save_cat'];
 		
 			if($action == 'edit' && $cat_id && !$submit)
 			{
@@ -213,7 +215,10 @@ class acp_categories_controller implements acp_categories_interface
 				$text_ary		= generate_text_for_edit($rules, $rules_uid, $rules_flags);
 				$rules			= $text_ary['text'];
 		
-				$s_hidden_fields = (!$submit) ? array_merge($s_hidden_fields, array('cat_id' => $cat_id)) : $s_hidden_fields;
+				if (!$submit && !isset($s_hidden_fields['cat_id']))
+				{
+					$s_hidden_fields += ['cat_id' => $cat_id];
+				}
 			}
 			else
 			{
@@ -396,7 +401,7 @@ class acp_categories_controller implements acp_categories_interface
 		
 			$this->u_action	.= '&amp;parent=' . $cat_parent . '&amp;type=' . $idx_type;
 
-			$this->template->assign_vars(array(
+			$this->template->assign_vars([
 				'L_DL_CAT_MODE'					=> ($action == 'edit') ? $this->language->lang('EDIT') : $this->language->lang('ADD'),
 				'L_DL_CAT_TRAFFIC'				=> (isset($index[$cat_id]['cat_traffic']) && $index[$cat_id]['cat_traffic'] && isset($cat_remain_traffic) && $cat_remain_traffic) ? $this->language->lang('DL_CAT_TRAFFIC', $cat_remain_traffic) : $this->language->lang('DL_CAT_TRAFFIC_OFF'),
 				'L_DL_CAT_TRAFFIC_HELP'			=> htmlentities((isset($index[$cat_id]['cat_traffic']) && $index[$cat_id]['cat_traffic'] && isset($cat_remain_traffic) && $cat_remain_traffic) ? $this->language->lang('DL_CAT_TRAFFIC', $cat_remain_traffic) : $this->language->lang('DL_CAT_TRAFFIC_OFF')),
@@ -445,7 +450,7 @@ class acp_categories_controller implements acp_categories_interface
 				'S_HIDDEN_FIELDS'		=> build_hidden_fields($s_hidden_fields),
 		
 				'U_BACK'				=> $this->u_action,
-			));
+			]);
 		}
 		else if($action == 'save_cat')
 		{
@@ -589,7 +594,7 @@ class acp_categories_controller implements acp_categories_interface
 				$topic_user = 0;
 			}
 		
-			$sql_cat_data = array(
+			$sql_cat_data = [
 				'allow_mod_desc'		=> $allow_mod_desc,
 				'allow_thumbs'			=> $allow_thumbs,
 				'approve_comments'		=> $approve_comments,
@@ -619,7 +624,7 @@ class acp_categories_controller implements acp_categories_interface
 				'stats_prune'			=> $stats_prune,
 				'topic_more_details'	=> $topic_more_details,
 				'topic_user'			=> $topic_user,
-			);
+			];
 
 			if($cat_id)
 			{
@@ -629,7 +634,7 @@ class acp_categories_controller implements acp_categories_interface
 
 				$message = $this->language->lang('DL_CATEGORY_UPDATED');
 		
-				$this->phpbb_log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_CAT_EDIT', false, array($cat_name));
+				$this->phpbb_log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_CAT_EDIT', false, [$cat_name]);
 			}
 			else
 			{
@@ -637,7 +642,7 @@ class acp_categories_controller implements acp_categories_interface
 		
 				$message = $this->language->lang('DL_CATEGORY_ADDED');
 		
-				$this->phpbb_log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_CAT_ADD', false, array($cat_name));
+				$this->phpbb_log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_CAT_ADD', false, [$cat_name]);
 			}
 
 			$this->db->sql_query($sql);
@@ -646,10 +651,10 @@ class acp_categories_controller implements acp_categories_interface
 			{
 				$cat_id = $this->db->sql_nextid();
 		
-				$sql = 'INSERT INTO ' . DL_CAT_TRAF_TABLE . ' ' . $this->db->sql_build_array('INSERT', array(
+				$sql = 'INSERT INTO ' . DL_CAT_TRAF_TABLE . ' ' . $this->db->sql_build_array('INSERT', [
 					'cat_id'			=> $cat_id,
 					'cat_traffic_use'	=> 0,
-				));
+				]);
 		
 				$this->db->sql_query($sql);
 			}
@@ -683,13 +688,13 @@ class acp_categories_controller implements acp_categories_interface
 					$dest_cat = $this->db->sql_fetchfield('cat_name');
 					$this->db->sql_freeresult($result);
 		
-					$sql = 'UPDATE ' . DL_CAT_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', array(
+					$sql = 'UPDATE ' . DL_CAT_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', [
 						'auth_view'		=> $auth_view,
 						'auth_dl'		=> $auth_dl,
 						'auth_up'		=> $auth_up,
 						'auth_mod'		=> $auth_mod,
 						'auth_cread'	=> $auth_cread,
-						'auth_cpost'	=> $auth_cpost)) . ' WHERE id = ' . (int) $cat_id;
+						'auth_cpost'	=> $auth_cpost]) . ' WHERE id = ' . (int) $cat_id;
 					$this->db->sql_query($sql);
 		
 					// And now copy all permissions for usergroups
@@ -705,19 +710,19 @@ class acp_categories_controller implements acp_categories_interface
 						$auth_up	= $row['auth_up'];
 						$auth_mod	= $row['auth_mod'];
 		
-						$sql = 'INSERT INTO ' . DL_AUTH_TABLE . ' ' . $this->db->sql_build_array('INSERT', array(
+						$sql = 'INSERT INTO ' . DL_AUTH_TABLE . ' ' . $this->db->sql_build_array('INSERT', [
 							'cat_id'	=> $cat_id,
 							'group_id'	=> $group_id,
 							'auth_view'	=> $auth_view,
 							'auth_dl'	=> $auth_dl,
 							'auth_up'	=> $auth_up,
-							'auth_mod'	=> $auth_mod));
+							'auth_mod'	=> $auth_mod]);
 						$this->db->sql_query($sql);
 					}
 		
 					$this->db->sql_freeresult($result);
 		
-					$this->phpbb_log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_CAT_PERM_COPY', false, array($source_cat, $dest_cat));
+					$this->phpbb_log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_CAT_PERM_COPY', false, [$source_cat, $dest_cat]);
 				}
 			}
 		
@@ -755,7 +760,7 @@ class acp_categories_controller implements acp_categories_interface
 							AND d.extern = 0';
 					$result = $this->db->sql_query($sql);
 		
-					$dl_ids = array();
+					$dl_ids = [];
 		
 					while ($row = $this->db->sql_fetchrow($result))
 					{
@@ -875,7 +880,7 @@ class acp_categories_controller implements acp_categories_interface
 					WHERE cat_id = ' . (int) $cat_id;
 				$this->db->sql_query($sql);
 		
-				$this->phpbb_log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_CAT_DEL', false, array($log_cat_name));
+				$this->phpbb_log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_CAT_DEL', false, [$log_cat_name]);
 		
 				// Purge the categories cache
 				@unlink(DL_EXT_CACHE_PATH . 'data_dl_cats.' . $this->phpEx);
@@ -900,12 +905,12 @@ class acp_categories_controller implements acp_categories_interface
 				$s_switch_cat .= $this->dlext_extra->dl_dropdown(0, 0, $cat_id, 'auth_move');
 				$s_switch_cat .= '</select>';
 		
-				$s_hidden_fields = array(
+				$s_hidden_fields = [
 					'cat_id'	=> $cat_id,
 					'action'	=> 'delete',
 					'parent'	=> $cat_parent,
 					'type'		=> $idx_type,
-				);
+				];
 		
 				$confirm_title = $this->language->lang('DL_CONFIRM_CAT_DELETE', $cat_name);
 
@@ -929,7 +934,7 @@ class acp_categories_controller implements acp_categories_interface
 
 				$this->db->sql_query($sql);
 	
-				$this->phpbb_log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_DEL_CAT_STATS', false, array($log_cat_name));
+				$this->phpbb_log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_DEL_CAT_STATS', false, [$log_cat_name]);
 
 				redirect($this->u_action);
 			}
@@ -938,12 +943,12 @@ class acp_categories_controller implements acp_categories_interface
 				$cat_name = $index[$cat_id]['cat_name'];
 				$cat_name = str_replace('&nbsp;&nbsp;|___&nbsp;', '', $cat_name);
 
-				$s_hidden_fields = array(
+				$s_hidden_fields = [
 					'cat_id' 	=> $cat_id,
 					'action' 	=> 'delete_stats',
 					'parent'	=> $cat_parent,
 					'type'		=> $idx_type,
-				);
+				];
 
 				$confirm_title = ($cat_id == -1) ? $this->language->lang('DL_CONFIRM_ALL_STATS_DELETE') : $this->language->lang('DL_CONFIRM_CAT_STATS_DELETE', $cat_name);
 
@@ -965,7 +970,7 @@ class acp_categories_controller implements acp_categories_interface
 
 				$this->db->sql_query($sql);
 	
-				$this->phpbb_log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_DEL_CAT_COM', false, array($log_cat_name));
+				$this->phpbb_log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_DEL_CAT_COM', false, [$log_cat_name]);
 
 				redirect($this->u_action);
 			}
@@ -974,13 +979,13 @@ class acp_categories_controller implements acp_categories_interface
 				$cat_name = $index[$cat_id]['cat_name'];
 				$cat_name = str_replace('&nbsp;&nbsp;|___&nbsp;', '', $cat_name);
 
-				$s_hidden_fields = array(
+				$s_hidden_fields = [
 					'cat_id'	=> $cat_id,
 					'action'	=> 'delete_comments',
 					'confirm'	=> 1,
 					'parent'	=> $cat_parent,
 					'type'		=> $idx_type,
-				);
+				];
 
 				$confirm_title = ($cat_id == -1) ? $this->language->lang('DL_CONFIRM_ALL_COMMENTS_DELETE') : $this->language->lang('DL_CONFIRM_CAT_COMMENTS_DELETE', $cat_name);
 
@@ -1020,8 +1025,8 @@ class acp_categories_controller implements acp_categories_interface
 		
 			while($row = $this->db->sql_fetchrow($result))
 			{
-				$sql_move = 'UPDATE ' . DL_CAT_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', array(
-					'sort' => $i)) . ' WHERE id = ' . (int) $row['id'];
+				$sql_move = 'UPDATE ' . DL_CAT_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', [
+					'sort' => $i]) . ' WHERE id = ' . (int) $row['id'];
 				$this->db->sql_query($sql_move);
 		
 				$i += 10;
@@ -1029,7 +1034,7 @@ class acp_categories_controller implements acp_categories_interface
 		
 			$this->db->sql_freeresult($result);
 		
-			$this->phpbb_log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_CAT_MOVE', false, array($log_cat_name));
+			$this->phpbb_log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_CAT_MOVE', false, [$log_cat_name]);
 		
 			// Purge the categories cache
 			unlink(DL_EXT_CACHE_PATH . 'data_dl_cats.' . $this->phpEx);
@@ -1050,8 +1055,8 @@ class acp_categories_controller implements acp_categories_interface
 		
 			while($row = $this->db->sql_fetchrow($result))
 			{
-				$sql_move = 'UPDATE ' . DL_CAT_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', array(
-						'sort' => $i)) . ' WHERE id = ' . (int) $row['id'];
+				$sql_move = 'UPDATE ' . DL_CAT_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', [
+						'sort' => $i]) . ' WHERE id = ' . (int) $row['id'];
 				$this->db->sql_query($sql_move);
 		
 				$i += 10;
@@ -1071,8 +1076,8 @@ class acp_categories_controller implements acp_categories_interface
 		}
 		else 
 		{
-			$stats_cats = array();
-			$comments_cats = array();
+			$stats_cats = [];
+			$comments_cats = [];
 		
 			$sql = 'SELECT cat_id, COUNT(dl_id) AS total_stats FROM ' . DL_STATS_TABLE . '
 				GROUP BY cat_id';
@@ -1172,7 +1177,7 @@ class acp_categories_controller implements acp_categories_interface
 						$comments_total++;
 					}
 		
-					$this->template->assign_block_vars('categories', array(
+					$this->template->assign_block_vars('categories', [
 						'L_DELETE_STATS'		=> $l_delete_stats,
 						'L_DELETE_COMMENTS'		=> $l_delete_comments,
 						'L_SORT_ASC'			=> $l_sort_asc,
@@ -1190,7 +1195,7 @@ class acp_categories_controller implements acp_categories_interface
 						'U_DELETE_STATS'		=> $u_delete_stats,
 						'U_DELETE_COMMENTS'		=> $u_delete_comments,
 						'U_CAT_OPEN'			=> ($cat_sub_count && $idx_type == 'c') ? str_replace('#CAT#', $cat_id, $this->u_action_open) : '',
-					));
+					]);
 				}
 		
 				if ($stats_total)
@@ -1221,11 +1226,11 @@ class acp_categories_controller implements acp_categories_interface
 			$cat_navi = '';
 			if ($cat_parent <> 0)
 			{
-				$tmp_nav = array();
+				$tmp_nav = [];
 				$cat_navi = $this->dlext_nav->nav($cat_parent, 'acp', $tmp_nav, $this->u_action_open);
 			}
 		
-			$this->template->assign_vars(array(
+			$this->template->assign_vars([
 				'L_DELETE_STATS_ALL'	=> $l_delete_stats_all,
 				'L_DELETE_COMMENTS_ALL'	=> $l_delete_comments_all,
 		
@@ -1241,7 +1246,7 @@ class acp_categories_controller implements acp_categories_interface
 				'U_DELETE_COMMENTS_ALL'	=> $u_delete_comments_all,
 				'U_IDX_ACTION'			=> $this->u_action_idx,
 				'U_CAT_NAV'				=> $cat_navi,
-			));
+			]);
 		}
 	}
 }

@@ -140,8 +140,8 @@ class mcp_approve
 					trigger_error('FORM_INVALID');
 				}
 
-				$sql = 'UPDATE ' . DOWNLOADS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', array(
-					'approve' => true)) . ' WHERE ' . $this->db->sql_in_set('id', $dlo_id);
+				$sql = 'UPDATE ' . DOWNLOADS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', [
+					'approve' => true]) . ' WHERE ' . $this->db->sql_in_set('id', $dlo_id);
 				$this->db->sql_query($sql);
 
 				if ($this->config['dl_enable_dl_topic'])
@@ -162,7 +162,7 @@ class mcp_approve
 			$total_approve = $this->db->sql_fetchfield('total');
 			$this->db->sql_freeresult($result);
 
-			$sql = 'SELECT cat, id, description, desc_uid, desc_bitfield, desc_flags FROM ' . DOWNLOADS_TABLE . "
+			$sql = 'SELECT cat, id, description, desc_uid, desc_bitfield, desc_flags, broken FROM ' . DOWNLOADS_TABLE . "
 				WHERE approve = 0
 					$sql_access_cats
 				ORDER BY cat, description";
@@ -182,49 +182,51 @@ class mcp_approve
 				$desc_flags		= $row['desc_flags'];
 				$description	= generate_text_for_display($description, $desc_uid, $desc_bitfield, $desc_flags);
 
-				$file_id = $row['id'];
+				$file_id 	= $row['id'];
+				$broken		= $row['broken'];
 
-				$this->template->assign_block_vars('approve_row', array(
+				$this->template->assign_block_vars('approve_row', [
 					'CAT_NAME'		=> $cat_name,
 					'FILE_ID'		=> $file_id,
 					'DESCRIPTION'	=> $description,
+					'BROKEN'		=> $broken,
 
 					'U_CAT_VIEW'	=> $cat_view,
-					'U_EDIT'		=> $this->helper->route('oxpus_dlext_mcp_edit', array('df_id' => $file_id, 'cat_id' => $cat_id, 'modcp' => 1)),
-					'U_DELETE'		=> $this->helper->route('oxpus_dlext_mcp_manage', array('delete' => 1, 'dlo_id[0]' => $file_id, 'cat_id' => $cat_id, 'modcp' => 99)),
-					'U_DOWNLOAD'	=> $this->helper->route('oxpus_dlext_details', array('df_id' => $file_id, 'dl_id' => $file_id, 'modcp' => 1, 'cat_id' => $cat_id)),
-				));
+					'U_EDIT'		=> $this->helper->route('oxpus_dlext_mcp_edit', ['df_id' => $file_id, 'cat_id' => $cat_id, 'modcp' => 1]),
+					'U_DELETE'		=> $this->helper->route('oxpus_dlext_mcp_manage', ['view' => 'toolbox', 'delete' => 1, 'dlo_id[0]' => $file_id, 'cat_id' => $cat_id, 'modcp' => 99]),
+					'U_DOWNLOAD'	=> $this->helper->route('oxpus_dlext_details', ['df_id' => $file_id, 'cat_id' => $cat_id, 'modcp' => 1]),
+				]);
 			}
 
 			$this->db->sql_freeresult($result);
 
-			$s_hidden_fields = array(
+			$s_hidden_fields = [
 				'cat_id'	=> $cat_id,
 				'start'		=> $start
-			);
+			];
 
 			if ($total_approve > $this->config['dl_links_per_page'])
 			{
 				$pagination = $this->phpbb_container->get('pagination');
 				$pagination->generate_template_pagination(
-					$this->helper->route('oxpus_dlext_mcp_approve', array('cat_id' => $cat_id)),
-					'pagination',
-					'start',
-					$total_approve,
-					$this->config['dl_links_per_page'],
-					$page_start
-				);
+					[
+						'routes' => [
+							'oxpus_dlext_mcp_approve',
+							'oxpus_dlext_mcp_approve',
+						],
+						'params' => ['cat_id' => $cat_id],
+					], 'pagination', 'start', $total_approve, $this->config['dl_links_per_page'], $page_start);
 
-				$this->template->assign_vars(array(
+				$this->template->assign_vars([
 					'PAGE_NUMBER'	=> $pagination->on_page($total_approve, $this->config['dl_links_per_page'], $page_start),
 					'TOTAL_DL'		=> $this->language->lang('VIEW_DOWNLOADS', $total_approve),
-				));
+				]);
 			}
 
-			$this->template->assign_vars(array(
+			$this->template->assign_vars([
 				'S_DL_MODCP_ACTION'	=> $this->helper->route('oxpus_dlext_mcp_approve'),
 				'S_HIDDEN_FIELDS'	=> build_hidden_fields($s_hidden_fields),
-			));
+			]);
 		}
 
 		return $this->helper->render('dl_mcp_approve.html', $this->language->lang('MCP'));

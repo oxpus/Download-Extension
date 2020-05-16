@@ -1,8 +1,14 @@
 {% INCLUDE 'dl_header.html' %}
 
-<h2>{% if S_ADD_DL %}{{ lang('DL_ADD_DOWNLOAD') }}{% else %}{{ lang('DL_EDIT_DOWNLOAD') }}{% endif %}</h2>
+<h2 style="float: left;">{% if S_ADD_DL %}{{ lang('DL_ADD_DOWNLOAD') }}{% else %}{{ lang('DL_EDIT_DOWNLOAD') }}{% endif %}</h2>
 
-<br />
+{% if U_GO_BACK %}
+<fieldset class="submit-buttons dl-right">
+	<a href="{{ U_GO_BACK }}" class="button{% if S_DL_MCP %}2{% else %} icon-button{% endif %} dl-a-button">{{ lang('CANCEL') }}</a>
+</fieldset>
+{% endif %}
+
+<br class="clear" />
 
 <form action="{{ S_DOWNLOADS_ACTION }}" method="post" {{ ENCTYPE }} id="dl_edit">
 
@@ -16,7 +22,7 @@
 
 		<dl>
 			<dt><label class="dl-green">{{ lang('DL_VERSION_ADD_NEW') }}</label></dt>
-			<dd><label><input type="radio" name="file_ver_opt" class="radio" value="0" checked="checked" /></label></dd>
+			<dd><label><input type="radio" name="file_ver_opt" class="radio" value="0" /></label></dd>
 		</dl>
 		<dl>
 			<dt><label class="dl-blue">{{ lang('DL_VERSION_ADD_OLD') }}</label></dt>
@@ -24,7 +30,7 @@
 		</dl>
 		<dl>
 			<dt><label class="dl-yellow">{{ lang('DL_VERSION_REPLACE') }}</label></dt>
-			<dd><input type="radio" name="file_ver_opt" class="radio" value="2" /> &raquo; {{ S_SELECT_VERSION }}<br />
+			<dd><input type="radio" name="file_ver_opt" class="radio" value="2" checked="checked" /> &raquo; {{ S_SELECT_VERSION }}<br />
 				<span class="small">{{ lang('DL_VERSION_REPLACE_EXPLAIN') }}</span></dd>
 		</dl>
 		{% if S_SELECT_VER_DEL %}<br />
@@ -353,8 +359,9 @@
 </fieldset>
 
 <fieldset class="submit-buttons dl-right">
-	<input type="submit" name="submit" value="{{ lang('SUBMIT') }}" class="button{% if S_DL_MCP %}1{% else %} icon-button{% endif %}" />&nbsp;&nbsp;
-	<input type="reset" name="reset" value="{{ lang('RESET') }}" class="button{% if S_DL_MCP %}2{% else %} icon-button{% endif %}" />
+	<input type="submit" name="submit" value="{{ lang('SUBMIT') }}" class="button{% if S_DL_MCP %}1{% else %} icon-button{% endif %}" />
+	&nbsp;&nbsp;<input type="reset" name="reset" value="{{ lang('RESET') }}" class="button{% if S_DL_MCP %}2{% else %} icon-button{% endif %}" />
+	{% if U_GO_BACK %}&nbsp; <a href="{{ U_GO_BACK }}" class="button{% if S_DL_MCP %}2{% else %} icon-button{% endif %} dl-a-button">{{ lang('CANCEL') }}</a>{% endif %}
 </fieldset>
 
 <div class="clear"></div>

@@ -119,7 +119,7 @@ class acp_files_controller implements acp_files_interface
 
 		if (isset($df_id) && $df_id)
 		{
-			$dl_file = array();
+			$dl_file = [];
 			$dl_file = $this->dlext_files->all_files(0, '', 'ASC', '', $df_id, 1, '*');
 			if (isset($dl_file['id']) && !$dl_file['id'])
 			{
@@ -127,7 +127,7 @@ class acp_files_controller implements acp_files_interface
 			}
 		}
 		
-		$index = array();
+		$index = [];
 		$index = $this->dlext_main->full_index($cat_id);
 		
 		if ($cancel)
@@ -140,7 +140,7 @@ class acp_files_controller implements acp_files_interface
 		
 		if($action == 'edit' || $action == 'add')
 		{
-			$s_hidden_fields = array('action' => 'save');
+			$s_hidden_fields = ['action' => 'save'];
 		
 			$cat_id = ($cat_id) ? $cat_id : ((isset($dl_file['cat'])) ? $dl_file['cat'] : 0);
 		
@@ -271,7 +271,7 @@ class acp_files_controller implements acp_files_interface
 		
 				$this->template->assign_var('S_CLICK_RESET', true);
 		
-				$s_hidden_fields = array_merge($s_hidden_fields, array('df_id' => $df_id));
+				$s_hidden_fields += ['df_id' => $df_id];
 			}
 			else
 			{
@@ -378,7 +378,7 @@ class acp_files_controller implements acp_files_interface
 		
 			add_form_key('dl_adm_edit');
 		
-			$this->template->assign_vars(array(
+			$this->template->assign_vars([
 				'L_DL_APPROVE_EXPLAIN'				=> 'DL_APPROVE',
 				'L_DL_CAT_NAME_EXPLAIN'				=> 'DL_CHOOSE_CATEGORY',
 				'L_DL_DESCRIPTION_EXPLAIN'			=> 'DL_FILE_DESCRIPTION',
@@ -443,7 +443,7 @@ class acp_files_controller implements acp_files_interface
 				'S_HIDDEN_FIELDS'		=> build_hidden_fields($s_hidden_fields),
 		
 				'U_BACK'				=> $this->u_action . '&amp;cat_id=' . $cat_id,
-			));
+			]);
 		
 			// Init and display the custom fields with the existing data
 			$cp->get_profile_fields($df_id);
@@ -457,7 +457,7 @@ class acp_files_controller implements acp_files_interface
 			{
 				if (confirm_box(true))
 				{
-					$dl_ids = array();
+					$dl_ids = [];
 		
 					for ($i = 0; $i < sizeof($file_ver_del); $i++)
 					{
@@ -522,17 +522,17 @@ class acp_files_controller implements acp_files_interface
 				{
 					$this->template->assign_var('S_DELETE_FILES_CONFIRM', true);
 		
-					$s_hidden_fields = array(
+					$s_hidden_fields = [
 						'view'			=> 'modcp',
 						'action'		=> 'save',
 						'cat_id'		=> $cat_id,
 						'df_id'			=> $df_id,
 						'file_ver_opt'	=> 3,
-					);
+					];
 		
 					for ($i = 0; $i < sizeof($file_ver_del); $i++)
 					{
-						$s_hidden_fields = array_merge($s_hidden_fields, array('file_ver_del[' . $i . ']' => $file_ver_del[$i]));
+						$s_hidden_fields += ['file_ver_del[' . $i . ']' => $file_ver_del[$i]];
 					}
 		
 					confirm_box(false, 'DL_CONFIRM_DEL_VERSIONS', build_hidden_fields($s_hidden_fields), 'dl_confirm_body.html');
@@ -614,7 +614,7 @@ class acp_files_controller implements acp_files_interface
 				}
 		
 				// validate custom profile fields
-				$error = $cp_data = $cp_error = array();
+				$error = $cp_data = $cp_error = [];
 				$cp->submit_cp_field($this->user->get_iso_lang_id(), $cp_data, $error);
 		
 				// Stop here, if custom fields are invalid!
@@ -625,13 +625,13 @@ class acp_files_controller implements acp_files_interface
 		
 				if ($df_id && !$file_extern)
 				{
-					$dl_file = array();
+					$dl_file = [];
 					$dl_file = $this->dlext_files->all_files(0, 0, 'ASC', 0, $df_id, true, '*');
 		
 					$real_file_old	= (isset($dl_file['real_file'])) ? $dl_file['real_file'] : '';
 					$file_cat_old	= (isset($dl_file['cat'])) ? $dl_file['cat'] : 0;
 		
-					$index_new = array();
+					$index_new = [];
 					$index_new = $this->dlext_main->full_index($file_cat_old);
 		
 					$file_path_old = (isset($index_new[$file_cat_old]['cat_path'])) ? $index_new[$file_cat_old]['cat_path'] : '';
@@ -706,12 +706,12 @@ class acp_files_controller implements acp_files_interface
 							$this->db->sql_freeresult($result);
 						}
 		
-						$sql = 'UPDATE ' . DL_STATS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', array(
-							'cat_id' => $cat_id)) . ' WHERE id = ' . (int) $df_id;
+						$sql = 'UPDATE ' . DL_STATS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', [
+							'cat_id' => $cat_id]) . ' WHERE id = ' . (int) $df_id;
 						$this->db->sql_query($sql);
 		
-						$sql = 'UPDATE ' . DL_COMMENTS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', array(
-							'cat_id' => $cat_id)) . ' WHERE id = ' . (int) $df_id;
+						$sql = 'UPDATE ' . DL_COMMENTS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', [
+							'cat_id' => $cat_id]) . ' WHERE id = ' . (int) $df_id;
 						$this->db->sql_query($sql);
 					}
 				}
@@ -777,7 +777,7 @@ class acp_files_controller implements acp_files_interface
 				{
 					if (!$file_option || $file_option == 1)
 					{
-						$sql = 'INSERT INTO ' . DL_VERSIONS_TABLE . ' ' . $this->db->sql_build_array('INSERT', array(
+						$sql = 'INSERT INTO ' . DL_VERSIONS_TABLE . ' ' . $this->db->sql_build_array('INSERT', [
 							'dl_id'				=> $df_id,
 							'ver_file_name'		=> ($file_option) ? $file_name : $dl_file['file_name'],
 							'ver_real_file'		=> ($file_option) ? $new_real_file : $dl_file['real_file'],
@@ -790,7 +790,7 @@ class acp_files_controller implements acp_files_interface
 							'ver_change_user'	=> ($file_option) ? $this->user->data['user_id'] : $dl_file['change_user'],
 							'ver_active'		=> 0,
 							'ver_text'			=> '',
-						));
+						]);
 		
 						$this->db->sql_query($sql);
 						$new_version = $this->db->sql_nextid();
@@ -806,20 +806,20 @@ class acp_files_controller implements acp_files_interface
 		
 						@unlink(DL_EXT_FILEBASE_PATH. 'downloads/' . $dl_path . $real_old_file);
 		
-						$sql = 'UPDATE ' . DL_VERSIONS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', array(
+						$sql = 'UPDATE ' . DL_VERSIONS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', [
 							'ver_file_name'		=> $file_name,
 							'ver_real_file'		=> $new_real_file,
 							'ver_file_hash'		=> $file_hash,
 							'ver_file_size'		=> $file_size,
 							'ver_change_time'	=> time(),
 							'ver_change_user'	=> $this->user->data['user_id'],
-						)) . ' WHERE dl_id = ' . (int) $df_id . ' AND ver_id = ' . (int) $file_version;
+						]) . ' WHERE dl_id = ' . (int) $df_id . ' AND ver_id = ' . (int) $file_version;
 		
 						$this->db->sql_query($sql);
 					}
 				}
 		
-				$sql_array = array(
+				$sql_array = [
 					'description'			=> $description,
 					'file_traffic'			=> $file_traffic,
 					'long_desc'				=> $long_desc,
@@ -850,42 +850,44 @@ class acp_files_controller implements acp_files_interface
 					'warn_bitfield'			=> $warn_bitfield,
 					'warn_flags'			=> $warn_flags,
 					'approve'				=> $approve,
-				);
+				];
 		
 				if ($df_id && (!$file_option || ($file_option == 2 && !$file_version)))
 				{
-					$sql_array = array_merge($sql_array, array(
+					$sql_array += [
 						'file_name'		=> ($file_name) ? $file_name : $dl_file['file_name'],
 						'real_file'		=> $new_real_file,
 						'file_hash'		=> $file_hash,
 						'file_size'		=> ($file_size) ? $file_size : $dl_file['file_size'],
 						'hack_version'	=> ($hack_version) ? $hack_version : $dl_file['hack_version'],
-					));
+					];
 				}
 				else
 				{
-					$sql_array = array_merge($sql_array, array(
+					$sql_array += [
 						'file_name'		=> ($df_id) ? $dl_file['file_name'] : $file_name,
 						'real_file'		=> ($df_id) ? $dl_file['real_file'] : $new_real_file,
 						'file_hash'		=> ($df_id) ? $dl_file['file_hash'] : $file_hash,
 						'file_size'		=> ($df_id) ? $dl_file['file_size'] : $file_size,
 						'hack_version'	=> ($df_id) ? $dl_file['hack_version'] : $hack_version,
-					));
+					];
 				}
 		
 				if($df_id)
 				{
 					if (!$change_time)
 					{
-						$sql_array = array_merge($sql_array, array(
+						$sql_array += [
 							'change_time' => $current_time,
-							'change_user' => $current_user));
+							'change_user' => $current_user,
+						];
 					}
 		
 					if ($click_reset)
 					{
-						$sql_array = array_merge($sql_array, array(
-							'klicks' => 0));
+						$sql_array += [
+							'klicks' => 0,
+						];
 					}
 		
 					$sql = 'UPDATE ' . DOWNLOADS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', $sql_array) . ' WHERE id = ' . (int) $df_id;
@@ -894,11 +896,12 @@ class acp_files_controller implements acp_files_interface
 				}
 				else
 				{
-					$sql_array = array_merge($sql_array, array(
+					$sql_array += [
 						'change_time'	=> $current_time,
 						'change_user'	=> $current_user,
 						'add_time'		=> $current_time,
-						'add_user'		=> $current_user));
+						'add_user'		=> $current_user,
+					];
 		
 					$sql = 'INSERT INTO ' . DOWNLOADS_TABLE . ' ' . $this->db->sql_build_array('INSERT', $sql_array);
 		
@@ -934,7 +937,7 @@ class acp_files_controller implements acp_files_interface
 						$min_pic_width = 1;
 		
 						$factory = $this->phpbb_container->get('files.factory');
-						$allowed_imagetypes = array('gif','png','jpg','bmp');
+						$allowed_imagetypes = ['gif','png','jpg','bmp'];
 						$upload = $factory->get('upload')
 							->set_allowed_extensions($allowed_imagetypes)
 							->set_max_filesize($this->config['dl_thumb_fsize'])
@@ -992,22 +995,22 @@ class acp_files_controller implements acp_files_interface
 								$error = $thumb_file->move_file($dest_folder, false, false, CHMOD_ALL);
 								$thumb_message = '<br />' . $this->language->lang('DL_THUMB_UPLOAD');
 		
-								$sql = 'UPDATE ' . DOWNLOADS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', array(
-									'thumbnail' => $df_id . '_' . $thumb_name)) . ' WHERE id = ' . (int) $df_id;
+								$sql = 'UPDATE ' . DOWNLOADS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', [
+									'thumbnail' => $df_id . '_' . $thumb_name]) . ' WHERE id = ' . (int) $df_id;
 									$this->db->sql_query($sql);
 							}
 							else
 							{
-								$sql = 'UPDATE ' . DOWNLOADS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', array(
-									'thumbnail' => '')) . ' WHERE id = ' . (int) $df_id;
+								$sql = 'UPDATE ' . DOWNLOADS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', [
+									'thumbnail' => '']) . ' WHERE id = ' . (int) $df_id;
 								$this->db->sql_query($sql);
 							}
 						}
 					}
 					else if ($del_thumb)
 					{
-						$sql = 'UPDATE ' . DOWNLOADS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', array(
-							'thumbnail' => '')) . ' WHERE id = ' . (int) $df_id;
+						$sql = 'UPDATE ' . DOWNLOADS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', [
+							'thumbnail' => '']) . ' WHERE id = ' . (int) $df_id;
 						$this->db->sql_query($sql);
 		
 						@unlink(DL_EXT_FILEBASE_PATH . 'thumbs/' . $dl_file['thumbnail']);
@@ -1038,7 +1041,7 @@ class acp_files_controller implements acp_files_interface
 						WHERE fav_dl_id = ' . (int) $df_id;
 					$result = $this->db->sql_query($sql);
 		
-					$fav_user = array();
+					$fav_user = [];
 					while ($row = $this->db->sql_fetchrow($result))
 					{
 						$fav_user[] = $row['fav_user_id'];
@@ -1054,14 +1057,14 @@ class acp_files_controller implements acp_files_interface
 						WHERE user_allow_fav_download_email = 1
 							AND ' . $this->db->sql_in_set('user_id', explode(',', $processing_user)) . $sql_fav_user;
 		
-					$mail_data = array(
+					$mail_data = [
 						'email_template'	=> $email_template,
 						'query'				=> $sql,
 						'description'		=> $description,
 						'long_desc'			=> $long_desc,
 						'cat_name'			=> $index[$cat_id]['cat_name_nav'],
 						'cat_id'			=> $cat_id,
-					);
+					];
 		
 					$this->dlext_email->send_dl_notify($mail_data);
 				}
@@ -1071,14 +1074,14 @@ class acp_files_controller implements acp_files_interface
 						WHERE user_allow_new_download_email = 1
 							AND ' . $this->db->sql_in_set('user_id', explode(',', $processing_user));
 		
-					$mail_data = array(
+					$mail_data = [
 						'email_template'	=> $email_template,
 						'query'				=> $sql,
 						'description'		=> $description,
 						'long_desc'			=> $long_desc,
 						'cat_name'			=> $index[$cat_id]['cat_name_nav'],
 						'cat_id'			=> $cat_id,
-					);
+					];
 		
 					$this->dlext_email->send_dl_notify($mail_data);
 				}
@@ -1089,13 +1092,13 @@ class acp_files_controller implements acp_files_interface
 		
 					if ($df_id && $sql_fav_user)
 					{
-						$sql = 'UPDATE ' . USERS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', array(
-							'user_new_download' => 1)) . " WHERE user_allow_fav_download_popup = 1 $sql_fav_user AND " . $this->db->sql_in_set('user_id', explode(',', $processing_user));
+						$sql = 'UPDATE ' . USERS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', [
+							'user_new_download' => 1]) . " WHERE user_allow_fav_download_popup = 1 $sql_fav_user AND " . $this->db->sql_in_set('user_id', explode(',', $processing_user));
 					}
 					else if (!$df_id)
 					{
-						$sql = 'UPDATE ' . USERS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', array(
-							'user_new_download' => 1)) . " WHERE user_allow_new_download_popup = 1 $sql_fav_user AND " . $this->db->sql_in_set('user_id', explode(',', $processing_user));
+						$sql = 'UPDATE ' . USERS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', [
+							'user_new_download' => 1]) . " WHERE user_allow_new_download_popup = 1 $sql_fav_user AND " . $this->db->sql_in_set('user_id', explode(',', $processing_user));
 					}
 		
 					if ($sql)
@@ -1105,17 +1108,17 @@ class acp_files_controller implements acp_files_interface
 				}
 		
 				$notification = $this->phpbb_container->get('notification_manager');
-				$notification_data = array('notification_id' => $dl_t_id);
+				$notification_data = ['notification_id' => $dl_t_id];
 				$notification->add_notifications('oxpus.dlext.notification.type.dlext', $notification_data);
 			}
 		
 			if ($df_id)
 			{
-				$this->phpbb_log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_FILE_EDIT', false, array($description));
+				$this->phpbb_log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_FILE_EDIT', false, [$description]);
 			}
 			else
 			{
-				$this->phpbb_log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_FILE_ADD', false, array($description));
+				$this->phpbb_log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_FILE_ADD', false, [$description]);
 			}
 		
 			// Purge the files cache
@@ -1127,7 +1130,7 @@ class acp_files_controller implements acp_files_interface
 		
 			if ($new_version)
 			{
-				$version_url	= $this->helper->route('oxpus_dlext_version', array('ver_id' => $new_version));
+				$version_url	= $this->helper->route('oxpus_dlext_version', ['ver_id' => $new_version]);
 				$ver_message	= '<br /><br />' . $this->language->lang('CLICK_VIEW_NEW_VERSION', '<a href="' . $version_url . '">', '</a>');
 			}
 		
@@ -1143,8 +1146,8 @@ class acp_files_controller implements acp_files_interface
 					WHERE dl_id = ' . (int) $df_id;
 				$result = $this->db->sql_query($sql);
 		
-				$ver_ids = array();
-				$real_ver_file = array();
+				$ver_ids = [];
+				$real_ver_file = [];
 				while ($row = $this->db->sql_fetchrow($result))
 				{
 					$real_ver_file[$row['dl_id']] = $row['ver_real_file'];
@@ -1198,7 +1201,7 @@ class acp_files_controller implements acp_files_interface
 		
 				if ($row['dl_topic'])
 				{
-					$del_t_id = array();
+					$del_t_id = [];
 					$del_t_id[] = $row['dl_topic'];
 					$dl_t_ids[$df_id] = $row['dl_topic'];
 					$this->dlext_topic->delete_topic($del_t_id, $topic_drop_mode, $dl_t_ids);
@@ -1245,7 +1248,7 @@ class acp_files_controller implements acp_files_interface
 					WHERE fav_dl_id = ' . (int) $df_id;
 				$this->db->sql_query($sql);
 		
-				$this->phpbb_log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_DEL_FILE', false, array($dl_desc));
+				$this->phpbb_log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_DEL_FILE', false, [$dl_desc]);
 		
 				// Purge the files cache
 				@unlink(DL_EXT_CACHE_PATH . 'data_dl_cat_counts.' . $this->phpEx);
@@ -1262,11 +1265,11 @@ class acp_files_controller implements acp_files_interface
 				$this->template->assign_var('S_DELETE_FILES_CONFIRM', true);
 				$this->template->assign_var('S_DELETE_TOPIC_CONFIRM', true);
 
-				$s_hidden_fields = array(
+				$s_hidden_fields = [
 					'cat_id'	=> $cat_id,
 					'df_id'		=> $df_id,
 					'action'	=> 'delete',
-				);
+				];
 
 				confirm_box(false, $this->language->lang('DL_CONFIRM_DELETE_SINGLE_FILE', $description), build_hidden_fields($s_hidden_fields), 'dl_confirm_body.html');
 			}
@@ -1282,8 +1285,8 @@ class acp_files_controller implements acp_files_interface
 			$dl_desc = $row['description'];
 			$dl_sort = $row['sort'] - $move;
 		
-			$sql = 'UPDATE ' . DOWNLOADS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', array(
-				'sort' => $dl_sort)) . ' WHERE id = ' . (int) $df_id;
+			$sql = 'UPDATE ' . DOWNLOADS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', [
+				'sort' => $dl_sort]) . ' WHERE id = ' . (int) $df_id;
 			$this->db->sql_query($sql);
 		
 			$sql = 'SELECT id FROM ' . DOWNLOADS_TABLE . '
@@ -1295,8 +1298,8 @@ class acp_files_controller implements acp_files_interface
 		
 			while($row = $this->db->sql_fetchrow($result))
 			{
-				$sql = 'UPDATE ' . DOWNLOADS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', array(
-					'sort' => $i)) . ' WHERE id = ' . (int) $row['id'];
+				$sql = 'UPDATE ' . DOWNLOADS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', [
+					'sort' => $i]) . ' WHERE id = ' . (int) $row['id'];
 				$this->db->sql_query($sql);
 		
 				$i += 10;
@@ -1304,7 +1307,7 @@ class acp_files_controller implements acp_files_interface
 		
 			$this->db->sql_freeresult($result);
 		
-			$this->phpbb_log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_FILE_MOVE', false, array($dl_desc));
+			$this->phpbb_log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_FILE_MOVE', false, [$dl_desc]);
 		
 			$action = '';
 		}
@@ -1325,8 +1328,8 @@ class acp_files_controller implements acp_files_interface
 		
 			while($row = $this->db->sql_fetchrow($result))
 			{
-				$sql = 'UPDATE ' . DOWNLOADS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', array(
-					'sort' => $i)) . ' WHERE id = ' . (int) $row['id'];
+				$sql = 'UPDATE ' . DOWNLOADS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', [
+					'sort' => $i]) . ' WHERE id = ' . (int) $row['id'];
 				$this->db->sql_query($sql);
 		
 				$i += 10;
@@ -1334,7 +1337,7 @@ class acp_files_controller implements acp_files_interface
 		
 			$this->db->sql_freeresult($result);
 		
-			$this->phpbb_log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_FILES_SORT', false, array($cat_name));
+			$this->phpbb_log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_FILES_SORT', false, [$cat_name]);
 		
 			$action = '';
 		}
@@ -1412,7 +1415,7 @@ class acp_files_controller implements acp_files_interface
 				$dl_move_up		= "{$this->u_action}&amp;action=downloads_order&amp;move=15&amp;df_id=$file_id&amp;cat_id=$cat_id";
 				$dl_move_down	= "{$this->u_action}&amp;action=downloads_order&amp;move=-15&amp;df_id=$file_id&amp;cat_id=$cat_id";
 		
-				$this->template->assign_block_vars('downloads', array(
+				$this->template->assign_block_vars('downloads', [
 					'DESCRIPTION'			=> $description,
 					'TEST'					=> $test,
 					'FILE_ID'				=> $file_id,
@@ -1429,8 +1432,8 @@ class acp_files_controller implements acp_files_interface
 					'U_FILE_EDIT'			=> $dl_edit,
 					'U_FILE_DELETE'			=> $dl_delete,
 					'U_DOWNLOAD_MOVE_UP'	=> $dl_move_up,
-					'U_DOWNLOAD_MOVE_DOWN'	=> $dl_move_down)
-				);
+					'U_DOWNLOAD_MOVE_DOWN'	=> $dl_move_down,
+				]);
 			}
 		
 			$categories = '<select name="cat_id" onchange="if(this.options[this.selectedIndex].value != -1){ forms[\'cat_id\'].submit() }">';
@@ -1439,7 +1442,7 @@ class acp_files_controller implements acp_files_interface
 			$categories .= $this->dlext_extra->dl_dropdown(0, 0, $cat_id, 'auth_up');
 			$categories .= '</select>';
 		
-			$this->template->assign_vars(array(
+			$this->template->assign_vars([
 				'DL_FILE_SIZE'			=> $this->language->lang('DL_FILE_SIZE'),
 				'SORT'					=> $this->language->lang('SORT_BY') . ' ' . $this->language->lang('DL_NAME') . ' / ' . $this->language->lang('DL_FILE_NAME'),
 		
@@ -1448,10 +1451,10 @@ class acp_files_controller implements acp_files_interface
 				'DL_COUNT'				=> $total_files . '&nbsp;' . $this->language->lang('DOWNLOADS'),
 		
 				'S_DOWNLOADS_ACTION'	=> $this->u_action,
-				'S_HIDDEN_FIELDS'		=> build_hidden_fields(array('cat_id' => $cat_id)),
+				'S_HIDDEN_FIELDS'		=> build_hidden_fields(['cat_id' => $cat_id]),
 		
-				'U_DOWNLOAD_ORDER_ALL'	=> "{$this->u_action}&amp;action=downloads_order_all&amp;cat_id=$cat_id")
-			);
+				'U_DOWNLOAD_ORDER_ALL'	=> "{$this->u_action}&amp;action=downloads_order_all&amp;cat_id=$cat_id",
+			]);
 		
 			if ($total_files)
 			{

@@ -127,7 +127,7 @@ class acp_stats_controller implements acp_stats_interface
 			}
 			else if (is_array($del_id) && sizeof($del_id))
 			{
-				$dl_id = array();
+				$dl_id = [];
 				foreach($del_id as $key => $value)
 				{
 					$dl_id[] = (int) $value;
@@ -204,8 +204,6 @@ class acp_stats_controller implements acp_stats_interface
 				$search_filter_by = $filter_by = '';
 		}
 		
-		$sql_where = '';
-		
 		$s_filter = '<select name="filtering">';
 		$s_filter .= '<option value="-1">' . $this->language->lang('DL_NO_FILTER') . '</option>';
 		$s_filter .= '<option value="username">' . $this->language->lang('USERNAME') . '</option>';
@@ -214,31 +212,32 @@ class acp_stats_controller implements acp_stats_interface
 		$s_filter .= '</select>';
 		$s_filter = str_replace('value="' . $filtering . '">', 'value="' . $filtering . '" selected="selected">', $s_filter);
 		
-		$this->template->set_filenames(array(
-			'stats' => 'dl_stats_admin_body.html')
-		);
+		$this->template->set_filenames(['stats' => 'dl_stats_admin_body.html']);
 		
+		$sql_where = '';
+
 		if (!$show_guests)
 		{
 			$sql_where = ' s.user_id <> ' . ANONYMOUS;
 		}
 		
-		$sql_array = array(
+		$sql_array = [
 			'SELECT'	=> 's.*, d.description, c.cat_name, u.user_colour',
-		
-			'FROM'		=> array(DL_STATS_TABLE => 's'));
-		
-		$sql_array['LEFT_JOIN'] = array();
-		$sql_array['LEFT_JOIN'][] = array(
-			'FROM'		=> array(DL_CAT_TABLE => 'c'),
-			'ON'		=> 'c.id = s.cat_id');
-		$sql_array['LEFT_JOIN'][] = array(
-			'FROM'		=> array(DOWNLOADS_TABLE => 'd'),
-			'ON'		=> 'd.id = s.id');
-		$sql_array['LEFT_JOIN'][] = array(
-			'FROM'		=> array(USERS_TABLE => 'u'),
-			'ON'		=> 'u.user_id = s.user_id');
-		
+			'FROM'		=> [DL_STATS_TABLE => 's']
+		];
+		$sql_array['LEFT_JOIN'] = [];
+		$sql_array['LEFT_JOIN'][] = [
+			'FROM'		=> [DL_CAT_TABLE => 'c'],
+			'ON'		=> 'c.id = s.cat_id'
+		];
+		$sql_array['LEFT_JOIN'][] = [
+			'FROM'		=> [DOWNLOADS_TABLE => 'd'],
+			'ON'		=> 'd.id = s.id'
+		];
+		$sql_array['LEFT_JOIN'][] = [
+			'FROM'		=> [USERS_TABLE => 'u'],
+			'ON'		=> 'u.user_id = s.user_id'
+		];
 		$sql_array['WHERE'] = $sql_where;
 		
 		$sql = $this->db->sql_build_query('SELECT', $sql_array);
@@ -248,7 +247,7 @@ class acp_stats_controller implements acp_stats_interface
 		
 		if ($total_data)
 		{
-			$search_ids = array();
+			$search_ids = [];
 			$search_result = false;
 		
 			$filter_string = str_replace('*', '', str_replace('%', '', strtolower($filter_string)));
@@ -293,10 +292,10 @@ class acp_stats_controller implements acp_stats_interface
 					$start
 				);
 					
-				$this->template->assign_vars(array(
+				$this->template->assign_vars([
 					'PAGE_NUMBER'	=> $this->pagination->on_page($page_data, $this->config['dl_links_per_page'], $start),
 					'TOTAL_DL'		=> $this->language->lang('VIEW_DL_STATS', $page_data),
-				));
+				]);
 			}
 
 			$sql = $this->db->sql_build_query('SELECT', $sql_array);
@@ -320,7 +319,7 @@ class acp_stats_controller implements acp_stats_interface
 						$direction = $this->language->lang('DL_DOWNLOAD');
 				}
 		
-				$this->template->assign_block_vars('dl_stat_row', array(
+				$this->template->assign_block_vars('dl_stat_row', [
 					'CAT_NAME'			=> $row['cat_name'],
 					'DESCRIPTION'		=> $row['description'],
 					'USERNAME'			=> ($row['user_id'] == ANONYMOUS) ? $this->language->lang('GUEST') : get_username_string('full', $row['user_id'], $row['username'], $row['user_colour']),
@@ -331,9 +330,9 @@ class acp_stats_controller implements acp_stats_interface
 					'TIME_STAMP_RFC'	=> gmdate(DATE_RFC3339, $row['time_stamp']),
 					'ID'				=> $row['dl_id'],
 		
-					'U_CAT_LINK'		=> $this->helper->route('oxpus_dlext_index', array('cat' => $row['cat_id'])),
-					'U_DL_LINK'			=> $this->helper->route('oxpus_dlext_details', array('df_id' => $row['id'])),
-				));
+					'U_CAT_LINK'		=> $this->helper->route('oxpus_dlext_index', ['cat' => $row['cat_id']]),
+					'U_DL_LINK'			=> $this->helper->route('oxpus_dlext_details', ['df_id' => $row['id']]),
+				]);
 		
 				$i++;
 			}
@@ -347,7 +346,7 @@ class acp_stats_controller implements acp_stats_interface
 			$this->template->assign_var('S_NO_DL_STAT_ROW', true);
 		}
 		
-		$this->template->assign_vars(array(
+		$this->template->assign_vars([
 			'TOTAL_DATA'		=> $total_data,
 			'FILTER_STRING'		=> $filter_string,
 		
@@ -355,7 +354,7 @@ class acp_stats_controller implements acp_stats_interface
 			'S_SHOW_GUESTS'		=> ($show_guests) ? 'checked="checked"' : '',
 			'S_FORM_ACTION'		=> $this->u_action,
 			'S_SORT_ORDER'		=> $s_sort_order,
-			'S_SORT_DIR'		=> $s_sort_dir)
-		);
+			'S_SORT_DIR'		=> $s_sort_dir,
+		]);
 	}
 }

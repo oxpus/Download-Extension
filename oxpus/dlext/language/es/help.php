@@ -22,10 +22,10 @@ if (!defined('IN_PHPBB'))
 
 if (empty($lang) || !is_array($lang))
 {
-	$lang = array();
+	$lang = [];
 }
 
-$lang = array_merge($lang, array(
+$lang = array_merge($lang, [
 	'HELP_TITLE' => 'Ayuda Online de la Extensión Descargas',
 
 	'DL_NO_HELP_AVIABLE' => 'No hay ayuda disponible para esta opción',
@@ -186,4 +186,4 @@ $lang = array_merge($lang, array(
 	'HELP_DL_VISUAL_CONFIRMATION'	=> 'Active esta opción para permitir que el usuario introduzca un código de confirmación de 5 dígitos mostrado para acceder a la descarga.<br />Si el usuario no introduce el código, o el código es erróneo, la Extensión mostrará un mensaje y no permitirá la descarga.',
 
 	'HELP_NUMBER_RECENT_DL_ON_PORTAL'	=> 'El número de las últimas descargas que el usuario verá en el portal.<br />El bloque utiliza la última fecha de edición para esta lista, por lo que puede ser posible tener una descarga más antigua en la parte superior de esta lista.',
-));
+]);

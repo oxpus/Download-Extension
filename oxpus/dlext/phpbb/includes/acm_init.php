@@ -39,7 +39,6 @@ $file_assign		= $this->request->variable('file_assign', '');
 $file_command		= $this->request->variable('file_command', '');
 $file_extern_size	= $this->request->variable('file_extern_size', '');
 $file_name			= $this->request->variable('file_name', '', true);
-$files				= $this->request->variable('files', array(''), true);
 $filter_string		= $this->request->variable('filter_string', '');
 $filtering			= $this->request->variable('filtering', '');
 $func				= $this->request->variable('func', '');
@@ -137,22 +136,23 @@ $view_perm			= $this->request->variable('view_perm', 0);
 /*
 * fetch arrays
 */
-$ban_id_ary			= $this->request->variable('ban_id', array(0));
-$data_group_range	= $this->request->variable('data_group_range', array(''));
-$del_id				= $this->request->variable('del_id', array(0));
-$extension_ary		= $this->request->variable('extension', array(''), true);
-$file_ver_del		= $this->request->variable('file_ver_del', array(0));
-$group_traffic_ary	= $this->request->variable('group_dl_auto_traffic', array(0));
-$s_presel_cats		= $this->request->variable('cat_select', array(0));
-$s_presel_groups	= $this->request->variable('group_select', array(0));
-$thumbs				= $this->request->variable('thumb', array(''), true);
+$ban_id_ary			= $this->request->variable('ban_id', [0]);
+$data_group_range	= $this->request->variable('data_group_range', ['']);
+$del_id				= $this->request->variable('del_id', [0]);
+$extension_ary		= $this->request->variable('extension', [''], true);
+$file_ver_del		= $this->request->variable('file_ver_del', [0]);
+$files				= $this->request->variable('files', [''], true);
+$group_traffic_ary	= $this->request->variable('group_dl_auto_traffic', [0]);
+$s_presel_cats		= $this->request->variable('cat_select', [0]);
+$s_presel_groups	= $this->request->variable('group_select', [0]);
+$thumbs				= $this->request->variable('thumb', [''], true);
 
 /*
 * initiate the help system
 */
-$this->template->assign_vars(array(
+$this->template->assign_vars([
 	'ICON_DL_HELP'		=> '<i class="icon fa-info-circle fa-fw"></i>',
 	'DL_MOD_RELEASE'	=> $this->language->lang('DL_MOD_VERSION', $this->config['dl_ext_version']),
 
 	'U_HELP_POPUP'		=> $this->helper->route('oxpus_dlext_help'),
-));
+]);

@@ -60,8 +60,8 @@ class dlext_nav implements dlext_nav_interface
 		$dl_auth	= $this->dlext_auth->dl_auth();
 		$user_admin	= $this->dlext_auth->user_admin();
 
-		$temp_url = $this->helper->route('oxpus_dlext_index', array('cat' => $cat_id));
-		$temp_url_2 = $this->helper->route('oxpus_dlext_index', array('cat' => $cat_id));
+		$temp_url = $this->helper->route('oxpus_dlext_index', ['cat' => $cat_id]);
+		$temp_url_2 = $this->helper->route('oxpus_dlext_index', ['cat' => $cat_id]);
 		$temp_url_3 = str_replace('#CAT#', $dl_index[$cat_id]['parent'], $basic_link);
 		$temp_title = $dl_index[$parent]['cat_name_nav'];
 
@@ -97,7 +97,7 @@ class dlext_nav implements dlext_nav_interface
 
 		if ($disp_art != 'url')
 		{
-			$tmp_navi_ary = array();
+			$tmp_navi_ary = [];
 			for ($i = sizeof($path_dl_array); $i >= 0; --$i)
 			{
 				if (isset($path_dl_array[$i]))

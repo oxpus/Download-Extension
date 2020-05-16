@@ -118,7 +118,7 @@ class acp_toolbox_controller implements acp_toolbox_interface
 		
 		if (sizeof($files) && $file_assign)
 		{
-			$file_names = $file_path = array();
+			$file_names = $file_path = [];
 		
 			for ($i = 0; $i < sizeof($files); $i++)
 			{
@@ -142,7 +142,7 @@ class acp_toolbox_controller implements acp_toolbox_interface
 
 					@unlink(DL_EXT_CACHE_PATH . 'data_dl_file_p.' . $this->phpEx);
 					
-					$this->phpbb_log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_FILE_DROP', false, array($files_name[$i]));
+					$this->phpbb_log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_FILE_DROP', false, [$files_name[$i]]);
 				}
 			}
 			else
@@ -163,13 +163,13 @@ class acp_toolbox_controller implements acp_toolbox_interface
 						@unlink($dl_dir . $files_path[$i] . '/' . $files_name[$i]);
 					}
 		
-					$sql = 'UPDATE ' . DOWNLOADS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', array(
-						'cat' => $file_assign)) . ' WHERE ' . $this->db->sql_in_set('cat', $index, true) . " AND real_file = '" . $this->db->sql_escape($files_name[$i]) . "'";
+					$sql = 'UPDATE ' . DOWNLOADS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', [
+						'cat' => $file_assign]) . ' WHERE ' . $this->db->sql_in_set('cat', $index, true) . " AND real_file = '" . $this->db->sql_escape($files_name[$i]) . "'";
 					$this->db->sql_query($sql);
 
 					@unlink(DL_EXT_CACHE_PATH . 'data_dl_file_p.' . $this->phpEx);
 					
-					$this->phpbb_log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_FILE_ADD', false, array($files_name[$i]));
+					$this->phpbb_log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_FILE_ADD', false, [$files_name[$i]]);
 				}
 			}
 		
@@ -178,7 +178,7 @@ class acp_toolbox_controller implements acp_toolbox_interface
 		
 		if (isset($index) && sizeof($index))
 		{
-			$unas_files = $files_temp = array();
+			$unas_files = $files_temp = [];
 		
 			$sql = 'SELECT description, real_file FROM ' . DOWNLOADS_TABLE . '
 				WHERE ' . $this->db->sql_in_set('cat', $index, true);
@@ -241,8 +241,8 @@ class acp_toolbox_controller implements acp_toolbox_interface
 				}
 				else if ($check_file_size <> $file_size)
 				{
-					$sql_new = 'UPDATE ' . DOWNLOADS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', array(
-							'file_size' => $check_file_size)) . ' WHERE id = ' . (int) $file_id;
+					$sql_new = 'UPDATE ' . DOWNLOADS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', [
+							'file_size' => $check_file_size]) . ' WHERE id = ' . (int) $file_id;
 					$result_new = $this->db->sql_query($sql_new);
 
 					@unlink(DL_EXT_CACHE_PATH . 'data_dl_file_p.' . $this->phpEx);
@@ -290,8 +290,8 @@ class acp_toolbox_controller implements acp_toolbox_interface
 				$this->phpbb_log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_THUMBS_DEL');
 			}
 		
-			$real_thumbnails['file_name'] = array();
-			$real_thumbnails['file_size'] = array();
+			$real_thumbnails['file_name'] = [];
+			$real_thumbnails['file_size'] = [];
 		
 			@$dir = opendir(DL_EXT_FILEBASE_PATH . 'thumbs/');
 		
@@ -306,7 +306,7 @@ class acp_toolbox_controller implements acp_toolbox_interface
 		
 			@closedir($dir);
 		
-			$dl_thumbs = array();
+			$dl_thumbs = [];
 		
 			$sql = 'SELECT thumbnail FROM ' . DOWNLOADS_TABLE . "
 				WHERE thumbnail <> ''";
@@ -325,18 +325,18 @@ class acp_toolbox_controller implements acp_toolbox_interface
 			{
 				$this->tpl_name = 'acp_dl_thumbs';
 
-				$this->template->assign_vars(array(
+				$this->template->assign_vars([
 					'S_MANAGE_ACTION'	=> "{$this->u_action}&amp;action=check_thumbnails",
 		
 					'U_BACK'			=> ($action == 'check_thumbnails') ? $this->u_action : '',
-				));
+				]);
 		
 				$j = -1;
 		
 				for ($i = 0; $i < sizeof($real_thumbnails['file_name']); $i++)
 				{
 					$real_file = $real_thumbnails['file_name'][$i];
-					if (!in_array($real_file, $dl_thumbs))
+					if (!in_array ($real_file, $dl_thumbs))
 					{
 						$j++;
 						$checkbox = '<input type="checkbox" class="permissions-checkbox" name="thumb[' . $j . ']" value="' . base64_encode($real_file) . '" />';
@@ -346,13 +346,13 @@ class acp_toolbox_controller implements acp_toolbox_interface
 						$checkbox = '';
 					}
 		
-					$this->template->assign_block_vars('thumbnails', array(
+					$this->template->assign_block_vars('thumbnails', [
 						'CHECKBOX'		=> $checkbox,
 						'REAL_FILE'		=> $real_file,
 						'FILE_SIZE'		=> $this->dlext_format->dl_size($real_thumbnails['file_size'][$i]),
 		
 						'U_REAL_FILE'	=> DL_EXT_FILEBASE_PATH . 'thumbs/' . $real_file,
-					));
+					]);
 				}
 			}
 			else
@@ -372,7 +372,7 @@ class acp_toolbox_controller implements acp_toolbox_interface
 				{
 					@unlink(DL_EXT_FILEBASE_PATH. 'downloads/' . $path . $files[$i]);
 		
-					$this->phpbb_log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_FILE_DROP', false, array($files[$i]));
+					$this->phpbb_log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_FILE_DROP', false, [$files[$i]]);
 				}
 			}
 			else
@@ -382,7 +382,7 @@ class acp_toolbox_controller implements acp_toolbox_interface
 					@copy(DL_EXT_FILEBASE_PATH. 'downloads/' . $path . $files[$i], $file_command . $files[$i]);
 					@unlink(DL_EXT_FILEBASE_PATH. 'downloads/' . $path . $files[$i]);
 		
-					$this->phpbb_log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_FILE_MOVE', false, array($files[$i]));
+					$this->phpbb_log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_FILE_MOVE', false, [$files[$i]]);
 				}
 			}
 		
@@ -392,13 +392,13 @@ class acp_toolbox_controller implements acp_toolbox_interface
 		
 		if ($dir_name && $dircreate)
 		{
-			$upas = array('�' => 'ae', '�' => 'ue', '�' => 'oe', '�' => 'Ae', '�' => 'Ue', '�' => 'Oe', '�' => 'ss');
-			$upass = array(' ' => '', '+' => '', '%' => '');
+			$upas = ['�' => 'ae', '�' => 'ue', '�' => 'oe', '�' => 'Ae', '�' => 'Ue', '�' => 'Oe', '�' => 'ss'];
+			$upass = [' ' => '', '+' => '', '%' => ''];
 			$dir_name = strtr(urlencode(strtr(utf8_decode($dir_name), $upas)), $upass);
 		
 			$this->dlext_physical->_create_folder(DL_EXT_FILEBASE_PATH. 'downloads/' . $path . '/' . $dir_name);
 		
-			$this->phpbb_log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_FOLDER_CREATE', false, array($path . '/' . $dir_name));
+			$this->phpbb_log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_FOLDER_CREATE', false, [$path . '/' . $dir_name]);
 		}
 		
 		if ($action == 'dirdelete')
@@ -423,7 +423,7 @@ class acp_toolbox_controller implements acp_toolbox_interface
 			{
 				$this->dlext_physical->_drop_dl_basis(DL_EXT_FILEBASE_PATH. 'downloads/' . $path);
 		
-				$this->phpbb_log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_FOLDER_DROP', false, array($path));
+				$this->phpbb_log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_FOLDER_DROP', false, [$path]);
 			}
 		
 			$action = '';
@@ -436,13 +436,13 @@ class acp_toolbox_controller implements acp_toolbox_interface
 			if ($action != 'unassigned')
 			{
 				$temp_url = '';
-				$temp_dir = array();
+				$temp_dir = [];
 		
 				$dl_navi = '<a href="' . $this->u_action . '&amp;action=browse">' . DL_EXT_FILEBASE_PATH. 'downloads/' . '</a>';
 		
-				$dirs = $dirs_delete = $files = $filen = $sizes = $exist = array();
+				$dirs = $dirs_delete = $files = $filen = $sizes = $exist = [];
 		
-				$existing_files = array();
+				$existing_files = [];
 				$existing_files = $this->dlext_physical->read_exist_files();
 		
 				if ($path)
@@ -460,7 +460,7 @@ class acp_toolbox_controller implements acp_toolbox_interface
 						}
 					}
 		
-					$real_file_array = array();
+					$real_file_array = [];
 		
 					$sql = 'SELECT d.file_name, d.real_file FROM ' . DOWNLOADS_TABLE . ' d, ' . DL_CAT_TABLE . " c
 						WHERE d.cat = c.id
@@ -543,15 +543,15 @@ class acp_toolbox_controller implements acp_toolbox_interface
 				$dl_navi = $this->language->lang('DL_UNASSIGNED_FILES');
 			}
 		
-			$this->template->assign_vars(array(
+			$this->template->assign_vars([
 				'DL_NAVI'					=> $dl_navi,
 		
 				'S_MANAGE_ACTION'			=> "{$this->u_action}&amp;path=$path",
 		
 				'U_UNASSIGNED_FILES'		=> "{$this->u_action}&amp;action=unassigned",
 				'U_DOWNLOADS_CHECK_FILES'	=> "{$this->u_action}&amp;action=check_file_sizes",
-				'U_DOWNLOADS_CHECK_THUMB'	=> "{$this->u_action}&amp;action=check_thumbnails")
-			);
+				'U_DOWNLOADS_CHECK_THUMB'	=> "{$this->u_action}&amp;action=check_thumbnails",
+			]);
 		
 			$existing_thumbs = 0;
 			@$dir = opendir(DL_EXT_FILEBASE_PATH . 'thumbs/');
@@ -588,10 +588,10 @@ class acp_toolbox_controller implements acp_toolbox_interface
 				foreach($dirs as $i => $value)
 				{
 					$dir_ary = explode('|~|', $value);
-					$this->template->assign_block_vars('dirs_row', array(
+					$this->template->assign_block_vars('dirs_row', [
 						'DIR_LINK' => $dir_ary[1],
-						'DIR_DELETE_LINK' => $dirs_delete[$i])
-					);
+						'DIR_DELETE_LINK' => $dirs_delete[$i],
+					]);
 				}
 			}
 		
@@ -611,13 +611,14 @@ class acp_toolbox_controller implements acp_toolbox_interface
 		
 					if ($action != 'unassigned')
 					{
-						$this->template->assign_block_vars('files_row', array(
+						$this->template->assign_block_vars('files_row', [
 							'FILE_NAME' => $files_ary[1],
 							'FILE_SIZE' => $file_size_out,
 							'FILE_SIZE_RANGE' => $file_size_range,
 							'FILE_EXIST' => (!$exist[$i]) ? '<input type="checkbox" class="permissions-checkbox" name="files[]" value="' . $filen[$i] . '" />' : '<input type="checkbox" class="permissions-checkbox" value="" disabled="disabled" />',
 							'S_UNKNOWN_FILE' => (!$exist[$i]) ? true : false,
-						));
+						]);
+
 						if (!$exist[$i])
 						{
 							$missing_count++;
@@ -625,19 +626,21 @@ class acp_toolbox_controller implements acp_toolbox_interface
 					}
 					else
 					{
-						$this->template->assign_block_vars('files_row', array(
+						$this->template->assign_block_vars('files_row', [
 							'FILE_NAME' => $unas_files[substr($files_ary[1], strrpos($files_ary[1], '/') + 1)],
 							'FILE_NAME_REAL' => $files_ary[1],
 							'FILE_SIZE' => $file_size_out,
 							'FILE_SIZE_RANGE' => $file_size_range,
-							'FILE_EXIST' => '<input type="checkbox" class="permissions-checkbox" name="files[]" value="' . $files_data[$i] . '" />')
-						);
+							'FILE_EXIST' => '<input type="checkbox" class="permissions-checkbox" name="files[]" value="' . $files_data[$i] . '" />',
+						]);
+
 						$missing_count++;
 					}
+
 					$overall_size += $file_size;
 				}
 		
-				$overall_size_tmp = array();
+				$overall_size_tmp = [];
 				$overall_size_tmp = $this->dlext_format->dl_size($overall_size, 2, 'no');
 				$overall_size_out = $overall_size_tmp['size_out'];
 				$file_size_range = $overall_size_tmp['range'];
@@ -658,16 +661,16 @@ class acp_toolbox_controller implements acp_toolbox_interface
 				}
 				$s_file_action .= '</select>';
 		
-				$this->template->assign_block_vars('overall_size', array(
+				$this->template->assign_block_vars('overall_size', [
 					'OVERALL_SIZE' => $overall_size_out,
-					'OVERALL_SIZE_RANGE' => $file_size_range)
-				);
+					'OVERALL_SIZE_RANGE' => $file_size_range,
+				]);
 		
 				if ($missing_count)
 				{
-					$this->template->assign_block_vars('file_move_delete', array(
-						'S_FILE_ACTION' => $s_file_action)
-					);
+					$this->template->assign_block_vars('file_move_delete', [
+						'S_FILE_ACTION' => $s_file_action,
+					]);
 				}
 			}
 		}

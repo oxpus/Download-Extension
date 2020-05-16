@@ -33,6 +33,7 @@
 						</ul>
 					</div>
 					{% endif %}
+					{% if S_SUB_ON_INDEX %}
 					{% for sub in subcats.sub %}
 					<br />
 					{% for sublevel_row in sub.sublevel_row %}
@@ -43,6 +44,7 @@
 					</div>
 					{% endfor %}
 					{% endfor %}
+					{% endif %}
 				</dt>
 				<dd class="posts">
 					<strong>{{ subcats.CAT_DL }}</strong>
@@ -50,7 +52,7 @@
 				<dd class="lastpost">
 					{% if subcats.CAT_LAST_DL %}
 					<div class="dl-padding-left-1">
-					    <a href="{{ subcats.U_CAT_LAST_LINK }}">{{ subcats.CAT_LAST_DL }}</a><br />
+					    <a href="{{ subcats.U_CAT_LAST_LINK }}">{{ subcats.CAT_LAST_ICON }}{{ subcats.CAT_LAST_DL }}</a><br />
 	                    <a href="{{ subcats.U_CAT_LAST_USER }}">{{ subcats.CAT_LAST_USER }}</a>
 						{% if subcats.CAT_LAST_TIME %}&nbsp;<time datetime="{{ subcats.CAT_LAST_TIME_RFC }}">{{ subcats.CAT_LAST_TIME }}</time>{% endif %}
 					</div>

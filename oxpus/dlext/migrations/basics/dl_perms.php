@@ -19,42 +19,42 @@ class dl_perms extends \phpbb\db\migration\migration
 
 	static public function depends_on()
 	{
-		return array('\oxpus\dlext\migrations\basics\dl_module');
+		return ['\oxpus\dlext\migrations\basics\dl_module'];
 	}
 
 	public function update_data()
 	{
-		return array(
+		return [
 			// The needed permissions
-			array('permission.add', array('a_dl_overview')),
-			array('permission.add', array('a_dl_config')),
-			array('permission.add', array('a_dl_traffic')),
-			array('permission.add', array('a_dl_categories')),
-			array('permission.add', array('a_dl_files')),
-			array('permission.add', array('a_dl_permissions')),
-			array('permission.add', array('a_dl_stats')),
-			array('permission.add', array('a_dl_banlist')),
-			array('permission.add', array('a_dl_blacklist')),
-			array('permission.add', array('a_dl_toolbox')),
-			array('permission.add', array('a_dl_fields')),
-			array('permission.add', array('a_dl_browser')),
+			['permission.add', ['a_dl_overview']],
+			['permission.add', ['a_dl_config']],
+			['permission.add', ['a_dl_traffic']],
+			['permission.add', ['a_dl_categories']],
+			['permission.add', ['a_dl_files']],
+			['permission.add', ['a_dl_permissions']],
+			['permission.add', ['a_dl_stats']],
+			['permission.add', ['a_dl_banlist']],
+			['permission.add', ['a_dl_blacklist']],
+			['permission.add', ['a_dl_toolbox']],
+			['permission.add', ['a_dl_fields']],
+			['permission.add', ['a_dl_browser']],
 
 			// Join permissions to administrators
-			array('permission.permission_set', array('ROLE_ADMIN_FULL', 'a_dl_overview')),
-			array('permission.permission_set', array('ROLE_ADMIN_FULL', 'a_dl_config')),
-			array('permission.permission_set', array('ROLE_ADMIN_FULL', 'a_dl_traffic')),
-			array('permission.permission_set', array('ROLE_ADMIN_FULL', 'a_dl_categories')),
-			array('permission.permission_set', array('ROLE_ADMIN_FULL', 'a_dl_files')),
-			array('permission.permission_set', array('ROLE_ADMIN_FULL', 'a_dl_permissions')),
-			array('permission.permission_set', array('ROLE_ADMIN_FULL', 'a_dl_stats')),
-			array('permission.permission_set', array('ROLE_ADMIN_FULL', 'a_dl_banlist')),
-			array('permission.permission_set', array('ROLE_ADMIN_FULL', 'a_dl_blacklist')),
-			array('permission.permission_set', array('ROLE_ADMIN_FULL', 'a_dl_toolbox')),
-			array('permission.permission_set', array('ROLE_ADMIN_FULL', 'a_dl_fields')),
-			array('permission.permission_set', array('ROLE_ADMIN_FULL', 'a_dl_browser')),
+			['permission.permission_set', ['ROLE_ADMIN_FULL', 'a_dl_overview']],
+			['permission.permission_set', ['ROLE_ADMIN_FULL', 'a_dl_config']],
+			['permission.permission_set', ['ROLE_ADMIN_FULL', 'a_dl_traffic']],
+			['permission.permission_set', ['ROLE_ADMIN_FULL', 'a_dl_categories']],
+			['permission.permission_set', ['ROLE_ADMIN_FULL', 'a_dl_files']],
+			['permission.permission_set', ['ROLE_ADMIN_FULL', 'a_dl_permissions']],
+			['permission.permission_set', ['ROLE_ADMIN_FULL', 'a_dl_stats']],
+			['permission.permission_set', ['ROLE_ADMIN_FULL', 'a_dl_banlist']],
+			['permission.permission_set', ['ROLE_ADMIN_FULL', 'a_dl_blacklist']],
+			['permission.permission_set', ['ROLE_ADMIN_FULL', 'a_dl_toolbox']],
+			['permission.permission_set', ['ROLE_ADMIN_FULL', 'a_dl_fields']],
+			['permission.permission_set', ['ROLE_ADMIN_FULL', 'a_dl_browser']],
 
 			// Set the next config
-			array('config.add', array('dl_use_ext_blacklist', '1')),
-		);
+			['config.add', ['dl_use_ext_blacklist', '1']],
+		];
 	}
 }

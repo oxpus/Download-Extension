@@ -21,18 +21,18 @@ class release_8_0_8 extends \phpbb\db\migration\migration
 
 	static public function depends_on()
 	{
-		return array('\oxpus\dlext\migrations\v800\release_8_0_7');
+		return ['\oxpus\dlext\migrations\v800\release_8_0_7'];
 	}
 
 	public function update_data()
 	{
-		return array(
+		return [
 			// Set the current version
-			array('config.update', array('dl_ext_version', $this->dl_ext_version)),
+			['config.update', ['dl_ext_version', $this->dl_ext_version]],
 
-			array('config.add', array('dl_nav_link_main', 'OHNA')),
-			array('config.add', array('dl_nav_link_hacks', 'OHNA')),
-			array('config.add', array('dl_nav_link_tracker', 'OHNA')),
-		);
+			['config.add', ['dl_nav_link_main', 'OHNA']],
+			['config.add', ['dl_nav_link_hacks', 'OHNA']],
+			['config.add', ['dl_nav_link_tracker', 'OHNA']],
+		];
 	}
 }

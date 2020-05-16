@@ -22,10 +22,10 @@ if (!defined('IN_PHPBB'))
 
 if (empty($lang) || !is_array($lang))
 {
-	$lang = array();
+	$lang = [];
 }
 
-$lang = array_merge($lang, array(
+$lang = array_merge($lang, [
 	'HELP_TITLE' => 'Download Extension Online Help',
 
 	'DL_NO_HELP_AVIABLE' => 'There is no help available for this option',
@@ -186,4 +186,4 @@ $lang = array_merge($lang, array(
 	'HELP_DL_VISUAL_CONFIRMATION'	=> 'Enable this option to let the user enter a displayed 5 digits confirmation code to access the download.<br />If the user will not enter the code or the code will be wrong the Extension will just display a message and stop the download.',
 
 	'HELP_NUMBER_RECENT_DL_ON_PORTAL'	=> 'The number of latest downloads the user which see on the portal.<br />The block uses the last edit time for this list, so it can be possible to have an older download on top of this list.',
-));
+]);

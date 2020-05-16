@@ -19,7 +19,7 @@ if (!defined('IN_PHPBB'))
 
 if (empty($lang) || !is_array($lang))
 {
-	$lang = array();
+	$lang = [];
 }
 
 // DEVELOPERS PLEASE NOTE
@@ -38,7 +38,7 @@ if (empty($lang) || !is_array($lang))
 // ’ « » “ ” …
 //
 
-$lang = array_merge($lang, array(
+$lang = array_merge($lang, [
 	'DL_LOG_CAT_PERM_DROP'	=> '<strong>Réinitialiser les permissions des catégories</strong><br>» %1$s',
 
 	'ACP_DOWNLOADS'		=> 'Téléchargements',
@@ -137,7 +137,7 @@ $lang = array_merge($lang, array(
 	'DL_APPROVE_COMMENTS'				=> 'Valider automatiquement les nouveaux commentaires',
 	'DL_APPROVE_OVERVIEW'				=> 'Il y a %s téléchargements non-validés. Cliquez ici pour les valider.',
 	'DL_APPROVE_OVERVIEW_COMMENTS'		=> 'Il y a %s commentaires non-validés. Cliquez sur le texte pour les vérifier.',
-	'DL_APPROVE_OVERVIEW_ONE'			=> 'Il y a %s téléchargement non-validé. Cliquez ici pour le valider.',
+	'DL_APPROVE_OVERVIEW_ONE'			=> 'Il y a un téléchargement non-validé. Cliquez ici pour le valider.',
 	'DL_APPROVE_OVERVIEW_ONE_COMMENT'	=> 'Il y a un commentaire non-validé. Cliquez sur le texte pour le vérifier.',
 	'DL_ASSIGN'							=> 'Affecter l’auteur',
 	'DL_AUTH_CPOST'						=> 'Écrire un commentaire',
@@ -159,6 +159,8 @@ $lang = array_merge($lang, array(
 	'DL_BROKEN'						=> 'Rapporter un problème de téléchargement',
 	'DL_BROKEN_CUR'					=> 'Ce téléchargement est actuellement rapporté pour un problème',
 	'DL_BROKEN_MOD'					=> 'Réinitialiser le statut des problèmes de téléchargements',
+	'DL_BROKEN_OVERVIEW'			=> 'Il y a %s téléchargements rapporté pour un problème. Cliquez ici pour les valider.',
+	'DL_BROKEN_OVERVIEW_ONE'		=> 'Il y a un téléchargement rapporté pour un problème. Cliquez ici pour le valider.',
 	'DL_BUG_REPORT_ADDED'			=> 'Rapport d’erreurs ajouté avec succès',
 	'DL_BUG_REPORT_ASSIGN'			=> 'assigné',
 	'DL_BUG_REPORT_ASSIGN_DATE'		=> 'assigné à',
@@ -240,6 +242,7 @@ $lang = array_merge($lang, array(
 	'DL_COMMENTS_COUNT'					=> '%s commentaires',
 	'DL_COMMENTS_DELETE'				=> 'Supprimer des commentaires',
 	'DL_COMMENTS_DELETE_ALL'			=> 'Supprimer tous les commentaires',
+	'DL_COMMENTS_PROFILE'				=> 'Commentaires des téléchargement',
 	'DL_CONFIG'							=> 'Configuration des téléchargements',
 	'DL_CONFIG_EXPLAIN'					=> 'Vous pouvez ici activer ou désactiver différentes fonctions de l’outil « Téléchargements » et modifier certains paramètres.',
 	'DL_CONFIG_UPDATED'					=> 'Configuration du téléchargement sauvegardée avec succès',
@@ -296,9 +299,11 @@ $lang = array_merge($lang, array(
 	'DL_EDIT_THUMBS'			=> 'Gestion des miniatures',
 	'DL_EDIT_TIME'				=> 'Nombre de jours qu’un téléchargement modifié doit être marqué',
 	'DL_EMPTY_CATEGORY'			=> 'Cette catégorie ne contient aucun téléchargement',
+	'DL_ENABLE_INDEX_DESC'		=> 'Activer les descriptions de téléchargement dans les catégories',
 	'DL_ENABLE_JUMPBOX'			=> 'Activer le menu « Aller à… » dans le pied de page de l’outil « Téléchargements »',
 	'DL_ENABLE_POST_TRAFFIC'	=> 'Activer l’addition du trafic pour les messages postés',
 	'DL_ENABLE_RATE'			=> 'Activer le système de notation',
+	'DL_ENABLE_SEARCH_DESC'		=> 'Activer les descriptions de téléchargement dans les résultats de la recherche',
 	'DL_ENABLE_TOPIC'			=> 'Créer un sujet pour chaque téléchargement',
 	'DL_EXT_BLACKLIST'			=> 'Liste noire des extensions de fichier',
 	'DL_EXT_BLACKLIST_EXPLAIN'	=> 'Toutes les extensions de fichier saisies ici seront désactivées lors des chargements, avec cet outil.<br>Depuis le Panneau d’administration, ces extensions peuvent être utilisées.<br>Elles ne se réfèrent pas à des téléchargements existants.',
@@ -403,9 +408,13 @@ $lang = array_merge($lang, array(
 	'DL_LATEST_COMMENTS'		=> 'Afficher les X derniers commentaires dans le détail des téléchargements',
 	'DL_LATEST_DOWNLOAD'		=> 'Dernier téléchargement',
 	'DL_LATEST_DOWNLOADS'		=> 'Derniers téléchargements',
+	'DL_LATEST_TYPE_OFF'		=> 'Désactivé',
+	'DL_LATEST_TYPE_DEFAULT'	=> 'Téléchargements nouveaux et mis à jour',
+	'DL_LATEST_TYPE_COMPLETE'	=> 'Tous les téléchargements',
 	'DL_LATEST_UPLOADS'			=> 'Derniers chargements',
 	'DL_LATEST_VERSION'			=> 'Dernière version',
 	'DL_LIMIT_DESC_ON_INDEX'	=> 'Limite de la description des téléchargements sur l’accueil',
+	'DL_LIMIT_DESC_ON_INDEX'	=> 'Limite de la description des téléchargements dans les résultats de recherche',
 	'DL_LINKS_PER_PAGE'			=> 'Nombre de téléchargements par page',
 	'DL_LOCK'					=> 'Verrouiller',
 
@@ -479,6 +488,7 @@ $lang = array_merge($lang, array(
 	'DL_MOD_VERSION_PUBLIC'			=> 'Outil « Téléchargements » © par Hotschi, Demolition Fabi, OXPUS',
 	'DL_MOD_WARNING'				=> 'Attention',
 	'DL_MODCP_APPROVE'				=> 'Valider des téléchargements',
+	'DL_MODCP_BROKEN'				=> 'Rapporté des téléchargements',
 	'DL_MODCP_CAPPROVE'				=> 'Valider des commentaires',
 	'DL_MODCP_EDIT'					=> 'Modifier le téléchargement',
 	'DL_MODCP_MANAGE'				=> 'Gérer les téléchargements',
@@ -739,10 +749,10 @@ $lang = array_merge($lang, array(
 	'DL_UNMARK'					=> 'Tout décocher',
 	'DL_UP'						=> 'jusqu’à',
 	'DL_UP_TO_DATE'				=> '%s est à jour',
-	'DL_UPLOAD'					=> 'Charger un fichier',
+	'DL_UPLOAD'					=> 'Créer un téléchargement',
 	'DL_UPLOAD_ERROR'			=> 'Erreur lors du chargement du fichier. Réessayez s’il vous plait.<br>Contactez l’administrateur si cette erreur persiste.',
 	'DL_UPLOAD_FILE'			=> 'Charger',
-	'DL_UPLOAD_MAX_FILESIZE'	=> 'Taille maximale autorisée du fichier pour les chargements : %s',
+	'DL_UPLOAD_MAX_FILESIZE'	=> 'Taille maximale autorisée du fichier: %s',
 	'DL_UPLOAD_ONE_MORE'		=> '%sCliquez ici pour ajouter un autre téléchargement%s',
 	'DL_UPLOAD_TRAFFIC'			=> 'La taille de fichier des chargements diminuera le trafic global. Attention à la taille du fichier choisie !',
 	'DL_UPLOAD_TRAFFIC_COUNT'	=> 'Également diminuer le trafic global pour les chargements',
@@ -773,6 +783,7 @@ $lang = array_merge($lang, array(
 	'DL_VERSION_REPLACE_EXPLAIN'	=> 'Le téléchargement sera seulement mis à jour, si pas de nouveau fichier n’est chargé.',
 	'DL_VERSIONS'					=> 'Versions',
 	'DL_VIEW_COMMENTS'				=> 'Afficher',
+	'DL_VIEW_DOWNLOADS'				=> 'Voir le téléchargements',
 	'DL_VIEW_LINK'					=> 'Voir le téléchargement',
 	'DL_VIEW_PERM'					=> 'Voir les permissions effectives',
 	'DL_VISUAL_CONFIRMATION'		=> 'Confirmation visuelle pour télécharger un fichier',
@@ -876,4 +887,4 @@ $lang = array_merge($lang, array(
 	%s
 	--------------------',
 
-));
+]);

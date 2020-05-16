@@ -148,17 +148,17 @@ class acp_traffic_controller implements acp_traffic_interface
 						{
 							$user_traffic += $traffic_bytes;
 		
-							$this->phpbb_log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_USER_TR_ADD', false, array($username, $user_traffic, $x));
+							$this->phpbb_log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_USER_TR_ADD', false, [$username, $user_traffic, $x]);
 						}
 						else
 						{
 							$user_traffic = $traffic_bytes;
 		
-							$this->phpbb_log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_USER_TR_SET', false, array($username, $user_traffic, $x));
+							$this->phpbb_log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_USER_TR_SET', false, [$username, $user_traffic, $x]);
 						}
 		
-						$sql = 'UPDATE ' . USERS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', array(
-							'user_traffic' => $user_traffic)) . ' WHERE user_id = ' . (int) $user_id;
+						$sql = 'UPDATE ' . USERS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', [
+							'user_traffic' => $user_traffic]) . ' WHERE user_id = ' . (int) $user_id;
 						$this->db->sql_query($sql);
 		
 						$message = $this->language->lang('DL_USER_AUTO_TRAFFIC_USER') . adm_back_link($this->u_action);
@@ -201,22 +201,22 @@ class acp_traffic_controller implements acp_traffic_interface
 								$user_id = $row['user_id'];
 								$user_traffic = $row['user_traffic'] + $traffic_bytes;
 		
-								$sql = 'UPDATE ' . USERS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', array(
-									'user_traffic' => $user_traffic)) . ' WHERE user_id = ' . (int) $user_id;
+								$sql = 'UPDATE ' . USERS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', [
+									'user_traffic' => $user_traffic]) . ' WHERE user_id = ' . (int) $user_id;
 								$this->db->sql_query($sql);
 							}
 		
 							$this->db->sql_freeresult($result);
 		
-							$this->phpbb_log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_ALL_TR_ADD', false, array($all_traffic, $y));
+							$this->phpbb_log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_ALL_TR_ADD', false, [$all_traffic, $y]);
 						}
 						if ($func == 'set')
 						{
-							$sql = 'UPDATE ' . USERS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', array(
-								'user_traffic' => $traffic_bytes)) . ' WHERE user_id <> ' . ANONYMOUS;
+							$sql = 'UPDATE ' . USERS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', [
+								'user_traffic' => $traffic_bytes]) . ' WHERE user_id <> ' . ANONYMOUS;
 							$this->db->sql_query($sql);
 		
-							$this->phpbb_log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_ALL_TR_SET', false, array($all_traffic, $y));
+							$this->phpbb_log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_ALL_TR_SET', false, [$all_traffic, $y]);
 						}
 		
 						$message = $this->language->lang('DL_USER_AUTO_TRAFFIC_USER') . adm_back_link($this->u_action);
@@ -277,8 +277,8 @@ class acp_traffic_controller implements acp_traffic_interface
 								$user_traffic = $traffic_bytes;
 							}
 		
-							$sql = 'UPDATE ' . USERS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', array(
-								'user_traffic' => $user_traffic)) . ' WHERE user_id = ' . (int) $user_id;
+							$sql = 'UPDATE ' . USERS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', [
+								'user_traffic' => $user_traffic]) . ' WHERE user_id = ' . (int) $user_id;
 							$this->db->sql_query($sql);
 						}
 		
@@ -286,11 +286,11 @@ class acp_traffic_controller implements acp_traffic_interface
 		
 						if ($func == 'add')
 						{
-							$this->phpbb_log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_GRP_TR_ADD', false, array($group_name, $group_traffic, $z));
+							$this->phpbb_log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_GRP_TR_ADD', false, [$group_name, $group_traffic, $z]);
 						}
 						else
 						{
-							$this->phpbb_log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_GRP_TR_SET', false, array($group_name, $group_traffic, $z));
+							$this->phpbb_log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_GRP_TR_SET', false, [$group_name, $group_traffic, $z]);
 						}
 		
 						$message = $this->language->lang('DL_USER_AUTO_TRAFFIC_USER') . adm_back_link($this->u_action);
@@ -332,11 +332,11 @@ class acp_traffic_controller implements acp_traffic_interface
 							$traffic = 0;
 						}
 		
-						$sql = 'UPDATE ' . GROUPS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', array(
-								'group_dl_auto_traffic' => $traffic)) . ' WHERE group_id = ' . (int) $group_id;
+						$sql = 'UPDATE ' . GROUPS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', [
+								'group_dl_auto_traffic' => $traffic]) . ' WHERE group_id = ' . (int) $group_id;
 						$this->db->sql_query($sql);
 		
-						$this->phpbb_log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_AUTO_TR_GRP', false, array($group_name, $group_traffic_ary[$group_id], $data_group_range[$group_id]));
+						$this->phpbb_log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_AUTO_TR_GRP', false, [$group_name, $group_traffic_ary[$group_id], $data_group_range[$group_id]]);
 					}
 		
 					if ($data_user_range == 'B')
@@ -366,7 +366,7 @@ class acp_traffic_controller implements acp_traffic_interface
 
 					$cache->purge('config');
 		
-					$this->phpbb_log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_AUTO_TR_USER', false, array($user_auto_traffic, $data_user_range));
+					$this->phpbb_log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_AUTO_TR_USER', false, [$user_auto_traffic, $data_user_range]);
 		
 					$message = $this->language->lang('DL_USER_AUTO_TRAFFIC_USER') . adm_back_link($this->u_action);
 		
@@ -427,14 +427,14 @@ class acp_traffic_controller implements acp_traffic_interface
 				$group_name = ($row['group_type'] == GROUP_SPECIAL) ? $this->language->lang('G_' . $row['group_name']) : $row['group_name'];
 				$group_sep = ($row['group_type'] == GROUP_SPECIAL) ? ' class="sep"' : '';
 		
-				$this->template->assign_block_vars('group_row',array(
+				$this->template->assign_block_vars('group_row', [
 					'GROUP_ID'				=> $row['group_id'],
 					'GROUP_NAME'			=> $group_name,
 					'GROUP_SPECIAL'			=> ($row['group_type'] == GROUP_SPECIAL) ? true : false,
 					'GROUP_DL_AUTO_TRAFFIC'	=> $group_traffic,
 		
-					'S_GROUP_DATA_RANGE'	=> $s_group_data_range)
-				);
+					'S_GROUP_DATA_RANGE'	=> $s_group_data_range,
+				]);
 		
 				$s_select_list .= '<option value="' . $row['group_id'] . '"' . $group_sep . '>' . $group_name . '</option>';
 			}
@@ -476,7 +476,7 @@ class acp_traffic_controller implements acp_traffic_interface
 		
 		$u_user_select = append_sid($this->dlext_init->root_path() . 'memberlist.' . $this->dlext_init->php_ext(), 'mode=searchuser&amp;form=user_traffic&amp;field=username&amp;select_single=true');
 		
-		$this->template->assign_vars(array(
+		$this->template->assign_vars([
 			'USER_DL_AUTO_TRAFFIC'		=> $user_traffic,
 		
 			'S_GROUP_SELECT'			=> $s_select_list,
@@ -491,18 +491,18 @@ class acp_traffic_controller implements acp_traffic_interface
 			'S_CONFIG_ACTION'			=> $this->u_action . '&amp;action=auto',
 		
 			'U_FIND_USERNAME'			=> $u_user_select,
-		));
+		]);
 		
-		$acl_cat_names = array(
+		$acl_cat_names = [
 			0 => $this->language->lang('DL_ACP_TRAF_AUTO'),
 			1 => $this->language->lang('DL_ACP_TRAF_ALL'),
 			2 => $this->language->lang('DL_ACP_TRAF_USER'),
 			3 => $this->language->lang('DL_ACP_TRAF_GRP'),
-		);
+		];
 		
 		for ($i = 0; $i < sizeof($acl_cat_names); $i++)
 		{
-			$this->template->assign_block_vars('category', array('CAT_NAME' => $acl_cat_names[$i]));
+			$this->template->assign_block_vars('category', ['CAT_NAME' => $acl_cat_names[$i]]);
 		}
 	}
 }

@@ -21,39 +21,39 @@ class release_8_0_3 extends \phpbb\db\migration\migration
 
 	static public function depends_on()
 	{
-		return array('\oxpus\dlext\migrations\v800\release_8_0_2');
+		return ['\oxpus\dlext\migrations\v800\release_8_0_2'];
 	}
 
 	public function update_data()
 	{
-		return array(
+		return [
 			// Set the current version
-			array('config.update', array('dl_ext_version', $this->dl_ext_version)),
+			['config.update', ['dl_ext_version', $this->dl_ext_version]],
 
-			array('module.remove', array(
+			['module.remove', [
 				'acp',
 				'ACP_DOWNLOADS',
-				array(
+				[
 					'module_basename'	=> '\oxpus\dlext\acp\main_module',
-					'modes'				=> array('browser'),
-				),
-			)),
+					'modes'				=> ['browser'],
+				],
+			]],
 
-			array('permission.remove', array('a_dl_browser')),
-			array('permission.permission_unset', array('ROLE_ADMIN_FULL', 'a_dl_browser')),
+			['permission.remove', ['a_dl_browser']],
+			['permission.permission_unset', ['ROLE_ADMIN_FULL', 'a_dl_browser']],
 
-			array('custom', array(array($this, 'remove_deprecated_files'))),
-		);
+			['custom', [[$this, 'remove_deprecated_files']]],
+		];
 	}
 
 	public function update_schema()
 	{
-		return array(
-			'drop_columns'	=> array(
-				$this->table_prefix . 'dl_banlist' => array('user_agent'),
-				$this->table_prefix . 'dl_stats' => array('browser'),
-			),
-		);
+		return [
+			'drop_columns'	=> [
+				$this->table_prefix . 'dl_banlist' => ['user_agent'],
+				$this->table_prefix . 'dl_stats' => ['browser'],
+			],
+		];
 	}
 
 	public function remove_deprecated_files()

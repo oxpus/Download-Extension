@@ -14,8 +14,20 @@ var dlAjaxUrl = '{{ U_DL_AJAX }}';
 
 <br />
 
-<div class="dl-right">&nbsp;<a href="{{ U_DL_SEARCH }}" class="button icon-button">{{ lang('DL_SEARCH_DOWNLOAD') }}</a></div>
-<div class="dl-right">{% if S_DL_UPLOAD %}<a href="{{ DL_UPLOAD }}" class="button icon-button reply-icon">{{ lang('DL_UPLOAD') }}</a>{% endif %}</div>
+<div class="dl-left">{% if S_DL_UPLOAD %}<a href="{{ DL_UPLOAD }}" class="button icon-button reply-icon">{{ lang('DL_UPLOAD') }}</a>{% endif %}</div>
+<div id="search-box" class="search-box dl-right" role="search" style="margin-right: 0.7em;">
+	<form action="{{ U_DL_SEARCH }}" method="post" id="news_search">
+		<fieldset>
+			<input name="search_keywords" id="search_keywords" type="search" maxlength="255" title="{{ lang('DL_SEARCH_DOWNLOAD') }}" class="inputbox search tiny" size="20" value="" placeholder="{{ lang('DL_SEARCH_DOWNLOAD') }}" />
+			<button class="button button-search" type="submit" title="{{ lang('SEARCH') }}">
+				<i class="icon fa-search fa-fw" aria-hidden="true"></i><span class="sr-only">{{ lang('SEARCH') }}</span>
+			</button>
+			<a href="{{ U_DL_SEARCH }}" class="button button-search-end" title="{{ lang('SEARCH_ADV') }}">
+				<i class="icon fa-cog fa-fw" aria-hidden="true"></i><span class="sr-only">{{ lang('SEARCH_ADV') }}</span>
+			</a>
+		</fieldset>
+	</form>
+</div>
 
 <div class="clear"></div>
 
@@ -63,24 +75,34 @@ var dlAjaxUrl = '{{ U_DL_AJAX }}';
 	</ul>
 	<ul class="topiclist forums">
 		{% for downloads in loops.downloads %}
-		<li class="row">
+		<li class="row{% if downloads.BROKEN %} dl-reported{% endif %}">
 			<dl>
-				<dt><div class="list-inner">{{ downloads.STATUS }}&nbsp;<a href="{{ downloads.U_FILE }}" class="forumtitle">{{ downloads.DESCRIPTION }}</a>&nbsp;{{ downloads.HACK_VERSION }}&nbsp;{{ downloads.MINI_IMG }}
-					{% if downloads.U_DIRECT_EDIT %}&nbsp;[ <a href="{{ downloads.U_DIRECT_EDIT }}">{{ lang('DL_EDIT_FILE') }}</a> ]{% endif %}
-					<br />{{ downloads.LONG_DESC }}</div>
+				<dt>
+					<div class="list-inner">{{ downloads.STATUS }}&nbsp;<a href="{{ downloads.U_FILE }}" class="forumtitle">{{ downloads.DESCRIPTION }}</a>
+						&nbsp;{{ downloads.HACK_VERSION }}&nbsp;{{ downloads.MINI_IMG }}
+					<br />{{ downloads.LONG_DESC }}
+					</div>
 				</dt>
 				<dd class="topics">{{ downloads.FILE_SIZE }}</dd>
 				<dd class="posts"><div>{{ downloads.FILE_KLICKS }} &bull; {{ downloads.FILE_OVERALL_KLICKS }}</div></dd>
-				<dd class="lastposts">
-					{% if S_ENABLE_RATE and downloads.RATING_IMG %}<div id="rating_{{ downloads.DF_ID }}">{{ downloads.RATING_IMG }}<br />{{ downloads.RATINGS }}</div>{% endif %}
+				<dd class="lastpost">
     				{% for comments in downloads.comments %}
-                    <br />
-					<div>
-						{% if comments.U_COMMENT %}
-						<a href="{{ comments.U_COMMENT }}"><i class="icon fa-comments fa-fw" aria-hidden="true"></i> {{ lang('DL_COMMENTS') }}</a>
+					{% if downloads.U_DIRECT_EDIT or comments.U_COMMENT %}
+					<ul class="post-buttons">
+						{% if downloads.U_DIRECT_EDIT %}
+						<li>
+							<a href="{{ downloads.U_DIRECT_EDIT }}" title="{{ lang('DL_EDIT_FILE') }}" class="button button-icon-only"><i class="icon fa-pencil fa-fw" aria-hidden="true"></i><span>{{ lang('DL_EDIT_FILE') }}</span></a>&nbsp;
+						</li>
 						{% endif %}
-					</div>
+						{% if comments.U_COMMENT %}
+						<li>
+							<a href="{{ comments.U_COMMENT }}" title="{{ lang('DL_COMMENTS') }}" class="button button-icon-only"><i class="icon fa-comments fa-fw" aria-hidden="true"></i><span>{{ lang('DL_COMMENTS') }}</span></a>&nbsp;
+						</li>
+						{% endif %}
+					</ul>
+					{% endif %}
     				{% endfor %}
+					{% if S_ENABLE_RATE and downloads.RATING_IMG %}<div id="rating_{{ downloads.DF_ID }}">{{ downloads.RATING_IMG }}<br />{{ downloads.RATINGS }}</div>{% endif %}
 				</dd>
 			</dl>
 		</li>
@@ -111,6 +133,10 @@ var dlAjaxUrl = '{{ U_DL_AJAX }}';
 {% endif %}
 
 <br />
+
+<div class="dl-left">{% if S_DL_UPLOAD %}<a href="{{ DL_UPLOAD }}" class="button icon-button reply-icon">{{ lang('DL_UPLOAD') }}</a>{% endif %}</div>
+
+<div class="clear"></div>
 
 {% if S_SORT_OPTIONS %}
 <form action="{{ U_DOWNLOADS }}" method="post">

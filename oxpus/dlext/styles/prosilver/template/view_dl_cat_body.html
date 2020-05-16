@@ -4,7 +4,19 @@
 
 <br />
 
-<div class="dl-right"><a href="{{ U_DL_SEARCH }}" class="button icon-button">{{ lang('DL_SEARCH_DOWNLOAD') }}</a></div>
+<div id="search-box" class="search-box dl-right" role="search" style="margin-right: 0.7em;">
+	<form action="{{ U_DL_SEARCH }}" method="post" id="news_search">
+		<fieldset>
+			<input name="search_keywords" id="search_keywords" type="search" maxlength="255" title="{{ lang('DL_SEARCH_DOWNLOAD') }}" class="inputbox search tiny" size="20" value="" placeholder="{{ lang('DL_SEARCH_DOWNLOAD') }}" />
+			<button class="button button-search" type="submit" title="{{ lang('SEARCH') }}">
+				<i class="icon fa-search fa-fw" aria-hidden="true"></i><span class="sr-only">{{ lang('SEARCH') }}</span>
+			</button>
+			<a href="{{ U_DL_SEARCH }}" class="button button-search-end" title="{{ lang('SEARCH_ADV') }}">
+				<i class="icon fa-cog fa-fw" aria-hidden="true"></i><span class="sr-only">{{ lang('SEARCH_ADV') }}</span>
+			</a>
+		</fieldset>
+	</form>
+</div>
 
 <div class="clear"></div>
 
@@ -71,7 +83,7 @@
 				<dd class="lastpost">
 					{% if downloads.CAT_LAST_DL %}
 					<div class="dl-padding-left-1">
-						<a href="{{ downloads.U_CAT_LAST_LINK }}">{{ downloads.CAT_LAST_DL }}</a><br />
+						<a href="{{ downloads.U_CAT_LAST_LINK }}">{{ downloads.CAT_LAST_ICON }}{{ downloads.CAT_LAST_DL }}</a><br />
 	                    <a href="{{ downloads.U_CAT_LAST_USER }}">{{ downloads.CAT_LAST_USER }}</a>
 						{% if downloads.CAT_LAST_TIME %}&nbsp;<time datetime="{{ downloads.CAT_LAST_TIME_RFC }}">{{ downloads.CAT_LAST_TIME }}</time>{% endif %}
 					</div>

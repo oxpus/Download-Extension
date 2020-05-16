@@ -22,11 +22,11 @@ if (!defined('IN_PHPBB'))
 
 if (empty($lang) || !is_array($lang))
 {
-	$lang = array();
+	$lang = [];
 }
 
 // Download MOD Permissions
-$lang = array_merge($lang, array(
+$lang = array_merge($lang, [
 	'ACP_DOWNLOADS'			=> 'Panel de Descargas',
 
 	'ACL_A_DL_OVERVIEW'		=> 'Puede ver la pantalla de inicio',
@@ -41,4 +41,4 @@ $lang = array_merge($lang, array(
 	'ACL_A_DL_TOOLBOX'		=> 'Puede utilizar la caja de herramientas',
 	'ACL_A_DL_FIELDS'		=> 'Puede gestionar los campos definidos por el usuario',
 	'ACL_A_DL_PERM_CHECK'	=> 'Puede probar los permisos del usuario',
-));
+]);

@@ -111,14 +111,14 @@ class acp_overview_controller implements acp_overview_interface
 		{
 			if (!confirm_box(true))
 			{
-				confirm_box(false, $this->language->lang('DL_ACP_CONFIRM_RESET_CLICKS'), build_hidden_fields(array(
+				confirm_box(false, $this->language->lang('DL_ACP_CONFIRM_RESET_CLICKS'), build_hidden_fields([
 					'mode'			=> $mode,
 					'reset_clicks'	=> true,
-				)));
+				]));
 			}
 			else
 			{
-				$sql = 'UPDATE ' . DOWNLOADS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', array('klicks' => 0));
+				$sql = 'UPDATE ' . DOWNLOADS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', ['klicks' => 0]);
 				$this->db->sql_query($sql);
 
 				@unlink(DL_EXT_CACHE_PATH . 'data_dl_file_p.' . $this->phpEx);
@@ -138,10 +138,10 @@ class acp_overview_controller implements acp_overview_interface
 			}
 			else
 			{
-				confirm_box(false, $this->language->lang('DL_ACP_CONFIRM_RESET_STATS'), build_hidden_fields(array(
+				confirm_box(false, $this->language->lang('DL_ACP_CONFIRM_RESET_STATS'), build_hidden_fields([
 					'mode'			=> $mode,
 					'reset_stats'	=> true,
-				)));
+				]));
 			}
 		}
 
@@ -165,10 +165,10 @@ class acp_overview_controller implements acp_overview_interface
 			}
 			else
 			{
-				confirm_box(false, $this->language->lang('DL_ACP_CONFIRM_RESET_CACHE'), build_hidden_fields(array(
+				confirm_box(false, $this->language->lang('DL_ACP_CONFIRM_RESET_CACHE'), build_hidden_fields([
 					'mode'			=> $mode,
 					'reset_cache'	=> true,
-				)));
+				]));
 			}
 		}
 
@@ -181,10 +181,10 @@ class acp_overview_controller implements acp_overview_interface
 			}
 			else
 			{
-				confirm_box(false, $this->language->lang('DL_ACP_CONFIRM_PRIVACY'), build_hidden_fields(array(
+				confirm_box(false, $this->language->lang('DL_ACP_CONFIRM_PRIVACY'), build_hidden_fields([
 					'mode'			=> $mode,
 					'dl_privacy'	=> true,
-				)));
+				]));
 			}
 		}
 
@@ -228,7 +228,7 @@ class acp_overview_controller implements acp_overview_interface
 		$todos	= (int) $row['todos'];
 		$broken	= (int) $row['broken'];
 
-		$index = array();
+		$index = [];
 		$index = $this->dlext_main->full_index();
 
 		$cats = 0;
@@ -256,7 +256,7 @@ class acp_overview_controller implements acp_overview_interface
 		$this->db->sql_freeresult($result);
 		$total_versions	= $row['versions'];
 
-		$this->template->assign_vars(array(
+		$this->template->assign_vars([
 			'DL_MOD_VERSION_SIMPLE'	=> $this->config['dl_ext_version'],
 			'TOTAL_NUM'				=> $total_dl,
 			'TOTAL_SIZE'			=> $total_size,
@@ -278,8 +278,9 @@ class acp_overview_controller implements acp_overview_interface
 			'TOTAL_VERSION_TSIZE'	=> $total_vtsize,
 
 			'S_DL_TRAFFIC_OFF'		=> $this->config['dl_traffic_off'],
+			'S_ACP_MAIN_TYPE'		=> substr($this->config['version'], 0, 3),
 
 			'U_ACTION'				=> $this->u_action,
-		));
+		]);
 	}
 }

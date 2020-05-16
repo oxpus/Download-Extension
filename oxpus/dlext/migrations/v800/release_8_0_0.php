@@ -21,7 +21,7 @@ class release_8_0_0 extends \phpbb\db\migration\migration
 
 	static public function depends_on()
 	{
-		return array('\oxpus\dlext\migrations\v800\prepare_8_0_0');
+		return ['\oxpus\dlext\migrations\v800\prepare_8_0_0'];
 	}
 
 	public function update_data()
@@ -32,121 +32,121 @@ class release_8_0_0 extends \phpbb\db\migration\migration
 
 		if (@file_exists($ext_path . 'mcp\mcp_info.' . $phpEx))
 		{
-			return array(
+			return [
 				// Set the current version
-				array('config.update', array('dl_ext_version', $this->dl_ext_version)),
+				['config.update', ['dl_ext_version', $this->dl_ext_version]],
 
-				array('config.remove', array('dl_uconf_link_onoff')),
+				['config.remove', ['dl_uconf_link_onoff']],
 
-				array('module.remove', array(
+				['module.remove', [
 					'ucp',
 					'DOWNLOADS',
-					array(
+					[
 						'module_basename'   => '\oxpus\dlext\ucp\main_module',
 						'module_langname'   => 'DL_CONFIG',
 						'module_mode'       => 'config',
 						'module_auth'       => 'ext_oxpus/dlext',
-					),
-				)),
-				array('module.remove', array(
+					],
+				]],
+				['module.remove', [
 					'ucp',
 					'DOWNLOADS',
-					array(
+					[
 						'module_basename'   => '\oxpus\dlext\ucp\main_module',
 						'module_langname'   => 'DL_PRIVACY',
 						'module_mode'       => 'dl_privacy',
 						'module_auth'       => 'ext_oxpus/dlext',
-					),
-				)),
-				array('module.remove', array(
+					],
+				]],
+				['module.remove', [
 					'ucp',
 					'DOWNLOADS',
-					array(
+					[
 						'module_basename'   => '\oxpus\dlext\ucp\main_module',
 						'module_langname'   => 'DL_FAVORITE',
 						'module_mode'       => 'favorite',
 						'module_auth'       => 'ext_oxpus/dlext',
-					),
-				)),
-				array('module.add', array(
+					],
+				]],
+				['module.add', [
 					'ucp',
 					'DOWNLOADS',
-					array(
+					[
 						'module_basename'	=> '\oxpus\dlext\ucp\main_module',
-						'modes'				=> array('ucp_config','ucp_privacy','ucp_favorite'),
-					),
-				)),
-				array('module.add', array(
+						'modes'				=> ['ucp_config','ucp_privacy','ucp_favorite'],
+					],
+				]],
+				['module.add', [
 					'mcp',
 					0,
 					'MCP_DOWNLOADS'
-				)),
-				array('module.add', array(
+				]],
+				['module.add', [
 					'mcp',
 					'MCP_DOWNLOADS',
-					array(
+					[
 						'module_basename'	=> '\oxpus\dlext\mcp\main_module',
-						'modes'				=> array('mcp_manage','mcp_edit','mcp_approve','mcp_capprove'),
-					),
-				)),
-			);
+						'modes'				=> ['mcp_manage','mcp_edit','mcp_approve','mcp_capprove'],
+					],
+				]],
+			];
 		}
 		else
 		{
-			return array(
+			return [
 				// Set the current version
-				array('config.update', array('dl_ext_version', $this->dl_ext_version)),
+				['config.update', ['dl_ext_version', $this->dl_ext_version]],
 
-				array('config.remove', array('dl_uconf_link_onoff')),
+				['config.remove', ['dl_uconf_link_onoff']],
 
-				array('module.remove', array(
+				['module.remove', [
 					'ucp',
 					'DOWNLOADS',
-					array(
+					[
 						'module_basename'   => '\oxpus\dlext\ucp\main_module',
 						'module_langname'   => 'DL_CONFIG',
 						'module_mode'       => 'config',
 						'module_auth'       => 'ext_oxpus/dlext',
-					),
-				)),
-				array('module.remove', array(
+					],
+				]],
+				['module.remove', [
 					'ucp',
 					'DOWNLOADS',
-					array(
+					[
 						'module_basename'   => '\oxpus\dlext\ucp\main_module',
 						'module_langname'   => 'DL_PRIVACY',
 						'module_mode'       => 'dl_privacy',
 						'module_auth'       => 'ext_oxpus/dlext',
-					),
-				)),
-				array('module.remove', array(
+					],
+				]],
+				['module.remove', [
 					'ucp',
 					'DOWNLOADS',
-					array(
+					[
 						'module_basename'   => '\oxpus\dlext\ucp\main_module',
 						'module_langname'   => 'DL_FAVORITE',
 						'module_mode'       => 'favorite',
 						'module_auth'       => 'ext_oxpus/dlext',
-					),
-				)),
-				array('module.add', array(
+					],
+				]],
+				['module.add', [
 					'ucp',
 					'DOWNLOADS',
-					array(
+					[
 						'module_basename'	=> '\oxpus\dlext\ucp\main_module',
-						'modes'				=> array('ucp_config','ucp_privacy','ucp_favorite'),
-					),
-				)),
-			);
+						'modes'				=> ['ucp_config','ucp_privacy','ucp_favorite'],
+					],
+				]],
+			];
 		}
 	}
 
 	public function update_schema()
 	{
-		return array(
-			'drop_tables' => array(
+		return [
+			'drop_tables' => [
 				$this->table_prefix . 'dl_rem_traf',
-			),
-		);
+			],
+		];
 	}
 }

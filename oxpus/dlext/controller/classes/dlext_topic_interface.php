@@ -35,7 +35,7 @@ interface dlext_topic_interface
 	 * @return void
 	 * @access public
 	*/
-	public function delete_topic($topic_ids, $topic_drop_mode = 'drop', $dl_ids = array());
+	public function delete_topic($topic_ids, $topic_drop_mode = 'drop', $dl_ids = []);
 
 	/**
 	 * Update existing topic for updated download

@@ -22,7 +22,7 @@
 				<dl>
 					<dt>
 						<strong>{{ searchresults.STATUS }}</strong> <a href="{{ searchresults.U_FILE_LINK }}" class="topictitle">{{ searchresults.DESCRIPTION }}</a> {{ searchresults.MINI_ICON }}</dt>
-						<div class="postbody"><div class="notice">{{ searchresults.LONG_DESC }}</div></div>
+						{% if searchresults.LONG_DESC %} <div class="postbody"><div class="notice">{{ searchresults.LONG_DESC }}</div></div>{% endif %}
 					</dt>
 					<dd class="lastpost">
 						<div><strong>{{ lang('DL_CAT_NAME') }}{{ lang('COLON') }} </strong><a href="{{ searchresults.U_CAT_LINK }}">{{ searchresults.CAT_NAME }}</a></div>

@@ -17,51 +17,51 @@ class main_info
 {
 	function module()
 	{
-		return array(
+		return [
 			'filename'	=> '\oxpus\dlext\acp\main_module',
 			'title'		=> 'ACP_DOWNLOADS',
-			'modes'		=> array(
-				'overview'		=> array(
-					'title' => 'DL_ACP_OVERVIEW',				'auth' => 'ext_oxpus/dlext && acl_a_dl_overview',		'cat' => array('ACP_DOWNLOADS')
-				),
-				'config'		=> array(
-					'title' => 'DL_ACP_CONFIG_MANAGEMENT',		'auth' => 'ext_oxpus/dlext && acl_a_dl_config',			'cat' => array('ACP_DOWNLOADS')
-				),
-				'traffic'		=> array(
-					'title' => 'DL_ACP_TRAFFIC_MANAGEMENT',		'auth' => 'ext_oxpus/dlext && acl_a_dl_traffic',		'cat' => array('ACP_DOWNLOADS')
-				),
-				'categories'	=> array(
-					'title' => 'DL_ACP_CATEGORIES_MANAGEMENT',	'auth' => 'ext_oxpus/dlext && acl_a_dl_categories',		'cat' => array('ACP_DOWNLOADS')
-				),
-				'files'			=> array(
-					'title' => 'DL_ACP_FILES_MANAGEMENT',		'auth' => 'ext_oxpus/dlext && acl_a_dl_files',			'cat' => array('ACP_DOWNLOADS')
-				),
-				'permissions'	=> array(
-					'title' => 'DL_ACP_PERMISSIONS',			'auth' => 'ext_oxpus/dlext && acl_a_dl_permissions',	'cat' => array('ACP_DOWNLOADS')
-				),
-				'stats'			=> array(
-					'title' => 'DL_ACP_STATS_MANAGEMENT',		'auth' => 'ext_oxpus/dlext && acl_a_dl_stats',			'cat' => array('ACP_DOWNLOADS')
-				),
-				'banlist'		=> array(
-					'title' => 'DL_ACP_BANLIST',				'auth' => 'ext_oxpus/dlext && acl_a_dl_banlist',		'cat' => array('ACP_DOWNLOADS')
-				),
-				'ext_blacklist'	=> array(
-					'title' => 'DL_EXT_BLACKLIST',				'auth' => 'ext_oxpus/dlext && acl_a_dl_blacklist',		'cat' => array('ACP_DOWNLOADS')
-				),
-				'toolbox'		=> array(
-					'title' => 'DL_MANAGE',						'auth' => 'ext_oxpus/dlext && acl_a_dl_toolbox',		'cat' => array('ACP_DOWNLOADS')
-				),
-				'fields'		=> array(
-					'title' => 'DL_ACP_FIELDS',					'auth' => 'ext_oxpus/dlext && acl_a_dl_fields',			'cat' => array('ACP_DOWNLOADS')
-				),
-				'browser'		=> array(
-					'title' => 'DL_ACP_BROWSER',				'auth' => 'ext_oxpus/dlext && acl_a_dl_browser',		'cat' => array('ACP_DOWNLOADS')
-				),
-				'perm_check'	=> array(
-					'title' => 'DL_ACP_PERM_CHECK',				'auth' => 'ext_oxpus/dlext && acl_a_dl_perm_check',		'cat' => array('ACP_DOWNLOADS')
-				),
-			),
-		);
+			'modes'		=> [
+				'overview'		=> [
+					'title' => 'DL_ACP_OVERVIEW',				'auth' => 'ext_oxpus/dlext && acl_a_dl_overview',		'cat' => ['ACP_DOWNLOADS']
+				],
+				'config'		=> [
+					'title' => 'DL_ACP_CONFIG_MANAGEMENT',		'auth' => 'ext_oxpus/dlext && acl_a_dl_config',			'cat' => ['ACP_DOWNLOADS']
+				],
+				'traffic'		=> [
+					'title' => 'DL_ACP_TRAFFIC_MANAGEMENT',		'auth' => 'ext_oxpus/dlext && acl_a_dl_traffic',		'cat' => ['ACP_DOWNLOADS']
+				],
+				'categories'	=> [
+					'title' => 'DL_ACP_CATEGORIES_MANAGEMENT',	'auth' => 'ext_oxpus/dlext && acl_a_dl_categories',		'cat' => ['ACP_DOWNLOADS']
+				],
+				'files'			=> [
+					'title' => 'DL_ACP_FILES_MANAGEMENT',		'auth' => 'ext_oxpus/dlext && acl_a_dl_files',			'cat' => ['ACP_DOWNLOADS']
+				],
+				'permissions'	=> [
+					'title' => 'DL_ACP_PERMISSIONS',			'auth' => 'ext_oxpus/dlext && acl_a_dl_permissions',	'cat' => ['ACP_DOWNLOADS']
+				],
+				'stats'			=> [
+					'title' => 'DL_ACP_STATS_MANAGEMENT',		'auth' => 'ext_oxpus/dlext && acl_a_dl_stats',			'cat' => ['ACP_DOWNLOADS']
+				],
+				'banlist'		=> [
+					'title' => 'DL_ACP_BANLIST',				'auth' => 'ext_oxpus/dlext && acl_a_dl_banlist',		'cat' => ['ACP_DOWNLOADS']
+				],
+				'ext_blacklist'	=> [
+					'title' => 'DL_EXT_BLACKLIST',				'auth' => 'ext_oxpus/dlext && acl_a_dl_blacklist',		'cat' => ['ACP_DOWNLOADS']
+				],
+				'toolbox'		=> [
+					'title' => 'DL_MANAGE',						'auth' => 'ext_oxpus/dlext && acl_a_dl_toolbox',		'cat' => ['ACP_DOWNLOADS']
+				],
+				'fields'		=> [
+					'title' => 'DL_ACP_FIELDS',					'auth' => 'ext_oxpus/dlext && acl_a_dl_fields',			'cat' => ['ACP_DOWNLOADS']
+				],
+				'browser'		=> [
+					'title' => 'DL_ACP_BROWSER',				'auth' => 'ext_oxpus/dlext && acl_a_dl_browser',		'cat' => ['ACP_DOWNLOADS']
+				],
+				'perm_check'	=> [
+					'title' => 'DL_ACP_PERM_CHECK',				'auth' => 'ext_oxpus/dlext && acl_a_dl_perm_check',		'cat' => ['ACP_DOWNLOADS']
+				],
+			],
+		];
 	}
 
 	function install()

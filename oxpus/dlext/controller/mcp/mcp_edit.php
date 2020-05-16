@@ -149,12 +149,12 @@ class mcp_edit
 
 		if (!$df_id)
 		{
-			redirect($this->helper->route('oxpus_dlext_mcp_manage', array('cat_id' => $cat_id)));
+			redirect($this->helper->route('oxpus_dlext_mcp_manage', ['view' => 'toolbox', 'cat_id' => $cat_id]));
 		}
 
 		if ($cancel && $file_option == 3)
 		{
-			redirect($this->helper->route('oxpus_dlext_details', array('view' => 'detail', 'df_id' => $df_id)));
+			redirect($this->helper->route('oxpus_dlext_details', ['view' => 'detail', 'df_id' => $df_id]));
 		}
 
 		$own_edit = false;
@@ -211,7 +211,7 @@ class mcp_edit
 
 				if (confirm_box(true))
 				{
-					$dl_ids = array();
+					$dl_ids = [];
 
 					for ($i = 0; $i < sizeof($file_ver_del); $i++)
 					{
@@ -270,23 +270,23 @@ class mcp_edit
 						$this->db->sql_query($sql);
 					}
 
-					redirect($this->helper->route('oxpus_dlext_details', array('df_id' => $df_id)));
+					redirect($this->helper->route('oxpus_dlext_details', ['df_id' => $df_id]));
 				}
 				else
 				{
 					$this->template->assign_var('S_DELETE_FILES_CONFIRM', true);
 
-					$s_hidden_fields = array(
+					$s_hidden_fields = [
 						'action'		=> 'save',
 						'cat_id'		=> $cat_id,
 						'df_id'			=> $df_id,
 						'submit'		=> 1,
 						'file_ver_opt'	=> 3,
-					);
+					];
 
 					for ($i = 0; $i < sizeof($file_ver_del); $i++)
 					{
-						$s_hidden_fields = array_merge($s_hidden_fields, array('file_ver_del[' . $i . ']' => $file_ver_del[$i]));
+						$s_hidden_fields += ['file_ver_del[' . $i . ']' => $file_ver_del[$i]];
 					}
 
 					confirm_box(false, $this->language->lang('DL_CONFIRM_DEL_VERSIONS'), build_hidden_fields($s_hidden_fields), 'dl_confirm_body.html');
@@ -385,7 +385,7 @@ class mcp_edit
 					$file_traffic = $this->dlext_format->resize_value('dl_file_traffic', $file_traffic);
 				}
 
-				$dl_file = array();
+				$dl_file = [];
 				$dl_file = $this->dlext_files->all_files(0, 0, 'ASC', 0, $df_id, true, '*');
 
 				$real_file_old	= $dl_file['real_file'];
@@ -403,7 +403,7 @@ class mcp_edit
 					$form_name = 'dl_name';
 					$file = $this->request->file($form_name);
 					$file_extension = str_replace('.', '', trim(strrchr(strtolower($file['name']), '.')));
-					$allowed_extensions = array($file_extension);
+					$allowed_extensions = [$file_extension];
 					$upload = $factory->get('upload')
 						->set_allowed_extensions($allowed_extensions)
 						->set_disallowed_content((isset($this->config['mime_triggers']) ? explode('|', $this->config['mime_triggers']) : false));
@@ -431,7 +431,7 @@ class mcp_edit
 						trigger_error(implode('<br />', $upload_file->error), E_USER_ERROR);
 					}
 
-					$upload_file->error = array();
+					$upload_file->error = [];
 
 					if ($file_name)
 					{
@@ -478,7 +478,7 @@ class mcp_edit
 								$stat_prune = $this->dlext_main->dl_prune_stats($cat_id, $index[$cat_id]['stats_prune']);
 							}
 
-							$sql = 'INSERT INTO ' . DL_STATS_TABLE . ' ' . $this->db->sql_build_array('INSERT', array(
+							$sql = 'INSERT INTO ' . DL_STATS_TABLE . ' ' . $this->db->sql_build_array('INSERT', [
 								'cat_id'		=> $new_cat,
 								'id'			=> $df_id,
 								'user_id'		=> $this->user->data['user_id'],
@@ -486,7 +486,7 @@ class mcp_edit
 								'traffic'		=> $file_size,
 								'direction'		=> 2,
 								'user_ip'		=> $this->user->data['session_ip'],
-								'time_stamp'	=> time()));
+								'time_stamp'	=> time()]);
 							$this->db->sql_query($sql);
 						}
 					}
@@ -548,7 +548,7 @@ class mcp_edit
 				if ($this->config['dl_thumb_fsize'] && $index[$cat_id]['allow_thumbs'] && !$del_thumb)
 				{
 					$min_pic_width = 10;
-					$allowed_imagetypes = array('gif','png','jpg','bmp');
+					$allowed_imagetypes = ['gif','png','jpg','bmp'];
 
 					$factory = $this->phpbb_container->get('files.factory');
 					$upload_image = $factory->get('upload')
@@ -578,7 +578,7 @@ class mcp_edit
 						trigger_error(implode('<br />', $thumb_file->error), E_USER_ERROR);
 					}
 
-					$thumb_file->error = array();
+					$thumb_file->error = [];
 
 					if ($thumb_name)
 					{
@@ -613,14 +613,14 @@ class mcp_edit
 
 					$thumb_message = '<br />' . $this->language->lang('DL_THUMB_UPLOAD');
 
-					$sql = 'UPDATE ' . DOWNLOADS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', array(
-						'thumbnail' => $df_id . '_' . $thumb_name)) . ' WHERE id = ' . (int) $df_id;
+					$sql = 'UPDATE ' . DOWNLOADS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', [
+						'thumbnail' => $df_id . '_' . $thumb_name]) . ' WHERE id = ' . (int) $df_id;
 					$this->db->sql_query($sql);
 				}
 				else if ($del_thumb)
 				{
-					$sql = 'UPDATE ' . DOWNLOADS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', array(
-						'thumbnail' => '')) . ' WHERE id = ' . (int) $df_id;
+					$sql = 'UPDATE ' . DOWNLOADS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', [
+						'thumbnail' => '']) . ' WHERE id = ' . (int) $df_id;
 					$this->db->sql_query($sql);
 
 					@unlink(DL_EXT_FILEBASE_PATH . 'thumbs/' . $dl_file['thumbnail']);
@@ -633,7 +633,7 @@ class mcp_edit
 				}
 
 				// validate custom profile fields
-				$error = $cp_data = $cp_error = array();
+				$error = $cp_data = $cp_error = [];
 				$cp->submit_cp_field($this->user->get_iso_lang_id(), $cp_data, $error);
 
 				// Stop here, if custom fields are invalid!
@@ -649,7 +649,7 @@ class mcp_edit
 					*/
 					if (!$file_option || $file_option == 1)
 					{
-						$sql = 'INSERT INTO ' . DL_VERSIONS_TABLE . ' ' . $this->db->sql_build_array('INSERT', array(
+						$sql = 'INSERT INTO ' . DL_VERSIONS_TABLE . ' ' . $this->db->sql_build_array('INSERT', [
 							'dl_id'				=> $df_id,
 							'ver_file_name'		=> ($file_option) ? $file_name : $dl_file['file_name'],
 							'ver_real_file'		=> ($file_option) ? $real_file_new : $dl_file['real_file'],
@@ -662,7 +662,7 @@ class mcp_edit
 							'ver_change_user'	=> ($file_option) ? $this->user->data['user_id'] : $dl_file['change_user'],
 							'ver_active'		=> 0,
 							'ver_text'			=> '',
-						));
+						]);
 
 						$this->db->sql_query($sql);
 
@@ -684,7 +684,7 @@ class mcp_edit
 							$row = $this->db->sql_fetchrow($result);
 							$this->db->sql_freeresult($result);
 
-							$sql = 'UPDATE ' . DL_VERSIONS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', array(
+							$sql = 'UPDATE ' . DL_VERSIONS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', [
 								'ver_file_name'		=> ($file_new) ? $file_name : $row['ver_file_name'],
 								'ver_real_file'		=> ($file_new) ? $real_file_new : $row['ver_real_file'],
 								'ver_file_hash'		=> ($file_new) ? $file_hash : $row['ver_file_hash'],
@@ -692,7 +692,7 @@ class mcp_edit
 								'ver_change_time'	=> time(),
 								'ver_change_user'	=> $this->user->data['user_id'],
 								'ver_version'		=> $hack_version,
-							)) . ' WHERE dl_id = ' . (int) $df_id . ' AND ver_id = ' . (int) $file_version;
+							]) . ' WHERE dl_id = ' . (int) $df_id . ' AND ver_id = ' . (int) $file_version;
 
 							$this->db->sql_query($sql);
 						}
@@ -705,7 +705,7 @@ class mcp_edit
 						$test = $require = $warning = $mod_desc = '';
 					}
 
-					$sql_array = array(
+					$sql_array = [
 						'description'			=> $description,
 						'file_traffic'			=> $file_traffic,
 						'long_desc'				=> $long_desc,
@@ -731,51 +731,56 @@ class mcp_edit
 						'test'					=> $test,
 						'req'					=> $require,
 						'warning'				=> $warning,
-						'mod_desc'				=> $mod_desc);
+						'mod_desc'				=> $mod_desc,
+					];
 
 					if (!$file_option || ($file_option == 2 && !$file_version))
 					{
-						$sql_array = array_merge($sql_array, array(
+						$sql_array += [
 							'file_name'				=> $file_name,
 							'real_file'				=> $real_file_new,
 							'file_hash'				=> $file_hash,
 							'file_size'				=> $file_size,
-							'hack_version'			=> $hack_version));
+							'hack_version'			=> $hack_version,
+						];
 					}
 					else
 					{
-						$sql_array = array_merge($sql_array, array(
+						$sql_array += [
 							'file_name'		=> $dl_file['file_name'],
 							'real_file'		=> $dl_file['real_file'],
 							'file_hash'		=> $dl_file['file_hash'],
 							'file_size'		=> $dl_file['file_size'],
 							'hack_version'	=> $dl_file['hack_version'],
-						));
+						];
 					}
 
 					if (!$change_time)
 					{
-						$sql_array = array_merge($sql_array, array(
+						$sql_array += [
 							'change_time'	=> time(),
-							'change_user'	=> $this->user->data['user_id']));
+							'change_user'	=> $this->user->data['user_id'],
+						];
 					}
 
 					if ($click_reset)
 					{
-						$sql_array = array_merge($sql_array, array(
-							'klicks' => 0));
+						$sql_array += [
+							'klicks' => 0,
+						];
 					}
 
 					if ($index[$cat_id]['allow_mod_desc'] || ($this->auth->acl_get('a_') && $this->user->data['is_registered']))
 					{
-						$sql_array = array_merge($sql_array, array(
+						$sql_array += [
 							'mod_list'			=> $mod_list,
 							'mod_desc_uid'		=> $mod_desc_uid,
 							'mod_desc_bitfield'	=> $mod_desc_bitfield,
 							'mod_desc_flags'	=> $mod_desc_flags,
 							'warn_uid'			=> $warn_uid,
 							'warn_bitfield'		=> $warn_bitfield,
-							'warn_flags'		=> $warn_flags));
+							'warn_flags'		=> $warn_flags,
+						];
 					}
 
 					$sql = 'UPDATE ' . DOWNLOADS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', $sql_array) . ' WHERE id = ' . (int) $df_id;
@@ -800,7 +805,7 @@ class mcp_edit
 						WHERE fav_dl_id = ' . (int) $df_id;
 					$result = $this->db->sql_query($sql);
 
-					$fav_user = array();
+					$fav_user = [];
 
 					while ($row = $this->db->sql_fetchrow($result))
 					{
@@ -819,14 +824,14 @@ class mcp_edit
 								AND (" . $this->db->sql_in_set('user_id', explode(',', $processing_user)) . '
 									OR user_type = ' . USER_FOUNDER . ')';
 
-						$mail_data = array(
+						$mail_data = [
 							'query'				=> $sql,
 							'email_template'	=> $email_template,
 							'description'		=> $description,
 							'long_desc'			=> $long_desc,
 							'cat_name'			=> $index[$cat_id]['cat_name_nav'],
 							'cat_id'			=> $cat_id,
-						);
+						];
 
 						$this->dlext_email->send_dl_notify($mail_data);
 					}
@@ -841,9 +846,9 @@ class mcp_edit
 						$this->db->sql_query($sql);
 
 						$notification = $this->phpbb_container->get('notification_manager');
-						$notification_data = array('notification_id' => $df_id);
+						$notification_data = ['notification_id' => $df_id];
 						$notification->add_notifications('oxpus.dlext.notification.type.dlext', $notification_data);
-						}
+					}
 
 					if ($this->config['dl_upload_traffic_count'] && !$file_extern && !$this->config['dl_traffic_off'])
 					{
@@ -878,12 +883,12 @@ class mcp_edit
 							$this->db->sql_freeresult($result);
 						}
 
-						$sql = 'UPDATE ' . DL_STATS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', array(
-							'cat_id' => $new_cat)) . ' WHERE id = ' . (int) $df_id;
+						$sql = 'UPDATE ' . DL_STATS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', [
+							'cat_id' => $new_cat]) . ' WHERE id = ' . (int) $df_id;
 						$this->db->sql_query($sql);
 
-						$sql = 'UPDATE ' . DL_COMMENTS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', array(
-							'cat_id' => $new_cat)) . ' WHERE id = ' . (int) $df_id;
+						$sql = 'UPDATE ' . DL_COMMENTS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', [
+							'cat_id' => $new_cat]) . ' WHERE id = ' . (int) $df_id;
 						$this->db->sql_query($sql);
 					}
 
@@ -901,25 +906,25 @@ class mcp_edit
 
 			if ($new_version)
 			{
-				$version_url	= $this->helper->route('oxpus_dlext_version', array('ver_id' => $new_version));
+				$version_url	= $this->helper->route('oxpus_dlext_version', ['ver_id' => $new_version]);
 				$ver_message	= '<br /><br />' . $this->language->lang('CLICK_VIEW_NEW_VERSION', '<a href="' . $version_url . '">', '</a>');
 			}
 
 			if ($own_edit)
 			{
-				$meta_url	= $this->helper->route('oxpus_dlext_details', array('df_id' => $df_id));
+				$meta_url	= $this->helper->route('oxpus_dlext_details', ['df_id' => $df_id]);
 				$message	= $this->language->lang('DOWNLOAD_UPDATED') . $thumb_message . '<br /><br />' . $this->language->lang('CLICK_RETURN_DOWNLOAD_DETAILS', '<a href="' . $meta_url . '">', '</a>') . $ver_message;
 			}
 			else
 			{
-				$meta_url		= $this->helper->route('oxpus_dlext_mcp_manage', array('cat_id' => $cat_id));
+				$meta_url		= $this->helper->route('oxpus_dlext_mcp_manage', ['view' => 'toolbox', 'cat_id' => $cat_id]);
 				$return_string	= ($action == 'approve') ? $this->language->lang('CLICK_RETURN_MODCP_APPROVE') : $this->language->lang('CLICK_RETURN_MODCP_MANAGE');
 				$message		= $this->language->lang('DOWNLOAD_UPDATED') . $thumb_message . '<br /><br />' . sprintf($return_string, '<a href="' . $meta_url . '">', '</a>') . $ver_message;
 			}
 
 			if ($cat_auth['auth_up'])
 			{
-				$message .= '<br /><br />' . $this->language->lang('DL_UPLOAD_ONE_MORE', '<a href="' . $this->helper->route('oxpus_dlext_upload', array('cat_id' => $cat_id)) . '">', '</a>');
+				$message .= '<br /><br />' . $this->language->lang('DL_UPLOAD_ONE_MORE', '<a href="' . $this->helper->route('oxpus_dlext_upload', ['cat_id' => $cat_id]) . '">', '</a>');
 			}
 
 			if (!$new_version)
@@ -930,14 +935,14 @@ class mcp_edit
 			trigger_error($message);
 		}
 
-		$dl_file = array();
+		$dl_file = [];
 		$dl_file = $this->dlext_files->all_files(0, '', 'ASC', '', $df_id, true, '*');
 
-		$s_hidden_fields = array(
+		$s_hidden_fields = [
 			'action'	=> 'save',
 			'cat_id'	=> $cat_id,
 			'df_id'		=> $df_id
-		);
+		];
 
 		$description			= $dl_file['description'];
 		$file_traffic			= $dl_file['file_traffic'];
@@ -1055,7 +1060,7 @@ class mcp_edit
 		{
 			$select_code = '';
 
-			$s_hidden_fields = array_merge($s_hidden_fields, array('new_cat' => $cat_id));
+			$s_hidden_fields += ['new_cat' => $cat_id];
 		}
 
 		if ($dl_file['extern'])
@@ -1071,17 +1076,17 @@ class mcp_edit
 
 		$this->template->assign_var('S_MODCP', true);
 
+		if ($this->config['dl_disable_popup_notify'])
+		{
+			$this->template->assign_var('S_CHANGE_TIME', true);
+		}
+
 		if (!$this->config['dl_disable_email'])
 		{
 			$this->template->assign_var('S_EMAIL_BLOCK', true);
 		}
 
 		if (!$this->config['dl_disable_popup'])
-		{
-			$this->template->assign_var('S_CHANGE_TIME', true);
-		}
-
-		if (!$this->config['dl_disable_popup_notify'])
 		{
 			$this->template->assign_var('S_POPUP_NOTIFY', true);
 		}
@@ -1128,7 +1133,7 @@ class mcp_edit
 		$s_select_ver_del = '<select name="file_ver_del[]" style="max-width: 75%" multiple="multiple" size="' . $multiple_size . '">';
 		$s_select_version .= '<option value="0" selected="selected">' . $this->language->lang('DL_VERSION_CURRENT') . '</option>';
 
-		$version_array = array();
+		$version_array = [];
 
 		while ($row = $this->db->sql_fetchrow($result))
 		{
@@ -1165,7 +1170,7 @@ class mcp_edit
 
 		$dl_files_page_title = $this->language->lang('DL_FILES_TITLE');
 
-		$this->template->assign_vars(array(
+		$this->template->assign_vars([
 			'DL_FILES_TITLE'					=> $dl_files_page_title,
 
 			'DL_THUMBNAIL_SECOND'				=> $thumbnail_explain,
@@ -1215,7 +1220,7 @@ class mcp_edit
 			'HACKLIST_EVER'			=> ($hacklist == 2) ? 'checked="checked"' : '',
 			'HACKLIST_NO'			=> ($hacklist == 0) ? 'checked="checked"' : '',
 			'HACKLIST_YES'			=> ($hacklist == 1) ? 'checked="checked"' : '',
-			'THUMBNAIL'				=> $thumbnail,
+			'THUMBNAIL'				=> append_sid($thumbnail),
 			'URL'					=> $dl_extern_url,
 			'CHECKEXTERN'			=> $checkextern,
 			'FILE_EXT_SIZE'			=> $file_extern_size_out,
@@ -1236,8 +1241,10 @@ class mcp_edit
 			'S_HACKLIST'			=> $s_hacklist,
 			'S_UPLOAD_TRAFFIC'		=> $s_upload_traffic,
 			'S_DOWNLOADS_ACTION'	=> $this->helper->route('oxpus_dlext_mcp_edit'),
-			'S_HIDDEN_FIELDS'		=> build_hidden_fields($s_hidden_fields))
-		);
+			'S_HIDDEN_FIELDS'		=> build_hidden_fields($s_hidden_fields),
+
+			'U_GO_BACK'				=> $this->helper->route('oxpus_dlext_details', ['df_id' => $df_id])
+		]);
 
 		// Init and display the custom fields with the existing data
 		$cp->get_profile_fields($df_id);

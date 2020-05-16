@@ -21,7 +21,7 @@ class release_8_0_9 extends \phpbb\db\migration\migration
 
 	static public function depends_on()
 	{
-		return array('\oxpus\dlext\migrations\v800\release_8_0_8');
+		return ['\oxpus\dlext\migrations\v800\release_8_0_8'];
 	}
 
 	public function update_data()
@@ -34,58 +34,58 @@ class release_8_0_9 extends \phpbb\db\migration\migration
 		}
 		else
 		{
-			return array(
+			return [
 				// Set the current version
-				array('config.update', array('dl_ext_version', $this->dl_ext_version)),
+				['config.update', ['dl_ext_version', $this->dl_ext_version]],
 
-				array('module.remove', array(
+				['module.remove', [
 					'mcp',
 					'MCP_DOWNLOADS',
-					array(
+					[
 						'module_basename'   => '\oxpus\dlext\mcp\main_module',
 						'module_langname'   => 'DL_MODCP_MANAGE',
 						'module_mode'       => 'mcp_manage',
 						'module_auth'       => 'ext_oxpus/dlext',
-					),
-				)),
-				array('module.remove', array(
+					],
+				]],
+				['module.remove', [
 					'mcp',
 					'MCP_DOWNLOADS',
-					array(
+					[
 						'module_basename'   => '\oxpus\dlext\mcp\main_module',
 						'module_langname'   => 'DL_MODCP_EDIT',
 						'module_mode'       => 'mcp_edit',
 						'module_auth'       => 'ext_oxpus/dlext',
-					),
-				)),
-				array('module.remove', array(
+					],
+				]],
+				['module.remove', [
 					'mcp',
 					'MCP_DOWNLOADS',
-					array(
+					[
 						'module_basename'   => '\oxpus\dlext\mcp\main_module',
 						'module_langname'   => 'DL_MODCP_APPROVE',
 						'module_mode'       => 'mcp_approve',
 						'module_auth'       => 'ext_oxpus/dlext',
-					),
-				)),
-				array('module.remove', array(
+					],
+				]],
+				['module.remove', [
 					'mcp',
 					'MCP_DOWNLOADS',
-					array(
+					[
 						'module_basename'   => '\oxpus\dlext\mcp\main_module',
 						'module_langname'   => 'DL_MODCP_CAPPROVE',
 						'module_mode'       => 'mcp_capprove',
 						'module_auth'       => 'ext_oxpus/dlext',
-					),
-				)),
-				array('module.remove', array(
+					],
+				]],
+				['module.remove', [
 					'mcp',
 					0,
 					'MCP_DOWNLOADS'
-				)),
+				]],
 
-				array('custom', array(array($this, 'remove_deprecated_files'))),
-			);
+				['custom', [[$this, 'remove_deprecated_files']]],
+			];
 		}
 	}
 

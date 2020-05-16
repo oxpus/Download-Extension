@@ -159,7 +159,7 @@ class version
 		/*
 		* default entry point for download details
 		*/
-		$dl_file = array();
+		$dl_file = [];
 		$dl_file = $this->dlext_files->all_files(0, '', 'ASC', '', $df_id, 0, '*');
 		
 		if (!$dl_file)
@@ -169,7 +169,7 @@ class version
 		
 		$cat_id = $dl_file['cat'];
 		
-		$cat_auth = array();
+		$cat_auth = [];
 		$cat_auth = $this->dlext_auth->dl_cat_auth($cat_id);
 		
 		$auth_view = $this->dlext_auth->user_auth($cat_id, 'auth_view');
@@ -211,7 +211,7 @@ class version
 			}
 		}
 		
-		$check_status = array();
+		$check_status = [];
 		$check_status = $this->dlext_status->status($df_id);
 		
 		if (!$dl_file['id'] || !$auth_view)
@@ -227,7 +227,7 @@ class version
 			$cat_rule = $index[$cat_id]['rules'];
 			$cat_rule_uid = (isset($index[$cat_id]['rule_uid'])) ? $index[$cat_id]['rule_uid'] : '';
 			$cat_rule_bitfield = (isset($index[$cat_id]['rule_bitfield'])) ? $index[$cat_id]['rule_bitfield'] : '';
-			$cat_rule_flags = (isset($index[$cat_id]['rule_flags'])) ? $index[$cat_id]['rule_flags'] : '';
+			$cat_rule_flags = (isset($index[$cat_id]['rule_flags'])) ? $index[$cat_id]['rule_flags'] : 0;
 			$cat_rule = censor_text($cat_rule);
 			$cat_rule = generate_text_for_display($cat_rule, $cat_rule_uid, $cat_rule_bitfield, $cat_rule_flags);
 		
@@ -255,7 +255,7 @@ class version
 		$mini_icon		= $this->dlext_status->mini_status_file($cat_id, $df_id);
 		$ver_version	= '&nbsp;' . $ver_data['ver_version'];
 		$ver_desc		= generate_text_for_display($ver_data['ver_text'], $ver_data['ver_uid'], $ver_data['ver_bitfield'], $ver_data['ver_flags']);
-		$file_status	= array();
+		$file_status	= [];
 		$file_status	= $this->dlext_status->status($df_id);
 		$status			= $file_status['status_detail'];
 		$file_name		= $ver_data['ver_file_name'];
@@ -293,7 +293,7 @@ class version
 		
 				$dl_file_url = str_replace($this->root_path, '', DL_EXT_FILEBASE_PATH. 'version/files/');
 		
-				$dl_file_data = array(
+				$dl_file_data = [
 					'attach_id'				=> 0,
 					'is_orphan'				=> false,
 					'physical_filename'		=> $row['real_name'],
@@ -301,7 +301,7 @@ class version
 					'mimetype'				=> 'application/octetstream',
 					'filesize'				=> sprintf("%u", @filesize($dl_file_url . $row['real_name'])),
 					'filetime'				=> @filemtime($dl_file_url . $row['real_name']),
-				);
+				];
 		
 				send_file_to_browser($dl_file_data, $dl_file_url, ATTACHMENT_CATEGORY_NONE);
 				file_gc();
@@ -322,9 +322,9 @@ class version
 			$this->language->add_lang('posting');
 		
 			// Drop attachments
-			$del_files = $this->request->variable('ver_title_del', array(0 => 0));
+			$del_files = $this->request->variable('ver_title_del', [0 => 0]);
 		
-			$dropped_files = array(0);
+			$dropped_files = [0];
 		
 			foreach ($del_files as $key => $value)
 			{
@@ -354,15 +354,15 @@ class version
 			$this->db->sql_query($sql);
 		
 			// Update file titles
-			$ver_title = $this->request->variable('ver_title', array(0 => ''));
+			$ver_title = $this->request->variable('ver_title', [0 => '']);
 		
 			foreach($ver_title as $key => $value)
 			{
 				if (!in_array($key, $dropped_files))
 				{
-					$sql = 'UPDATE ' . DL_VER_FILES_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', array(
+					$sql = 'UPDATE ' . DL_VER_FILES_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', [
 						'file_title'	=> $value,
-					)) . ' WHERE ver_file_id = ' . (int) $key;
+					]) . ' WHERE ver_file_id = ' . (int) $key;
 					$this->db->sql_query($sql);
 				}
 			}
@@ -372,7 +372,7 @@ class version
 			$form_name = 'ver_new_file';
 			$file = $this->request->file($form_name);
 			$extension = str_replace('.', '', trim(strrchr(strtolower($file['name']), '.')));
-			$allowed_extensions = array($extension);
+			$allowed_extensions = [$extension];
 			$upload = $factory->get('upload')
 				->set_allowed_extensions($allowed_extensions)
 				->set_disallowed_content((isset($this->config['mime_triggers']) ? explode('|', $this->config['mime_triggers']) : false));
@@ -391,7 +391,7 @@ class version
 				trigger_error(implode('<br />', $ver_file->error), E_USER_ERROR);
 			}
 		
-			$ver_file->error = array();
+			$ver_file->error = [];
 		
 			if ($ver_file_name)
 			{
@@ -409,14 +409,14 @@ class version
 		
 				$ver_file_title = $this->request->variable('ver_new_file_title', '', true);
 		
-				$sql = 'INSERT INTO ' . DL_VER_FILES_TABLE . ' ' . $this->db->sql_build_array('INSERT', array(
+				$sql = 'INSERT INTO ' . DL_VER_FILES_TABLE . ' ' . $this->db->sql_build_array('INSERT', [
 					'dl_id'			=> $df_id,
 					'ver_id'		=> $ver_id,
 					'real_name'		=> $file_name,
 					'file_name'		=> $ver_file_name,
 					'file_title'	=> $ver_file_title,
 					'file_type'		=> 0,
-				));
+				]);
 				$this->db->sql_query($sql);
 			}
 			else
@@ -429,7 +429,7 @@ class version
 			$form_name = 'ver_new_image';
 			$file = $this->request->file($form_name);
 			$extension = str_replace('.', '', trim(strrchr(strtolower($file['name']), '.')));
-			$allowed_extensions = array($extension);
+			$allowed_extensions = [$extension];
 			$upload_image = $factory->get('upload')
 				->set_allowed_extensions($allowed_extensions)
 				->set_disallowed_content((isset($this->config['mime_triggers']) ? explode('|', $this->config['mime_triggers']) : false));
@@ -448,7 +448,7 @@ class version
 				trigger_error(implode('<br />', $ver_image->error), E_USER_ERROR);
 			}
 		
-			$ver_image->error = array();
+			$ver_image->error = [];
 		
 			if ($ver_image_name)
 			{
@@ -482,14 +482,14 @@ class version
 		
 				$ver_file_title = $this->request->variable('ver_new_image_title', '', true);
 		
-				$sql = 'INSERT INTO ' . DL_VER_FILES_TABLE . ' ' . $this->db->sql_build_array('INSERT', array(
+				$sql = 'INSERT INTO ' . DL_VER_FILES_TABLE . ' ' . $this->db->sql_build_array('INSERT', [
 					'dl_id'			=> $df_id,
 					'ver_id'		=> $ver_id,
 					'real_name'		=> $img_name,
 					'file_name'		=> $ver_image_name,
 					'file_title'	=> $ver_file_title,
 					'file_type'		=> 1,
-				));
+				]);
 				$this->db->sql_query($sql);
 			}
 			else
@@ -511,7 +511,7 @@ class version
 		
 			generate_text_for_storage($ver_text, $ver_uid, $ver_bitfield, $ver_flags, $allow_bbcode, $allow_urls, $allow_smilies);
 		
-			$sql = 'UPDATE ' . DL_VERSIONS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', array(
+			$sql = 'UPDATE ' . DL_VERSIONS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', [
 				'ver_version'		=> $ver_version,
 				'ver_text'			=> $ver_text,
 				'ver_uid'			=> $ver_uid,
@@ -520,15 +520,15 @@ class version
 				'ver_active'		=> $ver_active,
 				'ver_change_time'	=> time(),
 				'ver_change_user'	=> $this->user->data['user_id'],
-			)) . ' WHERE dl_id = ' . (int) $df_id . ' AND ver_id = ' . (int) $ver_id;
+			]) . ' WHERE dl_id = ' . (int) $df_id . ' AND ver_id = ' . (int) $ver_id;
 		
 			$this->db->sql_query($sql);
 		
-			$s_redirect_params = array(
+			$s_redirect_params = [
 				'action'	=> 'save',
 				'ver_id'	=> $ver_id,
 				'df_id'		=> $df_id,
-			);
+			];
 		
 			$s_redirect = $this->helper->route('oxpus_dlext_version', $s_redirect_params);
 			redirect($s_redirect);
@@ -565,29 +565,49 @@ class version
 						$tpl_block = 'files';
 				}
 		
-				$this->template->assign_block_vars($tpl_block, array(
+				$this->template->assign_block_vars($tpl_block, [
 					'LINK'			=> $file_path,
 					'FILE_NAME'		=> $row['file_name'],
 					'NAME'			=> $row['file_title'],
 					'VER_FILE_ID'	=> $row['ver_file_id'],
-				));
+				]);
 			}
 		
 			$this->db->sql_freeresult($result);
 		
-			$s_form_ary = array(
+			$s_form_ary = [
 				'action'	=> 'save',
 				'ver_id'	=> $ver_id,
 				'df_id'		=> $df_id,
-			);
+			];
 		
 			$s_form_action = $this->helper->route('oxpus_dlext_version', $s_form_ary);
 		
-			$this->template->set_filenames(array(
-				'body' => 'dl_version_edit.html')
-			);
+			// Status for HTML, BBCode, Smilies, Images and Flash,
+			$bbcode_status	= ($this->config['allow_bbcode']) ? true : false;
+			$smilies_status	= ($bbcode_status && $this->config['allow_smilies']) ? true : false;
+			$img_status		= true;
+			$url_status		= ($this->config['allow_post_links']) ? true : false;
+			$flash_status	= false;
+			$quote_status	= true;
+
+			// Smilies Block,
+			if ($smilies_status)
+			{
+				if (!function_exists('generate_smilies'))
+				{
+					include_once($this->root_path . 'includes/functions_posting.' . $this->php_ext);
+				}
+				generate_smilies('inline', 0);
+			}
+
+			// BBCode-Block,
+			$this->language->add_lang('posting');
+			display_custom_bbcodes();
+
+			$this->template->set_filenames(['body' => 'dl_version_edit.html']);
 		
-			$this->template->assign_vars(array(
+			$this->template->assign_vars([
 				'CAT_RULE'			=> $cat_rule,
 				'DESCRIPTION'		=> $description,
 				'ENCTYPE'			=> 'enctype="multipart/form-data"',
@@ -598,20 +618,30 @@ class version
 				'VER_TEXT'			=> $ver_data['ver_text'],
 				'VER_VERSION'		=> $ver_data['ver_version'],
 		
+				'S_BBCODE_ALLOWED'	=> $bbcode_status,
+				'S_BBCODE_IMG'		=> $img_status,
+				'S_BBCODE_URL'		=> $url_status,
+				'S_BBCODE_FLASH'	=> $flash_status,
+				'S_BBCODE_QUOTE'	=> $quote_status,
+				'S_LINKS_ALLOWED'	=> $url_status,
+
 				'S_CAT_RULE'		=> ($cat_rule) ? true : false,
 				'S_DL_POPUPIMAGE'	=> $images_exists,
 				'S_FORM_ACTION'		=> $s_form_action,
-			));
+			]);
 		
-			page_footer();
+			/*
+			* include the mod footer
+			*/
+			$dl_footer = $this->phpbb_container->get('oxpus.dlext.footer');
+			$dl_footer->set_parameter($nav_view, $cat_id, $df_id, $index);
+			$dl_footer->handle();
 		}
 		
 		/*
 		* generate default page
 		*/
-		$this->template->set_filenames(array(
-			'body' => 'dl_version.html')
-		);
+		$this->template->set_filenames(['body' => 'dl_version.html']);
 		
 		/*
 		* Fetch all attachments for this release
@@ -632,21 +662,21 @@ class version
 					$images_exists = true;
 				break;
 				default:
-					$load_link_ary = array(
+					$load_link_ary = [
 						'action'		=> 'load',
 						'ver_id'		=> $ver_id,
 						'ver_file_id'	=> $row['ver_file_id'],
 						'df_id'			=> $df_id,
-					);
+					];
 					$file_path = $this->helper->route('oxpus_dlext_version', $load_link_ary);
 					$tpl_block = 'files';
 			}
 		
-			$this->template->assign_block_vars($tpl_block, array(
+			$this->template->assign_block_vars($tpl_block, [
 				'NAME'		=> $row['file_title'],
 				'LINK'		=> $file_path,
 				'S_AUTH'	=> $file_load,
-			));
+			]);
 		}
 		
 		$this->db->sql_freeresult($result);
@@ -654,7 +684,7 @@ class version
 		/*
 		* Send the release values themselves to the template to be able to read something *g*
 		*/
-		$this->template->assign_vars(array(
+		$this->template->assign_vars([
 			'DESCRIPTION'		=> $description,
 			'MINI_IMG'			=> $mini_icon,
 			'VER_VERSION'		=> $ver_version,
@@ -667,8 +697,8 @@ class version
 			'S_CAT_RULE'		=> ($cat_rule) ? true : false,
 			'S_DL_POPUPIMAGE'	=> $images_exists,
 		
-			'U_VER_EDIT'		=> ($ver_can_edit) ? $this->helper->route('oxpus_dlext_version', array('action' => 'edit', 'ver_id' => $ver_id, 'df_id' => $df_id)) : '',
-		));
+			'U_VER_EDIT'		=> ($ver_can_edit) ? $this->helper->route('oxpus_dlext_version', ['action' => 'edit', 'ver_id' => $ver_id, 'df_id' => $df_id]) : '',
+		]);
 		
 		/*
 		* include the mod footer

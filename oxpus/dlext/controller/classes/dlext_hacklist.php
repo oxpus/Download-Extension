@@ -43,7 +43,7 @@ class dlext_hacklist implements dlext_hacklist_interface
 	{
 		$dl_auth = $this->dlext_auth->dl_auth();
 
-		$tree_dl = array();
+		$tree_dl = [];
 
 		$sql = 'SELECT id, cat_name, auth_view FROM ' . DL_CAT_TABLE . '
 				ORDER BY parent, sort';
@@ -72,7 +72,7 @@ class dlext_hacklist implements dlext_hacklist_interface
 		{
 			$result = $this->db->sql_query_limit($sql, $total, $start);
 
-			$dl_files = array();
+			$dl_files = [];
 
 			while ($row = $this->db->sql_fetchrow($result))
 			{

@@ -1,6 +1,6 @@
 {% INCLUDE 'dl_header.html' %}
 
-<h2>{{ STATUS }} <label>{{ DESCRIPTION }}{{ HACK_VERSION }} {{ MINI_IMG }}</label></h2>
+<h2>{{ STATUS }} <label>{{ DESCRIPTION }} {{ HACK_VERSION }} {{ MINI_IMG }}</label></h2>
 
 <br />
 
@@ -27,6 +27,7 @@
 
 	<fieldset class="submit-buttons">
 		<input type="submit" name="submit" value="{{ lang('SUBMIT') }}" class="button icon-button" />
+		<input type="submit" name="cancel" value="{{ lang('CANCEL') }}" class="button icon-button" />
 		{{ S_FORM_TOKEN }}
 		{{ S_HIDDEN_FIELDS }}
 	</fieldset>

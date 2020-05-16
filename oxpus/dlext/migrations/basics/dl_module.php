@@ -21,7 +21,7 @@ class dl_module extends \phpbb\db\migration\migration
 
 	static public function depends_on()
 	{
-		return array('\oxpus\dlext\migrations\basics\dl_schema');
+		return ['\oxpus\dlext\migrations\basics\dl_schema'];
 	}
 
 	public function update_data()
@@ -32,7 +32,7 @@ class dl_module extends \phpbb\db\migration\migration
 		{
 			$module_manager = $phpbb_container->get('module.manager');
 
-			$module_basenames = array('\oxpus\dlext\ucp\main_module', '\oxpus\dlext\acp\main_module');
+			$module_basenames = ['\oxpus\dlext\ucp\main_module', '\oxpus\dlext\acp\main_module'];
 
 			$sql = 'SELECT module_id, module_class
 					FROM ' . MODULES_TABLE . '
@@ -49,53 +49,53 @@ class dl_module extends \phpbb\db\migration\migration
 
 			$this->db->sql_freeresult($result);
 
-			return array(
-				array('module.add', array(
+			return [
+				['module.add', [
 					'acp',
 					'ACP_CAT_DOT_MODS',
 					'ACP_DOWNLOADS'
-				)),
-				array('module.add', array(
+				]],
+				['module.add', [
 					'ucp',
 					false,
 					'DOWNLOADS'
-				)),
+				]],
 
-				array('config.add', array('dl_use_hacklist', '1')),
-			);
+				['config.add', ['dl_use_hacklist', '1']],
+			];
 		}
 		else
 		{
-			return array(
-				array('module.add', array(
+			return [
+				['module.add', [
 					'acp',
 					'ACP_CAT_DOT_MODS',
 					'ACP_DOWNLOADS'
-				)),
-				array('module.add', array(
+				]],
+				['module.add', [
 					'acp',
 					'ACP_DOWNLOADS',
-					array(
+					[
 						'module_basename'	=> '\oxpus\dlext\acp\main_module',
-						'modes'				=> array('overview','config','traffic','categories','files','permissions','stats','banlist','ext_blacklist','toolbox','fields','browser'),
-					),
-				)),
-				array('module.add', array(
+						'modes'				=> ['overview','config','traffic','categories','files','permissions','stats','banlist','ext_blacklist','toolbox','fields','browser'],
+					],
+				]],
+				['module.add', [
 					'ucp',
 					false,
 					'DOWNLOADS'
-				)),
-				array('module.add', array(
+				]],
+				['module.add', [
 					'ucp',
 					'DOWNLOADS',
-					array(
+					[
 						'module_basename'	=> '\oxpus\dlext\ucp\main_module',
-						'modes'				=> array('config','favorite'),
-					),
-				)),
+						'modes'				=> ['config','favorite'],
+					],
+				]],
 
-				array('config.add', array('dl_use_hacklist', '1')),
-			);
+				['config.add', ['dl_use_hacklist', '1']],
+			];
 		}
 	}
 }

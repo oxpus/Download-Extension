@@ -22,10 +22,10 @@ if (!defined('IN_PHPBB'))
 
 if (empty($lang) || !is_array($lang))
 {
-	$lang = array();
+	$lang = [];
 }
 
-$lang = array_merge($lang, array(
+$lang = array_merge($lang, [
 	'DL_LOG_CAT_PERM_DROP'	=> '<strong>Reset permissions for categories</strong><br />» %1$s',
 
 	'ACP_DOWNLOADS'		=> 'Downloads',
@@ -122,7 +122,7 @@ $lang = array_merge($lang, array(
 	'DL_APPROVE_COMMENTS'				=> 'Automatically approve every new comment',
 	'DL_APPROVE_OVERVIEW'				=> 'There are %s unapproved downloads. Click here to proof them.',
 	'DL_APPROVE_OVERVIEW_COMMENTS'		=> 'There are %s unapproved comments. Click the text to check them.',
-	'DL_APPROVE_OVERVIEW_ONE'			=> 'There is %s unapproved download. Click here to proof it.',
+	'DL_APPROVE_OVERVIEW_ONE'			=> 'There is one unapproved download. Click here to proof it.',
 	'DL_APPROVE_OVERVIEW_ONE_COMMENT'	=> 'There is one unapproved comment. Click the text to check it.',
 	'DL_ASSIGN'							=> 'Assign author',
 	'DL_AUTH_CPOST'						=> 'Write comments',
@@ -144,6 +144,8 @@ $lang = array_merge($lang, array(
 	'DL_BROKEN'						=> 'Report broken download',
 	'DL_BROKEN_CUR'					=> 'This download is currently reported as broken',
 	'DL_BROKEN_MOD'					=> 'Reset broken download status',
+	'DL_BROKEN_OVERVIEW'			=> 'There are %s broken downloads. Click here to proof them.',
+	'DL_BROKEN_OVERVIEW_ONE'		=> 'There is one broken download. Click here to proof it.',
 	'DL_BUG_REPORT_ADDED'			=> 'Bug report successfull added',
 	'DL_BUG_REPORT_ASSIGN'			=> 'assign',
 	'DL_BUG_REPORT_ASSIGN_DATE'		=> 'Assigned at',
@@ -225,6 +227,7 @@ $lang = array_merge($lang, array(
 	'DL_COMMENTS_COUNT'					=> '%s comments',
 	'DL_COMMENTS_DELETE'				=> 'Delete comments',
 	'DL_COMMENTS_DELETE_ALL'			=> 'Delete all comments',
+	'DL_COMMENTS_PROFILE'				=> 'Download comments',
 	'DL_CONFIG'							=> 'Download configuration',
 	'DL_CONFIG_EXPLAIN'					=> 'From here you can enable and disable various functions of the Download Extension and change some settings.',
 	'DL_CONFIG_UPDATED'					=> 'Download configuration saved successfully',
@@ -280,9 +283,11 @@ $lang = array_merge($lang, array(
 	'DL_EDIT_THUMBS'			=> 'Manage images',
 	'DL_EDIT_TIME'				=> 'Number of days an edited download will be marked',
 	'DL_EMPTY_CATEGORY'			=> 'This category does not contain any downloads',
+	'DL_ENABLE_INDEX_DESC'		=> 'Enable download description on categories',
 	'DL_ENABLE_JUMPBOX'			=> 'Enable jumpbox in download footer',
 	'DL_ENABLE_POST_TRAFFIC'	=> 'Enable traffic addition for posting',
 	'DL_ENABLE_RATE'			=> 'Enable rating system',
+	'DL_ENABLE_SEARCH_DESC'		=> 'Enable download description on search results',
 	'DL_ENABLE_TOPIC'			=> 'Create a topic for each download',
 	'DL_EXT_BLACKLIST'			=> 'Blacklist filetypes',
 	'DL_EXT_BLACKLIST_EXPLAIN'	=> 'All file Extensions entered here are disabled for upload with this Extension.<br />On the Administration Panel these extensions will be used, too.<br />They don’t refer to existing downloads.',
@@ -387,9 +392,13 @@ $lang = array_merge($lang, array(
 	'DL_LATEST_COMMENTS'		=> 'Displays the latest X comments on download details',
 	'DL_LATEST_DOWNLOAD'		=> 'Latest download',
 	'DL_LATEST_DOWNLOADS'		=> 'Latest downloads',
+	'DL_LATEST_TYPE_OFF'		=> 'Deactivated',
+	'DL_LATEST_TYPE_DEFAULT'	=> 'new and updates downloads',
+	'DL_LATEST_TYPE_COMPLETE'	=> 'all downloads',
 	'DL_LATEST_UPLOADS'			=> 'Latest uploads',
 	'DL_LATEST_VERSION'			=> 'Latest Version',
-	'DL_LIMIT_DESC_ON_INDEX'	=> 'Limit the Download descriptions on Index',
+	'DL_LIMIT_DESC_ON_INDEX'	=> 'Limit the download descriptions on index',
+	'DL_LIMIT_DESC_ON_SEARCH'	=> 'Limit the download descriptions on search results',
 	'DL_LINKS_PER_PAGE'			=> 'Downloads per page',
 	'DL_LOCK'					=> 'Lock',
 
@@ -461,6 +470,7 @@ $lang = array_merge($lang, array(
 	'DL_MOD_VERSION_PUBLIC'			=> 'Download Extension &copy; by Hotschi, Demolition Fabi, OXPUS',
 	'DL_MOD_WARNING'				=> 'Warnings',
 	'DL_MODCP_APPROVE'				=> 'Approve downloads',
+	'DL_MODCP_BROKEN'				=> 'Reported downloads',
 	'DL_MODCP_CAPPROVE'				=> 'Approve comments',
 	'DL_MODCP_EDIT'					=> 'Edit download',
 	'DL_MODCP_MANAGE'				=> 'Manage downloads',
@@ -722,9 +732,9 @@ $lang = array_merge($lang, array(
 	'DL_UP_TO_DATE'				=> '%s is up to date',
 	'DL_UPLOAD'					=> 'Upload a file',
 	'DL_UPLOAD_ERROR'			=> 'Error while uploading this file. Please go back and retry.<br />Contact the admin, if this error will still exist.',
-	'DL_UPLOAD_FILE'			=> 'Upload',
-	'DL_UPLOAD_MAX_FILESIZE'	=> 'Maximum file size that is allowed for uploads: %s',
-	'DL_UPLOAD_ONE_MORE'		=> '%sClick here to add another download%s',
+	'DL_UPLOAD_FILE'			=> 'Create Download',
+	'DL_UPLOAD_MAX_FILESIZE'	=> 'Maximum allowed file size: %s',
+	'DL_UPLOAD_ONE_MORE'		=> '%sClick here to create another download%s',
 	'DL_UPLOAD_TRAFFIC'			=> 'The file size of uploads will decrease the overall traffic. Regard this on choosing the file size!',
 	'DL_UPLOAD_TRAFFIC_COUNT'	=> 'Also decrease the overall traffic for uploads',
 	'DL_UPLOADS_COUNT'			=> 'Number of uploads',
@@ -754,7 +764,8 @@ $lang = array_merge($lang, array(
 	'DL_VERSION_REPLACE_EXPLAIN'	=> 'The download will only be updated, if no new file is uploaded.',
 	'DL_VERSIONS'					=> 'Releases',
 	'DL_VIEW_COMMENTS'				=> 'Show',
-	'DL_VIEW_LINK'					=> 'View Download',
+	'DL_VIEW_DOWNLOADS'				=> 'View downloads',
+	'DL_VIEW_LINK'					=> 'View download',
 	'DL_VIEW_PERM'					=> 'View effective permissions',
 	'DL_VISUAL_CONFIRMATION'		=> 'Visual confirmation to download a file',
 
@@ -857,4 +868,4 @@ $lang = array_merge($lang, array(
 	%s
 	--------------------',
 
-));
+]);

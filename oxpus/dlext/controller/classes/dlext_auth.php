@@ -70,11 +70,12 @@ class dlext_auth implements dlext_auth_interface
 
 	public function dl_auth()
 	{
-		$cat_auth_array = $group_ids = array();
+		$cat_auth_array = [];
+		$group_ids = [];
 
-		$auth_cat = (isset($this->dl_auth_perm['auth_cat'])) ? $this->dl_auth_perm['auth_cat'] : array();
-		$group_perm_ids = (isset($this->dl_auth_perm['group_perm_ids'])) ? $this->dl_auth_perm['group_perm_ids'] : array();
-		$auth_perm = (isset($this->dl_auth_perm['auth_perm'])) ? $this->dl_auth_perm['auth_perm'] : array();
+		$auth_cat = (isset($this->dl_auth_perm['auth_cat'])) ? $this->dl_auth_perm['auth_cat'] : [];
+		$group_perm_ids = (isset($this->dl_auth_perm['group_perm_ids'])) ? $this->dl_auth_perm['group_perm_ids'] : [];
+		$auth_perm = (isset($this->dl_auth_perm['auth_perm'])) ? $this->dl_auth_perm['auth_perm'] : [];
 
 		$user_id = ($this->user->data['user_perm_from']) ? $this->user->data['user_perm_from'] : $this->user->data['user_id'];
 
@@ -135,7 +136,7 @@ class dlext_auth implements dlext_auth_interface
 		}
 		else
 		{
-			$this->dl_index = array();
+			$this->dl_index = [];
 		}
 
 		$this->cat_counts = $this->dlext_cache->obtain_dl_cat_counts();
@@ -155,7 +156,7 @@ class dlext_auth implements dlext_auth_interface
 	{
 		$dl_auth = $this->dl_auth();
 
-		$cat_perm = array();
+		$cat_perm = [];
 
 		$cat_perm['auth_view']	= (isset($dl_auth[$cat_id]['auth_view'])) ? intval($dl_auth[$cat_id]['auth_view']) : 0;
 		$cat_perm['auth_dl']	= (isset($dl_auth[$cat_id]['auth_dl'])) ? intval($dl_auth[$cat_id]['auth_dl']) : 0;
@@ -195,7 +196,7 @@ class dlext_auth implements dlext_auth_interface
 	public function get_ext_blacklist()
 	{
 		$this->config->set('dl_enable_blacklist', 0);
-		$ext_blacklist = array();
+		$ext_blacklist = [];
 
 		if ($this->config['dl_use_ext_blacklist'])
 		{
@@ -348,7 +349,7 @@ class dlext_auth implements dlext_auth_interface
 			return 0;
 		}
 
-		$user_ids = array();
+		$user_ids = [];
 
 		if ($this->dl_index[$cat_id][$perm])
 		{
@@ -372,7 +373,7 @@ class dlext_auth implements dlext_auth_interface
 				return 0;
 			}
 
-			$group_ids = array();
+			$group_ids = [];
 
 			while ($row = $this->db->sql_fetchrow($result))
 			{

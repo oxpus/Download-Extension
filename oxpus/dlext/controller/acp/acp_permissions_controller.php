@@ -106,7 +106,9 @@ class acp_permissions_controller implements acp_permissions_interface
 			$action = '';
 		}
 		
-		$index = array();
+		$s_hidden_fields = [];
+
+		$index = [];
 		$index = $this->dlext_main->full_index();
 		
 		if (!sizeof($index))
@@ -114,21 +116,19 @@ class acp_permissions_controller implements acp_permissions_interface
 			redirect($this->u_action . '&amp;mode=categories');
 		}
 		
-		$cat_id = (isset($s_presel_cats[0])) ? $s_presel_cats[0] : array();
+		$cat_id = (isset($s_presel_cats[0])) ? $s_presel_cats[0] : [];
 		
 		if ($view_perm > 1)
 		{
 			$cat_list = '';
-			$s_hidden_fields = array(
-				'view_perm'	=> $view_perm,
-			);
+			$s_hidden_fields += ['view_perm' => $view_perm];
 		
 			if ($view_perm == 2 && $cat_id)
 			{
 				for ($i = 0; $i < sizeof($s_presel_cats); $i++)
 				{
 					$cat_list .= $index[$s_presel_cats[$i]]['cat_name'] . '<br />';
-					$s_hidden_fields = array_merge($s_hidden_fields, array('cat_select[' . $i . ']' => $s_presel_cats[$i]));
+					$s_hidden_fields += ['cat_select[' . $i . ']' => $s_presel_cats[$i]];
 				}
 			}
 		
@@ -136,7 +136,7 @@ class acp_permissions_controller implements acp_permissions_interface
 			{
 				if ($view_perm == 2)
 				{
-					$cat_ids = array();
+					$cat_ids = [];
 		
 					for ($i = 0; $i < sizeof($s_presel_cats); $i++)
 					{
@@ -147,30 +147,30 @@ class acp_permissions_controller implements acp_permissions_interface
 						WHERE ' . $this->db->sql_in_set('cat_id', $cat_ids);
 					$this->db->sql_query($sql);
 		
-					$sql = 'UPDATE ' . DL_CAT_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', array(
+					$sql = 'UPDATE ' . DL_CAT_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', [
 						'auth_view'		=> 0,
 						'auth_dl'		=> 0,
 						'auth_up'		=> 0,
 						'auth_mod'		=> 0,
 						'auth_cread'	=> 3,
-						'auth_cpost'	=> 3)) . ' WHERE ' . $this->db->sql_in_set('id', $cat_ids);
+						'auth_cpost'	=> 3]) . ' WHERE ' . $this->db->sql_in_set('id', $cat_ids);
 					$this->db->sql_query($sql);
 		
 		
-					$this->phpbb_log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_CAT_PERM_DROP', false, array($cat_list));
+					$this->phpbb_log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_CAT_PERM_DROP', false, [$cat_list]);
 				}
 				else
 				{
 					$sql = 'DELETE FROM ' . DL_AUTH_TABLE;
 					$this->db->sql_query($sql);
 		
-					$sql = 'UPDATE ' . DL_CAT_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', array(
+					$sql = 'UPDATE ' . DL_CAT_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', [
 						'auth_view'		=> 0,
 						'auth_dl'		=> 0,
 						'auth_up'		=> 0,
 						'auth_mod'		=> 0,
 						'auth_cread'	=> 3,
-						'auth_cpost'	=> 3));
+						'auth_cpost'	=> 3]);
 					$this->db->sql_query($sql);
 		
 					$this->phpbb_log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_CAT_PERM_ALL');
@@ -221,14 +221,14 @@ class acp_permissions_controller implements acp_permissions_interface
 					$group_name = ($row['group_type'] == GROUP_SPECIAL) ? $this->language->lang('G_' . $row['group_name']) : $row['group_name'];
 					$group_sep = ($row['group_type'] == GROUP_SPECIAL) ? true : false;
 		
-					$this->template->assign_block_vars('perm_row', array(
+					$this->template->assign_block_vars('perm_row', [
 						'GROUP_NAME'	=> $group_name,
 						'GROUP_SEP'		=> $group_sep,
 						'AUTH_VIEW'		=> $auth_view,
 						'AUTH_DL'		=> $auth_dl,
 						'AUTH_UP'		=> $auth_up,
 						'AUTH_MOD'		=> $auth_mod,
-					));
+					]);
 				}
 		
 				$this->db->sql_freeresult($result);
@@ -313,14 +313,14 @@ class acp_permissions_controller implements acp_permissions_interface
 						$l_auth_mod = $this->language->lang('DL_PERM_GRG');
 				}
 		
-				$this->template->assign_vars(array(
+				$this->template->assign_vars([
 					'AUTH_VIEW'		=> $l_auth_view,
 					'AUTH_DL'		=> $l_auth_dl,
 					'AUTH_UP'		=> $l_auth_up,
 					'AUTH_MOD'		=> $l_auth_mod,
 					'AUTH_CREAD'	=> $l_auth_cread,
 					'AUTH_CPOST'	=> $l_auth_cpost,
-				));
+				]);
 			}
 			else
 			{
@@ -435,16 +435,16 @@ class acp_permissions_controller implements acp_permissions_interface
 					$cat_name = $this->db->sql_fetchfield('cat_name');
 					$this->db->sql_freeresult($result);
 		
-					$sql = 'UPDATE ' . DL_CAT_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', array(
+					$sql = 'UPDATE ' . DL_CAT_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', [
 						'auth_view'		=> $auth_view,
 						'auth_dl'		=> $auth_dl,
 						'auth_up'		=> $auth_up,
 						'auth_mod'		=> $auth_mod,
 						'auth_cread'	=> $auth_cread,
-						'auth_cpost'	=> $auth_cpost)) . ' WHERE id = ' . (int) $s_presel_cats[$i];
+						'auth_cpost'	=> $auth_cpost]) . ' WHERE id = ' . (int) $s_presel_cats[$i];
 					$this->db->sql_query($sql);
 		
-					$this->phpbb_log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_CAT_PERM_ALL', false, array($cat_name, $log_auth_view, $log_auth_dl, $log_auth_up, $log_auth_mod, $log_auth_cread, $log_auth_cpost));
+					$this->phpbb_log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_CAT_PERM_ALL', false, [$cat_name, $log_auth_view, $log_auth_dl, $log_auth_up, $log_auth_mod, $log_auth_cread, $log_auth_cpost]);
 				}
 			}
 			else
@@ -464,13 +464,13 @@ class acp_permissions_controller implements acp_permissions_interface
 								AND group_id = ' . (int) $s_presel_groups[$j];
 						$this->db->sql_query($sql);
 		
-						$sql = 'INSERT INTO ' . DL_AUTH_TABLE . ' ' . $this->db->sql_build_array('INSERT', array(
+						$sql = 'INSERT INTO ' . DL_AUTH_TABLE . ' ' . $this->db->sql_build_array('INSERT', [
 							'cat_id'	=> $s_presel_cats[$i],
 							'group_id'	=> $s_presel_groups[$j],
 							'auth_view'	=> $auth_view,
 							'auth_dl'	=> $auth_dl,
 							'auth_up'	=> $auth_up,
-							'auth_mod'	=> $auth_mod));
+							'auth_mod'	=> $auth_mod]);
 						$this->db->sql_query($sql);
 		
 						$sql = 'SELECT group_type, group_name FROM ' . GROUPS_TABLE . '
@@ -480,7 +480,7 @@ class acp_permissions_controller implements acp_permissions_interface
 						$this->db->sql_freeresult($result);
 						$group_name = ($row['group_type'] == GROUP_SPECIAL) ? '<strong>' . $this->language->lang('G_' . $row['group_name']) . '</strong>' : $row['group_name'];
 		
-						$this->phpbb_log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_CAT_PERM_GRP', false, array($cat_name, $group_name, $log_auth_view, $log_auth_dl, $log_auth_up, $log_auth_mod));
+						$this->phpbb_log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_CAT_PERM_GRP', false, [$cat_name, $group_name, $log_auth_view, $log_auth_dl, $log_auth_up, $log_auth_mod]);
 					}
 				}
 			}
@@ -504,11 +504,11 @@ class acp_permissions_controller implements acp_permissions_interface
 			{
 				if ($s_presel_cats[$i] <> -1)
 				{
-					$this->template->assign_block_vars('preselected_cats', array(
-						'CAT_TITLE' => $index[$s_presel_cats[$i]]['cat_name'])
-					);
+					$this->template->assign_block_vars('preselected_cats', [
+						'CAT_TITLE' => $index[$s_presel_cats[$i]]['cat_name'],
+					]);
 		
-					$s_hidden_fields = (isset($s_hidden_fields)) ? array_merge($s_hidden_fields, array('cat_select[' . $i . ']' => $s_presel_cats[$i])) : array('cat_select[]' => $s_presel_cats[$i]);
+					$s_hidden_fields += ['cat_select[' . $i . ']' => $s_presel_cats[$i]];
 				}
 			}
 		
@@ -537,8 +537,8 @@ class acp_permissions_controller implements acp_permissions_interface
 					$s_group_select .= '</optgroup>';
 					$s_group_select .= '<optgroup label="' . $this->language->lang('USERGROUPS') . '">';
 		
-					$group_data = array();
-					$group_sepr = array();
+					$group_data = [];
+					$group_sepr = [];
 		
 					while($row = $this->db->sql_fetchrow($result))
 					{
@@ -581,15 +581,15 @@ class acp_permissions_controller implements acp_permissions_interface
 							$group_sep = '';
 						}
 		
-						$this->template->assign_block_vars('preselected_groups', array(
+						$this->template->assign_block_vars('preselected_groups', [
 							'GROUP_NAME'	=> $group_name,
 							'GROUP_SEP'		=> $group_sep,
-						));
+						]);
 		
-						$s_hidden_fields = array_merge($s_hidden_fields, array('group_select[' . $i . ']' => $s_presel_groups[$i]));
+						$s_hidden_fields += ['group_select[' . $i . ']' => $s_presel_groups[$i]];
 					}
 		
-					$s_hidden_fields = array_merge($s_hidden_fields, array('action' => 'save_perm'));
+					$s_hidden_fields += ['action' => 'save_perm'];
 		
 					if ($s_presel_groups[0] == -1)
 					{
@@ -640,7 +640,7 @@ class acp_permissions_controller implements acp_permissions_interface
 						}
 		
 						$this->template->assign_var('S_AUTH_ALL_USERS', true);
-						$this->template->assign_vars(array(
+						$this->template->assign_vars([
 							'L_AUTH_EXPL'	=> (sizeof($s_presel_cats) == 1) ? $this->language->lang('DL_AUTH_SINGLE_EXPLAIN') : $this->language->lang('DL_AUTH_MULTI_EXPLAIN'),
 							'L_OPTIONS'		=> $this->language->lang('SELECT_OPTION'),
 							'S_AUTH_VIEW'	=> $s_auth_view,
@@ -649,7 +649,7 @@ class acp_permissions_controller implements acp_permissions_interface
 							'S_AUTH_MOD'	=> $s_auth_mod,
 							'S_AUTH_CREAD'	=> $s_auth_cread,
 							'S_AUTH_CPOST'	=> $s_auth_cpost,
-						));
+						]);
 					}
 					else
 					{
@@ -675,7 +675,7 @@ class acp_permissions_controller implements acp_permissions_interface
 									$auth_mod = $row['auth_mod'];
 								}
 		
-								$this->template->assign_vars(array(
+								$this->template->assign_vars([
 									'S_AUTH_VIEW_YES'	=> ($auth_view) ? 'checked="checked"' : '',
 									'S_AUTH_VIEW_NO'	=> (!$auth_view) ? 'checked="checked"' : '',
 									'S_AUTH_DL_YES'		=> ($auth_dl) ? 'checked="checked"' : '',
@@ -684,7 +684,7 @@ class acp_permissions_controller implements acp_permissions_interface
 									'S_AUTH_UP_NO'		=> (!$auth_up) ? 'checked="checked"' : '',
 									'S_AUTH_MOD_YES'	=> ($auth_mod) ? 'checked="checked"' : '',
 									'S_AUTH_MOD_NO'		=> (!$auth_mod) ? 'checked="checked"' : '',
-								));
+								]);
 							}
 		
 							$this->db->sql_freeresult($result);
@@ -711,13 +711,13 @@ class acp_permissions_controller implements acp_permissions_interface
 		$s_cat_select .= $this->dlext_extra->dl_cat_select(0, 0, $s_presel_cats);
 		$s_cat_select .= '</select>';
 		
-		$this->template->assign_vars(array(
+		$this->template->assign_vars([
 			'S_CAT_SELECT'		=> (isset($s_cat_select)) ? $s_cat_select : '',
 			'S_GROUP_SELECT'	=> (isset($s_group_select)) ? $s_group_select : '',
 			'S_HIDDEN_FIELDS'	=> (isset($s_hidden_fields) && !$view_perm) ? build_hidden_fields($s_hidden_fields) : '',
 			'S_PERM_ACTION'		=> $this->u_action,
 		
 			'U_BACK'			=> (sizeof($s_presel_cats)) ? $this->u_action : '',
-		));
+		]);
 	}
 }

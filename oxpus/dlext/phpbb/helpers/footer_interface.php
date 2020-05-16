@@ -26,7 +26,7 @@ interface footer_interface
 	 * @return void
 	 * @access public
 	 */
-	public function set_parameter($nav_view = '', $cat_id = 0, $df_id = 0, $index = array());
+	public function set_parameter($nav_view = '', $cat_id = 0, $df_id = 0, $index = []);
 
 	/**
 	 * Module main part

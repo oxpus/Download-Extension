@@ -131,6 +131,18 @@ class broken
 		// Include the default base init script
 		include_once($this->ext_path . 'phpbb/includes/base_init.' . $this->php_ext);
 
+		if ($cancel)
+		{
+			if ($df_id)
+			{
+				redirect($this->helper->route('oxpus_dlext_details', ['df_id' => $df_id]));
+			}
+			else
+			{
+				redirect($this->helper->route('oxpus_dlext_index'));
+			}
+		}
+
 		/*
 		* handle reported broken download
 		*/
@@ -152,7 +164,7 @@ class broken
 
 				$mini_icon		= $this->dlext_status->mini_status_file($cat_id, $df_id);
 
-				$file_status	= array();
+				$file_status	= [];
 				$file_status	= $this->dlext_status->status($df_id);
 
 				$status			= $file_status['status_detail'];
@@ -173,7 +185,7 @@ class broken
 			}
 			else
 			{
-				$cat_auth_tmp = array();
+				$cat_auth_tmp = [];
 				$cat_auth_tmp = $this->dlext_auth->dl_cat_auth($cat_id);
 
 				if (($cat_auth_tmp['auth_mod'] || ($this->auth->acl_get('a_') && $this->user->data['is_registered'])) && !$this->dlext_auth->user_banned())
@@ -234,7 +246,8 @@ class broken
 				$captcha = $this->phpbb_container->get('captcha.factory')->get_instance($this->config['captcha_plugin']);
 				$captcha->init(CONFIRM_POST);
 
-				$s_hidden_fields = $error = array();
+				$s_hidden_fields = [];
+				$error = [];
 
 				if ($confirm == 'code')
 				{
@@ -257,7 +270,7 @@ class broken
 			        }
 			        else if ($captcha->is_solved())
 			        {
-			            $s_hidden_fields = array_merge($s_hidden_fields, $captcha->get_hidden_fields());
+			            $s_hidden_fields += $captcha->get_hidden_fields();
 			            $code_match = false;
 			        }
 				}
@@ -267,18 +280,16 @@ class broken
 
 					page_header();
 
-					$this->template->set_filenames(array(
-						'body' => 'dl_report_code_body.html')
-					);
+					$this->template->set_filenames(['body' => 'dl_report_code_body.html']);
 
-					$s_hidden_fields = array_merge($s_hidden_fields, array(
+					$s_hidden_fields += [
 						'cat_id' => $cat_id,
 						'df_id' => $df_id,
 						'view' => 'broken',
 						'confirm' => 'code'
-					));
+					];
 
-					$this->template->assign_vars(array(
+					$this->template->assign_vars([
 						'DESCRIPTION'		=> $description,
 						'MINI_IMG'			=> $mini_icon,
 						'HACK_VERSION'		=> $hack_version,
@@ -286,30 +297,34 @@ class broken
 						'MESSAGE_TITLE'		=> $this->language->lang('DL_BROKEN'),
 						'MESSAGE_TEXT'		=> $this->language->lang('DL_REPORT_CONFIRM_CODE'),
 
+			            'CAPTCHA_TEMPLATE'	=> $captcha->get_template(),
+
 						'S_CONFIRM_ACTION'	=> $this->helper->route('oxpus_dlext_broken'),
 						'S_HIDDEN_FIELDS'	=> build_hidden_fields($s_hidden_fields),
 			            'S_CONFIRM_CODE'	=> true,
-			            'CAPTCHA_TEMPLATE'	=> $captcha->get_template(),
-					));
+					]);
 
-					page_footer();
+					/*
+					* include the mod footer
+					*/
+					$dl_footer = $this->phpbb_container->get('oxpus.dlext.footer');
+					$dl_footer->set_parameter($nav_view, $cat_id, $df_id, $index);
+					$dl_footer->handle();
 				}
 			}
 			else if (!$submit)
 			{
 				page_header();
 
-				$this->template->set_filenames(array(
-					'body' => 'dl_report_code_body.html')
-				);
+				$this->template->set_filenames(['body' => 'dl_report_code_body.html']);
 
-				$s_hidden_fields = array(
+				$s_hidden_fields = [
 					'cat_id' => $cat_id,
 					'df_id' => $df_id,
 					'view' => 'broken',
-				);
+				];
 
-				$this->template->assign_vars(array(
+				$this->template->assign_vars([
 					'DESCRIPTION'		=> $description,
 					'MINI_IMG'			=> $mini_icon,
 					'HACK_VERSION'		=> $hack_version,
@@ -319,9 +334,14 @@ class broken
 
 					'S_CONFIRM_ACTION'	=> $this->helper->route('oxpus_dlext_broken'),
 					'S_HIDDEN_FIELDS'	=> build_hidden_fields($s_hidden_fields),
-				));
+				]);
 
-				page_footer();
+				/*
+				* include the mod footer
+				*/
+				$dl_footer = $this->phpbb_container->get('oxpus.dlext.footer');
+				$dl_footer->set_parameter($nav_view, $cat_id, $df_id, $index);
+				$dl_footer->handle();
 			}
 
 			if ($captcha_active && !$code_match)
@@ -330,8 +350,8 @@ class broken
 			}
 			else
 			{
-				$sql = 'UPDATE ' . DOWNLOADS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', array(
-					'broken' => true)) . ' WHERE id = ' . (int) $df_id;
+				$sql = 'UPDATE ' . DOWNLOADS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', [
+					'broken' => true]) . ' WHERE id = ' . (int) $df_id;
 				$this->db->sql_query($sql);
 
 				$processing_user = $this->dlext_auth->dl_auth_users($cat_id, 'auth_mod');
@@ -339,18 +359,18 @@ class broken
 				$report_notify_text = $this->request->variable('report_notify_text', '', true);
 				$report_notify_text = ($report_notify_text) ? $this->language->lang('DL_REPORT_NOTIFY_TEXT', $report_notify_text) : '';
 
-				$mail_data = array(
+				$mail_data = [
 					'email_template'		=> 'downloads_report_broken',
 					'processing_user'		=> $processing_user,
 					'report_notify_text'	=> $report_notify_text,
 					'cat_id'				=> $cat_id,
 					'df_id'					=> $df_id,
-				);
+				];
 
 				$this->dlext_email->send_report($mail_data);
 			}
 		}
 
-		redirect($this->helper->route('oxpus_dlext_details', array('df_id' => $df_id, 'cat_id' => $cat_id)));
+		redirect($this->helper->route('oxpus_dlext_details', ['df_id' => $df_id, 'cat_id' => $cat_id]));
 	}
 }

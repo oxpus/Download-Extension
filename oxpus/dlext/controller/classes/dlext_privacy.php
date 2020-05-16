@@ -35,9 +35,9 @@ class dlext_privacy implements dlext_privacy_interface
 
 	public function dl_privacy()
 	{
-		$sql = 'UPDATE ' . DL_STATS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', array(
+		$sql = 'UPDATE ' . DL_STATS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', [
 			'user_ip' => '127.0.0.1'
-		));
+		]);
 		$this->db->sql_query($sql);
 
 		return;

@@ -173,7 +173,7 @@ class load
 			{
 				if ($this->config['dl_hotlink_action'])
 				{
-					redirect($this->helper->route('oxpus_dlext_details', array('df_id' => $df_id)));
+					redirect($this->helper->route('oxpus_dlext_details', ['df_id' => $df_id]));
 				}
 				else
 				{
@@ -185,14 +185,14 @@ class load
 		/*
 		* THE basic function to get the download!
 		*/
-		$dl_file = array();
+		$dl_file = [];
 		$dl_file = $this->dlext_files->all_files(0, '', 'ASC', '', $df_id, $modcp, '*');
 
 		$cat_id = ($modcp) ? $cat_id : $dl_file['cat'];
 
 		if ($modcp && $cat_id)
 		{
-			$cat_auth = array();
+			$cat_auth = [];
 			$cat_auth = $this->dlext_auth->dl_cat_auth($cat_id);
 
 			if (!$this->auth->acl_get('a_') && !$cat_auth['auth_mod'])
@@ -208,10 +208,10 @@ class load
 		/*
 		* check the permissions
 		*/
-		$check_status = array();
+		$check_status = [];
 		$check_status = $this->dlext_status->status($df_id);
 		$status = $check_status['auth_dl'];
-		$cat_auth = array();
+		$cat_auth = [];
 		$cat_auth = $this->dlext_auth->dl_cat_auth($cat_id);
 
 		if ($modcp)
@@ -307,7 +307,7 @@ class load
 
 			if ($row_code != $code)
 			{
-				redirect($this->helper->route('oxpus_dlext_details', array('df_id' => $df_id)));
+				redirect($this->helper->route('oxpus_dlext_details', ['df_id' => $df_id]));
 			}
 		}
 
@@ -408,11 +408,11 @@ class load
 			*/
 			if ($status)
 			{
-				$sql = 'UPDATE ' . DOWNLOADS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', array(
+				$sql = 'UPDATE ' . DOWNLOADS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', [
 					'klicks'			=> $dl_file['klicks'] + 1,
 					'overall_klicks'	=> $dl_file['overall_klicks'] + 1,
 					'last_time'			=> time(),
-					'down_user'			=> $this->user->data['user_id'])) . ' WHERE id = ' . (int) $df_id;
+					'down_user'			=> $this->user->data['user_id']]) . ' WHERE id = ' . (int) $df_id;
 				$this->db->sql_query($sql);
 
 				@unlink(DL_EXT_CACHE_PATH . 'data_dl_file_p.' . $this->phpEx);
@@ -440,15 +440,15 @@ class load
 					{
 						$this->user->data['user_traffic'] -= $dl_file['file_size'];
 
-						$sql = 'UPDATE ' . USERS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', array(
-							'user_traffic' => $this->user->data['user_traffic'])) . ' WHERE user_id = ' . (int) $this->user->data['user_id'];
+						$sql = 'UPDATE ' . USERS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', [
+							'user_traffic' => $this->user->data['user_traffic']]) . ' WHERE user_id = ' . (int) $this->user->data['user_id'];
 						$this->db->sql_query($sql);
 
 						if ($this->config['dl_user_traffic_once'])
 						{
-							$sql = 'INSERT INTO ' . DL_NOTRAF_TABLE . ' ' . $this->db->sql_build_array('INSERT', array(
+							$sql = 'INSERT INTO ' . DL_NOTRAF_TABLE . ' ' . $this->db->sql_build_array('INSERT', [
 								'user_id'	=> $this->user->data['user_id'],
-								'dl_id'		=> $dl_file['id']));
+								'dl_id'		=> $dl_file['id']]);
 							$this->db->sql_query($sql);
 						}
 					}
@@ -492,8 +492,8 @@ class load
 						{
 							$cat_traffic_use += $dl_file['file_size'];
 
-							$sql = 'UPDATE ' . DL_CAT_TRAF_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', array(
-								'cat_traffic_use' => $cat_traffic_use)) . ' WHERE cat_id = ' . (int) $cat_id;
+							$sql = 'UPDATE ' . DL_CAT_TRAF_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', [
+								'cat_traffic_use' => $cat_traffic_use]) . ' WHERE cat_id = ' . (int) $cat_id;
 							$this->db->sql_query($sql);
 
 							@unlink(DL_EXT_CACHE_PATH . 'data_dl_cats.' . $this->phpEx);
@@ -508,7 +508,7 @@ class load
 						$stat_prune = $this->dlext_main->dl_prune_stats($cat_id, $index[$cat_id]['stats_prune']);
 					}
 
-					$sql = 'INSERT INTO ' . DL_STATS_TABLE . ' ' . $this->db->sql_build_array('INSERT', array(
+					$sql = 'INSERT INTO ' . DL_STATS_TABLE . ' ' . $this->db->sql_build_array('INSERT', [
 						'cat_id'		=> $cat_id,
 						'id'			=> $df_id,
 						'user_id'		=> $this->user->data['user_id'],
@@ -516,7 +516,7 @@ class load
 						'traffic'		=> $dl_file['file_size'],
 						'direction'		=> 0,
 						'user_ip'		=> $this->user->data['session_ip'],
-						'time_stamp'	=> time()));
+						'time_stamp'	=> time()]);
 					$this->db->sql_query($sql);
 				}
 			}
@@ -540,7 +540,7 @@ class load
 
 				$dl_file_url = str_replace($this->root_path, '', DL_EXT_FILEBASE_PATH. 'downloads/' . $index[$cat_id]['cat_path']);
 
-				$dl_file_data = array(
+				$dl_file_data = [
 					'attach_id'				=> 0,
 					'is_orphan'				=> false,
 					'physical_filename'		=> $dl_file['real_file'],
@@ -548,7 +548,7 @@ class load
 					'mimetype'				=> 'application/octetstream',
 					'filesize'				=> sprintf("%u", @filesize($dl_file_url . $dl_file['real_file'])),
 					'filetime'				=> $dl_file['change_time'],
-				);
+				];
 
 				send_file_to_browser($dl_file_data, $dl_file_url, ATTACHMENT_CATEGORY_NONE);
 				file_gc();

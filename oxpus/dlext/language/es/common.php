@@ -22,10 +22,10 @@ if (!defined('IN_PHPBB'))
 
 if (empty($lang) || !is_array($lang))
 {
-	$lang = array();
+	$lang = [];
 }
 
-$lang = array_merge($lang, array(
+$lang = array_merge($lang, [
   	'DL_LOG_CAT_PERM_DROP'	=> '<strong>Restablecer los permisos para las categorías</strong><br />» %1$s',
 
 	'ACP_DOWNLOADS' 	=> 'Descargas',
@@ -123,7 +123,7 @@ $lang = array_merge($lang, array(
 	'DL_APPROVE_COMMENTS'				=> 'Aprobar automáticamente cada nuevo comentario',
 	'DL_APPROVE_OVERVIEW'				=> 'Hay %s descargas no aprobadas. Haga clic aquí para aprobarlas.',
 	'DL_APPROVE_OVERVIEW_COMMENTS'		=> 'Hay %s comentarios no aprobados. Haga clic en el texto para comprobarlos.',
-	'DL_APPROVE_OVERVIEW_ONE'			=> 'Hay %s descarga no aprobada. Haga clic aquí para aprobarla.',
+	'DL_APPROVE_OVERVIEW_ONE'			=> 'Hay una descarga no aprobada. Haga clic aquí para aprobarla.',
 	'DL_APPROVE_OVERVIEW_ONE_COMMENT'	=> 'Hay un comentario no aprobado. Haga clic en el texto para comprobarlo.',
 	'DL_ASSIGN'							=> 'Asignar autor',
 	'DL_AUTH_CPOST'						=> 'Escribir comentarios',
@@ -145,6 +145,8 @@ $lang = array_merge($lang, array(
 	'DL_BROKEN'						=> 'Reportar descarga rota',
 	'DL_BROKEN_CUR'					=> 'Esta descarga está reporta actualmente como rota',
 	'DL_BROKEN_MOD'					=> 'Restablecer estado roto de la descarga',
+	'DL_BROKEN_OVERVIEW'			=> 'Hay %s descargas rota. Haga clic aquí para aprobarlas.',
+	'DL_BROKEN_OVERVIEW_ONE'		=> 'Hay una descarga rota. Haga clic aquí para aprobarla.',
 	'DL_BUG_REPORT_ADDED'			=> 'Informe de error añadido con éxito',
 	'DL_BUG_REPORT_ASSIGN'			=> 'Asignar',
 	'DL_BUG_REPORT_ASSIGN_DATE'		=> 'Asignado el',
@@ -226,6 +228,7 @@ $lang = array_merge($lang, array(
 	'DL_COMMENTS_COUNT'					=> '%s comentarios',
 	'DL_COMMENTS_DELETE'				=> 'Eliminar comentarios',
 	'DL_COMMENTS_DELETE_ALL'			=> 'Eliminar todos los comentarios',
+	'DL_COMMENTS_PROFILE'				=> 'Descargas comentarios',
 	'DL_CONFIG'							=> 'Configuración de Descargas',
 	'DL_CONFIG_EXPLAIN'					=> 'Desde aquí se puede activar y desactivar varias funciones de la Extensión Descargas y cambiar algunos ajustes.',
 	'DL_CONFIG_UPDATED'					=> 'Configuración de Descargas guardada correctamente',
@@ -281,9 +284,11 @@ $lang = array_merge($lang, array(
 	'DL_EDIT_THUMBS'			=> 'Gestionar imágenes',
 	'DL_EDIT_TIME'				=> 'Número de días que estará marcada una descarga editada',
 	'DL_EMPTY_CATEGORY'			=> 'Esta categoría no contiene ninguna descarga',
+	'DL_ENABLE_INDEX_DESC'		=> 'Habilitar descripciones de descarga en las categorías',
 	'DL_ENABLE_JUMPBOX'			=> 'Habilitar "Ir a" en el pie de página de descargas',
 	'DL_ENABLE_POST_TRAFFIC'	=> 'Habilitar adición de tráfico por publicar',
 	'DL_ENABLE_RATE'			=> 'Habilitar sistema de valoración',
+	'DL_ENABLE_SEARCH_DESC'		=> 'Habilitar descripciones de descarga en los resultados de búsqueda',
 	'DL_ENABLE_TOPIC'			=> 'Crear un tema para cada descarga',
 	'DL_EXT_BLACKLIST'			=> 'Lista negra de tipos de archivos',
 	'DL_EXT_BLACKLIST_EXPLAIN'	=> 'Todas las extensiones de archivos introducidas aquí están deshabilitadas para las subidas con esta extensión.<br />En el Panel de Administración se utilizarán estas extensiones también.<br />No influyen en las descargas existentes.',
@@ -388,9 +393,13 @@ $lang = array_merge($lang, array(
 	'DL_LATEST_COMMENTS'		=> 'Mostrar los últimos X comentarios en detalles de la descarga',
 	'DL_LATEST_DOWNLOAD'		=> 'Última descarga',
 	'DL_LATEST_DOWNLOADS'		=> 'Últimas descargas',
+	'DL_LATEST_TYPE_OFF'		=> 'Apagado',
+	'DL_LATEST_TYPE_DEFAULT'	=> 'Nuevo y cambiado descarga',
+	'DL_LATEST_TYPE_COMPLETE'	=> 'Todos descarga',
 	'DL_LATEST_UPLOADS'			=> 'Últimas subidas',
 	'DL_LATEST_VERSION'			=> 'Ultima versión',
-	'DL_LIMIT_DESC_ON_INDEX'	=> 'Limitar las descripciones de Descarga en el índice',
+	'DL_LIMIT_DESC_ON_INDEX'	=> 'Limitar las descripciones de descarga en el índice',
+	'DL_LIMIT_DESC_ON_SEARCH'	=> 'Limitar las descripciones de descarga en los resultados de búsqueda',
 	'DL_LINKS_PER_PAGE'			=> 'Descargas por página',
 	'DL_LOCK'					=> 'Bloquear',
 
@@ -464,6 +473,7 @@ $lang = array_merge($lang, array(
 	'DL_MOD_VERSION_PUBLIC'			=> 'Download Extension &copy; by Hotschi, Demolition Fabi, OXPUS',
 	'DL_MOD_WARNING'				=> 'Advertencias',
 	'DL_MODCP_APPROVE'				=> 'Aprobar descargas',
+	'DL_MODCP_BROKEN'				=> 'Reportado descargas',
 	'DL_MODCP_CAPPROVE'				=> 'Aprobar comentarios',
 	'DL_MODCP_EDIT'					=> 'Editar descarga',
 	'DL_MODCP_MANAGE'				=> 'Gestionar descargas',
@@ -724,10 +734,10 @@ $lang = array_merge($lang, array(
 	'DL_UNMARK'					=> 'Desmarcar todo',
 	'DL_UP'						=> 'Arriba',
 	'DL_UP_TO_DATE'				=> '%s está actualizado',
-	'DL_UPLOAD'					=> 'Subir un archivo',
+	'DL_UPLOAD'					=> 'Crear descarga',
 	'DL_UPLOAD_ERROR'			=> 'Error durante la subida de este archivo. Por favor, retroceda y vuelva a intentarlo.<br>Póngase en contacto con el administrador si persiste este error.',
 	'DL_UPLOAD_FILE'			=> 'Subir',
-	'DL_UPLOAD_MAX_FILESIZE'	=> 'Tamaño máximo del archivo permitido para subidas: %s',
+	'DL_UPLOAD_MAX_FILESIZE'	=> 'Tamaño máximo de archivo permitido: %s',
 	'DL_UPLOAD_ONE_MORE'		=> '%sClic aquí para añadir otra descarga%s',
 	'DL_UPLOAD_TRAFFIC'			=> 'El tamaño de archivo de subidas disminuirá el tráfico en general. ¡Considere esto sobre cómo elegir el tamaño de archivo!',
 	'DL_UPLOAD_TRAFFIC_COUNT'	=> 'También disminuye el tráfico global para subidas',
@@ -758,6 +768,7 @@ $lang = array_merge($lang, array(
 	'DL_VERSION_REPLACE_EXPLAIN'	=> 'La descarga sólo se actualizará si no se sube ningún archivo nuevo.',
 	'DL_VERSIONS'					=> 'Versiones',
 	'DL_VIEW_COMMENTS'				=> 'Mostrar',
+	'DL_VIEW_DOWMLOADS'				=> 'Ver descargas',
 	'DL_VIEW_LINK'					=> 'Ver descarga',
 	'DL_VIEW_PERM'					=> 'Ver permisos efectivos',
 	'DL_VISUAL_CONFIRMATION'		=> 'Confirmación visual para descargar un archivo',
@@ -861,4 +872,4 @@ $lang = array_merge($lang, array(
 	%s
 	--------------------',
 
-));
+]);

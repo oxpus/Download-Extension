@@ -21,28 +21,28 @@ class release_7_0_10 extends \phpbb\db\migration\migration
 
 	static public function depends_on()
 	{
-		return array('\oxpus\dlext\migrations\v700\release_7_0_9');
+		return ['\oxpus\dlext\migrations\v700\release_7_0_9'];
 	}
 
 	public function update_data()
 	{
-		return array(
+		return [
 			// Set the current version
-			array('config.update', array('dl_ext_version', $this->dl_ext_version)),
+			['config.update', ['dl_ext_version', $this->dl_ext_version]],
 
-			array('custom', array(array($this, 'drop_wrong_cache_files'))),
-		);
+			['custom', [[$this, 'drop_wrong_cache_files']]],
+		];
 	}
 
 	public function drop_wrong_cache_files()
 	{
-		$drop_files = array(
+		$drop_files = [
 			'auth',
 			'black',
 			'cat_counts',
 			'cats',
 			'file_preset',
-		);
+		];
 
 		foreach($drop_files as $file)
 		{

@@ -54,17 +54,17 @@ class dlext_main implements dlext_main_interface
         $this->user_admin   = $this->dlext_auth->user_admin();
 	}
 
-	public function full_index($only_cat = 0, $parent = 0, $level = 0, $auth_level = 0, &$tree_dl = array())
+	public function full_index($only_cat = 0, $parent = 0, $level = 0, $auth_level = 0, &$tree_dl = [])
 	{
 		if (!is_array($this->dl_index) || !sizeof($this->dl_index))
 		{
-			return array();
+			return [];
 		}
 
 		if ($only_cat > 0)
 		{
 			$tree_dl[$only_cat] = $this->dl_index[$only_cat];
-			$tree_dl[$only_cat]['nav_path'] = $this->helper->route('oxpus_dlext_index', array('cat' => $only_cat));
+			$tree_dl[$only_cat]['nav_path'] = $this->helper->route('oxpus_dlext_index', ['cat' => $only_cat]);
 			$tree_dl[$only_cat]['cat_path'] = $this->dl_index[$only_cat]['path'];
 			$tree_dl[$only_cat]['cat_name_nav'] = $this->dl_index[$only_cat]['cat_name'];
 		}
@@ -73,7 +73,7 @@ class dlext_main implements dlext_main_interface
 			if ($auth_level)
 			{
 				unset($access_ids);
-				$access_ids = array();
+				$access_ids = [];
 			}
 
 			foreach($this->dl_index as $cat_id => $value)
@@ -109,7 +109,7 @@ class dlext_main implements dlext_main_interface
 						}
 
 						$tree_dl[$cat_id] = $value;
-						$tree_dl[$cat_id]['nav_path'] = $this->helper->route('oxpus_dlext_index', array('cat' => $cat_id));
+						$tree_dl[$cat_id]['nav_path'] = $this->helper->route('oxpus_dlext_index', ['cat' => $cat_id]);
 						$tree_dl[$cat_id]['cat_path'] = $value['path'];
 						$tree_dl[$cat_id]['cat_name'] = $seperator . $value['cat_name'];
 						$tree_dl[$cat_id]['cat_name_nav'] = $value['cat_name'];
@@ -129,17 +129,17 @@ class dlext_main implements dlext_main_interface
 	{
 		if (!is_array($this->dl_index) || !sizeof($this->dl_index))
 		{
-			return array();
+			return [];
 		}
 
-		$tree_dl = array();
+		$tree_dl = [];
 
 		foreach($this->dl_index as $cat_id => $value)
 		{
 			if (((isset($value['auth_view']) && $value['auth_view']) || (isset($this->dl_auth[$cat_id]['auth_view']) && $this->dl_auth[$cat_id]['auth_view']) || $this->user_admin) && (isset($value['parent']) && $value['parent'] == $parent))
 			{
 				$tree_dl[$cat_id] = $value;
-				$tree_dl[$cat_id]['nav_path'] = $this->helper->route('oxpus_dlext_index', array('cat' => $cat_id));
+				$tree_dl[$cat_id]['nav_path'] = $this->helper->route('oxpus_dlext_index', ['cat' => $cat_id]);
 				$tree_dl[$cat_id]['cat_path'] = $value['path'];
 				$tree_dl[$cat_id]['cat_name_nav'] = $value['cat_name'];
 				$tree_dl[$cat_id]['sublevel'] = $this->get_sublevel($cat_id);
@@ -152,10 +152,10 @@ class dlext_main implements dlext_main_interface
 	{
 		if (!is_array($this->dl_index) || !sizeof($this->dl_index))
 		{
-			return array();
+			return [];
 		}
 
-		$sublevel = array();
+		$sublevel = [];
 		$i = 0;
 
 		foreach($this->dl_index as $cat_id => $value)
@@ -165,7 +165,7 @@ class dlext_main implements dlext_main_interface
 				$sublevel['cat_name'][$i] = $this->dl_index[$cat_id]['cat_name'];
 				$sublevel['total'][$i] = (isset($this->dl_index[$cat_id]['total'])) ? $this->dl_index[$cat_id]['total'] : 0;
 				$sublevel['cat_id'][$i] = $this->dl_index[$cat_id]['id'];
-				$sublevel['cat_path'][$i] = $this->helper->route('oxpus_dlext_index', array('cat' => $cat_id));
+				$sublevel['cat_path'][$i] = $this->helper->route('oxpus_dlext_index', ['cat' => $cat_id]);
 				$sublevel['cat_sub'][$i] = $cat_id;
 
 				$sublevel['description'][$i] = (isset($this->dl_index[$cat_id]['description'])) ? $this->dl_index[$cat_id]['description'] : '';

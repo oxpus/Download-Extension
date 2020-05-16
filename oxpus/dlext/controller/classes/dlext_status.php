@@ -70,11 +70,11 @@ class dlext_status implements dlext_status_interface
 	{
 		if (isset($this->dl_file_icon['new'][$parent][$file_id]) && $this->dl_file_icon['new'][$parent][$file_id] == true)
 		{
-			$mini_icon_img = ($rss) ? $this->language->lang('DL_FILE_NEW') : '<i class="icon fa-comment-o fa-fw dl-red"></i>';
+			$mini_icon_img = ($rss) ? $this->language->lang('DL_FILE_NEW') : '<i class="icon fa-comment-o fa-fw dl-red" title="' . $this->language->lang('DL_FILE_NEW') . '"></i>';
 		}
 		else if (isset($this->dl_file_icon['edit'][$parent][$file_id]) && $this->dl_file_icon['edit'][$parent][$file_id] == true)
 		{
-			$mini_icon_img = ($rss) ? $this->language->lang('DL_FILE_EDIT') : '<i class="icon fa-edit fa-fw dl-blue"></i>';
+			$mini_icon_img = ($rss) ? $this->language->lang('DL_FILE_EDIT') : '<i class="icon fa-edit fa-fw dl-blue" title="' . $this->language->lang('DL_FILE_EDIT') . '"></i>';
 		}
 		else
 		{
@@ -91,7 +91,7 @@ class dlext_status implements dlext_status_interface
 
 		if (!is_array($this->dl_index) || !sizeof($this->dl_index))
 		{
-			return array();
+			return [];
 		}
 
 		foreach($this->dl_index as $cat_id => $value)
@@ -140,78 +140,85 @@ class dlext_status implements dlext_status_interface
 
 	public function status($df_id)
 	{
+		$t_red = $this->language->lang('DL_RED_EXPLAIN_PERM');
+		$t_blue = $this->language->lang('DL_BLUE_EXPLAIN_FOOT');
+		$t_grey = $this->language->lang('DL_GREY_EXPLAIN');
+		$t_white = $this->language->lang('DL_WHITE_EXPLAIN');
+		$t_yellow = $this->language->lang('DL_YELLOW_EXPLAIN');
+		$t_green = $this->language->lang('DL_GREEN_EXPLAIN');
+
 		if (!isset($this->dl_file_p[$df_id]['cat']))
 		{
-			return array('status' => '', 'file_name' => '', 'auth_dl' => 0, 'file_detail' => '', 'status_detail' => '<i class="icon fa-ban fa-fw dl-red"></i>');
+			return ['status' => '', 'file_name' => '', 'auth_dl' => 0, 'file_detail' => '', 'status_detail' => '<i class="icon fa-ban fa-fw dl-red" title="' . $t_red . '"></i>'];
 		}
 
 		$cat_id = $this->dl_file_p[$df_id]['cat'];
-		$cat_auth = array();
+		$cat_auth = [];
 		$cat_auth = $this->dlext_auth->dl_cat_auth($cat_id);
-		$index = array();
+		$index = [];
 		$index = $this->dlext_main->full_index($cat_id);
 		$status = '';
-		$status_detail = '<i class="icon fa-ban fa-fw dl-red"></i>';
+		$status_detail = '<i class="icon fa-ban fa-fw dl-red" title="' . $t_red . '"></i>';
 		$file_name = '';
 		$auth_dl = 0;
 
-		$file_name = '<a href="' . $this->helper->route('oxpus_dlext_details', array('df_id' => $df_id)) . '">' . $this->dl_file_p[$df_id]['file_name'] . '</a>';
+		$file_name = '<a href="' . $this->helper->route('oxpus_dlext_details', ['df_id' => $df_id]) . '">' . $this->dl_file_p[$df_id]['file_name'] . '</a>';
 		$file_detail = $this->dl_file_p[$df_id]['file_name'];
 
 		if ($this->dlext_auth->user_banned())
 		{
-			$status_detail = '<i class="icon fa-ban fa-fw dl-red"></i>';
-			$status = '<a href="' . $this->helper->route('oxpus_dlext_details', array('df_id' => $df_id)) . '">' . $status_detail . '</a>';
+			$status_detail = '<i class="icon fa-ban fa-fw dl-red" title="' . $t_red . '"></i>';
+			$status = '<a href="' . $this->helper->route('oxpus_dlext_details', ['df_id' => $df_id]) . '">' . $status_detail . '</a>';
 			$auth_dl = 0;
-			return array('status' => $status, 'file_name' => $file_detail, 'auth_dl' => $auth_dl, 'file_detail' => $file_detail, 'status_detail' => $status_detail);
+			return ['status' => $status, 'file_name' => $file_detail, 'auth_dl' => $auth_dl, 'file_detail' => $file_detail, 'status_detail' => $status_detail];
 		}
 
 		if (!$this->config['dl_traffic_off'] && (DL_USERS_TRAFFICS == true || FOUNDER_TRAFFICS_OFF == true))
 		{
 			if (FOUNDER_TRAFFICS_OFF == true)
 			{
-				$status_detail = '<i class="icon fa-download fa-fw dl-yellow"></i>';
-				$status = '<a href="' . $this->helper->route('oxpus_dlext_details', array('df_id' => $df_id)) . '">' . $status_detail . '</a>';
+				$status_detail = '<i class="icon fa-download fa-fw dl-yellow" title="' . $t_yellow . '"></i>';
+				$status = '<a href="' . $this->helper->route('oxpus_dlext_details', ['df_id' => $df_id]) . '">' . $status_detail . '</a>';
 				$auth_dl = true;
 			}
 			else if ($this->dlext_auth->user_logged_in() && intval($this->dlext_auth->user_traffic()) >= $this->dl_file_p[$df_id]['file_size'] && !$this->dl_file_p[$df_id]['extern'])
 			{
-				$status_detail = '<i class="icon fa-download fa-fw dl-yellow"></i>';
-				$status = '<a href="' . $this->helper->route('oxpus_dlext_details', array('df_id' => $df_id)) . '">' . $status_detail . '</a>';
+				$status_detail = '<i class="icon fa-download fa-fw dl-yellow" title="' . $t_yellow . '"></i>';
+				$status = '<a href="' . $this->helper->route('oxpus_dlext_details', ['df_id' => $df_id]) . '">' . $status_detail . '</a>';
 				$auth_dl = true;
 			}
 			else if ($this->dlext_auth->user_logged_in() && intval($this->dlext_auth->user_traffic()) < $this->dl_file_p[$df_id]['file_size'] && !$this->dl_file_p[$df_id]['extern'])
 			{
-				$status_detail = '<i class="icon fa-ban fa-fw dl-red"></i>';
-				$status = '<a href="' . $this->helper->route('oxpus_dlext_details', array('df_id' => $df_id)) . '">' . $status_detail . '</a>';
+				$status_detail = '<i class="icon fa-ban fa-fw dl-red" title="' . $t_red . '"></i>';
+				$status = '<a href="' . $this->helper->route('oxpus_dlext_details', ['df_id' => $df_id]) . '">' . $status_detail . '</a>';
 				$auth_dl = 0;
 			}
 		}
 		else
 		{
-			$status_detail = '<i class="icon fa-download fa-fw dl-grey"></i>';
-			$status = '<a href="' . $this->helper->route('oxpus_dlext_details', array('df_id' => $df_id)) . '">' . $status_detail . '</a>';
+			$status_detail = '<i class="icon fa-download fa-fw dl-green" title="' . $t_green . '"></i>';
+			$status = '<a href="' . $this->helper->route('oxpus_dlext_details', ['df_id' => $df_id]) . '">' . $status_detail . '</a>';
 			$auth_dl = true;
 		}
 
 		if ($this->dlext_auth->user_posts() < $this->config['dl_posts'] && !$this->dl_file_p[$df_id]['extern'] && !$this->dl_file_p[$df_id]['free'])
 		{
-			$status_detail = '<i class="icon fa-ban fa-fw dl-red"></i>';
-			$status = '<a href="' . $this->helper->route('oxpus_dlext_details', array('df_id' => $df_id)) . '">' . $status_detail . '</a>';
+			$status_detail = '<i class="icon fa-ban fa-fw dl-red" title="' . $t_red . '"></i>';
+			$status = '<a href="' . $this->helper->route('oxpus_dlext_details', ['df_id' => $df_id]) . '">' . $status_detail . '</a>';
 			$auth_dl = 0;
 		}
 
 		if (!$this->dlext_auth->user_logged_in() && !$this->dl_file_p[$df_id]['extern'] && !$this->dl_file_p[$df_id]['free'])
 		{
-			$status_detail = '<i class="icon fa-ban fa-fw dl-red"></i>';
-			$status = '<a href="' . $this->helper->route('oxpus_dlext_details', array('df_id' => $df_id)) . '">' . $status_detail . '</a>';
+			$status_detail = '<i class="icon fa-ban fa-fw dl-red" title="' . $t_red . '"></i>';
+			$status = '<a href="' . $this->helper->route('oxpus_dlext_details', ['df_id' => $df_id]) . '">' . $status_detail . '</a>';
 			$auth_dl = 0;
 		}
 
 		if ($this->dl_file_p[$df_id]['free'] == 1)
 		{
-			$status_detail = '<i class="icon fa-download fa-fw dl-green"></i>';
-			$status = '<a href="' . $this->helper->route('oxpus_dlext_details', array('df_id' => $df_id)) . '">' . $status_detail . '</a>';
+			$status_detail = '<i class="icon fa-download fa-fw dl-green" title="' . $t_green . '"></i>';
+			$status = '<a href="' . $this->helper->route('oxpus_dlext_details', ['df_id' => $df_id]) . '">' . $status_detail . '</a>';
 			$auth_dl = true;
 		}
 
@@ -219,8 +226,8 @@ class dlext_status implements dlext_status_interface
 		{
 			if (($this->config['dl_icon_free_for_reg'] && !$this->dlext_auth->user_logged_in()) || (!$this->config['dl_icon_free_for_reg'] && $this->dlext_auth->user_logged_in()))
 			{
-				$status_detail = '<i class="icon fa-download fa-fw dl-grey"></i>';
-				$status = '<a href="' . $this->helper->route('oxpus_dlext_details', array('df_id' => $df_id)) . '">' . $status_detail . '</a>';
+				$status_detail = '<i class="icon fa-download fa-fw dl-white" title="' . $t_white . '"></i>';
+				$status = '<a href="' . $this->helper->route('oxpus_dlext_details', ['df_id' => $df_id]) . '">' . $status_detail . '</a>';
 			}
 
 			if ($this->dlext_auth->user_logged_in() || FOUNDER_TRAFFICS_OFF == true)
@@ -235,15 +242,15 @@ class dlext_status implements dlext_status_interface
 
 		if (!$cat_auth['auth_dl'] && !$index[$cat_id]['auth_dl'] && !$this->dlext_auth->user_admin())
 		{
-			$status_detail = '<i class="icon fa-ban fa-fw dl-red"></i>';
-			$status = '<a href="' . $this->helper->route('oxpus_dlext_details', array('df_id' => $df_id)) . '">' . $status_detail . '</a>';
+			$status_detail = '<i class="icon fa-ban fa-fw dl-red" title="' . $t_red . '"></i>';
+			$status = '<a href="' . $this->helper->route('oxpus_dlext_details', ['df_id' => $df_id]) . '">' . $status_detail . '</a>';
 			$auth_dl = 0;
 		}
 
 		if ($this->dl_file_p[$df_id]['file_traffic'] && $this->dl_file_p[$df_id]['klicks'] * $this->dl_file_p[$df_id]['file_size'] >= $this->dl_file_p[$df_id]['file_traffic'] && !$this->config['dl_traffic_off'])
 		{
-			$status_detail = '<i class="icon fa-info-circle fa-fw dl-blue"></i>';
-			$status = '<a href="' . $this->helper->route('oxpus_dlext_details', array('df_id' => $df_id)) . '">' . $status_detail . '</a>';
+			$status_detail = '<i class="icon fa-info-circle fa-fw dl-blue" title="' . $t_blue . '"></i>';
+			$status = '<a href="' . $this->helper->route('oxpus_dlext_details', ['df_id' => $df_id]) . '">' . $status_detail . '</a>';
 
 			if (FOUNDER_TRAFFICS_OFF == true)
 			{
@@ -270,8 +277,8 @@ class dlext_status implements dlext_status_interface
 
 		if (($overall_traffic - (int) $remain_traffic <= $this->dl_file_p[$df_id]['file_size']) && !$this->config['dl_traffic_off'] && $load_limit == true)
 		{
-			$status_detail = '<i class="icon fa-info-circle fa-fw dl-blue"></i>';
-			$status = '<a href="' . $this->helper->route('oxpus_dlext_details', array('df_id' => $df_id)) . '">' . $status_detail . '</a>';
+			$status_detail = '<i class="icon fa-info-circle fa-fw dl-blue" title="' . $t_blue . '"></i>';
+			$status = '<a href="' . $this->helper->route('oxpus_dlext_details', ['df_id' => $df_id]) . '">' . $status_detail . '</a>';
 
 			if (FOUNDER_TRAFFICS_OFF == true)
 			{
@@ -285,8 +292,8 @@ class dlext_status implements dlext_status_interface
 
 		if (($index[$cat_id]['cat_traffic'] && ($index[$cat_id]['cat_traffic'] - $index[$cat_id]['cat_traffic_use'] <= 0)) && !$this->config['dl_traffic_off'])
 		{
-			$status_detail = '<i class="icon fa-info-circle fa-fw dl-blue"></i>';
-			$status = '<a href="' . $this->helper->route('oxpus_dlext_details', array('df_id' => $df_id)) . '">' . $status_detail . '</a>';
+			$status_detail = '<i class="icon fa-info-circle fa-fw dl-blue" title="' . $t_blue . '"></i>';
+			$status = '<a href="' . $this->helper->route('oxpus_dlext_details', ['df_id' => $df_id]) . '">' . $status_detail . '</a>';
 
 			if (FOUNDER_TRAFFICS_OFF == true)
 			{
@@ -300,12 +307,12 @@ class dlext_status implements dlext_status_interface
 
 		if ($this->dl_file_p[$df_id]['extern'])
 		{
-			$status_detail = '<i class="icon fa-globe fa-fw dl-blue"></i>';
-			$status = '<a href="' . $this->helper->route('oxpus_dlext_details', array('df_id' => $df_id)) . '">' . $status_detail . '</a>';
-			$file_name = '<a href="' . $this->helper->route('oxpus_dlext_details', array('df_id' => $df_id)) . '">' . $this->language->lang('DL_EXTERN') . '</a>';
+			$status_detail = '<i class="icon fa-globe fa-fw dl-grey" title="' . $t_grey . '"></i>';
+			$status = '<a href="' . $this->helper->route('oxpus_dlext_details', ['df_id' => $df_id]) . '">' . $status_detail . '</a>';
+			$file_name = '<a href="' . $this->helper->route('oxpus_dlext_details', ['df_id' => $df_id]) . '">' . $this->language->lang('DL_EXTERN') . '</a>';
 			$auth_dl = true;
 		}
 
-		return array('status' => $status, 'file_name' => $file_name, 'auth_dl' => $auth_dl, 'file_detail' => $file_detail, 'status_detail' => $status_detail);
+		return ['status' => $status, 'file_name' => $file_name, 'auth_dl' => $auth_dl, 'file_detail' => $file_detail, 'status_detail' => $status_detail];
 	}
 }

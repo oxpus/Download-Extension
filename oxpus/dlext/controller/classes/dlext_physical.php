@@ -54,7 +54,7 @@ class dlext_physical implements dlext_physical_interface
 	{
 		$dl_files = $this->dlext_files->all_files(0, '', '', '', 0, 1, 'real_file');
 
-		$exist_files = array();
+		$exist_files = [];
 
 		for ($i = 0; $i < sizeof($dl_files); $i++)
 		{
@@ -105,7 +105,7 @@ class dlext_physical implements dlext_physical_interface
 		return $folders;
 	}
 
-	public function read_dl_files($path = '', $unas_files = array())
+	public function read_dl_files($path = '', $unas_files = [])
 	{
 		$files = '';
 
@@ -138,8 +138,8 @@ class dlext_physical implements dlext_physical_interface
 			$download_dir = DL_EXT_FILEBASE_PATH . 'downloads/';
 		}
 
-		$dirs = array_diff(scandir($download_dir), array(".", ".."));
-		$dir_array = array();
+		$dirs = array_diff(scandir($download_dir), ['.', '..']);
+		$dir_array = [];
 
 		foreach($dirs as $d)
 		{
@@ -167,7 +167,7 @@ class dlext_physical implements dlext_physical_interface
 		$post_max_value		= intval(substr($post_max, 0, strlen($post_max) - 1));
 		$upload_max_value	= intval(substr($upload_max, 0, strlen($upload_max) - 1));
 
-		$unit_factor = array('K' => 1024, 'M' => 1024*1024, 'G' => 1024*1024*1024);
+		$unit_factor		= ['K' => 1024, 'M' => 1024*1024, 'G' => 1024*1024*1024];
 
 		$post_max_size		= $post_max_value * $unit_factor[$post_max_unit];
 		$upload_max_size	= $upload_max_value * $unit_factor[$upload_max_unit];
@@ -308,7 +308,7 @@ class dlext_physical implements dlext_physical_interface
 	*/
 	public function get_file_base_tree($file_base, $path, $level = 0)
 	{
-		$tree = array();
+		$tree = [];
 		if (substr($file_base, -1, 1) != '/')
 		{
 			$file_base .= '/';
@@ -338,11 +338,11 @@ class dlext_physical implements dlext_physical_interface
 
 				$cat_path = str_replace(DL_EXT_FILEBASE_PATH . 'downloads/', '', $file_base . $entry . '/');
 				$entry_path = str_replace(DL_EXT_FILEBASE_PATH . 'downloads/', '', $file_base);
-				$tree[] = array(
+				$tree[] = [
 					'cat_path'	=> $cat_path,
 					'selected'	=> $selected,
 					'entry'		=> $separator . $entry . '/',
-				);
+				];
 
 				$level++;
 				$tmp_tree = $this->get_file_base_tree($file_base . $entry, $path, $level);

@@ -49,7 +49,7 @@ class dlext_extra implements dlext_extra_interface
 
 	public function get_todo()
 	{
-		$todo = array();
+		$todo = [];
 
 		$dl_files = $this->dlext_files->all_files(0, '', 'ASC', "AND todo <> '' AND todo IS NOT NULL", 0, 0, 'cat, id, description, hack_version, todo, todo_uid, todo_flags, todo_bitfield');
 		$dl_cats = $this->dlext_main->full_index(0, 0, 0, 1);
@@ -102,9 +102,9 @@ class dlext_extra implements dlext_extra_interface
 					{
 						for($i = 0; $i < $level; $i++)
 						{
-							$seperator .= '&nbsp;&nbsp;|';
+							$seperator .= '&nbsp;&nbsp;&nbsp;';
 						}
-						$seperator .= '___&nbsp;';
+						$seperator .= '&#8627;&nbsp;';
 					}
 
 					if ($perm == 'auth_up' || $rem_cat)
@@ -131,7 +131,48 @@ class dlext_extra implements dlext_extra_interface
 		return $catlist;
 	}
 
-	public function dl_cat_select($parent = 0, $level = 0, $select_cat = array())
+	public function dl_jumpbox($parent = 0, $level = 0, $perm, $rem_cat = 0, &$catlist = [])
+	{
+		$dl_auth = $this->dlext_auth->dl_auth();
+		$dl_index = $this->dlext_auth->dl_index();
+
+		if (!is_array($dl_index) || !sizeof($dl_index))
+		{
+			return;
+		}
+
+		foreach($dl_index as $cat_id => $value)
+		{
+			if (isset($dl_index[$cat_id]['parent']) && $dl_index[$cat_id]['parent'] == $parent)
+			{
+				if (isset($dl_index[$cat_id][$perm]) && $dl_index[$cat_id][$perm] || isset($dl_auth[$cat_id][$perm]) && $dl_auth[$cat_id][$perm] || $this->dlext_auth->user_admin())
+				{
+					$catlist[$cat_id]['name'] = $dl_index[$cat_id]['cat_name'];
+
+					$seperator = '';
+
+					if ($dl_index[$cat_id]['parent'] != 0)
+					{
+						$catlist[$cat_id]['sub'] = true;
+					}
+					else
+					{
+						$catlist[$cat_id]['sub'] = false;
+					}
+
+					$catlist[$cat_id]['level'] = $level;
+
+					$level++;
+					$this->dl_jumpbox($cat_id, $level, $perm, $rem_cat, $catlist);
+					$level--;
+				}
+			}
+		}
+
+		return $catlist;
+	}
+
+	public function dl_cat_select($parent = 0, $level = 0, $select_cat = [])
 	{
 		$dl_index = $this->dlext_auth->dl_index();
 

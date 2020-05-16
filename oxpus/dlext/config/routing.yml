@@ -67,6 +67,9 @@ oxpus_dlext_mcp_edit:
 oxpus_dlext_mcp_approve:
     path: /dlext/mcp/approve
     defaults: { _controller: oxpus.dlext.mcp_approve:handle }
+oxpus_dlext_mcp_broken:
+    path: /dlext/mcp/broken
+    defaults: { _controller: oxpus.dlext.mcp_broken:handle }
 oxpus_dlext_mcp_capprove:
     path: /dlext/mcp/capprove
     defaults: { _controller: oxpus.dlext.mcp_capprove:handle }

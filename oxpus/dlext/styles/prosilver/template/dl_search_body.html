@@ -14,12 +14,12 @@
 			<fieldset>
 
 				<dl>
-					<dt>{{ lang('SEARCH_KEYWORDS') }}</dt>
-					<dd class="time"><input type="text" class="inputbox" name="search_keywords" size="50" maxlength="255" value="" /></dd>
+					<dt><label>{{ lang('SEARCH_KEYWORDS') }}</label></dt>
+					<dd><input type="text" class="inputbox autowidth" name="search_keywords" size="50" maxlength="255" value="" /></dd>
 				</dl>
 				<dl>
-					<dt>{{ lang('DL_SEARCH_AUTHOR') }}</dt>
-					<dd class="time"><input type="text" class="inputbox" name="search_author" size="50" maxlength="255" value="" /></dd>
+					<dt><label>{{ lang('DL_SEARCH_AUTHOR') }}</label></dt>
+					<dd><input type="text" class="inputbox autowidth" name="search_author" size="50" maxlength="255" value="" /></dd>
 				</dl>
 
 			</fieldset>
@@ -35,19 +35,19 @@
 			<fieldset>
 
 				<dl>
-					<dt>{{ lang('DL_CAT_NAME') }}</dt>
+					<dt><label>{{ lang('DL_CAT_NAME') }}</label></dt>
 					<dd class="time">{{ S_DL_CATEGORY_OPTIONS }}</dd>
 				</dl>
 				<dl>
-					<dt>{{ lang('SEARCH_WITHIN') }}</dt>
+					<dt><label>{{ lang('SEARCH_WITHIN') }}</label></dt>
 					<dd class="time">{{ S_DL_SORT_OPTIONS }}</dd>
 				</dl>
 				<dl>
-					<dt>{{ lang('DL_ORDER') }}</dt>
+					<dt><label>{{ lang('DL_ORDER') }}</label></dt>
 					<dd class="time">{{ S_DL_SORT_ORDER }}</dd>
 				</dl>
 				<dl>
-					<dt>{{ lang('DL_SEARCH_TYPE') }}</dt>
+					<dt><label>{{ lang('DL_SEARCH_TYPE') }}</label></dt>
 					<dd class="time">
 						<label><input type="radio" name="search_type" value="0" checked="checked" /> {{ lang('DL_SEARCH_TYPE_ALL') }}</label><br />
 						<label><input type="radio" name="search_type" value="1" /> {{ lang('DL_SEARCH_TYPE_SINGLE') }}</label>

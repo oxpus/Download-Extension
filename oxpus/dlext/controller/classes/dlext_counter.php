@@ -41,6 +41,35 @@ class dlext_counter implements dlext_counter_interface
 		$this->dlext_main	= $dlext_main;
 	}
 
+	public function count_dl_broken()
+	{
+		if (!$this->dlext_auth->user_logged_in())
+		{
+			return 0;
+		}
+
+		$access_cats = [];
+		$access_cats = $this->dlext_main->full_index(0, 0, 0, 2);
+
+		if ((!isset($access_cats[0]) || !$access_cats[0] || !sizeof($access_cats)) && !$this->dlext_auth->user_admin())
+		{
+			return 0;
+		}
+
+		$sql_access_cats = ($this->dlext_auth->user_admin()) ? '' : ' AND ' . $this->db->sql_in_set('cat', array_map('intval', $access_cats));
+
+		$sql = 'SELECT COUNT(id) AS total, min(id) as first_dl FROM ' . DOWNLOADS_TABLE . "
+			WHERE broken = 1
+				$sql_access_cats";
+		$result = $this->db->sql_query($sql);
+		$row = $this->db->sql_fetchrow($result);
+		$total = $row['total'];
+		$first_dl = $row['first_dl'];
+		$this->db->sql_freeresult($result);
+
+		return ['total' => $total, 'df_id' => $first_dl];
+	}
+
 	public function count_dl_approve()
 	{
 		if (!$this->dlext_auth->user_logged_in())
@@ -48,7 +77,7 @@ class dlext_counter implements dlext_counter_interface
 			return 0;
 		}
 
-		$access_cats = array();
+		$access_cats = [];
 		$access_cats = $this->dlext_main->full_index(0, 0, 0, 2);
 
 		if ((!isset($access_cats[0]) || !$access_cats[0] || !sizeof($access_cats)) && !$this->dlext_auth->user_admin())
@@ -75,7 +104,7 @@ class dlext_counter implements dlext_counter_interface
 			return 0;
 		}
 
-		$access_cats = array();
+		$access_cats = [];
 		$access_cats = $this->dlext_main->full_index(0, 0, 0, 2);
 
 		if ((!isset($access_cats[0]) || !$access_cats[0] || !sizeof($access_cats)) && !$this->dlext_auth->user_admin())

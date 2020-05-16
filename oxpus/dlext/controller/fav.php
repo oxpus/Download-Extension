@@ -137,14 +137,14 @@ class fav
 
 			if (!$fav_check)
 			{
-				$sql = 'INSERT INTO ' . DL_FAVORITES_TABLE . ' ' . $this->db->sql_build_array('INSERT', array(
+				$sql = 'INSERT INTO ' . DL_FAVORITES_TABLE . ' ' . $this->db->sql_build_array('INSERT', [
 					'fav_dl_id'		=> $df_id,
 					'fav_dl_cat'	=> $cat_id,
-					'fav_user_id'	=> $this->user->data['user_id']));
+					'fav_user_id'	=> $this->user->data['user_id']]);
 				$this->db->sql_query($sql);
 			}
 
-			redirect($this->helper->route('oxpus_dlext_details', array('df_id' => $df_id, 'cat_id' => $cat_id)));
+			redirect($this->helper->route('oxpus_dlext_details', ['df_id' => $df_id, 'cat_id' => $cat_id]));
 		}
 
 		redirect($this->helper->route('oxpus_dlext_index'));

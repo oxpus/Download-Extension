@@ -123,7 +123,7 @@ class footer implements footer_interface
 		$this->php_ext			= substr($this->dlext_init->php_ext(),1);
 	}
 
-	public function set_parameter($nav_view = '', $cat_id = 0, $df_id = 0, $index = array())
+	public function set_parameter($nav_view = '', $cat_id = 0, $df_id = 0, $index = [])
 	{
 		$this->nav_mode = $nav_view;
 		$this->cat_id	= $cat_id;
@@ -141,15 +141,32 @@ class footer implements footer_interface
 			/*
 			* check and create link if we must approve downloads
 			*/
+			$broken_ary = $this->dlext_counter->count_dl_broken();
+			$total_broken = $broken_ary['total'];
+			$broken_id = $broken_ary['df_id'];
+
+			if ($total_broken)
+			{
+				$broken_string = ($total_broken == 1) ? $this->language->lang('DL_BROKEN_OVERVIEW_ONE') : $this->language->lang('DL_BROKEN_OVERVIEW', $total_broken);
+				$broken_url = ($total_broken == 1) ? $this->helper->route('oxpus_dlext_details', ['df_id' => $broken_id]) : $this->helper->route('oxpus_dlext_mcp_broken');
+				$this->template->assign_block_vars('broken', [
+					'L_BROKEN_DOWNLOADS' => $broken_string,
+					'U_BROKEN_DOWNLOADS' => $broken_url,
+				]);
+			}
+
+			/*
+			* check and create link if we must approve downloads
+			*/
 			$total_approve = $this->dlext_counter->count_dl_approve();
 
 			if ($total_approve)
 			{
-				$approve_string = ($total_approve == 1) ? $this->language->lang('DL_APPROVE_OVERVIEW_ONE') : $this->language->lang('DL_APPROVE_OVERVIEW');
-				$this->template->assign_block_vars('approve', array(
-					'L_APPROVE_DOWNLOADS' => sprintf($approve_string, $total_approve),
+				$approve_string = ($total_approve == 1) ? $this->language->lang('DL_APPROVE_OVERVIEW_ONE') : $this->language->lang('DL_APPROVE_OVERVIEW', $total_approve);
+				$this->template->assign_block_vars('approve', [
+					'L_APPROVE_DOWNLOADS' => $approve_string,
 					'U_APPROVE_DOWNLOADS' => $this->helper->route('oxpus_dlext_mcp_approve'),
-				));
+				]);
 			}
 
 			/*
@@ -159,11 +176,11 @@ class footer implements footer_interface
 
 			if ($total_comment_approve)
 			{
-				$approve_comment_string = ($total_comment_approve == 1) ? $this->language->lang('DL_APPROVE_OVERVIEW_ONE_COMMENT') : $this->language->lang('DL_APPROVE_OVERVIEW_COMMENTS');
-				$this->template->assign_block_vars('approve_comments', array(
-					'L_APPROVE_COMMENTS' => sprintf($approve_comment_string, $total_comment_approve),
+				$approve_comment_string = ($total_comment_approve == 1) ? $this->language->lang('DL_APPROVE_OVERVIEW_ONE_COMMENT') : $this->language->lang('DL_APPROVE_OVERVIEW_COMMENTS', $total_comment_approve);
+				$this->template->assign_block_vars('approve_comments', [
+					'L_APPROVE_COMMENTS' => $approve_comment_string,
 					'U_APPROVE_COMMENTS' => $this->helper->route('oxpus_dlext_mcp_capprove'),
-				));
+				]);
 			}
 
 			/*
@@ -195,13 +212,11 @@ class footer implements footer_interface
 				{
 					$total_size = $this->dlext_format->dl_size($total_size, 2);
 
-					$this->template->assign_block_vars('total_stat', array(
-						'TOTAL_STAT' => $this->language->lang('DL_TOTAL_STAT', $total_dl, $total_size, $physical_limit, $total_extern))
-					);
+					$this->template->assign_block_vars('total_stat', [
+						'TOTAL_STAT' => $this->language->lang('DL_TOTAL_STAT', $total_dl, $total_size, $physical_limit, $total_extern),
+					]);
 
-					$this->template->assign_vars(array(
-						'S_FOOTER_STATS'	=> true,
-					));
+					$this->template->assign_vars(['S_FOOTER_STATS' => true]);
 				}
 			}
 
@@ -210,16 +225,31 @@ class footer implements footer_interface
 			*/
 			if ($this->config['dl_enable_jumpbox'])
 			{
-				$dl_jumpbox = '<form method="post" id="dl_jumpbox" action="' . $this->helper->route('oxpus_dlext_index', array('sort_by' => $sort_by, 'order' => $order)) . '" onsubmit="if(this.options[this.selectedIndex].value == -1){ return false; }">';
-				$dl_jumpbox .= "\n<fieldset>" . $this->language->lang('DL_GOTO') . $this->language->lang('COLON') . ' <select name="cat" onchange="if(this.options[this.selectedIndex].value != -1){ forms[\'dl_jumpbox\'].submit() }">';
-				$dl_jumpbox .= '<option value="-1">' . $this->language->lang('DL_CAT_NAME') . '</option>';
-				$dl_jumpbox .= '<option value="-1">----------</option>';
-				$dl_jumpbox .= $this->dlext_extra->dl_dropdown(0, 0, $cat, 'auth_view');
-				$dl_jumpbox .= '</select>&nbsp;<input type="submit" value="' . $this->language->lang('GO') . '" class="button2" /></fieldset></form>';
+				$catlist = [];
+				$this->dlext_extra->dl_jumpbox(0, 0, $cat, 'auth_view', $catlist);
+
+				foreach($catlist as $cat_id => $data)
+				{
+					$this->template->assign_block_vars('dl_jumpbox', [
+						'DL_CAT_NAME'	=> $data['name'],
+						'DL_CAT_SUB'	=> ($data['sub']) ? true : false,
+						'U_CAT_LINK'	=> $this->helper->route('oxpus_dlext_index', ['cat' => $cat_id]),
+					]);
+
+					if ($data['sub'])
+					{
+						for($i = 1; $i < $data['level']; ++$i)
+						{
+							$this->template->assign_block_vars('dl_jumpbox.level', []);
+						}
+					}
+				}
+
+				$s_dl_jumpbox = true;
 			}
 			else
 			{
-				$dl_jumpbox = '';
+				$s_dl_jumpbox = false;
 			}
 
 			if ($this->config['dl_user_traffic_once'])
@@ -272,40 +302,48 @@ class footer implements footer_interface
 					$total_cur_clicks += $row['klicks'];
 				}
 
-				$this->template->assign_vars(array(
+				$this->template->assign_vars([
 					'EXT_STATS_OVERALL_TRAFFIC'			=> $this->language->lang('DL_OVERALL_TRAFFIC') . ': ' . $overall_traffic,
 					'EXT_STATS_OVERALL_GUESTS_TRAFFIC'	=> $this->language->lang('DL_OVERALL_GUEST_TRAFFIC') . ': ' . $overall_guest_traffic,
 					'EXT_STATS_MONTH_CLICKS'			=> $this->language->lang('DL_KLICKS') . ': ' . $total_cur_clicks,
 					'S_FOOTER_STATS'					=> true,
-				));
+				]);
 			}
 
 			/*
 			* Check for latest downloads and prepare link
 			*/
-			$check_add_time		= time() - ($this->config['dl_new_time'] * 86400);
-			$check_edit_time	= time() - ($this->config['dl_edit_time'] * 86400);
-
-			$sql_latest_where = 'AND (add_time >= ' . (int) $check_add_time . ' OR change_time >= ' . (int) $check_edit_time . ')';
-
-			$dl_latest_files = array();
-			$dl_latest_files = $this->dlext_files->all_files(0, '', '', $sql_latest_where, 0, 0, 'id');
-
-			if (sizeof($dl_latest_files))
+			if ($this->config['dl_latest_type'])
 			{
-				$this->template->assign_var('U_LATEST_DOWNLOADS', $this->helper->route('oxpus_dlext_latest'));
+				if ($this->config['dl_latest_type'] == 1)
+				{
+					$check_add_time		= time() - ($this->config['dl_new_time'] * 86400);
+					$check_edit_time	= time() - ($this->config['dl_edit_time'] * 86400);
+
+					$sql_latest_where = 'AND (add_time >= ' . (int) $check_add_time . ' OR change_time >= ' . (int) $check_edit_time . ')';
+				}
+				else
+				{
+					$sql_latest_where = '';
+				}
+
+				$dl_latest_files = [];
+				$dl_latest_files = $this->dlext_files->all_files(0, '', '', $sql_latest_where, 0, 0, 'id', 1);
+
+				if (sizeof($dl_latest_files))
+				{
+					$this->template->assign_var('U_LATEST_DOWNLOADS', $this->helper->route('oxpus_dlext_latest'));
+				}
 			}
 
 			/*
 			* load footer template and send default values
 			*/
-			$this->template->set_filenames(array(
-				'dl_footer' => 'dl_footer.html')
-			);
+			$this->template->set_filenames(['dl_footer' => 'dl_footer.html']);
 
 			$translation = $this->language->lang('DL_TRANSLATION');
 
-			$this->template->assign_vars(array(
+			$this->template->assign_vars([
 				'L_DL_GREEN_EXPLAIN'	=> ($this->config['dl_traffic_off']) ? $this->language->lang('DL_GREEN_EXPLAIN_T_OFF') : $this->language->lang('DL_GREEN_EXPLAIN'),
 				'L_DL_WHITE_EXPLAIN'	=> ($this->config['dl_traffic_off']) ? $this->language->lang('DL_WHITE_EXPLAIN_T_OFF') : $this->language->lang('DL_WHITE_EXPLAIN'),
 				'L_DL_GREY_EXPLAIN'		=> ($this->config['dl_traffic_off']) ? $this->language->lang('DL_GREY_EXPLAIN_T_OFF') : $this->language->lang('DL_GREY_EXPLAIN'),
@@ -315,13 +353,13 @@ class footer implements footer_interface
 				'DL_MOD_RELEASE'		=> $this->language->lang('DL_MOD_VERSION_PUBLIC'),
 				'LIGHTBOX_RESIZE_WIDTH'	=> 0,
 
-				'S_DL_JUMPBOX'			=> $dl_jumpbox,
+				'S_DL_JUMPBOX'			=> $s_dl_jumpbox,
 				'S_DL_TRANSLATION'		=> ($translation) ? true : false,
 
 				'U_DL_STATS'			=> $this->helper->route('oxpus_dlext_stats'),
 				'U_DL_TODOLIST'			=> $this->helper->route('oxpus_dlext_todo'),
 				'U_DL_OVERALL_VIEW'		=> ($this->config['dl_overview_link_onoff']) ? $this->helper->route('oxpus_dlext_overall') : '',
-			));
+			]);
 
 			$s_separate_stats = false;
 
@@ -342,9 +380,9 @@ class footer implements footer_interface
 							$text_no_more_remain_traffic = '<strong>' . $this->language->lang('DL_TRAFFICS_FOUNDER_INFO') . ':</strong> ' . $text_no_more_remain_traffic;
 						}
 
-						$this->template->assign_block_vars('no_remain_traffic', array(
-							'NO_OVERALL_TRAFFIC' => $text_no_more_remain_traffic)
-						);
+						$this->template->assign_block_vars('no_remain_traffic', [
+							'NO_OVERALL_TRAFFIC' => $text_no_more_remain_traffic,
+						]);
 
 						$s_separate_stats = true;
 					}
@@ -357,9 +395,9 @@ class footer implements footer_interface
 							$remain_text_out = '<strong>' . $this->language->lang('DL_TRAFFICS_FOUNDER_INFO') . ':</strong> ' . $remain_text_out;
 						}
 
-						$this->template->assign_block_vars('remain_traffic', array(
-							'REMAIN_TRAFFIC' => $remain_text_out)
-						);
+						$this->template->assign_block_vars('remain_traffic', [
+							'REMAIN_TRAFFIC' => $remain_text_out,
+						]);
 
 						$s_separate_stats = true;
 					}
@@ -376,9 +414,9 @@ class footer implements footer_interface
 						$user_account_traffic = '<strong>' . $this->language->lang('DL_TRAFFICS_FOUNDER_INFO') . ':</strong> ' . $user_account_traffic;
 					}
 
-					$this->template->assign_block_vars('userdata', array(
-						'ACCOUNT_TRAFFIC' => ($this->user->data['user_id'] <> ANONYMOUS) ? $user_account_traffic : '')
-					);
+					$this->template->assign_block_vars('userdata', [
+						'ACCOUNT_TRAFFIC' => ($this->user->data['user_id'] <> ANONYMOUS) ? $user_account_traffic : '',
+					]);
 
 					$s_separate_stats = true;
 				}
@@ -395,9 +433,9 @@ class footer implements footer_interface
 							$text_no_overall_guest_traffic = '<strong>' . $this->language->lang('DL_TRAFFICS_FOUNDER_INFO') . ':</strong> ' . $text_no_overall_guest_traffic;
 						}
 
-						$this->template->assign_block_vars('no_remain_guest_traffic', array(
+						$this->template->assign_block_vars('no_remain_guest_traffic', [
 							'NO_OVERALL_GUEST_TRAFFIC' => $text_no_overall_guest_traffic,
-						));
+						]);
 
 						$s_separate_stats = true;
 					}
@@ -411,9 +449,9 @@ class footer implements footer_interface
 							$remain_guest_text_out = '<strong>' . $this->language->lang('DL_TRAFFICS_FOUNDER_INFO') . ':</strong> ' . $remain_guest_text_out;
 						}
 
-						$this->template->assign_block_vars('remain_guest_traffic', array(
-							'REMAIN_GUEST_TRAFFIC' => $remain_guest_text_out)
-						);
+						$this->template->assign_block_vars('remain_guest_traffic', [
+							'REMAIN_GUEST_TRAFFIC' => $remain_guest_text_out,
+						]);
 
 						$s_separate_stats = true;
 					}
@@ -431,14 +469,19 @@ class footer implements footer_interface
 				$this->template->assign_var('S_DL_TRAFFIC_OFF', true);
 			}
 
-			if ($this->config['dl_show_footer_legend'] && !(in_array($this->nav_mode, array('todo', 'stat', 'upload', 'bug_tracker', 'search'))) || $this->cat_id)
+			if ($this->config['dl_show_footer_legend'] && !(in_array($this->nav_mode, ['todo', 'stat', 'upload', 'bug_tracker', 'search'])) || $this->cat_id)
 			{
 				$this->template->assign_var('S_FOOTER_LEGEND', true);
 			}
 
 			if ($this->config['dl_todo_link_onoff'] && $this->config['dl_todo_onoff'])
 			{
-				$this->template->assign_var('S_TODO_LINK', true);
+				$todo_access_ids = $this->dlext_main->full_index(0, 0, 0, 2);
+		
+				if (sizeof($todo_access_ids) && $this->user->data['is_registered'])
+				{
+					$this->template->assign_var('S_TODO_LINK', true);
+				}
 			}
 
 			if ($this->config['dl_rss_enable'])

@@ -17,6 +17,14 @@ namespace oxpus\dlext\controller\classes;
 interface dlext_counter_interface
 {
 	/**
+	 * Fetch the number of broken downloads
+	 * 
+	 * @return int number of broken downloads
+	 * @access public
+	*/
+	public function count_dl_broken();
+
+	/**
 	 * Fetch the number of unapproved downloads
 	 * 
 	 * @return int number of unapproved downloads

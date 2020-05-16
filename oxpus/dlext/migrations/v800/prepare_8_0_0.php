@@ -19,21 +19,21 @@ class prepare_8_0_0 extends \phpbb\db\migration\migration
 
 	static public function depends_on()
 	{
-		return array('\oxpus\dlext\migrations\v730\release_7_3_5');
+		return ['\oxpus\dlext\migrations\v730\release_7_3_5'];
 	}
 
 	public function update_data()
 	{
-		return array(
-			array('custom', array(array($this, 'move_remain_traffic'))),
-			array('custom', array(array($this, 'move_download_files'))),
+		return [
+			['custom', [[$this, 'move_remain_traffic']]],
+			['custom', [[$this, 'move_download_files']]],
 
-			array('config.add', array('dl_remain_guest_traffic', '0')),
-			array('config.add', array('dl_remain_traffic', '0')),
-			array('config.add', array('dl_enable_blacklist', '0')),
+			['config.add', ['dl_remain_guest_traffic', '0']],
+			['config.add', ['dl_remain_traffic', '0']],
+			['config.add', ['dl_enable_blacklist', '0']],
 
-			array('config.remove', array('dl_download_dir')),
-	   );
+			['config.remove', ['dl_download_dir']],
+		];
 	}
 
 	public function move_remain_traffic()

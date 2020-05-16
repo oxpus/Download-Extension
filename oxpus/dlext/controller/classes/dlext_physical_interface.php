@@ -43,7 +43,7 @@ interface dlext_physical_interface
 	 * @return array existing and unassigned file names
 	 * @access public
 	*/
-	public function read_dl_files($path = '', $unas_files = array());
+	public function read_dl_files($path = '', $unas_files = []);
 
 	/**
 	 * Read the physical file sizes from the download files
