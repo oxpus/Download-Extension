@@ -754,13 +754,13 @@ class details
 			{
 				$pagination = $this->phpbb_container->get('pagination');
 				$pagination->generate_template_pagination(
-					[
-						'routes' => [
-							'oxpus_dlext_details',
-							'oxpus_dlext_details',
-						],
-						'params' => ['view' => 'comment', 'action' => 'view', 'cat_id' => $cat_id, 'df_id' => $df_id],
-					], 'pagination', 'start', $real_comment_exists, $this->config['dl_links_per_page'], $page_start);
+					$this->helper->route('oxpus_dlext_details', ['view' => 'comment', 'action' => 'view', 'cat_id' => $cat_id, 'df_id' => $df_id]),
+					'pagination',
+					'start',
+					$real_comment_exists,
+					$this->config['dl_links_per_page'],
+					$page_start
+				);
 
 				$this->template->assign_vars([
 					'PAGE_NUMBER'	=> $pagination->on_page($real_comment_exists, $this->config['dl_links_per_page'], $page_start),

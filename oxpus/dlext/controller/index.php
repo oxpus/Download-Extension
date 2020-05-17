@@ -326,13 +326,13 @@ class index
 				{
 					$pagination = $this->phpbb_container->get('pagination');
 					$pagination->generate_template_pagination(
-						[
-							'routes' => [
-								'oxpus_dlext_index',
-								'oxpus_dlext_index',
-							],
-							'params' => ['cat' => $cat_id],
-						], $block . 'pagination', 'start', $index[$cat_id]['total'], $this->config['dl_links_per_page'], $page_start);
+						$this->helper->route('oxpus_dlext_index', ['cat' => $cat_id]),
+						$block . 'pagination',
+						'start',
+						$index[$cat_id]['total'],
+						$this->config['dl_links_per_page'],
+						$page_start
+					);
 		
 					$cat_pages = true;
 				}
@@ -426,13 +426,13 @@ class index
 			{
 				$pagination = $this->phpbb_container->get('pagination');
 				$pagination->generate_template_pagination(
-					[
-						'routes' => [
-							'oxpus_dlext_index',
-							'oxpus_dlext_index',
-						],
-						'params' => ['cat' => $cat, 'sort_by' => $sort_by, 'order' => $order],
-					], 'pagination', 'start', $total_downloads, $this->config['dl_links_per_page'], $page_start);
+					$this->helper->route('oxpus_dlext_index', ['cat' => $cat, 'sort_by' => $sort_by, 'order' => $order]),
+					'pagination',
+					'start',
+					$total_downloads,
+					$this->config['dl_links_per_page'],
+					$page_start
+				);
 		
 				$this->template->assign_vars([
 					'PAGE_NUMBER'	=> $pagination->on_page($total_downloads, $this->config['dl_links_per_page'], $page_start),

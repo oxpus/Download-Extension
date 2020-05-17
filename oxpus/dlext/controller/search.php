@@ -264,13 +264,13 @@ class search
 			{
 				$pagination = $this->phpbb_container->get('pagination');
 				$pagination->generate_template_pagination(
-					[
-						'routes' => [
-							'oxpus_dlext_search',
-							'oxpus_dlext_search',
-						],
-						'params' => ['search_keywords' => $search_keywords, 'search_cat' => $search_cat, 'sort_dir' => $sort_dir],
-					], 'pagination', 'start', $search_counter, $this->config['dl_links_per_page'], $page_start);
+					$this->helper->route('oxpus_dlext_search', ['search_keywords' => $search_keywords, 'search_cat' => $search_cat, 'sort_dir' => $sort_dir]),
+					'pagination',
+					'start',
+					$search_counter,
+					$this->config['dl_links_per_page'],
+					$page_start
+				);
 		
 				$this->template->assign_vars([
 					'PAGE_NUMBER'	=> $pagination->on_page($search_counter, $this->config['dl_links_per_page'], $page_start),
@@ -409,13 +409,13 @@ class search
 			{
 				$pagination = $this->phpbb_container->get('pagination');
 				$pagination->generate_template_pagination(
-					[
-						'routes' => [
-							'oxpus_dlext_search',
-							'oxpus_dlext_search',
-						],
-						'params' => ['search_author' => $search_author, 'search_cat' => $search_cat, 'sort_dir' => $sort_dir],
-					], 'pagination', 'start', $total_found_dl, $this->config['dl_links_per_page'], $page_start);
+					$this->helper->route('oxpus_dlext_search', ['search_author' => $search_author, 'search_cat' => $search_cat, 'sort_dir' => $sort_dir]),
+					'pagination',
+					'start',
+					$total_found_dl,
+					$this->config['dl_links_per_page'],
+					$page_start
+				);
 		
 				$this->template->assign_vars([
 					'PAGE_NUMBER'	=> $pagination->on_page($total_found_dl, $this->config['dl_links_per_page'], $page_start),

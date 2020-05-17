@@ -200,12 +200,13 @@ class mcp_broken
 			{
 				$pagination = $this->phpbb_container->get('pagination');
 				$pagination->generate_template_pagination(
-					[
-						'routes' => [
-							'oxpus_dlext_mcp_broken',
-							'oxpus_dlext_mcp_broken',
-						],
-					], 'pagination', 'start', $total_broken, $this->config['dl_links_per_page'], $page_start);
+					$this->helper->route('oxpus_dlext_mcp_broken'),
+					'pagination',
+					'start',
+					$total_broken,
+					$this->config['dl_links_per_page'],
+					$page_start
+				);
 
 				$this->template->assign_vars([
 					'PAGE_NUMBER'	=> $pagination->on_page($total_broken, $this->config['dl_links_per_page'], $page_start),

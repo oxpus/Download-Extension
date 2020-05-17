@@ -992,13 +992,13 @@ class tracker
 					{
 						$pagination = $this->phpbb_container->get('pagination');
 						$pagination->generate_template_pagination(
-							[
-								'routes' => [
-									'oxpus_dlext_tracker',
-									'oxpus_dlext_tracker',
-								],
-								'params' => ['df_id' => $df_id],
-							], 'pagination', 'start', $total_reports, $this->config['dl_links_per_page'], $page_start);
+							$this->helper->route('oxpus_dlext_tracker', ['df_id' => $df_id]),
+							'pagination',
+							'start',
+							$total_reports,
+							$this->config['dl_links_per_page'],
+							$page_start
+						);
 							
 						$this->template->assign_vars([
 							'PAGE_NUMBER'	=> $pagination->on_page($total_reports, $this->config['dl_links_per_page'], $page_start),

@@ -223,13 +223,13 @@ class latest
 		{
 			$pagination = $this->phpbb_container->get('pagination');
 			$pagination->generate_template_pagination(
-				[
-					'routes' => [
-						'oxpus_dlext_latest',
-						'oxpus_dlext_latest',
-					],
-					'params' => ['sort_by' => $sort_by, 'order' => $order],
-				], 'pagination', 'start', $total_files, $this->config['dl_links_per_page'], $page_start);
+				$this->helper->route('oxpus_dlext_latest', ['sort_by' => $sort_by, 'order' => $order]),
+				'pagination',
+				'start',
+				$total_files,
+				$this->config['dl_links_per_page'],
+				$page_start
+			);
 		
 			$this->template->assign_vars([
 				'PAGE_NUMBER'	=> $pagination->on_page($total_files, $this->config['dl_links_per_page'], $page_start),

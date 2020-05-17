@@ -73,8 +73,7 @@ $dl_mod_is_active = true;
 $dl_mod_link_show = true;
 $dl_mod_is_active_for_admins = false;
 
-$page_start = max($start - 1, 0) * $this->config['dl_links_per_page'];
-$start = $page_start;
+$page_start = $start;
 
 if ($cat < 0)
 {

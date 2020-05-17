@@ -572,13 +572,13 @@ class mcp_manage
 				{
 					$pagination = $this->phpbb_container->get('pagination');
 					$pagination->generate_template_pagination(
-						[
-							'routes' => [
-								'oxpus_dlext_mcp_manage',
-								'oxpus_dlext_mcp_manage',
-							],
-							'params' => ['view' => 'toolbox', 'cat_id' => $cat_id],
-						], 'pagination', 'start', $total_downloads, $this->config['dl_links_per_page'], $page_start);
+						$this->helper->route('oxpus_dlext_mcp_manage', ['view' => 'toolbox', 'cat_id' => $cat_id]),
+						'pagination',
+						'start',
+						$total_downloads,
+						$this->config['dl_links_per_page'],
+						$page_start
+					);
 
 					$this->template->assign_vars([
 						'PAGE_NUMBER'	=> $pagination->on_page($total_downloads, $per_page, $page_start),
