@@ -509,7 +509,7 @@ class index
 		if ($cat && $total_downloads)
 		{
 			$dl_files = [];
-			$dl_files = $this->dlext_files->files($cat, $sql_sort_by, $sql_order, $start, $this->config['dl_links_per_page'], 'id, description, desc_uid, desc_bitfield, desc_flags, hack_version, extern, file_size, klicks, overall_klicks, rating, long_desc, long_desc_uid, long_desc_bitfield, long_desc_flags, add_user, broken');
+			$dl_files = $this->dlext_files->files($cat, $sql_sort_by, $sql_order, $start, $this->config['dl_links_per_page'], 'id, description, desc_uid, desc_bitfield, desc_flags, hack_version, extern, file_size, klicks, overall_klicks, rating, long_desc, long_desc_uid, long_desc_bitfield, long_desc_flags, add_user, add_time, broken', true);
 		
 			if ($this->dlext_auth->cat_auth_comment_read($cat))
 			{
@@ -550,14 +550,18 @@ class index
 		
 				$long_desc = $dl_files[$i]['long_desc'];
 				$long_desc = censor_text($long_desc);
-				$long_desc = generate_text_for_display($long_desc, $long_desc_uid, $long_desc_bitfield, $long_desc_flags);
 
-				if ((int) $this->config['dl_limit_desc_on_index'] && strlen($long_desc) > (int) $this->config['dl_limit_desc_on_index'])
+				$long_desc = generate_text_for_display($long_desc, $long_desc_uid, $long_desc_bitfield, $long_desc_flags);
+				if ((int) $this->config['dl_limit_desc_on_index'] && utf8_strlen($long_desc) > (int) $this->config['dl_limit_desc_on_index'])
 				{
-					$long_desc = strip_tags($long_desc, '<br><br/>');
-					$long_desc = substr($long_desc, 0, (int) $this->config['dl_limit_desc_on_index']) . ' [...]';
+					$long_desc = truncate_string($long_desc, (int) $this->config['dl_limit_desc_on_index'], 16777215, false, '[...]');
+					$long_desc = htmlspecialchars_decode(str_replace(['<br>', '<br />'], "\n", $long_desc));
 				}
-		
+
+				$add_user = get_username_string('full', $dl_files[$i]['add_user'], $dl_files[$i]['username'], $dl_files[$i]['user_colour']);
+				$add_time = $this->user->format_date($dl_files[$i]['add_time']);
+				$add_time_rfc = gmdate(DATE_RFC3339, $dl_files[$i]['add_time']);
+
 				$dl_status = [];
 				$dl_status = $this->dlext_status->status($file_id);
 				$status = $dl_status['status'];
@@ -646,6 +650,10 @@ class index
 					'FILE_KLICKS'			=> $file_klicks,
 					'FILE_OVERALL_KLICKS'	=> $file_overall_klicks,
 					'DF_ID'					=> $file_id,
+					'ADD_USER'				=> $add_user,
+					'ADD_TIME'				=> $add_time,
+					'ADD_TIME_RFC'			=> $add_time_rfc,
+	
 					'U_DIRECT_EDIT'			=> ($cat_edit_link) ? $this->helper->route('oxpus_dlext_mcp_edit', ['cat_id' => $cat, 'df_id' => $file_id]) : '',
 					'U_FILE'				=> $file_url,
 				]);

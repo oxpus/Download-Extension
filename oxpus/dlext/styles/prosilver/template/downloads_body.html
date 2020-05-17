@@ -80,7 +80,8 @@ var dlAjaxUrl = '{{ U_DL_AJAX }}';
 				<dt>
 					<div class="list-inner">{{ downloads.STATUS }}&nbsp;<a href="{{ downloads.U_FILE }}" class="forumtitle">{{ downloads.DESCRIPTION }}</a>
 						&nbsp;{{ downloads.HACK_VERSION }}&nbsp;{{ downloads.MINI_IMG }}
-					<br />{{ downloads.LONG_DESC }}
+					<br />{{ lang('POST_BY_AUTHOR') }} {{ downloads.ADD_USER }} &raquo; <time datetime="{{ downloads.ADD_TIME_RFC }}">{{ downloads.ADD_TIME }}</time>
+					{% if downloads.LONG_DESC %}<hr />{{ downloads.LONG_DESC }}{% endif %}
 					</div>
 				</dt>
 				<dd class="topics">{{ downloads.FILE_SIZE }}</dd>

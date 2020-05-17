@@ -33,14 +33,39 @@ class dlext_files implements dlext_files_interface
 		$this->db 			= $db;
 	}
 
-	public function files($cat_id, $sql_sort_by, $sql_order, $start, $limit, $sql_fields = '*')
+	public function files($cat_id, $sql_sort_by, $sql_order, $start, $limit, $sql_fields = '*', $add_user = false)
 	{
 		$dl_files = [];
 
-		$sql = 'SELECT ' . $this->db->sql_escape($sql_fields) . ' FROM ' . DOWNLOADS_TABLE . '
-			WHERE cat = ' . (int) $cat_id . '
-				AND approve = ' . true . '
-			ORDER BY ' . $this->db->sql_escape($sql_sort_by) . ' ' . $this->db->sql_escape($sql_order);
+		if ($sql_fields == '*')
+		{
+			$sql_fields = 'd.*';
+		}
+		else
+		{
+			$fields = explode(', ', $sql_fields);
+			$sql_fields = 'd.' . implode(', d.', $fields);
+			if ($add_user)
+			{
+				$sql_fields .= ', u.username, u.user_colour';
+			}
+		}
+
+		$sql_array['SELECT'] = $sql_fields;
+		$sql_array['FROM'][DOWNLOADS_TABLE] = 'd';
+		if ($add_user)
+		{
+			$sql_array['FROM'][USERS_TABLE] = 'u';
+		}
+		$sql_array['WHERE'] = 'd.cat = ' . (int) $cat_id . ' AND d.approve = ' . true;
+		if ($add_user)
+		{
+			$sql_array['WHERE'] .= ' AND u.user_id = d.add_user';
+		}
+		$sql_arrry['ORDER_BY']	= $this->db->sql_escape($sql_sort_by) . ' ' . $this->db->sql_escape($sql_order);
+
+		$sql = $this->db->sql_build_query('SELECT', $sql_array);
+
 		if ($limit)
 		{
 			$result = $this->db->sql_query_limit($sql, $limit, $start);

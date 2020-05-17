@@ -1,3 +1,11 @@
+{% if U_DL_SELF %}
+<li>
+	<a href="{{ U_DL_SELF }}" role="menuitem">
+		<i class="icon fa-download fa-fw" aria-hidden="true"></i><span>{{ lang('DL_SELF_FILES') }}</span>
+	</a>
+</li>
+<li class="separator"></li>
+{% endif %}
 {% if U_DL_NAVI and S_DL_NAV_MAIN_NHQLA %}
 <li>
 	<a href="{{ U_DL_NAVI }}" role="menuitem">

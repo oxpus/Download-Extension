@@ -642,6 +642,7 @@ $lang = array_merge($lang, [
 	'DL_SELECT_CATS'			=> 'Wähle eine oder mehrere Kategorien aus',
 	'DL_SELECT_GROUP'			=> 'Auswahl Benutzergruppen',
 	'DL_SELECT_GROUPS'			=> 'Wähle eine oder mehrere Benutzergruppen aus',
+	'DL_SELF_FILES'				=> 'Eigene Downloads',
 	'DL_SET'					=> 'Setzen',
 	'DL_SET_ADD'				=> 'Benutzer für neue Downloads',
 	'DL_SHORTEN_EXTERN_LINKS'	=> 'Kürze den angezeigten externen Download Link',

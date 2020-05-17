@@ -227,10 +227,19 @@ class listener implements EventSubscriberInterface
 
 		if ($dl_mod_link_show)
 		{
+			$sql = 'SELECT COUNT(id) as total
+					FROM ' . DOWNLOADS_TABLE . ' 
+					WHERE add_user = ' . (int) $this->user->data['user_id'];
+			$result = $this->db->sql_query($sql);
+			$total_downloads = $this->db->sql_fetchfield('total');
+			$this->db->sql_freeresult($result);
+
 			$dl_main_link = $this->helper->route('oxpus_dlext_index');
+			$dl_main_self = $this->helper->route('oxpus_dlext_search', ['search_user_id' => $this->user->data['user_id']]);
 
 			$this->template->assign_vars([
 				'U_DL_NAVI'		=> $dl_main_link,
+				'U_DL_SELF'		=> ($total_downloads) ? $dl_main_self : '',
 			]);
 
 			if (isset($this->config['dl_use_hacklist']) && $this->config['dl_use_hacklist'])
@@ -328,7 +337,7 @@ class listener implements EventSubscriberInterface
 		$this->template->assign_vars([
 			'DL_COMMENTS'		=> $total_comments,
 			'DL_DOWNLOADS'		=> $total_downloads,
-			'U_DL_DOWNLOADS'	=> ($total_downloads) ? $this->helper->route('oxpus_dlext_search', ['search_author' => $username]) : '',
+			'U_DL_DOWNLOADS'	=> ($total_downloads) ? $this->helper->route('oxpus_dlext_search', ['search_user_id' => $user_id]) : '',
 		]);
 
 		if (!$this->config['dl_traffic_off'])
@@ -722,7 +731,7 @@ class listener implements EventSubscriberInterface
 			$this->template->assign_vars([
 				'DL_COMMENTS'		=> $total_comments,
 				'DL_DOWNLOADS'		=> $total_downloads,
-				'U_DL_DOWNLOADS'	=> ($total_downloads) ? $this->helper->route('oxpus_dlext_search', ['search_author' => $this->user->data['username']]) : '',
+				'U_DL_DOWNLOADS'	=> ($total_downloads) ? $this->helper->route('oxpus_dlext_search', ['search_user_id' => $user_id]) : '',
 			]);
 		}
 	}

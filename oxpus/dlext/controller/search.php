@@ -147,6 +147,7 @@ class search
 		$sort_dir			= $this->request->variable('sort_dir', 'ASC');
 		$search_in_fields	= $this->request->variable('search_fields', 'all');
 		$search_author		= $this->request->variable('search_author', '', true);
+		$search_user		= $this->request->variable('search_user_id', 0);
 		
 		$search_fnames		= [
 			$this->language->lang('DL_ALL'),
@@ -176,7 +177,7 @@ class search
 		/*
 		* search for keywords if entered
 		*/
-		if ($search_keywords != '' && !$search_author)
+		if ($search_keywords != '' && !$search_author && !$search_user)
 		{
 			$this->template->set_filenames(['body' => 'dl_search_results.html']);
 		
@@ -284,35 +285,33 @@ class search
 			}
 			else
 			{
-				$sql = 'SELECT d.*, c.cat_name FROM ' . DOWNLOADS_TABLE . ' d, ' . DL_CAT_TABLE . ' c
+				$sql = 'SELECT d.*, c.cat_name, u.username, u.user_colour FROM ' . DOWNLOADS_TABLE . ' d, ' . DL_CAT_TABLE . ' c, ' . USERS_TABLE . ' u
 					WHERE d.cat = c.id
+						AND u.user_id = d.add_user
 						AND ' . $this->db->sql_in_set('d.id', $search_ids);
 				$result = $this->db->sql_query_limit($sql, $this->config['dl_links_per_page'], $start);
 		
 				while ( $row = $this->db->sql_fetchrow($result) )
 				{
-					$cat_id			= $row['cat'];
-					$file_id		= $row['id'];
-					$u_file_link	= $this->helper->route('oxpus_dlext_details', ['df_id' => $file_id]);
+					$cat_id				= $row['cat'];
+					$file_id			= $row['id'];
+					$u_file_link		= $this->helper->route('oxpus_dlext_details', ['df_id' => $file_id]);
 		
-					$dl_status		= [];
-					$dl_status		= $this->dlext_status->status($file_id);
+					$dl_status			= [];
+					$dl_status			= $this->dlext_status->status($file_id);
 		
-					$status			= $dl_status['status'];
-					$file_name		= $dl_status['file_name'];
+					$status				= $dl_status['status'];
+					$file_name			= $dl_status['file_name'];
 		
-					if (isset($index[$cat_id]['parent']))
-					{
-						$mini_icon = $this->dlext_status->mini_status_file($index[$cat_id]['parent'], $file_id);
-					}
-					else
-					{
-						$mini_icon = '';
-					}
+					$mini_icon			= $this->dlext_status->mini_status_file($cat_id, $file_id);
 		
 					$cat_name			= $row['cat_name'];
 					$u_cat_link			= $this->helper->route('oxpus_dlext_index', ['cat' => $cat_id]);
-		
+
+					$add_user			= get_username_string('full', $row['add_user'], $row['username'], $row['user_colour']);
+					$add_time			= $this->user->format_date($row['add_time']);
+					$add_time_rfc		= gmdate(DATE_RFC3339, $row['add_time']);
+	
 					$description		= $row['description'];
 					$desc_uid			= $row['desc_uid'];
 					$desc_bitfield		= $row['desc_bitfield'];
@@ -340,6 +339,9 @@ class search
 						'MINI_ICON'		=> $mini_icon,
 						'FILE_NAME'		=> $file_name,
 						'LONG_DESC'		=> ($this->config['dl_desc_search']) ? $long_desc : '',
+						'ADD_USER'		=> $add_user,
+						'ADD_TIME'		=> $add_time,
+						'ADD_TIME_RFC'	=> $add_time_rfc,
 		
 						'U_CAT_LINK'	=> $u_cat_link,
 						'U_FILE_LINK'	=> $u_file_link,
@@ -347,49 +349,56 @@ class search
 				}
 			}
 		}
-		else if ($search_author)
+		else if ($search_author || $search_user)
 		{
 			$this->template->set_filenames(['body' => 'dl_search_results.html']);
-		
-			$search_author = str_replace('sql', '', $search_author);
-			$search_author = str_replace('union', '', $search_author);
-			$search_author = str_replace('*', '%', trim($search_author));
 		
 			$sql_cat		= ($search_cat == -1) ? '' : ' AND cat = ' . $search_cat;
 			$sql_cat_count	= ($search_cat == -1) ? '' : ' AND cat = ' . $search_cat;
 		
-			$sql = 'SELECT user_id FROM ' . USERS_TABLE . '
-				WHERE username ' . $this->db->sql_like_expression($this->db->get_any_char() . $search_author . $this->db->get_any_char());
-			$result = $this->db->sql_query($sql);
-			$total_users = $this->db->sql_affectedrows($result);
-		
-			if ($total_users)
+			if ($search_user)
 			{
-				while ($row = $this->db->sql_fetchrow($result))
+				$sql_matching_users = ' AND add_user = ' . (int) $search_user;
+			}
+			else
+			{
+				$search_author = str_replace('sql', '', $search_author);
+				$search_author = str_replace('union', '', $search_author);
+				$search_author = str_replace('*', '%', trim($search_author));
+			
+				$sql = 'SELECT user_id FROM ' . USERS_TABLE . '
+					WHERE username ' . $this->db->sql_like_expression($this->db->get_any_char() . $search_author . $this->db->get_any_char());
+				$result = $this->db->sql_query($sql);
+				$total_users = $this->db->sql_affectedrows($result);
+			
+				if ($total_users)
 				{
-					$matching_userids[] = $row['user_id'];
+					while ($row = $this->db->sql_fetchrow($result))
+					{
+						$matching_userids[] = $row['user_id'];
+					}
+			
+					$this->db->sql_freeresult($result);
 				}
-		
-				$this->db->sql_freeresult($result);
+				else
+				{
+					$this->db->sql_freeresult($result);
+					trigger_error('NO_USER');
+				}
+			
+				if (sizeof($matching_userids))
+				{
+					$sql_add_users = $this->db->sql_in_set('add_user', $matching_userids);
+					$sql_change_users = $this->db->sql_in_set('change_user', $matching_userids);
+			
+					$sql_matching_users = ' AND ( ' . $sql_add_users . ' OR ' . $sql_change_users . ' ) ';
+				}
+				else
+				{
+					$sql_matching_users = '';
+				}
 			}
-			else
-			{
-				$this->db->sql_freeresult($result);
-				trigger_error('NO_USER');
-			}
-		
-			if (sizeof($matching_userids))
-			{
-				$sql_add_users = $this->db->sql_in_set('add_user', $matching_userids);
-				$sql_change_users = $this->db->sql_in_set('change_user', $matching_userids);
-		
-				$sql_matching_users = ' AND ( ' . $sql_add_users . ' OR ' . $sql_change_users . ' ) ';
-			}
-			else
-			{
-				$sql_matching_users = '';
-			}
-		
+
 			$access_cats		= [];
 			$access_cats		= $this->dlext_main->full_index(0, 0, 0, 1);
 		
@@ -429,8 +438,9 @@ class search
 			}
 			else
 			{
-				$sql = 'SELECT d.*, c.cat_name FROM ' . DOWNLOADS_TABLE . ' d, ' . DL_CAT_TABLE . ' c
+				$sql = 'SELECT d.*, c.cat_name, u.username, u.user_colour FROM ' . DOWNLOADS_TABLE . ' d, ' . DL_CAT_TABLE . ' c, ' . USERS_TABLE . ' u
 					WHERE d.cat = c.id
+						AND u.user_id = d.add_user
 						AND d.approve = ' . true . "
 						$sql_matching_users
 						$sql_access_dls
@@ -450,11 +460,15 @@ class search
 					$status			= $dl_status['status'];
 					$file_name		= $dl_status['file_name'];
 		
-					$mini_icon		= (isset($index[$cat_id]['parent'])) ? $this->dlext_status->mini_status_file($index[$cat_id]['parent'], $file_id) : '';
+					$mini_icon		= $this->dlext_status->mini_status_file($cat_id, $file_id);
 		
 					$cat_name		= $row['cat_name'];
 					$u_cat_link		= $this->helper->route('oxpus_dlext_index', ['cat' => $cat_id]);
-		
+
+					$add_user		= get_username_string('full', $row['add_user'], $row['username'], $row['user_colour']);
+					$add_time		= $this->user->format_date($row['add_time']);
+					$add_time_rfc	= gmdate(DATE_RFC3339, $row['add_time']);
+
 					$description	= $row['description'];
 					$desc_uid		= $row['desc_uid'];
 					$desc_bitfield	= $row['desc_bitfield'];
@@ -467,14 +481,14 @@ class search
 					$long_desc_bitfield	= $row['long_desc_bitfield'];
 					$long_desc_flags	= $row['long_desc_flags'];
 					$long_desc			= censor_text($long_desc);
+
 					$long_desc			= generate_text_for_display($long_desc, $long_desc_uid, $long_desc_bitfield, $long_desc_flags);
-	
-					if ((int) $this->config['dl_limit_desc_on_search'] && strlen($long_desc) > (int) $this->config['dl_limit_desc_on_search'])
+					if ((int) $this->config['dl_limit_desc_on_search'] && utf8_strlen($long_desc) > (int) $this->config['dl_limit_desc_on_search'])
 					{
-						$long_desc = strip_tags($long_desc, '<br><br/>');
-						$long_desc = substr($long_desc, 0, (int) $this->config['dl_limit_desc_on_search']) . ' [...]';
+						$long_desc			= truncate_string($long_desc, (int) $this->config['dl_limit_desc_on_search'], 16777215, false, '[...]');
+						$long_desc 			= htmlspecialchars_decode(str_replace(['<br>', '<br />'], "\n", $long_desc));
 					}
-	
+
 					$this->template->assign_block_vars('searchresults', [
 						'STATUS'		=> $status,
 						'CAT_NAME'		=> $cat_name,
@@ -482,7 +496,10 @@ class search
 						'MINI_ICON'		=> $mini_icon,
 						'FILE_NAME'		=> $file_name,
 						'LONG_DESC'		=> ($this->config['dl_desc_search']) ? $long_desc : '',
-		
+						'ADD_USER'		=> $add_user,
+						'ADD_TIME'		=> $add_time,
+						'ADD_TIME_RFC'	=> $add_time_rfc,
+	
 						'U_CAT_LINK'	=> $u_cat_link,
 						'U_FILE_LINK'	=> $u_file_link,
 					]);
