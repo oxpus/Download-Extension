@@ -339,7 +339,7 @@ class acp_stats_controller implements acp_stats_interface
 		
 			$this->db->sql_freeresult($result);
 		
-			$this->template->assign_var('S_FILLED_FOOTER', true);
+			$this->template->assign_var('S_FILLED_FOOTER', $i);
 		}
 		else
 		{

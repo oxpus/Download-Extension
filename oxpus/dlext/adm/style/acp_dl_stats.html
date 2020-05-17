@@ -4,7 +4,7 @@
 // <![CDATA[
 	function select_switch(status)
 	{
-		for (i = 0; i < document.forms.dl_stats.length-12; i++)
+		for (i = 0; i < {{ S_FILLED_FOOTER }}; i++)
 		{
 			document.forms.dl_stats.elements[i].checked = status;
 		}
