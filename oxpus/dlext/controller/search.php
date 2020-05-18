@@ -492,7 +492,14 @@ class search
 					$cat_name		= $row['cat_name'];
 					$u_cat_link		= $this->helper->route('oxpus_dlext_index', ['cat' => $cat_id]);
 
-					$add_user		= get_username_string('full', $row['add_user'], $row['username'], $row['user_colour']);
+					if (!$row['username'])
+					{
+						$add_user = $this->language->lang('GUEST');
+					}
+					else
+					{
+						$add_user = get_username_string('full', $row['add_user'], $row['username'], $row['user_colour']);
+					}
 					$add_time		= $this->user->format_date($row['add_time']);
 					$add_time_rfc	= gmdate(DATE_RFC3339, $row['add_time']);
 
