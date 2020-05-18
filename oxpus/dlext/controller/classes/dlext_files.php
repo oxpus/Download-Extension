@@ -52,16 +52,19 @@ class dlext_files implements dlext_files_interface
 		}
 
 		$sql_array['SELECT'] = $sql_fields;
+
 		$sql_array['FROM'][DOWNLOADS_TABLE] = 'd';
+
 		if ($add_user)
 		{
-			$sql_array['FROM'][USERS_TABLE] = 'u';
+			$sql_array['LEFT_JOIN'][] = [
+				'FROM'	=> array(USERS_TABLE => 'u'),
+				'ON'	=> 'u.user_id = d.add_user'
+			];
 		}
+
 		$sql_array['WHERE'] = 'd.cat = ' . (int) $cat_id . ' AND d.approve = ' . true;
-		if ($add_user)
-		{
-			$sql_array['WHERE'] .= ' AND u.user_id = d.add_user';
-		}
+
 		$sql_arrry['ORDER_BY']	= $this->db->sql_escape($sql_sort_by) . ' ' . $this->db->sql_escape($sql_order);
 
 		$sql = $this->db->sql_build_query('SELECT', $sql_array);

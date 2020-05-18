@@ -558,7 +558,14 @@ class index
 					$long_desc = htmlspecialchars_decode(str_replace(['<br>', '<br />'], "\n", $long_desc));
 				}
 
-				$add_user = get_username_string('full', $dl_files[$i]['add_user'], $dl_files[$i]['username'], $dl_files[$i]['user_colour']);
+				if (!$dl_files[$i]['username'])
+				{
+					$add_user = $this->language->lang('GUEST');
+				}
+				else
+				{
+					$add_user = get_username_string('full', $dl_files[$i]['add_user'], $dl_files[$i]['username'], $dl_files[$i]['user_colour']);
+				}
 				$add_time = $this->user->format_date($dl_files[$i]['add_time']);
 				$add_time_rfc = gmdate(DATE_RFC3339, $dl_files[$i]['add_time']);
 

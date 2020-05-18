@@ -285,10 +285,21 @@ class search
 			}
 			else
 			{
-				$sql = 'SELECT d.*, c.cat_name, u.username, u.user_colour FROM ' . DOWNLOADS_TABLE . ' d, ' . DL_CAT_TABLE . ' c, ' . USERS_TABLE . ' u
-					WHERE d.cat = c.id
-						AND u.user_id = d.add_user
-						AND ' . $this->db->sql_in_set('d.id', $search_ids);
+				$sql_array['SELECT'] = 'd.*, c.cat_name, u.username, u.user_colour';
+
+				$sql_array['FROM'][DOWNLOADS_TABLE] = 'd';
+				$sql_array['FROM'][DL_CAT_TABLE] = 'c';
+
+				$sql_array['LEFT_JOIN'][] = [
+					'FROM'	=> array(USERS_TABLE => 'u'),
+					'ON'	=> 'd.add_user = u.user_id'
+				];
+
+				$sql_array['WHERE'] = 'd.cat = c.id AND ' . $this->db->sql_in_set('d.id', $search_ids);
+				$sql_arrry['ORDER_BY'] = ' c.cat_name, d.sort ' . (string) $sort_dir;
+
+				$sql = $this->db->sql_build_query('SELECT', $sql_array);
+				
 				$result = $this->db->sql_query_limit($sql, $this->config['dl_links_per_page'], $start);
 		
 				while ( $row = $this->db->sql_fetchrow($result) )
@@ -308,7 +319,14 @@ class search
 					$cat_name			= $row['cat_name'];
 					$u_cat_link			= $this->helper->route('oxpus_dlext_index', ['cat' => $cat_id]);
 
-					$add_user			= get_username_string('full', $row['add_user'], $row['username'], $row['user_colour']);
+					if (!$row['username'])
+					{
+						$add_user = $this->language->lang('GUEST');
+					}
+					else
+					{
+						$add_user = get_username_string('full', $row['add_user'], $row['username'], $row['user_colour']);
+					}
 					$add_time			= $this->user->format_date($row['add_time']);
 					$add_time_rfc		= gmdate(DATE_RFC3339, $row['add_time']);
 	
@@ -347,6 +365,8 @@ class search
 						'U_FILE_LINK'	=> $u_file_link,
 					]);
 				}
+
+				$this->db->sql_freeresult($result);
 			}
 		}
 		else if ($search_author || $search_user)
@@ -438,14 +458,21 @@ class search
 			}
 			else
 			{
-				$sql = 'SELECT d.*, c.cat_name, u.username, u.user_colour FROM ' . DOWNLOADS_TABLE . ' d, ' . DL_CAT_TABLE . ' c, ' . USERS_TABLE . ' u
-					WHERE d.cat = c.id
-						AND u.user_id = d.add_user
-						AND d.approve = ' . true . "
-						$sql_matching_users
-						$sql_access_dls
-						$sql_cat
-					ORDER BY c.cat_name, d.sort $sort_dir";
+				$sql_array['SELECT'] = 'd.*, c.cat_name, u.username, u.user_colour';
+
+				$sql_array['FROM'][DOWNLOADS_TABLE] = 'd';
+				$sql_array['FROM'][DL_CAT_TABLE] = 'c';
+
+				$sql_array['LEFT_JOIN'][] = [
+					'FROM'	=> array(USERS_TABLE => 'u'),
+					'ON'	=> 'd.add_user = u.user_id'
+				];
+
+				$sql_array['WHERE'] = 'd.cat = c.id AND d.approve = ' . true . $sql_matching_users . $sql_access_dls . $sql_cat;
+				$sql_arrry['ORDER_BY'] = ' c.cat_name, d.sort ' . (string) $sort_dir;
+
+				$sql = $this->db->sql_build_query('SELECT', $sql_array);
+
 				$result = $this->db->sql_query_limit($sql, $this->config['dl_links_per_page'], $start);
 		
 				while ( $row = $this->db->sql_fetchrow($result) )
