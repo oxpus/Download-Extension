@@ -2,7 +2,7 @@ Subject: Descarga rota
 
 Hola {USERNAME},
 
-Ha recibido este email porque {REPORTER} ha reportado una descarga rota en {SITENAME}.
+Ha recibido este email porque "{REPORTER}" ha reportado una descarga rota en "{SITENAME}".
 Utilice el siguiente enlace para ver este reporte:
 
 ---------------------------
@@ -10,4 +10,4 @@ Utilice el siguiente enlace para ver este reporte:
 {REPORT_NOTIFY_TEXT}
 ---------------------------
 
-{BOARD_EMAIL}
+{EMAIL_SIG}

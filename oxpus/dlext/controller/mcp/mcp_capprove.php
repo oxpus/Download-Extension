@@ -130,6 +130,8 @@ class mcp_capprove
 
 		unset($dl_index);
 
+		$notification = $this->phpbb_container->get('notification_manager');
+
 		if (!$deny_modcp)
 		{
 			add_form_key('dl_modcp');
@@ -146,12 +148,17 @@ class mcp_capprove
 					$sql = 'DELETE FROM ' . DL_COMMENTS_TABLE . '
 						WHERE ' . $this->db->sql_in_set('dl_id', $dlo_id);
 					$this->db->sql_query($sql);
+
+					$notification->delete_notifications([
+						'oxpus.dlext.notification.type.capprove',
+						'oxpus.dlext.notification.type.comments',
+					], $dlo_id);
 				}
 
 				$dlo_id = [];
 			}
 
-			if (!empty($dlo_id))
+			if (!empty($dlo_id) && !$deny_modcp)
 			{
 				if (!check_form_key('dl_modcp'))
 				{
@@ -161,6 +168,8 @@ class mcp_capprove
 				$sql = 'UPDATE ' . DL_COMMENTS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', [
 					'approve' => true]) . ' WHERE ' . $this->db->sql_in_set('dl_id', $dlo_id);
 				$this->db->sql_query($sql);
+
+				$notification->delete_notifications('oxpus.dlext.notification.type.capprove', $dlo_id);
 			}
 
 			$sql_access_cats = ($this->auth->acl_get('a_') && $this->user->data['is_registered']) ? '' : ' AND ' . $this->db->sql_in_set('c.cat_id', $access_cat);
@@ -199,9 +208,8 @@ class mcp_capprove
 				$com_flags		= $row['com_flags'];
 				$comment_text	= generate_text_for_display($comment_text, $com_uid, $com_bitfield, $com_flags);
 
-				$file_id = $row['id'];
-
-				$comment_id = $row['dl_id'];
+				$file_id		= $row['id'];
+				$comment_id		= $row['dl_id'];
 
 				$comment_user_id	= $row['user_id'];
 				$comment_username	= $row['username'];

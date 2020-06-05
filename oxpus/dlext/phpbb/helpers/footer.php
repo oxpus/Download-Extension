@@ -133,7 +133,7 @@ class footer implements footer_interface
 
 	public function handle()
 	{
-		if (sizeof($this->index) || $this->cat_id)
+		if (!empty($this->index) || $this->cat_id)
 		{
 			include($this->ext_path . 'phpbb/includes/base_init' . $this->dlext_init->php_ext());
 			include($this->ext_path . 'phpbb/includes/sort_init' . $this->dlext_init->php_ext());
@@ -201,7 +201,7 @@ class footer implements footer_interface
 			{
 				$total_size		= $this->dlext_physical->read_dl_sizes();
 				$total_dl		= $this->dlext_main->get_sublevel_count();
-				$total_extern	= sizeof($this->dlext_files->all_files(0, '', 'ASC', "AND extern = 1", 0, true, 'id'));
+				$total_extern	= count($this->dlext_files->all_files(0, '', 'ASC', "AND extern = 1", 0, true, 'id'));
 
 				$physical_limit	= $this->config['dl_physical_quota'];
 				$total_size		= ($total_size > $physical_limit) ? $physical_limit : $total_size;
@@ -238,7 +238,7 @@ class footer implements footer_interface
 
 					if ($data['sub'])
 					{
-						for($i = 1; $i < $data['level']; ++$i)
+						for ($i = 1; $i < $data['level']; ++$i)
 						{
 							$this->template->assign_block_vars('dl_jumpbox.level', []);
 						}
@@ -330,7 +330,7 @@ class footer implements footer_interface
 				$dl_latest_files = [];
 				$dl_latest_files = $this->dlext_files->all_files(0, '', '', $sql_latest_where, 0, 0, 'id', 1);
 
-				if (sizeof($dl_latest_files))
+				if (!empty($dl_latest_files))
 				{
 					$this->template->assign_var('U_LATEST_DOWNLOADS', $this->helper->route('oxpus_dlext_latest'));
 				}
@@ -469,7 +469,7 @@ class footer implements footer_interface
 				$this->template->assign_var('S_DL_TRAFFIC_OFF', true);
 			}
 
-			if ($this->config['dl_show_footer_legend'] && !(in_array($this->nav_mode, ['todo', 'stat', 'upload', 'bug_tracker', 'search'])) || $this->cat_id)
+			if ($this->config['dl_show_footer_legend'])
 			{
 				$this->template->assign_var('S_FOOTER_LEGEND', true);
 			}
@@ -478,7 +478,7 @@ class footer implements footer_interface
 			{
 				$todo_access_ids = $this->dlext_main->full_index(0, 0, 0, 2);
 		
-				if (sizeof($todo_access_ids) && $this->user->data['is_registered'])
+				if (!empty($todo_access_ids) && $this->user->data['is_registered'])
 				{
 					$this->template->assign_var('S_TODO_LINK', true);
 				}

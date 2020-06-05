@@ -1,26 +1,3 @@
-		{% if S_NEW_DL_MESSAGE %}
-		<div id="information" class="rules">
-			<div class="inner">
-				{{ NEW_DOWNLOAD_MESSAGE }}
-			</div>
-		</div>
-		{% endif %}
-		{% if S_NEW_DL_POPUP %}
-		<div id="dl_new_popup">
-			<div class="dl_new_close">
-				<li>
-					<a href="#" title="{{ lang('CLOSE') }}" class="button button-icon-only">
-						<i class="icon fa-times fa-fw" aria-hidden="true"></i><span class="sr-only">{{ lang('CLOSE') }}</span>
-					</a>
-				</li>
-			</div>
-			<div id="dl_new_content">
-				<div class="dl-text-center"><span>{{ NEW_DOWNLOAD_MESSAGE }}</span></div>
-			</div>
-		</div>
-
-		<div id="dl_new_bg"></div>
-		{% endif %}
 		<div id="dl_help_popup" class="noshow">
 			<div class="dl_help_close"></div>
 			<div id="dl_help_content">

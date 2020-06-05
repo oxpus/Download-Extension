@@ -79,7 +79,7 @@ class dlext_auth implements dlext_auth_interface
 
 		$user_id = ($this->user->data['user_perm_from']) ? $this->user->data['user_perm_from'] : $this->user->data['user_id'];
 
-		if (sizeof($group_perm_ids) != 0)
+		if (!empty($group_perm_ids))
 		{
 			$cat_auth_array = $this->dlext_cache->obtain_dl_access_groups($auth_cat, $group_perm_ids, $user_id, $auth_perm);
 		}
@@ -92,7 +92,7 @@ class dlext_auth implements dlext_auth_interface
 		$dl_auth		= $this->dl_auth();
 		$user_logged_in	= $this->user_logged_in();
 
-		if (is_array($this->dl_index) && sizeof($this->dl_index) > 0)
+		if (!empty($this->dl_index))
 		{
 			foreach($this->dl_index as $key => $value)
 			{
@@ -141,7 +141,7 @@ class dlext_auth implements dlext_auth_interface
 
 		$this->cat_counts = $this->dlext_cache->obtain_dl_cat_counts();
 
-		if (is_array($this->cat_counts) && sizeof($this->cat_counts) > 0)
+		if (!empty($this->cat_counts))
 		{
 			foreach($this->cat_counts as $key => $value)
 			{
@@ -202,7 +202,7 @@ class dlext_auth implements dlext_auth_interface
 		{
 			$blacklist_ary = $this->dlext_cache->obtain_dl_blacklist();
 
-			if (is_array($blacklist_ary) && sizeof($blacklist_ary))
+			if (!empty($blacklist_ary))
 			{
 				$ext_blacklist = array_unique($blacklist_ary);
 				$this->config->set('dl_enable_blacklist', 1);
@@ -232,7 +232,7 @@ class dlext_auth implements dlext_auth_interface
 		{
 			case 0:
 				$stats_view = true;
-				break;
+			break;
 
 			case 1:
 				if ($this->user_logged_in())
@@ -257,6 +257,10 @@ class dlext_auth implements dlext_auth_interface
 				{
 					$stats_view = true;
 				}
+			break;
+
+			case 9:
+				$stats_view = false;
 			break;
 
 			default:
@@ -344,17 +348,18 @@ class dlext_auth implements dlext_auth_interface
 
 	public function dl_auth_users($cat_id, $perm)
 	{
-		if (!is_array($this->dl_index) || !sizeof($this->dl_index))
-		{
-			return 0;
-		}
-
 		$user_ids = [];
+
+		if (!is_array($this->dl_index) || empty($this->dl_index))
+		{
+			return $user_ids;
+		}
 
 		if ($this->dl_index[$cat_id][$perm])
 		{
 			$sql = 'SELECT user_id FROM ' . USERS_TABLE . '
 				WHERE user_id <> ' . ANONYMOUS . '
+					AND user_type <> ' . USER_IGNORE . '
 					AND user_id <> ' . (int) $this->user->data['user_id'];
 			$result = $this->db->sql_query($sql);
 		}
@@ -370,7 +375,7 @@ class dlext_auth implements dlext_auth_interface
 			if (!$total_group_perms)
 			{
 				$this->db->sql_freeresult($result);
-				return 0;
+				return $user_ids;
 			}
 
 			$group_ids = [];
@@ -382,9 +387,9 @@ class dlext_auth implements dlext_auth_interface
 
 			$this->db->sql_freeresult($result);
 
-			if (!sizeof($group_ids))
+			if (empty($group_ids))
 			{
-				return 0;
+				return $user_ids;
 			}
 
 			$sql = 'SELECT user_id FROM ' . USER_GROUP_TABLE . '
@@ -401,19 +406,12 @@ class dlext_auth implements dlext_auth_interface
 
 		$this->db->sql_freeresult($result);
 
-		if (sizeof($user_ids))
-		{
-			return implode(', ', $user_ids);
-		}
-		else
-		{
-			return 0;
-		}
+		return array_unique($user_ids);
 	}
 
 	public function bug_tracker()
 	{
-		if (!is_array($this->dl_index) || !sizeof($this->dl_index))
+		if (!is_array($this->dl_index) || empty($this->dl_index))
 		{
 			return false;
 		}

@@ -59,7 +59,6 @@ class broken
 	protected $ext_path_ajax;
 
 	protected $dlext_auth;
-	protected $dlext_email;
 	protected $dlext_main;
 	protected $dlext_status;
 
@@ -95,7 +94,6 @@ class broken
 		\phpbb\user $user,
 		\phpbb\language\language $language,
 		$dlext_auth,
-		$dlext_email,
 		$dlext_main,
 		$dlext_status
 	)
@@ -119,7 +117,6 @@ class broken
 		$this->ext_path_ajax			= $this->ext_path_web . 'assets/javascript/';
 
 		$this->dlext_auth				= $dlext_auth;
-		$this->dlext_email				= $dlext_email;
 		$this->dlext_main				= $dlext_main;
 		$this->dlext_status				= $dlext_status;
 	}
@@ -263,7 +260,7 @@ class broken
 			            $error[] = $vc_response;
 			        }
 
-			        if (!sizeof($error))
+			        if (empty($error))
 			        {
 			            $captcha->reset();
 			            $code_match = true;
@@ -355,19 +352,22 @@ class broken
 				$this->db->sql_query($sql);
 
 				$processing_user = $this->dlext_auth->dl_auth_users($cat_id, 'auth_mod');
+				$reporter = ($this->dlext_auth->user_logged_in()) ? $this->user->data['username'] : $this->language->lang('DL_A_GUEST');
 
 				$report_notify_text = $this->request->variable('report_notify_text', '', true);
 				$report_notify_text = ($report_notify_text) ? $this->language->lang('DL_REPORT_NOTIFY_TEXT', $report_notify_text) : '';
 
-				$mail_data = [
-					'email_template'		=> 'downloads_report_broken',
-					'processing_user'		=> $processing_user,
-					'report_notify_text'	=> $report_notify_text,
-					'cat_id'				=> $cat_id,
+				$notification_data = [
+					'user_ids'				=> $processing_user,
 					'df_id'					=> $df_id,
+					'description'			=> $description,
+					'reporter'				=> $reporter,
+					'report_notify_text'	=> $report_notify_text,
 				];
 
-				$this->dlext_email->send_report($mail_data);
+				$notification = $this->phpbb_container->get('notification_manager');
+
+				$notification->add_notifications('oxpus.dlext.notification.type.broken', $notification_data);
 			}
 		}
 

@@ -2,7 +2,7 @@ Subject: Nouveau téléchargement
 
 Bonjour {USERNAME},
 
-Vous recevez cet e-mail car il y a un nouveau téléchargement dans la catégorie « {CATEGORY} » sur « {SITENAME} » :
+Vous recevez cet e-mail car il y a un nouveau téléchargement dans la catégorie "{CATEGORY}" sur "{SITENAME}":
 
 ---------------------------
 {DOWNLOAD}
@@ -15,4 +15,4 @@ Si vous voulez voir ce nouveau téléchargement, cliquez sur le lien suivant :
 
 Rappel : si vous ne voulez plus être notifié des nouveaux téléchargements, modifiez les paramètres de votre profil.
 
-{BOARD_EMAIL}
+{EMAIL_SIG}

@@ -51,7 +51,7 @@ class dlext_counter implements dlext_counter_interface
 		$access_cats = [];
 		$access_cats = $this->dlext_main->full_index(0, 0, 0, 2);
 
-		if ((!isset($access_cats[0]) || !$access_cats[0] || !sizeof($access_cats)) && !$this->dlext_auth->user_admin())
+		if (empty($access_cats) && !$this->dlext_auth->user_admin())
 		{
 			return 0;
 		}
@@ -80,7 +80,7 @@ class dlext_counter implements dlext_counter_interface
 		$access_cats = [];
 		$access_cats = $this->dlext_main->full_index(0, 0, 0, 2);
 
-		if ((!isset($access_cats[0]) || !$access_cats[0] || !sizeof($access_cats)) && !$this->dlext_auth->user_admin())
+		if (empty($access_cats) && !$this->dlext_auth->user_admin())
 		{
 			return 0;
 		}
@@ -107,7 +107,7 @@ class dlext_counter implements dlext_counter_interface
 		$access_cats = [];
 		$access_cats = $this->dlext_main->full_index(0, 0, 0, 2);
 
-		if ((!isset($access_cats[0]) || !$access_cats[0] || !sizeof($access_cats)) && !$this->dlext_auth->user_admin())
+		if (empty($access_cats) && !$this->dlext_auth->user_admin())
 		{
 			return 0;
 		}

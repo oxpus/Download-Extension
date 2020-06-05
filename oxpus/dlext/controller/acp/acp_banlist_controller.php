@@ -141,12 +141,12 @@ class acp_banlist_controller implements acp_banlist_interface
 			{
 				$sql_ext_in = [];
 		
-				for ($i = 0; $i < sizeof($ban_id_ary); $i++)
+				for ($i = 0; $i < count($ban_id_ary); ++$i)
 				{
 					$sql_ext_in[] = intval($ban_id_ary[$i]);
 				}
 		
-				if (sizeof($sql_ext_in))
+				if (!empty($sql_ext_in))
 				{
 					$sql = 'DELETE FROM ' . DL_BANLIST_TABLE . '
 						WHERE ' . $this->db->sql_in_set('ban_id', $sql_ext_in);
@@ -163,7 +163,7 @@ class acp_banlist_controller implements acp_banlist_interface
 			{
 				$s_hidden_fields = ['action' => 'delete'];
 		
-				for ($i = 0; $i < sizeof($ban_id_ary); $i++)
+				for ($i = 0; $i < count($ban_id_ary); ++$i)
 				{
 					$s_hidden_fields += ['ban_id[' . $i . ']' => intval($ban_id_ary[$i])];
 				}

@@ -500,7 +500,7 @@ class acp_traffic_controller implements acp_traffic_interface
 			3 => $this->language->lang('DL_ACP_TRAF_GRP'),
 		];
 		
-		for ($i = 0; $i < sizeof($acl_cat_names); $i++)
+		for ($i = 0; $i < count($acl_cat_names); ++$i)
 		{
 			$this->template->assign_block_vars('category', ['CAT_NAME' => $acl_cat_names[$i]]);
 		}

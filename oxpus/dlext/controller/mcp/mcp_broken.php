@@ -143,6 +143,9 @@ class mcp_broken
 				$sql = 'UPDATE ' . DOWNLOADS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', [
 					'broken' => 0]) . ' WHERE ' . $this->db->sql_in_set('id', $dlo_id);
 				$this->db->sql_query($sql);
+
+				$notification = $this->phpbb_container->get('notification_manager');
+				$notification->delete_notifications('oxpus.dlext.notification.type.broken', $dlo_id);
 			}
 
 			$sql_access_cats = ($this->auth->acl_get('a_') && $this->user->data['is_registered']) ? '' : ' AND ' . $this->db->sql_in_set('cat', $access_cat);

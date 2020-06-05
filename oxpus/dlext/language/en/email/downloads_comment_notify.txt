@@ -2,7 +2,7 @@ Subject: New Download Comment
 
 Hello {USERNAME},
 
-You have received this email because there is a new download comment on {SITENAME} for one of your subscribed downloads:
+You have received this email because there is a new download comment on "{SITENAME}" for one of your subscribed downloads:
 
 ---------------------------
 Category {CATEGORY}
@@ -13,6 +13,6 @@ If you want to take a look on this comment click the following link:
 
 {U_DOWNLOAD}
 
-Remember that you can always choose not to be notified about new comments by changing the appropriate setting in your download profile.
+Remember that you can always choose not to be notified about new comments by changing the appropriate setting in your user profile.
 
-{BOARD_EMAIL}
+{EMAIL_SIG}

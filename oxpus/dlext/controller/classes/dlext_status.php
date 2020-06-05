@@ -89,7 +89,7 @@ class dlext_status implements dlext_status_interface
 		$mini_status_icon[$cur]['new'] = 0;
 		$mini_status_icon[$cur]['edit'] = 0;
 
-		if (!is_array($this->dl_index) || !sizeof($this->dl_index))
+		if (empty($this->dl_index))
 		{
 			return [];
 		}

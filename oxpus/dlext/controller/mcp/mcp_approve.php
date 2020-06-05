@@ -146,11 +146,14 @@ class mcp_approve
 
 				if ($this->config['dl_enable_dl_topic'])
 				{
-					for ($i = 0; $i < sizeof($dlo_id); $i++)
+					for ($i = 0; $i < count($dlo_id); ++$i)
 					{
 						$this->dlext_topic->gen_dl_topic(intval($dlo_id[$i]));
 					}
 				}
+
+				$notification = $this->phpbb_container->get('notification_manager');
+				$notification->delete_notifications('oxpus.dlext.notification.type.approve', $dlo_id);
 			}
 
 			$sql_access_cats = ($this->auth->acl_get('a_') && $this->user->data['is_registered']) ? '' : ' AND ' . $this->db->sql_in_set('cat', $access_cat);

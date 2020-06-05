@@ -140,7 +140,7 @@ class feed
 			$access_cats = $this->dlext_main->full_index(0, 0, 0, 1);
 
 			// Does we have some cats? miau ...
-			if (sizeof($access_cats))
+			if (!empty($access_cats))
 			{
 				$sql_where_cats = ' AND ' . $this->db->sql_in_set('cat', $access_cats);
 
@@ -178,13 +178,13 @@ class feed
 				$dl_files = [];
 				$dl_files = $this->dlext_files->all_files(0, $sql_sort_by, $sql_order_by , $sql_where_cats, 0, 0, $sql_fields, $sql_limit);
 
-				if (sizeof($dl_files))
+				if (!empty($dl_files))
 				{
 					header("Content-Type: application/rss+xml");
 
 					$this->template->set_filenames(['body' => 'dl_rss.xml']);
 
-					for ($i = 0; $i < sizeof($dl_files); $i++)
+					for ($i = 0; $i < count($dl_files); ++$i)
 					{
 						$dl_id			= $dl_files[$i]['id'];
 						$dl_cat			= $dl_files[$i]['cat'];

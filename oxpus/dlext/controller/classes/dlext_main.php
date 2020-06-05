@@ -56,7 +56,7 @@ class dlext_main implements dlext_main_interface
 
 	public function full_index($only_cat = 0, $parent = 0, $level = 0, $auth_level = 0, &$tree_dl = [])
 	{
-		if (!is_array($this->dl_index) || !sizeof($this->dl_index))
+		if (empty($this->dl_index))
 		{
 			return [];
 		}
@@ -103,7 +103,7 @@ class dlext_main implements dlext_main_interface
 					else if (isset($value['parent']) && $value['parent'] == $parent)
 					{
 						$seperator = '';
-						for ($i = 0; $i < $level; $i++)
+						for ($i = 0; $i < $level; ++$i)
 						{
 							$seperator .= ($value['parent'] != 0) ? '&nbsp;&nbsp;|___&nbsp;' : '';
 						}
@@ -114,20 +114,20 @@ class dlext_main implements dlext_main_interface
 						$tree_dl[$cat_id]['cat_name'] = $seperator . $value['cat_name'];
 						$tree_dl[$cat_id]['cat_name_nav'] = $value['cat_name'];
 
-						$level++;
+						++$level;
 						$tree_dl = $this->full_index(0, $cat_id, $level, 0, $tree_dl);
-						$level--;
+						--$level;
 					}
 				}
 			}
 		}
 
-		return (isset($auth_level) && $auth_level <> 0) ? $access_ids : $tree_dl;
+		return (!empty($auth_level) && $auth_level <> 0) ? $access_ids : $tree_dl;
 	}
 
 	public function index($parent = 0)
 	{
-		if (!is_array($this->dl_index) || !sizeof($this->dl_index))
+		if (empty($this->dl_index))
 		{
 			return [];
 		}
@@ -150,7 +150,7 @@ class dlext_main implements dlext_main_interface
 
 	public function get_sublevel($parent = 0)
 	{
-		if (!is_array($this->dl_index) || !sizeof($this->dl_index))
+		if (empty($this->dl_index))
 		{
 			return [];
 		}
@@ -172,7 +172,8 @@ class dlext_main implements dlext_main_interface
 				$sublevel['desc_uid'][$i] = (isset($this->dl_index[$cat_id]['desc_uid'])) ? $this->dl_index[$cat_id]['desc_uid'] : '';
 				$sublevel['desc_bitfield'][$i] = (isset($this->dl_index[$cat_id]['desc_bitfield'])) ? $this->dl_index[$cat_id]['desc_bitfield'] : '';
 				$sublevel['desc_flags'][$i] = (isset($this->dl_index[$cat_id]['desc_flags'])) ? $this->dl_index[$cat_id]['desc_flags'] : '';
-				$i++;
+
+				++$i;
 			}
 		}
 
@@ -181,7 +182,7 @@ class dlext_main implements dlext_main_interface
 
 	public function get_sublevel_count($parent = 0)
 	{
-		if (!is_array($this->dl_index) || !sizeof($this->dl_index))
+		if (empty($this->dl_index))
 		{
 			return 0;
 		}
@@ -202,7 +203,7 @@ class dlext_main implements dlext_main_interface
 
 	public function count_sublevel($parent)
 	{
-		if (!is_array($this->dl_index) || !sizeof($this->dl_index))
+		if (empty($this->dl_index))
 		{
 			return 0;
 		}
@@ -213,7 +214,7 @@ class dlext_main implements dlext_main_interface
 		{
 			if ((isset($this->dl_index[$cat_id]['auth_view']) || isset($this->dl_auth[$cat_id]['auth_view']) || $this->user_admin) && (isset($this->dl_index[$cat_id]['parent']) && $this->dl_index[$cat_id]['parent'] == $parent))
 			{
-				$sublevel++;
+				++$sublevel;
 			}
 		}
 
@@ -252,7 +253,7 @@ class dlext_main implements dlext_main_interface
 
 	public function dl_prune_stats($cat_id, $stats_prune)
 	{
-		$stats_prune--;
+		--$stats_prune;
 
 		if ($stats_prune)
 		{

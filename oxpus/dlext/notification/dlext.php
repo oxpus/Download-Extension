@@ -12,7 +12,7 @@ namespace oxpus\dlext\notification;
 
 /**
 * Download Extension notifications class
-* This class handles notifications for new and updates downloads
+* This class handles notifications for new downloads
 *
 * @package notifications
 */
@@ -27,6 +27,7 @@ class dlext extends \phpbb\notification\type\base
 	{
 		return 'oxpus.dlext.notification.type.dlext';
 	}
+
 	/**
 	* Notification option data (for outputting to the user)
 	*
@@ -34,35 +35,32 @@ class dlext extends \phpbb\notification\type\base
 	* 					Array of data (including keys 'id', 'lang', and 'group')
 	*/
 	public static $notification_option = [
-		'lang'	=> 'NEW_DOWNLOAD_NOTIFICATION',
+		'lang'	=> 'DL_NOTIFY_TYPE_NEW',
+		'group'	=> 'DL_NOTIFICATIONS',
 	];
 
-	/** @var \phpbb\db\driver\driver_interface */
-	protected $db;
+	/** @var \phpbb\config\config */
+	protected $config;
 
-	/** @var \phpbb\language\language */
-	protected $language;
+	/** @var \phpbb\user_loader */
+	protected $user_loader;
 
 	/** @var \phpbb\controller\helper */
 	protected $helper;
 
-	/**
-	 * @param \phpbb\db\driver\driver_interface $db
-	 * @param \phpbb\language\language          $language
-	 * @param \phpbb\user                       $user
-	 * @param \phpbb\auth\auth                  $auth
-	 * @param string                            $phpbb_root_path
-	 * @param string                            $php_ext
-	 * @param string                            $user_notifications_table
-	 * @param \phpbb\controller\helper          $helper
-	*/
-	public function __construct(\phpbb\db\driver\driver_interface $db, \phpbb\language\language $language, \phpbb\user $user, \phpbb\auth\auth $auth, $phpbb_root_path, $php_ext, $user_notifications_table, \phpbb\controller\helper $helper)
+	public function set_config(\phpbb\config\config $config)
 	{
-		$this->db		= $db;
-		$this->language	= $language;
-		$this->helper	= $helper;
+		$this->config = $config;
+	}
 
-		parent::__construct($db, $language, $user, $auth, $phpbb_root_path, $php_ext, $user_notifications_table);
+	public function set_user_loader(\phpbb\user_loader $user_loader)
+	{
+		$this->user_loader = $user_loader;
+	}
+
+	public function set_helper(\phpbb\controller\helper $helper)
+	{
+		$this->helper	= $helper;
 	}
 
 	/**
@@ -83,7 +81,7 @@ class dlext extends \phpbb\notification\type\base
 	*/
 	public static function get_item_id($data)
 	{
-		return $data['notification_id'];
+		return $data['df_id'];
 	}
 
 	/**
@@ -107,21 +105,8 @@ class dlext extends \phpbb\notification\type\base
 	*/
 	public function find_users_for_notification($data, $options = [])
 	{
-		// Grab all registered users (excluding bots and guests)
-		$sql = 'SELECT user_id
-			FROM ' . USERS_TABLE . '
-			WHERE user_new_download <> 0
-				AND user_dl_note_type = 2';
-		$result = $this->db->sql_query($sql);
-
-		$users = [];
-		while ($row = $this->db->sql_fetchrow($result))
-		{
-			$users[$row['user_id']] = $this->notification_manager->get_default_methods();
-		}
-		$this->db->sql_freeresult($result);
-
-		return $users;
+		$this->user_loader->load_users($data['user_ids']);
+		return $this->check_user_notification_options($data['user_ids'], $options);
 	}
 
 
@@ -139,7 +124,7 @@ class dlext extends \phpbb\notification\type\base
 	*/
 	public function get_title()
 	{
-		return $this->language->lang('NEW_DOWNLOAD_NOTIFICATION');
+		return $this->language->lang('DL_NOTIFY_NEW', $this->get_data('description'));
 	}
 
 	/**
@@ -149,8 +134,7 @@ class dlext extends \phpbb\notification\type\base
 	 */
 	public function get_reference()
 	{
-		//return true;
-		//return censor_text($this->get_data('album_name'));
+		return '';
 	}
 
 	/**
@@ -160,7 +144,7 @@ class dlext extends \phpbb\notification\type\base
 	*/
 	public function get_email_template()
 	{
-		return false;
+		return '@oxpus_dlext/downloads_new_notify';
 	}
 	/**
 	* Get email template variables
@@ -169,7 +153,12 @@ class dlext extends \phpbb\notification\type\base
 	*/
 	public function get_email_template_variables()
 	{
-		return [];
+		return [
+			'DOWNLOAD'		=> strip_tags(htmlspecialchars_decode($this->get_data('description'))),
+			'DESCRIPTION'	=> strip_tags(htmlspecialchars_decode($this->get_data('long_desc'))),
+			'CATEGORY'		=> strip_tags(htmlspecialchars_decode($this->get_data('cat_name'))),
+			'U_CATEGORY'	=> generate_board_url(true) . $this->helper->route('oxpus_dlext_index', ['cat_df_id' => $this->get_data('df_id')]),
+		];
 	}
 
 	/**
@@ -179,7 +168,7 @@ class dlext extends \phpbb\notification\type\base
 	*/
 	public function get_url()
 	{
-		return $this->helper->route('oxpus_dlext_latest');
+		return $this->helper->route('oxpus_dlext_index', ['cat_df_id' => $this->get_data('df_id')]);
 	}
 
 	/**
@@ -196,12 +185,17 @@ class dlext extends \phpbb\notification\type\base
 	* Function for preparing the data for insertion in an SQL query
 	* (The service handles insertion)
 	*
-	* @param array $data The data for the updated or new download
+	* @param array $data The data for the new download
 	* @param array $pre_create_data Data from pre_create_insert_array()
 	*
 	*/
 	public function create_insert_array($data, $pre_create_data = [])
 	{
+		$this->set_data('user_ids', $data['user_ids']);
+		$this->set_data('df_id', $data['df_id']);
+		$this->set_data('cat_name', $data['cat_name']);
+		$this->set_data('long_desc', $data['long_desc']);
+		$this->set_data('description', $data['description']);
 		parent::create_insert_array($data, $pre_create_data);
 	}
 }

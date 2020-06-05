@@ -2,7 +2,7 @@ Subject: New Download Comment
 
 Hello {USERNAME},
 
-You receive this email because of a new or edited download comment for {DOWNLOAD} on {SITENAME} in the category {CATEGORY} which must be approved.
+You receive this email because of a new or edited download comment for "{DOWNLOAD}" on "{SITENAME}" in the category "{CATEGORY}" which must be approved.
 
 If you want to approve this comment click the following link:
 
@@ -13,4 +13,4 @@ Or you can view this comment by using this second link:
 {U_DOWNLOAD}
 
 
-{BOARD_EMAIL}
+{EMAIL_SIG}

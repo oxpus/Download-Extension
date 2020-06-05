@@ -65,48 +65,82 @@ class ajax
 	{
 		$dl_id		= $this->request->variable('dl_id', 0);
 		$rate_point	= $this->request->variable('rate_point', 0);
+		$drop		= $this->request->variable('drop', 0);
 
-		if ($dl_id && $rate_point)
+		if ($dl_id && ($rate_point || $drop))
 		{
-			$sql = 'INSERT INTO ' . DL_RATING_TABLE . ' ' . $this->db->sql_build_array('INSERT', [
-				'rate_point'	=> $rate_point,
-				'user_id'		=> $this->user->data['user_id'],
-				'dl_id'			=> $dl_id]);
+			if ($rate_point)
+			{
+				$sql = 'INSERT INTO ' . DL_RATING_TABLE . ' ' . $this->db->sql_build_array('INSERT', [
+					'rate_point'	=> $rate_point,
+					'user_id'		=> $this->user->data['user_id'],
+					'dl_id'			=> $dl_id]);
+			}
+			else if ($drop)
+			{
+				$sql = 'DELETE FROM ' . DL_RATING_TABLE . '
+						WHERE user_id = ' . (int) $this->user->data['user_id'] . '
+							AND dl_id = ' . (int) $dl_id;
+			}
+
 			$this->db->sql_query($sql);
-		
+
 			$sql = 'SELECT AVG(rate_point) AS rating, COUNT(rate_point) AS total FROM ' . DL_RATING_TABLE . '
 				WHERE dl_id = ' . (int) $dl_id . '
 				GROUP BY dl_id';
 			$result = $this->db->sql_query($sql);
 			$row = $this->db->sql_fetchrow($result);
-			$new_rating = ceil($row['rating']);
+			$new_rating = ceil($row['rating'] * 10);
 			$total_ratings = $row['total'];
 			$this->db->sql_freeresult($result);
-		
+
+			$sql = 'SELECT rate_point FROM ' . DL_RATING_TABLE . '
+				WHERE dl_id = ' . (int) $dl_id . '
+					AND user_id = ' . (int) $this->user->data['user_id'];
+			$result = $this->db->sql_query($sql);
+			$user_has_rated = $this->db->sql_affectedrows($result);
+			$this->db->sql_freeresult($result);
+
 			$sql = 'UPDATE ' . DOWNLOADS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', [
 				'rating' => $new_rating]) . ' WHERE id = ' . (int) $dl_id;
 			$this->db->sql_query($sql);
-		
-			$rate_img = '';
-			$rate_yes = '<i class="icon fa-star fa-fw dl-green" title=""></i>';
-			$rate_no = '<i class="icon fa-star-o fa-fw dl-yellow" title=""></i>';
-		
-			for ($i = 0; $i < $this->config['dl_rate_points']; $i++)
+
+			$rate_points_title = $new_rating / 10;
+
+			$rating_title = $this->language->lang('DL_RATING_HOVER', $rate_points_title, $this->config['dl_rate_points']);
+
+			$rate_img = '<span class="dl-rating" title="' . $rating_title . '">';
+	
+			$rate_yes = '<i class="icon fa-star fa-fw dl-green"></i>';
+			$rate_no = '<i class="icon fa-star-o fa-fw dl-yellow"></i>';
+			$rate_undo = '<i class="icon fa-times-circle fa-fw dl-red"></i>';
+
+			for ($i = 0; $i < $this->config['dl_rate_points']; ++$i)
 			{
 				$j = $i + 1;
 		
-				$rate_img .= ($j <= $new_rating ) ? $rate_yes : $rate_no;
+				if ($user_has_rated)
+				{
+					$ajax = '';
+				}
+				else
+				{
+					$ajax = 'onclick="AJAXDLVote(' . $dl_id . ', ' . $j . '); return false;"';
+				}
+				$rate_img .= ($j <= ceil($rate_points_title) ) ? '<a href="#" ' . $ajax . ' class="dl-rating-img">' . $rate_yes . '</a>' : '<a href="#" ' . $ajax . ' class="dl-rating-img">' . $rate_no . '</a>';
 			}
 		
-			if ($total_ratings == 1)
+			if ($user_has_rated)
 			{
-				$rate_img .= '<br />' . $this->language->lang('DL_RATING_ONE');
+				$ajax = 'onclick="AJAXDLUnvote(' . $dl_id . '); return false;"';
+				$rate_img .= ' <a href="#" ' . $ajax . ' class="dl-rating-img">' . $rate_undo . '</a>';
 			}
-			else
+
+			if ($total_ratings)
 			{
-				$rate_img .= '<br />' . $this->language->lang('DL_RATING_MORE', $total_ratings);
+				$rate_img .= '&nbsp;' . $this->language->lang('DL_RATING_COUNT', $total_ratings);
 			}
-		
+	
 			$json_out = json_encode(['rate_img' => $rate_img, 'dl_id' => $dl_id]);
 		
 			$http_headers = [

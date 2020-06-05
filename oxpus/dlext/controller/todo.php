@@ -139,7 +139,7 @@ class todo
 		}
 
 		$todo_access_ids = $this->dlext_main->full_index(0, 0, 0, 2);
-		$total_todo_ids = sizeof($todo_access_ids);
+		$total_todo_ids = count($todo_access_ids);
 
 		if ($total_todo_ids > 0 && $this->user->data['is_registered'])
 		{
@@ -336,9 +336,9 @@ class todo
 			$dl_todo = [];
 			$dl_todo = $this->dlext_extra->get_todo();
 			
-			if (isset($dl_todo['file_name'][0]))
+			if (!empty($dl_todo['file_name'][0]))
 			{
-				for ($i = 0; $i < sizeof($dl_todo['file_name']); $i++)
+				for ($i = 0; $i < count($dl_todo['file_name']); ++$i)
 				{
 					$df_id = $dl_todo['df_id'][$i];
 			

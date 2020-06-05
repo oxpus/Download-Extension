@@ -284,7 +284,8 @@ class thumbs
 					$thumb_temp = $upload_file['tmp_name'];
 					$thumb_name = $upload_file['name'];
 			
-					$error_count = sizeof($thumb_file->error);
+					$error_count = count($thumb_file->error);
+
 					if ($error_count > 1 && $thumb_name)
 					{
 						$thumb_file->remove();

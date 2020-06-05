@@ -64,6 +64,8 @@ class dlext_cache implements dlext_cache_interface
 
 			$result = $this->db->sql_query($sql);
 
+			$dl_index = [];
+
 			while ($row = $this->db->sql_fetchrow($result))
 			{
 				$dl_index[$row['id']] = $row;
@@ -94,6 +96,8 @@ class dlext_cache implements dlext_cache_interface
 					ORDER BY extention';
 			$result = $this->db->sql_query($sql);
 
+			$dl_black = [];
+
 			while ( $row = $this->db->sql_fetchrow($result) )
 			{
 				$dl_black[] = $row['extention'];
@@ -117,6 +121,9 @@ class dlext_cache implements dlext_cache_interface
 			$sql = 'SELECT COUNT(id) AS total, cat FROM ' . DOWNLOADS_TABLE . '
 				GROUP BY cat';
 			$result = $this->db->sql_query($sql);
+
+			$dl_cat_counts = [];
+
 			while ($row = $this->db->sql_fetchrow($result))
 			{
 				$dl_cat_counts[$row['cat']] = $row['total'];
@@ -219,7 +226,10 @@ class dlext_cache implements dlext_cache_interface
 	*/
 	public function obtain_dl_auth()
 	{
-		$auth_cat = $group_perm_ids = $auth_perm = [];
+		$auth_cat		= [];
+		$group_perm_ids	= [];
+		$auth_perm		= [];
+		$dl_auth_perm	= [];
 
 		if (($dl_auth_perm = $this->get('_dl_auth')) === false)
 		{
@@ -270,7 +280,8 @@ class dlext_cache implements dlext_cache_interface
 	*/
 	public function obtain_dl_access_groups($auth_cat, $group_perm_ids, $user_id, $auth_perm)
 	{
-		$dl_auth_groups = [];
+		$cat_auth_array	= [];
+		$dl_auth_groups	= [];
 
 		if (($dl_auth_groups = $this->get('_dl_auth_groups')) === false)
 		{
@@ -295,12 +306,12 @@ class dlext_cache implements dlext_cache_interface
 
 		$group_ids = $dl_auth_groups[$user_id];
 
-		for ($i = 0; $i < sizeof($auth_cat); $i++)
+		for ($i = 0; $i < count($auth_cat); ++$i)
 		{
 			$auth_view = $auth_dl = $auth_up = $auth_mod = 0;
 			$cat = $auth_cat[$i];
 
-			for ($j = 0; $j < sizeof($group_ids); $j++)
+			for ($j = 0; $j < count($group_ids); ++$j)
 			{
 				$user_group = $group_ids[$j];
 
@@ -497,7 +508,8 @@ class dlext_cache implements dlext_cache_interface
 				// Something went wrong
 				break;
 			}
-			$line++;
+
+			++$line;
 		}
 		fclose($handle);
 

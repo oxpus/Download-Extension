@@ -2,11 +2,11 @@ Subject: Rapport de bugs sur « {SITENAME} »
 
 Bonjour {USERNAME},
 
-Vous recevez cet e-mail car un rapport de bugs sur « {SITENAME} » a été envoyé pour être analysé.
+Vous recevez cet e-mail car un rapport de bugs sur "{SITENAME}" a été envoyé pour être analysé.
 Pour plus de détails, suivez ce lien :
 
 {U_BUG_REPORT}
 
 ----------------------------
 
-{BOARD_EMAIL}
+{EMAIL_SIG}

@@ -303,7 +303,7 @@ class custom_profile
 	{
 		global $db, $dbms, $table_prefix;
 
-		if (!sizeof($cp_data))
+		if (empty($cp_data))
 		{
 			return;
 		}
@@ -372,12 +372,12 @@ class custom_profile
 				$df_id = [$df_id];
 			}
 
-			if (!sizeof($this->profile_cache))
+			if (empty($this->profile_cache))
 			{
 				$this->build_cache();
 			}
 
-			if (!sizeof($df_id))
+			if (empty($df_id))
 			{
 				return [];
 			}
@@ -668,19 +668,19 @@ class custom_profile
 		}
 
 		$profile_row['s_day_options'] = '<option value="0"' . ((!$day) ? ' selected="selected"' : '') . '>--</option>';
-		for ($i = 1; $i < 32; $i++)
+		for ($i = 1; $i < 32; ++$i)
 		{
 			$profile_row['s_day_options'] .= '<option value="' . $i . '"' . (($i == $day) ? ' selected="selected"' : '') . ">$i</option>";
 		}
 
 		$profile_row['s_month_options'] = '<option value="0"' . ((!$month) ? ' selected="selected"' : '') . '>--</option>';
-		for ($i = 1; $i < 13; $i++)
+		for ($i = 1; $i < 13; ++$i)
 		{
 			$profile_row['s_month_options'] .= '<option value="' . $i . '"' . (($i == $month) ? ' selected="selected"' : '') . ">$i</option>";
 		}
 
 		$profile_row['s_year_options'] = '<option value="0"' . ((!$year) ? ' selected="selected"' : '') . '>--</option>';
-		for ($i = $now['year'] - 100; $i <= $now['year'] + 100; $i++)
+		for ($i = $now['year'] - 100; $i <= $now['year'] + 100; ++$i)
 		{
 			$profile_row['s_year_options'] .= '<option value="' . $i . '"' . (($i == $year) ? ' selected="selected"' : '') . ">$i</option>";
 		}
@@ -704,7 +704,7 @@ class custom_profile
 
 		if ($profile_row['field_length'] == 1)
 		{
-			if (!isset($this->options_lang[$profile_row['field_id']][$profile_row['lang_id']]) || !sizeof($this->options_lang[$profile_row['field_id']][$profile_row['lang_id']]))
+			if (!isset($this->options_lang[$profile_row['field_id']][$profile_row['lang_id']]) || empty($this->options_lang[$profile_row['field_id']][$profile_row['lang_id']]))
 			{
 				$this->get_option_lang($profile_row['field_id'], $profile_row['lang_id'], FIELD_BOOL, $preview);
 			}
@@ -759,7 +759,7 @@ class custom_profile
 
 		$value = $this->get_var('int', $profile_row, $profile_row['field_default_value'], $preview);
 
-		if (!isset($this->options_lang[$profile_row['field_id']]) || !isset($this->options_lang[$profile_row['field_id']][$profile_row['lang_id']]) || !sizeof($this->options_lang[$profile_row['field_id']][$profile_row['lang_id']]))
+		if (!isset($this->options_lang[$profile_row['field_id']]) || !isset($this->options_lang[$profile_row['field_id']][$profile_row['lang_id']]) || empty($this->options_lang[$profile_row['field_id']][$profile_row['lang_id']]))
 		{
 			$this->get_option_lang($profile_row['field_id'], $profile_row['lang_id'], FIELD_DROPDOWN, $preview);
 		}
@@ -813,6 +813,7 @@ class custom_profile
 		global $db, $user, $auth, $table_prefix;
 
 		$sql_not_in = [];
+
 		foreach ($cp_data as $key => $null)
 		{
 			$sql_not_in[] = (strncmp($key, 'pf_', 3) === 0) ? substr($key, 3) : $key;
@@ -821,7 +822,7 @@ class custom_profile
 		$sql = 'SELECT f.field_type, f.field_ident, f.field_default_value, l.lang_default_value
 			FROM ' . $table_prefix . self::DL_LANG_TABLE . ' l, ' . $table_prefix . self::DL_FIELDS_TABLE . ' f
 			WHERE l.lang_id = ' . (string) $this->get_iso_lang_id() . '
-				' . ((sizeof($sql_not_in)) ? ' AND ' . $db->sql_in_set('f.field_ident', $sql_not_in, true) : '') . '
+				' . ((!empty($sql_not_in)) ? ' AND ' . $db->sql_in_set('f.field_ident', $sql_not_in, true) : '') . '
 				AND l.field_id = f.field_id';
 		$result = $db->sql_query($sql);
 

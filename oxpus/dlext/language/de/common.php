@@ -128,6 +128,7 @@ $lang = array_merge($lang, [
 	'DL_APPROVE_OVERVIEW_ONE'			=> 'Es ist ein Download freizugeben. Klick hier, um diesen zu prüfen',
 	'DL_APPROVE_OVERVIEW_ONE_COMMENT'	=> 'Es ist ein freizugebender Kommentar vorhanden. Klicke hier, um ihn zu prüfen.',
 	'DL_ASSIGN'							=> 'Autor zuordnen',
+	'DL_ASSIGN_CHANGED'					=> 'auch den Update-Benutzer',
 	'DL_AUTH_CPOST'						=> 'Kommentare schreiben',
 	'DL_AUTH_CREAD'						=> 'Kommentare lesen',
 	'DL_AUTH_DL'						=> 'Download',
@@ -167,7 +168,7 @@ $lang = array_merge($lang, [
 	'DL_BUG_REPORT_REASSIGN'		=> 'neu zuordnen',
 	'DL_BUG_REPORT_STATUS'			=> 'Status',
 	'DL_BUG_REPORT_STATUS_DATE'		=> 'Zeit des letzten Status',
-	'DL_BUG_REPORT_STATUS_TEXT'		=> 'Ein wenig Text für den neuen Status (wird per Email an den Verfasser diese Fehlermeldung gesendet)',
+	'DL_BUG_REPORT_STATUS_TEXT'		=> 'Ein wenig Text für den neuen Status. Der Verfasser diese Meldung erhält hierüber eine Benachrichtigung.',
 	'DL_BUG_REPORT_STATUS_UPDATE'	=> 'aktualisiere Status',
 	'DL_BUG_REPORT_TEXT'			=> 'Beschreibung',
 	'DL_BUG_REPORT_TITLE'			=> 'Titel des Fehlerberichts',
@@ -262,10 +263,7 @@ $lang = array_merge($lang, [
 	'DL_DELETE_FILE_CONFIRM'		=> 'Lösche auch die Datei(en)',
 	'DL_DETAIL'						=> 'Details',
 	'DL_DIRECTION'					=> 'Aktion',
-	'DL_DISABLE_EMAIL'				=> 'Deaktiviere Benachrichtigungen per Email',
-	'DL_DISABLE_EMAIL_FILES'		=> 'Deaktiviere Benachrichtigungen per Email',
-	'DL_DISABLE_POPUP'				=> 'Deaktiviere Benachrichtigungen per Popup/Board Nachricht',
-	'DL_DISABLE_POPUP_FILES'		=> 'Deaktiviere Benachrichtigungen per Popup/Board Nachricht',
+	'DL_DISABLE_NOTIFY'				=> 'Deaktiviere Benachrichtigungen',
 	'DL_DISABLE_POPUP_NOTIFY'		=> 'Erlaube, die Bearbeitungszeit beim Bearbeiten eines Downloads zu unterdrücken',
 	'DL_DOWN'						=> 'runter',
 	'DL_DOWNLOAD'					=> 'Download',
@@ -332,6 +330,7 @@ $lang = array_merge($lang, [
 	'DL_FILEBASE_NOT_DROPPED'		=> 'Die alte Dateiablage konnte nicht vollständig gelöscht werden. Bitte prüfe diese manuell.',
 	'DL_FILEBASE_NOT_MOVED'			=> 'Die neue Dateiablage konnte nicht aufgebaut werden. Bitte prüfe die Zugriffsrechte des Zielordners.',
 	'DL_FILE_EDIT'					=> '* Update *',
+	'DL_FILE_EDIT_HINT'				=> 'Hinweis zur Bearbeitung von Downloads',
 	'DL_FILE_NAME'					=> 'Datei',
 	'DL_FILE_NEW'					=> '* Neu *',
 	'DL_FILE_NOT_FOUND'				=> '<strong>Datei %s nicht gefunden!</strong><br />Stelle sicher, daß diese Datei im Ordner %s existiert!',
@@ -586,9 +585,8 @@ $lang = array_merge($lang, [
 
 	'DL_RATE_POINTS'					=> 'Maximale Bewertungspunkte',
 	'DL_RATING'							=> 'Bewertung',
-	'DL_RATING_MORE'					=> '&nbsp;[ %s Bewertungen ]',
-	'DL_RATING_NONE'					=> '&nbsp;[ Bislang nicht bewertet ]',
-	'DL_RATING_ONE'						=> '&nbsp;[ Eine Bewertung ]',
+	'DL_RATING_COUNT'					=> '(%s)',
+	'DL_RATING_HOVER'					=> '%1$s/%2$s',
 	'DL_REAL_FILETIME'					=> 'Letzte Dateiaktualisierung',
 	'DL_RED_EXPLAIN'					=> 'Nicht genug Traffic oder Beiträge (%s Beiträge benötigt!).',
 	'DL_RED_EXPLAIN_ALT'				=> 'Nicht genug Traffic oder Beiträge (%s Beiträge benötigt!).',
@@ -649,7 +647,7 @@ $lang = array_merge($lang, [
 	'DL_SHOW_FILE_HASH'			=> 'Zeige Dateihash in Detailansicht',
 	'DL_SHOW_FOOTER_EXT_STATS'	=> 'Zeige erweiterte statistische Daten im Download Fuß',
 	'DL_SHOW_FOOTER_LEGEND'		=> 'Zeige Legende im Download Fuß',
-	'DL_SHOW_FOOTER_STAT'		=> 'Zeige Statistik im Download Fuß',
+	'DL_SHOW_FOOTER_STAT'		=> 'Zeige Ministatistik im Download Fuß',
 	'DL_SHOW_REAL_FILETIME'		=> 'Zeige die Zeit der letzten Dateiaktualisierung in den Downloaddetails',
 	'DL_SIMILAR_DL'				=> 'Ähnliche Downloads',
 	'DL_SIMILAR_DL_LIMIT'		=> 'Anzahl ähnlicher Downloads',
@@ -825,8 +823,6 @@ $lang = array_merge($lang, [
 
 	'MUST_SELECT_DOWNLOAD'	=> 'Wähle einen Download aus',
 
-	'NEW_DOWNLOAD'					=> 'Es ist ein Download neu hochgeladen oder aktualisiert worden.<br />Klick <a href="%s">hier</a>, um zu den Downloads zu gehen.',
-	'NEW_DOWNLOAD_NOTIFICATION'		=> 'Es ist ein Download neu hochgeladen oder aktualisiert worden.',
 	'NUMBER_RECENT_DL_ON_PORTAL'	=> 'Anzahl der letzten Downloads auf dem Portal',
 
 	'POST_CONFIRM_EXPLAIN'	=> 'Um unkontrollierte Downloads zu vermeiden musst du den nachfolgenden Bestätigungscode eingeben, damit du die Datei herunterladen kannst.<br />Bitte trage den Code in das nachfolgende Eingabefeld ein und bestätige dann deine Eingabe mit dem Button "Download".',
@@ -871,4 +867,26 @@ $lang = array_merge($lang, [
 	--------------------
 	%s
 	--------------------',
+
+	'DL_NOTIFICATIONS'				=> 'Benachrichtigungen zu Downloads',
+	'DL_NOTIFICATIONS_MOD'			=> 'Moderation von Downloads',
+	'DL_NOTIFICATIONS_TRACKER'		=> 'Bug Tracker Berichte',
+
+	'DL_NOTIFY_TYPE_BT_ASSIGN'		=> 'Jemand hat mir einen Bericht zugewiesen',
+	'DL_NOTIFY_TYPE_BT_STATUS'		=> 'Jemand hat den Status zu einem Bericht geändert',
+	'DL_NOTIFY_TYPE_NEW'			=> 'Jemand hat einen neuen Download hinzugefügt',
+	'DL_NOTIFY_TYPE_UPDATE'			=> 'Jemand hat einen Download aus deinen Favoriten geändert',
+	'DL_NOTIFY_TYPE_APPROVE'		=> 'Ein Download muss freigegeben werden',
+	'DL_NOTIFY_TYPE_BROKEN'			=> 'Jemand hat einen Download gemeldet',
+	'DL_NOTIFY_TYPE_CAPPROVE'		=> 'Ein Kommentar muss freigegeben werden',
+	'DL_NOTIFY_TYPE_COMMENTS'		=> 'Jemand hat einen Download aus deinen Favoriten kommentiert',
+
+	'DL_NOTIFY_BT_ASSIGN'			=> '<strong>Zugewiesener</strong> Bericht: %1$s',
+	'DL_NOTIFY_BT_STATUS'			=> '<strong>Neuer</strong> Berichtsstatus: %1$s',
+	'DL_NOTIFY_NEW'					=> '<strong>Neuer</strong> Download: %1$s',
+	'DL_NOTIFY_UPDATE'				=> '<strong>Geänderter</strong> Download: %1$s',
+	'DL_NOTIFY_APPROVE'				=> '<strong>Freigabe</strong> angefordert für Download: %1$s',
+	'DL_NOTIFY_BROKEN'				=> '<strong>Gemeldeter</strong> Download: %1$s',
+	'DL_NOTIFY_CAPPROVE'			=> '<strong>Freigabe</strong> angefordert für Kommentar zu Download: %1$s',
+	'DL_NOTIFY_COMMENTS'			=> '<strong>Neuer</strong> Kommentar zu Download: %1$s',
 ]);

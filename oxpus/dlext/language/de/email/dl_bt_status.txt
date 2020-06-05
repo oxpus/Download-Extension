@@ -2,7 +2,7 @@ Subject: Neuer Status für Fehlermeldung auf {SITENAME}
 
 Hallo {USERNAME},
 
-du erhältst diese Email weil der Status Deiner Fehlermeldung {REPORT_TITLE} auf {SITENAME} geändert wurde.
+du erhältst diese Email weil der Status Deiner Fehlermeldung "{REPORT_TITLE}" auf "{SITENAME}" geändert wurde.
 Neuer Status: {STATUS}.
 
 {STATUS_TEXT}
@@ -13,4 +13,4 @@ Für weitere Details hierzu folge bitte diesem Link:
 
 ----------------------------
 
-{BOARD_EMAIL}
+{EMAIL_SIG}

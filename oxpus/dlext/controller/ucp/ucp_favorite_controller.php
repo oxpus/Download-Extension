@@ -112,6 +112,8 @@ class ucp_favorite_controller implements ucp_favorite_interface
 		*/
 		$submit = $this->request->variable('submit', '');
 
+		$notification = $this->phpbb_container->get('notification_manager');
+
 		if ($submit)
 		{
 			if (!check_form_key('dl_ucp'))
@@ -124,12 +126,31 @@ class ucp_favorite_controller implements ucp_favorite_interface
 			*/
 			$fav_id = $this->request->variable('fav_id', [0 => '']);
 
-			if (sizeof($fav_id))
+			if (!empty($fav_id))
 			{
+				$sql = 'SELECT fav_dl_id FROM ' . DL_FAVORITES_TABLE . '
+					WHERE ' . $this->db->sql_in_set('fav_id', $fav_id) . '
+						AND fav_user_id = ' . (int) $this->user->data['user_id'];
+				$result = $this->db->sql_query($sql);
+
+				$dl_ids = [];
+
+				while($row = $this->db->sql_fetchrow($result))
+				{
+					$dl_ids[] = $row['fav_dl_id'];
+				}
+
+				$this->db->sql_freeresult($result);
+
 				$sql = 'DELETE FROM ' . DL_FAVORITES_TABLE . '
 					WHERE ' . $this->db->sql_in_set('fav_id', $fav_id) . '
 						AND fav_user_id = ' . (int) $this->user->data['user_id'];
 				$this->db->sql_query($sql);
+
+				$notification->delete_notifications([
+					'oxpus.dlext.notification.type.update',
+					'oxpus.dlext.notification.type.comments',
+				], $dl_ids, false, $this->user->data['user_id']);
 			}
 
 			$message = $this->language->lang('DL_USER_CONFIG_SAVED', '<a href="' . $this->u_action . '">', '</a>');
@@ -143,12 +164,34 @@ class ucp_favorite_controller implements ucp_favorite_interface
 		$access_cat = [];
 		$access_cat = $this->dlext_main->full_index(0, 0, 0, 1);
 
-		if (sizeof($access_cat))
+		if (!empty($access_cat))
 		{
+			$sql = 'SELECT fav_dl_id FROM ' . DL_FAVORITES_TABLE . '
+				WHERE ' . $this->db->sql_in_set('fav_dl_cat', $access_cat, true) . '
+					AND fav_user_id = ' . (int) $this->user->data['user_id'];
+			$result = $this->db->sql_query($sql);
+
+			$dl_ids = [];
+
+			while($row = $this->db->sql_fetchrow($result))
+			{
+				$dl_ids[] = $row['fav_dl_id'];
+			}
+
+			$this->db->sql_freeresult($result);
+
 			$sql = 'DELETE FROM ' . DL_FAVORITES_TABLE . '
 				WHERE ' . $this->db->sql_in_set('fav_dl_cat', $access_cat, true) . '
 					AND fav_user_id = ' . (int) $this->user->data['user_id'];
 			$this->db->sql_query($sql);
+
+			if (!empty($dl_ids))
+			{
+				$notification->delete_notifications([
+					'oxpus.dlext.notification.type.update',
+					'oxpus.dlext.notification.type.comments',
+				], $dl_ids, false, $this->user->data['user_id']);
+			}
 		}
 
 		/*

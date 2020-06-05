@@ -58,6 +58,8 @@ class overall
 	protected $ext_path_web;
 	protected $ext_path_ajax;
 
+	protected $phpbb_dispatcher;
+
 	protected $dlext_auth;
 	protected $dlext_files;
 	protected $dlext_format;
@@ -80,6 +82,7 @@ class overall
 	* @param \phpbb\template\template				$template
 	* @param \phpbb\user							$user
 	* @param \phpbb\language\language				$language
+	* @param \phpbb\event\dispatcher_interface		$phpbb_dispatcher
 	*/
 	public function __construct(
 		$root_path,
@@ -95,6 +98,7 @@ class overall
 		\phpbb\template\template $template,
 		\phpbb\user $user,
 		\phpbb\language\language $language,
+		\phpbb\event\dispatcher_interface $phpbb_dispatcher,
 		$dlext_auth,
 		$dlext_files,
 		$dlext_format,
@@ -115,6 +119,7 @@ class overall
 		$this->template 				= $template;
 		$this->user 					= $user;
 		$this->language					= $language;
+		$this->phpbb_dispatcher			= $phpbb_dispatcher;
 
 		$this->ext_path					= $this->phpbb_extension_manager->get_extension_path('oxpus/dlext', true);
 		$this->ext_path_web				= $this->phpbb_path_helper->update_web_root_path($this->ext_path);
@@ -139,7 +144,7 @@ class overall
 		*/
 		include_once($this->ext_path . 'phpbb/includes/sort_init.' . $this->php_ext);
 
-		if (sizeof($index) && $this->config['dl_overview_link_onoff'])
+		if (!empty($index) && $this->config['dl_overview_link_onoff'])
 		{
 			page_header($this->language->lang('DOWNLOADS') . ' ' . $this->language->lang('DL_OVERVIEW'));
 
@@ -169,16 +174,16 @@ class overall
 			
 			$total_files = 0;
 			
-			if (sizeof($dl_files))
+			if (!empty($dl_files))
 			{
-				for ($i = 0; $i < sizeof($dl_files); $i++)
+				for ($i = 0; $i < count($dl_files); ++$i)
 				{
 					$cat_id = $dl_files[$i]['cat'];
 					$cat_auth = [];
 					$cat_auth = $this->dlext_auth->dl_cat_auth($cat_id);
 					if (isset($cat_auth['auth_view']) && $cat_auth['auth_view'] || isset($index[$cat_id]['auth_view']) && $index[$cat_id]['auth_view'] || ($this->auth->acl_get('a_') && $this->user->data['is_registered']))
 					{
-						$total_files++;
+						++$total_files;
 					}
 				}
 			}
@@ -210,10 +215,30 @@ class overall
 			
 			$dl_files = [];
 			$dl_files = $this->dlext_files->all_files(0, '', '', ' ORDER BY ' . $sql_sort_by . ' ' . $sql_order . ' LIMIT ' . $start . ', ' . $this->config['dl_links_per_page'], 0, 0, 'cat, id, description, desc_uid, desc_bitfield, desc_flags, hack_version, extern, file_size, klicks, overall_klicks, rating');
-			
-			if (sizeof($dl_files))
+
+			/**
+			 * Fetch additional data for the downloads
+			 *
+			 * @event 		dlext.overall_fetch_download_data
+			 * @var string	cat					download category ID
+			 * @var string	sql_sort_by			sql order by fields
+			 * @var string	sql_order			sql order by direction
+			 * @var string	sql_latest_where	additional where conditions
+			 * @since 8.1.0-RC2
+			 */
+			$cat = 0;
+			$sql_latest_where = '';
+			$vars = array(
+				'cat',
+				'sql_sort_by',
+				'sql_order',
+				'sql_latest_where',
+			);
+			extract($this->phpbb_dispatcher->trigger_event('dlext.overall_fetch_download_data', compact($vars)));
+
+			if (!empty($dl_files))
 			{
-				for ($i = 0; $i < sizeof($dl_files); $i++)
+				for ($i = 0; $i < count($dl_files); ++$i)
 				{
 					$cat_id = $dl_files[$i]['cat'];
 					$cat_auth = [];
@@ -263,9 +288,9 @@ class overall
 							$s_rating_perm = true;
 						}
 			
-						if (isset($ratings[$file_id]) && $this->config['dl_enable_rate'])
+						if (!empty($ratings[$file_id]) && $this->config['dl_enable_rate'])
 						{
-							$total_ratings = sizeof($ratings[$file_id]);
+							$total_ratings = count($ratings[$file_id]);
 							if ($total_ratings == 1)
 							{
 								$rating_count_text = $this->language->lang('DL_RATING_ONE');
@@ -295,6 +320,21 @@ class overall
 							'U_CAT_VIEW'			=> $cat_view,
 							'U_DL_LINK'				=> $dl_link,
 						]);
+
+						/**
+						 * Fetch additional data for the downloads
+						 *
+						 * @event 		dlext.overall_display_data_after
+						 * @var string	block		template row key
+						 * @var array	file_id		download id
+						 * @since 8.1.0-RC2
+						 */
+						$block = 'downloads';
+						$vars = array(
+							'block',
+							'file_id',
+						);
+						extract($this->phpbb_dispatcher->trigger_event('dlext.overall_display_data_after', compact($vars)));
 					}
 				}
 			

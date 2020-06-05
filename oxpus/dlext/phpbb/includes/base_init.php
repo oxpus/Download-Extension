@@ -54,6 +54,7 @@ $df_id		= $this->request->variable('df_id', 0);
 $new_cat	= $this->request->variable('new_cat', 0);
 $cat		= $this->request->variable('cat', 0);
 $cat_id		= $this->request->variable('cat_id', 0);
+$cat_df_id	= $this->request->variable('cat_df_id', 0);
 $fav_id		= $this->request->variable('fav_id', 0);
 $dl_id		= $this->request->variable('dl_id', 0);
 $start		= $this->request->variable('start', 0);
@@ -62,6 +63,7 @@ $del_file	= $this->request->variable('del_file', 0);
 $bt_filter	= $this->request->variable('bt_filter', -1);
 $modcp		= $this->request->variable('modcp', 0);
 $next_id	= $this->request->variable('next_id', 0);
+$achanged	= $this->request->variable('assign_changed', 0);
 
 $dlo_id		= $this->request->variable('dlo_id', [0 => 0]);
 
@@ -74,6 +76,16 @@ $dl_mod_link_show = true;
 $dl_mod_is_active_for_admins = false;
 
 $page_start = $start;
+
+if ($cat_df_id && !$cat_id && !$cat)
+{
+	$sql = 'SELECT cat 
+			FROM ' . DOWNLOADS_TABLE . '
+			WHERE id = ' . (int) $cat_df_id;
+	$result = $this->db->sql_query($sql);
+	$cat_id = $cat = $this->db->sql_fetchfield('cat');
+	$this->db->sql_freeresult($result);
+}
 
 if ($cat < 0)
 {
@@ -92,7 +104,7 @@ if (!$this->config['dl_active'])
 		$off_from = (substr($this->config['dl_off_from'], 0, 2) * 60) + (substr($this->config['dl_off_from'], -2));
 		$off_till = (substr($this->config['dl_off_till'], 0, 2) * 60) + (substr($this->config['dl_off_till'], -2));
 
-		if ($curr_time >= $off_from && $curr_time < $off_till)
+		if ($curr_time >= $off_from && $curr_time <= $off_till)
 		{
 			$dl_mod_is_active = false;
 		}
@@ -233,7 +245,7 @@ $access_cat = $this->dlext_main->full_index(0, 0, 0, 2);
 $cat_auth = [];
 $cat_auth = $this->dlext_auth->dl_cat_auth($mcp_cat);
 
-if (sizeof($access_cat) || $this->auth->acl_get('a_'))
+if (!empty($access_cat) || $this->auth->acl_get('a_'))
 {
 	$deny_modcp = false;
 }

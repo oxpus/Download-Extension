@@ -58,6 +58,8 @@ class mcp_manage
 	protected $ext_path_web;
 	protected $ext_path_ajax;
 
+	protected $phpbb_dispatcher;
+
 	protected $dlext_auth;
 	protected $dlext_counter;
 	protected $dlext_extra;
@@ -82,6 +84,7 @@ class mcp_manage
 	* @param \phpbb\template\template				$template
 	* @param \phpbb\user							$user
 	* @param \phpbb\language\language				$language
+	* @param \phpbb\event\dispatcher_interface		$phpbb_dispatcher
 	*/
 	public function __construct(
 		$root_path,
@@ -97,6 +100,7 @@ class mcp_manage
 		\phpbb\template\template $template,
 		\phpbb\user $user,
 		\phpbb\language\language $language,
+		\phpbb\event\dispatcher_interface $phpbb_dispatcher,
 		$dlext_auth,
 		$dlext_counter,
 		$dlext_extra,
@@ -119,6 +123,7 @@ class mcp_manage
 		$this->template 				= $template;
 		$this->user 					= $user;
 		$this->language					= $language;
+		$this->phpbb_dispatcher			= $phpbb_dispatcher;
 
 		$this->ext_path					= $this->phpbb_extension_manager->get_extension_path('oxpus/dlext', true);
 		$this->ext_path_web				= $this->phpbb_path_helper->update_web_root_path($this->ext_path);
@@ -150,6 +155,8 @@ class mcp_manage
 			redirect($this->helper->route('oxpus_dlext_mcp_approve'));
 		}
 
+		$notification = $this->phpbb_container->get('notification_manager');
+
 		if ($view == 'toolbox')
 		{
 			if (isset($index[$cat_id]['total']) && $index[$cat_id]['total'] && $cat_id && !$deny_modcp)
@@ -177,7 +184,7 @@ class mcp_manage
 		
 						$this->db->sql_freeresult($result);
 		
-						for ($i = 0; $i < sizeof($dlo_id); $i++)
+						for ($i = 0; $i < count($dlo_id); ++$i)
 						{
 							$df_id = intval($dlo_id[$i]);
 		
@@ -202,7 +209,7 @@ class mcp_manage
 		
 								if (isset($real_ver_file[$df_id]))
 								{
-									for ($j = 0; $j < sizeof($real_ver_file[$df_id]); $j++)
+									for ($j = 0; $j < count($real_ver_file[$df_id]); ++$j)
 									{
 										@copy(DL_EXT_FILEBASE_PATH. 'downloads/' . $old_path . $real_ver_file[$df_id][$j], DL_EXT_FILEBASE_PATH. 'downloads/' . $new_path . $real_ver_file[$df_id][$j]);
 										@chmod(DL_EXT_FILEBASE_PATH. 'downloads/' . $new_path . $real_ver_file[$df_id][$j], 0777);
@@ -238,9 +245,34 @@ class mcp_manage
 				{
 					if (!empty($dlo_id))
 					{
-						$sql = 'UPDATE ' . DOWNLOADS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', [
-							'approve' => 0]) . ' WHERE ' . $this->db->sql_in_set('id', $dlo_id);
-						$this->db->sql_query($sql);
+						$sql = 'SELECT id, cat, description, long_desc
+								FROM ' . DOWNLOADS_TABLE . '
+								WHERE ' . $this->db->sql_in_set('id', $dlo_id);
+						$result = $this->db->sql_query($sql);
+
+						while ($row = $this->db->sql_fetchrow($result))
+						{
+							$df_id 			= $row['id'];
+							$cat_name		= $index[$row['cat']]['cat_name_nav'];
+							$description	= $row['description'];
+							$long_desc		= $row['long_desc'];
+
+							$sql_update = 'UPDATE ' . DOWNLOADS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', [
+								'approve' => 0]) . ' WHERE id = ' . (int) $df_id;
+							$this->db->sql_query($sql_update);
+
+							$notification_data = [
+								'user_ids'			=> $this->dlext_auth->dl_auth_users($cat_id, 'auth_mod'),
+								'description'		=> $description,
+								'long_desc'			=> $long_desc,
+								'df_id'				=> $df_id,
+								'cat_name'			=> $cat_name,
+							];
+		
+							$notification->add_notifications('oxpus.dlext.notification.type.approve', $notification_data);
+						}
+
+						$this->db->sql_freeresult($result);
 					}
 		
 					$fmove = '';
@@ -264,6 +296,13 @@ class mcp_manage
 							$sql = 'UPDATE ' . DOWNLOADS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', [
 								'add_user' => $user_id]) . ' WHERE ' . $this->db->sql_in_set('id', $dlo_id);
 							$this->db->sql_query($sql);
+
+							if ($achanged)
+							{
+								$sql = 'UPDATE ' . DOWNLOADS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', [
+									'change_user' => $user_id]) . ' WHERE ' . $this->db->sql_in_set('id', $dlo_id);
+								$this->db->sql_query($sql);
+							}
 						}
 					}
 		
@@ -326,7 +365,7 @@ class mcp_manage
 
 								if (isset($real_ver_file[$df_id]))
 								{
-									for ($i = 0; $i < sizeof($real_ver_file[$df_id]); $i++)
+									for ($i = 0; $i < count($real_ver_file[$df_id]); ++$i)
 									{
 										@unlink(DL_EXT_FILEBASE_PATH. 'downloads/' . $path . $real_ver_file[$df_id][$i]);
 									}
@@ -403,6 +442,30 @@ class mcp_manage
 							WHERE ' . $this->db->sql_in_set('fav_dl_id', $dlo_id);
 						$this->db->sql_query($sql);
 
+						/**
+						 * Workflow after delete download
+						 *
+						 * @event 		dlext.acp_files_delete_download_after
+						 * @var array	df_ids		download ID's
+						 * @var string	dl_cat		download category ID
+						 * @since 8.1.0-RC2
+						 */
+						$dl_ids = $dlo_id;
+						$vars = array(
+							'dl_ids',
+							'cat_id',
+						);
+						extract($this->phpbb_dispatcher->trigger_event('dlext.mcp_manage_delete_downloads_after', compact($vars)));
+
+						$notification->delete_notifications([
+							'oxpus.dlext.notification.type.approve',
+							'oxpus.dlext.notification.type.broken',
+							'oxpus.dlext.notification.type.dlext',
+							'oxpus.dlext.notification.type.update',
+							'oxpus.dlext.notification.type.capprove',
+							'oxpus.dlext.notification.type.comments',
+						], $dlo_id);
+		
 						// Purge the files cache
 						@unlink(DL_EXT_CACHE_PATH . 'data_dl_cat_counts.' . $this->php_ext);
 						@unlink(DL_EXT_CACHE_PATH . 'data_dl_file_p.' . $this->php_ext);
@@ -412,7 +475,7 @@ class mcp_manage
 					{
 						$s_hidden_fields = ['action' => 'delete', 'cat_id' => $cat_id];
 
-						if (sizeof($dlo_id) == 1)
+						if (count($dlo_id) == 1)
 						{
 							$dl_file	= [];
 							$dl_file	= $this->dlext_files->all_files(0, '', 'ASC', '', intval($dlo_id[0]), true, '*');
@@ -422,13 +485,15 @@ class mcp_manage
 						}
 						else
 						{
-							$delete_confirm_text	= $this->language->lang('DL_CONFIRM_DELETE_MULTIPLE_FILES', sizeof($dlo_id));
+							$delete_confirm_text	= $this->language->lang('DL_CONFIRM_DELETE_MULTIPLE_FILES', count($dlo_id));
 
 							$i = 0;
+
 							foreach($dlo_id as $key => $value)
 							{
 								$s_hidden_fields += ['dlo_id[' . $i . ']' => $value];
-								$i++;
+
+								++$i;
 							}
 						}
 

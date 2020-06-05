@@ -110,7 +110,7 @@ class navigation implements navigation_interface
 	
 				if (isset($dl_nav['link']))
 				{
-					for ($i = sizeof($dl_nav['link']) - 1; $i >= 0; $i--)
+					for ($i = count($dl_nav['link']) - 1; $i >= 0; --$i)
 					{
 						$nav_string['link'][] = $dl_nav['link'][$i];
 						$nav_string['name'][] = $dl_nav['name'][$i];
@@ -193,7 +193,7 @@ class navigation implements navigation_interface
 				break;
 			}
 
-			for ($i = 0; $i < sizeof($nav_string['name']); $i++)
+			for ($i = 0; $i < count($nav_string['name']); ++$i)
 			{
 				$this->template->assign_block_vars('navlinks', [
 					'FORUM_NAME'	=> $nav_string['name'][$i],

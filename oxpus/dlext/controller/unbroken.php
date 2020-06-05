@@ -138,6 +138,9 @@ class unbroken
 				$this->db->sql_query($sql);
 			}
 
+			$notification = $this->phpbb_container->get('notification_manager');
+			$notification->delete_notifications('oxpus.dlext.notification.type.broken', $df_id);
+
 			redirect($this->helper->route('oxpus_dlext_details', ['df_id' => $df_id, 'cat_id' => $cat_id]));
 		}
 

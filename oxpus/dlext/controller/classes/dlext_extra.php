@@ -54,7 +54,7 @@ class dlext_extra implements dlext_extra_interface
 		$dl_files = $this->dlext_files->all_files(0, '', 'ASC', "AND todo <> '' AND todo IS NOT NULL", 0, 0, 'cat, id, description, hack_version, todo, todo_uid, todo_flags, todo_bitfield');
 		$dl_cats = $this->dlext_main->full_index(0, 0, 0, 1);
 
-		for ($i = 0; $i < sizeof($dl_files); $i++)
+		for ($i = 0; $i < count($dl_files); ++$i)
 		{
 			$cat_id = $dl_files[$i]['cat'];
 			if (in_array($cat_id, $dl_cats))
@@ -78,7 +78,7 @@ class dlext_extra implements dlext_extra_interface
 		$dl_auth = $this->dlext_auth->dl_auth();
 		$dl_index = $this->dlext_auth->dl_index();
 
-		if (!is_array($dl_index) || !sizeof($dl_index))
+		if (empty($dl_index))
 		{
 			return;
 		}
@@ -100,7 +100,7 @@ class dlext_extra implements dlext_extra_interface
 
 					if ($dl_index[$cat_id]['parent'] != 0)
 					{
-						for($i = 0; $i < $level; $i++)
+						for ($i = 0; $i < $level; ++$i)
 						{
 							$seperator .= '&nbsp;&nbsp;&nbsp;';
 						}
@@ -122,9 +122,9 @@ class dlext_extra implements dlext_extra_interface
 					}
 				}
 
-				$level++;
+				++$level;
 				$catlist .= $this->dl_dropdown($cat_id, $level, $select_cat, $perm, $rem_cat);
-				$level--;
+				--$level;
 			}
 		}
 
@@ -136,7 +136,7 @@ class dlext_extra implements dlext_extra_interface
 		$dl_auth = $this->dlext_auth->dl_auth();
 		$dl_index = $this->dlext_auth->dl_index();
 
-		if (!is_array($dl_index) || !sizeof($dl_index))
+		if (empty($dl_index))
 		{
 			return;
 		}
@@ -162,9 +162,9 @@ class dlext_extra implements dlext_extra_interface
 
 					$catlist[$cat_id]['level'] = $level;
 
-					$level++;
+					++$level;
 					$this->dl_jumpbox($cat_id, $level, $perm, $rem_cat, $catlist);
-					$level--;
+					--$level;
 				}
 			}
 		}
@@ -191,7 +191,7 @@ class dlext_extra implements dlext_extra_interface
 
 				if ($dl_index[$cat_id]['parent'] != 0)
 				{
-					for($i = 0; $i < $level; $i++)
+					for ($i = 0; $i < $level; ++$i)
 					{
 						$seperator .= '&nbsp;&nbsp;|';
 					}
@@ -202,9 +202,9 @@ class dlext_extra implements dlext_extra_interface
 
 				$catlist .= '<option value="' . $cat_id . '" ' . $status . '>' . $seperator . $cat_name . '</option>';
 
-				$level++;
+				++$level;
 				$catlist .= $this->dl_cat_select($cat_id, $level, $select_cat);
-				$level--;
+				--$level;
 			}
 		}
 

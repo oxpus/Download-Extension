@@ -58,6 +58,8 @@ class search
 	protected $ext_path_web;
 	protected $ext_path_ajax;
 
+	protected $phpbb_dispatcher;
+
 	protected $dlext_auth;
 	protected $dlext_extra;
 	protected $dlext_main;
@@ -79,6 +81,7 @@ class search
 	* @param \phpbb\template\template				$template
 	* @param \phpbb\user							$user
 	* @param \phpbb\language\language				$language
+	* @param \phpbb\event\dispatcher_interface		$phpbb_dispatcher
 	*/
 	public function __construct(
 		$root_path,
@@ -94,6 +97,7 @@ class search
 		\phpbb\template\template $template,
 		\phpbb\user $user,
 		\phpbb\language\language $language,
+		\phpbb\event\dispatcher_interface $phpbb_dispatcher,
 		$dlext_auth,
 		$dlext_extra,
 		$dlext_main,
@@ -113,6 +117,7 @@ class search
 		$this->template 				= $template;
 		$this->user 					= $user;
 		$this->language					= $language;
+		$this->phpbb_dispatcher			= $phpbb_dispatcher;
 
 		$this->ext_path					= $this->phpbb_extension_manager->get_extension_path('oxpus/dlext', true);
 		$this->ext_path_web				= $this->phpbb_path_helper->update_web_root_path($this->ext_path);
@@ -234,33 +239,45 @@ class search
 					}
 		
 					$counter = 0;
-					for ($i = 0; $i < sizeof($search_words); $i++)
+					for ($i = 0; $i < count($search_words); ++$i)
 					{
 						if (preg_match_all('/' . preg_quote($search_words[$i], '/') . '/iu', $search_result, $matches))
 						{
-							$counter++;
+							++$counter;
 						}
 					}
 		
 					switch ($search_type)
 					{
 						case 0:
-							if ($counter == sizeof($search_words))
+							if ($counter == count($search_words))
 							{
 								$search_ids[] = $row['id'];
-								$search_counter++;
+								++$search_counter;
 							}
 						break;
 		
 						default:
 							$search_ids[] = $row['id'];
-							$search_counter++;
+							++$search_counter;
 					}
 				}
 			}
 		
 			$this->db->sql_freeresult($result);
-		
+
+			/**
+			 * Fetch additional data for the downloads
+			 *
+			 * @event 		dlext.search_keywords_fetch_download_data
+			 * @var array	search_ids		download ids
+			 * @since 8.1.0-RC2
+			 */
+			$vars = array(
+				'search_ids',
+			);
+			extract($this->phpbb_dispatcher->trigger_event('dlext.search_keywords_fetch_download_data', compact($vars)));
+
 			if ($search_counter > $this->config['dl_links_per_page'])
 			{
 				$pagination = $this->phpbb_container->get('pagination');
@@ -291,12 +308,12 @@ class search
 				$sql_array['FROM'][DL_CAT_TABLE] = 'c';
 
 				$sql_array['LEFT_JOIN'][] = [
-					'FROM'	=> array(USERS_TABLE => 'u'),
+					'FROM'	=> [USERS_TABLE => 'u'],
 					'ON'	=> 'd.add_user = u.user_id'
 				];
 
 				$sql_array['WHERE'] = 'd.cat = c.id AND ' . $this->db->sql_in_set('d.id', $search_ids);
-				$sql_arrry['ORDER_BY'] = ' c.cat_name, d.sort ' . (string) $sort_dir;
+				$sql_array['ORDER_BY'] = ' c.cat_name, d.sort ' . (string) $sort_dir;
 
 				$sql = $this->db->sql_build_query('SELECT', $sql_array);
 				
@@ -364,6 +381,21 @@ class search
 						'U_CAT_LINK'	=> $u_cat_link,
 						'U_FILE_LINK'	=> $u_file_link,
 					]);
+
+					/**
+					 * Fetch additional data for the downloads
+					 *
+					 * @event 		dlext.search_keywords_display_data_after
+					 * @var string	block		template row key
+					 * @var array	file_id		download id
+					 * @since 8.1.0-RC2
+					 */
+					$block = 'searchresults';
+					$vars = array(
+						'block',
+						'file_id',
+					);
+					extract($this->phpbb_dispatcher->trigger_event('dlext.search_keywords_display_data_after', compact($vars)));
 				}
 
 				$this->db->sql_freeresult($result);
@@ -406,7 +438,7 @@ class search
 					trigger_error('NO_USER');
 				}
 			
-				if (sizeof($matching_userids))
+				if (!empty($matching_userids))
 				{
 					$sql_add_users = $this->db->sql_in_set('add_user', $matching_userids);
 					$sql_change_users = $this->db->sql_in_set('change_user', $matching_userids);
@@ -432,13 +464,30 @@ class search
 					$sql_cat_count";
 			$result = $this->db->sql_query($sql);
 			$total_found_dl = $this->db->sql_affectedrows($result);
+
+			$search_ids = [];
+
+			while ($row = $this->db->sql_fetchrow($result))
+			{
+				$search_ids[] = $row['id'];
+			}
+
 			$this->db->sql_freeresult($result);
-		
+	
 			if ($total_found_dl > $this->config['dl_links_per_page'])
 			{
+				if ($search_user)
+				{
+					$pagination_url = $this->helper->route('oxpus_dlext_search', ['search_user_id' => $search_user, 'search_cat' => $search_cat, 'sort_dir' => $sort_dir]);
+				}
+				else
+				{
+					$pagination_url = $this->helper->route('oxpus_dlext_search', ['search_author' => $search_author, 'search_cat' => $search_cat, 'sort_dir' => $sort_dir]);
+				}
+
 				$pagination = $this->phpbb_container->get('pagination');
 				$pagination->generate_template_pagination(
-					$this->helper->route('oxpus_dlext_search', ['search_author' => $search_author, 'search_cat' => $search_cat, 'sort_dir' => $sort_dir]),
+					$pagination_url,
 					'pagination',
 					'start',
 					$total_found_dl,
@@ -451,25 +500,37 @@ class search
 					'TOTAL_DL'		=> $this->language->lang('VIEW_DOWNLOADS', $total_found_dl),
 				]);
 			}
-		
+
 			if ($total_found_dl == 0)
 			{
 				$this->template->assign_var('S_NO_RESULTS', true);
 			}
 			else
 			{
+				/**
+				 * Fetch additional data for the downloads
+				 *
+				 * @event 		dlext.search_user_fetch_download_data
+				 * @var array	search_ids		download ids
+				 * @since 8.1.0-RC2
+				 */
+				$vars = array(
+					'search_ids',
+				);
+				extract($this->phpbb_dispatcher->trigger_event('dlext.search_user_fetch_download_data', compact($vars)));
+
 				$sql_array['SELECT'] = 'd.*, c.cat_name, u.username, u.user_colour';
 
 				$sql_array['FROM'][DOWNLOADS_TABLE] = 'd';
 				$sql_array['FROM'][DL_CAT_TABLE] = 'c';
 
 				$sql_array['LEFT_JOIN'][] = [
-					'FROM'	=> array(USERS_TABLE => 'u'),
+					'FROM'	=> [USERS_TABLE => 'u'],
 					'ON'	=> 'd.add_user = u.user_id'
 				];
 
-				$sql_array['WHERE'] = 'd.cat = c.id AND d.approve = ' . true . $sql_matching_users . $sql_access_dls . $sql_cat;
-				$sql_arrry['ORDER_BY'] = ' c.cat_name, d.sort ' . (string) $sort_dir;
+				$sql_array['WHERE'] = 'd.cat = c.id AND d.approve = ' . true . ' AND ' . $this->db->sql_in_set('d.id', $search_ids);
+				$sql_array['ORDER_BY'] = ' c.cat_name, d.sort ' . (string) $sort_dir;
 
 				$sql = $this->db->sql_build_query('SELECT', $sql_array);
 
@@ -537,6 +598,21 @@ class search
 						'U_CAT_LINK'	=> $u_cat_link,
 						'U_FILE_LINK'	=> $u_file_link,
 					]);
+
+					/**
+					 * Fetch additional data for the downloads
+					 *
+					 * @event 		dlext.search_user_display_data_after
+					 * @var string	block		template row key
+					 * @var array	file_id		download id
+					 * @since 8.1.0-RC2
+					 */
+					$block = 'searchresults';
+					$vars = array(
+						'block',
+						'file_id',
+					);
+					extract($this->phpbb_dispatcher->trigger_event('dlext.search_user_display_data_after', compact($vars)));
 				}
 			}
 		}
@@ -562,7 +638,7 @@ class search
 		
 			$s_search_fields = '<select name="search_fields">';
 		
-			for ($i = 0; $i < sizeof($search_fields); $i++)
+			for ($i = 0; $i < count($search_fields); ++$i)
 			{
 				$s_search_fields .= '<option value="' . $search_fields[$i] . '">' . $search_fnames[$i] . '</option>';
 			}

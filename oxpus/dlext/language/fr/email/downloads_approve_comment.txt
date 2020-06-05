@@ -2,7 +2,7 @@ Subject: Nouveau commentaire
 
 Bonjour {USERNAME},
 
-Vous recevez cet e-mail car un nouveau commentaire du téléchargement « {DOWNLOAD} » de la catégorie « {CATEGORY} » sur « {SITENAME} » doit-être validé.
+Vous recevez cet e-mail car un nouveau commentaire du téléchargement "{DOWNLOAD}" de la catégorie "{CATEGORY}" sur "{SITENAME}" doit-être validé.
 
 Si vous voulez valider ce nouveau commentaire, cliquez sur le lien suivant :
 
@@ -13,4 +13,4 @@ Vous pouvez voir ce commentaire, en cliquant sur le lien suivant :
 {U_DOWNLOAD}
 
 
-{BOARD_EMAIL}
+{EMAIL_SIG}

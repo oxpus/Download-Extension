@@ -26,6 +26,7 @@ class acp_toolbox_controller implements acp_toolbox_interface
 	public $phpbb_container;
 	public $phpbb_path_helper;
 	public $phpbb_log;
+	public $phpbb_dispatcher;
 
 	public $config;
 	public $helper;
@@ -50,6 +51,7 @@ class acp_toolbox_controller implements acp_toolbox_interface
 	 * @param \phpbb\log\log_interface 				$log
 	 * @param \phpbb\auth\auth						$auth
 	 * @param \phpbb\user							$user
+	 * @param \phpbb\event\dispatcher_interface		$phpbb_dispatcher
 	 */
 	public function __construct(
 		$phpEx,
@@ -60,6 +62,7 @@ class acp_toolbox_controller implements acp_toolbox_interface
 		\phpbb\log\log_interface $log,
 		\phpbb\auth\auth $auth,
 		\phpbb\user $user,
+		\phpbb\event\dispatcher_interface $phpbb_dispatcher,
 		$dlext_extra,
 		$dlext_format,
 		$dlext_physical
@@ -73,6 +76,7 @@ class acp_toolbox_controller implements acp_toolbox_interface
 		$this->phpbb_log				= $log;
 		$this->auth						= $auth;
 		$this->user						= $user;
+		$this->phpbb_dispatcher			= $phpbb_dispatcher;
 
 		$this->config					= $this->phpbb_container->get('config');
 		$this->helper					= $this->phpbb_container->get('controller.helper');
@@ -116,11 +120,11 @@ class acp_toolbox_controller implements acp_toolbox_interface
 			trigger_error('FORM_INVALID', E_USER_WARNING);
 		}
 		
-		if (sizeof($files) && $file_assign)
+		if (!empty($files) && $file_assign)
 		{
 			$file_names = $file_path = [];
 		
-			for ($i = 0; $i < sizeof($files); $i++)
+			for ($i = 0; $i < count($files); ++$i)
 			{
 				$temp = strpos($files[$i], '|');
 				$files_path[] = substr($files[$i],0,$temp);
@@ -129,17 +133,57 @@ class acp_toolbox_controller implements acp_toolbox_interface
 		
 			if ($file_assign == 'del')
 			{
-				for ($i = 0; $i < sizeof($files); $i++)
+				for ($i = 0; $i < count($files); ++$i)
 				{
 					$dl_dir = ($files_path[$i]) ? substr(DL_EXT_FILEBASE_PATH. 'downloads/', 0, strlen(DL_EXT_FILEBASE_PATH. 'downloads/')-1) : DL_EXT_FILEBASE_PATH. 'downloads/';
 		
 					@unlink($dl_dir . $files_path[$i] . '/' . $files_name[$i]);
 		
-					$sql = 'DELETE FROM ' . DOWNLOADS_TABLE . "
+					$sql = 'SELECT id, cat FROM ' . DOWNLOADS_TABLE . "
 						WHERE real_file = '" . $this->db->sql_escape($files_name[$i]) . "'
 							AND " . $this->db->sql_in_set('cat', $index, true);
+					$result = $this->db->sql_query($sql);
+
+					$dl_ids = [];
+					$dl_cats = [];
+
+					while ($row = $this->db->sql_fetchrow($result))
+					{
+						$dl_ids[] = $row['id'];
+						$dl_cats[] = $row['cat'];
+					}
+
+					$this->db->sql_freeresult($result);
+
+					$sql = 'DELETE FROM ' . DOWNLOADS_TABLE . '
+						WHERE ' . $this->db->sql_in_set('id', $dl_ids);
 					$this->db->sql_query($sql);
 
+					/**
+					 * Workflow after delete download
+					 *
+					 * @event 		dlext.acp_toolbox_delete_downloads_after
+					 * @var array	df_ids		download ID's
+					 * @var array	dl_cats		download category ID's
+					 * @since 8.1.0-RC2
+					 */
+					$vars = array(
+						'dl_ids',
+						'dl_cats',
+					);
+					extract($this->phpbb_dispatcher->trigger_event('dlext.acp_toolbox_delete_downloads_after', compact($vars)));
+
+					$notification = $this->phpbb_container->get('notification_manager');
+
+					$notification->delete_notifications([
+						'oxpus.dlext.notification.type.approve',
+						'oxpus.dlext.notification.type.broken',
+						'oxpus.dlext.notification.type.dlext',
+						'oxpus.dlext.notification.type.update',
+						'oxpus.dlext.notification.type.capprove',
+						'oxpus.dlext.notification.type.comments',
+					], $dl_ids);
+	
 					@unlink(DL_EXT_CACHE_PATH . 'data_dl_file_p.' . $this->phpEx);
 					
 					$this->phpbb_log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_FILE_DROP', false, [$files_name[$i]]);
@@ -149,7 +193,7 @@ class acp_toolbox_controller implements acp_toolbox_interface
 			{
 				$dl_dir = substr(DL_EXT_FILEBASE_PATH. 'downloads/', 0, strlen(DL_EXT_FILEBASE_PATH. 'downloads/')-1);
 		
-				for ($i = 0; $i < sizeof($files); $i++)
+				for ($i = 0; $i < count($files); ++$i)
 				{
 					$sql = 'SELECT path FROM ' . DL_CAT_TABLE . '
 						WHERE id = ' . (int) $file_assign;
@@ -176,7 +220,7 @@ class acp_toolbox_controller implements acp_toolbox_interface
 			$file_action = $file_command = $new_path = '';
 		}
 		
-		if (isset($index) && sizeof($index))
+		if (!empty($index))
 		{
 			$unas_files = $files_temp = [];
 		
@@ -187,6 +231,7 @@ class acp_toolbox_controller implements acp_toolbox_interface
 			$total_unassigned_files = $this->db->sql_affectedrows($result);
 		
 			$i = 0;
+
 			if ($action == 'unassigned')
 			{
 				while ($row = $this->db->sql_fetchrow($result))
@@ -195,20 +240,20 @@ class acp_toolbox_controller implements acp_toolbox_interface
 					$file_desc = $row['description'];
 					$unas_files[$i] = $real_file;
 					$unas_files[$real_file] = $file_desc;
-					$i++;
+					++$i;
 				}
 			}
 		
 			$this->db->sql_freeresult($result);
 		
-			if ($action == 'unassigned' && sizeof($unas_files))
+			if ($action == 'unassigned' && !empty($unas_files))
 			{
 				$read_files = $this->dlext_physical->read_dl_files('', $unas_files);
 				$read_files = substr($read_files, 0, strlen($read_files) - 1 );
 		
 				$files = explode('|', $read_files);
 		
-				for ($i = 0; $i < sizeof($files); $i++)
+				for ($i = 0; $i < count($files); ++$i)
 				{
 					$temp = strripos($files[$i], '/');
 					$files_data[] = substr($files[$i],0,$temp).'|'.substr($files[$i],$temp+1);
@@ -282,7 +327,7 @@ class acp_toolbox_controller implements acp_toolbox_interface
 		{
 			if ($del_real_thumbs)
 			{
-				for ($i = 0; $i < sizeof($thumbs); $i++)
+				for ($i = 0; $i < count($thumbs); ++$i)
 				{
 					@unlink(DL_EXT_FILEBASE_PATH . 'thumbs/' . base64_decode($thumbs[$i]));
 				}
@@ -321,7 +366,7 @@ class acp_toolbox_controller implements acp_toolbox_interface
 			while ($dl_thumbs[] = $this->db->sql_fetchfield('img_name') );
 			$this->db->sql_freeresult($result);
 		
-			if (sizeof($real_thumbnails['file_name']))
+			if (!empty($real_thumbnails['file_name']))
 			{
 				$this->tpl_name = 'acp_dl_thumbs';
 
@@ -333,12 +378,13 @@ class acp_toolbox_controller implements acp_toolbox_interface
 		
 				$j = -1;
 		
-				for ($i = 0; $i < sizeof($real_thumbnails['file_name']); $i++)
+				for ($i = 0; $i < count($real_thumbnails['file_name']); ++$i)
 				{
 					$real_file = $real_thumbnails['file_name'][$i];
+
 					if (!in_array ($real_file, $dl_thumbs))
 					{
-						$j++;
+						++$j;
 						$checkbox = '<input type="checkbox" class="permissions-checkbox" name="thumb[' . $j . ']" value="' . base64_encode($real_file) . '" />';
 					}
 					else
@@ -368,7 +414,7 @@ class acp_toolbox_controller implements acp_toolbox_interface
 		
 			if ($file_command == 'del')
 			{
-				for ($i = 0; $i < sizeof($files); $i++)
+				for ($i = 0; $i < count($files); ++$i)
 				{
 					@unlink(DL_EXT_FILEBASE_PATH. 'downloads/' . $path . $files[$i]);
 		
@@ -377,7 +423,7 @@ class acp_toolbox_controller implements acp_toolbox_interface
 			}
 			else
 			{
-				for ($i = 0; $i < sizeof($files); $i++)
+				for ($i = 0; $i < count($files); ++$i)
 				{
 					@copy(DL_EXT_FILEBASE_PATH. 'downloads/' . $path . $files[$i], $file_command . $files[$i]);
 					@unlink(DL_EXT_FILEBASE_PATH. 'downloads/' . $path . $files[$i]);
@@ -413,7 +459,7 @@ class acp_toolbox_controller implements acp_toolbox_interface
 			{
 				if ($subfile{0} != '.' && $subfile != 'index.htm')
 				{
-					$content_count++;
+					++$content_count;
 				}
 			}
 		
@@ -450,9 +496,9 @@ class acp_toolbox_controller implements acp_toolbox_interface
 					$path = ($path{0} == '/') ? substr($path, 1) : $path;
 		
 					$temp_dir = explode('/', $path);
-					if (sizeof($temp_dir) > 0)
+					if (!empty($temp_dir))
 					{
-						for ($i = 0; $i < sizeof($temp_dir); $i++)
+						for ($i = 0; $i < count($temp_dir); ++$i)
 						{
 							$temp_url .= '/'.$temp_dir[$i];
 							$temp_path = preg_replace('#[/]*#', '', $temp_dir[$i]);
@@ -515,7 +561,7 @@ class acp_toolbox_controller implements acp_toolbox_interface
 							{
 								if ($subfile{0} != '.' && $subfile != 'index.htm')
 								{
-									$content_count++;
+									++$content_count;
 								}
 							}
 		
@@ -600,6 +646,7 @@ class acp_toolbox_controller implements acp_toolbox_interface
 				natcasesort($files);
 				$overall_size = 0;
 				$missing_count = 0;
+
 				foreach($files as $i => $value)
 				{
 					$files_ary = explode('|~|', $value);
@@ -621,7 +668,7 @@ class acp_toolbox_controller implements acp_toolbox_interface
 
 						if (!$exist[$i])
 						{
-							$missing_count++;
+							++$missing_count;
 						}
 					}
 					else
@@ -634,7 +681,7 @@ class acp_toolbox_controller implements acp_toolbox_interface
 							'FILE_EXIST' => '<input type="checkbox" class="permissions-checkbox" name="files[]" value="' . $files_data[$i] . '" />',
 						]);
 
-						$missing_count++;
+						++$missing_count;
 					}
 
 					$overall_size += $file_size;

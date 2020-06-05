@@ -2,15 +2,84 @@ services:
     oxpus.dlext.notification.type.dlext:
         class: oxpus\dlext\notification\dlext
         shared: false
-        arguments:
-            - '@dbal.conn'
-            - '@language'
-            - '@user'
-            - '@auth'
-            - '%core.root_path%'
-            - '%core.php_ext%'
-            - '%tables.user_notifications%'
-            - '@controller.helper'
-            - '@language'
+        parent: notification.type.base
+        calls:
+            - [set_config, ['@config']]
+            - [set_user_loader, ['@user_loader']]
+            - [set_helper, ['@controller.helper']]
+        tags:
+            - { name: notification.type }
+    oxpus.dlext.notification.type.update:
+        class: oxpus\dlext\notification\update
+        shared: false
+        parent: notification.type.base
+        calls:
+            - [set_config, ['@config']]
+            - [set_user_loader, ['@user_loader']]
+            - [set_helper, ['@controller.helper']]
+        tags:
+            - { name: notification.type }
+    oxpus.dlext.notification.type.comments:
+        class: oxpus\dlext\notification\comments
+        shared: false
+        parent: notification.type.base
+        calls:
+            - [set_config, ['@config']]
+            - [set_user_loader, ['@user_loader']]
+            - [set_helper, ['@controller.helper']]
+        tags:
+            - { name: notification.type }
+    oxpus.dlext.notification.type.broken:
+        class: oxpus\dlext\notification\broken
+        shared: false
+        parent: notification.type.base
+        calls:
+            - [set_config, ['@config']]
+            - [set_user_loader, ['@user_loader']]
+            - [set_helper, ['@controller.helper']]
+            - [set_dl_auth, ['@oxpus.dlext.dlext_main']]
+        tags:
+            - { name: notification.type }
+    oxpus.dlext.notification.type.approve:
+        class: oxpus\dlext\notification\approve
+        shared: false
+        parent: notification.type.base
+        calls:
+            - [set_config, ['@config']]
+            - [set_user_loader, ['@user_loader']]
+            - [set_helper, ['@controller.helper']]
+            - [set_dl_auth, ['@oxpus.dlext.dlext_main']]
+        tags:
+            - { name: notification.type }
+    oxpus.dlext.notification.type.capprove:
+        class: oxpus\dlext\notification\capprove
+        shared: false
+        parent: notification.type.base
+        calls:
+            - [set_config, ['@config']]
+            - [set_user_loader, ['@user_loader']]
+            - [set_helper, ['@controller.helper']]
+            - [set_dl_auth, ['@oxpus.dlext.dlext_main']]
+        tags:
+            - { name: notification.type }
+    oxpus.dlext.notification.type.bt_assign:
+        class: oxpus\dlext\notification\bt_assign
+        shared: false
+        parent: notification.type.base
+        calls:
+            - [set_config, ['@config']]
+            - [set_user_loader, ['@user_loader']]
+            - [set_helper, ['@controller.helper']]
+            - [set_dl_auth, ['@oxpus.dlext.dlext_main']]
+        tags:
+            - { name: notification.type }
+    oxpus.dlext.notification.type.bt_status:
+        class: oxpus\dlext\notification\bt_status
+        shared: false
+        parent: notification.type.base
+        calls:
+            - [set_config, ['@config']]
+            - [set_user_loader, ['@user_loader']]
+            - [set_helper, ['@controller.helper']]
         tags:
             - { name: notification.type }

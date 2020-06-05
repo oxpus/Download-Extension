@@ -58,8 +58,9 @@ class details
 	protected $ext_path_web;
 	protected $ext_path_ajax;
 
+	protected $phpbb_dispatcher;
+
 	protected $dlext_auth;
-	protected $dlext_email;
 	protected $dlext_files;
 	protected $dlext_format;
 	protected $dlext_main;
@@ -81,6 +82,7 @@ class details
 	* @param \phpbb\template\template				$template
 	* @param \phpbb\user							$user
 	* @param \phpbb\language\language				$language
+	* @param \phpbb\event\dispatcher_interface		$phpbb_dispatcher
 	*/
 	public function __construct(
 		$root_path,
@@ -96,8 +98,8 @@ class details
 		\phpbb\template\template $template,
 		\phpbb\user $user,
 		\phpbb\language\language $language,
+		\phpbb\event\dispatcher_interface $phpbb_dispatcher,
 		$dlext_auth,
-		$dlext_email,
 		$dlext_files,
 		$dlext_format,
 		$dlext_main,
@@ -117,13 +119,13 @@ class details
 		$this->template 				= $template;
 		$this->user 					= $user;
 		$this->language					= $language;
+		$this->phpbb_dispatcher			= $phpbb_dispatcher;
 
 		$this->ext_path					= $this->phpbb_extension_manager->get_extension_path('oxpus/dlext', true);
 		$this->ext_path_web				= $this->phpbb_path_helper->update_web_root_path($this->ext_path);
 		$this->ext_path_ajax			= $this->ext_path_web . 'assets/javascript/';
 
 		$this->dlext_auth				= $dlext_auth;
-		$this->dlext_email				= $dlext_email;
 		$this->dlext_files				= $dlext_files;
 		$this->dlext_format				= $dlext_format;
 		$this->dlext_main				= $dlext_main;
@@ -205,6 +207,8 @@ class details
 		$desc_bitfield		= $dl_files['desc_bitfield'];
 		$desc_flags			= $dl_files['desc_flags'];
 		$description		= generate_text_for_display($description, $desc_uid, $desc_bitfield, $desc_flags);
+
+		$real_comment_exists = 0;
 
 		if (!$cat_id)
 		{
@@ -328,6 +332,8 @@ class details
 
 		$this->db->sql_freeresult($result);
 
+		$notification = $this->phpbb_container->get('notification_manager');
+
 		page_header($this->language->lang('DOWNLOADS') . ' - ' . strip_tags($dl_files['description']));
 
 		/*
@@ -414,7 +420,7 @@ class details
 
 			while ($row = $this->db->sql_fetchrow($result))
 			{
-				$ratings++;
+				++$ratings;
 				$user_have_rated = ($row['user_id'] == $this->user->data['user_id']) ? true : false;
 			}
 
@@ -518,31 +524,33 @@ class details
 						'approve'			=> $approve]);
 					$this->db->sql_query($sql);
 
+					$dl_id = $this->db->sql_nextid();
+
 					$comment_message = $this->language->lang('DL_COMMENT_ADDED');
 				}
 
-				if ($approve)
+				$approve_message	= '';
+
+				if (!$approve)
 				{
-					$processing_user = ($this->dlext_auth->cat_auth_comment_read($cat_id) == 3) ? 0 : $this->dlext_auth->dl_auth_users($cat_id, 'auth_mod');
+					$processing_user = ($index[$cat_id]['auth_cread'] == 3) ? false : $this->dlext_auth->dl_auth_users($cat_id, 'auth_mod');
 
-					$sql = 'SELECT user_email, username, user_lang FROM ' . USERS_TABLE . '
-						WHERE ' . $this->db->sql_in_set('user_id', explode(',', $processing_user)) . '
-							OR user_type = ' . USER_FOUNDER;
+					if (is_array($processing_user))
+					{
+						$notification_data = [
+							'user_ids'			=> $processing_user,
+							'df_id'				=> $df_id,
+							'dl_id'				=> $dl_id,
+							'description'		=> $description,
+							'cat_name'			=> $index[$cat_id]['cat_name_nav'],
+						];
 
-					$mail_data = [
-						'query'				=> $sql,
-						'email_template'	=> 'downloads_approve_comment',
-						'cat_id'			=> $cat_id,
-						'df_id'				=> $df_id,
-						'description'		=> $description,
-						'cat_name'			=> $index[$cat_id]['cat_name_nav'],
-					];
+						$notification->add_notifications('oxpus.dlext.notification.type.capprove', $notification_data);
+						$approve_message	= '<br />' . $this->language->lang('DL_MUST_BE_APPROVE_COMMENT');
+					}
 
-					$this->dlext_email->send_comment_notify($mail_data);
-
-					$approve_message	= '';
-					$return_parameters	= ['view' => 'comment', 'action' => 'view', 'cat_id' => $cat_id, 'df_id' => $df_id];
-					$return_text		= $this->language->lang('CLICK_RETURN_COMMENTS');
+					$return_parameters	= ['df_id' => $df_id];
+					$return_text		= $this->language->lang('CLICK_RETURN_DOWNLOAD_DETAILS');
 				}
 				else
 				{
@@ -559,20 +567,18 @@ class details
 
 					$this->db->sql_freeresult($result);
 
+					$send_notify = false;
+
 					if (!$this->config['dl_disable_email'] && $fav_user)
 					{
-						$sql_fav_user = (sizeof($fav_user)) ? ' AND ' . $this->db->sql_in_set('user_id', $fav_user) : '';
-						$com_perms = $index[$cat_id]['auth_cread'];
-						$sql_user = '';
-
-						switch ($com_perms)
+						switch ($index[$cat_id]['auth_cread'])
 						{
 							case 0:
 							case 1:
-								if ($sql_fav_user)
+								if (!empty($fav_user))
 								{
-									$sql_user = $sql_fav_user;
 									$send_notify = true;
+									$processing_user = $fav_user;
 								}
 								else
 								{
@@ -582,15 +588,15 @@ class details
 
 							case 2:
 								$processing_user = $this->dlext_auth->dl_auth_users($cat_id, 'auth_mod');
-								if ($processing_user)
+
+								if (!empty($processing_user))
 								{
-									$sql_user .= ' AND ' . $this->db->sql_in_set('user_id', explode(',', $processing_user));
 									$send_notify = true;
 								}
 
-								if ($sql_fav_user)
+								if (!empty($fav_user))
 								{
-									$sql_user .= $sql_fav_user;
+									$proccessing_user = array_merge($fav_user, $processing_user);
 									$send_notify = true;
 								}
 								else
@@ -601,34 +607,26 @@ class details
 
 							case 3:
 							default:
-								$sql_user = '';
 								$send_notify = false;
 							break;
 						}
 
 						if ($send_notify)
 						{
-							$sql = 'SELECT user_email, username, user_lang FROM ' . USERS_TABLE . '
-								WHERE user_id <> ' . (int) $this->user->data['user_id'] . '
-									AND user_allow_fav_download_email = 1
-									AND user_allow_fav_comment_email = 1' . (string) $sql_fav_user;
-
-							$mail_data = [
-								'query'				=> $sql,
-								'email_template'	=> 'downloads_comment_notify',
-								'cat_id'			=> $cat_id,
+							$notification_data = [
+								'user_ids'			=> $processing_user,
 								'df_id'				=> $df_id,
+								'dl_id'				=> $dl_id,
 								'description'		=> $description,
 								'cat_name'			=> $index[$cat_id]['cat_name_nav'],
 							];
-
-							$this->dlext_email->send_comment_notify($mail_data);
+		
+							$notification->add_notifications('oxpus.dlext.notification.type.comments', $notification_data);
 						}
 					}
 
-					$approve_message	= '<br />' . $this->language->lang('DL_MUST_BE_APPROVE_COMMENT');
-					$return_parameters	= ['df_id' => $df_id];
-					$return_text		= $this->language->lang('CLICK_RETURN_DOWNLOAD_DETAILS');
+					$return_parameters	= ['view' => 'comment', 'action' => 'view', 'df_id' => $df_id];
+					$return_text		= $this->language->lang('CLICK_RETURN_COMMENTS');
 				}
 
 				$message = $comment_message . $approve_message . '<br /><br />' . sprintf($return_text, '<a href="' . $this->helper->route('oxpus_dlext_details', $return_parameters) . '">', '</a>');
@@ -655,6 +653,11 @@ class details
 					$result = $this->db->sql_query($sql);
 					$total_comments = $this->db->sql_affectedrows($result);
 					$this->db->sql_freeresult($result);
+					
+					$notification->delete_notifications([
+						'oxpus.dlext.notification.type.capprove',
+						'oxpus.dlext.notification.type.comments',
+					], $dl_id);
 
 					if (!$total_comments)
 					{
@@ -780,6 +783,8 @@ class details
 					ORDER BY comment_time DESC';
 				$result = $this->db->sql_query_limit($sql, $this->config['dl_links_per_page'], $start);
 
+				$dl_ids = [];
+
 				while ($row = $this->db->sql_fetchrow($result))
 				{
 					$avatar_row = [
@@ -831,6 +836,8 @@ class details
 						'U_EDIT_COMMENT'	=> ($deny_post) ? '' : $u_edit_comment,
 					]);
 
+					$dl_ids[] = $dl_id;
+
 					if (($poster_id == $this->user->data['user_id'] || $cat_auth['auth_mod'] || $index[$cat_id]['auth_mod'] || $this->auth->acl_get('a_')) && $this->user->data['is_registered'] && !$deny_post)
 					{
 						$this->template->assign_block_vars('comment_row.action_button', []);
@@ -838,6 +845,8 @@ class details
 				}
 
 				$this->db->sql_freeresult($result);
+
+				$notification->delete_notifications('oxpus.dlext.notification.type.comments', $dl_ids, false, $this->user->data['user_id']);
 			}
 		}
 
@@ -961,7 +970,7 @@ class details
 
 			$this->db->sql_freeresult($result);
 
-			if (sizeof($hash_table) && $index[$cat_id]['show_file_hash'])
+			if (!empty($hash_table) && $index[$cat_id]['show_file_hash'])
 			{
 				foreach ($hash_table as $key => $value)
 				{
@@ -1255,7 +1264,7 @@ class details
 							$error[] = $vc_response;
 						}
 
-						if (!sizeof($error))
+						if (empty($error))
 						{
 							$captcha->reset();
 							$code_match = true;
@@ -1367,7 +1376,7 @@ class details
 				$first_thumb_exists = true;
 			}
 
-			if (isset($thumbs_ary) && sizeof($thumbs_ary))
+			if (!empty($thumbs_ary))
 			{
 				$more_thumbs_exists = true;
 			}
@@ -1409,7 +1418,7 @@ class details
 					}
 				}
 
-				if (sizeof($drop_images))
+				if (!empty($drop_images))
 				{
 					$sql = 'DELETE FROM ' . DL_IMAGES_TABLE . '
 						WHERE dl_id = ' . (int) $df_id . '
@@ -1442,22 +1451,6 @@ class details
 			if ((!$rating_points || $rating_access) && $this->user->data['is_registered'])
 			{
 				$s_rating_perm = true;
-			}
-
-			if ($ratings)
-			{
-				if ($ratings == 1)
-				{
-					$rating_count_text = $this->language->lang('DL_RATING_ONE');
-				}
-				else
-				{
-					$rating_count_text = $this->language->lang('DL_RATING_MORE', $ratings);
-				}
-			}
-			else
-			{
-				$rating_count_text = $this->language->lang('DL_RATING_NONE');
 			}
 		}
 
@@ -1536,8 +1529,7 @@ class details
 			'CHANGE_USER'			=> ($change_user != '') ? $this->language->lang('DL_CHANGE_USER', $change_time, $change_user) : '',
 			'REAL_FILETIME'			=> $this->user->format_date(@filemtime(DL_EXT_FILEBASE_PATH. 'downloads/' . $index[$cat_id]['cat_path'] . $real_file)),
 			'REAL_FILETIME_RFC'		=> gmdate(DATE_RFC3339, @filemtime(DL_EXT_FILEBASE_PATH. 'downloads/' . $index[$cat_id]['cat_path'] . $real_file)),
-			'RATING_IMG'			=> $this->dlext_format->rating_img($rating_points, $s_rating_perm, $df_id),
-			'RATINGS'				=> $rating_count_text,
+			'RATING_IMG'			=> $this->dlext_format->rating_img($rating_points, $s_rating_perm, $df_id, $ratings),
 			'DF_ID'					=> $df_id,
 			'PHPEX'					=> $this->php_ext,
 			'BROKEN'				=> $broken,
@@ -1596,14 +1588,10 @@ class details
 		$dl_fields = $cp->generate_profile_fields_template('grab', $file_id);
 		$dl_fields = (isset($dl_fields[$file_id])) ? $cp->generate_profile_fields_template('show', false, $dl_fields[$file_id]) : [];
 
-		if (isset($dl_fields['row']) && sizeof($dl_fields['row']))
+		if (!empty($dl_fields['row']))
 		{
 			$this->template->assign_var('S_DL_FIELDS', true);
-
-			if (!empty($dl_fields['row']))
-			{
-				$this->template->assign_vars($dl_fields['row']);
-			}
+			$this->template->assign_vars($dl_fields['row']);
 
 			if (!empty($dl_fields['blockrow']))
 			{
@@ -1614,19 +1602,36 @@ class details
 			}
 		}
 
+		/**
+		 * Calculate or Display additional data
+		 *
+		 * @event 		dlext.details_display_after
+		 * @var string	df_id			download ID
+		 * @var string	cat_id			download category ID
+		 * @var array	dl_files		array of download's data
+		 * @since 8.1.0-RC2
+		 */
+		$vars = array(
+			'df_id',
+			'cat_id',
+			'dl_files',
+		);
+		extract($this->phpbb_dispatcher->trigger_event('dlext.details_display_after', compact($vars)));
+
 		$detail_cat_names = [
 			0 => $this->language->lang('DL_DETAIL'),
 			1 => ($ver_tab) ? $this->language->lang('DL_VERSIONS') : '',
 			2 => ($s_comments_tab) ? $this->language->lang('DL_COMMENTS') : '',
 		];
 
-		for ($i = 0; $i < sizeof($detail_cat_names); $i++)
+		for ($i = 0; $i < count($detail_cat_names); ++$i)
 		{
 			if ($detail_cat_names[$i])
 			{
 				$this->template->assign_block_vars('category', [
-					'CAT_NAME'	=> $detail_cat_names[$i],
-					'CAT_ID'	=> $i,
+					'CAT_NAME'			=> $detail_cat_names[$i],
+					'CAT_ID'			=> $i,
+					'COMMENTS_COUNT'	=> $real_comment_exists,
 				]);
 			}
 		}
@@ -1659,6 +1664,11 @@ class details
 
 			$this->db->sql_freeresult($result);
 		}
+
+		$notification->delete_notifications([
+			'oxpus.dlext.notification.type.dlext',
+			'oxpus.dlext.notification.type.update',
+		], $df_id, false, $this->user->data['user_id']);
 
 		/*
 		* include the mod footer

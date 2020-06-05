@@ -21,10 +21,11 @@
 			<li class="row{% if searchresults.S_ROW_COUNT is even %} bg1{% else %} bg2{% endif %}">
 				<dl>
 					<dt>
-						<div class="list-inner"><strong>{{ searchresults.STATUS }}</strong> <a href="{{ searchresults.U_FILE_LINK }}" class="topictitle">{{ searchresults.DESCRIPTION }}</a> 
-							{{ searchresults.MINI_ICON }}
-						<br />{{ lang('POST_BY_AUTHOR') }} {{ searchresults.ADD_USER }} &raquo; <time datetime="{{ searchresults.ADD_TIME_RFC }}">{{ searchresults.ADD_TIME }}</time>
-						{% if searchresults.LONG_DESC %}<hr />{{ searchresults.LONG_DESC }}{% endif %}
+						<div class="list-inner">
+							<strong>{{ searchresults.STATUS }}</strong> <a href="{{ searchresults.U_FILE_LINK }}" class="topictitle">{{ searchresults.DESCRIPTION }}</a> {{ searchresults.MINI_ICON }}
+							{% EVENT dlext_search_result_download_title_append %}
+							<br />{{ lang('POST_BY_AUTHOR') }} {{ searchresults.ADD_USER }} &raquo; <time datetime="{{ searchresults.ADD_TIME_RFC }}">{{ searchresults.ADD_TIME }}</time>
+							{% if searchresults.LONG_DESC %}<hr />{{ searchresults.LONG_DESC }}{% endif %}
 						</div>
 					</dt>
 					<dd class="lastpost">

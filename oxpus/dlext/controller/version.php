@@ -384,7 +384,8 @@ class version
 			$ver_file_temp = $file['tmp_name'];
 			$ver_file_name = $file['name'];
 		
-			$error_count = sizeof($ver_file->error);
+			$error_count = count($ver_file->error);
+
 			if ($error_count > 1 && $ver_file_name)
 			{
 				$ver_file->remove();
@@ -441,7 +442,8 @@ class version
 			$ver_image_temp = $file['tmp_name'];
 			$ver_image_name = $file['name'];
 		
-			$error_count = sizeof($ver_image->error);
+			$error_count = count($ver_image->error);
+
 			if ($error_count > 1 && $ver_image_name)
 			{
 				$ver_image->remove();

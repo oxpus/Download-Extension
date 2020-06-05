@@ -2,7 +2,7 @@ Subject: Nuevo Estado para el Reporte de Error en {SITENAME}
 
 Hola {USERNAME},
 
-Recibe este email porque el estado de su reporte de error {REPORT_TITLE} en {SITENAME} ha cambiado.
+Recibe este email porque el estado de su reporte de error "{REPORT_TITLE}" en "{SITENAME}" ha cambiado.
 Nuevo Estado: {STATUS}.
 
 {STATUS_TEXT}
@@ -13,4 +13,4 @@ Para más detalles sobre este reporte siga este enlace:
 
 ----------------------------
 
-{BOARD_EMAIL}
+{EMAIL_SIG}

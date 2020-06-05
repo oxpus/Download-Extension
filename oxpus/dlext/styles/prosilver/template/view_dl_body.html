@@ -33,7 +33,11 @@
 <div class="action-bar bar-top">
 {% for category in loops.category %}
 <a onclick="swapOptions('{{ category.CAT_ID }}');" class="button">
-	<span>{{ category.CAT_NAME }}</span> <i id="tab_{{ category.CAT_ID }}" class="icon{% if S_OPEN_PANEL == category.CAT_ID %} fa-eye fa-fw{% endif %}" aria-hidden="true"></i>
+	<span>{{ category.CAT_NAME }}</span>
+	{% if category.COMMENTS_COUNT and category.CAT_ID eq '2' %}
+	 <i class="dl-bubble">{{ category.COMMENTS_COUNT }}</i>
+	{% endif %}
+	 <i id="tab_{{ category.CAT_ID }}" class="icon{% if S_OPEN_PANEL == category.CAT_ID %} fa-eye fa-fw{% endif %}" aria-hidden="true"></i>
 </a>
 {% endfor %}
 </div>
@@ -96,9 +100,10 @@
 		{% if S_ENABLE_RATE %}
 			<dl>
 				<dt><label>{{ lang('DL_RATING') }}</label></dt>
-				<dd class="lastpost dl-cell-block"><div id="rating_{{ DF_ID }}">{{ RATING_IMG }}<br />{{ RATINGS }}</div></dd>
+				<dd class="lastpost dl-cell-block"><div id="rating_{{ DF_ID }}">{{ RATING_IMG }}</div></dd>
 			</dl>
 		{% endif %}
+		{% EVENT dlext_details_file_append %}
 		</fieldset>
 
 	</div>

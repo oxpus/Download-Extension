@@ -203,7 +203,8 @@ class acp_fields_controller implements acp_fields_interface
 		
 					while ($row = $this->db->sql_fetchrow($result))
 					{
-						$order++;
+						++$order;
+
 						if ($row['field_order'] != $order)
 						{
 							$sql = 'UPDATE ' . DL_FIELDS_TABLE . "
@@ -212,6 +213,7 @@ class acp_fields_controller implements acp_fields_interface
 							$this->db->sql_query($sql);
 						}
 					}
+
 					$this->db->sql_freeresult($result);
 		
 					$this->db->sql_transaction('commit');
@@ -446,7 +448,7 @@ class acp_fields_controller implements acp_fields_interface
 				{
 					$exploded_options = (is_array($options)) ? $options : explode("\n", $options);
 		
-					if (sizeof($exploded_options) == sizeof($lang_options) || $action == 'create')
+					if (count($exploded_options) == count($lang_options) || $action == 'create')
 					{
 						// The number of options in the field is equal to the number of options already in the database
 						// Or we are creating a new dropdown list.
@@ -472,7 +474,7 @@ class acp_fields_controller implements acp_fields_interface
 					if ($field_type == FIELD_DROPDOWN && $key == 'field_maxlen')
 					{
 						// Get the number of options if this key is 'field_maxlen'
-						$var = sizeof(explode("\n", $this->request->variable('lang_options', '', true)));
+						$var = count(explode("\n", $this->request->variable('lang_options', '', true)));
 					}
 					else if ($field_type == FIELD_TEXT && $key == 'field_length')
 					{
@@ -613,7 +615,7 @@ class acp_fields_controller implements acp_fields_interface
 						$error[] = $this->language->lang('EMPTY_USER_FIELD_NAME');
 					}
 		
-					if ($field_type == FIELD_DROPDOWN && !sizeof($cp->vars['lang_options']))
+					if ($field_type == FIELD_DROPDOWN && empty($cp->vars['lang_options']))
 					{
 						$error[] = $this->language->lang('NO_FIELD_ENTRIES');
 					}
@@ -642,9 +644,9 @@ class acp_fields_controller implements acp_fields_interface
 		
 				$step = ($req_next) ? $step + 1 : (($req_prev) ? $step - 1 : $step);
 		
-				if (sizeof($error))
+				if (!empty($error))
 				{
-					$step--;
+					--$step;
 					$submit = false;
 				}
 		
@@ -694,7 +696,7 @@ class acp_fields_controller implements acp_fields_interface
 							$req_key = $this->request->variable($key, '', true);
 							$req_ary = $this->request->variable($key, [''], true);
 		
-							if (!$req_key && !sizeof($req_ary))
+							if (!$req_key && empty($req_ary))
 							{
 								$var = false;
 							}
@@ -704,7 +706,7 @@ class acp_fields_controller implements acp_fields_interface
 							}
 							else
 							{
-								$_new_key_ary[$key] = (sizeof($req_ary)) ? $req_ary : $req_key;
+								$_new_key_ary[$key] = (!empty($req_ary)) ? $req_ary : $req_key;
 							}
 						}
 					}
@@ -712,9 +714,9 @@ class acp_fields_controller implements acp_fields_interface
 					$s_hidden_fields += $_new_key_ary;
 				}
 		
-				if (!sizeof($error))
+				if (empty($error))
 				{
-					if ($step == 3 && (sizeof($this->lang_defs['iso']) == 1 || $save))
+					if ($step == 3 && (count($this->lang_defs['iso']) == 1 || $save))
 					{
 						$this->save_profile_field($cp, $field_type, $action);
 					}
@@ -727,7 +729,7 @@ class acp_fields_controller implements acp_fields_interface
 				$this->template->assign_vars([
 					'S_EDIT'			=> true,
 					'S_EDIT_MODE'		=> ($action == 'edit') ? true : false,
-					'ERROR_MSG'			=> (sizeof($error)) ? implode('<br />', $error) : '',
+					'ERROR_MSG'			=> (!empty($error)) ? implode('<br />', $error) : '',
 		
 					'L_TITLE'			=> $this->language->lang('DL_FIELDS_STEP' . $step . '_TITLE_' . strtoupper($action)),
 					'L_EXPLAIN'			=> $this->language->lang('DL_FIELDS_STEP' . $step . '_EXPLAIN'),
@@ -769,7 +771,7 @@ class acp_fields_controller implements acp_fields_interface
 						if ($field_type == FIELD_BOOL || $field_type == FIELD_DROPDOWN)
 						{
 							// Initialize these array elements if we are creating a new field
-							if (!sizeof($cp->vars['lang_options']))
+							if (empty($cp->vars['lang_options']))
 							{
 								if ($field_type == FIELD_BOOL)
 								{
@@ -801,7 +803,7 @@ class acp_fields_controller implements acp_fields_interface
 		
 						$this->template->assign_vars([
 							'S_STEP_TWO'		=> true,
-							'L_NEXT_STEP'			=> (sizeof($this->lang_defs['iso']) == 1) ? $this->language->lang('SAVE') : $this->language->lang('PROFILE_LANG_OPTIONS'),
+							'L_NEXT_STEP'			=> (count($this->lang_defs['iso']) == 1) ? $this->language->lang('SAVE') : $this->language->lang('PROFILE_LANG_OPTIONS'),
 						]);
 		
 						// Build options based on profile type
@@ -859,7 +861,7 @@ class acp_fields_controller implements acp_fields_interface
 			$active_value = (!$row['field_active']) ? 'activate' : 'deactivate';
 			$id = $row['field_id'];
 		
-			$s_need_edit = (sizeof($this->lang_defs['diff'][$row['field_id']])) ? true : false;
+			$s_need_edit = (!empty($this->lang_defs['diff'][$row['field_id']])) ? true : false;
 		
 			if ($s_need_edit)
 			{
@@ -1102,7 +1104,7 @@ class acp_fields_controller implements acp_fields_interface
 			$this->update_insert(DL_LANG_TABLE, $sql_ary, ['field_id' => $field_id, 'lang_id' => $default_lang_id]);
 		}
 
-		if (is_array($cp->vars['l_lang_name']) && sizeof($cp->vars['l_lang_name']))
+		if (is_array($cp->vars['l_lang_name']) && !empty($cp->vars['l_lang_name']))
 		{
 			foreach ($cp->vars['l_lang_name'] as $lang_id => $data)
 			{
@@ -1190,7 +1192,7 @@ class acp_fields_controller implements acp_fields_interface
 			}
 		}
 
-		if (is_array($cp->vars['l_lang_options']) && sizeof($cp->vars['l_lang_options']))
+		if (is_array($cp->vars['l_lang_options']) && !empty($cp->vars['l_lang_options']))
 		{
 			$empty_lang = [];
 
@@ -1201,7 +1203,7 @@ class acp_fields_controller implements acp_fields_interface
 					$lang_ary = explode("\n", $lang_ary);
 				}
 
-				if (sizeof($lang_ary) != sizeof($cp->vars['lang_options']))
+				if (count($lang_ary) != count($cp->vars['lang_options']))
 				{
 					$empty_lang[$lang_id] = true;
 				}
@@ -1253,7 +1255,7 @@ class acp_fields_controller implements acp_fields_interface
 			}
 		}
 
-		if (sizeof($profile_lang_fields))
+		if (!empty($profile_lang_fields))
 		{
 			foreach ($profile_lang_fields as $sql)
 			{
@@ -1316,7 +1318,7 @@ class acp_fields_controller implements acp_fields_interface
 			$where_sql[] = $key . ' = ' . ((is_string($value)) ? "'" . $this->db->sql_escape($value) . "'" : (int) $value);
 		}
 
-		if (!sizeof($where_sql))
+		if (empty($where_sql))
 		{
 			return;
 		}
@@ -1332,14 +1334,14 @@ class acp_fields_controller implements acp_fields_interface
 		{
 			$sql_ary = array_merge($where_fields, $sql_ary);
 
-			if (sizeof($sql_ary))
+			if (!empty($sql_ary))
 			{
 				$this->db->sql_query("INSERT INTO $table " . $this->db->sql_build_array('INSERT', $sql_ary));
 			}
 		}
 		else
 		{
-			if (sizeof($sql_ary))
+			if (!empty($sql_ary))
 			{
 				$sql = "UPDATE $table SET " . $this->db->sql_build_array('UPDATE', $sql_ary) . '
 					WHERE ' . implode(' AND ', $where_sql);

@@ -22,9 +22,17 @@ class ext extends \phpbb\extension\base
 	{
 		switch ($old_state)
 		{
-			case '':
+			case '': // Empty means nothing has run yet
 				$phpbb_notifications = $this->container->get('notification_manager');
 				$phpbb_notifications->enable_notifications('oxpus.dlext.notification.type.dlext');
+				$phpbb_notifications->enable_notifications('oxpus.dlext.notification.type.update');
+				$phpbb_notifications->enable_notifications('oxpus.dlext.notification.type.approve');
+				$phpbb_notifications->enable_notifications('oxpus.dlext.notification.type.comments');
+				$phpbb_notifications->enable_notifications('oxpus.dlext.notification.type.capprove');
+				$phpbb_notifications->enable_notifications('oxpus.dlext.notification.type.broken');
+				$phpbb_notifications->enable_notifications('oxpus.dlext.notification.type.bt_assign');
+				$phpbb_notifications->enable_notifications('oxpus.dlext.notification.type.bt_status');
+
 				return 'notifications';
 			break;
 
@@ -38,9 +46,17 @@ class ext extends \phpbb\extension\base
 	{
 		switch ($old_state)
 		{
-			case '':
+			case '': // Empty means nothing has run yet
 				$phpbb_notifications = $this->container->get('notification_manager');
 				$phpbb_notifications->disable_notifications('oxpus.dlext.notification.type.dlext');
+				$phpbb_notifications->disable_notifications('oxpus.dlext.notification.type.update');
+				$phpbb_notifications->disable_notifications('oxpus.dlext.notification.type.approve');
+				$phpbb_notifications->disable_notifications('oxpus.dlext.notification.type.comments');
+				$phpbb_notifications->disable_notifications('oxpus.dlext.notification.type.capprove');
+				$phpbb_notifications->disable_notifications('oxpus.dlext.notification.type.broken');
+				$phpbb_notifications->disable_notifications('oxpus.dlext.notification.type.bt_assign');
+				$phpbb_notifications->disable_notifications('oxpus.dlext.notification.type.bt_status');
+
 				return 'notifications';
 			break;
 
@@ -54,9 +70,24 @@ class ext extends \phpbb\extension\base
 	{
 		switch ($old_state)
 		{
-			case '':
-				$phpbb_notifications = $this->container->get('notification_manager');
-				$phpbb_notifications->purge_notifications('oxpus.dlext.notification.type.dlext');
+			case '': // Empty means nothing has run yet
+				try
+				{
+					$phpbb_notifications = $this->container->get('notification_manager');
+					$phpbb_notifications->purge_notifications('oxpus.dlext.notification.type.dlext');
+					$phpbb_notifications->purge_notifications('oxpus.dlext.notification.type.update');
+					$phpbb_notifications->purge_notifications('oxpus.dlext.notification.type.approve');
+					$phpbb_notifications->purge_notifications('oxpus.dlext.notification.type.comments');
+					$phpbb_notifications->purge_notifications('oxpus.dlext.notification.type.capprove');
+					$phpbb_notifications->purge_notifications('oxpus.dlext.notification.type.broken');
+					$phpbb_notifications->purge_notifications('oxpus.dlext.notification.type.bt_assign');
+					$phpbb_notifications->purge_notifications('oxpus.dlext.notification.type.bt_status');
+				}
+				catch (\phpbb\notification\exception $e)
+				{
+					// continue
+				}
+
 				return 'notifications';
 			break;
 

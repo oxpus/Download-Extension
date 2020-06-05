@@ -196,7 +196,7 @@ class acp_overview_controller implements acp_overview_interface
 		$total_vfsize = $this->dlext_physical->read_dl_sizes(DL_EXT_FILEBASE_PATH. 'version/files/');
 		$total_vtsize = $this->dlext_physical->read_dl_sizes(DL_EXT_FILEBASE_PATH. 'version/images/');
 		$total_dl = $this->dlext_main->get_sublevel_count();
-		$total_extern = sizeof($this->dlext_files->all_files(0, '', 'ASC', "AND extern = 1", 0, true, 'id'));
+		$total_extern = count($this->dlext_files->all_files(0, '', 'ASC', "AND extern = 1", 0, true, 'id'));
 
 		$physical_limit = $this->config['dl_physical_quota'];
 		$total_size = ($total_size > $physical_limit) ? $physical_limit : $total_size;
@@ -234,7 +234,7 @@ class acp_overview_controller implements acp_overview_interface
 		$cats = 0;
 		$subs = 0;
 
-		if (sizeof($index))
+		if (!empty($index))
 		{
 			foreach($index as $cat_id => $data)
 			{

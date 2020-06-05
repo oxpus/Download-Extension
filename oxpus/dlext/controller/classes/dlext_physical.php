@@ -56,7 +56,7 @@ class dlext_physical implements dlext_physical_interface
 
 		$exist_files = [];
 
-		for ($i = 0; $i < sizeof($dl_files); $i++)
+		for ($i = 0; $i < count($dl_files); ++$i)
 		{
 			$exist_files[] = $dl_files[$i]['real_file'];
 		}
@@ -321,7 +321,7 @@ class dlext_physical implements dlext_physical_interface
 			if (@is_dir($file_base . $entry) && $entry[0] != '.')
 			{
 				$separator = '';
-				for ($i = 0; $i < $level; $i++)
+				for ($i = 0; $i < $level; ++$i)
 				{
 					$separator .= '&nbsp;&nbsp;&nbsp;-&nbsp;';
 				}
@@ -344,9 +344,9 @@ class dlext_physical implements dlext_physical_interface
 					'entry'		=> $separator . $entry . '/',
 				];
 
-				$level++;
+				++$level;
 				$tmp_tree = $this->get_file_base_tree($file_base . $entry, $path, $level);
-				$level--;
+				--$level;
 
 				if (is_array($tmp_tree))
 				{

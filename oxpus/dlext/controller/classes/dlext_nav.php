@@ -45,7 +45,7 @@ class dlext_nav implements dlext_nav_interface
 	{
 		$dl_index = $this->dlext_auth->dl_index();
 
-		if (!is_array($dl_index) || !sizeof($dl_index))
+		if (empty($dl_index))
 		{
 			return;
 		}
@@ -98,7 +98,7 @@ class dlext_nav implements dlext_nav_interface
 		if ($disp_art != 'url')
 		{
 			$tmp_navi_ary = [];
-			for ($i = sizeof($path_dl_array); $i >= 0; --$i)
+			for ($i = count($path_dl_array); $i >= 0; --$i)
 			{
 				if (isset($path_dl_array[$i]))
 				{

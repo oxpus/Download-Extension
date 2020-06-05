@@ -10,6 +10,8 @@
 
 <br class="clear" />
 
+{% if FORMATED_HINT_TEXT %}<div class="dl-edit-hint panel dl-edit-box-big"><div class="inner">{{ FORMATED_HINT_TEXT }}</div></div>{% endif %}
+
 <form action="{{ S_DOWNLOADS_ACTION }}" method="post" {{ ENCTYPE }} id="dl_edit">
 
 {% if S_VERSION_ON %}
@@ -87,6 +89,8 @@
 	</div>
 </div>
 
+{% EVENT dlext_download_edit_file_after %}
+
 <div class="panel dl-edit-box-light">
 	<div class="inner">
 
@@ -148,6 +152,7 @@
 			{{ S_CHECK_FREE }}
 		</dd>
 	</dl>
+	{% if not S_DL_TRAFFIC %}
 	<dl>
 		<dt><label>{{ lang('DL_TRAFFIC') }}</label></dt>
 		<dd>
@@ -155,6 +160,7 @@
 			<input type="text" name="file_traffic" size="10" maxlength="10" value="{{ TRAFFIC }}" class="inputbox autowidth" />&nbsp;{{ S_TRAFFIC_RANGE }}
 		</dd>
 	</dl>
+	{% endif %}
 	{% endif %}
 
 </fieldset>
@@ -333,21 +339,10 @@
 		</dd>
 	</dl>
 	{% endif %}
-	{% if S_POPUP_NOTIFY %}
-	<dl class="navbar dl-edit-box-medium">
-		<dt>
-			<label>{{ lang('DL_DISABLE_POPUP') }}</label>
-		</dt>
-		<dd>
-			<a href="javascript:void(0)" onclick="javascript:help_popup('{{ lang('DISABLE_POPUP_EXPLAIN') }}')" title="{{ lang('INFORMATION') }}">{{ ICON_DL_HELP }}</a>
-			<input type="checkbox" class="permissions_checkbox" name="disable_popup_notify" value="1" />
-		</dd>
-	</dl>
-	{% endif %}
 	{% if S_EMAIL_BLOCK %}
 	<dl class="navbar dl-edit-box-medium">
 		<dt>
-			<label>{{ lang('DL_DISABLE_EMAIL') }}</label>
+			<label>{{ lang('DL_DISABLE_NOTIFY') }}</label>
 		</dt>
 		<dd>
 			<a href="javascript:void(0)" onclick="javascript:help_popup('{{ lang('DL_SEND_NOTIFY_EXPLAIN') }}')" title="{{ lang('INFORMATION') }}">{{ ICON_DL_HELP }}</a>

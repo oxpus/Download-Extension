@@ -37,7 +37,7 @@ var	text_name 				= 'message';
 		</div>
 
 		<fieldset class="fields1">
-			<!-- IF ERROR --><p class="error">{ERROR}</p><!-- ENDIF -->
+			{% if ERROR %}<p class="error">{ERROR}</p>{% endif %}
 
 			<dl>
 				<dt><label>{{ lang('SUBJECT') }}</label></dt>

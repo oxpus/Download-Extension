@@ -2,7 +2,7 @@ Subject: Nouveau statut pour le rapport de bugs sur « {SITENAME} »
 
 Bonjour {USERNAME},
 
-Vous recevez cet e-mail car le statut du rapport de bugs « {REPORT_TITLE} » sur « {SITENAME} » a été modifié.
+Vous recevez cet e-mail car le statut du rapport de bugs "{REPORT_TITLE}" sur "{SITENAME}" a été modifié.
 Nouveau statut : {STATUS}.
 
 {STATUS_TEXT}
@@ -13,4 +13,4 @@ Pour plus de détails, suivez ce lien :
 
 ----------------------------
 
-{BOARD_EMAIL}
+{EMAIL_SIG}

@@ -23,17 +23,6 @@ services:
             - '@dbal.conn'
             - '@oxpus.dlext.dlext_auth'
             - '@oxpus.dlext.dlext_main'
-    oxpus.dlext.dlext_email:
-        class: oxpus\dlext\controller\classes\dlext_email
-        arguments:
-            - '@service_container'
-            - '@ext.manager'
-            - '@user'
-            - '@config'
-            - '@dbal.conn'
-            - '@controller.helper'
-            - '@oxpus.dlext.dlext_auth'
-            - '@oxpus.dlext.dlext_init'
     oxpus.dlext.dlext_extra:
         class: oxpus\dlext\controller\classes\dlext_extra
         arguments:
@@ -53,6 +42,7 @@ services:
         arguments:
             - '@service_container'
             - '@config'
+            - '@user'
     oxpus.dlext.dlext_hacklist:
         class: oxpus\dlext\controller\classes\dlext_hacklist
         arguments:

@@ -148,9 +148,12 @@ function select_switch(status)
 		<dl class="dl-option-row">
 			<dt><input type="radio" name="action" class="radio" id="lock"  value="lock" /><label for="lock"> {{ lang('DL_LOCK') }}</label></dt>
 		</dl>
-		<dl class="dl-option-row">
+		<dl>
 			<dt><input type="radio" name="action" class="radio" id="assign"  value="assign" /><label for="assign"> {{ lang('DL_ASSIGN') }}</label></dt>
-			<dd><input type="text" name="username" id="username" value="" class="inputbox autowidth" size="20" /> [ <a href="{{ U_FIND_USERNAME }}" onclick="find_username(this.href); return false;">{{ lang('FIND_USERNAME') }}</a> ]</dd>
+			<dd><input type="text" name="username" id="username" value="" class="inputbox autowidth" size="20" /><br />
+				[ <a href="{{ U_FIND_USERNAME }}" onclick="find_username(this.href); return false;">{{ lang('FIND_USERNAME') }}</a> ]<br /><br />
+				{{ lang('DL_ASSIGN_CHANGED') }} <input type="checkbox" name="assign_changed" class="radio" id="assign_changed" value="1" />
+			</dd>
 		</dl>
 		{% endif %}
 	</fieldset>

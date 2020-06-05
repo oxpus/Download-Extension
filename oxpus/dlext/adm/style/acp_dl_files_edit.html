@@ -2,6 +2,8 @@
 
 <h1>{{ lang('DL_FILES_TITLE') }}</h1>
 
+{% if FORMATED_HINT_TEXT %}<fieldset class="dl-red-bg"><div>{{ FORMATED_HINT_TEXT }}</div></fieldset>{% endif %}
+
 <form action="{{ S_DOWNLOADS_ACTION }}" method="post" id="cat_id" {{ ENCTYPE }}>
 
 {% if S_EDIT_VERSIONS %}
@@ -67,7 +69,9 @@
 	</dl>
 
 </fieldset>
-	
+
+{% EVENT dlext_acp_edit_file_after %}
+
 {% if S_ALLOW_THUMB %}
 <fieldset>
 
@@ -93,10 +97,12 @@
 		<dt><label>{{ lang('DL_IS_FREE') }}</label></dt>
 		<dd>&nbsp;<a href="javascript:void(0)" onclick="javascript:help_popup('{{ lang('DL_IS_FREE_EXPLAIN') }}')">{{ ICON_DL_HELP }}</a>&nbsp;{{ S_FILE_FREE_SELECT }}</dd>
 	</dl>
+	{% if not S_DL_TRAFFIC %}
 	<dl>
 		<dt><label>{{ lang('DL_TRAFFIC') }}</label></dt>
 		<dd>&nbsp;<a href="javascript:void(0)" onclick="javascript:help_popup('{{ lang('DL_TRAFFIC_EXPLAIN') }}')">{{ ICON_DL_HELP }}</a>&nbsp;<input type="text" name="file_traffic" size="10" maxlength="10" value="{{ TRAFFIC }}" />&nbsp;{{ S_FILE_TRAFFIC_RANGE }}</dd>
 	</dl>
+	{% endif %}
 
 </fieldset>
 
@@ -208,16 +214,9 @@
 	</dl>
 	{% endif %}
 
-	{% if S_POPUP_NOTIFY %}
-	<dl>
-		<dt><label>{{ lang('DL_DISABLE_POPUP_FILES') }}</label></dt>
-		<dd>&nbsp;<a href="javascript:void(0)" onclick="javascript:help_popup('{{ lang('DISABLE_POPUP_EXPLAIN') }}')">{{ ICON_DL_HELP }}</a>&nbsp;<input type="checkbox" name="disable_popup_notify" value="1" /></dd>
-	</dl>
-	{% endif %}
-
 	{% if S_EMAIL_BLOCK %}
 	<dl>
-		<dt><label>{{ lang('DL_DISABLE_EMAIL_FILES') }}</label></dt>
+		<dt><label>{{ lang('DL_DISABLE_NOTIFY') }}</label></dt>
 		<dd>&nbsp;<a href="javascript:void(0)" onclick="javascript:help_popup('{{ lang('DL_SEND_NOTIFY_EXPLAIN') }}')">{{ ICON_DL_HELP }}</a>&nbsp;<input type="checkbox" name="send_notify" value="1" /></dd>
 	</dl>
 	{% endif %}

@@ -27,6 +27,7 @@ class acp_categories_controller implements acp_categories_interface
 	public $phpbb_container;
 	public $phpbb_path_helper;
 	public $phpbb_log;
+	public $phpbb_dispatcher;
 
 	public $config;
 	public $helper;
@@ -54,6 +55,7 @@ class acp_categories_controller implements acp_categories_interface
 	 * @param \phpbb\log\log_interface 				$log
 	 * @param \phpbb\auth\auth						$auth
 	 * @param \phpbb\user							$user
+	 * @param \phpbb\event\dispatcher_interface		$phpbb_dispatcher
 	 */
 	public function __construct(
 		$root_path,
@@ -65,6 +67,7 @@ class acp_categories_controller implements acp_categories_interface
 		\phpbb\log\log_interface $log,
 		\phpbb\auth\auth $auth,
 		\phpbb\user $user,
+		\phpbb\event\dispatcher_interface $phpbb_dispatcher,
 		$dlext_extra,
 		$dlext_format,
 		$dlext_main,
@@ -81,6 +84,7 @@ class acp_categories_controller implements acp_categories_interface
 		$this->phpbb_log				= $log;
 		$this->auth						= $auth;
 		$this->user						= $user;
+		$this->phpbb_dispatcher			= $phpbb_dispatcher;
 
 		$this->config					= $this->phpbb_container->get('config');
 		$this->helper					= $this->phpbb_container->get('controller.helper');
@@ -117,6 +121,8 @@ class acp_categories_controller implements acp_categories_interface
 
 		include_once($this->ext_path . 'phpbb/includes/acm_init.' . $this->phpEx);
 
+		$notification = $this->phpbb_container->get('notification_manager');
+
 		if ($cancel)
 		{
 			$action = '';
@@ -132,7 +138,7 @@ class acp_categories_controller implements acp_categories_interface
 		$index = [];
 		$index = $this->dlext_main->full_index();
 
-		if (!sizeof($index) && $action != 'save_cat')
+		if (empty($index) && $action != 'save_cat')
 		{
 			$action = 'add';
 		}
@@ -775,7 +781,7 @@ class acp_categories_controller implements acp_categories_interface
 		
 							if (isset($real_ver_file[$df_id]))
 							{
-								for ($i = 0; $i < sizeof($real_ver_file[$df_id]); $i++)
+								for ($i = 0; $i < count($real_ver_file[$df_id]); ++$i)
 								{
 									@unlink(DL_EXT_FILEBASE_PATH. 'downloads/' . $path . $real_ver_file[$df_id][$i]);
 								}
@@ -788,12 +794,35 @@ class acp_categories_controller implements acp_categories_interface
 					$sql = 'DELETE FROM ' . DOWNLOADS_TABLE . '
 						WHERE cat = ' . (int) $cat_id;
 					$this->db->sql_query($sql);
-		
-					if (sizeof($dl_ids))
+
+					/**
+					 * Workflow after deleting downloads
+					 *
+					 * @event 		dlext.acp_categories_delete_downloads_after
+					 * @var array	dl_ids		download ID's
+					 * @var string	cat_id		download category ID
+					 * @since 8.1.0-RC2
+					 */
+					$vars = array(
+						'dl_ids',
+						'cat_id',
+					);
+					extract($this->phpbb_dispatcher->trigger_event('dlext.acp_categories_delete_downloads_after', compact($vars)));
+
+					if (!empty($dl_ids))
 					{
 						$sql = 'DELETE FROM ' . DL_VERSIONS_TABLE . '
 							WHERE ' . $this->db->sql_in_set('dl_id', $dl_ids);
 						$this->db->sql_query($sql);
+
+						$notification->delete_notifications([
+							'oxpus.dlext.notification.type.approve',
+							'oxpus.dlext.notification.type.broken',
+							'oxpus.dlext.notification.type.dlext',
+							'oxpus.dlext.notification.type.update',
+							'oxpus.dlext.notification.type.capprove',
+							'oxpus.dlext.notification.type.comments',
+						], $dl_ids);
 					}
 				}
 		
@@ -820,10 +849,13 @@ class acp_categories_controller implements acp_categories_interface
 							AND c.id = ' . (int) $cat_id . '
 							AND d.extern = 0';
 					$result = $this->db->sql_query($sql);
+
+					$dl_ids = [];
 		
 					while ($row = $this->db->sql_fetchrow($result))
 					{
 						$df_id = $row['df_id'];
+						$dl_ids[] = $df_id;
 						$path = $row['path'];
 						$real_file = $row['real_file'];
 		
@@ -832,7 +864,7 @@ class acp_categories_controller implements acp_categories_interface
 	
 						if (isset($real_ver_file[$df_id]))
 						{
-							for ($i = 0; $i < sizeof($real_ver_file[$df_id]); $i++)
+							for ($i = 0; $i < count($real_ver_file[$df_id]); ++$i)
 							{
 								@copy(DL_EXT_FILEBASE_PATH. 'downloads/' . $path . $real_ver_file[$df_id][$i], DL_EXT_FILEBASE_PATH. 'downloads/' . $new_path . $real_ver_file[$df_id][$i]);
 								@unlink(DL_EXT_FILEBASE_PATH. 'downloads/' . $path . $real_ver_file[$df_id][$i]);
@@ -856,6 +888,8 @@ class acp_categories_controller implements acp_categories_interface
 						SET cat_id = ' . (int) $new_cat_id . '
 						WHERE cat_id = ' . (int) $cat_id;
 					$this->db->sql_query($sql);
+
+					$options['item_parent_id'] = $new_cat_id;
 				}
 				else
 				{
@@ -961,15 +995,40 @@ class acp_categories_controller implements acp_categories_interface
 	
 			if (confirm_box(true))
 			{
-				$sql = 'DELETE FROM ' . DL_COMMENTS_TABLE;
-
 				if ($cat_id >= 1)
 				{
-					$sql .= ' WHERE cat_id = ' . (int) $cat_id;
+					$sql_second = ' WHERE cat_id = ' . (int) $cat_id;
+				}
+				else
+				{
+					$sql_second = '';
 				}
 
+				$sql = 'SELECT dl_id FROM ' . DL_COMMENTS_TABLE;
+				$sql .= $sql_second;
+				$result = $this->db->sql_query($sql);
+
+				$dl_ids = [];
+
+				while($row = $db->sql_fetchrow($result))
+				{
+					$dl_ids[] = $row['dl_id'];
+				}
+
+				$this->db->sql_freeresult($result);
+
+				$sql = 'DELETE FROM ' . DL_COMMENTS_TABLE;
+				$sql .= $sql_second;
 				$this->db->sql_query($sql);
-	
+
+				if (!empty($dl_ids))
+				{
+					$notification->delete_notifications([
+						'oxpus.dlext.notification.type.capprove',
+						'oxpus.dlext.notification.type.comments',
+					], $dl_ids);
+				}
+
 				$this->phpbb_log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_DEL_CAT_COM', false, [$log_cat_name]);
 
 				redirect($this->u_action);
@@ -1167,14 +1226,14 @@ class acp_categories_controller implements acp_categories_interface
 					{
 						$l_delete_stats = $this->language->lang('DL_STATS_DELETE');
 						$u_delete_stats = "{$this->u_action}&amp;action=delete_stats&amp;cat_id=$cat_id";
-						$stats_total++;
+						++$stats_total;
 					}
 		
 					if (isset($comments_cats[$cat_id]))
 					{
 						$l_delete_comments = $this->language->lang('DL_COMMENTS_DELETE');
 						$u_delete_comments = "{$this->u_action}&amp;action=delete_comments&amp;cat_id=$cat_id";
-						$comments_total++;
+						++$comments_total;
 					}
 		
 					$this->template->assign_block_vars('categories', [
@@ -1238,7 +1297,7 @@ class acp_categories_controller implements acp_categories_interface
 				'CAT_NAME'				=> $cat_name,
 		
 				'S_CATEGORY_ACTION'		=> $this->u_action,
-				'S_IDX_TYPE'			=> (sizeof($index)) ? $idx_type : '',
+				'S_IDX_TYPE'			=> (!empty($index)) ? $idx_type : '',
 				'S_SORT_MAIN'			=> ($cat_parent == 0) ? true : false,
 		
 				'U_SORT_LEVEL_ZERO'		=> "{$this->u_action}&amp;action=asc_sort&amp;cat_id=0",

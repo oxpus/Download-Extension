@@ -31,11 +31,15 @@ var dlAjaxUrl = '{{ U_DL_AJAX }}';
 			{% for downloads in loops.downloads %}
 			<li class="row">
 				<dl>
-					<dt>{{ downloads.STATUS }} <a href="{{ downloads.U_DL_LINK }}"><label>{{ downloads.DESCRIPTION }}</label></a> <span>{{ downloads.HACK_VERSION }}</span><br />{{ lang('DL_CAT_NAME') }}{{ lang('COLON') }} <a href="{{ downloads.U_CAT_VIEW }}">{{ downloads.CAT_NAME }}</a></dt>
+					<dt>
+						{{ downloads.STATUS }} <a href="{{ downloads.U_DL_LINK }}"><label>{{ downloads.DESCRIPTION }}</label></a>{{ downloads.HACK_VERSION }}
+						{% EVENT dlext_overview_download_title_append %}
+						<br />{{ lang('DL_CAT_NAME') }}{{ lang('COLON') }} <a href="{{ downloads.U_CAT_VIEW }}">{{ downloads.CAT_NAME }}</a>
+					</dt>
 					<dd class="topics">{{ downloads.FILE_SIZE }}</dd>
 					<dd class="posts">{{ downloads.FILE_KLICKS }} | {{ downloads.FILE_OVERALL_KLICKS }}</dd>
 					{% if S_ENABLE_RATE %}
-					<dd class="lastpost">{% if downloads.RATING_IMG %}<div id="rating_{{ downloads.DF_ID }}">{{ downloads.RATING_IMG }}<br />{{ downloads.RATINGS }}</div>{% endif %}</dd>
+					<dd class="lastpost">{% if downloads.RATING_IMG %}<div id="rating_{{ downloads.DF_ID }}">{{ downloads.RATING_IMG }}</div>{% endif %}</dd>
 					{% endif %}
 				</dl>
 			</li>

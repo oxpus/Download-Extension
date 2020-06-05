@@ -26,8 +26,10 @@ class acp_files_controller implements acp_files_interface
 	public $phpbb_container;
 	public $phpbb_path_helper;
 	public $phpbb_log;
+	public $phpbb_dispatcher;
 
 	public $config;
+	public $config_text;
 	public $helper;
 	public $language;
 	public $request;
@@ -38,7 +40,6 @@ class acp_files_controller implements acp_files_interface
 	public $ext_path_ajax;
 
 	public $dlext_auth;
-	public $dlext_email;
 
 	protected $dlext_extra;
 	protected $dlext_files;
@@ -55,6 +56,7 @@ class acp_files_controller implements acp_files_interface
 	 * @param \phpbb\log\log_interface 				$log
 	 * @param \phpbb\auth\auth						$auth
 	 * @param \phpbb\user							$user
+	 * @param \phpbb\event\dispatcher_interface		$phpbb_dispatcher
 	 */
 	public function __construct(
 		$phpEx,
@@ -65,8 +67,8 @@ class acp_files_controller implements acp_files_interface
 		\phpbb\log\log_interface $log,
 		\phpbb\auth\auth $auth,
 		\phpbb\user $user,
+		\phpbb\event\dispatcher_interface $phpbb_dispatcher,
 		$dlext_auth,
-		$dlext_email,
 		$dlext_extra,
 		$dlext_files,
 		$dlext_format,
@@ -82,8 +84,10 @@ class acp_files_controller implements acp_files_interface
 		$this->phpbb_log				= $log;
 		$this->auth						= $auth;
 		$this->user						= $user;
+		$this->phpbb_dispatcher			= $phpbb_dispatcher;
 
 		$this->config					= $this->phpbb_container->get('config');
+		$this->config_text				= $this->phpbb_container->get('config_text');
 		$this->helper					= $this->phpbb_container->get('controller.helper');
 		$this->language					= $this->phpbb_container->get('language');
 		$this->request					= $this->phpbb_container->get('request');
@@ -94,7 +98,6 @@ class acp_files_controller implements acp_files_interface
 		$this->ext_path_ajax			= $this->ext_path_web . 'assets/javascript/';
 
 		$this->dlext_auth				= $dlext_auth;
-		$this->dlext_email				= $dlext_email;
 		$this->dlext_extra				= $dlext_extra;
 		$this->dlext_files				= $dlext_files;
 		$this->dlext_format				= $dlext_format;
@@ -134,7 +137,9 @@ class acp_files_controller implements acp_files_interface
 		{
 			$action = '';
 		}
-		
+
+		$notification = $this->phpbb_container->get('notification_manager');
+
 		include($this->ext_path . 'phpbb/includes/fields.' . $this->phpEx);
 		$cp = new \oxpus\dlext\phpbb\includes\custom_profile();
 		
@@ -250,11 +255,6 @@ class acp_files_controller implements acp_files_interface
 					$this->template->assign_var('S_POPUP_NOTIFY', true);
 				}
 		
-				if (isset($this->config['dl_disable_email']) && !$this->config['dl_disable_email'])
-				{
-					$this->template->assign_var('S_EMAIL_BLOCK', true);
-				}
-		
 				$this->template->assign_var('S_CHANGE_TIME', true);
 		
 				$thumbnail = (isset($dl_file['thumbnail'])) ? $dl_file['thumbnail'] : '';
@@ -300,7 +300,17 @@ class acp_files_controller implements acp_files_interface
 				$s_file_traffic_range	= str_replace('value="kb">', 'value="kb" selected="selected">', $s_select_datasize);
 				$s_file_extsize_select	= str_replace('value="byte">', 'value="byte" selected="selected">', $s_select_datasize);
 			}
-		
+
+			if (isset($this->config['dl_disable_email']) && !$this->config['dl_disable_email'])
+			{
+				$this->template->assign_var('S_EMAIL_BLOCK', true);
+			}
+
+			if ($this->config['dl_traffic_off'])
+			{
+				$s_hidden_fields += ['file_traffic' => 0];
+			}
+
 			$s_file_traffic_range = '<select name="dl_t_quote">' . $s_file_traffic_range;
 			$s_file_extsize_select = '<select name="dl_e_quote">' . $s_file_extsize_select;
 		
@@ -339,7 +349,8 @@ class acp_files_controller implements acp_files_interface
 			}
 		
 			$ext_blacklist = $this->dlext_auth->get_ext_blacklist();
-			if (sizeof($ext_blacklist))
+
+			if (!empty($ext_blacklist))
 			{
 				$blacklist_explain = '<br />' . $this->language->lang('DL_FORBIDDEN_EXT_EXPLAIN', implode(', ', $ext_blacklist));
 			}
@@ -375,10 +386,24 @@ class acp_files_controller implements acp_files_interface
 			{
 				$s_select_ver_del = '';
 			}
-		
+
+			$dl_file_edit_hint				= $this->config_text->get('dl_file_edit_hint');
+
+			if ($dl_file_edit_hint)
+			{
+				$dl_file_edit_hint_uid		= $this->config['dl_file_edit_hint_bbcode'];
+				$dl_file_edit_hint_bitfield	= $this->config['dl_file_edit_hint_bitfield'];
+				$dl_file_edit_hint_flags	= $this->config['dl_file_edit_hint_flags'];
+				$formated_hint_text 		= generate_text_for_display($dl_file_edit_hint, $dl_file_edit_hint_uid, $dl_file_edit_hint_bitfield, $dl_file_edit_hint_flags);
+			}
+			else
+			{
+				$formated_hint_text			= '';
+			}
+
 			add_form_key('dl_adm_edit');
 		
-			$this->template->assign_vars([
+			$template_ary = [
 				'L_DL_APPROVE_EXPLAIN'				=> 'DL_APPROVE',
 				'L_DL_CAT_NAME_EXPLAIN'				=> 'DL_CHOOSE_CATEGORY',
 				'L_DL_DESCRIPTION_EXPLAIN'			=> 'DL_FILE_DESCRIPTION',
@@ -431,6 +456,7 @@ class acp_files_controller implements acp_files_interface
 				'ENCTYPE'				=> $enctype,
 				'THUMBNAIL'				=> DL_EXT_FILEBASE_PATH . 'thumbs/' . $thumbnail,
 				'FILE_EXT_SIZE'			=> $file_extern_size_out,
+				'FORMATED_HINT_TEXT'	=> $formated_hint_text,
 		
 				'S_TODO_LINK_ONOFF'		=> ($this->config['dl_todo_onoff']) ? true : false,
 				'S_SELECT_VERSION'		=> $s_select_version,
@@ -440,11 +466,30 @@ class acp_files_controller implements acp_files_interface
 				'S_FILE_TRAFFIC_RANGE'	=> $s_file_traffic_range,
 				'S_FILE_EXT_SIZE_RANGE'	=> $s_file_extsize_select,
 				'S_DOWNLOADS_ACTION'	=> $this->u_action,
+				'S_DL_TRAFFIC'			=> $this->config['dl_traffic_off'],
 				'S_HIDDEN_FIELDS'		=> build_hidden_fields($s_hidden_fields),
 		
 				'U_BACK'				=> $this->u_action . '&amp;cat_id=' . $cat_id,
-			]);
-		
+			];
+
+			/**
+			 * Display extra data to save them with the download
+			 *
+			 * @event 		dlext.acp_files_template_before
+			 * @var string	df_id			download ID
+			 * @var string	cat_id			download category ID
+			 * @var array	template_ary	array of download's data for edit
+			 * @since 8.1.0-RC2
+			 */
+			$vars = array(
+				'df_id',
+				'cat_id',
+				'template_ary',
+			);
+			extract($this->phpbb_dispatcher->trigger_event('dlext.acp_files_template_before', compact($vars)));
+
+			$this->template->assign_vars($template_ary);
+
 			// Init and display the custom fields with the existing data
 			$cp->get_profile_fields($df_id);
 			$cp->generate_profile_fields($this->user->get_iso_lang_id());
@@ -459,7 +504,7 @@ class acp_files_controller implements acp_files_interface
 				{
 					$dl_ids = [];
 		
-					for ($i = 0; $i < sizeof($file_ver_del); $i++)
+					for ($i = 0; $i < count($file_ver_del); ++$i)
 					{
 						$dl_ids[] = intval($file_ver_del[$i]);
 					}
@@ -472,7 +517,7 @@ class acp_files_controller implements acp_files_interface
 						$path = $this->db->sql_fetchfield('path');
 						$this->db->sql_freeresult($result);
 		
-						if (sizeof($dl_ids))
+						if (!empty($dl_ids))
 						{
 							$sql = 'SELECT ver_real_file FROM ' . DL_VERSIONS_TABLE . '
 								WHERE ' . $this->db->sql_in_set('ver_id', $dl_ids);
@@ -505,7 +550,7 @@ class acp_files_controller implements acp_files_interface
 						}
 					}
 		
-					if (sizeof($dl_ids))
+					if (!empty($dl_ids))
 					{
 						$sql = 'DELETE FROM ' . DL_VERSIONS_TABLE . '
 							WHERE ' . $this->db->sql_in_set('ver_id', $dl_ids);
@@ -530,7 +575,7 @@ class acp_files_controller implements acp_files_interface
 						'file_ver_opt'	=> 3,
 					];
 		
-					for ($i = 0; $i < sizeof($file_ver_del); $i++)
+					for ($i = 0; $i < count($file_ver_del); ++$i)
 					{
 						$s_hidden_fields += ['file_ver_del[' . $i . ']' => $file_ver_del[$i]];
 					}
@@ -618,7 +663,7 @@ class acp_files_controller implements acp_files_interface
 				$cp->submit_cp_field($this->user->get_iso_lang_id(), $cp_data, $error);
 		
 				// Stop here, if custom fields are invalid!
-				if (sizeof($error))
+				if (!empty($error))
 				{
 					trigger_error(implode('<br />', $error), E_USER_WARNING);
 				}
@@ -647,10 +692,11 @@ class acp_files_controller implements acp_files_interface
 						}
 		
 						$i = 0;
+
 						while(@file_exists(DL_EXT_FILEBASE_PATH. 'downloads/' . $file_path_new . $new_real_file))
 						{
 							$new_real_file = md5($i . $file_name);
-							$i++;
+							++$i;
 						}
 		
 						@copy(DL_EXT_FILEBASE_PATH. 'downloads/' . $file_path_old . $file_name, DL_EXT_FILEBASE_PATH. 'downloads/' . $file_path_new . $new_real_file);
@@ -666,10 +712,11 @@ class acp_files_controller implements acp_files_interface
 							$new_real_file = md5($dl_file['real_file']);
 		
 							$i = 0;
+
 							while(@file_exists(DL_EXT_FILEBASE_PATH. 'downloads/' . $file_path_old . $new_real_file))
 							{
 								$new_real_file = md5($i . $dl_file['real_file']);
-								$i++;
+								++$i;
 							}
 		
 							@copy(DL_EXT_FILEBASE_PATH. 'downloads/' . $file_path_old . $real_file_old, DL_EXT_FILEBASE_PATH. 'downloads/' . $file_path_old . $new_real_file);
@@ -720,10 +767,11 @@ class acp_files_controller implements acp_files_interface
 					$new_real_file = md5($file_name);
 		
 					$i = 0;
+
 					while(@file_exists(DL_EXT_FILEBASE_PATH. 'downloads/' . $file_path . $new_real_file))
 					{
 						$new_real_file = md5($i . $file_name);
-						$i++;
+						++$i;
 					}
 		
 					@copy(DL_EXT_FILEBASE_PATH. 'downloads/' . $file_path . $file_name, DL_EXT_FILEBASE_PATH. 'downloads/' . $file_path . $new_real_file);
@@ -731,7 +779,7 @@ class acp_files_controller implements acp_files_interface
 					@unlink(DL_EXT_FILEBASE_PATH. 'downloads/' . $file_path . $file_name);
 				}
 		
-				if (!$file_extern)
+				if (!$file_extern && $file_name)
 				{
 					$file_size = sprintf("%u", @filesize(DL_EXT_FILEBASE_PATH. 'downloads/' . $file_path . $new_real_file));
 		
@@ -889,8 +937,23 @@ class acp_files_controller implements acp_files_interface
 							'klicks' => 0,
 						];
 					}
-		
+
+					/**
+					 * Save additional data for the download
+					 *
+					 * @event 		dlext.acp_files_edit_sql_insert_before
+					 * @var string	df_id			download ID
+					 * @var array	sql_array		array of download's data for storage
+					 * @since 8.1.0-RC2
+					 */
+					$vars = array(
+						'df_id',
+						'sql_array',
+					);
+					extract($this->phpbb_dispatcher->trigger_event('dlext.acp_files_edit_sql_insert_before', compact($vars)));
+
 					$sql = 'UPDATE ' . DOWNLOADS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', $sql_array) . ' WHERE id = ' . (int) $df_id;
+					$this->db->sql_query($sql);
 		
 					$message = $this->language->lang('DOWNLOAD_UPDATED');
 				}
@@ -904,212 +967,236 @@ class acp_files_controller implements acp_files_interface
 					];
 		
 					$sql = 'INSERT INTO ' . DOWNLOADS_TABLE . ' ' . $this->db->sql_build_array('INSERT', $sql_array);
-		
+					$this->db->sql_query($sql);
+					$next_id = $this->db->sql_nextid();
+
+					/**
+					 * Save additional data for the download
+					 *
+					 * @event 		dlext.acp_files_add_sql_insert_after
+					 * @var string	next_id			download ID
+					 * @var array	sql_array		array of download's data for storage
+					 * @since 8.1.0-RC2
+					 */
+					$vars = array(
+						'next_id',
+						'sql_array',
+					);
+					extract($this->phpbb_dispatcher->trigger_event('dlext.acp_files_add_sql_insert_after', compact($vars)));
+
 					$message = $this->language->lang('DOWNLOAD_ADDED');
 				}
 		
-				$this->db->sql_query($sql);
-		
-				$dl_t_id = ($df_id) ? $df_id : $this->db->sql_nextid();
-		
-				if ($this->config['dl_enable_dl_topic'] && $approve)
+				$dl_t_id = ($df_id) ? $df_id : $next_id;
+
+				$thumb_form_name	= 'thumb_name';
+				$thumb_message		= '';
+
+				if ($this->config['dl_thumb_fsize'] && $index[$cat_id]['allow_thumbs'])
 				{
-					if ($df_id)
-					{
-						$this->dlext_topic->update_topic($dl_file['dl_topic'], $dl_t_id);
-					}
-					else
-					{
-						$this->dlext_topic->gen_dl_topic($dl_t_id);
-					}
-				}
-		
-				$thumb_message = '';
-		
-				if ($index[$cat_id]['allow_thumbs'] && $this->config['dl_thumb_fsize'])
-				{
-					$thumb_error = false;
-		
-					if (!$del_thumb)
-					{
-						$this->user->add_lang('posting');
-		
-						$min_pic_width = 1;
-		
-						$factory = $this->phpbb_container->get('files.factory');
-						$allowed_imagetypes = ['gif','png','jpg','bmp'];
-						$upload = $factory->get('upload')
-							->set_allowed_extensions($allowed_imagetypes)
-							->set_max_filesize($this->config['dl_thumb_fsize'])
-							->set_allowed_dimensions(
-								$min_pic_width,
-								$min_pic_width,
-								$this->config['dl_thumb_xsize'],
-								$this->config['dl_thumb_ysize'])
-							->set_disallowed_content((isset($this->config['mime_triggers']) ? explode('|', $this->config['mime_triggers']) : false));
-		
-						$form_name = 'thumb_name';
-		
-						$upload_file = $this->request->file($form_name);
-						unset($upload_file['local_mode']);
-						$thumb_file = $upload->handle_upload('files.types.form', $form_name);
-		
-						$thumb_size = $upload_file['size'];
-						$thumb_temp = $upload_file['tmp_name'];
-						$thumb_name = $upload_file['name'];
-		
-						if (sizeof($thumb_file->error) && $thumb_name)
-						{
-							$thumb_file->remove();
-							trigger_error(implode('<br />', $thumb_file->error), E_USER_ERROR);
-						}
-		
-						if ($thumb_name)
-						{
-							$pic_size = getimagesize($thumb_temp);
-							$pic_width = $pic_size[0];
-							$pic_height = $pic_size[1];
-		
-							if (!$pic_width || !$pic_height)
-							{
-								$thumb_file->remove();
-								$thumb_error = true;
-							}
-		
-							if ($pic_width > $this->config['dl_thumb_xsize'] || $pic_height > $this->config['dl_thumb_ysize'] || (sprintf("%u", @filesize($thumb_temp)) > $this->config['dl_thumb_fsize']))
-							{
-								$thumb_file->remove();
-								$thumb_error = true;
-							}
-		
-							if (!$thumb_error)
-							{
-								$df_id = ($df_id) ? $df_id : $this->db->sql_nextid();
-								@unlink(DL_EXT_FILEBASE_PATH . 'thumbs/' . $dl_file['thumbnail']);
-								@unlink(DL_EXT_FILEBASE_PATH . 'thumbs/' . $df_id . '_' . $thumb_name);
-		
-								$upload_file['name'] = $df_id . '_' . $thumb_name;
-								$thumb_file->set_upload_ary($upload_file);
-								$dest_folder = str_replace($phpbb_root_path, '', substr(DL_EXT_FILEBASE_PATH . 'thumbs/', 0, -1));
-		
-								$error = $thumb_file->move_file($dest_folder, false, false, CHMOD_ALL);
-								$thumb_message = '<br />' . $this->language->lang('DL_THUMB_UPLOAD');
-		
-								$sql = 'UPDATE ' . DOWNLOADS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', [
-									'thumbnail' => $df_id . '_' . $thumb_name]) . ' WHERE id = ' . (int) $df_id;
-									$this->db->sql_query($sql);
-							}
-							else
-							{
-								$sql = 'UPDATE ' . DOWNLOADS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', [
-									'thumbnail' => '']) . ' WHERE id = ' . (int) $df_id;
-								$this->db->sql_query($sql);
-							}
-						}
-					}
-					else if ($del_thumb)
-					{
-						$sql = 'UPDATE ' . DOWNLOADS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', [
-							'thumbnail' => '']) . ' WHERE id = ' . (int) $df_id;
-						$this->db->sql_query($sql);
-		
-						@unlink(DL_EXT_FILEBASE_PATH . 'thumbs/' . $dl_file['thumbnail']);
-		
-						$thumb_message = '<br />' . $this->anguage->lang('DL_THUMB_DEL');
-					}
-				}
-		
-				if ($approve)
-				{
-					$processing_user = $this->dlext_auth->dl_auth_users($cat_id, 'auth_dl');
-					$email_template = ($df_id) ? 'downloads_change_notify' : 'downloads_new_notify';
+					$allow_thumbs_upload = true;
 				}
 				else
 				{
-					$processing_user = $this->dlext_auth->dl_auth_users($cat_id, 'auth_mod');
-					$email_template = 'downloads_approve_notify';
+					$allow_thumbs_upload = false;
 				}
-		
-				$sql_fav_user = '';
-		
+
+				/**
+				 * Manipulate thumbnail upload
+				 *
+				 * @event 		dlext.acp_edit_thumbnail_before
+			 	 * @var bool  	thumb_form_name			thumbnail upload form field
+				 * @var bool  	allow_thumbs_upload		enable/disable thumbnail upload
+				 * @since 8.1.0-RC2
+				 */
+				
+				$vars = array(
+					'thumb_form_name',
+					'allow_thumbs_upload',
+				);
+				extract($this->phpbb_dispatcher->trigger_event('dlext.acp_edit_thumbnail_before', compact($vars)));
+
+				if ($allow_thumbs_upload)
+				{
+					$thumb_error = false;
+
+					$this->user->add_lang('posting');
+
+					$min_pic_width = 1;
+
+					$factory = $this->phpbb_container->get('files.factory');
+					$allowed_imagetypes = ['gif','png','jpg','bmp'];
+					$upload = $factory->get('upload')
+						->set_allowed_extensions($allowed_imagetypes)
+						->set_max_filesize($this->config['dl_thumb_fsize'])
+						->set_allowed_dimensions(
+							$min_pic_width,
+							$min_pic_width,
+							$this->config['dl_thumb_xsize'],
+							$this->config['dl_thumb_ysize'])
+						->set_disallowed_content((isset($this->config['mime_triggers']) ? explode('|', $this->config['mime_triggers']) : false));
+
+
+					$upload_file = $this->request->file($thumb_form_name);
+					unset($upload_file['local_mode']);
+					$thumb_file = $upload->handle_upload('files.types.form', $thumb_form_name);
+
+					$thumb_size = $upload_file['size'];
+					$thumb_temp = $upload_file['tmp_name'];
+					$thumb_name = $upload_file['name'];
+
+					if (!empty($thumb_file->error) && $thumb_name)
+					{
+						$thumb_file->remove();
+						trigger_error(implode('<br />', $thumb_file->error), E_USER_ERROR);
+					}
+
+					if ($thumb_name)
+					{
+						$pic_size = getimagesize($thumb_temp);
+						$pic_width = $pic_size[0];
+						$pic_height = $pic_size[1];
+
+						if (!$pic_width || !$pic_height)
+						{
+							$thumb_file->remove();
+							$thumb_error = true;
+						}
+
+						if ($pic_width > $this->config['dl_thumb_xsize'] || $pic_height > $this->config['dl_thumb_ysize'] || (sprintf("%u", @filesize($thumb_temp)) > $this->config['dl_thumb_fsize']))
+						{
+							$thumb_file->remove();
+							$thumb_error = true;
+						}
+
+						/**
+						 * Manipulate thumbnail data before storage
+						 *
+						 * @event 		dlext.acp_files_sql_thumbnail_before
+						 * @var string	foreign_thumb_message	message after manipulate thumbnail
+						 * @var bool	thumb_error				thumbnail error (yes to break here)
+						 * @var string	thumb_name				thumbnail name (empty to avoid overwrite foreign storage)
+						 * @var string	df_id					download ID
+						 * @var array	sql_array				array of download's data for storage
+						 * @since 8.1.0-RC2
+						 */
+						$foreign_thumb_message = '';
+						$vars = array(
+							'foreign_thumb_message',
+							'thumb_error',
+							'thumb_name',
+							'df_id',
+							'sql_array',
+						);
+						extract($this->phpbb_dispatcher->trigger_event('dlext.acp_files_sql_thumbnail_before', compact($vars)));
+
+						if (!$thumb_error)
+						{
+							$df_id = ($df_id) ? $df_id : $this->db->sql_nextid();
+							@unlink(DL_EXT_FILEBASE_PATH . 'thumbs/' . $dl_file['thumbnail']);
+							@unlink(DL_EXT_FILEBASE_PATH . 'thumbs/' . $df_id . '_' . $thumb_name);
+
+							$upload_file['name'] = $df_id . '_' . $thumb_name;
+							$thumb_file->set_upload_ary($upload_file);
+							$dest_folder = str_replace($phpbb_root_path, '', substr(DL_EXT_FILEBASE_PATH . 'thumbs/', 0, -1));
+
+							$error = $thumb_file->move_file($dest_folder, false, false, CHMOD_ALL);
+							$thumb_message = '<br />' . $this->language->lang('DL_THUMB_UPLOAD');
+
+							$sql = 'UPDATE ' . DOWNLOADS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', [
+								'thumbnail' => $df_id . '_' . $thumb_name]) . ' WHERE id = ' . (int) $df_id;
+								$this->db->sql_query($sql);
+						}
+						else if (!$thumb_name)
+						{
+							$sql = 'UPDATE ' . DOWNLOADS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', [
+								'thumbnail' => '']) . ' WHERE id = ' . (int) $df_id;
+							$this->db->sql_query($sql);
+						}
+
+						if ($foreign_thumb_message)
+						{
+							$thumb_message = '<br />' . $foreign_thumb_message;
+						}
+					}
+				}
+
+				if ($del_thumb)
+				{
+					$sql = 'UPDATE ' . DOWNLOADS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', [
+						'thumbnail' => '']) . ' WHERE id = ' . (int) $df_id;
+					$this->db->sql_query($sql);
+
+					@unlink(DL_EXT_FILEBASE_PATH . 'thumbs/' . $dl_file['thumbnail']);
+
+					$thumb_message = '<br />' . $this->language->lang('DL_THUMB_DEL');
+				}
+
 				// Update Custom Fields
 				$cp->update_profile_field_data($dl_t_id, $cp_data);
-		
-				if ($df_id)
+
+				if (!$this->config['dl_disable_email'] && !$send_notify && $approve)
 				{
-					$sql = 'SELECT fav_user_id FROM ' . DL_FAVORITES_TABLE . '
-						WHERE fav_dl_id = ' . (int) $df_id;
-					$result = $this->db->sql_query($sql);
-		
-					$fav_user = [];
-					while ($row = $this->db->sql_fetchrow($result))
+					if ($df_id)
 					{
-						$fav_user[] = $row['fav_user_id'];
+						$sql = 'SELECT fav_user_id FROM ' . DL_FAVORITES_TABLE . '
+								WHERE fav_dl_id = ' . (int) $df_id . '
+								AND ' . $this->db->sql_in_set('fav_user_id', $this->dlext_auth->dl_auth_users($cat_id, 'auth_view'));
+						$result = $this->db->sql_query($sql);
+
+						$processing_user = [];
+
+						while ($row = $this->db->sql_fetchrow($result))
+						{
+							$processing_user[] = $row['fav_user_id'];
+						}
+
+						$this->db->sql_freeresult($result);
+
+						$notification_data = [
+							'user_ids'		=> $processing_user,
+							'description'	=> $description,
+							'long_desc'		=> $long_desc,
+							'df_id'			=> $df_id,
+							'cat_name'		=> $index[$cat_id]['cat_name_nav'],
+						];
+
+						$notification->add_notifications('oxpus.dlext.notification.type.update', $notification_data);
+						$notification->delete_notifications('oxpus.dlext.notification.type.approve', $df_id);
+
+						$this->dlext_topic->update_topic($dl_file['dl_topic'], $df_id);
 					}
-					$this->db->sql_freeresult($result);
-		
-					$sql_fav_user = (sizeof($fav_user)) ? ' AND ' . $this->db->sql_in_set('user_id', $fav_user) : '';
+					else
+					{
+						$notification_data = [
+							'user_ids'		=> $this->dlext_auth->dl_auth_users($cat_id, 'auth_view'),
+							'description'	=> $description,
+							'long_desc'		=> $long_desc,
+							'df_id'			=> $dl_t_id,
+							'cat_name'		=> $index[$cat_id]['cat_name_nav'],
+						];
+	
+						$notification->add_notifications('oxpus.dlext.notification.type.dlext', $notification_data);
+	
+						$this->dlext_topic->gen_dl_topic($dl_t_id);
+					}
 				}
-		
-				if (!$this->config['dl_disable_email'] && !$send_notify && $df_id && $sql_fav_user)
+
+				if (!$approve)
 				{
-					$sql = 'SELECT user_email, username, user_lang FROM ' . USERS_TABLE . '
-						WHERE user_allow_fav_download_email = 1
-							AND ' . $this->db->sql_in_set('user_id', explode(',', $processing_user)) . $sql_fav_user;
-		
-					$mail_data = [
-						'email_template'	=> $email_template,
-						'query'				=> $sql,
-						'description'		=> $description,
-						'long_desc'			=> $long_desc,
-						'cat_name'			=> $index[$cat_id]['cat_name_nav'],
-						'cat_id'			=> $cat_id,
+					$item_id = ($dl_t_id) ? $dl_t_id : $df_id;
+	
+					$notification_data = [
+						'user_ids'		=> $this->dlext_auth->dl_auth_users($cat_id, 'auth_mod'),
+						'description'	=> $description,
+						'long_desc'		=> $long_desc,
+						'df_id'			=> $item_id,
+						'cat_name'		=> $index[$cat_id]['cat_name_nav'],
 					];
-		
-					$this->dlext_email->send_dl_notify($mail_data);
+
+					$notification->add_notifications('oxpus.dlext.notification.type.approve', $notification_data);
+					$notification->delete_notifications('oxpus.dlext.notification.type.update', $item_id);
 				}
-				else if (!$this->config['dl_disable_email'] && !$send_notify && !$df_id)
-				{
-					$sql = 'SELECT user_email, username, user_lang FROM ' . USERS_TABLE . '
-						WHERE user_allow_new_download_email = 1
-							AND ' . $this->db->sql_in_set('user_id', explode(',', $processing_user));
-		
-					$mail_data = [
-						'email_template'	=> $email_template,
-						'query'				=> $sql,
-						'description'		=> $description,
-						'long_desc'			=> $long_desc,
-						'cat_name'			=> $index[$cat_id]['cat_name_nav'],
-						'cat_id'			=> $cat_id,
-					];
-		
-					$this->dlext_email->send_dl_notify($mail_data);
-				}
-		
-				if (!$this->config['dl_disable_popup'] && !$disable_pnotify)
-				{
-					$sql = '';
-		
-					if ($df_id && $sql_fav_user)
-					{
-						$sql = 'UPDATE ' . USERS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', [
-							'user_new_download' => 1]) . " WHERE user_allow_fav_download_popup = 1 $sql_fav_user AND " . $this->db->sql_in_set('user_id', explode(',', $processing_user));
-					}
-					else if (!$df_id)
-					{
-						$sql = 'UPDATE ' . USERS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', [
-							'user_new_download' => 1]) . " WHERE user_allow_new_download_popup = 1 $sql_fav_user AND " . $this->db->sql_in_set('user_id', explode(',', $processing_user));
-					}
-		
-					if ($sql)
-					{
-						$this->db->sql_query($sql);
-					}
-				}
-		
-				$notification = $this->phpbb_container->get('notification_manager');
-				$notification_data = ['notification_id' => $dl_t_id];
-				$notification->add_notifications('oxpus.dlext.notification.type.dlext', $notification_data);
 			}
 		
 			if ($df_id)
@@ -1164,7 +1251,7 @@ class acp_files_controller implements acp_files_interface
 		
 					if (isset($real_ver_file[$df_id]))
 					{
-						for ($j = 0; $j < sizeof($real_ver_file[$df_id]); $j++)
+						for ($j = 0; $j < count($real_ver_file[$df_id]); ++$j)
 						{
 							@copy(DL_EXT_FILEBASE_PATH. 'downloads/' . $old_path . $real_ver_file[$df_id][$j], DL_EXT_FILEBASE_PATH. 'downloads/' . $new_path . $real_ver_file[$df_id][$j]);
 							@chmod(DL_EXT_FILEBASE_PATH. 'downloads/' . $new_path . $real_ver_file[$df_id][$j], 0777);
@@ -1193,7 +1280,7 @@ class acp_files_controller implements acp_files_interface
 		
 				@unlink(DL_EXT_FILEBASE_PATH . 'thumbs/' . $dl_file['thumbnail']);
 		
-				$sql = 'SELECT description, dl_topic FROM ' . DOWNLOADS_TABLE . '
+				$sql = 'SELECT cat, description, dl_topic FROM ' . DOWNLOADS_TABLE . '
 					WHERE id = ' . (int) $df_id;
 				$result = $this->db->sql_query($sql);
 				$row = $this->db->sql_fetchrow($result);
@@ -1207,13 +1294,14 @@ class acp_files_controller implements acp_files_interface
 					$this->dlext_topic->delete_topic($del_t_id, $topic_drop_mode, $dl_t_ids);
 				}
 		
-				$dl_desc = $row['description'];
+				$dl_desc	= $row['description'];
+				$dl_cat		= $row['cat'];
 		
 				$sql = 'DELETE FROM ' . DOWNLOADS_TABLE . '
 					WHERE id = ' . (int) $df_id;
 				$this->db->sql_query($sql);
 		
-				if (sizeof($ver_ids))
+				if (!empty($ver_ids))
 				{
 					$sql = 'DELETE FROM ' . DL_VERSIONS_TABLE . '
 						WHERE ' . $this->db->sql_in_set('ver_id', $ver_ids);
@@ -1247,7 +1335,30 @@ class acp_files_controller implements acp_files_interface
 				$sql = 'DELETE FROM ' . DL_FAVORITES_TABLE . '
 					WHERE fav_dl_id = ' . (int) $df_id;
 				$this->db->sql_query($sql);
-		
+
+				/**
+				 * Workflow after delete download
+				 *
+				 * @event 		dlext.acp_files_delete_download_after
+				 * @var string	df_id		download ID
+				 * @var string	dl_cat		download category ID
+				 * @since 8.1.0-RC2
+				 */
+				$vars = array(
+					'df_id',
+					'dl_cat',
+				);
+				extract($this->phpbb_dispatcher->trigger_event('dlext.acp_files_delete_download_after', compact($vars)));
+
+				$notification->delete_notifications([
+					'oxpus.dlext.notification.type.approve',
+					'oxpus.dlext.notification.type.broken',
+					'oxpus.dlext.notification.type.dlext',
+					'oxpus.dlext.notification.type.update',
+					'oxpus.dlext.notification.type.capprove',
+					'oxpus.dlext.notification.type.comments',
+				], $df_id);
+
 				$this->phpbb_log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_DEL_FILE', false, [$dl_desc]);
 		
 				// Purge the files cache

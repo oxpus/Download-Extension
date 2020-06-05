@@ -152,7 +152,7 @@ class hacklist
 		$hacklist = $this->dlext_hacklist->hacks_index();
 		$status = $this->config['dl_use_hacklist'];
 
-		if (!$status || !sizeof($hacklist))
+		if (!$status || empty($hacklist))
 		{
 			redirect(append_sid($this->root_path . 'index.' . $this->php_ext));
 		}
@@ -203,9 +203,9 @@ class hacklist
 			'S_FORM_ACTION'		=> $this->helper->route('oxpus_dlext_hacklist'),
 		]);
 
-		if (sizeof($dl_files))
+		if (!empty($dl_files))
 		{
-			for ($i = 0; $i < sizeof($dl_files); $i++)
+			for ($i = 0; $i < count($dl_files); ++$i)
 			{
 				$cat_id = $dl_files[$i]['cat'];
 				if ($hacklist[$cat_id])

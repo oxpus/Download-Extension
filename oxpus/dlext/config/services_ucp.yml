@@ -8,6 +8,7 @@ services:
             - '@language'
             - '@config'
             - '@template'
+            - '@dispatcher'
     oxpus.dlext.ucp_privacy_controller:
         class: oxpus\dlext\controller\ucp\ucp_privacy_controller
         arguments:

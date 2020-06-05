@@ -56,6 +56,8 @@ class index
 	/** @var extension owned objects */
 	protected $ext_path;
 
+	protected $phpbb_dispatcher;
+
 	protected $dlext_auth;
 	protected $dlext_files;
 	protected $dlext_format;
@@ -79,6 +81,7 @@ class index
 	* @param \phpbb\template\template				$template
 	* @param \phpbb\user							$user
 	* @param \phpbb\language\language				$language
+	* @param \phpbb\event\dispatcher_interface		$phpbb_dispatcher
 	*/
 	public function __construct(
 		$root_path,
@@ -94,6 +97,7 @@ class index
 		\phpbb\template\template $template,
 		\phpbb\user $user,
 		\phpbb\language\language $language,
+		\phpbb\event\dispatcher_interface $phpbb_dispatcher,
 		$dlext_auth,
 		$dlext_files,
 		$dlext_format,
@@ -115,6 +119,7 @@ class index
 		$this->template 				= $template;
 		$this->user 					= $user;
 		$this->language					= $language;
+		$this->phpbb_dispatcher			= $phpbb_dispatcher;
 
 		$this->ext_path					= $this->phpbb_extension_manager->get_extension_path('oxpus/dlext', true);
 		$this->ext_path_web				= $this->phpbb_path_helper->update_web_root_path($this->ext_path);
@@ -236,7 +241,7 @@ class index
 		}
 		$this->db->sql_freeresult($result);
 		
-		if (sizeof($index) > 0)
+		if (!empty($index))
 		{
 			foreach(array_keys($index) as $cat_id)
 			{
@@ -360,7 +365,7 @@ class index
 				{
 					$this->template->assign_block_vars($block.'.sub', []);
 		
-					for ($j = 0; $j < sizeof($cat_subs); $j++)
+					for ($j = 0; $j < count($cat_subs); ++$j)
 					{
 						$sub_id = $cat_sublevel['cat_id'][$j];
 						$mini_icon = [];
@@ -510,7 +515,26 @@ class index
 		{
 			$dl_files = [];
 			$dl_files = $this->dlext_files->files($cat, $sql_sort_by, $sql_order, $start, $this->config['dl_links_per_page'], 'id, description, desc_uid, desc_bitfield, desc_flags, hack_version, extern, file_size, klicks, overall_klicks, rating, long_desc, long_desc_uid, long_desc_bitfield, long_desc_flags, add_user, add_time, broken', true);
-		
+
+			/**
+			 * Fetch additional data for the downloads
+			 *
+			 * @event 		dlext.index_fetch_download_data
+			 * @var string	cat					download category ID
+			 * @var string	sql_sort_by			sql order by fields
+			 * @var string	sql_order			sql order by direction
+			 * @var string	sql_latest_where	additional where conditions
+			 * @since 8.1.0-RC2
+			 */
+			$sql_latest_where = '';
+			$vars = array(
+				'cat',
+				'sql_sort_by',
+				'sql_order',
+				'sql_latest_where',
+			);
+			extract($this->phpbb_dispatcher->trigger_event('dlext.index_fetch_download_data', compact($vars)));
+
 			if ($this->dlext_auth->cat_auth_comment_read($cat))
 			{
 				$sql = 'SELECT COUNT(dl_id) AS total_comments, id FROM ' . DL_COMMENTS_TABLE . '
@@ -527,7 +551,7 @@ class index
 				$this->db->sql_freeresult($result);
 			}
 		
-			for ($i = 0; $i < sizeof($dl_files); $i++)
+			for ($i = 0; $i < count($dl_files); ++$i)
 			{
 				$file_id = $dl_files[$i]['id'];
 				$mini_file_icon = $this->dlext_status->mini_status_file($cat, $file_id);
@@ -602,19 +626,11 @@ class index
 		
 					if (isset($ratings[$file_id]))
 					{
-						$total_ratings = sizeof($ratings[$file_id]);
-						if ($total_ratings == 1)
-						{
-							$rating_count_text = $this->language->lang('DL_RATING_ONE');
-						}
-						else
-						{
-							$rating_count_text = $this->language->lang('DL_RATING_MORE', $total_ratings);
-						}
+						$total_ratings = count($ratings[$file_id]);
 					}
 					else
 					{
-						$rating_count_text = $this->language->lang('DL_RATING_NONE');
+						$total_ratings = 0;
 					}
 				}
 		
@@ -650,8 +666,7 @@ class index
 					'MINI_IMG'				=> $mini_file_icon,
 					'HACK_VERSION'			=> $hack_version,
 					'LONG_DESC'				=> ($this->config['dl_desc_index']) ? $long_desc : '',
-					'RATING_IMG'			=> $this->dlext_format->rating_img($rating_points, $s_rating_perm, $file_id),
-					'RATINGS'				=> $rating_count_text,
+					'RATING_IMG'			=> $this->dlext_format->rating_img($rating_points, $s_rating_perm, $file_id, $total_ratings),
 					'STATUS'				=> $status,
 					'FILE_SIZE'				=> $file_size,
 					'FILE_KLICKS'			=> $file_klicks,
@@ -664,11 +679,26 @@ class index
 					'U_DIRECT_EDIT'			=> ($cat_edit_link) ? $this->helper->route('oxpus_dlext_mcp_edit', ['cat_id' => $cat, 'df_id' => $file_id]) : '',
 					'U_FILE'				=> $file_url,
 				]);
-		
+			
 				if ($index_cat[$cat]['comments'] && ($this->dlext_auth->cat_auth_comment_read($cat) || $this->dlext_auth->cat_auth_comment_post($cat)))
 				{
 					$this->template->assign_block_vars('downloads.comments', ['U_COMMENT' => $this->helper->route('oxpus_dlext_details', ['view' => 'comment', 'action' => 'view', 'cat_id' => $cat, 'df_id' => $file_id])]);
 				}
+
+				/**
+				 * Fetch additional data for the downloads
+				 *
+				 * @event 		dlext.index_display_data_after
+				 * @var string	block		template row key
+				 * @var array	file_id		download id
+				 * @since 8.1.0-RC2
+				 */
+				$block = 'downloads';
+				$vars = array(
+					'block',
+					'file_id',
+				);
+				extract($this->phpbb_dispatcher->trigger_event('dlext.index_display_data_after', compact($vars)));
 			}
 		}
 		
@@ -711,7 +741,7 @@ class index
 			'S_ENABLE_RATE'			=> (isset($this->config['dl_enable_rate']) && $this->config['dl_enable_rate']) ? true : false,
 		
 			'U_DOWNLOADS'	=> ($cat) ? $this->helper->route('oxpus_dlext_index', ['cat' => $cat]) : $this->helper->route('oxpus_dlext_index'),
-			'U_DL_SEARCH'	=> (sizeof($index) || $cat) ? $this->helper->route('oxpus_dlext_search') : '',
+			'U_DL_SEARCH'	=> (!empty($index) || $cat) ? $this->helper->route('oxpus_dlext_search') : '',
 			'U_DL_AJAX'		=> $this->helper->route('oxpus_dlext_ajax'),
 		]);
 

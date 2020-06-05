@@ -2,7 +2,7 @@ Subject: Neuer Download
 
 Hallo {USERNAME},
 
-du bekommst diese Email, weil es auf {SITENAME} einen neuen bzw. geänderten Download in der Kategorie {CATEGORY} gibt:
+du bekommst diese Email, weil es auf "{SITENAME}" einen neuen Download in der Kategorie "{CATEGORY}" gibt:
 
 ---------------------------
 {DOWNLOAD}
@@ -13,6 +13,6 @@ Wenn du diesen Download ansehen willst, dann klicke auf folgenden Link:
 
 {U_CATEGORY}
 
-Wenn du zukünftig keine Benachrichtigungen hierüber erhalten willst, dann kannst du die Einstellungen in deinem Download Profil ändern.
+Wenn du zukünftig keine Benachrichtigungen hierüber erhalten willst, dann kannst du die Einstellungen in deinem Benutzerprofil ändern.
 
-{BOARD_EMAIL}
+{EMAIL_SIG}

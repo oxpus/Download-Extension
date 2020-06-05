@@ -64,7 +64,11 @@ var dlAjaxUrl = '{{ U_DL_AJAX }}';
 	<ul class="topiclist">
 		<li class="header">
 			<dl>
-				<dt><div class="list-inner">{{ lang('DL_INFO') }} &bull; {{ lang('DL_NAME') }}<br />{{ lang('DL_FILE_DESCRIPTION') }}</div></dt>
+				<dt>
+					<div class="list-inner">
+						{{ lang('DL_INFO') }} &bull; {{ lang('DL_NAME') }}
+						<br />{{ lang('DL_FILE_DESCRIPTION') }}
+					</div></dt>
 				<dd class="topics">{{ lang('DL_FILE_SIZE') }}</dd>
 				<dd class="posts">{{ lang('DL_KLICKS') }}<br />{{ lang('DL_OVERALL_KLICKS') }}</dd>
 				{% for comment_header in loops.comment_header %}
@@ -80,6 +84,7 @@ var dlAjaxUrl = '{{ U_DL_AJAX }}';
 				<dt>
 					<div class="list-inner">{{ downloads.STATUS }}&nbsp;<a href="{{ downloads.U_FILE }}" class="forumtitle">{{ downloads.DESCRIPTION }}</a>
 						&nbsp;{{ downloads.HACK_VERSION }}&nbsp;{{ downloads.MINI_IMG }}
+						{% EVENT dlext_category_download_title_append %}
 					<br />{{ lang('POST_BY_AUTHOR') }} {{ downloads.ADD_USER }} &raquo; <time datetime="{{ downloads.ADD_TIME_RFC }}">{{ downloads.ADD_TIME }}</time>
 					{% if downloads.LONG_DESC %}<hr />{{ downloads.LONG_DESC }}{% endif %}
 					</div>
@@ -100,10 +105,13 @@ var dlAjaxUrl = '{{ U_DL_AJAX }}';
 							<a href="{{ comments.U_COMMENT }}" title="{{ lang('DL_COMMENTS') }}" class="button button-icon-only"><i class="icon fa-comments fa-fw" aria-hidden="true"></i><span>{{ lang('DL_COMMENTS') }}</span></a>&nbsp;
 						</li>
 						{% endif %}
+						<li>
+							<a href="{{ downloads.U_FILE }}" title="{{ lang('DL_DETAIL') }}" class="button button-icon-only"><i class="icon fa-eye fa-fw" aria-hidden="true"></i><span>{{ lang('DL_DETAIL') }}</span></a>&nbsp;
+						</li>
 					</ul>
 					{% endif %}
     				{% endfor %}
-					{% if S_ENABLE_RATE and downloads.RATING_IMG %}<div id="rating_{{ downloads.DF_ID }}">{{ downloads.RATING_IMG }}<br />{{ downloads.RATINGS }}</div>{% endif %}
+					{% if S_ENABLE_RATE and downloads.RATING_IMG %}<div id="rating_{{ downloads.DF_ID }}">{{ downloads.RATING_IMG }}</div>{% endif %}
 				</dd>
 			</dl>
 		</li>

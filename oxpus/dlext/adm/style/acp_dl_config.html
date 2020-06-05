@@ -34,7 +34,10 @@
 
 		<dl>
 			<dt><label for="{{ options.KEY }}">{{ options.TITLE }}{{ lang('COLON') }}</label>{% if options.S_EXPLAIN %}<br /><span>{{ options.TITLE_EXPLAIN }}</span>{% endif %}</dt>
-			<dd>{% if options.HELP_KEY %}<a href="javascript:void(0)" onclick="javascript:help_popup('{{ options.HELP_KEY }}')">{{ ICON_DL_HELP }}</a>{% else %}&nbsp;{% endif %}&nbsp;&nbsp;{{ options.CONTENT }}</dd>
+			<dd>
+				{% if options.HELP_KEY %}<a href="javascript:void(0)" onclick="javascript:help_popup('{{ options.HELP_KEY }}')">{{ ICON_DL_HELP }}</a>{% else %}&nbsp;{% endif %}&nbsp;&nbsp;{{ options.CONTENT }}
+				{% if options.PREVIEW %}<br /><br /><hr /><div class="small">{{ options.PREVIEW }}</div>{% endif %}
+			</dd>
 		</dl>
 
 	{% endif %}

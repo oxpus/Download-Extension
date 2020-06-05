@@ -16,80 +16,9 @@ function select_switch(status)
 
 <h2>{{ DL_MOD_RELEASE }}</h2>
 
-<br />
-
 <form action="{{ S_FORM_ACTION }}" method="post" id="user_dl_config">
 
 {% if S_DL_UCP_CONFIG %}
-
-{% if S_NO_DL_POPUP_NOTIFY %}
-<div class="panel">
-	<div class="inner">
-	<h3>{{ lang('USER_DOWNLOAD_POPUP') }}</h3>
-
-	<fieldset>
-
-		<dl>
-			<dt><label>{{ lang('USER_ALLOW_NEW_DOWNLOAD_POPUP') }}</label></dt>
-			<dd>
-				<label><input type="radio" class="radio" name="user_allow_new_download_popup" value="1" {{ ALLOW_NEW_DOWNLOAD_POPUP_YES }}/>&nbsp;{{ lang('YES') }}</label>
-				<label><input type="radio" class="radio" name="user_allow_new_download_popup" value="0" {{ ALLOW_NEW_DOWNLOAD_POPUP_NO }}/>&nbsp;{{ lang('NO') }}</label>
-			</dd>
-		</dl>
-		<dl>
-			<dt><label>{{ lang('USER_ALLOW_FAV_DOWNLOAD_POPUP') }}</label></dt>
-			<dd>
-				<label><input type="radio" class="radio" name="user_allow_fav_download_popup" value="1" {{ ALLOW_FAV_DOWNLOAD_POPUP_YES }}/>&nbsp;{{ lang('YES') }}</label>
-				<label><input type="radio" class="radio" name="user_allow_fav_download_popup" value="0" {{ ALLOW_FAV_DOWNLOAD_POPUP_NO }}/>&nbsp;{{ lang('NO') }}</label>
-			</dd>
-		</dl>
-		<dl>
-			<dt><label>{{ lang('USER_DOWNLOAD_NOTIFY_TYPE') }}</label></dt>
-			<dd>
-				<label><input type="radio" class="radio" name="user_dl_note_type" value="1" {{ USER_DL_NOTE_TYPE_POPUP }}/>&nbsp;{{ lang('USER_DOWNLOAD_NOTIFY_TYPE_POPUP') }}</label>
-				<label><input type="radio" class="radio" name="user_dl_note_type" value="0" {{ USER_DL_NOTE_TYPE_MESSAGE }}/>&nbsp;{{ lang('USER_DOWNLOAD_NOTIFY_TYPE_MESSAGE') }}</label>
-				<label><input type="radio" class="radio" name="user_dl_note_type" value="2" {{ USER_DL_NOTE_TYPE_NOTIFY }}/>&nbsp;{{ lang('USER_DOWNLOAD_NOTIFY_TYPE_NOTIFY') }}</label>
-			</dd>
-		</dl>
-
-	</fieldset>
-	</div>
-</div>
-{% endif %}
-
-{% if S_NO_DL_EMAIL_NOTIFY %}
-<div class="panel">
-	<div class="inner">
-	<h3>{{ lang('USER_DOWNLOAD_EMAIL') }}</h3>
-
-	<fieldset>
-
-		<dl>
-			<dt><label>{{ lang('USER_ALLOW_NEW_DOWNLOAD_EMAIL') }}</label></dt>
-			<dd>
-				<label><input type="radio" class="radio" name="user_allow_new_download_email" value="1" {{ ALLOW_NEW_DOWNLOAD_EMAIL_YES }}/>&nbsp;{{ lang('YES') }}</label>
-				<label><input type="radio" class="radio" name="user_allow_new_download_email" value="0" {{ ALLOW_NEW_DOWNLOAD_EMAIL_NO }}/>&nbsp;{{ lang('NO') }}</label>
-			</dd>
-		</dl>
-		<dl>
-			<dt><label>{{ lang('USER_ALLOW_FAV_DOWNLOAD_EMAIL') }}</label></dt>
-			<dd>
-				<label><input type="radio" class="radio" name="user_allow_fav_download_email" value="1" {{ ALLOW_FAV_DOWNLOAD_EMAIL_YES }}/>&nbsp;{{ lang('YES') }}</label>
-				<label><input type="radio" class="radio" name="user_allow_fav_download_email" value="0" {{ ALLOW_FAV_DOWNLOAD_EMAIL_NO }}/>&nbsp;{{ lang('NO') }}</label>
-			</dd>
-		</dl>
-		<dl>
-			<dt><label>{{ lang('USER_ALLOW_FAV_COMMENT_EMAIL') }}</label></dt>
-			<dd>
-				<label><input type="radio" class="radio" name="user_allow_fav_comment_email" value="1" {{ ALLOW_FAV_COMMENT_EMAIL_YES }}/>&nbsp;{{ lang('YES') }}</label>
-				<label><input type="radio" class="radio" name="user_allow_fav_comment_email" value="0" {{ ALLOW_FAV_COMMENT_EMAIL_NO }}/>&nbsp;{{ lang('NO') }}</label>
-			</dd>
-		</dl>
-
-	</fieldset>
-	</div>
-</div>
-{% endif %}
 
 {% if S_SORT_CONFIG_OPTIONS %}
 <div class="panel">
@@ -101,7 +30,7 @@ function select_switch(status)
 		<dl>
 			<dt><label>{{ lang('DL_SORT_USER_OPT') }}</label></dt>
 			<dd>
-				{{ S_DL_SORT_USER_OPT }}&nbsp;{{ S_DL_SORT_USER_DIR }}&nbsp;<label><input type="checkbox" class="permissions-checkbox" name="user_dl_sort_opt" value="1" {{ S_DL_SORT_USER_EXT }} />&nbsp;{{ lang('DL_SORT_USER_EXT') }}</label>
+				{{ S_DL_SORT_USER_OPT }}&nbsp;{{ S_DL_SORT_USER_DIR }}&nbsp;<label><input type="checkbox" class="permissions-checkbox" name="user_dl_sort_opt" value="1"{% if S_DL_SORT_USER_EXT eq 1 %} checked="checked"{% endif %} />&nbsp;{{ lang('DL_SORT_USER_EXT') }}</label>
 			</dd>
 		</dl>
 
@@ -119,14 +48,17 @@ function select_switch(status)
 		<dl>
 			<dt><label>{{ lang('DL_SUB_ON_INDEX') }}</label></dt>
 			<dd>
-				<label><input type="radio" class="radio" name="user_dl_sub_on_index" value="1" {{ USER_DL_SUB_ON_INDEX_YES }} />&nbsp;{{ lang('YES') }}</label>
-				<label><input type="radio" class="radio" name="user_dl_sub_on_index" value="0" {{ USER_DL_SUB_ON_INDEX_NO }} />&nbsp;{{ lang('NO') }}</label>
+				<label><input type="radio" class="radio" name="user_dl_sub_on_index" value="1"{% if S_USER_DL_SUB_ON_INDEX eq 1 %} checked="checked"{% endif %} />&nbsp;{{ lang('YES') }}</label>
+				<label><input type="radio" class="radio" name="user_dl_sub_on_index" value="0"{% if S_USER_DL_SUB_ON_INDEX eq 0 %} checked="checked"{% endif %} />&nbsp;{{ lang('NO') }}</label>
 			</dd>
 		</dl>
 
 	</fieldset>
 	</div>
 </div>
+
+{% EVENT dlext_ucp_configuration_append %}
+
 {% if not S_FAV_BLOCK %}
 <p>&nbsp;</p>
 {% endif %}

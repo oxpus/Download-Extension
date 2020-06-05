@@ -9,6 +9,7 @@
 <div class="clear"></div>
 <br />
 
+{% if S_FOOTER_LEGEND or S_FOOTER_STATS or U_LATEST_DOWNLOADS or U_DL_OVERALL_VIEW or S_STATS_VIEW_ON or S_TODO_LINK or S_DL_JUMPBOX %}
 <div class="panel bg3">
 
 {% if S_FOOTER_LEGEND %}
@@ -58,13 +59,13 @@
 {% if S_TODO_LINK %}<a href="{{ U_DL_TODOLIST }}" class="button icon-button"><i class="icon fa-clipboard fa-fw" aria-hidden="true"></i> <span>{{ lang('DL_MOD_TODO') }}</span></a>{% endif %}
 {% endif %}
 
-{% INCLUDE 'dl_jumpbox.html' %}
+{% if S_DL_JUMPBOX %}{% INCLUDE 'dl_jumpbox.html' %}{% endif %}
 
 </div>
+{% endif %}
 
 {% if S_DL_MOD_OFFLINE_ADMINS %}
 <br />
-
 <div class="rules">
 	<div class="inner">
 		<strong>{{ lang('DL_OFF_MESSAGE_ADMIN') }}</strong>
@@ -74,7 +75,6 @@
 
 {% for broken in loops.broken %}
 <br />
-
 <div class="panel dl-footer-alert">
 	<div class="inner">
 	<a href="{{ broken.U_BROKEN_DOWNLOADS }}" class="forumtitle">{{ broken.L_BROKEN_DOWNLOADS }}</a>
@@ -84,7 +84,6 @@
 
 {% for approve in loops.approve %}
 <br />
-
 <div class="panel dl-footer-alert">
 	<div class="inner">
 	<a href="{{ approve.U_APPROVE_DOWNLOADS }}" class="forumtitle">{{ approve.L_APPROVE_DOWNLOADS }}</a>
@@ -94,7 +93,6 @@
 
 {% for approve_comments in loops.approve_comments %}
 <br />
-
 <div class="panel dl-footer-alert">
 	<div class="inner">
 	<a href="{{ approve_comments.U_APPROVE_COMMENTS }}" class="forumtitle">{{ approve_comments.L_APPROVE_COMMENTS }}</a>

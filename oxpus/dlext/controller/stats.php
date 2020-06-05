@@ -142,12 +142,12 @@ class stats
 			redirect($this->helper->route('oxpus_dlext_index'));
 		}
 
-		if (sizeof($index))
+		if (!empty($index))
 		{
 			$access_cats = [];
 			$access_cats = $this->dlext_main->full_index(0, 0, 0, 1);
 
-			if (sizeof($access_cats))
+			if (!empty($access_cats))
 			{
 				/*
 				* enable/disable guest data on basic statistics
@@ -197,7 +197,7 @@ class stats
 							'DL_TIME_RFC'	=> $dl_time_rfc,
 						]);
 
-						$dl_pos++;
+						++$dl_pos;
 					}
 					$this->db->sql_freeresult($result);
 				}
@@ -245,7 +245,7 @@ class stats
 							'DL_TIME_RFC'	=> $dl_time_rfc,
 						]);
 
-						$dl_pos++;
+						++$dl_pos;
 					}
 					$this->db->sql_freeresult($result);
 				}
@@ -285,7 +285,7 @@ class stats
 							'DL_KLICKS'		=> $dl_klicks,
 						]);
 
-						$dl_pos++;
+						++$dl_pos;
 					}
 					$this->db->sql_freeresult($result);
 				}
@@ -325,7 +325,7 @@ class stats
 							'DL_KLICKS'		=> $dl_klicks,
 						]);
 
-						$dl_pos++;
+						++$dl_pos;
 					}
 					$this->db->sql_freeresult($result);
 				}
@@ -367,7 +367,7 @@ class stats
 								'DL_TRAFFIC'	=> $dl_traffic,
 							]);
 
-							$dl_pos++;
+							++$dl_pos;
 						}
 						$this->db->sql_freeresult($result);
 					}
@@ -407,7 +407,7 @@ class stats
 								'DL_TRAFFIC'	=> $dl_traffic,
 							]);
 
-							$dl_pos++;
+							++$dl_pos;
 						}
 						$this->db->sql_freeresult($result);
 					}
@@ -451,7 +451,7 @@ class stats
 							'DL_COUNTS'		=> $row['dl_counts'],
 						]);
 
-						$dl_pos++;
+						++$dl_pos;
 					}
 					$this->db->sql_freeresult($result);
 				}
@@ -492,7 +492,7 @@ class stats
 								'DL_TRAFFIC'	=> $dl_traffic,
 							]);
 
-							$dl_pos++;
+							++$dl_pos;
 						}
 						$this->db->sql_freeresult($result);
 					}
@@ -530,7 +530,7 @@ class stats
 							'DL_COUNTS'		=> $row['dl_counts'],
 						]);
 
-						$dl_pos++;
+						++$dl_pos;
 					}
 					$this->db->sql_freeresult($result);
 				}
@@ -571,7 +571,7 @@ class stats
 								'DL_TRAFFIC'	=> $dl_traffic,
 							]);
 
-							$dl_pos++;
+							++$dl_pos;
 						}
 						$this->db->sql_freeresult($result);
 					}

@@ -125,7 +125,7 @@ class acp_stats_controller implements acp_stats_interface
 		
 				$this->phpbb_log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_STATS_ANONYM');
 			}
-			else if (is_array($del_id) && sizeof($del_id))
+			else if (is_array($del_id) && !empty($del_id))
 			{
 				$dl_id = [];
 				foreach($del_id as $key => $value)
@@ -279,7 +279,7 @@ class acp_stats_controller implements acp_stats_interface
 				$start -= $this->config['dl_links_per_page'];
 			}
 		
-			$page_data = (sizeof($search_ids)) ? sizeof($search_ids) : $total_data;
+			$page_data = (!empty($search_ids)) ? count($search_ids) : $total_data;
 		
 			if ($page_data > $this->config['dl_links_per_page'])
 			{
@@ -334,7 +334,7 @@ class acp_stats_controller implements acp_stats_interface
 					'U_DL_LINK'			=> $this->helper->route('oxpus_dlext_details', ['df_id' => $row['id']]),
 				]);
 		
-				$i++;
+				++$i;
 			}
 		
 			$this->db->sql_freeresult($result);

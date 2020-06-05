@@ -67,6 +67,16 @@
     font-size: 1em;
 }
 
+.dl-bubble {
+    padding: 3px;
+    border-radius: 12px;
+    color: #ffffff;
+    background-color: #aaaaaa;
+    font-size: 0.8em;
+    text-shadow: none;
+    font-style: normal;
+}
+
 .noshow
 {
     display: none;
@@ -87,19 +97,7 @@
     padding: 1em;
 }
 
-#dl_new_bg, #dl_help_bg
-{
-    display:none;
-    z-index: 1;
-    position: fixed;
-    height:100%;
-    width:100%;
-    top:0px;
-    left:0px;
-    background:#000000;
-}
-
-#dl_new_popup, #dl_help_popup
+#dl_help_popup
 {
     display: none;
     z-index: 2;
@@ -114,7 +112,7 @@
     color: #000000;
 }
 
-div.dl_new_close, div.dl_help_close
+div.dl_help_close
 {
 	display: block;
 	float: right;
@@ -128,7 +126,7 @@ div.dl_new_close, div.dl_help_close
     cursor: pointer;
 }
 
-div.dl_new_close:hover, div.dl_help_close:hover, .dl-close-footer:hover
+div.dl_help_close:hover, .dl-close-footer:hover
 {
     background-position: 0 -16px;
 }
@@ -147,7 +145,7 @@ div.dl_new_close:hover, div.dl_help_close:hover, .dl-close-footer:hover
     cursor: pointer;
 }
 
-#dl_new_content, #dl_help_content
+#dl_help_content
 {
     margin: 8px 14px;
 }
@@ -255,10 +253,19 @@ div.dl_new_close:hover, div.dl_help_close:hover, .dl-close-footer:hover
     border-bottom: 1px #555555 solid;
 }
 
+.dl-edit-box-big {
+    background-color: #f0f0f0;
+    border: 2px #555555 solid;
+}
+
 .dl-edit-box-medium-green {
     background-color: #b1fdb1;
     border-right: 1px #555555 solid;
     border-bottom: 1px #555555 solid;
+}
+
+.dl-edit-hint {
+    background-color: #ffaaaa !important;
 }
 
 .dl-edit-version {

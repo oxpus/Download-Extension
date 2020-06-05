@@ -220,7 +220,7 @@ class listener implements EventSubscriberInterface
 
 		$dl_index = $this->dlext_auth->dl_index();
 
-		if (!is_array($dl_index) || !sizeof($dl_index))
+		if (empty($dl_index))
 		{
 			$dl_mod_link_show = false;
 		}
@@ -288,7 +288,6 @@ class listener implements EventSubscriberInterface
 				}
 			}
 
-			$this->_dl_add_download_message($event);
 			$this->_dl_reset_values();
 			$this->_dl_navi_links();
 		}
@@ -528,25 +527,6 @@ class listener implements EventSubscriberInterface
 	public function tas2580_privacyprotection_delete_ip_after($event)
 	{
 		$this->dlext_privacy->dl_privacy();
-	}
-
-	private function _dl_add_download_message($event)
-	{
-		if ( isset($this->user->data['user_new_download']) && $this->user->data['user_new_download'] && $this->user->data['user_dl_note_type'] <> 2)
-		{
-			$sql = 'UPDATE ' . USERS_TABLE . '
-				SET user_new_download = 0
-				WHERE user_id = ' . (int)$this->user->data['user_id'];
-			$this->db->sql_query($sql);
-
-			$new_dl_link = $this->helper->route('oxpus_dlext_latest');
-
-			$this->template->assign_vars([
-				'NEW_DOWNLOAD_MESSAGE'	=> $this->language->lang('NEW_DOWNLOAD', $new_dl_link),
-				'S_NEW_DL_POPUP'		=> ($this->user->data['user_dl_note_type'] == 1) ? true : false,
-				'S_NEW_DL_MESSAGE'		=> ($this->user->data['user_dl_note_type'] == 0) ? true : false,
-			]);
-		}
 	}
 
 	private function _dl_mod_callback($part)

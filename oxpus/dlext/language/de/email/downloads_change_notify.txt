@@ -2,7 +2,7 @@ Subject: Geänderter Download
 
 Hallo {USERNAME},
 
-du bekommst diese Email, weil der nachfolgende Download auf {SITENAME} in der Kategorie "{CATEGORY}" geändert wurde:
+du bekommst diese Email, weil der nachfolgende Download auf "{SITENAME}" in der Kategorie "{CATEGORY}" geändert wurde:
 
 ---------------------------
 {DOWNLOAD}
@@ -13,6 +13,6 @@ Wenn du diesen Download ansehen willst, dann klicke auf folgenden Link:
 
 {U_CATEGORY}
 
-Wenn du zukünftig keine Benachrichtigungen hierüber erhalten willst, dann entferne die Benachrichtigungen in den Download Details oder Deinem Downloads Benutzerprofil.
+Wenn du zukünftig keine Benachrichtigungen hierüber erhalten willst, dann entferne die Benachrichtigungen in deinem Benutzerprofil.
 
-{BOARD_EMAIL}
+{EMAIL_SIG}

@@ -34,6 +34,8 @@ class ucp_config_controller implements ucp_config_interface
 	/* @var \phpbb\template\template */
 	protected $template;
 
+	protected $phpbb_dispatcher;
+
 	/**
 	* Constructor
 	*
@@ -43,6 +45,7 @@ class ucp_config_controller implements ucp_config_interface
 	* @param \phpbb\language\language				$language
 	* @param \phpbb\config\config					$config
 	* @param \phpbb\template\template				$template
+	* @param \phpbb\event\dispatcher_interface		$phpbb_dispatcher
 	*/
 	public function __construct(
 		\phpbb\request\request_interface $request,
@@ -50,15 +53,17 @@ class ucp_config_controller implements ucp_config_interface
 		\phpbb\user $user,
 		\phpbb\language\language $language,
 		\phpbb\config\config $config,
-		\phpbb\template\template $template
+		\phpbb\template\template $template,
+		\phpbb\event\dispatcher_interface $phpbb_dispatcher
 	)
 	{
-		$this->request		= $request;
-		$this->db 			= $db;
-		$this->user 		= $user;
-		$this->language		= $language;
-		$this->config 		= $config;
-		$this->template 	= $template;
+		$this->request			= $request;
+		$this->db 				= $db;
+		$this->user 			= $user;
+		$this->language			= $language;
+		$this->config 			= $config;
+		$this->template 		= $template;
+		$this->phpbb_dispatcher	= $phpbb_dispatcher;
 	}
 
 	public function set_action($u_action)
@@ -80,28 +85,27 @@ class ucp_config_controller implements ucp_config_interface
 				trigger_error('FORM_INVALID');
 			}
 
-			$user_allow_new_download_popup	= $this->request->variable('user_allow_new_download_popup', 0);
-			$user_allow_fav_download_popup	= $this->request->variable('user_allow_fav_download_popup', 0);
-			$user_allow_new_download_email	= $this->request->variable('user_allow_new_download_email', 0);
-			$user_allow_fav_download_email	= $this->request->variable('user_allow_fav_download_email', 0);
-			$user_allow_fav_comment_email	= $this->request->variable('user_allow_fav_comment_email', 0);
-			$user_dl_note_type				= $this->request->variable('user_dl_note_type', 0);
-			$user_dl_sort_fix				= $this->request->variable('user_dl_sort_fix', 0);
-			$user_dl_sort_opt				= $this->request->variable('user_dl_sort_opt', 0);
-			$user_dl_sort_dir				= $this->request->variable('user_dl_sort_dir', 0);
-			$user_dl_sub_on_index			= $this->request->variable('user_dl_sub_on_index', 0);
+			$sql_array = [
+				'user_dl_sort_fix'				=> $this->request->variable('user_dl_sort_fix', 0),
+				'user_dl_sort_opt'				=> $this->request->variable('user_dl_sort_opt', 0),
+				'user_dl_sort_dir'				=> $this->request->variable('user_dl_sort_dir', 0),
+				'user_dl_sub_on_index'			=> $this->request->variable('user_dl_sub_on_index', 0),
+			];
 
-			$sql = 'UPDATE ' . USERS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', [
-				'user_allow_new_download_popup'	=> $user_allow_new_download_popup,
-				'user_allow_fav_download_popup'	=> $user_allow_fav_download_popup,
-				'user_allow_new_download_email'	=> $user_allow_new_download_email,
-				'user_allow_fav_download_email'	=> $user_allow_fav_download_email,
-				'user_allow_fav_comment_email'	=> $user_allow_fav_comment_email,
-				'user_dl_note_type'				=> $user_dl_note_type,
-				'user_dl_sort_fix'				=> $user_dl_sort_fix,
-				'user_dl_sort_opt'				=> $user_dl_sort_opt,
-				'user_dl_sort_dir'				=> $user_dl_sort_dir,
-				'user_dl_sub_on_index'			=> $user_dl_sub_on_index]) . ' WHERE user_id = ' . (int) $this->user->data['user_id'];
+			/**
+			 * Save additional data for user download settings
+			 *
+			 * @event 		dlext.ucp_config_sql_update_before
+			 * @var array	sql_array		array of user's data for storage
+			 * @since 8.1.0-RC2
+			 */
+			$vars = array(
+				'sql_array',
+			);
+			extract($this->phpbb_dispatcher->trigger_event('dlext.ucp_config_sql_update_before', compact($vars)));
+
+			$sql = 'UPDATE ' . USERS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', $sql_array) . '
+					WHERE user_id = ' . (int) $this->user->data['user_id'];
 			$this->db->sql_query($sql);
 
 			$message = $this->language->lang('DL_USER_CONFIG_SAVED', '<a href="' . $this->u_action . '">', '</a>');
@@ -110,25 +114,6 @@ class ucp_config_controller implements ucp_config_interface
 		}
 
 		add_form_key('dl_ucp');
-
-		$allow_new_popup_yes	= ($this->user->data['user_allow_new_download_popup']) ? 'checked="checked"' : '';
-		$allow_new_popup_no		= (!$this->user->data['user_allow_new_download_popup']) ? 'checked="checked"' : '';
-		$allow_fav_popup_yes	= ($this->user->data['user_allow_fav_download_popup']) ? 'checked="checked"' : '';
-		$allow_fav_popup_no		= (!$this->user->data['user_allow_fav_download_popup']) ? 'checked="checked"' : '';
-		$allow_new_email_yes	= ($this->user->data['user_allow_new_download_email']) ? 'checked="checked"' : '';
-		$allow_new_email_no		= (!$this->user->data['user_allow_new_download_email']) ? 'checked="checked"' : '';
-		$allow_fav_email_yes	= ($this->user->data['user_allow_fav_download_email']) ? 'checked="checked"' : '';
-		$allow_fav_email_no		= (!$this->user->data['user_allow_fav_download_email']) ? 'checked="checked"' : '';
-		$allow_com_email_yes	= ($this->user->data['user_allow_fav_comment_email']) ? 'checked="checked"' : '';
-		$allow_com_email_no		= (!$this->user->data['user_allow_fav_comment_email']) ? 'checked="checked"' : '';
-
-		$user_dl_note_type_popup	= ($this->user->data['user_dl_note_type'] == 1) ? 'checked="checked"' : '';
-		$user_dl_note_type_message	= ($this->user->data['user_dl_note_type'] == 0) ? 'checked="checked"' : '';
-		$user_dl_note_type_notify	= ($this->user->data['user_dl_note_type'] == 2) ? 'checked="checked"' : '';
-		$user_dl_sort_opt			= ($this->user->data['user_dl_sort_opt']) ? 'checked="checked"' : '';
-
-		$user_dl_sub_on_index_yes	= ($this->user->data['user_dl_sub_on_index']) ? 'checked="checked"' : '';
-		$user_dl_sub_on_index_no	= (!$this->user->data['user_dl_sub_on_index']) ? 'checked="checked"' : '';
 
 		$s_user_dl_sort_fix = '<select name="user_dl_sort_fix">';
 		$s_user_dl_sort_fix .= '<option value="0">' . $this->language->lang('DL_DEFAULT_SORT') . '</option>';
@@ -149,16 +134,6 @@ class ucp_config_controller implements ucp_config_interface
 		$s_user_dl_sort_dir .= '</select>';
 		$s_user_dl_sort_dir = str_replace('value="' . $this->user->data['user_dl_sort_dir'] . '">', 'value="' . $this->user->data['user_dl_sort_dir'] . '" selected="selected">', $s_user_dl_sort_dir);
 
-		if (!$this->config['dl_disable_email'])
-		{
-			$this->template->assign_var('S_NO_DL_EMAIL_NOTIFY', true);
-		}
-
-		if (!$this->config['dl_disable_popup'])
-		{
-			$this->template->assign_var('S_NO_DL_POPUP_NOTIFY', true);
-		}
-
 		if (!$this->config['dl_sort_preform'])
 		{
 			$this->template->assign_var('S_SORT_CONFIG_OPTIONS', true);
@@ -168,33 +143,28 @@ class ucp_config_controller implements ucp_config_interface
 
 		add_form_key('dl_ucp');
 
-		$this->template->assign_vars([
-			'DL_MOD_RELEASE'					=> $this->language->lang('DL_MOD_VERSION_PUBLIC'),
+		$template_ary = [
+			'DL_MOD_RELEASE'			=> $this->language->lang('DL_MOD_VERSION_PUBLIC'),
 
-			'ALLOW_NEW_DOWNLOAD_POPUP_YES'		=> $allow_new_popup_yes,
-			'ALLOW_NEW_DOWNLOAD_POPUP_NO'		=> $allow_new_popup_no,
-			'ALLOW_FAV_DOWNLOAD_POPUP_YES'		=> $allow_fav_popup_yes,
-			'ALLOW_FAV_DOWNLOAD_POPUP_NO'		=> $allow_fav_popup_no,
+			'S_USER_DL_SUB_ON_INDEX'	=> $this->user->data['user_dl_sub_on_index'],
+			'S_DL_SORT_USER_OPT'		=> $s_user_dl_sort_fix,
+			'S_DL_SORT_USER_EXT'		=> $this->user->data['user_dl_sort_opt'],
+			'S_DL_SORT_USER_DIR'		=> $s_user_dl_sort_dir,
+			'S_FORM_ACTION'				=> $this->u_action,
+		];
 
-			'ALLOW_NEW_DOWNLOAD_EMAIL_YES'		=> $allow_new_email_yes,
-			'ALLOW_NEW_DOWNLOAD_EMAIL_NO'		=> $allow_new_email_no,
-			'ALLOW_FAV_DOWNLOAD_EMAIL_YES'		=> $allow_fav_email_yes,
-			'ALLOW_FAV_DOWNLOAD_EMAIL_NO'		=> $allow_fav_email_no,
-			'ALLOW_FAV_COMMENT_EMAIL_YES'		=> $allow_com_email_yes,
-			'ALLOW_FAV_COMMENT_EMAIL_NO'		=> $allow_com_email_no,
+		/**
+		 * Display additional data for user download settings
+		 *
+		 * @event 		dlext.ucp_config_template_before
+		 * @var array	template_ary		template data for displaying
+		 * @since 8.1.0-RC2
+		 */
+		$vars = array(
+			'template_ary',
+		);
+		extract($this->phpbb_dispatcher->trigger_event('dlext.ucp_config_template_before', compact($vars)));
 
-			'USER_DL_NOTE_TYPE_POPUP'			=> $user_dl_note_type_popup,
-			'USER_DL_NOTE_TYPE_MESSAGE'			=> $user_dl_note_type_message,
-			'USER_DL_NOTE_TYPE_NOTIFY'			=> $user_dl_note_type_notify,
-
-			'USER_DL_SUB_ON_INDEX_YES'			=> $user_dl_sub_on_index_yes,
-			'USER_DL_SUB_ON_INDEX_NO'			=> $user_dl_sub_on_index_no,
-
-			'S_DL_SORT_USER_OPT'				=> $s_user_dl_sort_fix,
-			'S_DL_SORT_USER_EXT'				=> $user_dl_sort_opt,
-			'S_DL_SORT_USER_DIR'				=> $s_user_dl_sort_dir,
-
-			'S_FORM_ACTION'						=> $this->u_action,
-		]);
+		$this->template->assign_vars($template_ary);
 	}
 }

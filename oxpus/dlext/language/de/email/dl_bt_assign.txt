@@ -2,11 +2,11 @@ Subject: Zugewiesene Fehlermeldung auf {SITENAME}
 
 Hallo {USERNAME},
 
-du erhältst diese Email, weil dir auf {SITENAME} eine Fehlermeldung zur Bearbeitung zugewiesen wurde.
+du erhältst diese Email, weil dir auf "{SITENAME}" eine Fehlermeldung zur Bearbeitung zugewiesen wurde.
 Für weitere Details zu dieser Fehlermeldung folge bitte diesem Link:
 
 {U_BUG_REPORT}
 
 ----------------------------
 
-{BOARD_EMAIL}
+{EMAIL_SIG}

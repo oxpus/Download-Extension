@@ -138,12 +138,12 @@ class acp_ext_blacklist_controller implements acp_ext_blacklist_interface
 			{
 				$sql_ext_in = [];
 		
-				for ($i = 0; $i < sizeof($extension_ary); $i++)
+				for ($i = 0; $i < count($extension_ary); ++$i)
 				{
 					$sql_ext_in[] = $extension_ary[$i];
 				}
 		
-				if (sizeof($sql_ext_in))
+				if (!empty($sql_ext_in))
 				{
 					$sql = 'DELETE FROM ' . DL_EXT_BLACKLIST . '
 						WHERE ' . $this->db->sql_in_set('extention', $sql_ext_in);
@@ -155,7 +155,7 @@ class acp_ext_blacklist_controller implements acp_ext_blacklist_interface
 					$this->phpbb_log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_EXT_DEL', false, [implode(', ', $sql_ext_in)]);
 				}
 
-				$message = ((sizeof($extension_ary) == 1) ? $this->language->lang('EXTENSION_REMOVED') : $this->language->lang('EXTENSIONS_REMOVED')) . adm_back_link($this->u_action);
+				$message = ((count($extension_ary) == 1) ? $this->language->lang('EXTENSION_REMOVED') : $this->language->lang('EXTENSIONS_REMOVED')) . adm_back_link($this->u_action);
 
 				trigger_error($message);
 			}
@@ -163,12 +163,12 @@ class acp_ext_blacklist_controller implements acp_ext_blacklist_interface
 			{
 				$s_hidden_fields = ['action' => 'delete'];
 		
-				for ($i = 0; $i < sizeof($extension_ary); $i++)
+				for ($i = 0; $i < count($extension_ary); ++$i)
 				{
 					$s_hidden_fields += ['extension[' . $i . ']' => $extension_ary[$i]];
 				}
 
-				$confirm_title = (sizeof($extension_ary) == 1) ? $this->language->lang('DL_CONFIRM_DELETE_EXTENSION', $extension_ary[0]) : $this->language->lang('DL_CONFIRM_DELETE_EXTENSIONS', implode(', ', $extension_ary));
+				$confirm_title = (count($extension_ary) == 1) ? $this->language->lang('DL_CONFIRM_DELETE_EXTENSION', $extension_ary[0]) : $this->language->lang('DL_CONFIRM_DELETE_EXTENSIONS', implode(', ', $extension_ary));
 
 				confirm_box(false, $confirm_title, build_hidden_fields($s_hidden_fields));
 			}

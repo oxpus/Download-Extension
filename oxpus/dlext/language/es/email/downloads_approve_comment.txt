@@ -2,7 +2,7 @@ Subject: Nuevo comentario en Descarga
 
 Hola {USERNAME},
 
-Recibe este email porque hay un comentario de descarga nuevo o editado para {DOWNLOAD} en {SITENAME} en la categoría {CATEGORY} que debe ser aprobado.
+Recibe este email porque hay un comentario de descarga nuevo o editado para "{DOWNLOAD}" en "{SITENAME}" en la categoría "{CATEGORY}" que debe ser aprobado.
 
 Si desea aprobar este comentario, haga clic en el siguiente enlace:
 
@@ -13,4 +13,4 @@ O puede ver el comentario a través de este segundo enlace:
 {U_DOWNLOAD}
 
 
-{BOARD_EMAIL}
+{EMAIL_SIG}

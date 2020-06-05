@@ -134,6 +134,13 @@ class unfav
 					AND fav_user_id = ' . (int) $this->user->data['user_id'];
 			$this->db->sql_query($sql);
 
+			$notification = $this->phpbb_container->get('notification_manager');
+
+			$notification->delete_notifications([
+				'oxpus.dlext.notification.type.update',
+				'oxpus.dlext.notification.type.comments',
+			], $df_id, false, $this->user->data['user_id']);
+
 			redirect($this->helper->route('oxpus_dlext_details', ['df_id' => $df_id, 'cat_id' => $cat_id]));
 		}
 

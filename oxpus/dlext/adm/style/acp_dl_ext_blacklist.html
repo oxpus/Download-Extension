@@ -31,19 +31,23 @@ function select_switch(status)
 {% if S_EXT_YES %}
 <form action="{{ S_DOWNLOADS_ACTION }}" method="post" id="extension">
 
-<fieldset>
-
-	<legend>{{ lang('DL_EXTENSIONS') }}</legend>
-
+<table class="table1">
+<thead>
+<tr>
+	<th class="dl-text-left"><strong>{{ lang('DL_EXTENSIONS') }}</strong></th>
+	<th class="dl-text-center">{{ lang('SELECT') }}</th>
+</tr>
+</thead>
+<tbody>
 	{% for extension_row in loops.extension_row %}
-	<dl>
-		<dt><label>{{ extension_row.EXTENSION }}</label></dt>
-		<dd><input type="checkbox" class="permissions-checkbox" name="extension[]" value="{{ extension_row.EXTENSION }}" /></dd>
-	</dl>
+	{% if extension_row.S_ROW_COUNT is even %}<tr class="row4 dl-line-hight">{% else %}<tr class="row3 dl-line-hight">{% endif %}
+		<td class="dl-text-left"><strong>{{ extension_row.EXTENSION }}</strong></td>
+		<td class="dl-text-center"><input type="checkbox" title="{{ extension_row.EXTENSION }}" class="permissions-checkbox" name="extension[]" value="{{ extension_row.EXTENSION }}" /></td>
+	</tr>
 	{% endfor %}
-
-</fieldset>
-
+</tbody>
+</table>
+	
 <fieldset class="quick">
 	<div><a href="javascript:select_switch(true);" class="small">{{ lang('MARK_ALL') }}</a> &bull; <a href="javascript:select_switch(false);" class="small">{{ lang('UNMARK_ALL') }}</a></div>
 	<br />

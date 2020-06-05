@@ -58,8 +58,10 @@ class upload
 	protected $ext_path_web;
 	protected $ext_path_ajax;
 
+	protected $config_text;
+	protected $phpbb_dispatcher;
+
 	protected $dlext_auth;
-	protected $dlext_email;
 	protected $dlext_extra;
 	protected $dlext_format;
 	protected $dlext_init;
@@ -83,6 +85,7 @@ class upload
 	* @param \phpbb\template\template				$template
 	* @param \phpbb\user							$user
 	* @param \phpbb\language\language				$language
+	* @param \phpbb\event\dispatcher_interface		$phpbb_dispatcher
 	*/
 	public function __construct(
 		$root_path,
@@ -98,8 +101,8 @@ class upload
 		\phpbb\template\template $template,
 		\phpbb\user $user,
 		\phpbb\language\language $language,
+		\phpbb\event\dispatcher_interface $phpbb_dispatcher,
 		$dlext_auth,
-		$dlext_email,
 		$dlext_extra,
 		$dlext_format,
 		$dlext_init,
@@ -121,13 +124,15 @@ class upload
 		$this->template 				= $template;
 		$this->user 					= $user;
 		$this->language					= $language;
+		$this->phpbb_dispatcher			= $phpbb_dispatcher;
+
+		$this->config_text				= $this->phpbb_container->get('config_text');
 
 		$this->ext_path					= $this->phpbb_extension_manager->get_extension_path('oxpus/dlext', true);
 		$this->ext_path_web				= $this->phpbb_path_helper->update_web_root_path($this->ext_path);
 		$this->ext_path_ajax			= $this->ext_path_web . 'assets/javascript/';
 
 		$this->dlext_auth				= $dlext_auth;
-		$this->dlext_email				= $dlext_email;
 		$this->dlext_extra				= $dlext_extra;
 		$this->dlext_format				= $dlext_format;
 		$this->dlext_init				= $dlext_init;
@@ -156,7 +161,7 @@ class upload
 			trigger_error('DL_BLUE_EXPLAIN');
 		}
 
-		if (($this->config['dl_stop_uploads'] && !$this->auth->acl_get('a_')) || !sizeof($index) || (!$cat_auth['auth_up'] && !$index[$cat_id]['auth_up'] && !$this->auth->acl_get('a_')))
+		if (($this->config['dl_stop_uploads'] && !$this->auth->acl_get('a_')) || empty($index) || (!$cat_auth['auth_up'] && !$index[$cat_id]['auth_up'] && !$this->auth->acl_get('a_')))
 		{
 			trigger_error('DL_NO_PERMISSION');
 		}
@@ -191,7 +196,6 @@ class upload
 			$mod_list			= ($mod_list) ? 1 : 0;
 
 			$send_notify			= $this->request->variable('send_notify', 0);
-			$disable_popup_notify	= $this->request->variable('disable_popup_notify', 0);
 
 			$hacklist				= $this->request->variable('hacklist', 0);
 			$hack_author			= $this->request->variable('hack_author', '', true);
@@ -289,7 +293,8 @@ class upload
 
 				$upload_file->error = [];
 
-				$error_count = sizeof($upload_file->error);
+				$error_count = count($upload_file->error);
+
 				if ($error_count > 1 && $file_name)
 				{
 					$upload_file->remove();
@@ -327,10 +332,11 @@ class upload
 				$real_file = md5($file_name) . '.' . $upload_file->get_extension($file_name);
 
 				$i = 0;
+
 				while(@file_exists(DL_EXT_FILEBASE_PATH. 'downloads/' . $dl_path . $real_file))
 				{
 					$real_file = md5($i . $file_name);
-					$i++;
+					++$i;
 				}
 			}
 			else
@@ -347,6 +353,32 @@ class upload
 
 			if ($this->config['dl_thumb_fsize'] && $index[$cat_id]['allow_thumbs'])
 			{
+				$allow_thumbs_upload = true;
+			}
+			else
+			{
+				$allow_thumbs_upload = false;
+			}
+
+			$thumb_form_name = 'thumb_name';
+
+			/**
+			 * Manipulate thumbnail upload
+			 *
+			 * @event 		dlext.upload_thumbnail_before
+			 * @var bool  	thumb_form_name			thumbnail upload form field
+			 * @var bool  	allow_thumbs_upload		enable/disable thumbnail upload
+			 * @since 8.1.0-RC2
+			 */
+			
+			$vars = array(
+				'thumb_form_name',
+				'allow_thumbs_upload',
+			);
+			extract($this->phpbb_dispatcher->trigger_event('dlext.upload_thumbnail_before', compact($vars)));
+
+			if ($allow_thumbs_upload)
+			{
 				$min_pic_width = 10;
 				$allowed_imagetypes = ['gif','png','jpg','bmp'];
 
@@ -361,17 +393,16 @@ class upload
 						$this->config['dl_thumb_ysize'])
 					->set_disallowed_content((isset($this->config['mime_triggers']) ? explode('|', $this->config['mime_triggers']) : false));
 
-				$form_name = 'thumb_name';
-
-				$upload_thumb_file = $this->request->file($form_name);
+				$upload_thumb_file = $this->request->file($thumb_form_name);
 				unset($upload_thumb_file['local_mode']);
-				$thumb_file = $upload_image->handle_upload('files.types.form', $form_name);
+				$thumb_file = $upload_image->handle_upload('files.types.form', $thumb_form_name);
 
 				$thumb_size = $upload_thumb_file['size'];
 				$thumb_temp = $upload_thumb_file['tmp_name'];
 				$thumb_name = $upload_thumb_file['name'];
 
-				$error_count = sizeof($thumb_file->error);
+				$error_count = count($thumb_file->error);
+
 				if ($error_count > 1 && $thumb_name)
 				{
 					$thumb_file->remove();
@@ -405,7 +436,7 @@ class upload
 			$cp->submit_cp_field($this->user->get_iso_lang_id(), $cp_data, $error);
 
 			// Stop here, if custom fields are invalid!
-			if (sizeof($error))
+			if (!empty($error))
 			{
 				trigger_error(implode('<br />', $error), E_USER_WARNING);
 			}
@@ -428,7 +459,7 @@ class upload
 					$dest_path = str_replace($this->root_path, '', $dest_path);
 					$upload_file->move_file($dest_path, false, false, CHMOD_ALL);
 
-					$error_count = sizeof($upload_file->error);
+					$error_count = count($upload_file->error);
 					if ($error_count)
 					{
 						$upload_file->remove();
@@ -504,11 +535,7 @@ class upload
 					'todo_flags'			=> $todo_flags,
 				];
 
-				if (!$cat_auth['auth_mod'] && !$index[$cat_id]['auth_mod'] && !$index[$cat_id]['allow_mod_desc'] && !($this->auth->acl_get('a_') && $this->user->data['is_registered']))
-				{
-					$sql = 'INSERT INTO ' . DOWNLOADS_TABLE . ' ' . $this->db->sql_build_array('INSERT', $sql_array);
-				}
-				else
+				if ($cat_auth['auth_mod'] || $index[$cat_id]['auth_mod'] || $index[$cat_id]['allow_mod_desc'] || ($this->auth->acl_get('a_') && $this->user->data['is_registered']))
 				{
 					$sql_array += [
 						'mod_list'				=> $mod_list,
@@ -519,16 +546,61 @@ class upload
 						'warn_bitfield'			=> $warn_bitfield,
 						'warn_flags'			=> $warn_flags,
 					];
-
-					$sql = 'INSERT INTO ' . DOWNLOADS_TABLE . ' ' . $this->db->sql_build_array('INSERT', $sql_array);
 				}
+
+				/**
+				 * Save additional data for the download
+				 *
+				 * @event 		dlext.upload_sql_insert_before
+				 * @var array	sql_array		array of download's data for storage
+				 * @since 8.1.0-RC2
+				 */
+				$vars = array(
+					'sql_array',
+				);
+				extract($this->phpbb_dispatcher->trigger_event('dlext.upload_sql_insert_before', compact($vars)));
+
+				$sql = 'INSERT INTO ' . DOWNLOADS_TABLE . ' ' . $this->db->sql_build_array('INSERT', $sql_array);
 
 				$this->db->sql_query($sql);
 
 				$next_id = $this->db->sql_nextid();
 
+				/**
+				 * Save additional data for the download
+				 *
+				 * @event 		dlext.upload_sql_insert_after
+				 * @var string	next_id			download ID
+				 * @var array	sql_array		array of download's data for storage
+				 * @since 8.1.0-RC2
+				 */
+				$vars = array(
+					'next_id',
+					'sql_array',
+				);
+				extract($this->phpbb_dispatcher->trigger_event('dlext.upload_sql_insert_after', compact($vars)));
+
 				// Update Custom Fields
 				$cp->update_profile_field_data($next_id, $cp_data);
+
+				/**
+				 * Manipulate thumbnail data before storage
+				 *
+				 * @event 		dlext.upload_sql_thumbnail_before
+				 * @var string	foreign_thumb_message	message after manipulate thumbnail
+				 * @var string	thumb_name				thumbnail name (empty to avoid overwrite foreign storage)
+				 * @var string	next_id					download ID
+				 * @var array	sql_array				array of download's data for storage
+				 * @since 8.1.0-RC2
+				 */
+				$foreign_thumb_message = '';
+				$vars = array(
+					'foreign_thumb_message',
+					'thumb_name',
+					'next_id',
+					'sql_array',
+				);
+				extract($this->phpbb_dispatcher->trigger_event('dlext.upload_sql_thumbnail_before', compact($vars)));
 
 				if (isset($thumb_name) && $thumb_name != '')
 				{
@@ -550,6 +622,27 @@ class upload
 					$thumb_message = '';
 				}
 
+				if ($foreign_thumb_message)
+				{
+					$thumb_message = '<br />' . $foreign_thumb_message;
+				}
+
+				/**
+				 * Manipulate thumbnail data after storage
+				 *
+				 * @event 		dlext.upload_sql_thumbnail_after
+				 * @var string	thumb_name		thumbnail name
+				 * @var string	next_id			download ID
+				 * @var array	sql_array		array of download's data for storage
+				 * @since 8.1.0-RC2
+				 */
+				$vars = array(
+					'thumb_name',
+					'next_id',
+					'sql_array',
+				);
+				extract($this->phpbb_dispatcher->trigger_event('dlext.upload_sql_thumbnail_after', compact($vars)));
+
 				if ($index[$cat_id]['statistics'])
 				{
 					if ($index[$cat_id]['stats_prune'])
@@ -569,57 +662,35 @@ class upload
 					$this->db->sql_query($sql);
 				}
 
-				if ($approve)
+				$notification = $this->phpbb_container->get('notification_manager');
+
+				if (!$this->config['dl_disable_email'] && !$send_notify && $approve)
 				{
-					$processing_user = $this->dlext_auth->dl_auth_users($cat_id, 'auth_dl');
+					$notification_data = [
+						'user_ids'			=> $this->dlext_auth->dl_auth_users($cat_id, 'auth_view'),
+						'description'		=> $description,
+						'long_desc'			=> $long_desc,
+						'df_id'				=> $next_id,
+						'cat_name'			=> $index[$cat_id]['cat_name_nav'],
+					];
 
-					$email_template = 'downloads_new_notify';
-
-					$sql = 'SELECT user_email, username, user_lang FROM ' . USERS_TABLE . '
-						WHERE user_allow_new_download_email = 1
-							AND ' . $this->db->sql_in_set('user_id', explode(',', $processing_user));
-
-					$notification = $this->phpbb_container->get('notification_manager');
-					$notification_data = ['notification_id' => $next_id];
 					$notification->add_notifications('oxpus.dlext.notification.type.dlext', $notification_data);
 
 					$this->dlext_topic->gen_dl_topic($next_id);
 				}
-				else
+
+				if (!$approve)
 				{
-					$processing_user = $this->dlext_auth->dl_auth_users($cat_id, 'auth_mod');
-
-					$email_template = 'downloads_approve_notify';
-
-					$sql = 'SELECT user_email, username, user_lang FROM ' . USERS_TABLE . '
-						WHERE user_allow_new_download_email = 1
-							AND (' . $this->db->sql_in_set('user_id', explode(',', $processing_user)) . '
-							OR user_type = ' . USER_FOUNDER . ')';
-				}
-
-				if (!$this->config['dl_disable_email'] && !$send_notify)
-				{
-					$mail_data = [
-						'query'				=> $sql,
-						'email_template'	=> $email_template,
+					$notification_data = [
+						'user_ids'			=> $this->dlext_auth->dl_auth_users($cat_id, 'auth_mod'),
 						'description'		=> $description,
 						'long_desc'			=> $long_desc,
+						'df_id'				=> $next_id,
 						'cat_name'			=> $index[$cat_id]['cat_name_nav'],
-						'cat_id'			=> $cat_id,
 					];
 
-					$this->dlext_email->send_dl_notify($mail_data);
+					$notification->add_notifications('oxpus.dlext.notification.type.approve', $notification_data);
 				}
-
-				if (!$this->config['dl_disable_popup'] && !$disable_popup_notify && $approve)
-				{
-					$sql = 'UPDATE ' . USERS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', [
-						'user_new_download' => 1]) . '
-							WHERE user_allow_new_download_popup = 1
-							AND ' . $this->db->sql_in_set('user_id', explode(',', $processing_user));
-					$this->db->sql_query($sql);
-				}
-
 
 				if ($this->config['dl_upload_traffic_count'] && !$file_extern && !$this->config['dl_traffic_off'])
 				{
@@ -720,8 +791,14 @@ class upload
 			$s_hidden_fields += ['send_notify' => 0];
 		}
 
+		if ($this->config['dl_traffic_off'])
+		{
+			$s_hidden_fields += ['file_traffic' => 0];
+		}
+
 		$ext_blacklist = $this->dlext_auth->get_ext_blacklist();
-		if (sizeof($ext_blacklist))
+
+		if (!empty($ext_blacklist))
 		{
 			$blacklist_explain = '<br />' . $this->language->lang('DL_FORBIDDEN_EXT_EXPLAIN', implode(', ', $ext_blacklist));
 		}
@@ -766,7 +843,21 @@ class upload
 		$file_size			= $file_size_ary['size_out'];
 		$file_size_range	= $file_size_ary['range'];
 
-		$this->template->assign_vars([
+		$dl_file_edit_hint				= $this->config_text->get('dl_file_edit_hint');
+
+		if ($dl_file_edit_hint)
+		{
+			$dl_file_edit_hint_uid		= $this->config['dl_file_edit_hint_bbcode'];
+			$dl_file_edit_hint_bitfield	= $this->config['dl_file_edit_hint_bitfield'];
+			$dl_file_edit_hint_flags	= $this->config['dl_file_edit_hint_flags'];
+			$formated_hint_text 		= generate_text_for_display($dl_file_edit_hint, $dl_file_edit_hint_uid, $dl_file_edit_hint_bitfield, $dl_file_edit_hint_flags);
+		}
+		else
+		{
+			$formated_hint_text			= '';
+		}
+
+		$template_ary = [
 			'DL_FILES_TITLE'			=> $dl_files_page_title,
 			'DL_THUMBNAIL_SECOND'		=> $thumbnail_explain,
 			'EXT_BLACKLIST'				=> $blacklist_explain,
@@ -815,8 +906,9 @@ class upload
 			'MOD_BLOCK_BG'			=> (isset($mod_block_bg) && $mod_block_bg) ? ' bg2' : '',
 
 			'MAX_UPLOAD_SIZE'		=> $this->language->lang('DL_UPLOAD_MAX_FILESIZE', $this->dlext_physical->dl_max_upload_size()),
+			'FORMATED_HINT_TEXT'	=> $formated_hint_text,
 
-			'ENCTYPE'	=> 'enctype="multipart/form-data"',
+			'ENCTYPE'				=> 'enctype="multipart/form-data"',
 
 			'S_TODO_LINK_ONOFF'		=> ($this->config['dl_todo_onoff']) ? true : false,
 			'S_CHECK_FREE'			=> $s_check_free,
@@ -824,9 +916,26 @@ class upload
 			'S_FILE_EXT_SIZE_RANGE'	=> $s_file_ext_size_range,
 			'S_HACKLIST'			=> $s_hacklist,
 			'S_DOWNLOADS_ACTION'	=> $this->helper->route('oxpus_dlext_upload'),
+			'S_DL_TRAFFIC'			=> $this->config['dl_traffic_off'],
 			'S_HIDDEN_FIELDS'		=> build_hidden_fields($s_hidden_fields),
 			'S_ADD_DL'				=> true,
-		]);
+		];
+
+		/**
+		 * Display extra data to save them with the download
+		 *
+		 * @event 		dlext.upload_template_before
+		 * @var string	cat_id			download category ID
+		 * @var array	template_ary	array of download's data for edit
+		 * @since 8.1.0-RC2
+		 */
+		$vars = array(
+			'cat_id',
+			'template_ary',
+		);
+		extract($this->phpbb_dispatcher->trigger_event('dlext.upload_template_before', compact($vars)));
+
+		$this->template->assign_vars($template_ary);
 
 		// Init and display the custom fields with the existing data
 		$cp->get_profile_fields($df_id);

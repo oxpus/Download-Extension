@@ -17,6 +17,9 @@ class dlext_format implements dlext_format_interface
 	/* @var \phpbb\config\config */
 	protected $config;
 
+	/* @var \phpbb\user */
+	protected $user;
+
 	protected $language;
 	protected $request;
 
@@ -26,17 +29,21 @@ class dlext_format implements dlext_format_interface
 	* @param Container 								$phpbb_container
 
 	* @param \phpbb\config\config					$config
+	* @param \phpbb\user							$user
 	*/
 	public function __construct(
 		Container $phpbb_container,
 
-		\phpbb\config\config $config
+		\phpbb\config\config $config,
+		\phpbb\user $user
 	)
 	{
 		$this->config 		= $config;
+		$this->user 		= $user;
 
 		$this->language		= $phpbb_container->get('language');
 		$this->request		= $phpbb_container->get('request');
+		$this->user			= $phpbb_container->get('user');
 	}
 
 	public function dl_size($input_value, $rnd = 2, $out_type = 'combine')
@@ -97,33 +104,49 @@ class dlext_format implements dlext_format_interface
 		return $data_out;
 	}
 
-	public function rating_img($rating_points, $rate = false, $df_id = 0)
+	public function rating_img($rating_points, $rate = false, $df_id = 0, $total_ratings = 0)
 	{
 		if (!$this->config['dl_enable_rate'])
 		{
 			return false;
 		}
 
-		$rate_points = ceil($rating_points);
-		$rate_image = '';
-		$rate_yes = '<i class="icon fa-star fa-fw dl-green" title=""></i>';
-		$rate_no = '<i class="icon fa-star-o fa-fw dl-yellow" title=""></i>';
+		$rate_points = ceil($rating_points / 10);
 
-		for ($i = 0; $i < $this->config['dl_rate_points']; $i++)
+		$rating_title = $this->language->lang('DL_RATING_HOVER', $rating_points / 10, $this->config['dl_rate_points']);
+		$rate_image = '<span class="dl-rating" title="' . $rating_title . '">';
+
+		$rate_yes = '<i class="icon fa-star fa-fw dl-green"></i>';
+		$rate_no = '<i class="icon fa-star-o fa-fw dl-yellow"></i>';
+		$rate_undo = '<i class="icon fa-times-circle fa-fw dl-red"></i>';
+
+		for ($i = 0; $i < $this->config['dl_rate_points']; ++$i)
 		{
 			$j = $i + 1;
 
 			if ($rate)
 			{
 				$ajax = 'onclick="AJAXDLVote(' . $df_id . ', ' . $j . '); return false;"';
-				$rate_image .= ($j <= $rate_points ) ? '<a href="#" ' . $ajax . '>' . $rate_yes . '</a>' : '<a href="#" ' . $ajax . '>' . $rate_no . '</a>';
-
+				$rate_image .= ($j <= $rate_points ) ? '<a href="#" ' . $ajax . ' class="dl-rating-img">' . $rate_yes . '</a>' : '<a href="#" ' . $ajax . ' class="dl-rating-img">' . $rate_no . '</a>';
 			}
 			else
 			{
 				$rate_image .= ($j <= $rate_points ) ? $rate_yes : $rate_no;
 			}
 		}
+
+		if (!$rate && $this->user->data['is_registered'])
+		{
+			$ajax = 'onclick="AJAXDLUnvote(' . $df_id . '); return false;"';
+			$rate_image .= ' <a href="#" ' . $ajax . ' class="dl-rating-img">' . $rate_undo . '</a>';
+		}
+
+		if ($total_ratings)
+		{
+			$rate_image .= '&nbsp;' . $this->language->lang('DL_RATING_COUNT', $total_ratings);
+		}
+
+		$rate_image .= '</span>';
 
 		return $rate_image;
 	}
