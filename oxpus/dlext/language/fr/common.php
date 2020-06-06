@@ -835,8 +835,8 @@ $lang = array_merge($lang, [
 	'IMG_DL_WHITE'			=> 'Blanc',
 	'IMG_DL_YELLOW'			=> 'Jaune',
 
-	'IMG_BUTTON_DOWNLOAD_UPLOAD'		=> 'Rechercher téléchargement',
-	'IMG_BUTTON_DOWNLOAD_SEARCH'		=> 'Charger un fichier',
+	'IMG_BUTTON_DOWNLOAD_UPLOAD'		=> 'Charger un fichier',
+	'IMG_BUTTON_DOWNLOAD_SEARCH'		=> 'Rechercher téléchargement',
 
 	'MUST_SELECT_DOWNLOAD'	=> 'Choisissez un téléchargement.',
 
