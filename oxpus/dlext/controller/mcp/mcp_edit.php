@@ -804,7 +804,7 @@ class mcp_edit
 					/**
 					 * Manipulate thumbnail data before storage
 					 *
-					 * @event 		dlext.upload_sql_thumbnail_before
+					 * @event 		dlext.mcp_sql_thumbnail_before
 					 * @var string	foreign_thumb_message	message after manipulate thumbnail
 					 * @var string	thumb_name				thumbnail name (empty to avoid overwrite foreign storage)
 					 * @var string	df_id					download ID
@@ -818,7 +818,7 @@ class mcp_edit
 						'df_id',
 						'sql_array',
 					);
-					extract($this->phpbb_dispatcher->trigger_event('dlext.upload_sql_thumbnail_before', compact($vars)));
+					extract($this->phpbb_dispatcher->trigger_event('dlext.mcp_sql_thumbnail_before', compact($vars)));
 
 					if (isset($thumb_name) && $thumb_name != '')
 					{

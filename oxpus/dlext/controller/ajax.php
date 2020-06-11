@@ -69,18 +69,29 @@ class ajax
 
 		if ($dl_id && ($rate_point || $drop))
 		{
-			if ($rate_point)
+			$sql = 'SELECT rate_point FROM ' . DL_RATING_TABLE . '
+				WHERE dl_id = ' . (int) $dl_id . '
+					AND user_id = ' . (int) $this->user->data['user_id'];
+			$result = $this->db->sql_query($sql);
+			$user_has_rated = $this->db->sql_affectedrows($result);
+			$this->db->sql_freeresult($result);
+
+			if ($rate_point && !$user_has_rated)
 			{
 				$sql = 'INSERT INTO ' . DL_RATING_TABLE . ' ' . $this->db->sql_build_array('INSERT', [
 					'rate_point'	=> $rate_point,
 					'user_id'		=> $this->user->data['user_id'],
 					'dl_id'			=> $dl_id]);
+
+				$user_has_rated = true;
 			}
 			else if ($drop)
 			{
 				$sql = 'DELETE FROM ' . DL_RATING_TABLE . '
 						WHERE user_id = ' . (int) $this->user->data['user_id'] . '
 							AND dl_id = ' . (int) $dl_id;
+
+				$user_has_rated = false;
 			}
 
 			$this->db->sql_query($sql);
@@ -92,13 +103,6 @@ class ajax
 			$row = $this->db->sql_fetchrow($result);
 			$new_rating = ceil($row['rating'] * 10);
 			$total_ratings = $row['total'];
-			$this->db->sql_freeresult($result);
-
-			$sql = 'SELECT rate_point FROM ' . DL_RATING_TABLE . '
-				WHERE dl_id = ' . (int) $dl_id . '
-					AND user_id = ' . (int) $this->user->data['user_id'];
-			$result = $this->db->sql_query($sql);
-			$user_has_rated = $this->db->sql_affectedrows($result);
 			$this->db->sql_freeresult($result);
 
 			$sql = 'UPDATE ' . DOWNLOADS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', [
