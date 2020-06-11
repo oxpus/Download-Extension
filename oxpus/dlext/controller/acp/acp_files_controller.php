@@ -1068,57 +1068,57 @@ class acp_files_controller implements acp_files_interface
 							$thumb_file->remove();
 							$thumb_error = true;
 						}
-
-						/**
-						 * Manipulate thumbnail data before storage
-						 *
-						 * @event 		dlext.acp_files_sql_thumbnail_before
-						 * @var string	foreign_thumb_message	message after manipulate thumbnail
-						 * @var bool	thumb_error				thumbnail error (yes to break here)
-						 * @var string	thumb_name				thumbnail name (empty to avoid overwrite foreign storage)
-						 * @var string	df_id					download ID
-						 * @var array	sql_array				array of download's data for storage
-						 * @since 8.1.0-RC2
-						 */
-						$foreign_thumb_message = '';
-						$vars = array(
-							'foreign_thumb_message',
-							'thumb_error',
-							'thumb_name',
-							'df_id',
-							'sql_array',
-						);
-						extract($this->phpbb_dispatcher->trigger_event('dlext.acp_files_sql_thumbnail_before', compact($vars)));
-
-						if (!$thumb_error)
-						{
-							$df_id = ($df_id) ? $df_id : $this->db->sql_nextid();
-							@unlink(DL_EXT_FILEBASE_PATH . 'thumbs/' . $dl_file['thumbnail']);
-							@unlink(DL_EXT_FILEBASE_PATH . 'thumbs/' . $df_id . '_' . $thumb_name);
-
-							$upload_file['name'] = $df_id . '_' . $thumb_name;
-							$thumb_file->set_upload_ary($upload_file);
-							$dest_folder = str_replace($phpbb_root_path, '', substr(DL_EXT_FILEBASE_PATH . 'thumbs/', 0, -1));
-
-							$error = $thumb_file->move_file($dest_folder, false, false, CHMOD_ALL);
-							$thumb_message = '<br />' . $this->language->lang('DL_THUMB_UPLOAD');
-
-							$sql = 'UPDATE ' . DOWNLOADS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', [
-								'thumbnail' => $df_id . '_' . $thumb_name]) . ' WHERE id = ' . (int) $df_id;
-								$this->db->sql_query($sql);
-						}
-						else if (!$thumb_name)
-						{
-							$sql = 'UPDATE ' . DOWNLOADS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', [
-								'thumbnail' => '']) . ' WHERE id = ' . (int) $df_id;
-							$this->db->sql_query($sql);
-						}
-
-						if ($foreign_thumb_message)
-						{
-							$thumb_message = '<br />' . $foreign_thumb_message;
-						}
 					}
+				}
+
+				/**
+				 * Manipulate thumbnail data before storage
+				 *
+				 * @event 		dlext.acp_files_sql_thumbnail_before
+				 * @var string	foreign_thumb_message	message after manipulate thumbnail
+				 * @var bool	thumb_error				thumbnail error (true to break here)
+				 * @var string	thumb_name				thumbnail name (true to avoid overwrite foreign storage)
+				 * @var string	df_id					download ID
+				 * @var array	sql_array				array of download's data for storage
+				 * @since 8.1.0-RC2
+				 */
+				$foreign_thumb_message = '';
+				$vars = array(
+					'foreign_thumb_message',
+					'thumb_error',
+					'thumb_name',
+					'df_id',
+					'sql_array',
+				);
+				extract($this->phpbb_dispatcher->trigger_event('dlext.acp_files_sql_thumbnail_before', compact($vars)));
+
+				if (!$thumb_error)
+				{
+					$df_id = ($df_id) ? $df_id : $this->db->sql_nextid();
+					@unlink(DL_EXT_FILEBASE_PATH . 'thumbs/' . $dl_file['thumbnail']);
+					@unlink(DL_EXT_FILEBASE_PATH . 'thumbs/' . $df_id . '_' . $thumb_name);
+
+					$upload_file['name'] = $df_id . '_' . $thumb_name;
+					$thumb_file->set_upload_ary($upload_file);
+					$dest_folder = str_replace($phpbb_root_path, '', substr(DL_EXT_FILEBASE_PATH . 'thumbs/', 0, -1));
+
+					$error = $thumb_file->move_file($dest_folder, false, false, CHMOD_ALL);
+					$thumb_message = '<br />' . $this->language->lang('DL_THUMB_UPLOAD');
+
+					$sql = 'UPDATE ' . DOWNLOADS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', [
+						'thumbnail' => $df_id . '_' . $thumb_name]) . ' WHERE id = ' . (int) $df_id;
+						$this->db->sql_query($sql);
+				}
+				else if (!$thumb_name)
+				{
+					$sql = 'UPDATE ' . DOWNLOADS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', [
+						'thumbnail' => '']) . ' WHERE id = ' . (int) $df_id;
+					$this->db->sql_query($sql);
+				}
+
+				if ($foreign_thumb_message)
+				{
+					$thumb_message = '<br />' . $foreign_thumb_message;
 				}
 
 				if ($del_thumb)
