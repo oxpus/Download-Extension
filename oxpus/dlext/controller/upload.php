@@ -366,7 +366,7 @@ class upload
 			 * Manipulate thumbnail upload
 			 *
 			 * @event 		dlext.upload_thumbnail_before
-			 * @var bool  	thumb_form_name			thumbnail upload form field
+			 * @var string 	thumb_form_name			thumbnail upload form field
 			 * @var bool  	allow_thumbs_upload		enable/disable thumbnail upload
 			 * @since 8.1.0-RC2
 			 */
@@ -552,7 +552,7 @@ class upload
 				 * Save additional data for the download
 				 *
 				 * @event 		dlext.upload_sql_insert_before
-				 * @var array	sql_array		array of download's data for storage
+				 * @var string	sql_array		array of download's data for storage
 				 * @since 8.1.0-RC2
 				 */
 				$vars = array(
@@ -570,7 +570,7 @@ class upload
 				 * Save additional data for the download
 				 *
 				 * @event 		dlext.upload_sql_insert_after
-				 * @var string	next_id			download ID
+				 * @var int		next_id			download ID
 				 * @var array	sql_array		array of download's data for storage
 				 * @since 8.1.0-RC2
 				 */
@@ -589,7 +589,7 @@ class upload
 				 * @event 		dlext.upload_sql_thumbnail_before
 				 * @var string	foreign_thumb_message	message after manipulate thumbnail
 				 * @var string	thumb_name				thumbnail name (empty to avoid overwrite foreign storage)
-				 * @var string	next_id					download ID
+				 * @var int		next_id					download ID
 				 * @var array	sql_array				array of download's data for storage
 				 * @since 8.1.0-RC2
 				 */
@@ -632,7 +632,7 @@ class upload
 				 *
 				 * @event 		dlext.upload_sql_thumbnail_after
 				 * @var string	thumb_name		thumbnail name
-				 * @var string	next_id			download ID
+				 * @var int		next_id			download ID
 				 * @var array	sql_array		array of download's data for storage
 				 * @since 8.1.0-RC2
 				 */
@@ -925,7 +925,7 @@ class upload
 		 * Display extra data to save them with the download
 		 *
 		 * @event 		dlext.upload_template_before
-		 * @var string	cat_id			download category ID
+		 * @var int		cat_id			download category ID
 		 * @var array	template_ary	array of download's data for edit
 		 * @since 8.1.0-RC2
 		 */

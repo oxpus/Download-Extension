@@ -447,7 +447,7 @@ class mcp_manage
 						 *
 						 * @event 		dlext.acp_files_delete_download_after
 						 * @var array	df_ids		download ID's
-						 * @var string	dl_cat		download category ID
+						 * @var int		dl_cat		download category ID
 						 * @since 8.1.0-RC2
 						 */
 						$dl_ids = $dlo_id;

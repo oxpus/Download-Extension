@@ -520,7 +520,7 @@ class index
 			 * Fetch additional data for the downloads
 			 *
 			 * @event 		dlext.index_fetch_download_data
-			 * @var string	cat					download category ID
+			 * @var int 	cat					download category ID
 			 * @var string	sql_sort_by			sql order by fields
 			 * @var string	sql_order			sql order by direction
 			 * @var string	sql_latest_where	additional where conditions
@@ -690,7 +690,7 @@ class index
 				 *
 				 * @event 		dlext.index_display_data_after
 				 * @var string	block		template row key
-				 * @var array	file_id		download id
+				 * @var int 	file_id		download id
 				 * @since 8.1.0-RC2
 				 */
 				$block = 'downloads';

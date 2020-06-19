@@ -58,6 +58,8 @@ class load
 	protected $ext_path_web;
 	protected $ext_path_ajax;
 
+	protected $phpbb_dispatcher;
+
 	protected $dlext_auth;
 	protected $dlext_files;
 	protected $dlext_init;
@@ -80,6 +82,7 @@ class load
 	* @param \phpbb\template\template				$template
 	* @param \phpbb\user							$user
 	* @param \phpbb\language\language				$language
+	* @param \phpbb\event\dispatcher_interface		$phpbb_dispatcher
 	*/
 	public function __construct(
 		$root_path,
@@ -95,6 +98,7 @@ class load
 		\phpbb\template\template $template,
 		\phpbb\user $user,
 		\phpbb\language\language $language,
+		\phpbb\event\dispatcher_interface $phpbb_dispatcher,
 		$dlext_auth,
 		$dlext_files,
 		$dlext_init,
@@ -115,6 +119,7 @@ class load
 		$this->template 				= $template;
 		$this->user 					= $user;
 		$this->language					= $language;
+		$this->phpbb_dispatcher			= $phpbb_dispatcher;
 
 		$this->ext_path					= $this->phpbb_extension_manager->get_extension_path('oxpus/dlext', true);
 		$this->ext_path_web				= $this->phpbb_path_helper->update_web_root_path($this->ext_path);
@@ -520,6 +525,22 @@ class load
 					$this->db->sql_query($sql);
 				}
 			}
+
+			/**
+			 * Additional actions before really download the file / open the webpage
+			 *
+			 * @event 		dlext.load_download_prepend
+			 * @var array	dl_file			download data array
+			 * @var int		df_id			download ID
+			 * @var int		cat_id			download category ID
+			 * @since 8.1.1
+			 */
+			$vars = array(
+				'dl_file',
+				'df_id',
+				'cat_id',
+			);
+			extract($this->phpbb_dispatcher->trigger_event('dlext.load_download_prepend', compact($vars)));
 
 			/*
 			* now it is time and we are ready to rumble: send the file to the user client to download it there!

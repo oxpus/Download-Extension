@@ -497,6 +497,7 @@ class listener implements EventSubscriberInterface
 		$content = preg_replace_callback('#<a href="((.*?)">(.*?)(df_id=)(\d+))<\/a>#i', ['self', '_dl_mod_callback'], $content);
 		$content = preg_replace_callback('#<\/s>(.*?)(df_id=)(\d+)<e>#i', ['self', '_dl_mod_callback'], $content);
 		$content = preg_replace_callback('#<LINK_TEXT text="(.*?)">(.*?)(df_id=)(\d+)<\/LINK_TEXT>#i', ['self', '_dl_mod_callback'], $content);
+		$content = preg_replace_callback('#<URL url="(.*?)(df_id=)(\d+)">(.*?)(df_id=)(\d+)<\/url>#i', ['self', '_dl_mod_callback'], $content);
 
 		$event['text'] = $content;
 	}
@@ -546,6 +547,11 @@ class listener implements EventSubscriberInterface
 			$dl_id = $part[4];
 			$link_text = 'link_text';
 		}
+		else if (isset($part[6]) && (int) $part[6])
+		{
+			$dl_id = $part[6];
+			$link_text = 'url';
+		}
 		else
 		{
 			$dl_id = $part[3];
@@ -569,11 +575,11 @@ class listener implements EventSubscriberInterface
 
 		if ($title)
 		{
-			if ($this->config['dl_topic_title_catname'])
+			if ($this->config['dl_topic_post_catname'])
 			{
 				$title .= ' (' . $this->dl_index[$cat_id]['cat_name_nav'] . ')';
 			}
-	
+
 			switch ($link_text)
 			{
 				case 'preview':
@@ -581,6 +587,9 @@ class listener implements EventSubscriberInterface
 				break;
 				case 'link_text':
 					$link_title = '<LINK_TEXT text="' . $title . '">' . $title . '</LINK_TEXT>';
+				break;
+				case 'url':
+					$link_title = '<URL url="' .  $part[1] .  $part[2] .  $part[3]  . '">' . $title . '</URL>';
 				break;
 				case 'postlink':
 					$link_title = '</s>' . $title . '<e>';

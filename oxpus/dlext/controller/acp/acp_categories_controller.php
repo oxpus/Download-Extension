@@ -800,7 +800,7 @@ class acp_categories_controller implements acp_categories_interface
 					 *
 					 * @event 		dlext.acp_categories_delete_downloads_after
 					 * @var array	dl_ids		download ID's
-					 * @var string	cat_id		download category ID
+					 * @var int		cat_id		download category ID
 					 * @since 8.1.0-RC2
 					 */
 					$vars = array(

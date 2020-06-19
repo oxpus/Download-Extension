@@ -387,7 +387,7 @@ class search
 					 *
 					 * @event 		dlext.search_keywords_display_data_after
 					 * @var string	block		template row key
-					 * @var array	file_id		download id
+					 * @var int		file_id		download id
 					 * @since 8.1.0-RC2
 					 */
 					$block = 'searchresults';
@@ -604,7 +604,7 @@ class search
 					 *
 					 * @event 		dlext.search_user_display_data_after
 					 * @var string	block		template row key
-					 * @var array	file_id		download id
+					 * @var int		file_id		download id
 					 * @since 8.1.0-RC2
 					 */
 					$block = 'searchresults';

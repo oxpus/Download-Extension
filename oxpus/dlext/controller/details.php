@@ -495,6 +495,26 @@ class details
 					$approve = 0;
 				}
 
+				/**
+				 * Additional actions before storage a download comment
+				 *
+				 * @event 		dlext.details_comment_storage_before
+				 * @var int		df_id			download ID
+				 * @var int		dl_id			download comment ID
+				 * @var int		cat_id			download category ID
+				 * @var string	comment_text	comment text, unformatted
+				 * @var bool	approve			download approval
+				 * @since 8.1.1
+				 */
+				$vars = array(
+					'df_id',
+					'df_id',
+					'cat_id',
+					'comment_text',
+					'approve',
+				);
+				extract($this->phpbb_dispatcher->trigger_event('dlext.details_comment_storage_after', compact($vars)));
+
 				if ($dl_id)
 				{
 					$sql = 'UPDATE ' . DL_COMMENTS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', [
@@ -528,6 +548,34 @@ class details
 
 					$comment_message = $this->language->lang('DL_COMMENT_ADDED');
 				}
+
+				/**
+				 * Additional actions after storage a download comment
+				 *
+				 * @event 		dlext.details_comment_storage_after
+				 * @var int		df_id			download ID
+				 * @var int		dl_id			download comment ID
+				 * @var int		cat_id			download category ID
+				 * @var string	comment_text	comment text prepared for storage
+				 * @var string	com_uid			comment bbcode uid
+				 * @var string	com_bitfield	comment bbcode bitfields
+				 * @var int		com_flags		comment bbcode flags
+				 * @var bool	approve			download approval
+				 * @var string	comment_message	success message after save/update comment
+				 * @since 8.1.1
+				 */
+				$vars = array(
+					'df_id',
+					'df_id',
+					'cat_id',
+					'comment_text',
+					'com_uid',
+					'com_bitfield',
+					'com_flags',
+					'approve',
+					'comment_message'
+				);
+				extract($this->phpbb_dispatcher->trigger_event('dlext.details_comment_storage_after', compact($vars)));
 
 				$approve_message	= '';
 
@@ -1299,13 +1347,14 @@ class details
 					}
 
 					$code = $this->request->variable('confirm_id', '');
+	
 					if (!$code)
 					{
 						$code = $this->request->variable('confirm_code', '');
 					}
 
 					if ($code)
-					{
+					{	
 						$sql = 'INSERT INTO ' . DL_HOTLINK_TABLE . ' ' . $this->db->sql_build_array('INSERT', [
 							'user_id'		=> $this->user->data['user_id'],
 							'session_id'	=> $this->user->data['session_id'],
@@ -1313,6 +1362,28 @@ class details
 							'code'			=> 'dlvc']);
 						$this->db->sql_query($sql);
 					}
+
+					/**
+					 * Additional actions before redirect to download the file / open the webpage
+					 *
+					 * @event 		dlext.details_download_before
+					 * @var int		hotlink_id		hotlink protection ID
+					 * @var string	code			confirmation code
+					 * @var int		df_id			download ID
+					 * @var bool	modcp			current modcp action
+					 * @var int		cat_id			download category ID
+					 * @var int		file_version	download version ID
+					 * @since 8.1.1
+					 */
+					$vars = array(
+						'hotlink_id',
+						'code',
+						'df_id',
+						'modcp',
+						'cat_id',
+						'file_version',
+					);
+					extract($this->phpbb_dispatcher->trigger_event('dlext.details_download_before', compact($vars)));
 
 					redirect($this->helper->route('oxpus_dlext_load', ['hotlink_id' => $hotlink_id, 'code' => $code, 'df_id' => $df_id, 'modcp' => $modcp, 'cat_id' => $cat_id, 'file_version' => $file_version]));
 				}
@@ -1606,8 +1677,8 @@ class details
 		 * Calculate or Display additional data
 		 *
 		 * @event 		dlext.details_display_after
-		 * @var string	df_id			download ID
-		 * @var string	cat_id			download category ID
+		 * @var int		df_id			download ID
+		 * @var int		cat_id			download category ID
 		 * @var array	dl_files		array of download's data
 		 * @since 8.1.0-RC2
 		 */

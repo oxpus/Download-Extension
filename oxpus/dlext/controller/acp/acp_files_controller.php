@@ -476,8 +476,8 @@ class acp_files_controller implements acp_files_interface
 			 * Display extra data to save them with the download
 			 *
 			 * @event 		dlext.acp_files_template_before
-			 * @var string	df_id			download ID
-			 * @var string	cat_id			download category ID
+			 * @var int		df_id			download ID
+			 * @var int		cat_id			download category ID
 			 * @var array	template_ary	array of download's data for edit
 			 * @since 8.1.0-RC2
 			 */
@@ -942,7 +942,7 @@ class acp_files_controller implements acp_files_interface
 					 * Save additional data for the download
 					 *
 					 * @event 		dlext.acp_files_edit_sql_insert_before
-					 * @var string	df_id			download ID
+					 * @var int		df_id			download ID
 					 * @var array	sql_array		array of download's data for storage
 					 * @since 8.1.0-RC2
 					 */
@@ -974,7 +974,7 @@ class acp_files_controller implements acp_files_interface
 					 * Save additional data for the download
 					 *
 					 * @event 		dlext.acp_files_add_sql_insert_after
-					 * @var string	next_id			download ID
+					 * @var int		next_id			download ID
 					 * @var array	sql_array		array of download's data for storage
 					 * @since 8.1.0-RC2
 					 */
@@ -1005,7 +1005,7 @@ class acp_files_controller implements acp_files_interface
 				 * Manipulate thumbnail upload
 				 *
 				 * @event 		dlext.acp_edit_thumbnail_before
-			 	 * @var bool  	thumb_form_name			thumbnail upload form field
+			 	 * @var string 	thumb_form_name			thumbnail upload form field
 				 * @var bool  	allow_thumbs_upload		enable/disable thumbnail upload
 				 * @since 8.1.0-RC2
 				 */
@@ -1078,7 +1078,7 @@ class acp_files_controller implements acp_files_interface
 				 * @var string	foreign_thumb_message	message after manipulate thumbnail
 				 * @var bool	thumb_error				thumbnail error (true to break here)
 				 * @var string	thumb_name				thumbnail name (true to avoid overwrite foreign storage)
-				 * @var string	df_id					download ID
+				 * @var int		df_id					download ID
 				 * @var array	sql_array				array of download's data for storage
 				 * @since 8.1.0-RC2
 				 */
@@ -1340,8 +1340,8 @@ class acp_files_controller implements acp_files_interface
 				 * Workflow after delete download
 				 *
 				 * @event 		dlext.acp_files_delete_download_after
-				 * @var string	df_id		download ID
-				 * @var string	dl_cat		download category ID
+				 * @var int		df_id		download ID
+				 * @var int		dl_cat		download category ID
 				 * @since 8.1.0-RC2
 				 */
 				$vars = array(

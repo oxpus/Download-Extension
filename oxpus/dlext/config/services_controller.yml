@@ -173,6 +173,7 @@ services:
             - '@template'
             - '@user'
             - '@language'
+            - '@dispatcher'
             - '@oxpus.dlext.dlext_auth'
             - '@oxpus.dlext.dlext_files'
             - '@oxpus.dlext.dlext_init'
