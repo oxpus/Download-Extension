@@ -580,6 +580,8 @@ class listener implements EventSubscriberInterface
 				$title .= ' (' . $this->dl_index[$cat_id]['cat_name_nav'] . ')';
 			}
 
+			$title = strip_tags($title);
+
 			switch ($link_text)
 			{
 				case 'preview':
