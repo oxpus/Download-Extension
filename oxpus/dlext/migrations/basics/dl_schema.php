@@ -284,7 +284,7 @@ class dl_schema extends \phpbb\db\migration\migration
 				$this->table_prefix . 'dl_lang' => [
 					'COLUMNS'		=> [
 						'field_id'				=> ['UINT:8', 0],
-						'lang_id'				=> ['UINT:8', ],
+						'lang_id'				=> ['UINT:8', 0],
 						'lang_name'				=> ['MTEXT_UNI', ''],
 						'lang_explain'			=> ['MTEXT_UNI', ''],
 						'lang_default_value'	=> ['MTEXT_UNI', ''],
@@ -437,7 +437,7 @@ class dl_schema extends \phpbb\db\migration\migration
 						'rules_bitfield'		=> ['VCHAR', ''],
 						'rules_flags'			=> ['UINT:11', 0],
 						'dl_topic_forum'		=> ['INT:11', 0],
-						'dl_topic_text'			=> ['MTEXT_UNI', ],
+						'dl_topic_text'			=> ['MTEXT_UNI', ''],
 						'cat_icon'				=> ['VCHAR', ''],
 						'diff_topic_user'		=> ['BOOL', 0],
 						'topic_user'			=> ['UINT:11', 0],
