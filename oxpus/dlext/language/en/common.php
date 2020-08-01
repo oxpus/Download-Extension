@@ -178,8 +178,8 @@ $lang = array_merge($lang, [
 	'DL_BYTES'						=> 'B',
 	'DL_BYTES_LONG'					=> 'Bytes',
 
-	'DL_CAN_DOWNLOAD_TRAFFIC'			=> 'You have already downloaded this file.<br />The administrator allowes you to download again without paying traffic for it.',
-	'DL_CAN_DOWNLOAD_TRAFFIC_FOOTER'	=> '<strong>The administrator currently allowes you to load already downloaded files again without paying traffic for them.</strong><br /><br />',
+	'DL_CAN_DOWNLOAD_TRAFFIC'			=> 'You have already downloaded this file.<br />The administrator allows you to download again without paying traffic for it.',
+	'DL_CAN_DOWNLOAD_TRAFFIC_FOOTER'	=> '<strong>The administrator currently allows you to load already downloaded files again without paying traffic for them.</strong><br /><br />',
 	'DL_CAPTCHA_PERM_0'					=> 'disabled',
 	'DL_CAPTCHA_PERM_1'					=> 'Guests',
 	'DL_CAPTCHA_PERM_2'					=> 'Guests and Standardusers',
@@ -378,7 +378,7 @@ $lang = array_merge($lang, [
 	'DL_INDEX_DESC_HIDE'	=> 'Hide category descriptions',
 	'DL_INFO'				=> 'Info',
 	'DL_IP'					=> 'IP Address',
-	'DL_IS_FREE'			=> 'free',
+	'DL_IS_FREE'			=> 'Free',
 	'DL_IS_FREE_REG'		=> 'Free for reg. users',
 
 	'DL_KB'				=> 'KiB',
@@ -503,11 +503,11 @@ $lang = array_merge($lang, [
 	'DL_NEW_TIME'						=> 'Number of days a new download will be marked',
 	'DL_NEWTOPIC_TRAFFIC'				=> 'Download traffic for every new created topic',
 	'DL_NO'								=> 'No',
-	'DL_NO_ACCESS'						=> 'You’re prohibited from downloading this file.<br />Please log in to the forum first.',
+	'DL_NO_ACCESS'						=> 'Access denied! <br /> <br /> You have no rights to download this file! <br /> Please log in to the forum first.',
 	'DL_NO_APPROVE'						=> 'No downloads available for approval',
 	'DL_NO_CAPPROVE'					=> 'No comments available for approval',
 	'DL_NO_BUG_TRACKER'					=> 'No reports found',
-	'DL_NO_CATEGORY'					=> 'There are no categories. Add a new category before you set any permissions.',
+	'DL_NO_CATEGORY'					=> 'There are no categories set. Please create a category before setting permissions.',
 	'DL_NO_CATEGORY_INDEX'				=> 'This download section has no categories',
 	'DL_NO_CHANGE_EDIT_TIME'			=> 'Do not log this update',
 	'DL_NO_CONFIG'						=> 'User configuration locked',
@@ -529,8 +529,8 @@ $lang = array_merge($lang, [
 
 	'DL_OFF_GUESTS'				=> 'Not for guests',
 	'DL_OFF_HIDE'				=> 'Hide link in board navigation (if Extension is inactive)',
-	'DL_OFF_MESSAGE'			=> 'The downloads are currently off-line.<br />Please take a look later on.',
-	'DL_OFF_MESSAGE_ADMIN'		=> 'The downloads are currently off-line',
+	'DL_OFF_MESSAGE'			=> 'The download area is currently locked. <br /> Please try again later.',
+	'DL_OFF_MESSAGE_ADMIN'		=> 'The download area is currently locked',
 	'DL_OFF_NOW'				=> 'now',
 	'DL_OFF_NOW_TIME'			=> 'Deactivate now or for a timespan',
 	'DL_OFF_TIME'				=> 'timespan',
@@ -577,7 +577,7 @@ $lang = array_merge($lang, [
 	'DL_PRIVACY_BUGS'			=> 'Bug Tracker entries',
 	'DL_PRIVACY_COMMENTS'		=> 'Comments on downloads',
 	'DL_PRIVACY_DOWNLOAD'		=> 'Download datafile',
-	'DL_PRIVACY_EXPLAIN'		=> 'With the buttons below you can download all data stored about you within the Download Extension.<br />The data will be sent to you as a simple CSV datafile provided for downloads.<br /><br />Important: These data can be changed or even be deleted at any time by functions within the extension or in the forum. Restoring these data from the downloaded csv datafiles is not possible in this context.',
+	'DL_PRIVACY_EXPLAIN'		=> 'With the buttons below you can download all data stored about you within the Download Extension.<br />The data will be sent to you as a simple CSV datafile provided for downloads.<br /><br />Important: These data can be changed or even deleted at any time by functions within the extension or in the forum. In this case, it is not possible to restore this data with the downloaded files!',
 	'DL_PRIVACY_IPS'			=> 'Anonymize user IPs',
 	'DL_PRIVACY_STATS'			=> 'Statistical data',
 
@@ -601,7 +601,7 @@ $lang = array_merge($lang, [
 	'DL_REPORT_BROKEN_VC'				=> 'Visual confirmation to report a broken download',
 	'DL_REPORT_BROKEN_VC_MISMATCH'		=> 'The confirmation code for this report was wrong. Please go back and retry.',
 	'DL_REPORT_CONFIRM_CODE'			=> 'Please enter the confirmation code here to report this download as broken:',
-	'DL_REPORT_NOTIFY_TEXT'				=> "---------------------------\n\nThe user have entered the following message about this:\n\n%s\n\n",
+	'DL_REPORT_NOTIFY_TEXT'				=> "---------------------------\n\nThe user has left you the following message:\n\n%s\n\n",
 	'DL_REPORT_REASON'					=> 'Reason for your report',
 
 	'DL_RSS_ACTION_D_TXT'			=> 'Display the following message',
@@ -633,7 +633,7 @@ $lang = array_merge($lang, [
 	'DL_SEARCH_RESULTS'			=> 'Downloads search results',
 	'DL_SEARCH_TYPE'			=> 'Restrict search result',
 	'DL_SEARCH_TYPE_ALL'		=> 'Download must contain all keywords',
-	'DL_SEARCH_TYPE_SINGLE'		=> 'Download should contain at least one of the keywords',
+	'DL_SEARCH_TYPE_SINGLE'		=> 'Download should contain at least one word',
 	'DL_SELECT_CAT'				=> 'Select Categories',
 	'DL_SELECT_CATS'			=> 'Click to select one or more categories',
 	'DL_SELECT_GROUP'			=> 'Select user groups',
@@ -731,11 +731,11 @@ $lang = array_merge($lang, [
 	'DL_UP'						=> 'up',
 	'DL_UP_TO_DATE'				=> '%s is up to date',
 	'DL_UPLOAD'					=> 'Upload a file',
-	'DL_UPLOAD_ERROR'			=> 'Error while uploading this file. Please go back and retry.<br />Contact the admin, if this error will still exist.',
+	'DL_UPLOAD_ERROR'			=> 'Failed to upload this file. Please go back and try again. <br /> Contact the admin if the error persists.',
 	'DL_UPLOAD_FILE'			=> 'Create Download',
 	'DL_UPLOAD_MAX_FILESIZE'	=> 'Maximum allowed file size: %s',
 	'DL_UPLOAD_ONE_MORE'		=> '%sClick here to create another download%s',
-	'DL_UPLOAD_TRAFFIC'			=> 'The file size of uploads will decrease the overall traffic. Regard this on choosing the file size!',
+	'DL_UPLOAD_TRAFFIC'			=> 'The size of uploaded files is subtracted from the overall traffic. Keep this in mind when choosing the file size!',
 	'DL_UPLOAD_TRAFFIC_COUNT'	=> 'Also decrease the overall traffic for uploads',
 	'DL_UPLOADS_COUNT'			=> 'Number of uploads',
 	'DL_UPLOADS_TRAFFIC'		=> 'Overall upload traffic',
@@ -744,8 +744,8 @@ $lang = array_merge($lang, [
 	'DL_USE_TODOLIST'			=> 'Activate ToDo list',
 	'DL_USER_AUTO_TRAFFIC'		=> 'Traffic for users',
 	'DL_USER_AUTO_TRAFFIC_USER'	=> 'Traffic for this user successful updated',
-	'DL_USER_BANNED'			=> 'You was banned for the download area so you have no permissions to download files.<br />Please contact an administrator if you will not accept the ban.',
-	'DL_USER_CONFIG_SAVED'		=> 'User configuration for downloads updated successfully<br /><br />%sClick here to return to the download settings%s',
+	'DL_USER_BANNED'			=> "You have been banned in the download area and can therefore not download any files. <br /> Please contact an administrator if you do not agree with the ban.",
+	'DL_USER_CONFIG_SAVED'		=> 'User configuration for downloads successfully updated.<br /><br />%sClick here to return to the settings%s',
 	'DL_USER_ID'				=> 'User ID',
 	'DL_USER_TRAFFIC_ONCE'		=> 'Decrease user traffic only once per download',
 	'DL_USERS_WITHOUT_GROUP'	=> 'Users without a membership in an user group',
@@ -823,7 +823,7 @@ $lang = array_merge($lang, [
 
 	'NUMBER_RECENT_DL_ON_PORTAL'	=> 'Number of recent downloads that are displayed on the portal',
 
-	'POST_CONFIRM_EXPLAIN'		=> 'To prevent uncontrolled downloads you are asked to enter the following code to be able to download this file.<br />Please enter the code in the input field and confirm this with a click on the button “Download”.',
+	'POST_CONFIRM_EXPLAIN'		=> 'In order to avoid uncontrolled downloads you have to enter the confirmation code below so that you can download the file. <br /> Please enter the code in the following input field and then confirm your entry with the "Download" button. ',
 
 	'RECENT_DOWNLOADS'			=> 'Recent downloads',
 
@@ -861,7 +861,7 @@ $lang = array_merge($lang, [
 	'DL_REPORT_STATUS_4'	=> 'finish',
 	'DL_REPORT_STATUS_5'	=> 'dropped',
 
-	'DL_BUG_REPORT_EMAIL_STATUS'	=> 'This message was left behind the new status:
+	'DL_BUG_REPORT_EMAIL_STATUS'	=> 'This message was left for the new status:
 	--------------------
 	%s
 	--------------------',

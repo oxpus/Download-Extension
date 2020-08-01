@@ -2,7 +2,7 @@ Subject: Broken Download
 
 Hello {USERNAME},
 
-You have received this email because "{REPORTER}" have reported a broken download on "{SITENAME}".
+You have received this email because "{REPORTER}" has reported a broken download on "{SITENAME}".
 Use the following link to check this report:
 
 ---------------------------
