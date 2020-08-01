@@ -2,7 +2,7 @@ Subject: Changed Download
 
 Hello {USERNAME},
 
-You have received this email because the following download on "{SITENAME}" in the category "{CATEGORY}" is changed:
+You have received this email because the following download on "{SITENAME}" in the category "{CATEGORY}" has been changed:
 
 ---------------------------
 {DOWNLOAD}
