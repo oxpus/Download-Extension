@@ -542,6 +542,11 @@ class load
 			);
 			extract($this->phpbb_dispatcher->trigger_event('dlext.load_download_prepend', compact($vars)));
 
+			// Purge the files cache
+			@unlink(DL_EXT_CACHE_PATH . 'data_dl_cat_counts.' . $this->php_ext);
+			@unlink(DL_EXT_CACHE_PATH . 'data_dl_file_p.' . $this->php_ext);
+			@unlink(DL_EXT_CACHE_PATH . 'data_dl_file_preset.' . $this->php_ext);
+
 			/*
 			* now it is time and we are ready to rumble: send the file to the user client to download it there!
 			*/

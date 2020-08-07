@@ -296,10 +296,13 @@ class footer implements footer_interface
 
 				$dl_file_p = $this->dlext_init->dl_file_p();
 				$total_cur_clicks = 0;
-
-				foreach ($dl_file_p as $dl_id => $row)
+				
+				if (!empty($dl_file_p))
 				{
-					$total_cur_clicks += $row['klicks'];
+					foreach ($dl_file_p as $dl_id => $row)
+					{
+						$total_cur_clicks += $row['klicks'];
+					}
 				}
 
 				$this->template->assign_vars([
