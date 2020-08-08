@@ -1,17 +1,22 @@
 <?php
-/**
- *
- * Hotschi's Downloads. An extension for the phpBB Forum Software package.
- * French translation by phpBB-fr.com (Darky et EnYgma), panteror (http://www.dowfrance.com) & Galixte (http://www.galixte.com)
- *
- * @copyright (c) 2002-2020 OXPUS <https://www.oxpus.net>
- * @license GNU General Public License, version 2 (GPL-2.0-only)
- *
- */
 
 /**
- * DO NOT CHANGE
- */
+*
+* @package phpBB Extension - Oxpus Downloads
+* @copyright (c) 2002-2020 OXPUS - www.oxpus.net
+* @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
+*
+*/
+
+/*
+* [ french ] language file for Download Extension
+* French translation by phpBB-fr.com (Darky et EnYgma), panteror (http://www.dowfrance.com) & Galixte (http://www.galixte.com)
+* Correction by TazDevilBZH
+*/
+
+/**
+* DO NOT CHANGE
+*/
 if (!defined('IN_PHPBB'))
 {
 	exit;
@@ -22,44 +27,28 @@ if (empty($lang) || !is_array($lang))
 	$lang = [];
 }
 
-// DEVELOPERS PLEASE NOTE
-//
-// All language files should use UTF-8 as their encoding and the files must not contain a BOM.
-//
-// Placeholders can now contain order information, e.g. instead of
-// 'Page %s of %s' you can (and should) write 'Page %1$s of %2$s', this allows
-// translators to re-order the output of data while ensuring it remains correct
-//
-// You do not need this where single placeholders are used, e.g. 'Message %d' is fine
-// equally where a string contains only two placeholders which are used to wrap text
-// in a url you again do not need to specify an order e.g., 'Click %sHERE%s' is fine
-//
-// Some characters you may want to copy&paste:
-// ’ « » “ ” …
-//
-
 $lang = array_merge($lang, [
 	'DL_LOG_CAT_PERM_DROP'	=> '<strong>Réinitialiser les permissions des catégories</strong><br>» %1$s',
 
 	'ACP_DOWNLOADS'		=> 'Téléchargements',
 	'ADD_NEW_DOWNLOAD'	=> 'Ajouter un nouveau téléchargement',
 
-	'CLICK_VIEW_NEW_VERSION'				=> 'Vous avez ajouté une nouvelle version de ce téléchargement.<br>Pour le moment cette version a été verrouillée afin de pouvoir ajouter une description et des informations supplémentaires<br>avant que cette version ne devienne publique.<br>%sCliquez ici pour ouvrir, modifier et déverrouiller cette version.%s',
-	'CLICK_RETURN_BUG_TRACKER'				=> '%sCliquez ici pour revenir au traqueur d’erreurs%s',
+	'CLICK_VIEW_NEW_VERSION'				=> 'Vous avez ajouté une nouvelle version de ce téléchargement.<br />Cette version est actuellement verrouillée afin de pouvoir ajouter une description et des pièces-jointes supplémentaires<br />avant que cette version ne devienne visible publiquement.<br>%sCliquez ici pour afficher, modifier et déverrouiller cette version.%s',
+	'CLICK_RETURN_BUG_TRACKER'				=> '%sCliquez ici pour revenir au bug tracker%s',
 	'CLICK_RETURN_COMMENTS'					=> '%sCliquez ici pour revenir aux commentaires%s',
 	'CLICK_RETURN_DOWNLOAD_DETAILS'			=> '%sCliquez ici pour revenir au téléchargement%s',
 	'CLICK_RETURN_DOWNLOADADMIN'			=> '%sCliquez ici pour revenir à l’administration des téléchargements%s',
 	'CLICK_RETURN_DOWNLOADS'				=> '%sCliquez ici pour revenir aux catégories de téléchargement%s',
-	'CLICK_RETURN_MODCP_APPROVE'			=> '%sCliquez ici pour revenir aux téléchargements non-validés%s',
+	'CLICK_RETURN_MODCP_APPROVE'			=> '%sCliquez ici pour revenir aux téléchargements non-approuvés%s',
 	'CLICK_RETURN_MODCP_MANAGE'				=> '%sCliquez ici pour revenir au panneau de modération%s',
 	'CLICK_RETURN_THUMBS'					=> '%sCliquez ici pour revenir à la gestion de la miniature%s',
 	'CLICK_RETURN_TODO_EDIT'				=> '%sCliquez ici pour revenir à la liste des tâches à effectuer%s',
 
 	'DL_CONFIRM_DELETE_BUG_REPORT'	=> 'Êtes-vous sûr de vouloir supprimer ce rapport d’erreurs ?',
-	'DL_CONFIRM_EXPLAIN'			=> 'Pour éviter le spam sur les rapports de problèmes de téléchargement, veuillez saisir le code suivant.<br>Merci de saisir le code dans le champ de saisie et le valider en cliquant sur le bouton « Envoyer ».',
+	'DL_CONFIRM_EXPLAIN'			=> 'Afin d’éviter le spam en signalant des téléchargements défectueux, vous devez saisir le code de confirmation suivant.<br>Veuillez saisir le code, indiqué ci-dessous, dans le champ de saisie suivant et confirmer votre saisie en cliquant sur le bouton « Envoyer ».',
 
 	'DL_A_GUEST'						=> 'un invité',
-	'DL_ACCOUNT'						=> 'Vous avez utilisé <strong>%s</strong> de trafic ce mois-ci.',
+	'DL_ACCOUNT'						=> 'Il vous reste <strong>%s</strong> de trafic pour ce mois-ci.',
 	'DL_ACP_BANLIST'					=> 'Liste des bannissements',
 	'DL_ACP_BANLIST_EXPLAIN'			=> 'Vous pouvez saisir ici différentes valeurs pour interdire l’accès aux téléchargements.<br>Chaque valeur sera utilisée en même temps, si elles sont inscrites comme un ensemble de données.',
 	'DL_ACP_CATEGORIES'					=> 'Gestion des Catégories',
@@ -70,7 +59,7 @@ $lang = array_merge($lang, [
 	'DL_ACP_CONFIRM_RESET_FINISH'		=> 'L’opération s’est déroulée avec succès',
 	'DL_ACP_CONFIRM_RESET_STATS'		=> 'Êtes-vous sûr de vouloir purger toutes les données de statistiques ?',
 	'DL_ACP_CONF_GENERAL'				=> 'Général',
-	'DL_ACP_CONF_LIMIT'					=> 'Limitations',
+	'DL_ACP_CONF_LIMIT'					=> 'Limites',
 	'DL_ACP_CONF_MESSAGE'				=> 'Messages',
 	'DL_ACP_CONF_PROTECT'				=> 'Sécurité',
 	'DL_ACP_CONF_RSS'					=> 'Flux RSS',
@@ -80,12 +69,11 @@ $lang = array_merge($lang, [
 	'DL_ACP_CONFIG'						=> 'Configuration générale',
 	'DL_ACP_CONFIG_MANAGEMENT'			=> 'Configuration générale',
 	'DL_ACP_FIELDS'						=> 'Champs définis par l’utilisateur',
-	'DL_ACP_BROWSER'					=> 'Gérer les Robots',
 	'DL_ACP_EXT_BLACKLIST'				=> 'Liste noire des extensions de fichier',
 	'DL_ACP_FILES'						=> 'Gestion des Téléchargements',
 	'DL_ACP_FILES_MANAGEMENT'			=> 'Gestion des Téléchargements',
-	'DL_ACP_IDX_TYPE_C'					=> 'Basculer vers l’index réduit',
-	'DL_ACP_IDX_TYPE_F'					=> 'Basculer vers l’index complet',
+	'DL_ACP_IDX_TYPE_C'					=> 'Basculer vers l’affichage compact de l’index',
+	'DL_ACP_IDX_TYPE_F'					=> 'Basculer vers l’affichage complet de l’index',
 	'DL_ACP_MAIN_STATS_CATEGORIES'		=> 'Catégories principales',
 	'DL_ACP_MAIN_STATS_REMAIN_GTRAFFIC'	=> 'Trafic restant pour les invités',
 	'DL_ACP_MAIN_STATS_REMAIN_OFF'		=> 'vide',
@@ -122,7 +110,6 @@ $lang = array_merge($lang, [
 	'DL_ACP_TRAFFIC_MANAGEMENT'			=> 'Gestion du Trafic',
 	'DL_ACTIVE'							=> 'Activer l’outil « Téléchargements »',
 	'DL_ADD'							=> 'Ajouter',
-	'DL_ADD_BROWSER'					=> 'Ajouter un nouveau robot',
 	'DL_ADD_CATEGORY'					=> 'Ajouter une catégorie',
 	'DL_ADD_DOWNLOAD'					=> 'Ajouter un téléchargement',
 	'DL_ADD_EXTENSION'					=> 'Ajouter une extension de fichier',
@@ -147,21 +134,21 @@ $lang = array_merge($lang, [
 	'DL_AUTH_MOD'						=> 'Modérer',
 	'DL_AUTH_MULTI_EXPLAIN'				=> 'Il y a plusieurs catégories/groupes d’utilisateurs sélectionnés. Les permissions ne seront pas définies !',
 	'DL_AUTH_SINGLE_EXPLAIN'			=> 'Il y a une catégorie et un groupe d’utilisateurs sélectionnés. Les permissions sont définies pour les valeurs enregistrées.',
-	'DL_AUTH_UP'						=> 'Charger',
+	'DL_AUTH_UP'						=> 'Téléverser',
 	'DL_AUTH_VIEW'						=> 'Voir',
 	'DL_AUTO_TRAFFIC'					=> 'Trafic automatique',
-	'DL_AUTO_TRAFFIC_EXPLAIN'			=> 'Sur ce tableau, vous pouvez définir le trafic de tous les utilisateurs ou de tous les membres d’un groupe d’utilisateurs, qu’ils recevront tous les mois pour télécharger.',
+	'DL_AUTO_TRAFFIC_EXPLAIN'			=> 'Sur ce tableau, vous pouvez définir le trafic que tous les utilisateurs ou que tous les membres d’un groupe d’utilisateurs recevront chaque mois pour télécharger.',
 
 	'DL_BANLIST_UPDATED'			=> 'La liste des bannissements a été mise à jour avec succès',
-	'DL_BANNED'						=> 'Vous êtes banni, donc vous ne pouvez plus télécharger de fichiers !',
+	'DL_BANNED'						=> 'Vous êtes banni, vous ne pouvez donc plus télécharger de fichiers !',
 	'DL_BLUE_EXPLAIN'				=> 'Plus aucun trafic global pour ce mois-ci !',
 	'DL_BLUE_EXPLAIN_FILE'			=> 'Plus aucun trafic de fichiers pour ce mois-ci !',
 	'DL_BLUE_EXPLAIN_FOOT'			=> 'Plus aucun trafic global ou trafic de fichiers/catégories pour ce mois-ci !',
-	'DL_BROKEN'						=> 'Rapporter un problème de téléchargement',
-	'DL_BROKEN_CUR'					=> 'Ce téléchargement est actuellement rapporté pour un problème',
-	'DL_BROKEN_MOD'					=> 'Réinitialiser le statut des problèmes de téléchargements',
-	'DL_BROKEN_OVERVIEW'			=> 'Il y a %s téléchargements rapporté pour un problème. Cliquez ici pour les valider.',
-	'DL_BROKEN_OVERVIEW_ONE'		=> 'Il y a un téléchargement rapporté pour un problème. Cliquez ici pour le valider.',
+	'DL_BROKEN'						=> 'Rapporter un téléchargement défectueux',
+	'DL_BROKEN_CUR'					=> 'Ce téléchargement est actuellement reporté comme étant défectueux',
+	'DL_BROKEN_MOD'					=> 'Réinitialiser le statut de téléchargement défectueux',
+	'DL_BROKEN_OVERVIEW'			=> 'Il y a %s téléchargements défectueux signalés. Cliquez ici pour les valider.',
+	'DL_BROKEN_OVERVIEW_ONE'		=> 'Il y a un téléchargement défectueux signalé. Cliquez ici pour le valider.',
 	'DL_BUG_REPORT_ADDED'			=> 'Rapport d’erreurs ajouté avec succès',
 	'DL_BUG_REPORT_ASSIGN'			=> 'assigné',
 	'DL_BUG_REPORT_ASSIGN_DATE'		=> 'assigné à',
@@ -256,8 +243,7 @@ $lang = array_merge($lang, [
 	'DL_CONFIRM_DEL_EXTENSION_CONFIRM'	=> 'Êtes-vous sûr de vouloir supprimer l’extension <strong>%s</strong> ?',
 	'DL_CONFIRM_DELETE_EXTENSIONS'		=> 'Êtes-vous sûr de vouloir supprimer les extensions <strong>%s</strong> ?',
 	'DL_CONFIRM_DELETE_MULTIPLE_FILES'	=> 'Voulez-vous vraiment supprimer ces <strong>%d téléchargements</strong> ?',
-	'DL_CONFIRM_DELETE_SINGLE_FILE'		=> 'Voulez-vous vraiment supprimer le téléchargement <strong>%s</strong> ?',
-	'DL_CONFIRM_DEL_UA'					=> 'Supprimer Internet enregistrés ?',
+	'DL_CONFIRM_DELETE_SINGLE_FILE'		=> 'Voulez-vous vraiment supprimer le téléchargement <strong>%s</strong>',
 	'DL_CONFIRM_DEL_UA_CONFIRM	'		=> 'Êtes-vous sûr de vouloir supprimer cette entrée avec tous les navigateurs Internet enregistrés ?',
 	'DL_CONFIRM_DEL_VERSIONS'			=> 'Êtes-vous sûr de vouloir supprimer les versions sélectionnées ?',
 	'DL_CONFIRM_DEL_VERSIONS_CONFIRM'	=> '',
@@ -275,7 +261,7 @@ $lang = array_merge($lang, [
 	'DL_DELETE_CAT_ONLY'			=> 'Supprimer seulement cette catégorie',
 	'DL_DELETE_EXTENSION_CONFIRM'	=> 'Supprimer cette extension de fichier de la liste noire',
 	'DL_DELETE_EXTENSIONS_CONFIRM'	=> 'Supprimer ces extensions de fichier de la liste noire',
-	'DL_DELETE_FILE_CONFIRM'		=> 'Également supprimer le(s) fichier(s)',
+	'DL_DELETE_FILE_CONFIRM'		=> 'Supprimer le fichier du serveur également',
 	'DL_DETAIL'						=> 'Détails',
 	'DL_DIRECTION'					=> 'Action',
 	'DL_DISABLE_NOTIFY'				=> 'Désactiver la notification',
@@ -295,10 +281,10 @@ $lang = array_merge($lang, [
 	'DL_EDIT_FILE'				=> 'Modifier',
 	'DL_EDIT_OWN_DOWNLOADS'		=> 'L’utilisateur peut modifier ses fichiers',
 	'DL_EDIT_THUMBS'			=> 'Gestion des miniatures',
-	'DL_EDIT_TIME'				=> 'Nombre de jours qu’un téléchargement modifié doit être marqué',
+	'DL_EDIT_TIME'				=> 'Nombre de jours pendant lesquels un téléchargement modifié doit être annoncé',
 	'DL_EMPTY_CATEGORY'			=> 'Cette catégorie ne contient aucun téléchargement',
 	'DL_ENABLE_INDEX_DESC'		=> 'Activer les descriptions de téléchargement dans les catégories',
-	'DL_ENABLE_JUMPBOX'			=> 'Activer le menu « Aller à… » dans le pied de page de l’outil « Téléchargements »',
+	'DL_ENABLE_JUMPBOX'			=> 'Activer le menu « Aller à… » dans le bas de la page de l’outil « Téléchargements »',
 	'DL_ENABLE_POST_TRAFFIC'	=> 'Activer l’addition du trafic pour les messages postés',
 	'DL_ENABLE_RATE'			=> 'Activer le système de notation',
 	'DL_ENABLE_SEARCH_DESC'		=> 'Activer les descriptions de téléchargement dans les résultats de la recherche',
@@ -413,8 +399,8 @@ $lang = array_merge($lang, [
 	'DL_LATEST_TYPE_COMPLETE'	=> 'Tous les téléchargements',
 	'DL_LATEST_UPLOADS'			=> 'Derniers chargements',
 	'DL_LATEST_VERSION'			=> 'Dernière version',
-	'DL_LIMIT_DESC_ON_INDEX'	=> 'Limite de la description des téléchargements sur l’accueil',
-	'DL_LIMIT_DESC_ON_INDEX'	=> 'Limite de la description des téléchargements dans les résultats de recherche',
+	'DL_LIMIT_DESC_ON_INDEX'	=> 'Limite de la description des téléchargements sur la page d’accueil',
+	'DL_LIMIT_DESC_ON_SEARCH'	=> 'Limite de la description des téléchargements dans les résultats de recherche',
 	'DL_LINKS_PER_PAGE'			=> 'Nombre de téléchargements par page',
 	'DL_LOCK'					=> 'Verrouiller',
 
@@ -425,15 +411,13 @@ $lang = array_merge($lang, [
 	'DL_LOG_BAN_ADD'		=> '<strong>Ajout d’une entrée dans la liste des bannissements des téléchargements</strong><br>» Utilisateur : %1$s, IP : %2$s, Invité : %3$s',
 	'DL_LOG_BAN_DEL'		=> '<strong>Suppression d’entrées de la liste des bannissements des téléchargements</strong><br>» %s',
 	'DL_LOG_BAN_EDIT'		=> '<strong>Liste des bannissements des téléchargements modifiée</strong><br>» Utilisateur : %1$s, IP : %2$s, Invité : %3$s',
-	'DL_LOG_BROWSER_SAVE'	=> '<strong>Navigateur Internet sauvegardé</strong>',
-	'DL_LOG_BROWSER_DEL'	=> '<strong>Navigateur Internet supprimé</strong>',
 	'DL_LOG_CAT_ADD'		=> '<strong>Catégorie de téléchargement ajoutée</strong><br>» %s',
 	'DL_LOG_CAT_DEL'		=> '<strong>Catégorie de téléchargement supprimée</strong><br>»; %s',
 	'DL_LOG_CAT_EDIT'		=> '<strong>Catégorie de téléchargement modifiée</strong><br>» %s',
 	'DL_LOG_CAT_MOVE'		=> '<strong>Catégorie de téléchargement déplacée</strong><br>» %s',
-	'DL_LOG_CAT_PERM_ALL'	=> '<strong>Permissions de la catégorie modifiées</strong><br>» %1$s<br>» Voir : %2$s<br>» Téléchargement : %3$s<br>» Chargement : %4$s<br>» Modération : %5$s<br>» Voir les commentaires : %6$s<br>» Commentaires du message : %7$s',
+	'DL_LOG_CAT_PERM_ALL'	=> '<strong>Permissions de la catégorie modifiées</strong><br>» %1$s<br>» Voir : %2$s<br>» Téléchargement : %3$s<br>» Téléversement : %4$s<br>» Modération : %5$s<br>» Voir les commentaires : %6$s<br>» Commentaires du message : %7$s',
 	'DL_LOG_CAT_PERM_COPY'	=> '<strong>Permissions copiées de la catégorie de téléchargement</strong><br>» de « %1$s » à « %2$s »',
-	'DL_LOG_CAT_PERM_GRP'	=> '<strong>Permissions de la catégorie de téléchargement modifiées</strong><br>» %1$s pour le groupe d’utilisateurs %2$s<br>» Voir : %3$s<br>» Téléchargement : %4$s<br>» Chargement : %5$s<br>» Modération : %6$s',
+	'DL_LOG_CAT_PERM_GRP'	=> '<strong>Permissions de la catégorie de téléchargement modifiées</strong><br>» %1$s pour le groupe d’utilisateurs %2$s<br>» Voir : %3$s<br>» Téléchargement : %4$s<br>» Téléversement : %5$s<br>» Modération : %6$s',
 	'DL_LOG_CAT_SORT_ASC'	=> '<strong>Catégories de téléchargement triées par ordre alphabétique</strong>',
 	'DL_LOG_CONFIG'			=> '<strong>Configuration du téléchargement modifiée</strong>',
 	'DL_LOG_DEL_ALL_COM'	=> '<strong>Commentaires de téléchargement supprimés</strong>',
@@ -470,7 +454,7 @@ $lang = array_merge($lang, [
 	'DL_MANAGE_CONTENT_COUNT'		=> '%s entrées',
 	'DL_MANAGE_CREATE_DIR'			=> 'Créer un dossier',
 	'DL_MANAGE_EMPTY_FOLDER'		=> 'Ce dossier est vide…',
-	'DL_MANAGE_EXPLAIN'				=> 'Vous pouvez gérer ici les fichiers des téléchargements. Vous pouvez utiliser les fonctions suivantes :<br><br>- Supprimer ou déplacer les fichiers non-assignés.<br>- Joindre des fichiers assignés des catégories inexistantes à des catégories existantes.<br>- Parcourir les fichiers (<i>Par défaut après avoir ouvert le gestionnaire</i>).<br>- Créer un nouveau dossier.<br>- Supprimer des dossiers vides.<br>- Vérifier la taille des fichiers pour chaque téléchargement interne.<br><br><strong>Attention :</strong><br>Cette boite à outils ne doit pas être remplacée par un client FTP !<br>Des fonctions comme le chargement, le déplacement ou le remplacement de fichiers ne sont pas possibles avec cette boite à outils !',
+	'DL_MANAGE_EXPLAIN'				=> 'Vous pouvez gérer ici les fichiers des téléchargements. Vous pouvez utiliser les fonctions suivantes :<br><br>- Supprimer ou déplacer les fichiers non-assignés.<br>- Joindre des fichiers assignés des catégories inexistantes à des catégories existantes.<br>- Parcourir les fichiers (<i>Par défaut après avoir ouvert le gestionnaire</i>).<br>- Créer un nouveau dossier.<br>- Supprimer des dossiers vides.<br>- Vérifier la taille des fichiers pour chaque téléchargement interne.<br><br><strong>Attention :</strong><br>Cette boite à outils ne doit pas être remplacée par un client FTP !<br>Des fonctions comme le téléversement, le déplacement ou le remplacement de fichiers ne sont pas possibles avec cette boite à outils !',
 	'DL_MARK_ALL'					=> 'Tout cocher',
 	'DL_MB'							=> 'Mo',
 	'DL_MOD_DESC'					=> 'Comment l’outil « Téléchargements » fonctionne',
@@ -518,8 +502,8 @@ $lang = array_merge($lang, [
 	'DL_NAV_LINK_OFTlB'					=> 'Après le lien d’équipe dans le pied de page',
 	'DL_NAV_LINK_OFTlA'					=> 'Avant le lien d’équipe dans le pied de page',
 	'DL_NEW'							=> 'Nouveau téléchargement',
-	'DL_NEW_TIME'						=> 'Nombre de jours qu’un téléchargement doit être marqué',
-	'DL_NEWTOPIC_TRAFFIC'				=> 'Trafic pour chaque nouveau sujet créé<br />Veuillez d’abord vous connecter au forum.',
+	'DL_NEW_TIME'						=> 'Nombre de jours pendant lesquels un nouveau téléchargement doit être annoncé',
+	'DL_NEWTOPIC_TRAFFIC'				=> 'Trafic pour chaque nouveau sujet créé',
 	'DL_NO'								=> 'Non',
 	'DL_NO_ACCESS'						=> 'Accès interdit !<br><br>Vous n’avez pas les permissions nécessaires pour télécharger ce fichier !',
 	'DL_NO_APPROVE'						=> 'Aucun téléchargement disponible pour approbation',
@@ -527,7 +511,7 @@ $lang = array_merge($lang, [
 	'DL_NO_BUG_TRACKER'					=> 'Aucun rapport trouvé',
 	'DL_NO_CATEGORY'					=> 'Il n’y a aucune catégorie. Ajoutez une nouvelle catégorie avant de définir des permissions.',
 	'DL_NO_CATEGORY_INDEX'				=> 'Cette section de téléchargement n’a aucune catégorie',
-	'DL_NO_CHANGE_EDIT_TIME'			=> 'Ne pas enregistrer la mise à jour',
+	'DL_NO_CHANGE_EDIT_TIME'			=> 'Ne pas inscrire cette mise à jour dans le journal',
 	'DL_NO_CONFIG'						=> 'Configuration de l’utilisateur verrouillée',
 	'DL_NO_EXTERNAL_URL'				=> 'Vous devez saisir un lien valide, si vous voulez enregistrer un téléchargement externe !',
 	'DL_NO_FILENAME_ENTERED'			=> 'Vous devez sélectionner un fichier, si vous voulez le charger !',
@@ -540,7 +524,7 @@ $lang = array_merge($lang, [
 	'DL_NO_MORE_REMAIN_TRAFFIC'			=> 'Le trafic des téléchargements, pour les utilisateurs enregistrés, dans %s a été complètement utilisé ce mois-ci. Attendez le mois prochain ou contactez un administrateur.',
 	'DL_NO_PERMISSION'					=> 'Accès interdit !<br><br>Vous n’avez pas les permissions nécessaires !',
 	'DL_NO_PERMS_COPY'					=> 'Ne pas copier/conserver les permissions actuelles',
-	'DL_NO_UPLOAD_TRAFFIC'				=> 'Désolé, mais il n’y a plus de trafic de chargement. Contactez un administrateur s’il vous plait, si vous voulez charger ce fichier',
+	'DL_NO_UPLOAD_TRAFFIC'				=> 'Désolé, mais il n’y a plus de trafic de téléversement disponible. Veuillez contacter un administrateur si vous souhaitez téléverser ce fichier',
 	'DL_NOT_ACTIVE'						=> 'verrouillé',
 	'DL_NOT_AVAILIBLE'					=> 'Pas disponible',
 	'DL_NOT_UP_TO_DATE'					=> '%s n’est pas à jour',
@@ -549,18 +533,18 @@ $lang = array_merge($lang, [
 	'DL_OFF_HIDE'				=> 'Masquer le lien dans la navigation du forum (si l’outil « Téléchargements » est inactif)',
 	'DL_OFF_MESSAGE'			=> 'Les téléchargements sont actuellement désactivés.<br>Merci de réessayer plus tard.',
 	'DL_OFF_MESSAGE_ADMIN'		=> 'Les téléchargements sont actuellement désactivés !',
-	'DL_OFF_NOW'				=> 'Actuellement',
-	'DL_OFF_NOW_TIME'			=> 'Désactiver maintenant ou pour un laps de temps',
-	'DL_OFF_TIME'				=> 'Laps de temps',
+	'DL_OFF_NOW'				=> 'Aussitôt',
+	'DL_OFF_NOW_TIME'			=> 'Désactiver aussitôt ou pour une période horaire',
+	'DL_OFF_TIME'				=> 'Période horaire',
 	'DL_ON_ADMINS'				=> 'Toujours autoriser les administrateurs',
-	'DL_OFF_PERIOD'				=> 'Laps de temps de la désactivation',
+	'DL_OFF_PERIOD'				=> 'Désactiver de',
 	'DL_OFF_PERIOD_TILL'		=> 'Désactiver jusqu’à',
 	'DL_ORDER'					=> 'Trier',
 	'DL_OVERALL_GUEST_TRAFFIC'	=> 'Trafic mensuel des invités pour tous les fichiers',
 	'DL_OVERALL_KLICKS'			=> 'Clics totaux',
 	'DL_OVERALL_TRAFFIC'		=> 'Trafic mensuel des utilisateurs enregistrés pour tous les fichiers',
 	'DL_OVERVIEW'				=> 'Liste globale',
-	'DL_OVERVIEW_LINK'			=> 'Afficher le lien de la liste globale',
+	'DL_OVERVIEW_LINK'			=> 'Afficher le lien vers la liste globale',
 
 	'DL_PAGE_BUG_TRACKER'		=> 'Traqueur d’erreurs',
 	'DL_PAGE_DL_HACKSLIST'		=> 'Liste des fichiers',
@@ -585,8 +569,8 @@ $lang = array_merge($lang, [
 	'DL_PERMISSION_UPDATED'		=> 'Permissions des téléchargements sauvegardées avec succès',
 	'DL_PERMISSIONS'			=> 'Permissions des membres des groupes d’utilisateurs suivants',
 	'DL_PERMISSIONS_ALL'		=> 'Définir les permissions pour tous les utilisateurs',
-	'DL_PHYSICAL_QUOTA'			=> 'Quota physique sur tous les fichiers',
-	'DL_PHYSICAL_QUOTA_EXPLAIN'	=> 'Si ce quota (actuellement de %s en cours d’utilisation) est atteint, plus aucun chargement ne sera autorisé.',
+	'DL_PHYSICAL_QUOTA'			=> 'Quota physique pour tous les fichiers',
+	'DL_PHYSICAL_QUOTA_EXPLAIN'	=> 'Si ce quota (actuellement de %s en cours d’utilisation) est atteint, plus aucun téléversement ne sera autorisé.',
 	'DL_POS'					=> 'Pos.',
 	'DL_POST_COMMENT'			=> 'Écrire un commentaire',
 	'DL_POSTS'					=> 'Nombre de messages qu’un utilisateur doit avoir pour pouvoir avoir accès aux téléchargements',
@@ -661,9 +645,9 @@ $lang = array_merge($lang, [
 	'DL_SET_ADD'				=> 'Utilisateur pour les nouveaux téléchargements',
 	'DL_SHORTEN_EXTERN_LINKS'	=> 'Raccourcir les liens des téléchargements externes affichés',
 	'DL_SHOW_FILE_HASH'			=> 'Afficher les détails du hachage du téléchargement',
-	'DL_SHOW_FOOTER_EXT_STATS'	=> 'Afficher des données statistiques étendues dans le pied de page de téléchargement',
-	'DL_SHOW_FOOTER_LEGEND'		=> 'Afficher la légende sur le pied de page des téléchargements',
-	'DL_SHOW_FOOTER_STAT'		=> 'Afficher les mini statistiques sur le pied de page des téléchargements',
+	'DL_SHOW_FOOTER_EXT_STATS'	=> 'Afficher des données statistiques étendues dans le bas de la page de téléchargement',
+	'DL_SHOW_FOOTER_LEGEND'		=> 'Afficher la légende sur le bas de la page des téléchargements',
+	'DL_SHOW_FOOTER_STAT'		=> 'Afficher les mini-statistiques sur le bas de la page des téléchargements',
 	'DL_SHOW_REAL_FILETIME'		=> 'Afficher la date de dernière modification des fichiers sur le détail des téléchargements',
 	'DL_SIMILAR_DL'				=> 'Téléchargements similaires',
 	'DL_SIMILAR_DL_LIMIT'		=> 'Nombre de téléchargements similaires',
@@ -684,7 +668,7 @@ $lang = array_merge($lang, [
 	'DL_STATS_DELETE'			=> 'Supprimer la statistique',
 	'DL_STATS_DELETE_ALL'		=> 'Supprimer toutes les statistiques',
 	'DL_STATS_PRUNE'			=> 'Supprimer les données de statistiques après',
-	'DL_STOP_UPLOADS'			=> 'Désactiver les chargements',
+	'DL_STOP_UPLOADS'			=> 'Désactiver les téléversements',
 	'DL_SUB_ON_INDEX'			=> 'Afficher les sous-catégories sur l’Index',
 	'DL_SUB_SORT_ASC'			=> 'Trier toutes les entrées de cette catégorie par ordre croissant',
 	'DL_SUB_SORT_ASC_ZERO'		=> 'Trier les principales catégories par ordre croissant',
@@ -697,14 +681,14 @@ $lang = array_merge($lang, [
 	'DL_THUMB_MAX_DIM_X'			=> 'Taille maximale de la largeur en pixel',
 	'DL_THUMB_MAX_DIM_Y'			=> 'Taille maximale de la hauteur en pixel',
 	'DL_THUMB_MAX_SIZE'				=> 'Taille maximale des miniatures',
-	'DL_THUMB_TO_BIG'				=> 'La miniature est trop grande !<br>Merci d’utiliser un fichier plus petit, ou une image avec de petites dimensions.<br>Utilisez le bouton retour de votre navigateur et recommencez le chargement.',
+	'DL_THUMB_TO_BIG'				=> 'La miniature est trop grande !<br>Merci d’utiliser un fichier plus petit, ou une image avec de petites dimensions.<br>Utilisez le bouton retour de votre navigateur et recommencez le téléversement.',
 	'DL_THUMB_UPLOAD'				=> 'Miniature chargée avec succès',
 	'DL_TIME'						=> 'Temps',
 	'DL_TODO_ADD'					=> 'Ajouter une nouvelle tâche à effectuer',
 	'DL_TODO_EDIT'					=> 'Modifier la tâche',
-	'DL_TODO_LINK'					=> 'Afficher le lien des tâches à effectuer',
+	'DL_TODO_LINK'					=> 'Afficher le lien vers les tâches à effectuer',
 	'DL_TOPIC_DETAILS'				=> 'Plus de détails',
-	'DL_TOPIC_DROP_MODE'			=> 'Sujets de téléchargement existants',
+	'DL_TOPIC_DROP_MODE'			=> 'Que faire des sujets de téléchargement existants',
 	'DL_TOPIC_DROP_MODE_CLOSE'		=> 'Fermer',
 	'DL_TOPIC_DROP_MODE_DELETE'		=> 'Supprimer',
 	'DL_TOPIC_DROP_MODE_MISSING'	=> 'Le téléchargement n’est plus disponible',
@@ -723,7 +707,7 @@ $lang = array_merge($lang, [
 	'DL_TOPIC_USER_SELF'			=> 'L’utilisateur actuel',
 	'DL_TOPIC_USER'					=> 'Utilisateur du sujet',
 	'DL_TOTAL_ENTRIES'				=> 'Entrées trouvées',
-	'DL_TOTAL_STAT'					=> 'Il y a au total %s téléchargements avec une taille de %s / %s. Cela inclus %s téléchargements externes.',
+	'DL_TOTAL_STAT'					=> 'Il y a au total %s téléchargements avec une taille de %s / %s. Dont %s téléchargements externes.',
 	'DL_TRAFFIC'					=> 'Trafic maximum',
 	'DL_TRAFFIC_CUR_MONTH'			=> 'Trafic ce mois-ci',
 	'DL_TRAFFIC_OFF'				=> 'Désactiver la gestion du trafic',
@@ -740,9 +724,8 @@ $lang = array_merge($lang, [
 	'DL_TRAFFICS_USERS'				=> 'Limiter le trafic des utilisateurs',
 	'DL_TRAFFICS_USERS_GROUPS'		=> 'Limiter le trafic des utilisateurs pour ces groupes d’utilisateurs',
 	'DL_TRAFFICS_GUESTS'			=> 'Limiter le trafic global pour les invités',
-	'DL_TRANSLATION'				=> 'Traduction française par : darky, EnYgma, <a href="http://www.dowfrance.com" title="DoWFrance - Communauté Francophone Days of War">panteror</a> & la <a href="http://www.ezcom-fr.com" title="Communauté EzCom">Communauté EzCom</a>.',
+	'DL_TRANSLATION'				=> 'Traduction française par : darky, EnYgma, <a href="http://www.dowfrance.com" title="DoWFrance - Communauté Francophone Days of War">panteror</a>, la <a href="http://www.ezcom-fr.com" title="Communauté EzCom">Communauté EzCom</a> & TazDevilBZH du <a=href"https://forum.makersbzh.fr" title="Forum Makers BZH>Forum Makers BZH</a>.',
 
-	'DL_UA_FILE_NOT_WRITABLE'	=> 'Le fichier n’est pas accessible en écriture pour les robots !<br>Vérifiez, s’il vous plait, les permissions du fichier afin d’être en mesure de sauvegarder les données.',
 	'DL_UNAPPROVED'				=> '[ non-validé ]',
 	'DL_UNASSIGNED_FILES'		=> 'Vérifier les téléchargements non-assignés',
 	'DL_UNKNOWN_FILE'			=> 'Fichier inconnu',
@@ -750,14 +733,14 @@ $lang = array_merge($lang, [
 	'DL_UP'						=> 'jusqu’à',
 	'DL_UP_TO_DATE'				=> '%s est à jour',
 	'DL_UPLOAD'					=> 'Créer un téléchargement',
-	'DL_UPLOAD_ERROR'			=> 'Erreur lors du chargement du fichier. Réessayez s’il vous plait.<br>Contactez l’administrateur si cette erreur persiste.',
-	'DL_UPLOAD_FILE'			=> 'Charger',
+	'DL_UPLOAD_ERROR'			=> 'Erreur lors du téléversement du fichier. Veuillez réessayez s’il vous plait.<br>Contactez l’administrateur si cette erreur persiste.',
+	'DL_UPLOAD_FILE'			=> 'Téléverser',
 	'DL_UPLOAD_MAX_FILESIZE'	=> 'Taille maximale autorisée du fichier: %s',
 	'DL_UPLOAD_ONE_MORE'		=> '%sCliquez ici pour ajouter un autre téléchargement%s',
-	'DL_UPLOAD_TRAFFIC'			=> 'La taille de fichier des chargements diminuera le trafic global. Attention à la taille du fichier choisie !',
-	'DL_UPLOAD_TRAFFIC_COUNT'	=> 'Également diminuer le trafic global pour les chargements',
-	'DL_UPLOADS_COUNT'			=> 'Nombre de chargements',
-	'DL_UPLOADS_TRAFFIC'		=> 'Trafic global de chargement',
+	'DL_UPLOAD_TRAFFIC'			=> 'La taille de fichier des téléveresement diminuera le trafic global. Attention à la taille du fichier choisie !',
+	'DL_UPLOAD_TRAFFIC_COUNT'	=> 'Également diminuer le trafic global pour les téléversements',
+	'DL_UPLOADS_COUNT'			=> 'Nombre de téléversements',
+	'DL_UPLOADS_TRAFFIC'		=> 'Trafic global de téléversement',
 	'DL_USE_EXT_BLACKLIST'		=> 'Activer la liste noire des extensions de fichier',
 	'DL_USE_HACKLIST'			=> 'Activer la liste des fichiers disponibles au téléchargement',
 	'DL_USE_TODOLIST'			=> 'Activer la liste de tâches à effectuer',
@@ -783,7 +766,7 @@ $lang = array_merge($lang, [
 	'DL_VERSION_REPLACE_EXPLAIN'	=> 'Le téléchargement sera seulement mis à jour, si pas de nouveau fichier n’est chargé.',
 	'DL_VERSIONS'					=> 'Versions',
 	'DL_VIEW_COMMENTS'				=> 'Afficher',
-	'DL_VIEW_DOWNLOADS'				=> 'Voir le téléchargements',
+	'DL_VIEW_DOWNLOADS'				=> 'Voir les téléchargements',
 	'DL_VIEW_LINK'					=> 'Voir le téléchargement',
 	'DL_VIEW_PERM'					=> 'Voir les permissions effectives',
 	'DL_VISUAL_CONFIRMATION'		=> 'Confirmation visuelle pour télécharger un fichier',
@@ -791,13 +774,13 @@ $lang = array_merge($lang, [
 	'DL_WHITE_EXPLAIN'			=> 'Téléchargement libre sans comptage de trafic pour les utilisateurs enregistrés',
 	'DL_WHITE_EXPLAIN_T_OFF'	=> 'Téléchargement libre pour les utilisateurs enregistrés',
 
-	'DL_YELLOW_EXPLAIN'	=> 'Télécharger ! Le trafic diminuera du compte utilisateur.',
+	'DL_YELLOW_EXPLAIN'	=> 'Télécharger ! Le trafic sera déduit du compte utilisateur.',
 	'DL_YES'			=> 'Oui',
 	'DL_YES_REG'		=> 'Oui pour<br>Utilisateurs enregistrés',
 
 	'DOWNLOAD_ADDED'		=> 'Le téléchargement a été ajouté',
-	'DOWNLOAD_PATH'			=> 'Chemin de vos téléchargements, exemple : « ./ext/oxpus/dlext/files/downloads/ »',
-	'DOWNLOAD_PATH_EXPLAIN'	=> 'Ce chemin est spécifié dans les paramètres de la carte pour les pièces jointes.<br />Si ce dossier est modifié, tous les fichiers contenus doivent être déplacés manuellement.',
+	'DOWNLOAD_PATH'			=> 'Répertoire des téléchargements',
+	'DOWNLOAD_PATH_EXPLAIN'	=> 'Le chemin de ce répertoire est spécifié dans les paramètres du forum concernant les pièces jointes.<br />Si ce dossier est modifié, tous les fichiers contenus devront être déplacés manuellement.',
 	'DOWNLOAD_REMOVED'		=> 'Le téléchargement a été supprimé',
 	'DOWNLOAD_UPDATED'		=> 'Les informations ont été mises à jour',
 	'DOWNLOADS'				=> 'Téléchargements',
@@ -816,7 +799,7 @@ $lang = array_merge($lang, [
 	'FIELD_INVALID_CHARS_SPACERS_ONLY'	=> 'Le champ « %s » a des caractères invalides, seulement les caractères alphanumériques, espace ou -+_[] sont autorisés.',
 	'FIELD_INVALID_DATE'				=> 'Le champ « %s » a une date invalide.',
 
-	'IMG_BUTTON_DL_UPLOAD'	=> 'Charger un fichier',
+	'IMG_BUTTON_DL_UPLOAD'	=> 'Téléverser un fichier',
 	'IMG_CAT_DLMOD'			=> 'Outil « Téléchargements »',
 	'IMG_DL_BANLIST'		=> 'Liste des bannissements',
 	'IMG_DL_BLUE'			=> 'Bleu',
@@ -835,7 +818,7 @@ $lang = array_merge($lang, [
 	'IMG_DL_WHITE'			=> 'Blanc',
 	'IMG_DL_YELLOW'			=> 'Jaune',
 
-	'IMG_BUTTON_DOWNLOAD_UPLOAD'		=> 'Charger un fichier',
+	'IMG_BUTTON_DOWNLOAD_UPLOAD'		=> 'Téléverser un fichier',
 	'IMG_BUTTON_DOWNLOAD_SEARCH'		=> 'Rechercher téléchargement',
 
 	'MUST_SELECT_DOWNLOAD'	=> 'Choisissez un téléchargement.',
@@ -896,7 +879,7 @@ $lang = array_merge($lang, [
 	'DL_NOTIFY_TYPE_APPROVE'		=> 'Un téléchargement doit être publié',
 	'DL_NOTIFY_TYPE_BROKEN'			=> 'Quelqu’un a signalé un téléchargement',
 	'DL_NOTIFY_TYPE_CAPPROVE'		=> 'Un commentaire doit être publié',
-	'DL_NOTIFY_TYPE_COMMENTS'		=> 'Quelqu’un a commenté le téléchargement de vos favoris',
+	'DL_NOTIFY_TYPE_COMMENTS'		=> 'Quelqu’un a commenté un téléchargement faisant partie de vos favoris',
 
 	'DL_NOTIFY_BT_ASSIGN'			=> 'Rapport <strong>attribué</strong>: %1$s',
 	'DL_NOTIFY_BT_STATUS'			=> '<strong>Nouveau</strong> statut de rapport: %1$s',

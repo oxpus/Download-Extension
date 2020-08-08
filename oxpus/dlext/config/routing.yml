@@ -4,6 +4,9 @@ oxpus_dlext_ajax:
 oxpus_dlext_broken:
     path: /dlext/broken
     defaults: { _controller: oxpus.dlext.broken:handle }
+oxpus_dlext_default:
+    path: /dlext
+    defaults: { _controller: oxpus.dlext.index:handle }
 oxpus_dlext_details:
     path: /dlext/details
     defaults: { _controller: oxpus.dlext.details:handle }
