@@ -198,12 +198,9 @@ class dlext_physical implements dlext_physical_interface
 			return;
 		}
 
-		$f = fopen($path . '.htaccess', 'w');
-		fwrite($f, "<Files *>\n");
-		fwrite($f, "	Order Allow,Deny\n");
-		fwrite($f, "	Allow from All\n");
-		fwrite($f, "</Files>\n");
-		fclose($f);
+		@unlink($path . '.htaccess');
+		@copy ($this->ext_path . 'htaccess.txt', $path . '.htaccess');
+		@phpbb_chmod($path, CHMOD_READ);
 	}
 
 	public function check_folders()
