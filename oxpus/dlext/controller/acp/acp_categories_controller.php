@@ -212,7 +212,7 @@ class acp_categories_controller implements acp_categories_interface
 				$perms_copy_from	= '<select name="perms_copy_from">';
 				$perms_copy_from	.= '<option value="-1">&nbsp;»&nbsp;'.$this->language->lang('DL_NO_PERMS_COPY').'</option>';
 				$perms_copy_from	.= '<option value="0">&nbsp;»&nbsp;'.$this->language->lang('DL_CAT_PARENT').'</option>';
-				$perms_copy_from	.= $this->dlext_extra->dl_dropdown(0, 0, $index[$cat_id]['parent'], 'auth_view', $cat_id);
+				$perms_copy_from	.= $this->dlext_extra->dl_dropdown(0, 0, 0, 'auth_view', $cat_id);
 				$perms_copy_from	.= '</select>';
 		
 				$text_ary		= generate_text_for_edit($description, $desc_uid, $desc_flags);
@@ -702,8 +702,12 @@ class acp_categories_controller implements acp_categories_interface
 						'auth_cread'	=> $auth_cread,
 						'auth_cpost'	=> $auth_cpost]) . ' WHERE id = ' . (int) $cat_id;
 					$this->db->sql_query($sql);
-		
+
 					// And now copy all permissions for usergroups
+					$sql = 'DELETE FROM ' . DL_AUTH_TABLE . '
+						WHERE cat_id = ' . (int) $cat_id;
+					$this->db->sql_query($sql);
+
 					$sql = 'SELECT * FROM ' . DL_AUTH_TABLE . '
 						WHERE cat_id = ' . (int) $copy_from;
 					$result = $this->db->sql_query($sql);
