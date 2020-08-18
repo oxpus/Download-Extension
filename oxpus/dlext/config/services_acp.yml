@@ -69,6 +69,7 @@ services:
     oxpus.dlext.acp_files_controller:
         class: oxpus\dlext\controller\acp\acp_files_controller
         arguments:
+            - '%core.root_path%'
             - '%core.php_ext%'
             - '@service_container'
             - '@ext.manager'

@@ -579,6 +579,8 @@ class mcp_edit
 				);
 				extract($this->phpbb_dispatcher->trigger_event('dlext.mcp_edit_thumbnail_before', compact($vars)));
 
+				$thumb_name = '';
+
 				if ($allow_thumbs_upload)
 				{
 					$min_pic_width = 10;

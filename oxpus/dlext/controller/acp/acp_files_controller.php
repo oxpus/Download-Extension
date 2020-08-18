@@ -28,6 +28,7 @@ class acp_files_controller implements acp_files_interface
 	public $phpbb_log;
 	public $phpbb_dispatcher;
 
+	public $root_path;
 	public $config;
 	public $config_text;
 	public $helper;
@@ -48,6 +49,7 @@ class acp_files_controller implements acp_files_interface
 	protected $dlext_topic;
 
 	/*
+	 * @param string								$root_path
 	 * @param string								$phpEx
 	 * @param Container 							$phpbb_container
 	 * @param \phpbb\extension\manager				$phpbb_extension_manager
@@ -59,6 +61,7 @@ class acp_files_controller implements acp_files_interface
 	 * @param \phpbb\event\dispatcher_interface		$phpbb_dispatcher
 	 */
 	public function __construct(
+		$root_path,
 		$phpEx,
 		Container $phpbb_container,
 		\phpbb\extension\manager $phpbb_extension_manager,
@@ -76,6 +79,7 @@ class acp_files_controller implements acp_files_interface
 		$dlext_topic
 	)
 	{
+		$this->root_path				= $root_path;
 		$this->phpEx					= $phpEx;
 		$this->phpbb_container			= $phpbb_container;
 		$this->phpbb_extension_manager	= $phpbb_extension_manager;
@@ -684,8 +688,9 @@ class acp_files_controller implements acp_files_interface
 		
 					if ($file_name)
 					{
-						$new_real_file = md5($file_name);
-		
+						$extension = str_replace('.', '', trim(strrchr(strtolower($file_name), '.')));
+						$new_real_file = md5($file_name) . '.' . $extension;
+	
 						if ($file_option == 2 && !$file_version)
 						{
 							@unlink(DL_EXT_FILEBASE_PATH. 'downloads/' . $file_path_old . $real_file_old);
@@ -695,13 +700,13 @@ class acp_files_controller implements acp_files_interface
 
 						while(@file_exists(DL_EXT_FILEBASE_PATH. 'downloads/' . $file_path_new . $new_real_file))
 						{
-							$new_real_file = md5($i . $file_name);
+							$new_real_file = md5($i . $file_name) . '.' . $extension;
 							++$i;
 						}
-		
-						@copy(DL_EXT_FILEBASE_PATH. 'downloads/' . $file_path_old . $file_name, DL_EXT_FILEBASE_PATH. 'downloads/' . $file_path_new . $new_real_file);
-						@chmod(DL_EXT_FILEBASE_PATH. 'downloads/' . $file_path_new . $new_real_file, 0777);
-						@unlink(DL_EXT_FILEBASE_PATH. 'downloads/' . $file_path_old . $file_name);
+
+						copy(DL_EXT_FILEBASE_PATH. 'downloads/' . $file_path_old . $file_name, DL_EXT_FILEBASE_PATH. 'downloads/' . $file_path_new . $new_real_file);
+						chmod(DL_EXT_FILEBASE_PATH. 'downloads/' . $file_path_new . $new_real_file, 0777);
+						unlink(DL_EXT_FILEBASE_PATH. 'downloads/' . $file_path_old . $file_name);
 		
 						$real_file_old = $new_real_file;
 					}
@@ -709,13 +714,14 @@ class acp_files_controller implements acp_files_interface
 					{
 						if ($dl_file['file_name'] == $dl_file['real_file'])
 						{
-							$new_real_file = md5($dl_file['real_file']);
-		
+							$extension = str_replace('.', '', trim(strrchr(strtolower($dl_file['real_file']), '.')));
+							$new_real_file = md5($dl_file['real_file']) . '.' . $extension;
+
 							$i = 0;
 
 							while(@file_exists(DL_EXT_FILEBASE_PATH. 'downloads/' . $file_path_old . $new_real_file))
 							{
-								$new_real_file = md5($i . $dl_file['real_file']);
+								$new_real_file = md5($i . $dl_file['real_file']) . '.' . $extension;
 								++$i;
 							}
 		
@@ -764,13 +770,14 @@ class acp_files_controller implements acp_files_interface
 				}
 				else if (!$file_extern && $file_name)
 				{
-					$new_real_file = md5($file_name);
-		
+					$extension = str_replace('.', '', trim(strrchr(strtolower($file_name), '.')));
+					$new_real_file = md5($file_name) . '.' . $extension;
+					
 					$i = 0;
 
 					while(@file_exists(DL_EXT_FILEBASE_PATH. 'downloads/' . $file_path . $new_real_file))
 					{
-						$new_real_file = md5($i . $file_name);
+						$new_real_file = md5($i . $file_name) . '.' . $extension;
 						++$i;
 					}
 		
@@ -785,7 +792,7 @@ class acp_files_controller implements acp_files_interface
 		
 					if (!$file_size)
 					{
-						trigger_error($this->language->lang('DL_FILE_NOT_FOUND', $new_real_file, DL_EXT_FILEBASE_PATH. 'downloads/' . $file_path), E_USER_WARNING);
+						trigger_error('796: ' . $this->language->lang('DL_FILE_NOT_FOUND', $new_real_file, DL_EXT_FILEBASE_PATH. 'downloads/' . $file_path), E_USER_WARNING);
 					}
 				}
 				else
@@ -1092,7 +1099,7 @@ class acp_files_controller implements acp_files_interface
 				);
 				extract($this->phpbb_dispatcher->trigger_event('dlext.acp_files_sql_thumbnail_before', compact($vars)));
 
-				if (!$thumb_error)
+				if (!$thumb_error && isset($thumb_name) && $thumb_name != '')
 				{
 					$df_id = ($df_id) ? $df_id : $this->db->sql_nextid();
 					@unlink(DL_EXT_FILEBASE_PATH . 'thumbs/' . $dl_file['thumbnail']);
@@ -1100,7 +1107,7 @@ class acp_files_controller implements acp_files_interface
 
 					$upload_file['name'] = $df_id . '_' . $thumb_name;
 					$thumb_file->set_upload_ary($upload_file);
-					$dest_folder = str_replace($phpbb_root_path, '', substr(DL_EXT_FILEBASE_PATH . 'thumbs/', 0, -1));
+					$dest_folder = str_replace($this->root_path, '', substr(DL_EXT_FILEBASE_PATH . 'thumbs/', 0, -1));
 
 					$error = $thumb_file->move_file($dest_folder, false, false, CHMOD_ALL);
 					$thumb_message = '<br />' . $this->language->lang('DL_THUMB_UPLOAD');
@@ -1108,12 +1115,6 @@ class acp_files_controller implements acp_files_interface
 					$sql = 'UPDATE ' . DOWNLOADS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', [
 						'thumbnail' => $df_id . '_' . $thumb_name]) . ' WHERE id = ' . (int) $df_id;
 						$this->db->sql_query($sql);
-				}
-				else if (!$thumb_name)
-				{
-					$sql = 'UPDATE ' . DOWNLOADS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', [
-						'thumbnail' => '']) . ' WHERE id = ' . (int) $df_id;
-					$this->db->sql_query($sql);
 				}
 
 				if ($foreign_thumb_message)
