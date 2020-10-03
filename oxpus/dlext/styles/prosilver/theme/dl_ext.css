@@ -277,6 +277,31 @@ div.dl_help_close:hover, .dl-close-footer:hover
     max-height: 100px;
 }
 
+.dl-thumb-box-manage {
+    border-right: 1px #555555 solid;
+    border-bottom: 1px #555555 solid;
+    margin: 0.5em;
+    text-align: center;
+    box-shadow: 2px 2px #888888;
+}
+
+.dl-thumb-cell {
+    width: 150px;
+    height: 100px;
+    padding-left: 1em;
+}
+
+.dl-thumb-cell-button {
+    text-align: center;
+    margin-top: 2px;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+}
+
+.dl-thumb-cell-button span {
+    font-size: 0;
+}
+
 .dl-footer-alert {
     background-color: #ffaa44;
 }
@@ -287,6 +312,10 @@ div.dl_help_close:hover, .dl-close-footer:hover
 
 .dl-intent {
     padding-left: 1em !important;
+}
+
+.dl-intent-right {
+    padding-right: 1em !important;
 }
 
 .panel>.inner>ul.topiclist>.header>dl>dd.dl-cell-block {

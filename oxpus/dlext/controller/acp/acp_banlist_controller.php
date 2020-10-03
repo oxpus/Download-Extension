@@ -240,8 +240,7 @@ class acp_banlist_controller implements acp_banlist_interface
 				'DL_USER_ID'			=> $user_id,
 				'DL_USER_IP'			=> $user_ip,
 				'DL_USERNAME'			=> $username,
-				'CHECKED_YES'			=> ($guests) ? 'checked="checked"' : '',
-				'CHECKED_NO'			=> (!$guests) ? 'checked="checked"' : '',
+				'CHECKED'				=> ($guests) ? 'checked="checked"' : '',
 		
 				'S_BAN_LIST'			=> $s_ban_list,
 				'S_HIDDEN_FIELDS'		=> build_hidden_fields($s_hidden_fields),

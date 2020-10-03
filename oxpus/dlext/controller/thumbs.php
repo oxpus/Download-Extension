@@ -262,7 +262,7 @@ class thumbs
 				if ($this->config['dl_thumb_fsize'] && $index[$cat_id]['allow_thumbs'])
 				{
 					$min_pic_width = 10;
-					$allowed_imagetypes = ['gif','png','jpg','bmp'];
+					$allowed_imagetypes = ['gif','png','jpg'];
 			
 					$upload = $factory->get('upload')
 						->set_allowed_extensions($allowed_imagetypes)
@@ -412,8 +412,10 @@ class thumbs
 
 			while ($row = $this->db->sql_fetchrow($result))
 			{
+				$pic_path = base64_encode(DL_EXT_FILEBASE_PATH . 'thumbs/' . str_replace(" ", "%20", $row['img_name']));
 				$this->template->assign_block_vars('thumbnails', [
-					'IMG_LINK'	=> append_sid(DL_EXT_FILEBASE_PATH . 'thumbs/' . str_replace(" ", "%20", $row['img_name'])),
+					'IMG_LINK'	=> $this->helper->route('oxpus_dlext_thumbnail', ['thumbnail' => $pic_path, 'disp_art' => false]),
+					'IMG_PIC'	=> $this->helper->route('oxpus_dlext_thumbnail', ['thumbnail' => $pic_path, 'disp_art' => true]),
 					'IMG_TITLE'	=> $row['img_title'],
 			
 					'U_DELETE'	=> $this->helper->route('oxpus_dlext_thumbs', ['action' => 'delete', 'cat_id' => $cat_id, 'df_id' => $df_id, 'img_id' => $row['img_id']]),

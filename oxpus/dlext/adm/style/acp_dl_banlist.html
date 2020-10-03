@@ -36,7 +36,7 @@ function select_switch(status)
 		<td><input type="text" size="5" maxlength="8" name="user_id" value="{{ DL_USER_ID }}" /></td>
 		<td><input type="text" size="15" maxlength="15" name="user_ip" value="{{ DL_USER_IP }}" /></td>
 		<td><input type="text" size="25" maxlength="25" name="username" value="{{ DL_USERNAME }}" /></td>
-		<td><span><input type="radio" class="radio" name="guests" value="1" {{ CHECKED_YES }} />&nbsp;{{ lang('YES') }}&nbsp;<input type="radio" class="radio" name="guests" value="0" {{ CHECKED_NO }} />&nbsp;{{ lang('NO') }}</span></td>
+		<td><input type="checkbox" class="radio switch" name="guests" value="1" {{ CHECKED }} id="guests" /><label class="switch" for="guests">&nbsp;</label></td>
 	</tr>
 	</tbody>
 	</table>

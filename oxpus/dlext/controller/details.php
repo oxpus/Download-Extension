@@ -937,8 +937,8 @@ class details
 			}
 
 			$sql = 'SELECT * FROM ' . DL_VERSIONS_TABLE . '
-				WHERE dl_id = ' . (int) $df_id . "
-				ORDER BY ver_version DESC, ver_change_time DESC";
+				WHERE dl_id = ' . (int) $df_id . '
+				ORDER BY ver_version DESC, ver_change_time DESC';
 			$result = $this->db->sql_query($sql);
 			$total_releases = $this->db->sql_affectedrows($result);
 
@@ -1476,10 +1476,13 @@ class details
 
 				foreach ($thumbs_ary as $key => $value)
 				{
-					if (@file_exists(DL_EXT_FILEBASE_PATH . 'thumbs/' . $thumbs_ary[$key]['img_name']))
+					$pic_path = DL_EXT_FILEBASE_PATH . 'thumbs/' . $thumbs_ary[$key]['img_name'];
+					if (@file_exists($pic_path))
 					{
+						$pic_path = base64_encode($pic_path);
 						$this->template->assign_block_vars('thumbnail', [
-							'THUMBNAIL_LINK'	=> append_sid(DL_EXT_FILEBASE_PATH . 'thumbs/' . str_replace(" ", "%20", $thumbs_ary[$key]['img_name'])),
+							'THUMBNAIL_LINK'	=> $this->helper->route('oxpus_dlext_thumbnail', ['thumbnail' => $pic_path, 'disp_art' => false]),
+							'THUMBNAIL_PIC'		=> $this->helper->route('oxpus_dlext_thumbnail', ['thumbnail' => $pic_path, 'disp_art' => true]),
 							'THUMBNAIL_NAME'	=> $thumbs_ary[$key]['img_title'],
 						]);
 					}

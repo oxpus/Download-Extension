@@ -101,15 +101,30 @@ class ajax
 				GROUP BY dl_id';
 			$result = $this->db->sql_query($sql);
 			$row = $this->db->sql_fetchrow($result);
-			$new_rating = ceil($row['rating'] * 10);
-			$total_ratings = $row['total'];
+			if (!$this->db->sql_affectedrows($result))
+			{
+				$new_rating = 0;
+				$total_ratings = 0;
+			}
+			else
+			{
+				$new_rating = ceil($row['rating'] * 10);
+				$total_ratings = $row['total'];
+			}
 			$this->db->sql_freeresult($result);
 
 			$sql = 'UPDATE ' . DOWNLOADS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', [
 				'rating' => $new_rating]) . ' WHERE id = ' . (int) $dl_id;
 			$this->db->sql_query($sql);
 
-			$rate_points_title = $new_rating / 10;
+			if ($new_rating)
+			{
+				$rate_points_title = $new_rating / 10;
+			}
+			else
+			{
+				$rate_points_title = 0;
+			}
 
 			$rating_title = $this->language->lang('DL_RATING_HOVER', $rate_points_title, $this->config['dl_rate_points']);
 

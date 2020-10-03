@@ -584,7 +584,7 @@ class mcp_edit
 				if ($allow_thumbs_upload)
 				{
 					$min_pic_width = 10;
-					$allowed_imagetypes = ['gif','png','jpg','bmp'];
+					$allowed_imagetypes = ['gif','png','jpg'];
 
 					$factory = $this->phpbb_container->get('files.factory');
 					$upload_image = $factory->get('upload')

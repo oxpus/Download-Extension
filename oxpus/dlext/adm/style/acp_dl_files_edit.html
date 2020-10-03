@@ -59,7 +59,7 @@
 	<dl>
 		<dt><label>{{ lang('DL_EXTERN') }}</label></dt>
 		<dd>
-			&nbsp;<a href="javascript:void(0)" onclick="javascript:help_popup('{{ lang('DL_EXTERN_EXPLAIN') }}');">{{ ICON_DL_HELP }}</a>&nbsp;<input type="checkbox" class="permissions-checkbox" name="file_extern" {{ CHECKEXTERN }} value="1" />
+			&nbsp;<a href="javascript:void(0)" onclick="javascript:help_popup('{{ lang('DL_EXTERN_EXPLAIN') }}');">{{ ICON_DL_HELP }}</a>&nbsp;<input type="checkbox" class="radio switch" name="file_extern" {{ CHECKEXTERN }} value="1"  id="file_extern" /><label class="switch" for="file_extern">&nbsp;</label>
 			&nbsp;<input type="text" size="10" maxlength="20" name="file_extern_size" value="{{ FILE_EXT_SIZE }}" />&nbsp;{{ S_FILE_EXT_SIZE_RANGE }}
 		</dd>
 	</dl>
@@ -143,7 +143,7 @@
 	{% if S_USE_MOD_DESC %}
 	<dl>
 		<dt><label>{{ lang('DL_MOD_LIST') }}</label></dt>
-		<dd>&nbsp;<a href="javascript:void(0)" onclick="javascript:help_popup('{{ lang('DL_MOD_LIST_EXPLAIN') }}')">{{ ICON_DL_HELP }}</a>&nbsp;<input type="checkbox" name="mod_list" {{ MOD_LIST }} value="1" /></dd>
+		<dd>&nbsp;<a href="javascript:void(0)" onclick="javascript:help_popup('{{ lang('DL_MOD_LIST_EXPLAIN') }}')">{{ ICON_DL_HELP }}</a>&nbsp;<input type="checkbox" class="radio switch" name="mod_list" {{ MOD_LIST }} value="1" id="mod_list" /><label class="switch" for="mod_list">&nbsp;</label></dd>
 	</dl>
 	<dl>
 		<dt><label>{{ lang('DL_MOD_TEST') }}</label></dt>
@@ -197,27 +197,27 @@
 
 	<dl>
 		<dt><label>{{ lang('DL_APPROVE') }}</label></dt>
-		<dd>&nbsp;<a href="javascript:void(0)" onclick="javascript:help_popup('{{ lang('DL_APPROVE_EXPLAIN') }}')">{{ ICON_DL_HELP }}</a>&nbsp;<input type="checkbox" name="approve" {{ APPROVE }} value="1" /></dd>
+		<dd>&nbsp;<a href="javascript:void(0)" onclick="javascript:help_popup('{{ lang('DL_APPROVE_EXPLAIN') }}')">{{ ICON_DL_HELP }}</a>&nbsp;<input type="checkbox" class="radio switch" name="approve" {{ APPROVE }} value="1" id="approve" /><label class="switch" for="approve">&nbsp;</label></dd>
 	</dl>
 
 	{% if S_CHANGE_TIME %}
 	<dl>
 		<dt><label>{{ lang('DL_NO_CHANGE_EDIT_TIME') }}</label></dt>
-		<dd>&nbsp;<a href="javascript:void(0)" onclick="javascript:help_popup('{{ lang('CHANGE_TIME_EXPLAIN') }}')">{{ ICON_DL_HELP }}</a>&nbsp;<input type="checkbox" name="change_time" value="1" /></dd>
+		<dd>&nbsp;<a href="javascript:void(0)" onclick="javascript:help_popup('{{ lang('CHANGE_TIME_EXPLAIN') }}')">{{ ICON_DL_HELP }}</a>&nbsp;<input type="checkbox" class="radio switch" name="change_time" value="1" id="change_time" /><label class="switch" for="change_time">&nbsp;</label></dd>
 	</dl>
 	{% endif %}
 
 	{% if S_CLICK_RESET %}
 	<dl>
 		<dt><label>{{ lang('DL_KLICKS_RESET') }}</label></dt>
-		<dd>&nbsp;<a href="javascript:void(0)" onclick="javascript:help_popup('{{ lang('CLICK_RESET_EXPLAIN') }}')">{{ ICON_DL_HELP }}</a>&nbsp;<input type="checkbox" name="click_reset" value="1" /></dd>
+		<dd>&nbsp;<a href="javascript:void(0)" onclick="javascript:help_popup('{{ lang('CLICK_RESET_EXPLAIN') }}')">{{ ICON_DL_HELP }}</a>&nbsp;<input type="checkbox" class="radio switch" name="click_reset" value="1" id="click_reset" /><label class="switch" for="click_reset">&nbsp;</label></dd>
 	</dl>
 	{% endif %}
 
 	{% if S_EMAIL_BLOCK %}
 	<dl>
 		<dt><label>{{ lang('DL_DISABLE_NOTIFY') }}</label></dt>
-		<dd>&nbsp;<a href="javascript:void(0)" onclick="javascript:help_popup('{{ lang('DL_SEND_NOTIFY_EXPLAIN') }}')">{{ ICON_DL_HELP }}</a>&nbsp;<input type="checkbox" name="send_notify" value="1" /></dd>
+		<dd>&nbsp;<a href="javascript:void(0)" onclick="javascript:help_popup('{{ lang('DL_SEND_NOTIFY_EXPLAIN') }}')">{{ ICON_DL_HELP }}</a>&nbsp;<input type="checkbox" class="radio switch" name="send_notify" value="1" id="send_notify" /><label class="switch" for="send_notify">&nbsp;</label></dd>
 	</dl>
 	{% endif %}
 

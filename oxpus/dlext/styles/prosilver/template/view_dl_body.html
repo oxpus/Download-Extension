@@ -118,9 +118,9 @@
 	<ul class="dl-detail-row">
 	{% endif %}
 		{% if S_DL_POPUPIMAGE %}
-		<li class="dl-left dl-margin-right-small"><a href="{{ thumbnail.THUMBNAIL_LINK }}" title="{{ thumbnail.THUMBNAIL_NAME }}" rel="prettyPhoto[pp_gal]"><img src="{{ thumbnail.THUMBNAIL_LINK }}" alt="{{ thumbnail.THUMBNAIL_NAME }}" title="{{ thumbnail.THUMBNAIL_NAME }}" class="dl-thumb-box" /></a></li>
+		<li class="dl-left dl-margin-right-small"><a href="{{ thumbnail.THUMBNAIL_LINK }}" title="{{ thumbnail.THUMBNAIL_NAME }}" rel="prettyPhoto[pp_gal]"><img src="{{ thumbnail.THUMBNAIL_PIC }}" alt="{{ thumbnail.THUMBNAIL_NAME }}" title="{{ thumbnail.THUMBNAIL_NAME }}" class="dl-thumb-box" /></a></li>
 		{% else %}
-		<img src="{{ thumbnail.THUMBNAIL_LINK }}" alt="{{ thumbnail.THUMBNAIL_NAME }}" title="{{ thumbnail.THUMBNAIL_NAME }}" class="dl-thumb-box" />
+		<img src="{{ thumbnail.THUMBNAIL_PIC }}" alt="{{ thumbnail.THUMBNAIL_NAME }}" title="{{ thumbnail.THUMBNAIL_NAME }}" class="dl-thumb-box" />
 		{% endif %}
 	{% if thumbnail.S_LAST_ROW %}
 	</ul>

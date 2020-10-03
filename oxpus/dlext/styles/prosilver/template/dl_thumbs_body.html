@@ -51,20 +51,19 @@
 
 <div class="panel">
 	<div class="inner">
-
-	<ul class="topiclist">
 {% endif %}
-	<li class="row bg{% if thumbnails.S_ROW_COUNT is even %}2{% else %}1{% endif %}">
-		<dl>
-			<dt><a href="{{ thumbnails.IMG_LINK }}" rel="prettyPhoto[pp_gal]" title="{{ thumbnails.IMG_TITLE }}"><img src="{{ thumbnails.IMG_LINK }}" alt="{{ thumbnails.IMG_TITLE }}" title="{{ thumbnails.IMG_TITLE }}" class="dl-thumb-box" /></a></dt>
-			<dd class="posts"><a href="{{ thumbnails.U_DELETE }}">{{ lang('DL_DELETE') }}</a></dd>
-			<dd class="topics"><a href="{{ thumbnails.U_EDIT }}">{{ lang('DL_EDIT_FILE') }}</a></dd>
-		</dl>
-	</li>
+
+	<div class="dl-left dl-cell-block dl-intent-right dl-thumb-box-manage">
+		<div class="dl-thumb-cell">
+			<a href="{{ thumbnails.IMG_LINK }}" rel="prettyPhoto[pp_gal]" title="{{ thumbnails.IMG_TITLE }}"><img src="{{ thumbnails.IMG_PIC }}" alt="{{ thumbnails.IMG_TITLE }}" title="{{ thumbnails.IMG_TITLE }}" class="dl-thumb-box" /></a>
+		</div>
+		<div class="dl-thumb-cell-button">
+			<a href="{{ thumbnails.U_DELETE }}" title="{{ lang('DL_DELETE') }}" class="button button-icon-only"><i class="icon fa-times fa-fw" aria-hidden="true"></i><span>{{ lang('DL_DELETE') }}</span></a>
+			<a href="{{ thumbnails.U_EDIT }}" title="{{ lang('DL_EDIT_FILE') }}" class="button button-icon-only"><i class="icon fa-pencil fa-fw" aria-hidden="true"></i><span>{{ lang('DL_EDIT_FILE') }}</span></a>
+		</div>
+	</div>
 
 {% if thumbnails.S_LAST_ROW %}
-	</ul>
-
 	</div>
 </div>
 {% endif %}

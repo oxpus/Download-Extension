@@ -1,0 +1,193 @@
+#dl_help_bg {
+    display:none;
+    z-index:1;
+    position: fixed;
+    height:100%;
+    width:100%;
+    top:0px;
+    left:0px;
+    background:#000000;
+}
+
+#dl_help_popup {
+    display: none;
+    z-index: 2;
+    position: fixed;
+    width:450px;
+    top: 20%;
+    left: 50%;
+    margin-left: -250px;
+    background: none repeat scroll 0 0 #FFFFFF;
+    border: 1px solid #ccc;
+    font-size: 12px;
+    color: #000;
+}
+
+div.dl_help_close {
+    position: relative;
+    height: 16px;
+    width: 16px;
+    left: 8px;
+    bottom: 8px;
+    background: url("./../images/alert_close.png") no-repeat scroll 0 0 transparent;
+    float: right;
+    cursor: pointer;
+}
+
+div.dl_help_close:hover {
+	background-position: 0 -16px;
+}
+
+#dl_help_content {
+    margin: 8px 14px;
+}
+
+.dl-red {
+    color: #cc0000;
+}
+
+.dl-green {
+    color: #009900;
+}
+
+.dl-grey-bg {
+    background-color: #dddddd;
+    border: 2px #555555 solid;
+}
+
+.dl-red-bg {
+    background-color: #BC2A4D;
+    border: 2px #555555 solid;
+    padding: 5px;
+    color: #ffffff;
+}
+
+.dl-grey-bg .hint {
+    color: #cc0000;
+    font-weight: bold;
+    padding-left: 2.5em;
+}
+
+.dl-left {
+    float: left;
+}
+
+.dl-right {
+    float: right;
+}
+
+.dl-text-left {
+    text-align: left;
+}
+
+.dl-text-center {
+    text-align: center;
+}
+
+.dl-text-right {
+    text-align: right;
+}
+
+.dl-width-5 {
+    width: 5%;
+}
+
+.dl-width-10 {
+    width: 10%;
+}
+
+.dl-width-15 {
+    width: 15%;
+}
+
+.dl-width-35 {
+    width: 35%;
+}
+
+.dl-width-30 {
+    width: 30%;
+}
+
+.dl-width-30p {
+    width: 30px;
+}
+
+.dl-width-75 {
+    width: 75%;
+}
+
+.dl-width-80 {
+    width: 80%;
+}
+
+.dl-width-85 {
+    width: 85%;
+}
+
+.dl-field-nav {
+    width: 80px;
+    text-align: right;
+    white-space: nowrap;
+}
+
+.dl-thumb-max {
+    max-width: 150px;
+    max-height: 100px
+}
+
+.dl-noshow {
+    display: none;
+}
+
+.dl-font-bold {
+    font-weight: bold;
+}
+
+.dl-line-hight {
+    line-height: 1.2em;
+}
+
+/**
+* Switch
+*/
+input[type="checkbox"].radio.switch {
+	height: 0;
+	width: 0;
+	visibility: hidden;
+}
+
+label.switch {
+	cursor: pointer;
+	width: 35px;
+	height: 16px;
+    display: inline-block;
+	background: #aa0000;
+	border-radius: 100px;
+	position: relative;
+    margin-left: -1em;
+}
+
+label.switch:after {
+	content: "";
+	position: absolute;
+	top: 2px;
+	left: 2px;
+	width: 12px;
+	height: 12px;
+	background: #fff;
+	border-radius: 90px;
+	transition: 0.3s;
+}
+
+input.radio.switch:checked + label.switch {
+	background: green;
+}
+
+input.radio.switch:checked + label.switch:after {
+	left: calc(100% - 2px);
+	transform: translateX(-100%);
+}
+
+label.switch:active:after {
+	width: 20px;
+}

@@ -144,6 +144,7 @@ class listener implements EventSubscriberInterface
 			'core.group_add_user_after'					=> 'core_group_change_user_after',
 			'core.group_delete_user_after'				=> 'core_group_change_user_after',
 			'core.ucp_display_module_before'			=> 'core_ucp_display_module_before',
+			'core.build_config_template'				=> 'core_build_config_template',
 
 			// Events by extensions
 			'tas2580.privacyprotection_delete_ip_after'	=> 'tas2580_privacyprotection_delete_ip_after',
@@ -775,5 +776,21 @@ class listener implements EventSubscriberInterface
 			'S_DL_NAV_TRACKER_OFTlB'	=> ($this->config['dl_nav_link_tracker'] == 'OFTlB') ? true : false,
 			'S_DL_NAV_TRACKER_OFTlA'	=> ($this->config['dl_nav_link_tracker'] == 'OFTlA') ? true : false,
 		]);
+	}
+
+	public function core_build_config_template($event)
+	{
+		$tpl_type	= $event['tpl_type'];
+		$new_ary	= $event['new'];
+		$key		= $event['key'];
+		$tpl		= $event['tpl'];
+		$name		= 'config[' . $key . ']';
+
+		if ($tpl_type[0] == 'switch')
+		{
+			$tpl = '<input type="checkbox" name="' . $name . '"' . (($new_ary[$key]) ? ' value="1" checked="checked"' : '') . ' class="radio switch" id="switch_' . $key . '" /><label class="switch" for="switch_' . $key . '">&nbsp;</label>';
+		}
+
+		$event['tpl'] = $tpl;
 	}
 }

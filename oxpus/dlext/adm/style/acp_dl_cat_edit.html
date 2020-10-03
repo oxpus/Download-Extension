@@ -50,11 +50,11 @@
 	</dl>
 	<dl>
 		<dt><label>{{ lang('DL_MUST_APPROVE') }}</label></dt>
-		<dd><a href="javascript:void(0)" onclick="javascript:help_popup('DL_MUST_APPROVE')" class="nav">{{ ICON_DL_HELP }}</a>&nbsp;<label><input type="radio" class="radio" name="must_approve" value="1" {{ MUST_APPROVE_YES }} />&nbsp;{{ lang('YES') }}</label>&nbsp;<label><input type="radio" class="radio" name="must_approve" value="0" {{ MUST_APPROVE_NO }} />&nbsp;{{ lang('NO') }}</label></dd>
+		<dd><a href="javascript:void(0)" onclick="javascript:help_popup('DL_MUST_APPROVE')" class="nav">{{ ICON_DL_HELP }}</a>&nbsp;<input type="checkbox" class="radio switch" name="must_approve" value="1" {{ MUST_APPROVE }} id="must_approve" /><label class="switch" for="must_approve">&nbsp;</label></dd>
 	</dl>
 	<dl>
 		<dt><label>{{ lang('DL_MOD_DESC_ALLOW') }}</label></dt>
-		<dd><a href="javascript:void(0)" onclick="javascript:help_popup('DL_MOD_DESC_ALLOW')" class="nav">{{ ICON_DL_HELP }}</a>&nbsp;<label><input type="radio" class="radio" name="allow_mod_desc" value="1" {{ ALLOW_MOD_DESC_YES }} />&nbsp;{{ lang('YES') }}</label>&nbsp;<label><input type="radio" class="radio" name="allow_mod_desc" value="0" {{ ALLOW_MOD_DESC_NO }} />&nbsp;{{ lang('NO') }}</label></dd>
+		<dd><a href="javascript:void(0)" onclick="javascript:help_popup('DL_MOD_DESC_ALLOW')" class="nav">{{ ICON_DL_HELP }}</a>&nbsp;<input type="checkbox" class="radio switch" name="allow_mod_desc" value="1" {{ ALLOW_MOD_DESC }} id="allow_mod_desc" /><label class="switch" for="allow_mod_desc">&nbsp;</label></dd>
 	</dl>
 
 </fieldset>
@@ -63,7 +63,7 @@
 
 	<dl>
 		<dt><label>{{ lang('DL_STATISTICS') }}</label></dt>
-		<dd><a href="javascript:void(0)" onclick="javascript:help_popup('DL_STATISTICS')" class="nav">{{ ICON_DL_HELP }}</a>&nbsp;<label><input type="radio" class="radio" name="statistics" value="1" {{ STATS_YES }} />&nbsp;{{ lang('YES') }}</label>&nbsp;<label><input type="radio" class="radio" name="statistics" value="0" {{ STATS_NO }} />&nbsp;{{ lang('NO') }}</label></dd>
+		<dd><a href="javascript:void(0)" onclick="javascript:help_popup('DL_STATISTICS')" class="nav">{{ ICON_DL_HELP }}</a>&nbsp;<input type="checkbox" class="radio switch" name="statistics" value="1" {{ STATS }} id="statistics"  /><label class="switch" for="statistics">&nbsp;</label></dd>
 	</dl>
 	<dl>
 		<dt><label>{{ lang('DL_STATS_PRUNE') }}</label></dt>
@@ -71,21 +71,21 @@
 	</dl>
 	<dl>
 		<dt><label>{{ lang('DL_COMMENTS') }}</label></dt>
-		<dd><a href="javascript:void(0)" onclick="javascript:help_popup('DL_COMMENTS')" class="nav">{{ ICON_DL_HELP }}</a>&nbsp;<label><input type="radio" class="radio" name="comments" value="1" {{ COMMENTS_YES }} />&nbsp;{{ lang('YES') }}</label>&nbsp;<label><input type="radio" class="radio" name="comments" value="0" {{ COMMENTS_NO }} />&nbsp;{{ lang('NO') }}</label></dd>
+		<dd><a href="javascript:void(0)" onclick="javascript:help_popup('DL_COMMENTS')" class="nav">{{ ICON_DL_HELP }}</a>&nbsp;<input type="checkbox" class="radio switch" name="comments" value="1" {{ COMMENTS }}  id="comments" /><label class="switch" for="comments">&nbsp;</label></dd>
 	</dl>
 	<dl>
 		<dt><label>{{ lang('DL_APPROVE_COMMENTS') }}</label></dt>
-		<dd><a href="javascript:void(0)" onclick="javascript:help_popup('DL_APPROVE_COMMENTS')" class="nav">{{ ICON_DL_HELP }}</a>&nbsp;<label><input type="radio" class="radio" name="approve_comments" value="1" {{ APPROVE_COMMENTS_YES }} />&nbsp;{{ lang('YES') }}</label>&nbsp;<label><input type="radio" class="radio" name="approve_comments" value="0" {{ APPROVE_COMMENTS_NO }} />&nbsp;{{ lang('NO') }}</label></dd>
+		<dd><a href="javascript:void(0)" onclick="javascript:help_popup('DL_APPROVE_COMMENTS')" class="nav">{{ ICON_DL_HELP }}</a>&nbsp;<input type="checkbox" class="radio switch" name="approve_comments" value="1" {{ APPROVE_COMMENTS }} id="approve_comments"  /><label class="switch" for="approve_comments">&nbsp;</label></dd>
 	</dl>
 	{% if S_THUMNAILS %}
 	<dl>
 		<dt><label>{{ lang('DL_THUMB_CAT') }}</label></dt>
-		<dd><a href="javascript:void(0)" onclick="javascript:help_popup('DL_THUMB_CAT')" class="nav">{{ ICON_DL_HELP }}</a>&nbsp;<label><input type="radio" class="radio" name="allow_thumbs" value="1" {{ ALLOW_THUMBS_YES }} />&nbsp;{{ lang('YES') }}</label>&nbsp;<label><input type="radio" class="radio" name="allow_thumbs" value="0" {{ ALLOW_THUMBS_NO }} />&nbsp;{{ lang('NO') }}</label></dd>
+		<dd><a href="javascript:void(0)" onclick="javascript:help_popup('DL_THUMB_CAT')" class="nav">{{ ICON_DL_HELP }}</a>&nbsp;<input type="checkbox" class="radio switch" name="allow_thumbs" value="1" {{ ALLOW_THUMBS }} id="allow_thumbs"  /><label class="switch" for="allow_thumbs">&nbsp;</label></dd>
 	</dl>
 	{% endif %}
 	<dl>
 		<dt><label>{{ lang('DL_BUG_TRACKER_CAT') }}</label></dt>
-		<dd><a href="javascript:void(0)" onclick="javascript:help_popup('DL_BUG_TRACKER_CAT')" class="nav">{{ ICON_DL_HELP }}</a>&nbsp;<label><input type="radio" class="radio" name="bug_tracker" value="1" {{ BUG_TRACKER_YES }} />&nbsp;{{ lang('YES') }}</label>&nbsp;<label><input type="radio" class="radio" name="bug_tracker" value="0" {{ BUG_TRACKER_NO }} />&nbsp;{{ lang('NO') }}</label></dd>
+		<dd><a href="javascript:void(0)" onclick="javascript:help_popup('DL_BUG_TRACKER_CAT')" class="nav">{{ ICON_DL_HELP }}</a>&nbsp;<input type="checkbox" class="radio switch" name="bug_tracker" value="1" {{ BUG_TRACKER }} id="bug_tracker" /><label class="switch" for="bug_tracker">&nbsp;</label></dd>
 	</dl>
 	<dl>
 		<dt><label>{{ lang('DL_CAT_TRAFFIC') }}</label></dt>
@@ -93,7 +93,7 @@
 	</dl>
 	<dl>
 		<dt><label>{{ lang('DL_SHOW_FILE_HASH') }}</label></dt>
-		<dd><a href="javascript:void(0)" onclick="javascript:help_popup('DL_SHOW_FILE_HASH')" class="nav">{{ ICON_DL_HELP }}</a>&nbsp;<label><input type="radio" class="radio" name="show_file_hash" value="1" {{ SHOW_FILE_HASH_YES }} />&nbsp;{{ lang('YES') }}</label>&nbsp;<label><input type="radio" class="radio" name="show_file_hash" value="0" {{ SHOW_FILE_HASH_NO }} />&nbsp;{{ lang('NO') }}</label></dd>
+		<dd><a href="javascript:void(0)" onclick="javascript:help_popup('DL_SHOW_FILE_HASH')" class="nav">{{ ICON_DL_HELP }}</a>&nbsp;<input type="checkbox" class="radio switch" name="show_file_hash" value="1" {{ SHOW_FILE_HASH }} id="show_file_hash" /><label class="switch" for="show_file_hash">&nbsp;</label></dd>
 	</dl>
 
 </fieldset>

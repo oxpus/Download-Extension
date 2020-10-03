@@ -312,29 +312,14 @@ class acp_categories_controller implements acp_categories_interface
 			$cat_traffic_range	= str_replace('value="' . $data_range_select . '">', 'value="' . $data_range_select . '" selected="selected">', $s_select_datasize);
 			$cat_traffic_range	= '<select name="cat_traffic_range">' . $cat_traffic_range;
 		
-			$approve_yes	= ($must_approve) ? 'checked="checked"' : '';
-			$approve_no		= (!$must_approve) ? 'checked="checked"' : '';
-		
-			$allow_mod_desc_yes	= ($allow_mod_desc) ? 'checked="checked"' : '';
-			$allow_mod_desc_no	= (!$allow_mod_desc) ? 'checked="checked"' : '';
-		
-			$stats_yes	= ($statistics) ? 'checked="checked"' : '';
-			$stats_no	= (!$statistics) ? 'checked="checked"' : '';
-		
-			$comments_yes	= ($comments) ? 'checked="checked"' : '';
-			$comments_no	= (!$comments) ? 'checked="checked"' : '';
-		
-			$allow_thumbs_yes	= ($allow_thumbs) ? 'checked="checked"' : '';
-			$allow_thumbs_no	= (!$allow_thumbs) ? 'checked="checked"' : '';
-		
-			$approve_comments_yes	= ($approve_comments) ? 'checked="checked"' : '';
-			$approve_comments_no	= (!$approve_comments) ? 'checked="checked"' : '';
-		
-			$bug_tracker_yes	= ($bug_tracker) ? 'checked="checked"' : '';
-			$bug_tracker_no		= (!$bug_tracker) ? 'checked="checked"' : '';
-		
-			$show_file_hash_yes	= ($show_file_hash) ? 'checked="checked"' : '';
-			$show_file_hash_no	= (!$show_file_hash) ? 'checked="checked"' : '';
+			$approve			= ($must_approve) ? 'checked="checked"' : '';
+			$allow_mod_desc		= ($allow_mod_desc) ? 'checked="checked"' : '';
+			$stats				= ($statistics) ? 'checked="checked"' : '';
+			$comments			= ($comments) ? 'checked="checked"' : '';
+			$allow_thumbs		= ($allow_thumbs) ? 'checked="checked"' : '';
+			$approve_comments	= ($approve_comments) ? 'checked="checked"' : '';
+			$bug_tracker		= ($bug_tracker) ? 'checked="checked"' : '';
+			$show_file_hash		= ($show_file_hash) ? 'checked="checked"' : '';
 		
 			$this->language->add_lang('posting');
 		
@@ -414,32 +399,24 @@ class acp_categories_controller implements acp_categories_interface
 		
 				'ERROR_MSG'				=> $error_msg,
 				'CATEGORY'				=> (isset($index[$cat_id]['cat_name'])) ? $this->language->lang('DL_PERMISSIONS', $index[$cat_id]['cat_name']) : '',
-				'MUST_APPROVE_YES'		=> $approve_yes,
-				'MUST_APPROVE_NO'		=> $approve_no,
-				'ALLOW_MOD_DESC_YES'	=> $allow_mod_desc_yes,
-				'ALLOW_MOD_DESC_NO'		=> $allow_mod_desc_no,
-				'STATS_YES'				=> $stats_yes,
-				'STATS_NO'				=> $stats_no,
+				'MUST_APPROVE'			=> $approve,
+				'ALLOW_MOD_DESC'		=> $allow_mod_desc,
+				'STATS'					=> $stats,
 				'STATS_PRUNE'			=> $stats_prune,
-				'COMMENTS_YES'			=> $comments_yes,
-				'COMMENTS_NO'			=> $comments_no,
+				'COMMENTS'				=> $comments,
 				'CAT_NAME'				=> $cat_name,
 				'DESCRIPTION'			=> $description,
 				'RULES'					=> $rules,
 				'CAT_PARENT'			=> $s_cat_parent,
 				'CAT_TRAFFIC'			=> $cat_traffic_out,
-				'ALLOW_THUMBS_YES'		=> $allow_thumbs_yes,
-				'ALLOW_THUMBS_NO'		=> $allow_thumbs_no,
-				'APPROVE_COMMENTS_YES'	=> $approve_comments_yes,
-				'APPROVE_COMMENTS_NO'	=> $approve_comments_no,
-				'BUG_TRACKER_YES'		=> $bug_tracker_yes,
-				'BUG_TRACKER_NO'		=> $bug_tracker_no,
+				'ALLOW_THUMBS'			=> $allow_thumbs,
+				'APPROVE_COMMENTS'		=> $approve_comments,
+				'BUG_TRACKER'			=> $bug_tracker,
 				'PERMS_COPY_FROM'		=> $perms_copy_from,
 				'TOPIC_TEXT'			=> $topic_text,
 				'CAT_ICON'				=> $cat_icon,
 				'TOPIC_USER'			=> $this->dlext_extra->dl_user_switch($topic_user),
-				'SHOW_FILE_HASH_YES'	=> $show_file_hash_yes,
-				'SHOW_FILE_HASH_NO'		=> $show_file_hash_no,
+				'SHOW_FILE_HASH'		=> $show_file_hash,
 				'SET_USER'				=> $this->dlext_extra->dl_user_switch($set_user),
 		
 				'S_TOPIC_TYPE'			=> $s_topic_type,

@@ -97,6 +97,10 @@ services:
             - '@oxpus.dlext.dlext_format'
             - '@oxpus.dlext.dlext_init'
             - '@oxpus.dlext.dlext_main'
+    oxpus.dlext.dlext_thumbs:
+        class: oxpus\dlext\controller\classes\dlext_thumbs
+        arguments:
+            - '@request'
     oxpus.dlext.dlext_topic:
         class: oxpus\dlext\controller\classes\dlext_topic
         arguments:

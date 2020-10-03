@@ -1032,7 +1032,7 @@ class acp_files_controller implements acp_files_interface
 					$min_pic_width = 1;
 
 					$factory = $this->phpbb_container->get('files.factory');
-					$allowed_imagetypes = ['gif','png','jpg','bmp'];
+					$allowed_imagetypes = ['gif','png','jpg'];
 					$upload = $factory->get('upload')
 						->set_allowed_extensions($allowed_imagetypes)
 						->set_max_filesize($this->config['dl_thumb_fsize'])
