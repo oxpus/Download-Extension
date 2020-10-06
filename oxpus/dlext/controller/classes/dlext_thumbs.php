@@ -57,14 +57,33 @@ class dlext_thumbs implements dlext_thumbs_interface
 			return;
 		}
 
+		$max_width = 150;
+		$max_height = 100;
+
+		if (($pic_height <= $max_height) && ($pic_width <= $max_width))
+		{
+			$disp_art = false;
+		}
+
+		if (($pic_height / $max_height) > ($pic_width / $max_width))
+		{
+			$thumb_height	= $max_height;
+			$thumb_width	= round($max_width * (($pic_width / $max_width) / ($pic_height / $max_height)));
+		}
+		else
+		{
+			$thumb_height	= round($max_height * (($pic_height / $max_height) / ($pic_width / $max_width)));
+			$thumb_width	= $max_width;
+		}
+
 		$image = $this->_get_image($thumbnail, $file_ext);
 
 		if ($image)
 		{
 			if ($disp_art)
 			{
-				$newimage = imagecreatetruecolor('150', '100');
-				imagecopyresampled($newimage, $image, 0, 0, 0, 0, 150, 100, $pic_width, $pic_height);
+				$newimage = imagecreatetruecolor($thumb_width, $thumb_height);
+				imagecopyresampled($newimage, $image, 0, 0, 0, 0, $thumb_width, $thumb_height, $pic_width, $pic_height);
 				imagejpeg($newimage);
 			}
 			else
