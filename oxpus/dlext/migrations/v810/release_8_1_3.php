@@ -57,7 +57,7 @@ class release_8_1_3 extends \phpbb\db\migration\migration
 		@mkdir($path);
 		@phpbb_chmod($path, CHMOD_ALL);
 
-		$f = fopen($path . '/index.htm', 'w');
+		$f = fopen($path . 'index.htm', 'w');
 		fclose($f);
 	}
 

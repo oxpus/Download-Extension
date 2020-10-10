@@ -187,7 +187,7 @@ class dlext_physical implements dlext_physical_interface
 		@mkdir($path);
 		@phpbb_chmod($path, CHMOD_ALL);
 
-		$f = fopen($path . '/index.htm', 'w');
+		$f = fopen($path . 'index.htm', 'w');
 		fclose($f);
 	}
 
