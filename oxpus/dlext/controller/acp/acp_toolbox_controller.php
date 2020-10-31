@@ -22,6 +22,7 @@ class acp_toolbox_controller implements acp_toolbox_interface
 	public $user;
 	public $auth;
 	public $phpEx;
+	public $root_path;
 	public $phpbb_extension_manager;
 	public $phpbb_container;
 	public $phpbb_path_helper;
@@ -43,6 +44,7 @@ class acp_toolbox_controller implements acp_toolbox_interface
 	protected $dlext_physical;
 
 	/*
+	 * @param string								$root_path
 	 * @param string								$phpEx
 	 * @param Container 							$phpbb_container
 	 * @param \phpbb\extension\manager				$phpbb_extension_manager
@@ -54,6 +56,7 @@ class acp_toolbox_controller implements acp_toolbox_interface
 	 * @param \phpbb\event\dispatcher_interface		$phpbb_dispatcher
 	 */
 	public function __construct(
+		$root_path,
 		$phpEx,
 		Container $phpbb_container,
 		\phpbb\extension\manager $phpbb_extension_manager,
@@ -68,6 +71,7 @@ class acp_toolbox_controller implements acp_toolbox_interface
 		$dlext_physical
 	)
 	{
+		$this->root_path				= $root_path;
 		$this->phpEx					= $phpEx;
 		$this->phpbb_container			= $phpbb_container;
 		$this->phpbb_extension_manager	= $phpbb_extension_manager;
@@ -119,7 +123,42 @@ class acp_toolbox_controller implements acp_toolbox_interface
 		{
 			trigger_error('FORM_INVALID', E_USER_WARNING);
 		}
+
+		if ($action == 'dl' && $file_name && $path)
+		{
+			if (!$description)
+			{
+				$description = $file_name;
+			}
+
+			$description	= base64_decode($description);
+			$file_name		= base64_decode($file_name);
+			$path			= base64_decode($path);
+
+			include_once($this->root_path . 'includes/functions_download.' . $this->phpEx);
 		
+			$this->language->add_lang('viewtopic');
+
+			$file_path = DL_EXT_FILEBASE_PATH. 'downloads/' . $path . '/';
+	
+			$dl_data = [
+				'physical_file'		=> $file_path . $file_name,
+				'real_filename'		=> $description,
+				'mimetype'			=> 'application/octetstream',
+				'filesize'			=> sprintf("%u", @filesize($file_path . $file_name)),
+				'filetime'			=> @filemtime($file_path . $file_name),
+			];
+
+			if (@file_exists($file_path . $file_name))
+			{
+				$this->dlext_physical->send_file_to_browser($dl_data);
+			}
+			else
+			{
+				trigger_error($this->language->lang('FILE_NOT_FOUND_404', $description) . adm_back_link($this->u_action . '&amp;path=/' . $path), E_USER_WARNING);
+			}
+		}
+
 		if (!empty($files) && $file_assign)
 		{
 			$file_names = $file_path = [];
@@ -227,8 +266,6 @@ class acp_toolbox_controller implements acp_toolbox_interface
 			$sql = 'SELECT description, real_file FROM ' . DOWNLOADS_TABLE . '
 				WHERE ' . $this->db->sql_in_set('cat', $index, true);
 			$result = $this->db->sql_query($sql);
-		
-			$total_unassigned_files = $this->db->sql_affectedrows($result);
 		
 			$i = 0;
 
@@ -508,7 +545,7 @@ class acp_toolbox_controller implements acp_toolbox_interface
 		
 					$real_file_array = [];
 		
-					$sql = 'SELECT d.file_name, d.real_file FROM ' . DOWNLOADS_TABLE . ' d, ' . DL_CAT_TABLE . " c
+					$sql = 'SELECT d.description, d.file_name, d.real_file FROM ' . DOWNLOADS_TABLE . ' d, ' . DL_CAT_TABLE . " c
 						WHERE d.cat = c.id
 							AND c.path = '" . $this->db->sql_escape(utf8_decode($path)) . "/'";
 					$result = $this->db->sql_query($sql);
@@ -518,13 +555,13 @@ class acp_toolbox_controller implements acp_toolbox_interface
 					{
 						while ($row = $this->db->sql_fetchrow($result))
 						{
-							$real_file_array[$row['real_file']] = $row['file_name'];
+							$real_file_array[$row['real_file']] = '<strong>' . $row['description'] . '</strong><br />[' . $row['file_name'] . ']';
 						}
 					}
 		
 					$this->db->sql_freeresult($result);
 		
-					$sql = 'SELECT v.ver_file_name, v.ver_real_file FROM ' . DL_VERSIONS_TABLE . ' v, ' . DOWNLOADS_TABLE . ' d, ' . DL_CAT_TABLE . " c
+					$sql = 'SELECT d.description, v.ver_file_name, v.ver_real_file FROM ' . DL_VERSIONS_TABLE . ' v, ' . DOWNLOADS_TABLE . ' d, ' . DL_CAT_TABLE . " c
 						WHERE d.cat = c.id
 							AND v.dl_id = d.id
 							AND c.path = '" . $this->db->sql_escape(utf8_decode($path)) . "/'";
@@ -535,7 +572,7 @@ class acp_toolbox_controller implements acp_toolbox_interface
 					{
 						while ($row = $this->db->sql_fetchrow($result))
 						{
-							$real_file_array[$row['ver_real_file']] = $row['ver_file_name'];
+							$real_file_array[$row['ver_real_file']] = '<strong>' . $row['description'] . '</strong><br />[' . $row['ver_file_name'] . ']';
 						}
 					}
 		
@@ -543,7 +580,9 @@ class acp_toolbox_controller implements acp_toolbox_interface
 				}
 		
 				$dh = @opendir(DL_EXT_FILEBASE_PATH. 'downloads/' . $path);
-		
+
+				$total_unassigned_files = 0;
+
 				while (false !== ($file = @readdir($dh)))
 				{
 					if ($file{0} != '.' &&  $file != 'index.htm')
@@ -572,10 +611,22 @@ class acp_toolbox_controller implements acp_toolbox_interface
 						else
 						{
 							$real_file_name = (isset($real_file_array[$file])) ? $real_file_array[$file] : $file;
-							$files[] = $real_file_name . '|~|<a href="' . DL_EXT_FILEBASE_PATH. 'downloads/' . $path . '/' . $file.'">' . $real_file_name . '</a>';
+							$description	= base64_encode($real_file_name);
+							$file_name		= base64_encode($file);
+							$file_path		= base64_encode($path);
+							$files_url		= "{$this->u_action}&amp;action=dl&amp;description=$description&amp;file_name=$file_name&amp;path=$file_path";
+							$files[] = $real_file_name . '|~|<a href="' . $files_url . '">' . $real_file_name . '</a>';
 							$filen[] = $file;
 							$sizes[] = sprintf("%u", @filesize(DL_EXT_FILEBASE_PATH. 'downloads/' . $path .'/' . $file));
-							$exist[] = (in_array($file, $existing_files)) ? true : 0;
+							if (in_array($file, $existing_files))
+							{
+								$exist[] = true;
+							}
+							else
+							{
+								$exist[] = 0;
+								++$total_unassigned_files;
+							}
 						}
 					}
 				}
@@ -623,7 +674,7 @@ class acp_toolbox_controller implements acp_toolbox_interface
 				$this->template->assign_var('S_EMPTY_FOLDER', true);
 			}
 		
-			if (isset($total_unassigned_files) && $total_unassigned_files && $action != 'unassigned')
+			if ($total_unassigned_files && $action != 'unassigned')
 			{
 				$this->template->assign_var('S_UNASSIGNED_FILES', true);
 			}

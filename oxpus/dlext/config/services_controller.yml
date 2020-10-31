@@ -178,6 +178,7 @@ services:
             - '@oxpus.dlext.dlext_files'
             - '@oxpus.dlext.dlext_init'
             - '@oxpus.dlext.dlext_main'
+            - '@oxpus.dlext.dlext_physical'
             - '@oxpus.dlext.dlext_status'
     oxpus.dlext.overall:
         class: oxpus\dlext\controller\overall
@@ -380,4 +381,5 @@ services:
             - '@oxpus.dlext.dlext_files'
             - '@oxpus.dlext.dlext_format'
             - '@oxpus.dlext.dlext_main'
+            - '@oxpus.dlext.dlext_physical'
             - '@oxpus.dlext.dlext_status'

@@ -64,6 +64,7 @@ class load
 	protected $dlext_files;
 	protected $dlext_init;
 	protected $dlext_main;
+	protected $dlext_physical;
 	protected $dlext_status;
 
 	/**
@@ -103,6 +104,7 @@ class load
 		$dlext_files,
 		$dlext_init,
 		$dlext_main,
+		$dlext_physical,
 		$dlext_status
 	)
 	{
@@ -129,6 +131,7 @@ class load
 		$this->dlext_files				= $dlext_files;
 		$this->dlext_init				= $dlext_init;
 		$this->dlext_main				= $dlext_main;
+		$this->dlext_physical			= $dlext_physical;
 		$this->dlext_status				= $dlext_status;
 	}
 
@@ -564,20 +567,24 @@ class load
 
 				$this->language->add_lang('viewtopic');
 
-				$dl_file_url = str_replace($this->root_path, '', DL_EXT_FILEBASE_PATH. 'downloads/' . $index[$cat_id]['cat_path']);
+				$dl_file_url = DL_EXT_FILEBASE_PATH . 'downloads/' . $index[$cat_id]['cat_path'];
 
 				$dl_file_data = [
-					'attach_id'				=> 0,
-					'is_orphan'				=> false,
-					'physical_filename'		=> $dl_file['real_file'],
-					'real_filename'			=> $dl_file['file_name'],
-					'mimetype'				=> 'application/octetstream',
-					'filesize'				=> sprintf("%u", @filesize($dl_file_url . $dl_file['real_file'])),
-					'filetime'				=> $dl_file['change_time'],
+					'physical_file'		=> $dl_file_url . $dl_file['real_file'],
+					'real_filename'		=> $dl_file['file_name'],
+					'mimetype'			=> 'application/octetstream',
+					'filesize'			=> sprintf("%u", @filesize($dl_file_url . $dl_file['real_file'])),
+					'filetime'			=> $dl_file['change_time'],
 				];
 
-				send_file_to_browser($dl_file_data, $dl_file_url, ATTACHMENT_CATEGORY_NONE);
-				file_gc();
+				if (@file_exists($dl_file_url . $dl_file['real_file']))
+				{
+					$this->dlext_physical->send_file_to_browser($dl_file_data);
+				}
+				else
+				{
+					trigger_error($this->language->lang('FILE_NOT_FOUND_404', $dl_file['file_name']));
+				}
 			}
 			else
 			{

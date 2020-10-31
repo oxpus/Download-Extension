@@ -80,6 +80,7 @@ services:
             - '@service_container'
             - '@ext.manager'
             - '@dbal.conn'
+            - '@user'
             - '@oxpus.dlext.dlext_files'
             - '@oxpus.dlext.dlext_format'
     oxpus.dlext.dlext_privacy:

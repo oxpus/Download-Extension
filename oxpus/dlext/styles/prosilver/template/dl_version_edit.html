@@ -67,7 +67,7 @@
 			{% for images in loops.images %}
 			<dl{% if images.S_ROW_COUNT is even %} class="row bg2"{% endif %}>
 				<dt>
-					<a href="{{ images.LINK }}" title="{{ images.NAME }}" rel="prettyPhoto[pp_gal]"><img src="{{ images.LINK }}" alt="{{ images.NAME }}" title="{{ images.NAME }}" class="dl-thumb-box" /></a>
+					<a href="{{ images.IMAGE }}" title="{{ images.NAME }}" rel="prettyPhoto[pp_gal]"><img src="{{ images.LINK }}" alt="{{ images.NAME }}" title="{{ images.NAME }}" class="dl-thumb-box" /></a>
 				</dt>
 				<dd>
 					<input type="text" maxlength="255" name="ver_title[{{ images.VER_FILE_ID }}]" value="{{ images.NAME }}" class="inputbox autowidth" />

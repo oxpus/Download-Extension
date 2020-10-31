@@ -62,6 +62,7 @@ class version
 	protected $dlext_files;
 	protected $dlext_format;
 	protected $dlext_main;
+	protected $dlext_physical;
 	protected $dlext_status;
 
 	/**
@@ -99,6 +100,7 @@ class version
 		$dlext_files,
 		$dlext_format,
 		$dlext_main,
+		$dlext_physical,
 		$dlext_status
 	)
 	{
@@ -124,6 +126,7 @@ class version
 		$this->dlext_files				= $dlext_files;
 		$this->dlext_format				= $dlext_format;
 		$this->dlext_main				= $dlext_main;
+		$this->dlext_physical			= $dlext_physical;
 		$this->dlext_status				= $dlext_status;
 	}
 
@@ -277,34 +280,38 @@ class version
 		/*
 		* Download an attached file?
 		*/
-		if ($action == 'load' && $ver_id && $ver_file_id && $auth_dl)
+		if ($action == 'dl' && $ver_id && $ver_file_id && $auth_dl)
 		{
 			$sql = 'SELECT ver_id, real_name, file_name, file_type FROM ' . DL_VER_FILES_TABLE . '
 				WHERE ver_file_id = ' . (int) $ver_file_id;
 			$result = $this->db->sql_query($sql);
-			$row = $this->db->sql_fetchrow($result);
+			$row_ver = $this->db->sql_fetchrow($result);
 			$this->db->sql_freeresult($result);
-		
-			if ($row['file_type'] == 0 && $row['ver_id'] == $ver_id)
+
+			if ($row_ver['file_type'] == 0 && $row_ver['ver_id'] == $ver_id)
 			{
 				include_once($this->root_path . 'includes/functions_download.' . $this->php_ext);
 		
 				$this->language->add_lang('viewtopic');
 		
-				$dl_file_url = str_replace($this->root_path, '', DL_EXT_FILEBASE_PATH. 'version/files/');
-		
-				$dl_file_data = [
-					'attach_id'				=> 0,
-					'is_orphan'				=> false,
-					'physical_filename'		=> $row['real_name'],
-					'real_filename'			=> $row['file_name'],
-					'mimetype'				=> 'application/octetstream',
-					'filesize'				=> sprintf("%u", @filesize($dl_file_url . $row['real_name'])),
-					'filetime'				=> @filemtime($dl_file_url . $row['real_name']),
+				$dl_file_url = DL_EXT_FILEBASE_PATH. 'version/files/';
+
+				$dl_ver_data = [
+					'physical_file'		=> $dl_file_url . $row_ver['real_name'],
+					'real_filename'		=> $row_ver['file_name'],
+					'mimetype'			=> 'application/octetstream',
+					'filesize'			=> sprintf("%u", @filesize($dl_file_url . $row_ver['real_name'])),
+					'filetime'			=> @filemtime($dl_file_url . $row_ver['real_name']),
 				];
-		
-				send_file_to_browser($dl_file_data, $dl_file_url, ATTACHMENT_CATEGORY_NONE);
-				file_gc();
+
+				if (@file_exists($dl_file_url . $row_ver['real_name']))
+				{
+					$this->dlext_physical->send_file_to_browser($dl_ver_data);
+				}
+				else
+				{
+					trigger_error($this->language->lang('FILE_NOT_FOUND_404', $row_ver['file_name']));
+				}
 			}
 		
 			trigger_error('DL_NO_ACCESS');
@@ -558,19 +565,23 @@ class version
 				switch ($row['file_type'])
 				{
 					case 1:
-						$file_path = DL_EXT_FILEBASE_PATH. 'version/images/' . $row['real_name'];
-						$tpl_block = 'images';
-						$images_exists = true;
+						$pic_path		= base64_encode(DL_EXT_FILEBASE_PATH . 'version/images/' . str_replace(" ", "%20", $row['real_name']));
+						$file_path		= $this->helper->route('oxpus_dlext_thumbnail', ['thumbnail' => $pic_path, 'disp_art' => true]);
+						$image			= $this->helper->route('oxpus_dlext_thumbnail', ['thumbnail' => $pic_path, 'disp_art' => false]);
+						$tpl_block		= 'images';
+						$images_exists	= true;
 					break;
 					default:
-						$file_path = $row['real_name'];
-						$tpl_block = 'files';
+						$file_path		= $row['real_name'];
+						$tpl_block		= 'files';
+						$image			= '';
 				}
 		
 				$this->template->assign_block_vars($tpl_block, [
 					'LINK'			=> $file_path,
 					'FILE_NAME'		=> $row['file_name'],
 					'NAME'			=> $row['file_title'],
+					'IMAGE'			=> $image,
 					'VER_FILE_ID'	=> $row['ver_file_id'],
 				]);
 			}
@@ -660,23 +671,28 @@ class version
 			switch ($row['file_type'])
 			{
 				case 1:
-					$tpl_block = 'images';
-					$images_exists = true;
+					$tpl_block		= 'images';
+					$images_exists	= true;
+					$pic_path		= base64_encode(DL_EXT_FILEBASE_PATH . 'version/images/' . str_replace(" ", "%20", $row['real_name']));
+					$file_path		= $this->helper->route('oxpus_dlext_thumbnail', ['thumbnail' => $pic_path, 'disp_art' => true]);
+					$image			= $this->helper->route('oxpus_dlext_thumbnail', ['thumbnail' => $pic_path, 'disp_art' => false]);
 				break;
 				default:
 					$load_link_ary = [
-						'action'		=> 'load',
+						'action'		=> 'dl',
 						'ver_id'		=> $ver_id,
 						'ver_file_id'	=> $row['ver_file_id'],
 						'df_id'			=> $df_id,
 					];
-					$file_path = $this->helper->route('oxpus_dlext_version', $load_link_ary);
-					$tpl_block = 'files';
+					$file_path	= $this->helper->route('oxpus_dlext_version', $load_link_ary);
+					$tpl_block	= 'files';
+					$image		= '';
 			}
 		
 			$this->template->assign_block_vars($tpl_block, [
-				'NAME'		=> $row['file_title'],
+				'NAME'		=> ($row['file_title']) ? $row['file_title'] : $row['file_name'],
 				'LINK'		=> $file_path,
+				'IMAGE'		=> $image,
 				'S_AUTH'	=> $file_load,
 			]);
 		}

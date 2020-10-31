@@ -99,4 +99,13 @@ interface dlext_physical_interface
 	 * @access public
 	*/
 	public function get_file_base_tree($file_base, $path, $level = 0);
+
+	/**
+	 * Send the selected file to the user client (webbrowser) = download
+	 * 
+	 * @param array $dl_file_data data array with all informations about the download file
+	 * @return void
+	 * @access public
+	*/
+	public function send_file_to_browser($dl_file_data);
 }

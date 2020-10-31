@@ -18,6 +18,9 @@ class dlext_physical implements dlext_physical_interface
 	/* @var \phpbb\db\driver\driver_interface */
 	protected $db;
 
+	/* @var \phpbb\user */
+	protected $user;
+
 	protected $ext_path;
 	protected $phpbb_container;
 
@@ -31,17 +34,20 @@ class dlext_physical implements dlext_physical_interface
 	* @param \phpbb\extension\manager				$phpbb_extension_manager
 
 	* @param \phpbb\db\driver\driver_interfacer		$db
+	* @param \phpbb\user							$user
 	*/
 	public function __construct(
 		Container $phpbb_container,
 		\phpbb\extension\manager $phpbb_extension_manager,
 
 		\phpbb\db\driver\driver_interface $db,
+		\phpbb\user $user,
 		$dlext_files,
 		$dlext_format
 		)
 	{
 		$this->db 				= $db;
+		$this->user 			= $user;
 		$this->phpbb_container 	= $phpbb_container;
 
 		$this->ext_path			= $phpbb_extension_manager->get_extension_path('oxpus/dlext', true);
@@ -333,5 +339,72 @@ class dlext_physical implements dlext_physical_interface
 		@closedir($handle);
 
 		return $tree;
+	}
+
+	/**
+	 * Send the selected file to the user client (webbrowser) = download
+	*/
+	public function send_file_to_browser($dl_file_data)
+	{
+		// Now the tricky part... let's dance
+		header('Cache-Control: private');
+
+		// Send out the Headers. Do not set Content-Disposition to inline please, it is a security measure for users using the Internet Explorer.
+		header('Content-Type: ' . $dl_file_data['mimetype']);
+
+		if (phpbb_is_greater_ie_version($this->user->browser, 7))
+		{
+			header('X-Content-Type-Options: nosniff');
+		}
+
+		if (empty($this->user->browser) || ((strpos(strtolower($this->user->browser), 'msie') !== false) && !phpbb_is_greater_ie_version($this->user->browser, 7)))
+		{
+			header('Content-Disposition: attachment; ' . header_filename(htmlspecialchars_decode($dl_file_data['real_filename'])));
+			if (empty($this->user->browser) || (strpos(strtolower($this->user->browser), 'msie 6.0') !== false))
+			{
+				header('Expires: ' . gmdate('D, d M Y H:i:s', time()) . ' GMT');
+			}
+		}
+		else
+		{
+			header('Content-Disposition: ' . ((strpos($dl_file_data['mimetype'], 'image') === 0) ? 'inline' : 'attachment') . '; ' . header_filename(htmlspecialchars_decode($dl_file_data['real_filename'])));
+			if (phpbb_is_greater_ie_version($this->user->browser, 7) && (strpos($dl_file_data['mimetype'], 'image') !== 0))
+			{
+				header('X-Download-Options: noopen');
+			}
+		}
+
+		if (!set_modified_headers($dl_file_data['filetime'], $this->user->browser))
+		{
+			$size = $dl_file_data['filesize'];
+			if ($size)
+			{
+				header("Content-Length: $size");
+			}
+
+			// Try to deliver in chunks
+			@set_time_limit(0);
+
+			$stream = @file_get_contents($dl_file_data['physical_file']);
+
+			// Simulate the stream
+			$fp = fopen('php://temp', 'w+b');
+			fwrite($fp, $stream);
+			rewind($fp);
+
+			// Close the db connection before sending the file etc.
+			file_gc(false);
+
+			if ($fp !== false)
+			{
+				$output = fopen('php://output', 'w+b');
+				stream_copy_to_stream($fp, $output);
+				fclose($fp);
+			}
+
+			flush();
+		}
+
+		exit;
 	}
 }

@@ -35,23 +35,18 @@ function select_switch(status)
 
 	{% for dirs_row in loops.dirs_row %}
 	<dl>
-		<dt><i class="icon fa-folder fa-fw"></i>&nbsp;<label>{{ dirs_row.DIR_LINK }}</label></dt>
+		<dt><label>{{ dirs_row.DIR_LINK }}</label></dt>
 		<dd><label>{{ dirs_row.DIR_DELETE_LINK }}</label></dd>
 	</dl>
 	{% endfor %}
 
 	{% for files_row in loops.files_row %}
 	<dl>
-		<dt><label>{{ files_row.FILE_EXIST }}&nbsp;{% if files_row.S_UNKNOWN_FILE %}<span class="dl-red"><i class="icon fa-file-o fa-fw"></i>&nbsp;{{ lang('DL_UNKNOWN_FILE') }}{{ lang('COLON') }}</span>&nbsp;{% else %}<i class="icon fa-file fa-fw"></i>&nbsp;{% endif %}{{ files_row.FILE_NAME }}</label></dt>
+		<dt class="inner-list">{% if files_row.S_UNKNOWN_FILE %}<span class="dl-red">{{ lang('DL_UNKNOWN_FILE') }}</span>{% endif %}{{ files_row.FILE_NAME }}</dt>
+		<dd>{{ files_row.FILE_EXIST }}</dd>
 		<dd><span>{{ files_row.FILE_SIZE }}&nbsp;{{ files_row.FILE_SIZE_RANGE }}{% if files_row.FILE_NAME_REAL %}<br />{{ files_row.FILE_NAME_REAL }}{% endif %}</span></dd>
 	</dl>
 	{% endfor %}
-
-	{% if files_row.S_ROW_COUNT %}
-	<p>
-		<span><a href="javascript:select_switch(true);" class="small">{{ lang('MARK_ALL') }}</a> &bull; <a href="javascript:select_switch(false);" class="small">{{ lang('UNMARK_ALL') }}</a></span>
-	</p>
-	{% endif %}
 
 	{% if S_EMPTY_FOLDER %}
 	<p>
@@ -60,6 +55,13 @@ function select_switch(status)
 	{% endif %}
 
 </fieldset>
+
+{% if S_UNASSIGNED_FILES %}
+<div class="dl-right">
+	<a href="javascript:select_switch(true);" class="small">{{ lang('MARK_ALL') }}</a> &bull; <a href="javascript:select_switch(false);" class="small">{{ lang('UNMARK_ALL') }}</a>
+</div>
+<br class="clear" />
+{% endif %}
 
 {% for overall_size in loops.overall_size %}
 <fieldset>

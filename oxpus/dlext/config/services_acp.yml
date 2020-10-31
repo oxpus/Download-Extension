@@ -142,6 +142,7 @@ services:
     oxpus.dlext.acp_toolbox_controller:
         class: oxpus\dlext\controller\acp\acp_toolbox_controller
         arguments:
+            - '%core.root_path%'
             - '%core.php_ext%'
             - '@service_container'
             - '@ext.manager'

@@ -42,7 +42,7 @@
 			<dl>
 				<ul class="dl-detail-row">
 			{% endif %}
-					<li class="dl-left dl-margin-right-small">{% if S_DL_POPUPIMAGE %}<a href="{{ images.LINK }}" title="{{ images.NAME }}" rel="prettyPhoto[pp_gal]">{% endif %}<img src="{{ images.LINK }}" alt="{{ images.NAME }}" title="{{ images.NAME }}" class="dl-thumb-box" />{% if S_DL_POPUPIMAGE %}</a>{% endif %}</li>
+					<li class="dl-left dl-thumb-box dl_thumb-cell dl-intent-right">{% if S_DL_POPUPIMAGE %}<a href="{{ images.IMAGE }}" title="{{ images.NAME }}" rel="prettyPhoto[pp_gal]">{% endif %}<img src="{{ images.LINK }}" alt="{{ images.NAME }}" title="{{ images.NAME }}" class="dl-thumb-box" />{% if S_DL_POPUPIMAGE %}</a>{% endif %}</li>
 			{% if images.S_LAST_ROW %}
 				</ul>
 			</dl>
@@ -54,9 +54,9 @@
 			<br />
 			<h3>{{ lang('DL_FILES_TITLE') }}{{ lang('COLON') }}</h3>
 			<dl>
-				<ul class="dl-detail-row">
+				<ul class="topiclist">
 			{% endif %}
-					<li class="dl-left dl-margin-right-small">{% if files.S_AUTH %}<a href="{{ files.LINK }}" title="{{ files.NAME }}">{% endif %}{{ files.NAME }}{% if files.S_AUTH %}</a>{% endif %}</li>
+					<li class="dl-margin-right-small dl-a-button">{% if files.S_AUTH %}<a href="{{ files.LINK }}" title="{{ files.NAME }}">{% endif %}<strong>{{ files.NAME }}</strong>{% if files.S_AUTH %}</a>{% endif %}</li>
 			{% if files.S_LAST_ROW %}
 				</ul>
 			</dl>
