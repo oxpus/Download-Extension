@@ -544,6 +544,7 @@ class acp_toolbox_controller implements acp_toolbox_interface
 					}
 		
 					$real_file_array = [];
+					$real_file_title = [];
 		
 					$sql = 'SELECT d.description, d.file_name, d.real_file FROM ' . DOWNLOADS_TABLE . ' d, ' . DL_CAT_TABLE . " c
 						WHERE d.cat = c.id
@@ -556,6 +557,7 @@ class acp_toolbox_controller implements acp_toolbox_interface
 						while ($row = $this->db->sql_fetchrow($result))
 						{
 							$real_file_array[$row['real_file']] = '<strong>' . $row['description'] . '</strong><br />[' . $row['file_name'] . ']';
+							$real_file_title[$row['real_file']] = $row['file_name'];
 						}
 					}
 		
@@ -573,6 +575,7 @@ class acp_toolbox_controller implements acp_toolbox_interface
 						while ($row = $this->db->sql_fetchrow($result))
 						{
 							$real_file_array[$row['ver_real_file']] = '<strong>' . $row['description'] . '</strong><br />[' . $row['ver_file_name'] . ']';
+							$real_file_title[$row['ver_real_file']] = $row['ver_file_name'];
 						}
 					}
 		
@@ -610,11 +613,12 @@ class acp_toolbox_controller implements acp_toolbox_interface
 						}
 						else
 						{
-							$real_file_name = (isset($real_file_array[$file])) ? $real_file_array[$file] : $file;
-							$description	= base64_encode($real_file_name);
+							$file_desc		= (isset($real_file_title[$file])) ? $real_file_title[$file] : $file;
+							$file_desc		= base64_encode($file_desc);
 							$file_name		= base64_encode($file);
 							$file_path		= base64_encode($path);
-							$files_url		= "{$this->u_action}&amp;action=dl&amp;description=$description&amp;file_name=$file_name&amp;path=$file_path";
+							$real_file_name = (isset($real_file_array[$file])) ? $real_file_array[$file] : $file;
+							$files_url		= "{$this->u_action}&amp;action=dl&amp;description=$file_desc&amp;file_name=$file_name&amp;path=$file_path";
 							$files[] = $real_file_name . '|~|<a href="' . $files_url . '">' . $real_file_name . '</a>';
 							$filen[] = $file;
 							$sizes[] = sprintf("%u", @filesize(DL_EXT_FILEBASE_PATH. 'downloads/' . $path .'/' . $file));
