@@ -10,5 +10,4 @@ Latest release 8.1.6
 
 
 **Attention:**
-The download extension is incompatible with Tapatalk!
-There is no support for this as long as this extension blockes standard JavaScript functions that are used by the download extension.
+The download extension is incompatible with Tapatalk. There is no support for this!
