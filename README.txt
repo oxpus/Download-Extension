@@ -7,3 +7,8 @@ Based on phpBB 3.2.x / 3.3.x
 Original by Hotschi
 Latest release 8.1.6
 (c) 2002 - 2020 OXPUS networks
+
+
+**Attention:**
+The download extension is incompatible with Tapatalk!
+There is no support for this as long as this extension blockes standard JavaScript functions that are used by the download extension.
