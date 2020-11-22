@@ -980,7 +980,7 @@ class acp_files_controller implements acp_files_interface
 					/**
 					 * Save additional data for the download
 					 *
-					 * @event 		dlext.acp_files_add_sql_insert_after
+					 * @event oxpus.dlext.acp_files_add_sql_insert_after
 					 * @var int		next_id			download ID
 					 * @var array	sql_array		array of download's data for storage
 					 * @since 8.1.0-RC2
@@ -989,7 +989,7 @@ class acp_files_controller implements acp_files_interface
 						'next_id',
 						'sql_array',
 					);
-					extract($this->phpbb_dispatcher->trigger_event('dlext.acp_files_add_sql_insert_after', compact($vars)));
+					extract($this->phpbb_dispatcher->trigger_event('oxpus.dlext.acp_files_add_sql_insert_after', compact($vars)));
 
 					$message = $this->language->lang('DOWNLOAD_ADDED');
 				}
@@ -1011,7 +1011,7 @@ class acp_files_controller implements acp_files_interface
 				/**
 				 * Manipulate thumbnail upload
 				 *
-				 * @event 		dlext.acp_edit_thumbnail_before
+				 * @event oxpus.dlext.acp_edit_thumbnail_before
 			 	 * @var string 	thumb_form_name			thumbnail upload form field
 				 * @var bool  	allow_thumbs_upload		enable/disable thumbnail upload
 				 * @since 8.1.0-RC2
@@ -1021,7 +1021,7 @@ class acp_files_controller implements acp_files_interface
 					'thumb_form_name',
 					'allow_thumbs_upload',
 				);
-				extract($this->phpbb_dispatcher->trigger_event('dlext.acp_edit_thumbnail_before', compact($vars)));
+				extract($this->phpbb_dispatcher->trigger_event('oxpus.dlext.acp_edit_thumbnail_before', compact($vars)));
 
 				if ($allow_thumbs_upload)
 				{
@@ -1081,7 +1081,7 @@ class acp_files_controller implements acp_files_interface
 				/**
 				 * Manipulate thumbnail data before storage
 				 *
-				 * @event 		dlext.acp_files_sql_thumbnail_before
+				 * @event oxpus.dlext.acp_files_sql_thumbnail_before
 				 * @var string	foreign_thumb_message	message after manipulate thumbnail
 				 * @var bool	thumb_error				thumbnail error (true to break here)
 				 * @var string	thumb_name				thumbnail name (true to avoid overwrite foreign storage)
@@ -1097,7 +1097,7 @@ class acp_files_controller implements acp_files_interface
 					'df_id',
 					'sql_array',
 				);
-				extract($this->phpbb_dispatcher->trigger_event('dlext.acp_files_sql_thumbnail_before', compact($vars)));
+				extract($this->phpbb_dispatcher->trigger_event('oxpus.dlext.acp_files_sql_thumbnail_before', compact($vars)));
 
 				if (!$thumb_error && isset($thumb_name) && $thumb_name != '')
 				{
@@ -1340,7 +1340,7 @@ class acp_files_controller implements acp_files_interface
 				/**
 				 * Workflow after delete download
 				 *
-				 * @event 		dlext.acp_files_delete_download_after
+				 * @event oxpus.dlext.acp_files_delete_download_after
 				 * @var int		df_id		download ID
 				 * @var int		dl_cat		download category ID
 				 * @since 8.1.0-RC2
@@ -1349,7 +1349,7 @@ class acp_files_controller implements acp_files_interface
 					'df_id',
 					'dl_cat',
 				);
-				extract($this->phpbb_dispatcher->trigger_event('dlext.acp_files_delete_download_after', compact($vars)));
+				extract($this->phpbb_dispatcher->trigger_event('oxpus.dlext.acp_files_delete_download_after', compact($vars)));
 
 				$notification->delete_notifications([
 					'oxpus.dlext.notification.type.approve',

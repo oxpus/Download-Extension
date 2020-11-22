@@ -806,7 +806,7 @@ class mcp_edit
 					/**
 					 * Manipulate thumbnail data before storage
 					 *
-					 * @event 		dlext.mcp_sql_thumbnail_before
+					 * @event oxpus.dlext.mcp_sql_thumbnail_before
 					 * @var string	foreign_thumb_message	message after manipulate thumbnail
 					 * @var string	thumb_name				thumbnail name (empty to avoid overwrite foreign storage)
 					 * @var int		df_id					download ID
@@ -820,7 +820,7 @@ class mcp_edit
 						'df_id',
 						'sql_array',
 					);
-					extract($this->phpbb_dispatcher->trigger_event('dlext.mcp_sql_thumbnail_before', compact($vars)));
+					extract($this->phpbb_dispatcher->trigger_event('oxpus.dlext.mcp_sql_thumbnail_before', compact($vars)));
 
 					if (isset($thumb_name) && $thumb_name != '')
 					{
@@ -1325,7 +1325,7 @@ class mcp_edit
 		/**
 		 * Display extra data to save them with the download
 		 *
-		 * @event 		dlext.mcp_edit_template_before
+		 * @event oxpus.dlext.mcp_edit_template_before
 		 * @var int		df_id			download ID
 		 * @var int		cat_id			download category ID
 		 * @var array	template_ary	array of download's data for edit
@@ -1336,7 +1336,7 @@ class mcp_edit
 			'cat_id',
 			'template_ary',
 		);
-		extract($this->phpbb_dispatcher->trigger_event('dlext.mcp_edit_template_before', compact($vars)));
+		extract($this->phpbb_dispatcher->trigger_event('oxpus.dlext.mcp_edit_template_before', compact($vars)));
 
 		$this->template->assign_vars($template_ary);
 

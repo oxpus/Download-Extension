@@ -241,7 +241,7 @@ class latest
 		/**
 		 * Fetch additional data for the downloads
 		 *
-		 * @event oxpus.dlext.index_fetch_download_data
+		 * @event oxpus.dlext.latest_fetch_download_data
 		 * @var int		cat					download category ID
 		 * @var string	sql_sort_by			sql order by fields
 		 * @var string	sql_order			sql order by direction

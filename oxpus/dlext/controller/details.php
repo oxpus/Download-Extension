@@ -513,7 +513,7 @@ class details
 					'comment_text',
 					'approve',
 				);
-				extract($this->phpbb_dispatcher->trigger_event('oxpus.dlext.details_comment_storage_after', compact($vars)));
+				extract($this->phpbb_dispatcher->trigger_event('oxpus.dlext.details_comment_storage_before', compact($vars)));
 
 				if ($dl_id)
 				{
@@ -1366,7 +1366,7 @@ class details
 					/**
 					 * Additional actions before redirect to download the file / open the webpage
 					 *
-					 * @event 		dlext.details_download_before
+					 * @event oxpus.dlext.details_download_before
 					 * @var int		hotlink_id		hotlink protection ID
 					 * @var string	code			confirmation code
 					 * @var int		df_id			download ID
@@ -1383,7 +1383,7 @@ class details
 						'cat_id',
 						'file_version',
 					);
-					extract($this->phpbb_dispatcher->trigger_event('dlext.details_download_before', compact($vars)));
+					extract($this->phpbb_dispatcher->trigger_event('oxpus.dlext.details_download_before', compact($vars)));
 
 					redirect($this->helper->route('oxpus_dlext_load', ['hotlink_id' => $hotlink_id, 'code' => $code, 'df_id' => $df_id, 'modcp' => $modcp, 'cat_id' => $cat_id, 'file_version' => $file_version]));
 				}
@@ -1679,7 +1679,7 @@ class details
 		/**
 		 * Calculate or Display additional data
 		 *
-		 * @event 		dlext.details_display_after
+		 * @event oxpus.dlext.details_display_after
 		 * @var int		df_id			download ID
 		 * @var int		cat_id			download category ID
 		 * @var array	dl_files		array of download's data
@@ -1690,7 +1690,7 @@ class details
 			'cat_id',
 			'dl_files',
 		);
-		extract($this->phpbb_dispatcher->trigger_event('dlext.details_display_after', compact($vars)));
+		extract($this->phpbb_dispatcher->trigger_event('oxpus.dlext.details_display_after', compact($vars)));
 
 		$detail_cat_names = [
 			0 => $this->language->lang('DL_DETAIL'),
