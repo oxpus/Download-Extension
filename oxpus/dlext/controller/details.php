@@ -573,7 +573,7 @@ class details
 					'com_bitfield',
 					'com_flags',
 					'approve',
-					'comment_message'
+					'comment_message',
 				);
 				extract($this->phpbb_dispatcher->trigger_event('oxpus.dlext.details_comment_storage_after', compact($vars)));
 
