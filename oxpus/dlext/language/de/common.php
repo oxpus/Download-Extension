@@ -110,7 +110,6 @@ $lang = array_merge($lang, [
 	'DL_ACP_TRAFFIC_MANAGEMENT'			=> 'Traffic verwalten',
 	'DL_ACTIVE'							=> 'Download Bereich aktivieren',
 	'DL_ADD'							=> 'Addieren',
-	'DL_ADD_BROWSER'					=> 'Neuen Browser hinzufügen',
 	'DL_ADD_CATEGORY'					=> 'Erstelle Kategorie',
 	'DL_ADD_DOWNLOAD'					=> 'Neuen Download hinzufügen',
 	'DL_ADD_EXTENSION'					=> 'Dateiendung hinzufügen',
