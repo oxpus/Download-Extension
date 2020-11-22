@@ -764,6 +764,7 @@ $lang = array_merge($lang, [
 	'DL_VERSION_REPLACE_EXPLAIN'	=> 'La descarga sólo se actualizará si no se sube ningún archivo nuevo.',
 	'DL_VERSIONS'					=> 'Versiones',
 	'DL_VIEW_COMMENTS'				=> 'Mostrar',
+	'DL_VIEW_DOWNLOADS'				=> 'Ver descargas',
 	'DL_VIEW_LINK'					=> 'Ver descarga',
 	'DL_VIEW_PERM'					=> 'Ver permisos efectivos',
 	'DL_VISUAL_CONFIRMATION'		=> 'Confirmación visual para descargar un archivo',
