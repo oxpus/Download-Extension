@@ -779,7 +779,7 @@ class acp_categories_controller implements acp_categories_interface
 					/**
 					 * Workflow after deleting downloads
 					 *
-					 * @event dlext.acp_categories_delete_downloads_after
+					 * @event oxpus.dlext.acp_categories_delete_downloads_after
 					 * @var array	dl_ids		download ID's
 					 * @var int		cat_id		download category ID
 					 * @since 8.1.0-RC2
@@ -788,7 +788,7 @@ class acp_categories_controller implements acp_categories_interface
 						'dl_ids',
 						'cat_id',
 					);
-					extract($this->phpbb_dispatcher->trigger_event('dlext.acp_categories_delete_downloads_after', compact($vars)));
+					extract($this->phpbb_dispatcher->trigger_event('oxpus.dlext.acp_categories_delete_downloads_after', compact($vars)));
 
 					if (!empty($dl_ids))
 					{
