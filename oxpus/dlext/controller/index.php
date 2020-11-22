@@ -519,7 +519,7 @@ class index
 			/**
 			 * Fetch additional data for the downloads
 			 *
-			 * @event 		dlext.index_fetch_download_data
+			 * @event oxpus.dlext.index_fetch_download_data
 			 * @var int 	cat					download category ID
 			 * @var string	sql_sort_by			sql order by fields
 			 * @var string	sql_order			sql order by direction
@@ -533,7 +533,7 @@ class index
 				'sql_order',
 				'sql_latest_where',
 			);
-			extract($this->phpbb_dispatcher->trigger_event('dlext.index_fetch_download_data', compact($vars)));
+			extract($this->phpbb_dispatcher->trigger_event('oxpus.dlext.index_fetch_download_data', compact($vars)));
 
 			if ($this->dlext_auth->cat_auth_comment_read($cat))
 			{

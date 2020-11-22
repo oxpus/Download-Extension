@@ -365,7 +365,7 @@ class upload
 			/**
 			 * Manipulate thumbnail upload
 			 *
-			 * @event 		dlext.upload_thumbnail_before
+			 * @event oxpus.dlext.upload_thumbnail_before
 			 * @var string 	thumb_form_name			thumbnail upload form field
 			 * @var bool  	allow_thumbs_upload		enable/disable thumbnail upload
 			 * @since 8.1.0-RC2
@@ -375,7 +375,7 @@ class upload
 				'thumb_form_name',
 				'allow_thumbs_upload',
 			);
-			extract($this->phpbb_dispatcher->trigger_event('dlext.upload_thumbnail_before', compact($vars)));
+			extract($this->phpbb_dispatcher->trigger_event('oxpus.dlext.upload_thumbnail_before', compact($vars)));
 
 			if ($allow_thumbs_upload)
 			{

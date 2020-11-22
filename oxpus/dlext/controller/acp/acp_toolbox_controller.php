@@ -201,8 +201,8 @@ class acp_toolbox_controller implements acp_toolbox_interface
 					/**
 					 * Workflow after delete download
 					 *
-					 * @event 		dlext.acp_toolbox_delete_downloads_after
-					 * @var array	df_ids		download ID's
+					 * @event oxpus.dlext.acp_toolbox_delete_downloads_after
+					 * @var array	dl_ids		download ID's
 					 * @var array	dl_cats		download category ID's
 					 * @since 8.1.0-RC2
 					 */
@@ -210,7 +210,7 @@ class acp_toolbox_controller implements acp_toolbox_interface
 						'dl_ids',
 						'dl_cats',
 					);
-					extract($this->phpbb_dispatcher->trigger_event('dlext.acp_toolbox_delete_downloads_after', compact($vars)));
+					extract($this->phpbb_dispatcher->trigger_event('oxpus.dlext.acp_toolbox_delete_downloads_after', compact($vars)));
 
 					$notification = $this->phpbb_container->get('notification_manager');
 

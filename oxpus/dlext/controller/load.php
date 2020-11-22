@@ -532,7 +532,7 @@ class load
 			/**
 			 * Additional actions before really download the file / open the webpage
 			 *
-			 * @event 		dlext.load_download_prepend
+			 * @event oxpus.dlext.load_download_prepend
 			 * @var array	dl_file			download data array
 			 * @var int		df_id			download ID
 			 * @var int		cat_id			download category ID
@@ -543,7 +543,7 @@ class load
 				'df_id',
 				'cat_id',
 			);
-			extract($this->phpbb_dispatcher->trigger_event('dlext.load_download_prepend', compact($vars)));
+			extract($this->phpbb_dispatcher->trigger_event('oxpus.dlext.load_download_prepend', compact($vars)));
 
 			// Purge the files cache
 			@unlink(DL_EXT_CACHE_PATH . 'data_dl_cat_counts.' . $this->php_ext);

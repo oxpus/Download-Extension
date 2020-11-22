@@ -95,14 +95,14 @@ class ucp_config_controller implements ucp_config_interface
 			/**
 			 * Save additional data for user download settings
 			 *
-			 * @event 		dlext.ucp_config_sql_update_before
+			 * @event oxpus.dlext.ucp_config_sql_update_before
 			 * @var array	sql_array		array of user's data for storage
 			 * @since 8.1.0-RC2
 			 */
 			$vars = array(
 				'sql_array',
 			);
-			extract($this->phpbb_dispatcher->trigger_event('dlext.ucp_config_sql_update_before', compact($vars)));
+			extract($this->phpbb_dispatcher->trigger_event('oxpus.dlext.ucp_config_sql_update_before', compact($vars)));
 
 			$sql = 'UPDATE ' . USERS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', $sql_array) . '
 					WHERE user_id = ' . (int) $this->user->data['user_id'];

@@ -219,7 +219,7 @@ class overall
 			/**
 			 * Fetch additional data for the downloads
 			 *
-			 * @event 		dlext.overall_fetch_download_data
+			 * @event oxpus.dlext.overall_fetch_download_data
 			 * @var int		cat					download category ID
 			 * @var string	sql_sort_by			sql order by fields
 			 * @var string	sql_order			sql order by direction
@@ -234,7 +234,7 @@ class overall
 				'sql_order',
 				'sql_latest_where',
 			);
-			extract($this->phpbb_dispatcher->trigger_event('dlext.overall_fetch_download_data', compact($vars)));
+			extract($this->phpbb_dispatcher->trigger_event('oxpus.dlext.overall_fetch_download_data', compact($vars)));
 
 			if (!empty($dl_files))
 			{

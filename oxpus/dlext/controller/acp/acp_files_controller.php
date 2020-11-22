@@ -479,7 +479,7 @@ class acp_files_controller implements acp_files_interface
 			/**
 			 * Display extra data to save them with the download
 			 *
-			 * @event 		dlext.acp_files_template_before
+			 * @event oxpus.dlext.acp_files_template_before
 			 * @var int		df_id			download ID
 			 * @var int		cat_id			download category ID
 			 * @var array	template_ary	array of download's data for edit
@@ -490,7 +490,7 @@ class acp_files_controller implements acp_files_interface
 				'cat_id',
 				'template_ary',
 			);
-			extract($this->phpbb_dispatcher->trigger_event('dlext.acp_files_template_before', compact($vars)));
+			extract($this->phpbb_dispatcher->trigger_event('oxpus.dlext.acp_files_template_before', compact($vars)));
 
 			$this->template->assign_vars($template_ary);
 

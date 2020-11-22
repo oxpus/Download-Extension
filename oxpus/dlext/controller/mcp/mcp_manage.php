@@ -445,9 +445,9 @@ class mcp_manage
 						/**
 						 * Workflow after delete download
 						 *
-						 * @event 		dlext.acp_files_delete_download_after
-						 * @var array	df_ids		download ID's
-						 * @var int		dl_cat		download category ID
+						 * @event oxpus.dlext.acp_files_delete_download_after
+						 * @var array	dl_ids		download ID's
+						 * @var int		cat_id		download category ID
 						 * @since 8.1.0-RC2
 						 */
 						$dl_ids = $dlo_id;
@@ -455,7 +455,7 @@ class mcp_manage
 							'dl_ids',
 							'cat_id',
 						);
-						extract($this->phpbb_dispatcher->trigger_event('dlext.mcp_manage_delete_downloads_after', compact($vars)));
+						extract($this->phpbb_dispatcher->trigger_event('oxpus.dlext.mcp_manage_delete_downloads_after', compact($vars)));
 
 						$notification->delete_notifications([
 							'oxpus.dlext.notification.type.approve',

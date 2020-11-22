@@ -552,9 +552,9 @@ class details
 				/**
 				 * Additional actions after storage a download comment
 				 *
-				 * @event 		dlext.details_comment_storage_after
+				 * @event oxpus.dlext.details_comment_storage_after
 				 * @var int		df_id			download ID
-				 * @var int		dl_id			download comment ID
+				 * @var int		df_id			download comment ID
 				 * @var int		cat_id			download category ID
 				 * @var string	comment_text	comment text prepared for storage
 				 * @var string	com_uid			comment bbcode uid
@@ -575,7 +575,7 @@ class details
 					'approve',
 					'comment_message'
 				);
-				extract($this->phpbb_dispatcher->trigger_event('dlext.details_comment_storage_after', compact($vars)));
+				extract($this->phpbb_dispatcher->trigger_event('oxpus.dlext.details_comment_storage_after', compact($vars)));
 
 				$approve_message	= '';
 

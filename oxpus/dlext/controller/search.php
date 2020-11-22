@@ -269,14 +269,14 @@ class search
 			/**
 			 * Fetch additional data for the downloads
 			 *
-			 * @event 		dlext.search_keywords_fetch_download_data
+			 * @event oxpus.dlext.search_keywords_fetch_download_data
 			 * @var array	search_ids		download ids
 			 * @since 8.1.0-RC2
 			 */
 			$vars = array(
 				'search_ids',
 			);
-			extract($this->phpbb_dispatcher->trigger_event('dlext.search_keywords_fetch_download_data', compact($vars)));
+			extract($this->phpbb_dispatcher->trigger_event('oxpus.dlext.search_keywords_fetch_download_data', compact($vars)));
 
 			if ($search_counter > $this->config['dl_links_per_page'])
 			{

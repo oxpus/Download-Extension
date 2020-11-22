@@ -567,7 +567,7 @@ class mcp_edit
 				/**
 				 * Manipulate thumbnail upload
 				 *
-				 * @event 		dlext.mcp_edit_thumbnail_before
+				 * @event oxpus.dlext.mcp_edit_thumbnail_before
 			 	 * @var string 	thumb_form_name			thumbnail upload form field
 				 * @var bool  	allow_thumbs_upload		enable/disable thumbnail upload
 				 * @since 8.1.0-RC2
@@ -577,7 +577,7 @@ class mcp_edit
 					'thumb_form_name',
 					'allow_thumbs_upload',
 				);
-				extract($this->phpbb_dispatcher->trigger_event('dlext.mcp_edit_thumbnail_before', compact($vars)));
+				extract($this->phpbb_dispatcher->trigger_event('oxpus.dlext.mcp_edit_thumbnail_before', compact($vars)));
 
 				$thumb_name = '';
 
