@@ -948,7 +948,7 @@ class acp_files_controller implements acp_files_interface
 					/**
 					 * Save additional data for the download
 					 *
-					 * @event 		dlext.acp_files_edit_sql_insert_before
+					 * @event oxpus.dlext.acp_files_edit_sql_insert_before
 					 * @var int		df_id			download ID
 					 * @var array	sql_array		array of download's data for storage
 					 * @since 8.1.0-RC2
@@ -957,7 +957,7 @@ class acp_files_controller implements acp_files_interface
 						'df_id',
 						'sql_array',
 					);
-					extract($this->phpbb_dispatcher->trigger_event('dlext.acp_files_edit_sql_insert_before', compact($vars)));
+					extract($this->phpbb_dispatcher->trigger_event('oxpus.dlext.acp_files_edit_sql_insert_before', compact($vars)));
 
 					$sql = 'UPDATE ' . DOWNLOADS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', $sql_array) . ' WHERE id = ' . (int) $df_id;
 					$this->db->sql_query($sql);

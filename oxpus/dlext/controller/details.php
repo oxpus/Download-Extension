@@ -498,7 +498,7 @@ class details
 				/**
 				 * Additional actions before storage a download comment
 				 *
-				 * @event 		dlext.details_comment_storage_before
+				 * @event oxpus.dlext.details_comment_storage_before
 				 * @var int		df_id			download ID
 				 * @var int		dl_id			download comment ID
 				 * @var int		cat_id			download category ID
@@ -508,12 +508,12 @@ class details
 				 */
 				$vars = array(
 					'df_id',
-					'df_id',
+					'dl_id',
 					'cat_id',
 					'comment_text',
 					'approve',
 				);
-				extract($this->phpbb_dispatcher->trigger_event('dlext.details_comment_storage_after', compact($vars)));
+				extract($this->phpbb_dispatcher->trigger_event('oxpus.dlext.details_comment_storage_after', compact($vars)));
 
 				if ($dl_id)
 				{
@@ -554,7 +554,7 @@ class details
 				 *
 				 * @event oxpus.dlext.details_comment_storage_after
 				 * @var int		df_id			download ID
-				 * @var int		df_id			download comment ID
+				 * @var int		dl_id			download comment ID
 				 * @var int		cat_id			download category ID
 				 * @var string	comment_text	comment text prepared for storage
 				 * @var string	com_uid			comment bbcode uid
@@ -566,7 +566,7 @@ class details
 				 */
 				$vars = array(
 					'df_id',
-					'df_id',
+					'dl_id',
 					'cat_id',
 					'comment_text',
 					'com_uid',

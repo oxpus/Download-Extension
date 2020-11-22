@@ -551,14 +551,14 @@ class upload
 				/**
 				 * Save additional data for the download
 				 *
-				 * @event 		dlext.upload_sql_insert_before
+				 * @event oxpus.dlext.upload_sql_insert_before
 				 * @var string	sql_array		array of download's data for storage
 				 * @since 8.1.0-RC2
 				 */
 				$vars = array(
 					'sql_array',
 				);
-				extract($this->phpbb_dispatcher->trigger_event('dlext.upload_sql_insert_before', compact($vars)));
+				extract($this->phpbb_dispatcher->trigger_event('oxpus.dlext.upload_sql_insert_before', compact($vars)));
 
 				$sql = 'INSERT INTO ' . DOWNLOADS_TABLE . ' ' . $this->db->sql_build_array('INSERT', $sql_array);
 
@@ -569,7 +569,7 @@ class upload
 				/**
 				 * Save additional data for the download
 				 *
-				 * @event 		dlext.upload_sql_insert_after
+				 * @event oxpus.dlext.upload_sql_insert_after
 				 * @var int		next_id			download ID
 				 * @var array	sql_array		array of download's data for storage
 				 * @since 8.1.0-RC2
@@ -578,7 +578,7 @@ class upload
 					'next_id',
 					'sql_array',
 				);
-				extract($this->phpbb_dispatcher->trigger_event('dlext.upload_sql_insert_after', compact($vars)));
+				extract($this->phpbb_dispatcher->trigger_event('oxpus.dlext.upload_sql_insert_after', compact($vars)));
 
 				// Update Custom Fields
 				$cp->update_profile_field_data($next_id, $cp_data);
@@ -586,7 +586,7 @@ class upload
 				/**
 				 * Manipulate thumbnail data before storage
 				 *
-				 * @event 		dlext.upload_sql_thumbnail_before
+				 * @event oxpus.dlext.upload_sql_thumbnail_before
 				 * @var string	foreign_thumb_message	message after manipulate thumbnail
 				 * @var string	thumb_name				thumbnail name (empty to avoid overwrite foreign storage)
 				 * @var int		next_id					download ID
@@ -600,7 +600,7 @@ class upload
 					'next_id',
 					'sql_array',
 				);
-				extract($this->phpbb_dispatcher->trigger_event('dlext.upload_sql_thumbnail_before', compact($vars)));
+				extract($this->phpbb_dispatcher->trigger_event('oxpus.dlext.upload_sql_thumbnail_before', compact($vars)));
 
 				if (isset($thumb_name) && $thumb_name != '')
 				{
@@ -630,7 +630,7 @@ class upload
 				/**
 				 * Manipulate thumbnail data after storage
 				 *
-				 * @event 		dlext.upload_sql_thumbnail_after
+				 * @event oxpus.dlext.upload_sql_thumbnail_after
 				 * @var string	thumb_name		thumbnail name
 				 * @var int		next_id			download ID
 				 * @var array	sql_array		array of download's data for storage
@@ -641,7 +641,7 @@ class upload
 					'next_id',
 					'sql_array',
 				);
-				extract($this->phpbb_dispatcher->trigger_event('dlext.upload_sql_thumbnail_after', compact($vars)));
+				extract($this->phpbb_dispatcher->trigger_event('oxpus.dlext.upload_sql_thumbnail_after', compact($vars)));
 
 				if ($index[$cat_id]['statistics'])
 				{
@@ -924,7 +924,7 @@ class upload
 		/**
 		 * Display extra data to save them with the download
 		 *
-		 * @event 		dlext.upload_template_before
+		 * @event oxpus.dlext.upload_template_before
 		 * @var int		cat_id			download category ID
 		 * @var array	template_ary	array of download's data for edit
 		 * @since 8.1.0-RC2
@@ -933,7 +933,7 @@ class upload
 			'cat_id',
 			'template_ary',
 		);
-		extract($this->phpbb_dispatcher->trigger_event('dlext.upload_template_before', compact($vars)));
+		extract($this->phpbb_dispatcher->trigger_event('oxpus.dlext.upload_template_before', compact($vars)));
 
 		$this->template->assign_vars($template_ary);
 

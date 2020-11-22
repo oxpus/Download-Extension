@@ -156,14 +156,14 @@ class ucp_config_controller implements ucp_config_interface
 		/**
 		 * Display additional data for user download settings
 		 *
-		 * @event 		dlext.ucp_config_template_before
+		 * @event oxpus.dlext.ucp_config_template_before
 		 * @var array	template_ary		template data for displaying
 		 * @since 8.1.0-RC2
 		 */
 		$vars = array(
 			'template_ary',
 		);
-		extract($this->phpbb_dispatcher->trigger_event('dlext.ucp_config_template_before', compact($vars)));
+		extract($this->phpbb_dispatcher->trigger_event('oxpus.dlext.ucp_config_template_before', compact($vars)));
 
 		$this->template->assign_vars($template_ary);
 	}

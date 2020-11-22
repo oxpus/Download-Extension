@@ -385,7 +385,7 @@ class search
 					/**
 					 * Fetch additional data for the downloads
 					 *
-					 * @event 		dlext.search_keywords_display_data_after
+					 * @event oxpus.dlext.search_keywords_display_data_after
 					 * @var string	block		template row key
 					 * @var int		file_id		download id
 					 * @since 8.1.0-RC2
@@ -395,7 +395,7 @@ class search
 						'block',
 						'file_id',
 					);
-					extract($this->phpbb_dispatcher->trigger_event('dlext.search_keywords_display_data_after', compact($vars)));
+					extract($this->phpbb_dispatcher->trigger_event('oxpus.dlext.search_keywords_display_data_after', compact($vars)));
 				}
 
 				$this->db->sql_freeresult($result);
@@ -510,14 +510,14 @@ class search
 				/**
 				 * Fetch additional data for the downloads
 				 *
-				 * @event 		dlext.search_user_fetch_download_data
+				 * @event oxpus.dlext.search_user_fetch_download_data
 				 * @var array	search_ids		download ids
 				 * @since 8.1.0-RC2
 				 */
 				$vars = array(
 					'search_ids',
 				);
-				extract($this->phpbb_dispatcher->trigger_event('dlext.search_user_fetch_download_data', compact($vars)));
+				extract($this->phpbb_dispatcher->trigger_event('oxpus.dlext.search_user_fetch_download_data', compact($vars)));
 
 				$sql_array['SELECT'] = 'd.*, c.cat_name, u.username, u.user_colour';
 
@@ -602,7 +602,7 @@ class search
 					/**
 					 * Fetch additional data for the downloads
 					 *
-					 * @event 		dlext.search_user_display_data_after
+					 * @event oxpus.dlext.search_user_display_data_after
 					 * @var string	block		template row key
 					 * @var int		file_id		download id
 					 * @since 8.1.0-RC2
@@ -612,7 +612,7 @@ class search
 						'block',
 						'file_id',
 					);
-					extract($this->phpbb_dispatcher->trigger_event('dlext.search_user_display_data_after', compact($vars)));
+					extract($this->phpbb_dispatcher->trigger_event('oxpus.dlext.search_user_display_data_after', compact($vars)));
 				}
 			}
 		}

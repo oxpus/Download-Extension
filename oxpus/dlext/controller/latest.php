@@ -346,7 +346,7 @@ class latest
 					/**
 					 * Fetch additional data for the downloads
 					 *
-					 * @event 		dlext.latest_display_data_after
+					 * @event oxpus.dlext.latest_display_data_after
 					 * @var string	block		template row key
 					 * @var int		file_id		download id
 					 * @since 8.1.0-RC2
@@ -356,7 +356,7 @@ class latest
 						'block',
 						'file_id',
 					);
-					extract($this->phpbb_dispatcher->trigger_event('dlext.latest_display_data_after', compact($vars)));
+					extract($this->phpbb_dispatcher->trigger_event('oxpus.dlext.latest_display_data_after', compact($vars)));
 				}
 			}
 		

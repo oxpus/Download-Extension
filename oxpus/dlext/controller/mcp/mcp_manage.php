@@ -445,7 +445,7 @@ class mcp_manage
 						/**
 						 * Workflow after delete download
 						 *
-						 * @event oxpus.dlext.acp_files_delete_download_after
+						 * @event oxpus.dlext.mcp_manage_delete_downloads_after
 						 * @var array	dl_ids		download ID's
 						 * @var int		cat_id		download category ID
 						 * @since 8.1.0-RC2

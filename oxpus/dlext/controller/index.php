@@ -688,7 +688,7 @@ class index
 				/**
 				 * Fetch additional data for the downloads
 				 *
-				 * @event 		dlext.index_display_data_after
+				 * @event oxpus.dlext.index_display_data_after
 				 * @var string	block		template row key
 				 * @var int 	file_id		download id
 				 * @since 8.1.0-RC2
@@ -698,7 +698,7 @@ class index
 					'block',
 					'file_id',
 				);
-				extract($this->phpbb_dispatcher->trigger_event('dlext.index_display_data_after', compact($vars)));
+				extract($this->phpbb_dispatcher->trigger_event('oxpus.dlext.index_display_data_after', compact($vars)));
 			}
 		}
 		
