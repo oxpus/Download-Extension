@@ -401,10 +401,8 @@ class dlext_physical implements dlext_physical_interface
 				stream_copy_to_stream($fp, $output);
 				fclose($fp);
 			}
-
-			flush();
 		}
 
-		exit;
+		exit_handler();
 	}
 }
