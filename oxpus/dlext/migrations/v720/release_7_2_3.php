@@ -64,4 +64,11 @@ class release_7_2_3 extends \phpbb\db\migration\migration
 			],
 		];
 	}
+
+	public function revert_schema()
+	{
+		return [
+			['config.remove', ['dl_topic_type']],
+		];
+	}
 }

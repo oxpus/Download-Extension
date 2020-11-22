@@ -56,6 +56,11 @@ class release_8_0_3 extends \phpbb\db\migration\migration
 		];
 	}
 
+	public function revert_schema()
+	{
+		return [];
+	}
+
 	public function remove_deprecated_files()
 	{
 		global $phpbb_container, $phpEx, $phpbb_extension_manager;

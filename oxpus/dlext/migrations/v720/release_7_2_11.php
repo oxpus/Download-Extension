@@ -47,4 +47,12 @@ class release_7_2_11 extends \phpbb\db\migration\migration
 			],
 		];
 	}
+
+	public function revert_schema()
+	{
+		return [
+			['config.remove', ['dl_set_add']],
+			['config.remove', ['dl_set_user']],
+		];
+	}
 }
