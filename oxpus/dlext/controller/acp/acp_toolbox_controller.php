@@ -479,7 +479,7 @@ class acp_toolbox_controller implements acp_toolbox_interface
 			$upass = [' ' => '', '+' => '', '%' => ''];
 			$dir_name = strtr(urlencode(strtr(utf8_decode($dir_name), $upas)), $upass);
 		
-			$this->dlext_physical->_create_folder(DL_EXT_FILEBASE_PATH. 'downloads/' . $path . '/' . $dir_name);
+			$this->dlext_physical->_create_folder(DL_EXT_FILEBASE_PATH. 'downloads/' . $path . '/' . $dir_name . '/');
 		
 			$this->phpbb_log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_FOLDER_CREATE', false, [$path . '/' . $dir_name]);
 		}
