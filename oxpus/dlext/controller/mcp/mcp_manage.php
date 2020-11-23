@@ -340,17 +340,12 @@ class mcp_manage
 						{
 							$cat_id = $row['cat'];
 
-							if (!$this->auth->acl_get('a_') && isset($index[$cat_id]['auth_mod']) && !$index[$cat_id]['auth_mod'])
-							{
-								trigger_error($this->language->lang('DL_NO_PERMISSION') . __LINE__);
-							}
-
 							$cat_auth = [];
 							$cat_auth = $this->dlext_auth->dl_cat_auth($cat_id);
 
-							if (!$this->auth->acl_get('a_') && !$cat_auth['auth_mod'])
+							if (!$this->auth->acl_get('a_') && isset($index[$cat_id]['auth_mod']) && !$index[$cat_id]['auth_mod'] && !$cat_auth['auth_mod'])
 							{
-								trigger_error($this->language->lang('DL_NO_PERMISSION') . __LINE__);
+								trigger_error($this->language->lang('DL_NO_PERMISSION'));
 							}
 
 							$path		= $row['path'];
@@ -621,7 +616,7 @@ class mcp_manage
 				}
 
 				$s_cat_select = '<select name="new_cat">';
-				$s_cat_select .= $this->dlext_extra->dl_dropdown(0, 0, $cat_id, 'auth_view');
+				$s_cat_select .= $this->dlext_extra->dl_dropdown(0, 0, $cat_id, 'auth_mod');
 				$s_cat_select .= '</select>';
 
 				$s_hidden_fields = [
@@ -669,7 +664,7 @@ class mcp_manage
 				$s_cat_select = '<form method="post" id="mcp_cat_select" action="' . $this->helper->route('oxpus_dlext_mcp_manage', ['view' => 'toolbox']) . '" onsubmit="if(this.options[this.selectedIndex].value == -1) { return false; }">';
 				$s_cat_select .= "\n<fieldset>" . $this->language->lang('DL_GOTO') . $this->language->lang('COLON') . ' <select name="cat_id" onchange="if(this.options[this.selectedIndex].value != -1) { forms[\'mcp_cat_select\'].submit(); }">';
 				$s_cat_select .= '<option value="-1">' . $this->language->lang('DL_CAT_NAME') . '</option>';
-				$s_cat_select .= $this->dlext_extra->dl_dropdown(0, 0, $cat_id, 'auth_view', -1);
+				$s_cat_select .= $this->dlext_extra->dl_dropdown(0, 0, $cat_id, 'auth_mod', -1);
 				$s_cat_select .= '</select>&nbsp;<input type="submit" value="' . $this->language->lang('GO') . '" class="button2" /></fieldset></form>';
 
 				$this->template->assign_vars([

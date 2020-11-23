@@ -94,7 +94,7 @@ function select_switch(status)
 			<td>{{ manage_row.USERNAME }}</dd>
 			<td class="center">
 				&nbsp;<input type="checkbox" class="permissions-checkbox" name="dlo_id[]" id="dlo_id_{{ manage_row.S_ROW_COUNT }}" value="{{ manage_row.FILE_ID }}" />&nbsp;
-				{% if SORT %}
+				{% if S_SORT_ASC %}
 				&nbsp;<a href="{{ manage_row.U_UP }}" class="button button-icon-only"><i class="icon fa-chevron-up fa-fw" aria-hidden="true" title="{{ lang('DL_UP') }}"></i><span class="sr-only">{{ lang('DL_UP') }}</span></a>
 				&nbsp;<a href="{{ manage_row.U_DOWN }}" class="button button-icon-only"><i class="icon fa-chevron-down fa-fw" aria-hidden="true" title="{{ lang('DL_DOWN') }}"></i><span class="sr-only">{{ lang('DL_DOWN') }}</span></a>
 				{% endif %}
@@ -135,9 +135,11 @@ function select_switch(status)
 	<fieldset class="fields1">
 		{% if not S_MODCP_BUTTON %}
 		<h3>{{ lang('DL_MODCP_MOD_SELECT') }}</h3>
+		{% if S_SORT_ASC %}
 		<dl class="dl-option-row">
 			<dt><input type="radio" name="action" class="radio" id="sort" value="sort" /><label for="sort"> {{ lang('DL_ORDER') }}</label></dt>
 		</dl>
+		{% endif %}
 		<dl class="dl-option-row">
 			<dt><input type="radio" name="action" class="radio" id="move"  value="move" /><label for="move"> {{ lang('DL_MOVE') }}</label></dt>
 			<dd>{{ S_CAT_SELECT }}</dd>
