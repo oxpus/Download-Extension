@@ -675,8 +675,6 @@ class upload
 					];
 
 					$notification->add_notifications('oxpus.dlext.notification.type.dlext', $notification_data);
-
-					$this->dlext_topic->gen_dl_topic($next_id);
 				}
 
 				if (!$approve)
@@ -690,6 +688,10 @@ class upload
 					];
 
 					$notification->add_notifications('oxpus.dlext.notification.type.approve', $notification_data);
+				}
+				else
+				{
+					$this->dlext_topic->gen_dl_topic($next_id);
 				}
 
 				if ($this->config['dl_upload_traffic_count'] && !$file_extern && !$this->config['dl_traffic_off'])

@@ -428,7 +428,7 @@ class acp_config_controller implements acp_config_interface
 					'vars'	=> [
 						'legend1'				=> '',
 		
-						'dl_enable_dl_topic'		=> ['lang' => 'DL_ENABLE_TOPIC',			'validate' => 'bool',	'type' => 'radswitchio:yes_no',	'explain' => false,		'help_key' => 'DL_ENABLE_TOPIC'],
+						'dl_enable_dl_topic'		=> ['lang' => 'DL_ENABLE_TOPIC',			'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => false,		'help_key' => 'DL_ENABLE_TOPIC'],
 						'dl_diff_topic_user'		=> ['lang' => 'DL_TOPIC_USER',				'validate' => 'int',	'type' => 'select',			'explain' => false,		'help_key' => 'DL_TOPIC_USER',			'function' => [$this, 'select_topic_user'],		'params' => ['{CONFIG_VALUE}']],
 						'dl_topic_user'				=> ['lang' => 'DL_TOPIC_USER_OTHER',		'validate' => 'string',	'type' => 'custom',			'explain' => false,		'help_key' => 'DL_TOPIC_USER',			'function' => [$this, 'select_dl_user'],		'params' => ['{CONFIG_VALUE}', 'dl_topic_user']],
 						'dl_topic_forum'			=> ['lang' => 'DL_TOPIC_FORUM',				'validate' => 'int',	'type' => 'select',			'explain' => false,		'help_key' => 'DL_TOPIC_FORUM',			'function' => [$this, 'select_dl_forum'],		'params' => ['{CONFIG_VALUE}']],

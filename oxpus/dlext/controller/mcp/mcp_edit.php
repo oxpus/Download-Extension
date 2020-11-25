@@ -934,8 +934,6 @@ class mcp_edit
 
 						$notification->add_notifications('oxpus.dlext.notification.type.update', $notification_data);
 						$notification->delete_notifications('oxpus.dlext.notification.type.approve', $df_id);
-
-						$this->dlext_topic->update_topic($dl_file['dl_topic'], $df_id);
 					}
 					
 					if (!$approve)
@@ -950,6 +948,10 @@ class mcp_edit
 
 						$notification->add_notifications('oxpus.dlext.notification.type.approve', $notification_data);
 						$notification->delete_notifications('oxpus.dlext.notification.type.update', $df_id);
+					}
+					else
+					{
+						$this->dlext_topic->update_topic($dl_file['dl_topic'], $df_id);
 					}
 				}
 			}

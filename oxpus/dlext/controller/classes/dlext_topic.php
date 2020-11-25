@@ -409,7 +409,7 @@ class dlext_topic implements dlext_topic_interface
 
 	public function update_topic($topic_id, $dl_id, $topic_drop_mode = '')
 	{
-		if (!$topic_id || !$dl_id)
+		if (!$dl_id)
 		{
 			return;
 		}
