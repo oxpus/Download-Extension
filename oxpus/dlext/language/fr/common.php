@@ -350,6 +350,7 @@ $lang = array_merge($lang, [
 	'DL_FUNCTION'					=> 'Fonction',
 
 	'DL_GB'						=> 'Go',
+	'DL_GLOBAL_BOTS'			=> 'Accès global pour les bots',
 	'DL_GLOBAL_GUESTS'			=> 'Accès global pour les invités',
 	'DL_GO'						=> 'Aller',
 	'DL_GOTO'					=> 'Aller à la catégorie',

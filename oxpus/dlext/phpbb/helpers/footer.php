@@ -142,8 +142,8 @@ class footer implements footer_interface
 			* check and create link if we must approve downloads
 			*/
 			$broken_ary = $this->dlext_counter->count_dl_broken();
-			$total_broken = $broken_ary['total'];
-			$broken_id = $broken_ary['df_id'];
+			$total_broken = (isset($broken_ary['total'])) ? $broken_ary['total'] : 0;
+			$broken_id = (isset($broken_ary['df_id'])) ? $broken_ary['df_id'] : 0;
 
 			if ($total_broken)
 			{

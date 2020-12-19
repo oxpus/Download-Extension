@@ -122,7 +122,7 @@ if (!$dl_mod_is_active && $this->config['dl_off_hide'])
 	$dl_mod_link_show = false;
 }
 
-if ($this->user->data['is_bot'])
+if (!$this->config['dl_global_bots'] && $this->user->data['is_bot'])
 {
 	$nav_view = '';
 	$dl_mod_link_show = false;
@@ -130,7 +130,7 @@ if ($this->user->data['is_bot'])
 	$dl_mod_is_active_for_admins = false;
 }
 
-if (!$this->config['dl_global_guests'] && !$this->user->data['is_registered'])
+if (!$this->config['dl_global_guests'] && !$this->user->data['is_registered'] && !$this->user->data['is_bot'])
 {
 	$nav_view = '';
 	$dl_mod_link_show = false;

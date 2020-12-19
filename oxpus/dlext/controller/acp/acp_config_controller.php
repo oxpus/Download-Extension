@@ -241,6 +241,7 @@ class acp_config_controller implements acp_config_interface
 						'legend1'				=> '',
 		
 						'dl_global_guests'		=> ['lang' => 'DL_GLOBAL_GUESTS',		'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => false,		'help_key' => 'DL_GLOBAL_GUESTS'],
+						'dl_global_bots'		=> ['lang' => 'DL_GLOBAL_BOTS',			'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => false,		'help_key' => 'DL_GLOBAL_BOTS'],
 		
 						'legend2'				=> '',
 		
