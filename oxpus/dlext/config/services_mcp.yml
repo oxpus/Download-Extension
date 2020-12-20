@@ -1,6 +1,7 @@
 services:
     oxpus.dlext.mcp_approve:
         class: oxpus\dlext\controller\mcp\mcp_approve
+        public: true
         arguments:
             - '%core.root_path%'
             - '%core.php_ext%'
@@ -20,6 +21,7 @@ services:
             - '@oxpus.dlext.dlext_topic'
     oxpus.dlext.mcp_broken:
         class: oxpus\dlext\controller\mcp\mcp_broken
+        public: true
         arguments:
             - '%core.root_path%'
             - '%core.php_ext%'
@@ -39,6 +41,7 @@ services:
             - '@oxpus.dlext.dlext_topic'
     oxpus.dlext.mcp_capprove:
         class: oxpus\dlext\controller\mcp\mcp_capprove
+        public: true
         arguments:
             - '%core.root_path%'
             - '%core.php_ext%'
@@ -57,6 +60,7 @@ services:
             - '@oxpus.dlext.dlext_main'
     oxpus.dlext.mcp_edit:
         class: oxpus\dlext\controller\mcp\mcp_edit
+        public: true
         arguments:
             - '%core.root_path%'
             - '%core.php_ext%'
@@ -82,6 +86,7 @@ services:
             - '@oxpus.dlext.dlext_topic'
     oxpus.dlext.mcp_manage:
         class: oxpus\dlext\controller\mcp\mcp_manage
+        public: true
         arguments:
             - '%core.root_path%'
             - '%core.php_ext%'

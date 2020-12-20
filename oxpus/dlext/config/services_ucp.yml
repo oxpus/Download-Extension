@@ -1,6 +1,7 @@
 services:
     oxpus.dlext.ucp_config_controller:
         class: oxpus\dlext\controller\ucp\ucp_config_controller
+        public: true
         arguments:
             - '@request'
             - '@dbal.conn'
@@ -11,6 +12,7 @@ services:
             - '@dispatcher'
     oxpus.dlext.ucp_privacy_controller:
         class: oxpus\dlext\controller\ucp\ucp_privacy_controller
+        public: true
         arguments:
             - '@ext.manager'
             - '%core.php_ext%'
@@ -21,6 +23,7 @@ services:
             - '@service_container'
     oxpus.dlext.ucp_favorite_controller:
         class: oxpus\dlext\controller\ucp\ucp_favorite_controller
+        public: true
         arguments:
             - '@ext.manager'
             - '%core.root_path%'

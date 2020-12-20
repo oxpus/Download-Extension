@@ -1,6 +1,7 @@
 services:
     oxpus.dlext.acp_banlist_controller:
         class: oxpus\dlext\controller\acp\acp_banlist_controller
+        public: true
         arguments:
             - '%core.php_ext%'
             - '@service_container'
@@ -12,6 +13,7 @@ services:
             - '@user'
     oxpus.dlext.acp_categories_controller:
         class: oxpus\dlext\controller\acp\acp_categories_controller
+        public: true
         arguments:
             - '%core.root_path%'
             - '%core.php_ext%'
@@ -30,6 +32,7 @@ services:
             - '@oxpus.dlext.dlext_physical'
     oxpus.dlext.acp_config_controller:
         class: oxpus\dlext\controller\acp\acp_config_controller
+        public: true
         arguments:
             - '%core.root_path%'
             - '%core.php_ext%'
@@ -45,6 +48,7 @@ services:
             - '@oxpus.dlext.dlext_physical'
     oxpus.dlext.acp_ext_blacklist_controller:
         class: oxpus\dlext\controller\acp\acp_ext_blacklist_controller
+        public: true
         arguments:
             - '%core.php_ext%'
             - '@service_container'
@@ -56,6 +60,7 @@ services:
             - '@user'
     oxpus.dlext.acp_fields_controller:
         class: oxpus\dlext\controller\acp\acp_fields_controller
+        public: true
         arguments:
             - '%core.root_path%'
             - '%core.php_ext%'
@@ -68,6 +73,7 @@ services:
             - '@user'
     oxpus.dlext.acp_files_controller:
         class: oxpus\dlext\controller\acp\acp_files_controller
+        public: true
         arguments:
             - '%core.root_path%'
             - '%core.php_ext%'
@@ -87,6 +93,7 @@ services:
             - '@oxpus.dlext.dlext_topic'
     oxpus.dlext.acp_overview_controller:
         class: oxpus\dlext\controller\acp\acp_overview_controller
+        public: true
         arguments:
             - '%core.php_ext%'
             - '@service_container'
@@ -102,6 +109,7 @@ services:
             - '@oxpus.dlext.dlext_physical'
     oxpus.dlext.acp_perm_check_controller:
         class: oxpus\dlext\controller\acp\acp_perm_check_controller
+        public: true
         arguments:
             - '%core.root_path%'
             - '%core.php_ext%'
@@ -116,6 +124,7 @@ services:
             - '@oxpus.dlext.dlext_main'
     oxpus.dlext.acp_permissions_controller:
         class: oxpus\dlext\controller\acp\acp_permissions_controller
+        public: true
         arguments:
             - '%core.php_ext%'
             - '@service_container'
@@ -129,6 +138,7 @@ services:
             - '@oxpus.dlext.dlext_main'
     oxpus.dlext.acp_stats_controller:
         class: oxpus\dlext\controller\acp\acp_stats_controller
+        public: true
         arguments:
             - '%core.php_ext%'
             - '@service_container'
@@ -141,6 +151,7 @@ services:
             - '@oxpus.dlext.dlext_format'
     oxpus.dlext.acp_toolbox_controller:
         class: oxpus\dlext\controller\acp\acp_toolbox_controller
+        public: true
         arguments:
             - '%core.root_path%'
             - '%core.php_ext%'
@@ -157,6 +168,7 @@ services:
             - '@oxpus.dlext.dlext_physical'
     oxpus.dlext.acp_traffic_controller:
         class: oxpus\dlext\controller\acp\acp_traffic_controller
+        public: true
         arguments:
             - '%core.php_ext%'
             - '@service_container'

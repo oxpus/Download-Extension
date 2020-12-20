@@ -1,6 +1,7 @@
 services:
     oxpus.dlext.dlext_auth:
         class: oxpus\dlext\controller\classes\dlext_auth
+        public: true
         arguments:
             - '@service_container'
             - '@ext.manager'
@@ -12,12 +13,14 @@ services:
             - '@oxpus.dlext.dlext_init'
     oxpus.dlext.dlext_cache:
         class: oxpus\dlext\controller\classes\dlext_cache
+        public: true
         arguments:
             - '@service_container'
             - '@dbal.conn'
             - '%core.php_ext%'
     oxpus.dlext.dlext_counter:
         class: oxpus\dlext\controller\classes\dlext_counter
+        public: true
         arguments:
             - '@service_container'
             - '@dbal.conn'
@@ -25,6 +28,7 @@ services:
             - '@oxpus.dlext.dlext_main'
     oxpus.dlext.dlext_extra:
         class: oxpus\dlext\controller\classes\dlext_extra
+        public: true
         arguments:
             - '@service_container'
             - '@dbal.conn'
@@ -34,23 +38,27 @@ services:
             - '@oxpus.dlext.dlext_main'
     oxpus.dlext.dlext_files:
         class: oxpus\dlext\controller\classes\dlext_files
+        public: true
         arguments:
             - '@service_container'
             - '@dbal.conn'
     oxpus.dlext.dlext_format:
         class: oxpus\dlext\controller\classes\dlext_format
+        public: true
         arguments:
             - '@service_container'
             - '@config'
             - '@user'
     oxpus.dlext.dlext_hacklist:
         class: oxpus\dlext\controller\classes\dlext_hacklist
+        public: true
         arguments:
             - '@service_container'
             - '@dbal.conn'
             - '@oxpus.dlext.dlext_auth'
     oxpus.dlext.dlext_init:
         class: oxpus\dlext\controller\classes\dlext_init
+        public: true
         arguments:
             - '%core.root_path%'
             - '%core.php_ext%'
@@ -61,6 +69,7 @@ services:
             - '@oxpus.dlext.dlext_cache'
     oxpus.dlext.dlext_main:
         class: oxpus\dlext\controller\classes\dlext_main
+        public: true
         arguments:
             - '@service_container'
             - '@dbal.conn'
@@ -69,6 +78,7 @@ services:
             - '@oxpus.dlext.dlext_init'
     oxpus.dlext.dlext_nav:
         class: oxpus\dlext\controller\classes\dlext_nav
+        public: true
         arguments:
             - '@service_container'
             - '@controller.helper'
@@ -76,6 +86,7 @@ services:
             - '@oxpus.dlext.dlext_init'
     oxpus.dlext.dlext_physical:
         class: oxpus\dlext\controller\classes\dlext_physical
+        public: true
         arguments:
             - '@service_container'
             - '@ext.manager'
@@ -85,11 +96,13 @@ services:
             - '@oxpus.dlext.dlext_format'
     oxpus.dlext.dlext_privacy:
         class: oxpus\dlext\controller\classes\dlext_privacy
+        public: true
         arguments:
             - '@service_container'
             - '@dbal.conn'
     oxpus.dlext.dlext_status:
         class: oxpus\dlext\controller\classes\dlext_status
+        public: true
         arguments:
             - '@service_container'
             - '@config'
@@ -100,10 +113,12 @@ services:
             - '@oxpus.dlext.dlext_main'
     oxpus.dlext.dlext_thumbs:
         class: oxpus\dlext\controller\classes\dlext_thumbs
+        public: true
         arguments:
             - '@request'
     oxpus.dlext.dlext_topic:
         class: oxpus\dlext\controller\classes\dlext_topic
+        public: true
         arguments:
             - '@service_container'
             - '@user'

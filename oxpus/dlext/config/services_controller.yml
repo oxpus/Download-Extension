@@ -1,6 +1,7 @@
 services:
     oxpus.dlext.ajax:
         class: oxpus\dlext\controller\ajax
+        public: true
         arguments:
             - '@dbal.conn'
             - '@user'
@@ -11,6 +12,7 @@ services:
             - '@service_container'
     oxpus.dlext.broken:
         class: oxpus\dlext\controller\broken
+        public: true
         arguments:
             - '%core.root_path%'
             - '%core.php_ext%'
@@ -30,6 +32,7 @@ services:
             - '@oxpus.dlext.dlext_status'
     oxpus.dlext.details:
         class: oxpus\dlext\controller\details
+        public: true
         arguments:
             - '%core.root_path%'
             - '%core.php_ext%'
@@ -52,6 +55,7 @@ services:
             - '@oxpus.dlext.dlext_status'
     oxpus.dlext.fav:
         class: oxpus\dlext\controller\fav
+        public: true
         arguments:
             - '%core.root_path%'
             - '%core.php_ext%'
@@ -70,6 +74,7 @@ services:
             - '@oxpus.dlext.dlext_main'
     oxpus.dlext.feed:
         class: oxpus\dlext\controller\feed
+        public: true
         arguments:
             - '%core.root_path%'
             - '%core.php_ext%'
@@ -89,6 +94,7 @@ services:
             - '@oxpus.dlext.dlext_status'
     oxpus.dlext.hacklist:
         class: oxpus\dlext\controller\hacklist
+        public: true
         arguments:
             - '%core.root_path%'
             - '%core.php_ext%'
@@ -108,12 +114,14 @@ services:
             - '@oxpus.dlext.dlext_main'
     oxpus.dlext.help:
         class: oxpus\dlext\controller\help
+        public: true
         arguments:
             - '@language'
             - '@template'
             - '@request'
     oxpus.dlext.index:
         class: oxpus\dlext\controller\index
+        public: true
         arguments:
             - '%core.root_path%'
             - '%core.php_ext%'
@@ -137,6 +145,7 @@ services:
             - '@oxpus.dlext.dlext_status'
     oxpus.dlext.latest:
         class: oxpus\dlext\controller\latest
+        public: true
         arguments:
             - '%core.root_path%'
             - '%core.php_ext%'
@@ -159,6 +168,7 @@ services:
             - '@oxpus.dlext.dlext_status'
     oxpus.dlext.load:
         class: oxpus\dlext\controller\load
+        public: true
         arguments:
             - '%core.root_path%'
             - '%core.php_ext%'
@@ -182,6 +192,7 @@ services:
             - '@oxpus.dlext.dlext_status'
     oxpus.dlext.overall:
         class: oxpus\dlext\controller\overall
+        public: true
         arguments:
             - '%core.root_path%'
             - '%core.php_ext%'
@@ -204,6 +215,7 @@ services:
             - '@oxpus.dlext.dlext_status'
     oxpus.dlext.search:
         class: oxpus\dlext\controller\search
+        public: true
         arguments:
             - '%core.root_path%'
             - '%core.php_ext%'
@@ -225,6 +237,7 @@ services:
             - '@oxpus.dlext.dlext_status'
     oxpus.dlext.stats:
         class: oxpus\dlext\controller\stats
+        public: true
         arguments:
             - '%core.root_path%'
             - '%core.php_ext%'
@@ -244,6 +257,7 @@ services:
             - '@oxpus.dlext.dlext_main'
     oxpus.dlext.thumbs:
         class: oxpus\dlext\controller\thumbs
+        public: true
         arguments:
             - '%core.root_path%'
             - '%core.php_ext%'
@@ -265,6 +279,7 @@ services:
             - '@oxpus.dlext.dlext_status'
     oxpus.dlext.todo:
         class: oxpus\dlext\controller\todo
+        public: true
         arguments:
             - '%core.root_path%'
             - '%core.php_ext%'
@@ -285,6 +300,7 @@ services:
             - '@oxpus.dlext.dlext_main'
     oxpus.dlext.tracker:
         class: oxpus\dlext\controller\tracker
+        public: true
         arguments:
             - '%core.root_path%'
             - '%core.php_ext%'
@@ -303,6 +319,7 @@ services:
             - '@oxpus.dlext.dlext_main'
     oxpus.dlext.unbroken:
         class: oxpus\dlext\controller\unbroken
+        public: true
         arguments:
             - '%core.root_path%'
             - '%core.php_ext%'
@@ -321,6 +338,7 @@ services:
             - '@oxpus.dlext.dlext_main'
     oxpus.dlext.unfav:
         class: oxpus\dlext\controller\unfav
+        public: true
         arguments:
             - '%core.root_path%'
             - '%core.php_ext%'
@@ -339,6 +357,7 @@ services:
             - '@oxpus.dlext.dlext_main'
     oxpus.dlext.upload:
         class: oxpus\dlext\controller\upload
+        public: true
         arguments:
             - '%core.root_path%'
             - '%core.php_ext%'
@@ -363,6 +382,7 @@ services:
             - '@oxpus.dlext.dlext_topic'
     oxpus.dlext.version:
         class: oxpus\dlext\controller\version
+        public: true
         arguments:
             - '%core.root_path%'
             - '%core.php_ext%'

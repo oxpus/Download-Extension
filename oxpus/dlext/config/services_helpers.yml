@@ -1,6 +1,7 @@
 services:
     oxpus.dlext.constants:
         class: oxpus\dlext\phpbb\helpers\constants
+        public: true
         arguments:
             - '@service_container'
             - '%core.root_path%'
@@ -13,6 +14,7 @@ services:
             - '@oxpus.dlext.dlext_physical'
     oxpus.dlext.footer:
         class: oxpus\dlext\phpbb\helpers\footer
+        public: true
         arguments:
             - '%core.root_path%'
             - '%core.php_ext%'
@@ -36,6 +38,7 @@ services:
             - '@oxpus.dlext.dlext_physical'
     oxpus.dlext.navigation:
         class: oxpus\dlext\phpbb\helpers\navigation
+        public: true
         arguments:
             - '%core.root_path%'
             - '%core.php_ext%'

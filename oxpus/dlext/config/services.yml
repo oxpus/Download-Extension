@@ -10,6 +10,7 @@ imports:
 services:
     oxpus.dlext.listener:
         class: oxpus\dlext\event\listener
+        public: true
         arguments:
             - '%core.root_path%'
             - '%core.php_ext%'
