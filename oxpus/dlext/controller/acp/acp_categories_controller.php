@@ -1103,7 +1103,7 @@ class acp_categories_controller implements acp_categories_interface
 			}
 
 			$this->db->sql_freeresult($result);
-		
+
 			// Purge the categories cache
 			@unlink(DL_EXT_CACHE_PATH . 'data_dl_cats.' . $this->phpEx);
 			@unlink(DL_EXT_CACHE_PATH . 'data_dl_auth.' . $this->phpEx);
@@ -1275,14 +1275,14 @@ class acp_categories_controller implements acp_categories_interface
 			$this->template->assign_vars([
 				'L_DELETE_STATS_ALL'	=> $l_delete_stats_all,
 				'L_DELETE_COMMENTS_ALL'	=> $l_delete_comments_all,
-		
+
 				'CAT_PATH'				=> (isset($cat_path)) ? $cat_path : '/',
 				'CAT_NAME'				=> $cat_name,
-		
+
 				'S_CATEGORY_ACTION'		=> $this->u_action,
 				'S_IDX_TYPE'			=> (!empty($index)) ? $idx_type : '',
 				'S_SORT_MAIN'			=> ($cat_parent == 0) ? true : false,
-		
+
 				'U_SORT_LEVEL_ZERO'		=> "{$this->u_action}&amp;action=asc_sort&amp;cat_id=0",
 				'U_DELETE_STATS_ALL'	=> $u_delete_stats_all,
 				'U_DELETE_COMMENTS_ALL'	=> $u_delete_comments_all,

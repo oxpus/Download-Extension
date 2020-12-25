@@ -178,7 +178,7 @@ class hacklist
 				$this->config['dl_links_per_page'],
 				$page_start
 			);
-	
+
 			$this->template->assign_vars([
 				'PAGE_NUMBER'	=> $pagination->on_page($all_files, $this->config['dl_links_per_page'], $page_start),
 				'TOTAL_DL'		=> $this->language->lang('VIEW_DL_STATS', $all_files),

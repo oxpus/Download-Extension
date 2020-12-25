@@ -506,7 +506,7 @@ class acp_permissions_controller implements acp_permissions_interface
 					$this->template->assign_block_vars('preselected_cats', [
 						'CAT_TITLE' => $index[$s_presel_cats[$i]]['cat_name'],
 					]);
-		
+
 					$s_hidden_fields += ['cat_select[' . $i . ']' => $s_presel_cats[$i]];
 				}
 			}

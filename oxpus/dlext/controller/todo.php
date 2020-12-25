@@ -244,7 +244,7 @@ class todo
 						AND (todo = '' OR todo IS NULL)
 					ORDER BY c.parent, c.sort, c.id, d.description";
 				$result = $this->db->sql_query($sql);
-			
+
 				$total_possible_todo = $this->db->sql_affectedrows($result);
 
 				$dl_select = [];
@@ -334,7 +334,7 @@ class todo
 			// Build todo edit list for existing entries
 			$dl_todo = [];
 			$dl_todo = $this->dlext_extra->get_todo();
-			
+
 			if (!empty($dl_todo['file_name'][0]))
 			{
 				for ($i = 0; $i < count($dl_todo['file_name']); ++$i)

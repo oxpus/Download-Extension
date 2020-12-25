@@ -1011,8 +1011,8 @@ class acp_files_controller implements acp_files_interface
 				 * Manipulate thumbnail upload
 				 *
 				 * @event oxpus.dlext.acp_edit_thumbnail_before
-			 	 * @var string	thumb_form_name			thumbnail upload form field
-				 * @var bool 	allow_thumbs_upload		enable/disable thumbnail upload
+				 * @var string	thumb_form_name			thumbnail upload form field
+				 * @var bool	allow_thumbs_upload		enable/disable thumbnail upload
 				 * @since 8.1.0-RC2
 				 */
 
@@ -1041,7 +1041,6 @@ class acp_files_controller implements acp_files_interface
 							$this->config['dl_thumb_xsize'],
 							$this->config['dl_thumb_ysize'])
 						->set_disallowed_content((isset($this->config['mime_triggers']) ? explode('|', $this->config['mime_triggers']) : false));
-
 
 					$upload_file = $this->request->file($thumb_form_name);
 					unset($upload_file['local_mode']);

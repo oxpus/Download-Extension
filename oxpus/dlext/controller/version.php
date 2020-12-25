@@ -352,7 +352,7 @@ class version
 				}
 
 				$this->db->sql_freeresult($result);
-		
+
 				$dropped_files[] = $value;
 			}
 

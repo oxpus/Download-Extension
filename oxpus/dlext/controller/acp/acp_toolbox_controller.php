@@ -222,7 +222,7 @@ class acp_toolbox_controller implements acp_toolbox_interface
 						'oxpus.dlext.notification.type.capprove',
 						'oxpus.dlext.notification.type.comments',
 					], $dl_ids);
-	
+
 					@unlink(DL_EXT_CACHE_PATH . 'data_dl_file_p.' . $this->phpEx);
 
 					$this->phpbb_log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_FILE_DROP', false, [$files_name[$i]]);
@@ -465,7 +465,7 @@ class acp_toolbox_controller implements acp_toolbox_interface
 				{
 					@copy(DL_EXT_FILEBASE_PATH. 'downloads/' . $path . $files[$i], $file_command . $files[$i]);
 					@unlink(DL_EXT_FILEBASE_PATH. 'downloads/' . $path . $files[$i]);
-		
+
 					$this->phpbb_log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_FILE_MOVE', false, [$files[$i]]);
 				}
 			}
@@ -473,7 +473,7 @@ class acp_toolbox_controller implements acp_toolbox_interface
 			$path = $path_temp;
 			$file_action = $file_command = $new_path = '';
 		}
-		
+
 		if ($dir_name && $dircreate)
 		{
 			$upas = ['�' => 'ae', '�' => 'ue', '�' => 'oe', '�' => 'Ae', '�' => 'Ue', '�' => 'Oe', '�' => 'ss'];

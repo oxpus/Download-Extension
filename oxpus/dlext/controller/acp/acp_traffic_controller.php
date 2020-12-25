@@ -432,7 +432,7 @@ class acp_traffic_controller implements acp_traffic_interface
 					'GROUP_NAME'			=> $group_name,
 					'GROUP_SPECIAL'			=> ($row['group_type'] == GROUP_SPECIAL) ? true : false,
 					'GROUP_DL_AUTO_TRAFFIC'	=> $group_traffic,
-		
+
 					'S_GROUP_DATA_RANGE'	=> $s_group_data_range,
 				]);
 

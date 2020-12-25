@@ -256,7 +256,7 @@ class search
 								++$search_counter;
 							}
 						break;
-		
+
 						default:
 							$search_ids[] = $row['id'];
 							++$search_counter;
@@ -637,7 +637,7 @@ class search
 			$s_sort_dir .= '</select>';
 
 			$s_search_fields = '<select name="search_fields">';
-		
+
 			for ($i = 0; $i < count($search_fields); ++$i)
 			{
 				$s_search_fields .= '<option value="' . $search_fields[$i] . '">' . $search_fnames[$i] . '</option>';

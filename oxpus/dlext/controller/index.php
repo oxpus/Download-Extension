@@ -720,7 +720,7 @@ class index
 					$comment_count[$row['id']] = $row['total_comments'];
 				}
 				$this->db->sql_freeresult($result);
-		
+
 				$this->template->assign_block_vars('comment_header', []);
 			}
 		}

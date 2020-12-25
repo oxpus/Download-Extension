@@ -102,6 +102,7 @@ class acp_fields_controller implements acp_fields_interface
 		include_once($this->root_path . 'includes/functions_posting.' . $this->phpEx);
 		include_once($this->root_path . 'includes/functions_user.' . $this->phpEx);
 		include_once($this->ext_path . 'phpbb/includes/fields.' . $this->phpEx);
+		include_once($this->ext_path . 'phpbb/includes/fields_admin.' . $this->phpEx);
 
 		$this->user->add_lang(['ucp', 'acp/profile']);
 
@@ -550,7 +551,6 @@ class acp_fields_controller implements acp_fields_interface
 						$l_lang_options[$row['lang_id']][$row['option_id']] = $row['lang_value'];
 					}
 					$this->db->sql_freeresult($result);
-
 
 					$sql = 'SELECT lang_id, lang_name, lang_explain, lang_default_value
 						FROM ' . DL_LANG_TABLE . '
