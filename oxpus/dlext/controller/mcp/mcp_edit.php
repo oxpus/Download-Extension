@@ -568,7 +568,7 @@ class mcp_edit
 				 * Manipulate thumbnail upload
 				 *
 				 * @event oxpus.dlext.mcp_edit_thumbnail_before
-			 	 * @var string	thumb_form_name			thumbnail upload form field
+				 * @var string	thumb_form_name			thumbnail upload form field
 				 * @var bool	allow_thumbs_upload		enable/disable thumbnail upload
 				 * @since 8.1.0-RC2
 				 */
