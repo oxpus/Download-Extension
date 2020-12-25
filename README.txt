@@ -11,3 +11,5 @@ Latest release 8.1.10
 
 **Attention:**
 The download extension is incompatible with Tapatalk. There is no support for this!
+
+![Tests](https://github.com/oxpus/Download-32-Extension/workflows/Tests/badge.svg?branch=master)
