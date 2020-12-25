@@ -153,7 +153,7 @@ class search
 		$search_in_fields	= $this->request->variable('search_fields', 'all');
 		$search_author		= $this->request->variable('search_author', '', true);
 		$search_user		= $this->request->variable('search_user_id', 0);
-		
+
 		$search_fnames		= [
 			$this->language->lang('DL_ALL'),
 			$this->language->lang('DL_FILE_NAME'),
@@ -168,9 +168,9 @@ class search
 
 		$search_fields		= ['all', 'file_name', 'description', 'long_desc', 'test', 'mod_desc', 'warning', 'todo', 'req'];
 		$search_type		= $this->request->variable('search_type', 0);
-		
+
 		$submit = $this->request->variable('submit', '');
-		
+
 		if ($submit)
 		{
 			if (!check_form_key('dl_search'))
@@ -178,23 +178,23 @@ class search
 				trigger_error('FORM_INVALID');
 			}
 		}
-		
+
 		/*
 		* search for keywords if entered
 		*/
 		if ($search_keywords != '' && !$search_author && !$search_user)
 		{
 			$this->template->set_filenames(['body' => 'dl_search_results.html']);
-		
+
 			$search_keywords = str_replace(['sql', 'union', '  ', ' ', '*', '?', '%'], ' ', strtolower($search_keywords));
-		
+
 			$access_cats		= [];
 			$access_cats		= $this->dlext_main->full_index(0, 0, 0, 1);
 			$sql_access_cats	= ($this->auth->acl_get('a_') && $this->user->data['is_registered']) ? '' : ' AND ' . $this->db->sql_in_set('d.cat', $access_cats) . ' ';
-		
+
 			$sql_cat			= ($search_cat == -1) ? '' : ' AND d.cat = ' . (int) $search_cat;
-		
-			switch($search_in_fields)
+
+			switch ($search_in_fields)
 			{
 				case 'all':
 					$sql_fields = 'd.file_name, d.description, d.long_desc, d.test, d.mod_desc, d.warning, d.todo, d.req';
@@ -212,18 +212,18 @@ class search
 				default:
 					trigger_error($this->language->lang('DL_NO_PERMISSION'));
 			}
-		
+
 			$search_words = array_unique(explode(' ', $search_keywords));
-		
+
 			$sql = "SELECT d.id, $sql_fields FROM " . DOWNLOADS_TABLE . ' d
 				WHERE d.approve = ' . true . "
 				$sql_access_cats
 				$sql_cat";
 			$result = $this->db->sql_query($sql);
 			$total_found_dl = $this->db->sql_affectedrows($result);
-		
+
 			$search_counter = 0;
-		
+
 			if ($total_found_dl)
 			{
 				$search_ids = [];
@@ -237,7 +237,7 @@ class search
 					{
 						$search_result = $row[$search_in_fields];
 					}
-		
+
 					$counter = 0;
 					for ($i = 0; $i < count($search_words); ++$i)
 					{
@@ -246,7 +246,7 @@ class search
 							++$counter;
 						}
 					}
-		
+
 					switch ($search_type)
 					{
 						case 0:
@@ -263,7 +263,7 @@ class search
 					}
 				}
 			}
-		
+
 			$this->db->sql_freeresult($result);
 
 			/**
@@ -289,13 +289,13 @@ class search
 					$this->config['dl_links_per_page'],
 					$page_start
 				);
-		
+
 				$this->template->assign_vars([
 					'PAGE_NUMBER'	=> $pagination->on_page($search_counter, $this->config['dl_links_per_page'], $page_start),
 					'TOTAL_DL'		=> $this->language->lang('VIEW_DOWNLOADS', $search_counter),
 				]);
 			}
-		
+
 			if (!$search_counter)
 			{
 				$this->template->assign_var('S_NO_RESULTS', true);
@@ -316,23 +316,23 @@ class search
 				$sql_array['ORDER_BY'] = ' c.cat_name, d.sort ' . (string) $sort_dir;
 
 				$sql = $this->db->sql_build_query('SELECT', $sql_array);
-				
+
 				$result = $this->db->sql_query_limit($sql, $this->config['dl_links_per_page'], $start);
-		
+
 				while ( $row = $this->db->sql_fetchrow($result) )
 				{
 					$cat_id				= $row['cat'];
 					$file_id			= $row['id'];
 					$u_file_link		= $this->helper->route('oxpus_dlext_details', ['df_id' => $file_id]);
-		
+
 					$dl_status			= [];
 					$dl_status			= $this->dlext_status->status($file_id);
-		
+
 					$status				= $dl_status['status'];
 					$file_name			= $dl_status['file_name'];
-		
+
 					$mini_icon			= $this->dlext_status->mini_status_file($cat_id, $file_id);
-		
+
 					$cat_name			= $row['cat_name'];
 					$u_cat_link			= $this->helper->route('oxpus_dlext_index', ['cat' => $cat_id]);
 
@@ -346,21 +346,21 @@ class search
 					}
 					$add_time			= $this->user->format_date($row['add_time']);
 					$add_time_rfc		= gmdate(DATE_RFC3339, $row['add_time']);
-	
+
 					$description		= $row['description'];
 					$desc_uid			= $row['desc_uid'];
 					$desc_bitfield		= $row['desc_bitfield'];
 					$desc_flags			= $row['desc_flags'];
 					$description		= censor_text($description);
 					$description		= generate_text_for_display($description, $desc_uid, $desc_bitfield, $desc_flags);
-		
+
 					$long_desc			= $row['long_desc'];
 					$long_desc_uid		= $row['long_desc_uid'];
 					$long_desc_bitfield	= $row['long_desc_bitfield'];
 					$long_desc_flags	= $row['long_desc_flags'];
 					$long_desc			= censor_text($long_desc);
 					$long_desc			= generate_text_for_display($long_desc, $long_desc_uid, $long_desc_bitfield, $long_desc_flags);
-	
+
 					if ((int) $this->config['dl_limit_desc_on_search'] && strlen($long_desc) > (int) $this->config['dl_limit_desc_on_search'])
 					{
 						$long_desc = strip_tags($long_desc, '<br><br/>');
@@ -377,7 +377,7 @@ class search
 						'ADD_USER'		=> $add_user,
 						'ADD_TIME'		=> $add_time,
 						'ADD_TIME_RFC'	=> $add_time_rfc,
-		
+
 						'U_CAT_LINK'	=> $u_cat_link,
 						'U_FILE_LINK'	=> $u_file_link,
 					]);
@@ -404,10 +404,10 @@ class search
 		else if ($search_author || $search_user)
 		{
 			$this->template->set_filenames(['body' => 'dl_search_results.html']);
-		
+
 			$sql_cat		= ($search_cat == -1) ? '' : ' AND cat = ' . $search_cat;
 			$sql_cat_count	= ($search_cat == -1) ? '' : ' AND cat = ' . $search_cat;
-		
+
 			if ($search_user)
 			{
 				$sql_matching_users = ' AND add_user = ' . (int) $search_user;
@@ -417,19 +417,19 @@ class search
 				$search_author = str_replace('sql', '', $search_author);
 				$search_author = str_replace('union', '', $search_author);
 				$search_author = str_replace('*', '%', trim($search_author));
-			
+
 				$sql = 'SELECT user_id FROM ' . USERS_TABLE . '
 					WHERE username ' . $this->db->sql_like_expression($this->db->get_any_char() . $search_author . $this->db->get_any_char());
 				$result = $this->db->sql_query($sql);
 				$total_users = $this->db->sql_affectedrows($result);
-			
+
 				if ($total_users)
 				{
 					while ($row = $this->db->sql_fetchrow($result))
 					{
 						$matching_userids[] = $row['user_id'];
 					}
-			
+
 					$this->db->sql_freeresult($result);
 				}
 				else
@@ -437,12 +437,12 @@ class search
 					$this->db->sql_freeresult($result);
 					trigger_error('NO_USER');
 				}
-			
+
 				if (!empty($matching_userids))
 				{
 					$sql_add_users = $this->db->sql_in_set('add_user', $matching_userids);
 					$sql_change_users = $this->db->sql_in_set('change_user', $matching_userids);
-			
+
 					$sql_matching_users = ' AND ( ' . $sql_add_users . ' OR ' . $sql_change_users . ' ) ';
 				}
 				else
@@ -453,10 +453,10 @@ class search
 
 			$access_cats		= [];
 			$access_cats		= $this->dlext_main->full_index(0, 0, 0, 1);
-		
+
 			$sql_access_cats	= ($this->auth->acl_get('a_') && $this->user->data['is_registered']) ? '' : ' AND ' . $this->db->sql_in_set('cat', $access_cats);
 			$sql_access_dls		= ($this->auth->acl_get('a_') && $this->user->data['is_registered']) ? '' : ' AND ' . $this->db->sql_in_set('d.cat', $access_cats);
-		
+
 			$sql = 'SELECT id FROM ' . DOWNLOADS_TABLE . '
 				WHERE approve = ' . true . "
 					$sql_matching_users
@@ -473,7 +473,7 @@ class search
 			}
 
 			$this->db->sql_freeresult($result);
-	
+
 			if ($total_found_dl > $this->config['dl_links_per_page'])
 			{
 				if ($search_user)
@@ -494,7 +494,7 @@ class search
 					$this->config['dl_links_per_page'],
 					$page_start
 				);
-		
+
 				$this->template->assign_vars([
 					'PAGE_NUMBER'	=> $pagination->on_page($total_found_dl, $this->config['dl_links_per_page'], $page_start),
 					'TOTAL_DL'		=> $this->language->lang('VIEW_DOWNLOADS', $total_found_dl),
@@ -535,21 +535,21 @@ class search
 				$sql = $this->db->sql_build_query('SELECT', $sql_array);
 
 				$result = $this->db->sql_query_limit($sql, $this->config['dl_links_per_page'], $start);
-		
+
 				while ( $row = $this->db->sql_fetchrow($result) )
 				{
 					$cat_id			= $row['cat'];
 					$file_id		= $row['id'];
 					$u_file_link	= $this->helper->route('oxpus_dlext_details', ['df_id' => $file_id]);
-		
+
 					$dl_status		= [];
 					$dl_status		= $this->dlext_status->status($file_id);
-		
+
 					$status			= $dl_status['status'];
 					$file_name		= $dl_status['file_name'];
-		
+
 					$mini_icon		= $this->dlext_status->mini_status_file($cat_id, $file_id);
-		
+
 					$cat_name		= $row['cat_name'];
 					$u_cat_link		= $this->helper->route('oxpus_dlext_index', ['cat' => $cat_id]);
 
@@ -570,7 +570,7 @@ class search
 					$desc_flags		= $row['desc_flags'];
 					$description	= censor_text($description);
 					$description	= generate_text_for_display($description, $desc_uid, $desc_bitfield, $desc_flags);
-		
+
 					$long_desc			= $row['long_desc'];
 					$long_desc_uid		= $row['long_desc_uid'];
 					$long_desc_bitfield	= $row['long_desc_bitfield'];
@@ -594,7 +594,7 @@ class search
 						'ADD_USER'		=> $add_user,
 						'ADD_TIME'		=> $add_time,
 						'ADD_TIME_RFC'	=> $add_time_rfc,
-	
+
 						'U_CAT_LINK'	=> $u_cat_link,
 						'U_FILE_LINK'	=> $u_file_link,
 					]);
@@ -624,9 +624,9 @@ class search
 			$select_categories = '<select name="search_cat" size="10"><option value="-1" selected="selected">' . $this->language->lang('DL_ALL') . '</option>';
 			$select_categories .= $this->dlext_extra->dl_dropdown(0, 0, 0, 'auth_view');
 			$select_categories .= '</select>';
-		
+
 			$s_sort_dir = '<select name="sort_dir">';
-			if($sort_dir == 'ASC')
+			if ($sort_dir == 'ASC')
 			{
 				$s_sort_dir .= '<option value="ASC" selected="selected">' . $this->language->lang('ASCENDING') . '</option><option value="DESC">' . $this->language->lang('DESCENDING') . '</option>';
 			}
@@ -635,7 +635,7 @@ class search
 				$s_sort_dir .= '<option value="ASC">' . $this->language->lang('ASCENDING') . '</option><option value="DESC" selected="selected">' . $this->language->lang('DESCENDING') . '</option>';
 			}
 			$s_sort_dir .= '</select>';
-		
+
 			$s_search_fields = '<select name="search_fields">';
 		
 			for ($i = 0; $i < count($search_fields); ++$i)
@@ -643,11 +643,11 @@ class search
 				$s_search_fields .= '<option value="' . $search_fields[$i] . '">' . $search_fnames[$i] . '</option>';
 			}
 			$s_search_fields .= '</select>';
-		
+
 			$this->template->set_filenames(['body' => 'dl_search_body.html']);
-		
+
 			add_form_key('dl_search');
-		
+
 			$this->template->assign_vars([
 				'S_DL_SEARCH_ACTION'	=> $this->helper->route('oxpus_dlext_search'),
 				'S_DL_CATEGORY_OPTIONS'	=> $select_categories,

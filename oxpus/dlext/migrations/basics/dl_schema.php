@@ -138,7 +138,7 @@ class dl_schema extends \phpbb\db\migration\migration
 
 				$this->table_prefix . 'dl_banlist' => [
 					'COLUMNS'		=> [
-						'ban_id'		=> ['UINT:11', NULL, 'auto_increment'],
+						'ban_id'		=> ['UINT:11', null, 'auto_increment'],
 						'user_id'		=> ['UINT', 0],
 						'user_ip'		=> ['VCHAR:40', ''],
 						'user_agent'	=> ['VCHAR:50', ''],
@@ -150,7 +150,7 @@ class dl_schema extends \phpbb\db\migration\migration
 
 				$this->table_prefix . 'dl_bug_history' => [
 					'COLUMNS'		=> [
-						'report_his_id'		=> ['UINT:11', NULL, 'auto_increment'],
+						'report_his_id'		=> ['UINT:11', null, 'auto_increment'],
 						'df_id'				=> ['INT:11', 0],
 						'report_id'			=> ['INT:11', 0],
 						'report_his_type'	=> ['CHAR:10', ''],
@@ -162,7 +162,7 @@ class dl_schema extends \phpbb\db\migration\migration
 
 				$this->table_prefix . 'dl_bug_tracker' => [
 					'COLUMNS'		=> [
-						'report_id'				=> ['UINT:11', NULL, 'auto_increment'],
+						'report_id'				=> ['UINT:11', null, 'auto_increment'],
 						'df_id'					=> ['INT:11', 0],
 						'report_title'			=> ['VCHAR', ''],
 						'report_text'			=> ['MTEXT_UNI', ''],
@@ -193,7 +193,7 @@ class dl_schema extends \phpbb\db\migration\migration
 
 				$this->table_prefix . 'dl_comments' => [
 					'COLUMNS'		=> [
-						'dl_id'				=> ['BINT', NULL, 'auto_increment'],
+						'dl_id'				=> ['BINT', null, 'auto_increment'],
 						'id'				=> ['INT:11', 0],
 						'cat_id'			=> ['INT:11', 0],
 						'user_id'			=> ['UINT', 0],
@@ -217,7 +217,7 @@ class dl_schema extends \phpbb\db\migration\migration
 
 				$this->table_prefix . 'dl_favorites' => [
 					'COLUMNS'		=> [
-						'fav_id'		=> ['UINT:11', NULL, 'auto_increment'],
+						'fav_id'		=> ['UINT:11', null, 'auto_increment'],
 						'fav_dl_id'		=> ['INT:11', 0],
 						'fav_dl_cat'	=> ['INT:11', 0],
 						'fav_user_id'	=> ['UINT', 0],
@@ -227,7 +227,7 @@ class dl_schema extends \phpbb\db\migration\migration
 
 				$this->table_prefix . 'dl_fields' => [
 					'COLUMNS'		=> [
-						'field_id'				=> ['UINT:8', NULL, 'auto_increment'],
+						'field_id'				=> ['UINT:8', null, 'auto_increment'],
 						'field_name'			=> ['MTEXT_UNI', ''],
 						'field_type'			=> ['INT:4', 0],
 						'field_ident'			=> ['VCHAR:20', ''],
@@ -273,7 +273,7 @@ class dl_schema extends \phpbb\db\migration\migration
 
 				$this->table_prefix . 'dl_images' => [
 					'COLUMNS'		=> [
-						'img_id'				=> ['UINT:8', NULL, 'auto_increment'],
+						'img_id'				=> ['UINT:8', null, 'auto_increment'],
 						'dl_id'					=> ['UINT:11', 0],
 						'img_name'				=> ['VCHAR:255', ''],
 						'img_title'				=> ['MTEXT_UNI', ''],
@@ -317,7 +317,7 @@ class dl_schema extends \phpbb\db\migration\migration
 
 				$this->table_prefix . 'dl_stats' => [
 					'COLUMNS'		=> [
-						'dl_id'			=> ['BINT', NULL, 'auto_increment'],
+						'dl_id'			=> ['BINT', null, 'auto_increment'],
 						'id'			=> ['INT:11', 0],
 						'cat_id'		=> ['INT:11', 0],
 						'user_id'		=> ['UINT', 0],
@@ -333,7 +333,7 @@ class dl_schema extends \phpbb\db\migration\migration
 
 				$this->table_prefix . 'dl_versions' => [
 					'COLUMNS'		=> [
-						'ver_id'			=> ['UINT:11', NULL, 'auto_increment'],
+						'ver_id'			=> ['UINT:11', null, 'auto_increment'],
 						'dl_id'				=> ['UINT:11', 0],
 						'ver_file_name'		=> ['VCHAR', ''],
 						'ver_file_hash'		=> ['VCHAR:255', ''],
@@ -350,7 +350,7 @@ class dl_schema extends \phpbb\db\migration\migration
 
 				$this->table_prefix . 'downloads' => [
 					'COLUMNS'		=> [
-						'id'					=> ['UINT:11', NULL, 'auto_increment'],
+						'id'					=> ['UINT:11', null, 'auto_increment'],
 						'description'			=> ['MTEXT_UNI', ''],
 						'file_name'				=> ['VCHAR', ''],
 						'klicks'				=> ['INT:11', 0],
@@ -408,7 +408,7 @@ class dl_schema extends \phpbb\db\migration\migration
 
 				$this->table_prefix . 'downloads_cat' => [
 					'COLUMNS'		=> [
-						'id'					=> ['UINT:11', NULL, 'auto_increment'],
+						'id'					=> ['UINT:11', null, 'auto_increment'],
 						'parent'				=> ['INT:11', 0],
 						'path'					=> ['VCHAR', ''],
 						'cat_name'				=> ['VCHAR', ''],

@@ -26,7 +26,7 @@ class main_module
 		/*
 		* set the current module title
 		*/
-		switch($mode)
+		switch ($mode)
 		{
 			case 'config':
 				$this->page_title = 'DL_CONFIG';

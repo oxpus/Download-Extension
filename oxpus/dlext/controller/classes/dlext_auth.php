@@ -63,7 +63,7 @@ class dlext_auth implements dlext_auth_interface
 
 		$this->dlext_cache	= $dlext_cache;
 		$this->dlext_init	= $dlext_init;
-		
+
 		$this->dl_auth_perm	= $this->dlext_cache->obtain_dl_auth();
 		$this->dl_index		= $this->dlext_cache->obtain_dl_cats();
 	}
@@ -94,7 +94,7 @@ class dlext_auth implements dlext_auth_interface
 
 		if (!empty($this->dl_index))
 		{
-			foreach($this->dl_index as $key => $value)
+			foreach ($this->dl_index as $key => $value)
 			{
 				// check the default cat permissions
 				if (isset($this->dl_index[$key]['auth_view']) && ($this->dl_index[$key]['auth_view'] == 1 || ($this->dl_index[$key]['auth_view'] == 2 && $user_logged_in)))
@@ -143,7 +143,7 @@ class dlext_auth implements dlext_auth_interface
 
 		if (!empty($this->cat_counts))
 		{
-			foreach($this->cat_counts as $key => $value)
+			foreach ($this->cat_counts as $key => $value)
 			{
 				$this->dl_index[$key]['total'] = $value;
 			}
@@ -187,7 +187,7 @@ class dlext_auth implements dlext_auth_interface
 	{
 		return $this->user->data['user_posts'];
 	}
-	
+
 	public function user_traffic()
 	{
 		return $this->user->data['user_traffic'];
@@ -228,7 +228,7 @@ class dlext_auth implements dlext_auth_interface
 	{
 		$stats_view = false;
 
-		switch($this->config['dl_stats_perm'])
+		switch ($this->config['dl_stats_perm'])
 		{
 			case 0:
 				$stats_view = true;
@@ -274,7 +274,7 @@ class dlext_auth implements dlext_auth_interface
 	{
 		$auth_cread = false;
 
-		switch($this->dl_index[$cat_id]['auth_cread'])
+		switch ($this->dl_index[$cat_id]['auth_cread'])
 		{
 			case 0:
 				$auth_cread = true;
@@ -312,7 +312,7 @@ class dlext_auth implements dlext_auth_interface
 	{
 		$auth_cpost = false;
 
-		switch($this->dl_index[$cat_id]['auth_cpost'])
+		switch ($this->dl_index[$cat_id]['auth_cpost'])
 		{
 			case 0:
 				$auth_cpost = true;
@@ -418,7 +418,7 @@ class dlext_auth implements dlext_auth_interface
 
 		$bug_tracker = false;
 
-		foreach($this->dl_index as $cat_id => $value)
+		foreach ($this->dl_index as $cat_id => $value)
 		{
 			if (isset($this->dl_index[$cat_id]['bug_tracker']) && $this->dl_index[$cat_id]['bug_tracker'])
 			{

@@ -155,24 +155,48 @@ class dlext_format implements dlext_format_interface
 	{
 		switch ($config_name)
 		{
-			case 'dl_thumb_fsize':				$quote = 'dl_f_quote';	break;
-			case 'dl_physical_quota':			$quote = 'dl_x_quota';	break;
-			case 'dl_overall_traffic':			$quote = 'dl_x_over';	break;
-			case 'dl_overall_guest_traffic':	$quote = 'dl_x_g_over';	break;
-			case 'dl_newtopic_traffic':			$quote = 'dl_x_new';	break;
-			case 'dl_reply_traffic':			$quote = 'dl_x_reply';	break;
-			case 'dl_method_quota':				$quote = 'dl_m_quote';	break;
-			case 'dl_extern_size':				$quote = 'dl_e_quote';	break;
-			case 'dl_file_traffic':				$quote = 'dl_t_quote';	break;
+			case 'dl_thumb_fsize':
+				$quote = 'dl_f_quote';
+			break;
+			case 'dl_physical_quota':
+				$quote = 'dl_x_quota';
+			break;
+			case 'dl_overall_traffic':
+				$quote = 'dl_x_over';
+			break;
+			case 'dl_overall_guest_traffic':
+				$quote = 'dl_x_g_over';
+			break;
+			case 'dl_newtopic_traffic':
+				$quote = 'dl_x_new';
+			break;
+			case 'dl_reply_traffic':
+				$quote = 'dl_x_reply';
+			break;
+			case 'dl_method_quota':
+				$quote = 'dl_m_quote';
+			break;
+			case 'dl_extern_size':
+				$quote = 'dl_e_quote';
+			break;
+			case 'dl_file_traffic':
+				$quote = 'dl_t_quote';
+			break;
 		}
 
 		$x = $this->request->variable($quote, '');
 
-		switch($x)
+		switch ($x)
 		{
-			case 'kb': $config_value = floor($config_value * 1024);			break;
-			case 'mb': $config_value = floor($config_value * 1048576);		break;
-			case 'gb': $config_value = floor($config_value * 1073741824);	break;
+			case 'kb':
+				$config_value = floor($config_value * 1024);
+			break;
+			case 'mb':
+				$config_value = floor($config_value * 1048576);
+			break;
+			case 'gb':
+				$config_value = floor($config_value * 1073741824);
+			break;
 		}
 
 		return $config_value;

@@ -119,7 +119,7 @@ class ucp_privacy_controller implements ucp_privacy_interface
 				while ($row = $this->db->sql_fetchrow($result))
 				{
 					$output_row[$counter] = [];
-					foreach($row as $field => $value)
+					foreach ($row as $field => $value)
 					{
 						if (in_array($field, $time_fields))
 						{
@@ -144,7 +144,7 @@ class ucp_privacy_controller implements ucp_privacy_interface
 
 				$this->template->assign_var('FIELDS', $fields);
 
-				foreach($output_row as $key => $data)
+				foreach ($output_row as $key => $data)
 				{
 					$this->template->assign_block_vars('fields_row', [
 						'DATA'	=> implode(', ', $data),

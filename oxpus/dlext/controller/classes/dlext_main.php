@@ -49,9 +49,9 @@ class dlext_main implements dlext_main_interface
 		$this->dlext_auth	= $dlext_auth;
 		$this->dlext_init	= $dlext_init;
 
-        $this->dl_auth      = $this->dlext_auth->dl_auth();
-        $this->dl_index     = $this->dlext_auth->dl_index();
-        $this->user_admin   = $this->dlext_auth->user_admin();
+		$this->dl_auth		= $this->dlext_auth->dl_auth();
+		$this->dl_index		= $this->dlext_auth->dl_index();
+		$this->user_admin	= $this->dlext_auth->user_admin();
 	}
 
 	public function full_index($only_cat = 0, $parent = 0, $level = 0, $auth_level = 0, &$tree_dl = [])
@@ -76,7 +76,7 @@ class dlext_main implements dlext_main_interface
 				$access_ids = [];
 			}
 
-			foreach($this->dl_index as $cat_id => $value)
+			foreach ($this->dl_index as $cat_id => $value)
 			{
 				if ((isset($value['auth_view']) && $value['auth_view']) || (isset($this->dl_auth[$cat_id]['auth_view']) && $this->dl_auth[$cat_id]['auth_view']) || $this->user_admin)
 				{
@@ -134,7 +134,7 @@ class dlext_main implements dlext_main_interface
 
 		$tree_dl = [];
 
-		foreach($this->dl_index as $cat_id => $value)
+		foreach ($this->dl_index as $cat_id => $value)
 		{
 			if (((isset($value['auth_view']) && $value['auth_view']) || (isset($this->dl_auth[$cat_id]['auth_view']) && $this->dl_auth[$cat_id]['auth_view']) || $this->user_admin) && (isset($value['parent']) && $value['parent'] == $parent))
 			{
@@ -158,7 +158,7 @@ class dlext_main implements dlext_main_interface
 		$sublevel = [];
 		$i = 0;
 
-		foreach($this->dl_index as $cat_id => $value)
+		foreach ($this->dl_index as $cat_id => $value)
 		{
 			if (((isset($this->dl_index[$cat_id]['auth_view']) && $this->dl_index[$cat_id]['auth_view']) || (isset($this->dl_auth[$cat_id]['auth_view']) && $this->dl_auth[$cat_id]['auth_view']) || $this->user_admin) && (isset($this->dl_index[$cat_id]['parent']) && $this->dl_index[$cat_id]['parent'] == $parent))
 			{
@@ -189,7 +189,7 @@ class dlext_main implements dlext_main_interface
 
 		$sublevel_count = 0;
 
-		foreach($this->dl_index as $cat_id => $value)
+		foreach ($this->dl_index as $cat_id => $value)
 		{
 			if (isset($this->dl_index[$cat_id]['parent']) && $this->dl_index[$cat_id]['parent'] == $parent && (isset($this->dl_index[$cat_id]['auth_view']) || isset($this->dl_auth[$cat_id]['auth_view']) || $this->user_admin))
 			{
@@ -210,7 +210,7 @@ class dlext_main implements dlext_main_interface
 
 		$sublevel = 0;
 
-		foreach($this->dl_index as $cat_id => $value)
+		foreach ($this->dl_index as $cat_id => $value)
 		{
 			if ((isset($this->dl_index[$cat_id]['auth_view']) || isset($this->dl_auth[$cat_id]['auth_view']) || $this->user_admin) && (isset($this->dl_index[$cat_id]['parent']) && $this->dl_index[$cat_id]['parent'] == $parent))
 			{
@@ -223,7 +223,7 @@ class dlext_main implements dlext_main_interface
 
 	public function find_latest_dl($last_data, $parent, $main_cat, $last_dl_time)
 	{
-		foreach($last_data as $cat_id => $value)
+		foreach ($last_data as $cat_id => $value)
 		{
 			if ($last_data[$cat_id]['parent'] == $parent || $main_cat == $cat_id)
 			{

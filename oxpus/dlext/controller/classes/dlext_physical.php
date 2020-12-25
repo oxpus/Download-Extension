@@ -95,9 +95,9 @@ class dlext_physical implements dlext_physical_interface
 
 		while (false !== ($file=@readdir($dir)))
 		{
-			if ($file{0} != ".")
+			if ($file[0] != ".")
 			{
-				if(is_dir($download_dir . $path . '/' . $file))
+				if (is_dir($download_dir . $path . '/' . $file))
 				{
 					$temp_dir = $dl_dir . $path . '/' . $file;
 					$folders .= ('/' . $cur != $path . '/' . $file) ? '<option value="' . $dl_dir . $path . '/' . $file . '/">' . $language->lang('DL_MOVE') . ' » ' . $temp_dir . '/</option>' : '';
@@ -123,7 +123,7 @@ class dlext_physical implements dlext_physical_interface
 
 		while (false !== ($file=@readdir($dir)))
 		{
-			if ($file{0} != ".")
+			if ($file[0] != ".")
 			{
 				$files .= (in_array($file, $unas_files)) ? $path . '/' . $file . '|' : '';
 				$files .= $this->read_dl_files($download_dir, $path . '/' . $file, $unas_files);
@@ -147,7 +147,7 @@ class dlext_physical implements dlext_physical_interface
 		$dirs = array_diff(scandir($download_dir), ['.', '..']);
 		$dir_array = [];
 
-		foreach($dirs as $d)
+		foreach ($dirs as $d)
 		{
 			if (is_dir($download_dir . '/' . $d))
 			{
@@ -204,12 +204,12 @@ class dlext_physical implements dlext_physical_interface
 			return;
 		}
 
-		if(!@file_exists(DL_EXT_CACHE_PATH))
+		if (!@file_exists(DL_EXT_CACHE_PATH))
 		{
 			$this->_create_folder(DL_EXT_CACHE_PATH);
 		}
 
-		if(!@file_exists(DL_EXT_FILEBASE_PATH))
+		if (!@file_exists(DL_EXT_FILEBASE_PATH))
 		{
 			$this->_create_folder(DL_EXT_FILEBASE_PATH);
 			$this->_create_folder(DL_EXT_FILEBASE_PATH . 'thumbs/');
@@ -220,29 +220,29 @@ class dlext_physical implements dlext_physical_interface
 			$this->_create_folder(DL_EXT_FILEBASE_PATH . 'version/images/');
 		}
 
-		if(!@file_exists(DL_EXT_FILEBASE_PATH . 'thumbs/'))
+		if (!@file_exists(DL_EXT_FILEBASE_PATH . 'thumbs/'))
 		{
 			$this->_create_folder(DL_EXT_FILEBASE_PATH . 'thumbs/');
 		}
 
-		if(!@file_exists(DL_EXT_FILEBASE_PATH . 'downloads/'))
+		if (!@file_exists(DL_EXT_FILEBASE_PATH . 'downloads/'))
 		{
 			$this->_create_folder(DL_EXT_FILEBASE_PATH . 'downloads/');
 		}
 
-		if(!@file_exists(DL_EXT_FILEBASE_PATH . 'version/'))
+		if (!@file_exists(DL_EXT_FILEBASE_PATH . 'version/'))
 		{
 			$this->_create_folder(DL_EXT_FILEBASE_PATH . 'version/');
 			$this->_create_folder(DL_EXT_FILEBASE_PATH . 'version/files/');
 			$this->_create_folder(DL_EXT_FILEBASE_PATH . 'version/images/');
 		}
 
-		if(!@file_exists(DL_EXT_FILEBASE_PATH . 'version/files/'))
+		if (!@file_exists(DL_EXT_FILEBASE_PATH . 'version/files/'))
 		{
 			$this->_create_folder(DL_EXT_FILEBASE_PATH . 'version/files/');
 		}
 
-		if(!@file_exists(DL_EXT_FILEBASE_PATH . 'version/images/'))
+		if (!@file_exists(DL_EXT_FILEBASE_PATH . 'version/images/'))
 		{
 			$this->_create_folder(DL_EXT_FILEBASE_PATH . 'version/images/');
 		}

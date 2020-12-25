@@ -135,7 +135,7 @@ class ucp_favorite_controller implements ucp_favorite_interface
 
 				$dl_ids = [];
 
-				while($row = $this->db->sql_fetchrow($result))
+				while ($row = $this->db->sql_fetchrow($result))
 				{
 					$dl_ids[] = $row['fav_dl_id'];
 				}
@@ -173,7 +173,7 @@ class ucp_favorite_controller implements ucp_favorite_interface
 
 			$dl_ids = [];
 
-			while($row = $this->db->sql_fetchrow($result))
+			while ($row = $this->db->sql_fetchrow($result))
 			{
 				$dl_ids[] = $row['fav_dl_id'];
 			}

@@ -18,7 +18,7 @@ interface dlext_files_interface
 {
 	/**
 	 * Fetch the saves data from the given download files
-	 * 
+	 *
 	 * @param int $cat_id downloads only from this category
 	 * @param string $sql_sort_by fields for sorting the files
 	 * @param string $sql_order sort direction ASC or DESC
@@ -32,7 +32,7 @@ interface dlext_files_interface
 
 	/**
 	 * Fetch the saves data from the given download files with more control settings
-	 * 
+	 *
 	 * @param int $cat_id downloads only from this category
 	 * @param string $sql_sort_by fields for sorting the files
 	 * @param string $sql_order sort direction ASC or DESC

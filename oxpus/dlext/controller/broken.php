@@ -253,23 +253,23 @@ class broken
 						trigger_error('FORM_INVALID');
 					}
 
-			        $vc_response = $captcha->validate();
+					$vc_response = $captcha->validate();
 
-			        if ($vc_response)
-			        {
-			            $error[] = $vc_response;
-			        }
+					if ($vc_response)
+					{
+						$error[] = $vc_response;
+					}
 
-			        if (empty($error))
-			        {
-			            $captcha->reset();
-			            $code_match = true;
-			        }
-			        else if ($captcha->is_solved())
-			        {
-			            $s_hidden_fields += $captcha->get_hidden_fields();
-			            $code_match = false;
-			        }
+					if (empty($error))
+					{
+						$captcha->reset();
+						$code_match = true;
+					}
+					else if ($captcha->is_solved())
+					{
+						$s_hidden_fields += $captcha->get_hidden_fields();
+						$code_match = false;
+					}
 				}
 				else if (!$captcha->is_solved())
 				{
@@ -294,11 +294,11 @@ class broken
 						'MESSAGE_TITLE'		=> $this->language->lang('DL_BROKEN'),
 						'MESSAGE_TEXT'		=> $this->language->lang('DL_REPORT_CONFIRM_CODE'),
 
-			            'CAPTCHA_TEMPLATE'	=> $captcha->get_template(),
+						'CAPTCHA_TEMPLATE'	=> $captcha->get_template(),
 
 						'S_CONFIRM_ACTION'	=> $this->helper->route('oxpus_dlext_broken'),
 						'S_HIDDEN_FIELDS'	=> build_hidden_fields($s_hidden_fields),
-			            'S_CONFIRM_CODE'	=> true,
+						'S_CONFIRM_CODE'	=> true,
 					]);
 
 					/*

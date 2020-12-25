@@ -162,13 +162,13 @@ class prepare_8_0_0 extends \phpbb\db\migration\migration
 		// define extension folder constants
 		$dl_ext_cache_path = $this->phpbb_root_path . 'cache/' . PHPBB_ENVIRONMENT . '/dlext/';
 		$dl_ext_filebase_path = $this->phpbb_root_path . $this->config['upload_path'] . '/dlext/';
-		
-		if(!@file_exists($dl_ext_cache_path))
+
+		if (!@file_exists($dl_ext_cache_path))
 		{
 			$this->_create_folder($dl_ext_cache_path);
 		}
 
-		if(!@file_exists($dl_ext_filebase_path))
+		if (!@file_exists($dl_ext_filebase_path))
 		{
 			$this->_create_folder($dl_ext_filebase_path);
 			$this->_create_folder($dl_ext_filebase_path . 'thumbs/');
@@ -179,29 +179,29 @@ class prepare_8_0_0 extends \phpbb\db\migration\migration
 			$this->_create_folder($dl_ext_filebase_path . 'version/images/');
 		}
 
-		if(!@file_exists($dl_ext_filebase_path . 'thumbs/'))
+		if (!@file_exists($dl_ext_filebase_path . 'thumbs/'))
 		{
 			$this->_create_folder($dl_ext_filebase_path . 'thumbs/');
 		}
 
-		if(!@file_exists($dl_ext_filebase_path . 'downloads/'))
+		if (!@file_exists($dl_ext_filebase_path . 'downloads/'))
 		{
 			$this->_create_folder($dl_ext_filebase_path . 'downloads/');
 		}
 
-		if(!@file_exists($dl_ext_filebase_path . 'version/'))
+		if (!@file_exists($dl_ext_filebase_path . 'version/'))
 		{
 			$this->_create_folder($dl_ext_filebase_path . 'version/');
 			$this->_create_folder($dl_ext_filebase_path . 'version/files/');
 			$this->_create_folder($dl_ext_filebase_path . 'version/images/');
 		}
 
-		if(!@file_exists($dl_ext_filebase_path . 'version/files/'))
+		if (!@file_exists($dl_ext_filebase_path . 'version/files/'))
 		{
 			$this->_create_folder($dl_ext_filebase_path . 'version/files/');
 		}
 
-		if(!@file_exists($dl_ext_filebase_path . 'version/images/'))
+		if (!@file_exists($dl_ext_filebase_path . 'version/images/'))
 		{
 			$this->_create_folder($dl_ext_filebase_path . 'version/images/');
 		}

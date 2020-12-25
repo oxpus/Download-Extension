@@ -18,7 +18,7 @@ interface dlext_status_interface
 {
 	/**
 	 * Fetch the number of unapproved downloads
-	 * 
+	 *
 	 * @param int $parent index tree start id
 	 * @param int $file_id download id
 	 * @param bool $rss false will return the status icon, true text for the rss feed
@@ -29,7 +29,7 @@ interface dlext_status_interface
 
 	/**
 	 * Fetch the status icon for categories about new and/or updated downloads
-	 * 
+	 *
 	 * @param int $cur id from current category
 	 * @param int $parent index tree start id
 	 * @param int $flag 0 start with the current parent id, otherwise the sub categories
@@ -40,7 +40,7 @@ interface dlext_status_interface
 
 	/**
 	 * Fetch the download access status and status icon
-	 * 
+	 *
 	 * @param int $df_id download id to be checked
 	 * @return array access, status icon and link for given download
 	 * @access public

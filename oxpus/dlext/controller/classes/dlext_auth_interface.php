@@ -27,7 +27,7 @@ interface dlext_auth_interface
 
 	/**
 	 * Prepare the download index with all default permissions based on categories
-	 * 
+	 *
 	 * @return array download index data with download numbers and default permission settings
 	 * @access public
 	*/
@@ -77,7 +77,7 @@ interface dlext_auth_interface
 	 * @access public
 	 */
 	public function user_posts();
-	
+
 	/**
 	 * Fetch the user traffic amount
 	 *
@@ -101,7 +101,7 @@ interface dlext_auth_interface
 	 *
 	 * @param int $cat_id category id for checks
 	 * @param string $perm the permission to ask for
-	 * @return bool true when the user have the given permission on the given category, otherwise false 
+	 * @return bool true when the user have the given permission on the given category, otherwise false
 	 * @access public
 	 */
 	public function user_auth($cat_id, $perm);
@@ -110,7 +110,7 @@ interface dlext_auth_interface
 	 * Fetch the permission to access the static page
 	 *
 	 * @param string $u_action the current module url
-	 * @return bool true when the user can access the statistic page, otherwise false 
+	 * @return bool true when the user can access the statistic page, otherwise false
 	 * @access public
 	 */
 	public function stats_perm();
@@ -119,7 +119,7 @@ interface dlext_auth_interface
 	 * Fetch the permission to read download comments
 	 *
 	 * @param int $cat_id category id for checks
-	 * @return bool true when the user can read comments in the given category, otherwise false 
+	 * @return bool true when the user can read comments in the given category, otherwise false
 	 * @access public
 	 */
 	public function cat_auth_comment_read($cat_id);
@@ -128,7 +128,7 @@ interface dlext_auth_interface
 	 * Fetch the permission to post download comments
 	 *
 	 * @param int $cat_id category id for checks
-	 * @return bool true when the user can post comments in the given category, otherwise false 
+	 * @return bool true when the user can post comments in the given category, otherwise false
 	 * @access public
 	 */
 	public function cat_auth_comment_post($cat_id);

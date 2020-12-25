@@ -172,22 +172,22 @@ class mcp_manage
 					if (!empty($dlo_id))
 					{
 						$new_path = $index[$new_cat]['cat_path'];
-		
+
 						$sql = 'SELECT dl_id, ver_real_file FROM ' . DL_VERSIONS_TABLE . '
 							WHERE ' . $this->db->sql_in_set('dl_id', $dlo_id);
 						$result = $this->db->sql_query($sql);
-		
+
 						while ($row = $this->db->sql_fetchrow($result))
 						{
 							$real_ver_file[$row['dl_id']][] = $row['ver_real_file'];
 						}
-		
+
 						$this->db->sql_freeresult($result);
-		
+
 						for ($i = 0; $i < count($dlo_id); ++$i)
 						{
 							$df_id = intval($dlo_id[$i]);
-		
+
 							$sql = 'SELECT c.path, d.real_file FROM ' . DOWNLOADS_TABLE . ' d, ' . DL_CAT_TABLE . ' c
 								WHERE d.cat = c.id
 									AND d.id = ' . (int) $df_id . '
@@ -195,18 +195,18 @@ class mcp_manage
 									AND d.extern = 0';
 							$result = $this->db->sql_query($sql);
 							$row = $this->db->sql_fetchrow($result);
-		
+
 							$old_path = $row['path'];
 							$real_file = $row['real_file'];
-		
+
 							$this->db->sql_freeresult($result);
-		
+
 							if ($new_path != $old_path)
 							{
 								@copy(DL_EXT_FILEBASE_PATH. 'downloads/' . $old_path . $real_file, DL_EXT_FILEBASE_PATH. 'downloads/' . $new_path . $real_file);
 								@chmod(DL_EXT_FILEBASE_PATH. 'downloads/' . $new_path . $real_file, 0777);
 								@unlink(DL_EXT_FILEBASE_PATH. 'downloads/' . $old_path . $real_file);
-		
+
 								if (isset($real_ver_file[$df_id]))
 								{
 									for ($j = 0; $j < count($real_ver_file[$df_id]); ++$j)
@@ -218,29 +218,29 @@ class mcp_manage
 								}
 							}
 						}
-		
+
 						$sql = 'UPDATE ' . DOWNLOADS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', [
 							'cat' => $new_cat]) . ' WHERE ' . $this->db->sql_in_set('id', $dlo_id) . ' AND cat = ' . (int) $cat_id;
 						$this->db->sql_query($sql);
-		
+
 						$sql = "UPDATE " . DL_STATS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', [
 							'cat_id' => $new_cat]) . ' WHERE ' . $this->db->sql_in_set('id', $dlo_id) . ' AND cat_id = ' . (int) $cat_id;
 						$this->db->sql_query($sql);
-		
+
 						$sql = "UPDATE " . DL_COMMENTS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', [
 							'cat_id' => $new_cat]) . ' WHERE ' . $this->db->sql_in_set('id', $dlo_id) . ' AND cat_id = ' . (int) $cat_id;
 						$this->db->sql_query($sql);
-		
+
 						// Purge the files cache
 						@unlink(DL_EXT_CACHE_PATH . 'data_dl_cat_counts.' . $this->php_ext);
 						@unlink(DL_EXT_CACHE_PATH . 'data_dl_file_p.' . $this->php_ext);
 						@unlink(DL_EXT_CACHE_PATH . 'data_dl_file_preset.' . $this->php_ext);
 					}
-		
+
 					$fmove = '';
 					$action = '';
 				}
-		
+
 				if ($action == 'lock')
 				{
 					if (!empty($dlo_id))
@@ -268,13 +268,13 @@ class mcp_manage
 								'df_id'				=> $df_id,
 								'cat_name'			=> $cat_name,
 							];
-		
+
 							$notification->add_notifications('oxpus.dlext.notification.type.approve', $notification_data);
 						}
 
 						$this->db->sql_freeresult($result);
 					}
-		
+
 					$fmove = '';
 					$action = '';
 				}
@@ -282,7 +282,7 @@ class mcp_manage
 				if ($action == 'assign')
 				{
 					$username	= $this->request->variable('username', '', true);
-		
+
 					if (!empty($dlo_id) && $username)
 					{
 						$sql = 'SELECT user_id FROM ' . USERS_TABLE . "
@@ -290,7 +290,7 @@ class mcp_manage
 						$result = $this->db->sql_query($sql);
 						$user_id = (int) $this->db->sql_fetchfield('user_id');
 						$this->db->sql_freeresult($result);
-		
+
 						if ($user_id)
 						{
 							$sql = 'UPDATE ' . DOWNLOADS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', [
@@ -305,11 +305,11 @@ class mcp_manage
 							}
 						}
 					}
-		
+
 					$fmove = '';
 					$action = '';
 				}
-		
+
 				if ($action == 'delete' && !empty($dlo_id))
 				{
 					if (confirm_box(true))
@@ -460,7 +460,7 @@ class mcp_manage
 							'oxpus.dlext.notification.type.capprove',
 							'oxpus.dlext.notification.type.comments',
 						], $dlo_id);
-		
+
 						// Purge the files cache
 						@unlink(DL_EXT_CACHE_PATH . 'data_dl_cat_counts.' . $this->php_ext);
 						@unlink(DL_EXT_CACHE_PATH . 'data_dl_file_p.' . $this->php_ext);
@@ -484,7 +484,7 @@ class mcp_manage
 
 							$i = 0;
 
-							foreach($dlo_id as $key => $value)
+							foreach ($dlo_id as $key => $value)
 							{
 								$s_hidden_fields += ['dlo_id[' . $i . ']' => $value];
 
@@ -501,7 +501,7 @@ class mcp_manage
 					$fmove = '';
 					$action = '';
 				}
-		
+
 				if ($fmove && ($this->auth->acl_get('a_') && $this->user->data['is_registered']))
 				{
 					if ($fmove == 'ABC')
@@ -518,34 +518,34 @@ class mcp_manage
 						$result = $this->db->sql_query($sql);
 						$sort = $this->db->sql_fetchfield('sort');
 						$this->db->sql_freeresult($result);
-		
+
 						$sql_move = ($fmove == 1) ? $sort + 15 : $sort - 15;
-		
+
 						$sql = 'UPDATE ' . DOWNLOADS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', [
 							'sort' => $sql_move]) . ' WHERE id = ' . (int) $df_id;
 						$this->db->sql_query($sql);
-		
+
 						$sql = 'SELECT id FROM ' . DOWNLOADS_TABLE . '
 							WHERE cat = ' . (int) $cat_id . '
 							ORDER BY sort ASC';
 						$result = $this->db->sql_query($sql);
 					}
-		
+
 					$i = 10;
-		
-					while($row = $this->db->sql_fetchrow($result))
+
+					while ($row = $this->db->sql_fetchrow($result))
 					{
 						$sql_sort = 'UPDATE ' . DOWNLOADS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', [
 							'sort' => $i]) . ' WHERE id = ' . (int) $row['id'];
 						$this->db->sql_query($sql_sort);
 						$i += 10;
 					}
-		
+
 					$this->db->sql_freeresult($result);
 
 					$fmove = '';
 				}
-		
+
 				$total_downloads = $index[$cat_id]['total'];
 
 				if ($sort && ($this->auth->acl_get('a_') && $this->user->data['is_registered']))

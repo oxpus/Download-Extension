@@ -106,24 +106,24 @@ class acp_perm_check_controller implements acp_perm_check_interface
 		include_once($this->ext_path . 'phpbb/includes/acm_init.' . $this->phpEx);
 
 		$s_display_perms = false;
-		
+
 		if ($submit && $check_user)
 		{
 			$username = utf8_clean_string($check_user);
-		
+
 			$sql = 'SELECT * FROM ' . USERS_TABLE . "
 				WHERE username_clean = '" . $this->db->sql_escape($username) . "'";
 			$result			= $this->db->sql_query($sql);
 			$row			= $this->db->sql_fetchrow($result);
 			$this->db->sql_freeresult($result);
-		
+
 			if ($row)
 			{
-				foreach($row as $key => $value)
+				foreach ($row as $key => $value)
 				{
 					$$key = $value;
 				}
-		
+
 				// Check for selected user and reinit the download classes to get the right content
 				$reset_user_data = false;
 				if ($user_id <> $this->user->data['user_id'])
@@ -136,12 +136,12 @@ class acp_perm_check_controller implements acp_perm_check_interface
 					$this->auth->acl($this->user->data);
 					$reset_user_data = true;
 				}
-		
+
 				// Fetch category permissions
 				$cat_perm_ary   = [];
 				$dl_index       = [];
 				$dl_index       = $this->dlext_main->full_index();
-		
+
 				foreach ($dl_index as $cat_id => $value)
 				{
 					$cat_perm_ary[$cat_id]['cat_name']		= $dl_index[$cat_id]['cat_name'];
@@ -151,7 +151,7 @@ class acp_perm_check_controller implements acp_perm_check_interface
 					$cat_perm_ary[$cat_id]['auth_mod']		= $this->dlext_auth->user_auth($cat_id, 'auth_mod');
 					$cat_perm_ary[$cat_id]['comment_read']	= $this->dlext_auth->cat_auth_comment_read($cat_id);
 					$cat_perm_ary[$cat_id]['comment_post']	= $this->dlext_auth->cat_auth_comment_post($cat_id);
-		
+
 					$cat_perm_ary[$cat_id]['cat_remain']    = ($this->config['dl_traffic_off']) ? true : false;
 					if (($dl_index[$cat_id]['cat_traffic'] && ($dl_index[$cat_id]['cat_traffic'] - $dl_index[$cat_id]['cat_traffic_use'] <= 0)) && !$this->config['dl_traffic_off'])
 					{
@@ -161,7 +161,7 @@ class acp_perm_check_controller implements acp_perm_check_interface
 						}
 					}
 				}
-		
+
 				// General user permissions
 				$this->template->assign_vars([
 					'USER_IS_ADMIN'         => $this->dlext_auth->user_admin(),
@@ -171,11 +171,11 @@ class acp_perm_check_controller implements acp_perm_check_interface
 					'USER_HAVE_TRAFFIC'     => $this->dlext_format->dl_size($this->user->data['user_traffic']),
 					'USER_HAVE_POSTS'       => $this->user->data['user_posts'] . ' / ' .$this->config['dl_posts'],
 					'CHECK_USERNAME'        => $this->user->data['username'],
-		
+
 					'U_BACK'				=> $this->u_action,
 				]);
-		
-				foreach($cat_perm_ary as $cat_id => $data_ary)
+
+				foreach ($cat_perm_ary as $cat_id => $data_ary)
 				{
 					$this->template->assign_block_vars('cat_row', [
 						'CAT_NAME'  => $data_ary['cat_name'],
@@ -187,7 +187,7 @@ class acp_perm_check_controller implements acp_perm_check_interface
 						'CAT_CPOST' => $data_ary['comment_post'],
 					]);
 				}
-		
+
 				// Reset userdata to the real current user and reinit the download classes to get the right content
 				if ($reset_user_data)
 				{
@@ -195,18 +195,18 @@ class acp_perm_check_controller implements acp_perm_check_interface
 					unset($tmp_user_data);
 					$this->auth->acl($this->user->data);
 				}
-		
+
 				$s_display_perms = true;
 			}
 		}
-		
+
 		$u_user_select = append_sid("{$this->root_path}memberlist.{$this->phpEx}", "mode=searchuser&amp;form=select_user&amp;field=check_user&amp;select_single=true");
-		
+
 		$this->template->assign_vars([
 			'S_FORM_ACTION'     => $this->u_action,
 			'S_DL_PERM_CHECK'   => true,
 			'S_DISPLAY_PERMS'   => $s_display_perms,
-		
+
 			'U_FIND_USERNAME'   => $u_user_select,
 		]);
 	}

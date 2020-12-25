@@ -18,7 +18,7 @@ interface dlext_thumbs_interface
 {
 	/**
 	 * Read and display the spezified thumbnail for a download
-	 * 
+	 *
 	 * @return void
 	 * @access public
 	*/
@@ -26,7 +26,7 @@ interface dlext_thumbs_interface
 
 	/**
 	 * Prepare image from thumbnail file
-	 * 
+	 *
 	 * @param string $pic_filename image filename to be examined
 	 * @param string $file_ext delete or close topics
 	 * @return object $image

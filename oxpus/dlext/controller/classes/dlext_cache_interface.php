@@ -18,7 +18,7 @@ interface dlext_cache_interface
 {
 	/**
 	 * Download Extension Category Cache
-	 * 
+	 *
 	 * @return array complete download index data
 	 * @access public
 	*/
@@ -26,7 +26,7 @@ interface dlext_cache_interface
 
 	/**
 	 * Download Extension File Extension Blacklist Cache
-	 * 
+	 *
 	 * @return array complete file extension blacklist data
 	 * @access public
 	*/
@@ -34,7 +34,7 @@ interface dlext_cache_interface
 
 	/**
 	 * Download Extension Cat Filecount Cache
-	 * 
+	 *
 	 * @return array number of downloads saved on each category
 	 * @access public
 	*/
@@ -42,7 +42,7 @@ interface dlext_cache_interface
 
 	/**
 	 * Download Extension Files Cache
-	 * 
+	 *
 	 * @param int $dl_new_time timespan to indicate a download as new
 	 * @param int $dl_edit_time timespan to indicate a download as updated
 	 * @return array combined download data about new or updated status for each file
@@ -52,7 +52,7 @@ interface dlext_cache_interface
 
 	/**
 	 * Download Extension Auth Cache
-	 * 
+	 *
 	 * @return array complete download auth data based on user groups
 	 * @access public
 	*/
@@ -60,6 +60,7 @@ interface dlext_cache_interface
 
 	/**
 	 * Download MOD Auth Group Settings Cache
+	 *
 	 * @param array $auth_cat category ids used in auth table
 	 * @param int $group_perm_ids group ids used in auth table
 	 * @param int $user_id user id to proof permissions fore
@@ -71,7 +72,7 @@ interface dlext_cache_interface
 
 	/**
 	 * Get saved cache object
-	 * 
+	 *
 	 * @param string $var_name name of the cache file
 	 * @return array cache data if exists, otherwise false
 	 * @access public
@@ -80,7 +81,7 @@ interface dlext_cache_interface
 
 	/**
 	 * Put data into cache
-	 * 
+	 *
 	 * @param string $var_name name of the cache file
 	 * @param mixed $var cache content
 	 * @param string $ttl Timestamp when the data expires
@@ -91,7 +92,7 @@ interface dlext_cache_interface
 
 	/**
 	 * Check if a given cache entry exist
-	 * 
+	 *
 	 * @param string $var_name name of the cache file
 	 * @return bool true when the cache exists and is valid, otherwise false
 	 * @access public
@@ -121,7 +122,7 @@ interface dlext_cache_interface
 
 	/**
 	 * Removes/unlinks file
-	 * 
+	 *
 	 * @param string $filename Filename to delete
 	 * @param bool $check check if the file is writeable, returns message if fails
 	 * @return mixed true if the files was removed/inlinked, otherwise false

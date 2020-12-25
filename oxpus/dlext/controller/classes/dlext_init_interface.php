@@ -18,7 +18,7 @@ interface dlext_init_interface
 {
 	/**
 	 * Get the forum root path
-	 * 
+	 *
 	 * @return string default phpBB root path
 	 * @access public
 	*/
@@ -26,7 +26,7 @@ interface dlext_init_interface
 
 	/**
 	 * Get the default forum php-file extension
-	 * 
+	 *
 	 * @return string default php file extension
 	 * @access public
 	*/
@@ -34,7 +34,7 @@ interface dlext_init_interface
 
 	/**
 	 * Prefetch all basic download data
-	 * 
+	 *
 	 * @return array basic download data from each approved download dataset
 	 * @access public
 	*/
@@ -42,7 +42,7 @@ interface dlext_init_interface
 
 	/**
 	 * Fetch the download status icon for new or updated indications
-	 * 
+	 *
 	 * @return array new and updated indicators for download files
 	 * @access public
 	*/

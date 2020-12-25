@@ -18,8 +18,8 @@ namespace oxpus\dlext\controller\classes;
 interface dlext_physical_interface
 {
 	/**
-	 * Grab all real file names from the download data 
-	 * 
+	 * Grab all real file names from the download data
+	 *
 	 * @return array real filenames from downloads
 	 * @access public
 	*/
@@ -27,7 +27,7 @@ interface dlext_physical_interface
 
 	/**
 	 * Read the folder tree from download folders and prepare option list
-	 * 
+	 *
 	 * @param string $path the asked folder to be read out
 	 * @param string $cur for internal uses, needs to be $path on start
 	 * @return string option list element
@@ -37,7 +37,7 @@ interface dlext_physical_interface
 
 	/**
 	 * Read the real files from the download folders which are nor assigned
-	 * 
+	 *
 	 * @param string $path the asked folder to be read out
 	 * @param array $unas_files for internal uses, needs to be $path on start
 	 * @return array existing and unassigned file names
@@ -47,7 +47,7 @@ interface dlext_physical_interface
 
 	/**
 	 * Read the physical file sizes from the download files
-	 * 
+	 *
 	 * @param string $download_dir the asked folder to be read out
 	 * @return int sumerized download file sizes
 	 * @access public
@@ -56,7 +56,7 @@ interface dlext_physical_interface
 
 	/**
 	 * Fetch the number of unapproved downloads
-	 * 
+	 *
 	 * @return string combined amount of maximum upload file size limit by PHP itself
 	 * @access public
 	*/
@@ -64,7 +64,7 @@ interface dlext_physical_interface
 
 	/**
 	 * Fetch the number of unapproved downloads
-	 * 
+	 *
 	 * @param string $path physical generate the folder path
 	 * @return void
 	 * @access public
@@ -73,7 +73,7 @@ interface dlext_physical_interface
 
 	/**
 	 * Check all required download folders and create missing ones
-	 * 
+	 *
 	 * @return void
 	 * @access public
 	*/
@@ -81,7 +81,7 @@ interface dlext_physical_interface
 
 	/**
 	 * Drop the old download folder structures with all files and folders
-	 * 
+	 *
 	 * @param string $source_path the source path from previous extension settings
 	 * @return bool false if the removing fails, otherwise true
 	 * @access public
@@ -91,7 +91,7 @@ interface dlext_physical_interface
 	/**
 	 * Read the existing downloads folder tree to select a path within the categories management
 	 * instead enter the complete path "old school" manually.
-	 * 
+	 *
 	 * @param string $file_base the start folder to be read out
 	 * @param string $path the path to be preselected
 	 * @param int $level for internal uses only
@@ -102,7 +102,7 @@ interface dlext_physical_interface
 
 	/**
 	 * Send the selected file to the user client (webbrowser) = download
-	 * 
+	 *
 	 * @param array $dl_file_data data array with all informations about the download file
 	 * @return void
 	 * @access public

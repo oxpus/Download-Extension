@@ -73,7 +73,7 @@ class dlext_extra implements dlext_extra_interface
 		return $todo;
 	}
 
-	public function dl_dropdown($parent = 0, $level = 0, $select_cat = 0, $perm, $rem_cat = 0)
+	public function dl_dropdown($parent = 0, $level = 0, $select_cat = 0, $perm = 'auth_view', $rem_cat = 0)
 	{
 		$dl_auth = $this->dlext_auth->dl_auth();
 		$dl_index = $this->dlext_auth->dl_index();
@@ -88,7 +88,7 @@ class dlext_extra implements dlext_extra_interface
 			$catlist = '';
 		}
 
-		foreach($dl_index as $cat_id => $value)
+		foreach ($dl_index as $cat_id => $value)
 		{
 			if (isset($dl_index[$cat_id]['parent']) && $dl_index[$cat_id]['parent'] == $parent)
 			{
@@ -131,7 +131,7 @@ class dlext_extra implements dlext_extra_interface
 		return $catlist;
 	}
 
-	public function dl_jumpbox($parent = 0, $level = 0, $perm, $rem_cat = 0, &$catlist = [])
+	public function dl_jumpbox($parent = 0, $level = 0, $perm = 'auth_view', $rem_cat = 0, &$catlist = [])
 	{
 		$dl_auth = $this->dlext_auth->dl_auth();
 		$dl_index = $this->dlext_auth->dl_index();
@@ -141,7 +141,7 @@ class dlext_extra implements dlext_extra_interface
 			return;
 		}
 
-		foreach($dl_index as $cat_id => $value)
+		foreach ($dl_index as $cat_id => $value)
 		{
 			if (isset($dl_index[$cat_id]['parent']) && $dl_index[$cat_id]['parent'] == $parent)
 			{
@@ -181,7 +181,7 @@ class dlext_extra implements dlext_extra_interface
 			$catlist = '';
 		}
 
-		foreach($dl_index as $cat_id => $value)
+		foreach ($dl_index as $cat_id => $value)
 		{
 			if (isset($dl_index[$cat_id]['parent']) && $dl_index[$cat_id]['parent'] == $parent)
 			{

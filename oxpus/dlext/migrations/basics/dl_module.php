@@ -10,8 +10,6 @@
 
 namespace oxpus\dlext\migrations\basics;
 
-use phpbb\module\exception\module_exception;
-
 class dl_module extends \phpbb\db\migration\migration
 {
 	public function effectively_installed()

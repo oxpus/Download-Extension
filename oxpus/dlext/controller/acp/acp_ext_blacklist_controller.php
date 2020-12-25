@@ -100,14 +100,14 @@ class acp_ext_blacklist_controller implements acp_ext_blacklist_interface
 		{
 			$action = '';
 		}
-		
-		if($action == 'add')
+
+		if ($action == 'add')
 		{
 			if (!check_form_key('dl_adm_ext'))
 			{
 				trigger_error('FORM_INVALID', E_USER_WARNING);
 			}
-		
+
 			if ($extension)
 			{
 				$sql = 'SELECT * FROM ' . DL_EXT_BLACKLIST . "
@@ -115,43 +115,43 @@ class acp_ext_blacklist_controller implements acp_ext_blacklist_interface
 				$result = $this->db->sql_query($sql);
 				$ext_exist = $this->db->sql_affectedrows($result);
 				$this->db->sql_freeresult($result);
-		
+
 				if (!$ext_exist)
 				{
 					$sql = 'INSERT INTO ' . DL_EXT_BLACKLIST . ' ' . $this->db->sql_build_array('INSERT', [
 						'extention' => $extension]);
 					$this->db->sql_query($sql);
-		
+
 					// Purge the blacklist cache
 					@unlink(DL_EXT_CACHE_PATH . 'data_dl_black.' . $this->phpEx);
-		
+
 					$this->phpbb_log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_EXT_ADD', false, [$extension]);
 				}
 			}
-		
+
 			$action = '';
 		}
-		
-		if($action == 'delete')
+
+		if ($action == 'delete')
 		{
 			if (confirm_box(true))
 			{
 				$sql_ext_in = [];
-		
+
 				for ($i = 0; $i < count($extension_ary); ++$i)
 				{
 					$sql_ext_in[] = $extension_ary[$i];
 				}
-		
+
 				if (!empty($sql_ext_in))
 				{
 					$sql = 'DELETE FROM ' . DL_EXT_BLACKLIST . '
 						WHERE ' . $this->db->sql_in_set('extention', $sql_ext_in);
 					$this->db->sql_query($sql);
-		
+
 					// Purge the blacklist cache
 					@unlink(DL_EXT_CACHE_PATH . 'data_dl_black.' . $this->phpEx);
-		
+
 					$this->phpbb_log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_EXT_DEL', false, [implode(', ', $sql_ext_in)]);
 				}
 
@@ -162,7 +162,7 @@ class acp_ext_blacklist_controller implements acp_ext_blacklist_interface
 			else
 			{
 				$s_hidden_fields = ['action' => 'delete'];
-		
+
 				for ($i = 0; $i < count($extension_ary); ++$i)
 				{
 					$s_hidden_fields += ['extension[' . $i . ']' => $extension_ary[$i]];
@@ -173,26 +173,26 @@ class acp_ext_blacklist_controller implements acp_ext_blacklist_interface
 				confirm_box(false, $confirm_title, build_hidden_fields($s_hidden_fields));
 			}
 		}
-		
+
 		if ($action == '')
 		{
 			$sql = 'SELECT extention FROM ' . DL_EXT_BLACKLIST . '
 				ORDER BY extention';
 			$result = $this->db->sql_query($sql);
-		
+
 			while ($row = $this->db->sql_fetchrow($result))
 			{
 				$this->template->assign_block_vars('extension_row', [
 					'EXTENSION' => $row['extention'],
 				]);
 			}
-		
+
 			$ext_yes = ($this->db->sql_affectedrows($result)) ? true : false;
-		
+
 			$this->db->sql_freeresult($result);
-		
+
 			add_form_key('dl_adm_ext');
-		
+
 			$this->template->assign_vars([
 				'S_EXT_YES'				=> $ext_yes,
 				'S_DOWNLOADS_ACTION'	=> $this->u_action,

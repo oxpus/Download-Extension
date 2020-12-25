@@ -398,7 +398,7 @@ class dlext_topic implements dlext_topic_interface
 		}
 		else if ($topic_drop_mode == 'close')
 		{
-			foreach($dl_ids as $dl_id => $topic_id)
+			foreach ($dl_ids as $dl_id => $topic_id)
 			{
 				$return = $this->update_topic($topic_id, $dl_id, 'close');
 			}
@@ -743,7 +743,7 @@ class dlext_topic implements dlext_topic_interface
 	*/
 	public function _change_auth($user_id, $mode = 'replace', $bkup_data = false)
 	{
-		switch($mode)
+		switch ($mode)
 		{
 			case 'replace':
 

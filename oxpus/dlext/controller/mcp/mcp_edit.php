@@ -163,7 +163,7 @@ class mcp_edit
 		}
 
 		$own_edit = false;
-		
+
 		if ($this->config['dl_edit_own_downloads'])
 		{
 			$sql = 'SELECT add_user FROM ' . DOWNLOADS_TABLE . '
@@ -171,13 +171,13 @@ class mcp_edit
 			$result = $this->db->sql_query($sql);
 			$add_user = $this->db->sql_fetchfield('add_user');
 			$this->db->sql_freeresult($result);
-		
+
 			if ($add_user == $this->user->data['user_id'])
 			{
 				$own_edit = true;
 			}
 		}
-		
+
 		if ($own_edit == true)
 		{
 			$access_cat[0] = $cat_id;
@@ -453,7 +453,7 @@ class mcp_edit
 								$remain_traffic = $this->config['dl_overall_guest_traffic'] - $this->config['dl_remain_guest_traffic'];
 							}
 
-							if(!$file_size || ($remain_traffic && $file_size > $remain_traffic && $this->config['dl_upload_traffic_count']))
+							if (!$file_size || ($remain_traffic && $file_size > $remain_traffic && $this->config['dl_upload_traffic_count']))
 							{
 								$upload_file->remove();
 								trigger_error($this->language->lang('DL_NO_UPLOAD_TRAFFIC'), E_USER_ERROR);
@@ -568,11 +568,10 @@ class mcp_edit
 				 * Manipulate thumbnail upload
 				 *
 				 * @event oxpus.dlext.mcp_edit_thumbnail_before
-			 	 * @var string 	thumb_form_name			thumbnail upload form field
-				 * @var bool  	allow_thumbs_upload		enable/disable thumbnail upload
+			 	 * @var string	thumb_form_name			thumbnail upload form field
+				 * @var bool	allow_thumbs_upload		enable/disable thumbnail upload
 				 * @since 8.1.0-RC2
 				 */
-				
 				$vars = array(
 					'thumb_form_name',
 					'allow_thumbs_upload',
@@ -935,7 +934,7 @@ class mcp_edit
 						$notification->add_notifications('oxpus.dlext.notification.type.update', $notification_data);
 						$notification->delete_notifications('oxpus.dlext.notification.type.approve', $df_id);
 					}
-					
+
 					if (!$approve)
 					{
 						$notification_data = [
@@ -1202,7 +1201,7 @@ class mcp_edit
 		natsort($version_array);
 		$version_array = array_unique(array_reverse($version_array));
 
-		foreach($version_array as $key => $value)
+		foreach ($version_array as $key => $value)
 		{
 			$s_select_version .= '<option value="' . $value . '">' . $key . '</option>';
 			$s_select_ver_del .= '<option value="' . $value . '">' . $key . '</option>';
@@ -1323,7 +1322,7 @@ class mcp_edit
 
 			'U_GO_BACK'				=> $this->helper->route('oxpus_dlext_details', ['df_id' => $df_id])
 		];
-		
+
 		/**
 		 * Display extra data to save them with the download
 		 *

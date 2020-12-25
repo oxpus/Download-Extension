@@ -64,7 +64,7 @@ class dlext_status implements dlext_status_interface
 		$this->dl_file_icon	= $this->dlext_init->dl_file_icon();
 		$this->dl_auth		= $this->dlext_auth->dl_auth();
 		$this->dl_index		= $this->dlext_auth->dl_index();
-	}	
+	}
 
 	public function mini_status_file($parent, $file_id, $rss = false)
 	{
@@ -94,7 +94,7 @@ class dlext_status implements dlext_status_interface
 			return [];
 		}
 
-		foreach($this->dl_index as $cat_id => $value)
+		foreach ($this->dl_index as $cat_id => $value)
 		{
 			if ($cat_id == $parent && !$flag)
 			{

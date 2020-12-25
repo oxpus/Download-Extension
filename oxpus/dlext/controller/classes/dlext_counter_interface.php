@@ -18,7 +18,7 @@ interface dlext_counter_interface
 {
 	/**
 	 * Fetch the number of broken downloads
-	 * 
+	 *
 	 * @return int number of broken downloads
 	 * @access public
 	*/
@@ -26,7 +26,7 @@ interface dlext_counter_interface
 
 	/**
 	 * Fetch the number of unapproved downloads
-	 * 
+	 *
 	 * @return int number of unapproved downloads
 	 * @access public
 	*/
@@ -34,7 +34,7 @@ interface dlext_counter_interface
 
 	/**
 	 * Fetch the number of unapproved download comments
-	 * 
+	 *
 	 * @return int number of unapproved download comments
 	 * @access public
 	*/

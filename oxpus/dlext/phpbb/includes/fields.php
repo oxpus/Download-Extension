@@ -199,7 +199,7 @@ class custom_profile
 	function get_option_lang($field_id, $lang_id, $field_type, $preview)
 	{
 		global $db, $table_prefix;
-		
+
 		if ($preview)
 		{
 			$lang_options = (!is_array($this->vars['lang_options'])) ? explode("\n", $this->vars['lang_options']) : $this->vars['lang_options'];
@@ -417,7 +417,7 @@ class custom_profile
 			{
 				$value = $this->get_profile_value($ident_ary);
 
-				if ($value === NULL)
+				if ($value === null)
 				{
 					continue;
 				}
@@ -464,7 +464,7 @@ class custom_profile
 			case 'int':
 				if ($value === '')
 				{
-					return NULL;
+					return null;
 				}
 				return (int) $value;
 			break;
@@ -473,7 +473,7 @@ class custom_profile
 			case 'text':
 				if (!$value)
 				{
-					return NULL;
+					return null;
 				}
 
 				$value = make_clickable($value);
@@ -491,7 +491,7 @@ class custom_profile
 
 				if (!$day && !$month && !$year)
 				{
-					return NULL;
+					return null;
 				}
 				else if ($day && $month && $year)
 				{
@@ -513,7 +513,7 @@ class custom_profile
 
 				if ($value == $ident_ary['data']['field_novalue'])
 				{
-					return NULL;
+					return null;
 				}
 
 				$value = (int) $value;
@@ -521,7 +521,7 @@ class custom_profile
 				// User not having a value assigned
 				if (!isset($this->options_lang[$field_id][$lang_id][$value]))
 				{
-					return NULL;
+					return null;
 				}
 
 				return $this->options_lang[$field_id][$lang_id][$value];
@@ -537,11 +537,11 @@ class custom_profile
 
 				if ($ident_ary['data']['field_length'] == 1)
 				{
-					return (isset($this->options_lang[$field_id][$lang_id][(int) $value])) ? $this->options_lang[$field_id][$lang_id][(int) $value] : NULL;
+					return (isset($this->options_lang[$field_id][$lang_id][(int) $value])) ? $this->options_lang[$field_id][$lang_id][(int) $value] : null;
 				}
 				else if (!$value || $value == 2)
 				{
-					return NULL;
+					return null;
 				}
 				else
 				{
@@ -583,7 +583,7 @@ class custom_profile
 			{
 				if (!$preview && array_key_exists($user_ident, $this->profile_fields) && is_null($this->profile_fields[$user_ident]))
 				{
-					$value = NULL;
+					$value = null;
 				}
 				else if (!isset($this->profile_fields[$user_ident]) || $preview)
 				{
@@ -902,7 +902,7 @@ class custom_profile
 				$req_fl = $request->variable($var_name, '', true);
 				if ($req_fl === '')
 				{
-					$var = NULL;
+					$var = null;
 				}
 				else
 				{

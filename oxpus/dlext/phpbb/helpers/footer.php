@@ -228,7 +228,7 @@ class footer implements footer_interface
 				$catlist = [];
 				$this->dlext_extra->dl_jumpbox(0, 0, $cat, 'auth_view', $catlist);
 
-				foreach($catlist as $cat_id => $data)
+				foreach ($catlist as $cat_id => $data)
 				{
 					$this->template->assign_block_vars('dl_jumpbox', [
 						'DL_CAT_NAME'	=> $data['name'],
@@ -262,7 +262,8 @@ class footer implements footer_interface
 			}
 
 			$ext_stats_enable = false;
-			switch($this->config['dl_mini_stats_ext'])
+
+			switch ($this->config['dl_mini_stats_ext'])
 			{
 				case 1:
 					$ext_stats_enable = true;
@@ -296,7 +297,7 @@ class footer implements footer_interface
 
 				$dl_file_p = $this->dlext_init->dl_file_p();
 				$total_cur_clicks = 0;
-				
+
 				if (!empty($dl_file_p))
 				{
 					foreach ($dl_file_p as $dl_id => $row)
@@ -480,7 +481,7 @@ class footer implements footer_interface
 			if ($this->config['dl_todo_link_onoff'] && $this->config['dl_todo_onoff'])
 			{
 				$todo_access_ids = $this->dlext_main->full_index(0, 0, 0, 2);
-		
+
 				if (!empty($todo_access_ids) && $this->user->data['is_registered'])
 				{
 					$this->template->assign_var('S_TODO_LINK', true);

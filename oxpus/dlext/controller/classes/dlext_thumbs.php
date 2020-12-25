@@ -10,8 +10,6 @@
 
 namespace oxpus\dlext\controller\classes;
 
-use Symfony\Component\DependencyInjection\Container;
-
 class dlext_thumbs implements dlext_thumbs_interface
 {
 	/* @var \phpbb\request\request_interface */
@@ -24,10 +22,10 @@ class dlext_thumbs implements dlext_thumbs_interface
 	*/
 	public function __construct(
 		\phpbb\request\request_interface $request
-		)
+	)
 	{
 		$this->request 		= $request;
-	}	
+	}
 
 	public function handle()
 	{

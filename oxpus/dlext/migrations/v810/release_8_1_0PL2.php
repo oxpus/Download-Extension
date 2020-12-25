@@ -10,7 +10,7 @@
 
 namespace oxpus\dlext\migrations\v810;
 
-class release_8_1_0PL2 extends \phpbb\db\migration\migration
+class release_8_1_0pl2 extends \phpbb\db\migration\migration
 {
 	var $dl_ext_version = '8.1.0PL2';
 

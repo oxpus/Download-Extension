@@ -99,15 +99,15 @@ class navigation implements navigation_interface
 			if ($this->cat_id)
 			{
 				$cat_auth = $this->dlext_auth->user_auth($this->cat_id, 'auth_view');
-	
+
 				if (!$cat_auth)
 				{
 					redirect($this->helper->route('oxpus_dlext_index'));
 				}
-	
+
 				$tmp_nav = [];
 				$dl_nav = $this->dlext_nav->nav($this->cat_id, 'url', $tmp_nav);
-	
+
 				if (isset($dl_nav['link']))
 				{
 					for ($i = count($dl_nav['link']) - 1; $i >= 0; --$i)

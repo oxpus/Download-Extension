@@ -238,7 +238,7 @@ if (!$mcp_cat && isset($this->cat_id))
 }
 
 $deny_modcp = true;
-		
+
 $access_cat = [];
 $access_cat = $this->dlext_main->full_index(0, 0, 0, 2);
 
@@ -269,7 +269,7 @@ if (!$deny_modcp)
 		$mcp_mode = $modcp_mode;
 	}
 
-	switch($mcp_mode)
+	switch ($mcp_mode)
 	{
 		case 'manage':
 			$l_mcp_module = $this->language->lang('DL_MANAGE');

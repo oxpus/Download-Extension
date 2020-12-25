@@ -10,8 +10,6 @@
 
 namespace oxpus\dlext\controller\ucp;
 
-use Symfony\Component\DependencyInjection\Container;
-
 class ucp_config_controller implements ucp_config_interface
 {
 	protected $u_action;

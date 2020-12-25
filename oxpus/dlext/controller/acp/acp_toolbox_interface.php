@@ -10,8 +10,6 @@
 
 namespace oxpus\dlext\controller\acp;
 
-use Symfony\Component\DependencyInjection\ContainerInterface;
-
 /**
  * Interface for acp_toolbox_controller
  *

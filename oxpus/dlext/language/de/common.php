@@ -26,7 +26,7 @@ if (empty($lang) || !is_array($lang))
 }
 
 $lang = array_merge($lang, [
-   	'DL_LOG_CAT_PERM_DROP'	=> '<strong>Berechtigungen für Kategorien zurückgesetzt</strong><br />» %1$s',
+	'DL_LOG_CAT_PERM_DROP'	=> '<strong>Berechtigungen für Kategorien zurückgesetzt</strong><br />» %1$s',
 
 	'ACP_DOWNLOADS'		=> 'Downloads',
 	'ADD_NEW_DOWNLOAD'	=> 'Neuen Download hinzufügen',

@@ -79,7 +79,7 @@ class capprove extends \phpbb\notification\type\base
 	{
 		$access_cat = [];
 		$access_cat = $this->dlext_main->full_index(0, 0, 0, 2);
-		
+
 		return (!empty($access_cat)) ? true : false;
 	}
 

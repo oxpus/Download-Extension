@@ -10,8 +10,6 @@
 
 namespace oxpus\dlext\controller;
 
-use Symfony\Component\DependencyInjection\Container;
-
 class help
 {
 	/* @var \phpbb\language\language */
@@ -48,7 +46,7 @@ class help
 		$help_key	= $this->request->variable('help_key', '');
 		$value		= $this->request->variable('value', '', true);
 		$value = ($value == 'undefined') ? '' : $value;
-		
+
 		//
 		// Pull all user config data
 		//
@@ -60,12 +58,12 @@ class help
 		{
 			$help_string = $this->language->lang('DL_NO_HELP_AVIABLE');
 		}
-		
+
 		if ($value)
 		{
 			$help_key = $value;
 		}
-		
+
 		if ($value)
 		{
 			$help_option = $help_key;
@@ -78,24 +76,24 @@ class help
 		{
 			$help_option = '';
 		}
-		
+
 		$json_out = json_encode(['title' => $this->language->lang('HELP_TITLE'), 'option' => $help_option, 'string' => $help_string]);
-		
+
 		$http_headers = [
 			'Content-type' => 'text/html; charset=UTF-8',
 			'Cache-Control' => 'private, no-cache="set-cookie"',
 			'Expires' => gmdate('D, d M Y H:i:s', time()) . ' GMT',
 		];
-		
+
 		foreach ($http_headers as $hname => $hval)
 		{
 			header((string) $hname . ': ' . (string) $hval);
 		}
-		
+
 		$this->template->set_filenames(['body' => 'dl_json.html']);
 		$this->template->assign_var('JSON_OUTPUT', $json_out);
 		$this->template->display('body');
-		
+
 		garbage_collection();
 		exit_handler();
 	}

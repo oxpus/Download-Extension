@@ -18,7 +18,7 @@ interface dlext_privacy_interface
 {
 	/**
 	 * Anonymise ip adresses on statistical data if events fired
-	 * 
+	 *
 	 * @return void
 	 * @access public
 	*/

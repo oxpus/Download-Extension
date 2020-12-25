@@ -26,12 +26,12 @@ if (empty($lang) || !is_array($lang))
 }
 
 $lang = array_merge($lang, [
-  	'DL_LOG_CAT_PERM_DROP'	=> '<strong>Restablecer los permisos para las categorías</strong><br />» %1$s',
+	'DL_LOG_CAT_PERM_DROP'	=> '<strong>Restablecer los permisos para las categorías</strong><br />» %1$s',
 
 	'ACP_DOWNLOADS' 	=> 'Descargas',
 	'ADD_NEW_DOWNLOAD'	=> 'Añadir una nueva descarga',
 
-	'CLICK_VIEW_NEW_VERSION'				=> 'Usted ha añadido una nueva versión de esta descarga.<br>Esta versión está bloqueada por ahora para poder añadir una descripción y adjuntos adicionales<br />antes de que se convierta en estado público.<br />%sHaga clic aquí para abrir, editar y desbloquear esta versión.%s', 
+	'CLICK_VIEW_NEW_VERSION'				=> 'Usted ha añadido una nueva versión de esta descarga.<br>Esta versión está bloqueada por ahora para poder añadir una descripción y adjuntos adicionales<br />antes de que se convierta en estado público.<br />%sHaga clic aquí para abrir, editar y desbloquear esta versión.%s',
 	'CLICK_RETURN_BUG_TRACKER'				=> '%sHaga clic aquí para volver a la Bug Tracker%s',
 	'CLICK_RETURN_COMMENTS'					=> '%sHaga clic aquí para volver a los comentarios%s',
 	'CLICK_RETURN_DOWNLOAD_DETAILS'			=> '%sHaga clic aquí para volver a la descarga%s',
@@ -462,7 +462,7 @@ $lang = array_merge($lang, [
 	'DL_MOD_FILE_HASH_OPEN'			=> 'Mostrar tabla de hash de archivos',
 	'DL_MOD_FILE_HASH_TABLE'		=> 'Tabla del archivo hash',
 	'DL_MOD_LIST'					=> 'Mostrar información adicional',
-	'DL_MOD_LIST_CLOSE'				=> 'Ocultar información adicional',	
+	'DL_MOD_LIST_CLOSE'				=> 'Ocultar información adicional',
 	'DL_MOD_LIST_SHORT'				=> 'Información adicional',
 	'DL_MOD_REQUIRE'				=> 'Requiere',
 	'DL_MOD_TEST'					=> 'Extensión testeada en/con',
@@ -745,7 +745,7 @@ $lang = array_merge($lang, [
 	'DL_USE_TODOLIST'			=> 'Activar ToDo list',
 	'DL_USER_AUTO_TRAFFIC'		=> 'Tráfico para usuarios',
 	'DL_USER_AUTO_TRAFFIC_USER'	=> 'Tráfico para este usuario actualizado con éxito',
-	'DL_USER_BANNED'			=> 'Usted fue baneado para la sección de descargas, de modo que no tiene permisos para descargar archivos.<br>Por favor, póngase en contacto con un administrador si no va a aceptar la prohibición.', 
+	'DL_USER_BANNED'			=> 'Usted fue baneado para la sección de descargas, de modo que no tiene permisos para descargar archivos.<br>Por favor, póngase en contacto con un administrador si no va a aceptar la prohibición.',
 	'DL_USER_CONFIG_SAVED'		=> 'Configuración de usuario para descargas actualizado correctamente<br><br>%sHaga clic aquí para volver a la configuración de descargas%s',
 	'DL_USER_ID'				=> 'ID de usuario',
 	'DL_USER_TRAFFIC_ONCE'		=> 'Disminuir el tráfico de usuario sólo una vez por cada descarga',

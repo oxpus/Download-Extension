@@ -129,7 +129,7 @@ class ajax
 			$rating_title = $this->language->lang('DL_RATING_HOVER', $rate_points_title, $this->config['dl_rate_points']);
 
 			$rate_img = '<span class="dl-rating" title="' . $rating_title . '">';
-	
+
 			$rate_yes = '<i class="icon fa-star fa-fw dl-green"></i>';
 			$rate_no = '<i class="icon fa-star-o fa-fw dl-yellow"></i>';
 			$rate_undo = '<i class="icon fa-times-circle fa-fw dl-red"></i>';
@@ -137,7 +137,7 @@ class ajax
 			for ($i = 0; $i < $this->config['dl_rate_points']; ++$i)
 			{
 				$j = $i + 1;
-		
+
 				if ($user_has_rated)
 				{
 					$ajax = '';
@@ -148,7 +148,7 @@ class ajax
 				}
 				$rate_img .= ($j <= ceil($rate_points_title) ) ? '<a href="#" ' . $ajax . ' class="dl-rating-img">' . $rate_yes . '</a>' : '<a href="#" ' . $ajax . ' class="dl-rating-img">' . $rate_no . '</a>';
 			}
-		
+
 			if ($user_has_rated)
 			{
 				$ajax = 'onclick="AJAXDLUnvote(' . $dl_id . '); return false;"';
@@ -159,20 +159,20 @@ class ajax
 			{
 				$rate_img .= '&nbsp;' . $this->language->lang('DL_RATING_COUNT', $total_ratings);
 			}
-	
+
 			$json_out = json_encode(['rate_img' => $rate_img, 'dl_id' => $dl_id]);
-		
+
 			$http_headers = [
 				'Content-type' => 'text/html; charset=UTF-8',
 				'Cache-Control' => 'private, no-cache="set-cookie"',
 				'Expires' => gmdate('D, d M Y H:i:s', time()) . ' GMT',
 			];
-		
+
 			foreach ($http_headers as $hname => $hval)
 			{
 				header((string) $hname . ': ' . (string) $hval);
 			}
-		
+
 			$this->template->set_filenames(['body' => 'dl_json.html']);
 			$this->template->assign_var('JSON_OUTPUT', $json_out);
 			$this->template->display('body');

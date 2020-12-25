@@ -44,7 +44,7 @@ class release_7_0_10 extends \phpbb\db\migration\migration
 			'file_preset',
 		];
 
-		foreach($drop_files as $file)
+		foreach ($drop_files as $file)
 		{
 			if (@file_exists($this->phpbb_root_path . 'DL_EXT_CACHE_PATHdata_dl_' . $file . '.' . $this->php_ext))
 			{

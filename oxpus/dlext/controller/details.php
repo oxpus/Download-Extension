@@ -201,7 +201,7 @@ class details
 		$file_load			= $check_status['auth_dl'];
 
 		$real_file			= $dl_files['real_file'];
-				
+
 		$description		= $dl_files['description'];
 		$desc_uid			= $dl_files['desc_uid'];
 		$desc_bitfield		= $dl_files['desc_bitfield'];
@@ -668,7 +668,7 @@ class details
 								'description'		=> $description,
 								'cat_name'			=> $index[$cat_id]['cat_name_nav'],
 							];
-		
+
 							$notification->add_notifications('oxpus.dlext.notification.type.comments', $notification_data);
 						}
 					}
@@ -701,7 +701,7 @@ class details
 					$result = $this->db->sql_query($sql);
 					$total_comments = $this->db->sql_affectedrows($result);
 					$this->db->sql_freeresult($result);
-					
+
 					$notification->delete_notifications([
 						'oxpus.dlext.notification.type.capprove',
 						'oxpus.dlext.notification.type.comments',
@@ -859,7 +859,7 @@ class details
 					$comment_time		= $row['comment_time'];
 					$comment_edit_time	= $row['comment_edit_time'];
 
-					if($comment_time <> $comment_edit_time)
+					if ($comment_time <> $comment_edit_time)
 					{
 						$edited_by = $this->language->lang('DL_COMMENT_EDITED', $this->user->format_date($comment_edit_time));
 					}
@@ -1271,7 +1271,7 @@ class details
 
 					natsort($version_array);
 					$version_array = array_unique(array_reverse($version_array));
-					foreach($version_array as $key => $value)
+					foreach ($version_array as $key => $value)
 					{
 						$s_select_version .= '<option value="' . $value . '">' . $key . '</option>';
 					}
@@ -1347,14 +1347,14 @@ class details
 					}
 
 					$code = $this->request->variable('confirm_id', '');
-	
+
 					if (!$code)
 					{
 						$code = $this->request->variable('confirm_code', '');
 					}
 
 					if ($code)
-					{	
+					{
 						$sql = 'INSERT INTO ' . DL_HOTLINK_TABLE . ' ' . $this->db->sql_build_array('INSERT', [
 							'user_id'		=> $this->user->data['user_id'],
 							'session_id'	=> $this->user->data['session_id'],
@@ -1460,7 +1460,7 @@ class details
 					'img_name'	=> $dl_files['thumbnail'],
 					'img_title'	=> $description,
 				]];
-	
+
 				if ($more_thumbs_exists)
 				{
 					$first_thumbs += $thumbs_ary;

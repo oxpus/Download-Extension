@@ -114,14 +114,14 @@ class acp_config_controller implements acp_config_interface
 		{
 			trigger_error('FORM_INVALID', E_USER_WARNING);
 		}
-		
+
 		if (!$submit)
 		{
 			add_form_key('dl_adm_config');
 		}
-		
+
 		$this->language->add_lang('posting');
-		
+
 		$s_hidden_fields = [];
 
 		$dl_file_edit_hint			= $this->config_text->get('dl_file_edit_hint');
@@ -138,23 +138,23 @@ class acp_config_controller implements acp_config_interface
 					'title'	=> 'DL_ACP_CONF_GENERAL',
 					'vars'	=> [
 						'legend1'				=> '',
-		
+
 						'dl_active'			=> ['lang' => 'DL_ACTIVE',			'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => false,		'help_key' => 'DL_ACTIVE'],
 						'dl_traffic_off'	=> ['lang' => 'DL_TRAFFIC_OFF',		'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => false,		'help_key' => 'DL_TRAFFIC_OFF'],
 						'dl_stop_uploads'	=> ['lang' => 'DL_STOP_UPLOADS',	'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => false,		'help_key' => 'DL_STOP_UPLOADS'],
 						'dl_use_hacklist'	=> ['lang' => 'DL_USE_HACKLIST',	'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => false,		'help_key' => 'DL_USE_HACKLIST'],
 						'dl_todo_onoff'		=> ['lang' => 'DL_USE_TODOLIST',	'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => false,		'help_key' => 'DL_USE_TODOLIST'],
-		
+
 						'legend2'				=> '',
-		
+
 						'dl_off_now_time'	=> ['lang' => 'DL_OFF_NOW_TIME',		'validate' => 'bool',	'type' => 'custom',			'explain' => false,		'help_key' => 'DL_OFF_NOW_TIME', 		'function' => [$this, 'mod_disable'],	'params' => ['{CONFIG_VALUE}']],
 						'dl_off_from'		=> ['lang' => 'DL_OFF_PERIOD',			'validate' => 'string',	'type' => 'text:5:5',		'explain' => false,		'help_key' => 'DL_OFF_PERIOD'],
 						'dl_off_till'		=> ['lang' => 'DL_OFF_PERIOD_TILL',		'validate' => 'string',	'type' => 'text:5:5',		'explain' => false,		'help_key' => 'DL_OFF_PERIOD_TILL'],
 						'dl_on_admins'		=> ['lang' => 'DL_ON_ADMINS',			'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => false,		'help_key' => 'DL_ON_ADMINS'],
 						'dl_off_hide'		=> ['lang' => 'DL_OFF_HIDE',			'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => false,		'help_key' => 'DL_OFF_HIDE'],
-		
+
 						'legend3'				=> '',
-		
+
 						'dl_set_add'		=> ['lang' => 'DL_SET_ADD',				'validate' => 'int',	'type' => 'select',		'explain' => false,		'help_key' => 'DL_SET_ADD', 				'function' => [$this, 'select_topic_user'],	'params' => ['{CONFIG_VALUE}']],
 						'dl_set_user'		=> ['lang' => 'DL_TOPIC_USER_OTHER',	'validate' => 'string',	'type' => 'custom',		'explain' => false,		'help_key' => 'DL_SET_ADD',					'function' => [$this, 'select_dl_user'], 	'params' => ['{CONFIG_VALUE}', 'dl_set_user']],
 					]
@@ -165,7 +165,7 @@ class acp_config_controller implements acp_config_interface
 					'title'	=> 'DL_ACP_CONF_VIEW',
 					'vars'	=> [
 						'legend1'				=> '',
-		
+
 						'dl_icon_free_for_reg'		=> ['lang' => 'DL_ICON_FREE_FOR_REG',		'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => false,		'help_key' => 'DL_ICON_FREE_FOR_REG'],
 						'dl_new_time'				=> ['lang' => 'DL_NEW_TIME',				'validate' => 'string',	'type' => 'text:3:4',		'explain' => false,		'help_key' => 'DL_NEW_TIME'],
 						'dl_edit_time'				=> ['lang' => 'DL_EDIT_TIME',				'validate' => 'string',	'type' => 'text:3:4',		'explain' => false,		'help_key' => 'DL_EDIT_TIME'],
@@ -176,9 +176,9 @@ class acp_config_controller implements acp_config_interface
 						'dl_todo_link_onoff'		=> ['lang' => 'DL_TODO_LINK',				'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => false,		'help_key' => 'DL_TODO_LINK'],
 						'dl_enable_jumpbox'			=> ['lang' => 'DL_ENABLE_JUMPBOX',			'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => false,		'help_key' => 'DL_ENABLE_JUMPBOX'],
 						'dl_cat_edit'				=> ['lang' => 'DL_CAT_EDIT_LINK',			'validate' => 'int',	'type' => 'select',			'explain' => false,		'help_key' => 'DL_CAT_EDIT_LINK',		'function' => [$this, 'select_dl_cat_edit'],	'params' => ['{CONFIG_VALUE}']],
-		
+
 						'legend2'				=> '',
-		
+
 						'dl_links_per_page'			=> ['lang' => 'DL_LINKS_PER_PAGE',			'validate' => 'string',	'type' => 'text:3:4',		'explain' => false,		'help_key' => 'DL_LINKS_PER_PAGE'],
 						'dl_shorten_extern_links'	=> ['lang' => 'DL_SHORTEN_EXTERN_LINKS',	'validate' => 'string',	'type' => 'text:3:4',		'explain' => false,		'help_key' => 'DL_SHORTEN_EXTERN_LINKS'],
 						'dl_index_desc_hide'		=> ['lang' => 'DL_INDEX_DESC_HIDE',			'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => false,		'help_key' => 'DL_INDEX_DESC_HIDE'],
@@ -186,25 +186,25 @@ class acp_config_controller implements acp_config_interface
 						'dl_limit_desc_on_index'	=> ['lang' => 'DL_LIMIT_DESC_ON_INDEX',		'validate' => 'string',	'type' => 'text:5:10',		'explain' => false,		'help_key' => 'DL_LIMIT_DESC_ON_INDEX'],
 						'dl_desc_search'			=> ['lang' => 'DL_ENABLE_SEARCH_DESC',		'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => false,		'help_key' => 'DL_ENABLE_SEARCH_DESC'],
 						'dl_limit_desc_on_search'	=> ['lang' => 'DL_LIMIT_DESC_ON_SEARCH',	'validate' => 'string',	'type' => 'text:5:10',		'explain' => false,		'help_key' => 'DL_LIMIT_DESC_ON_SEARCH'],
-		
+
 						'legend3'				=> '',
-		
+
 						'dl_show_real_filetime'		=> ['lang' => 'DL_SHOW_REAL_FILETIME',		'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => false,		'help_key' => 'DL_SHOW_REAL_FILETIME'],
 						'dl_file_hash_algo'			=> ['lang' => 'DL_FILE_HASH_ALGO',			'validate' => 'string',	'type' => 'select',			'explain' => false,		'help_key' => 'DL_FILE_HASH_ALGO',		'function' => [$this, 'select_dl_hash_algo'],	'params' => ['{CONFIG_VALUE}']],
 						'dl_ext_new_window'			=> ['lang' => 'DL_EXT_NEW_WINDOW',			'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => false,		'help_key' => 'DL_EXT_NEW_WINDOW'],
 						'dl_report_broken_message'	=> ['lang' => 'DL_REPORT_BROKEN_MESSAGE',	'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => false,		'help_key' => 'DL_REPORT_BROKEN_MESSAGE'],
 
 						'legend4'				=> '',
-		
+
 						'dl_nav_link_main'			=> ['lang' => 'DL_NAV_LINK_MAIN',			'validate' => 'string',	'type' => 'select',			'explain' => false,		'help_key' => false,		'function' => [$this, 'select_nav_link_pos'],	'params' => ['{CONFIG_VALUE}']],
 						'dl_nav_link_hacks'			=> ['lang' => 'DL_NAV_LINK_HACKS',			'validate' => 'string',	'type' => 'select',			'explain' => false,		'help_key' => false,		'function' => [$this, 'select_nav_link_pos'],	'params' => ['{CONFIG_VALUE}']],
 						'dl_nav_link_tracker'		=> ['lang' => 'DL_NAV_LINK_TRACKER',		'validate' => 'string',	'type' => 'select',			'explain' => false,		'help_key' => false,		'function' => [$this, 'select_nav_link_pos'],	'params' => ['{CONFIG_VALUE}']],
 					]
 				];
-		
+
 				$fulltext_dl_search_enabled = false;
 				global $dbms;
-		
+
 				if (strpos(strtolower($dbms), 'mysql') !== false)
 				{
 					$sql = 'SHOW INDEX FROM ' . DOWNLOADS_TABLE;
@@ -218,12 +218,12 @@ class acp_config_controller implements acp_config_interface
 					}
 					$this->db->sql_freeresult($result);
 				}
-		
+
 				if ($fulltext_dl_search_enabled)
 				{
 					$display_vars['vars'] += [
 						'legend5'				=> '',
-		
+
 						'dl_similar_dl'		=> ['lang' => 'DL_SIMILAR_DL_OPTION',		'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => false,		'help_key' => 'DL_SIMILAR_DL'],
 						'dl_similar_limit'	=> ['lang' => 'DL_SIMILAR_DL_LIMIT',		'validate' => 'int',	'type' => 'text:3:5',		'explain' => false,		'help_key' => 'DL_SIMILAR_DL_LIMIT'],
 					];
@@ -232,37 +232,37 @@ class acp_config_controller implements acp_config_interface
 				{
 					$s_hidden_fields = ['dl_similar_limit' => 0, 'dl_similar_dl' => 0];
 				}
-		
+
 			break;
 			case 'protect':
 				$display_vars = [
 					'title'	=> 'DL_ACP_CONF_PROTECT',
 					'vars'	=> [
 						'legend1'				=> '',
-		
+
 						'dl_global_guests'		=> ['lang' => 'DL_GLOBAL_GUESTS',		'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => false,		'help_key' => 'DL_GLOBAL_GUESTS'],
 						'dl_global_bots'		=> ['lang' => 'DL_GLOBAL_BOTS',			'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => false,		'help_key' => 'DL_GLOBAL_BOTS'],
-		
+
 						'legend2'				=> '',
-		
+
 						'dl_use_ext_blacklist'	=> ['lang' => 'DL_USE_EXT_BLACKLIST',	'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => false,		'help_key' => 'DL_USE_EXT_BLACKLIST'],
-		
+
 						'legend3'				=> 'DL_ANTISPAM',
-		
+
 						'dl_antispam_posts'		=> ['lang' => 'DL_ANTISPAM_POSTS',		'validate' => 'int',	'type' => 'text:5:10',		'explain' => false,		'help_key' => 'DL_ANTISPAM'],
 						'dl_antispam_hours'		=> ['lang' => 'DL_ANTISPAM_HOURS',		'validate' => 'int',	'type' => 'text:5:10',		'explain' => false,		'help_key' => 'DL_ANTISPAM'],
-		
+
 						'legend4'				=> '',
-		
+
 						'dl_download_vc'		=> ['lang' => 'DL_VISUAL_CONFIRMATION',	'validate' => 'int',	'type' => 'select',		'explain' => true,		'help_key' => 'DL_VISUAL_CONFIRMATION',		'function' => [$this, 'select_dl_vc'],		'params' => ['{CONFIG_VALUE}']],
 						'dl_report_broken_vc'	=> ['lang' => 'DL_REPORT_BROKEN_VC',	'validate' => 'int',	'type' => 'select',		'explain' => false,		'help_key' => 'DL_REPORT_BROKEN_VC',		'function' => [$this, 'select_report_vc'],	'params' => ['{CONFIG_VALUE}']],
-		
+
 						'legend5'				=> '',
-		
+
 						'dl_stats_perm'			=> ['lang' => 'DL_STAT_PERM',	'validate' => 'int',	'type' => 'select',		'explain' => false,		'help_key' => 'DL_STAT_PERM',	'function' => [$this, 'select_stat_perm'],	'params' => ['{CONFIG_VALUE}']],
-		
+
 						'legend6'				=> '',
-		
+
 						'dl_prevent_hotlink'	=> ['lang' => 'DL_PREVENT_HOTLINK',	'validate' => 'int',	'type' => 'switch:yes_no',	'explain' => false,		'help_key' => 'DL_PREVENT_HOTLINK'],
 						'dl_hotlink_action'		=> ['lang' => 'DL_HOTLINK_ACTION',	'validate' => 'int',	'type' => 'select',			'explain' => false,		'help_key' => 'DL_HOTLINK_ACTION',		'function' => [$this, 'select_hotlink_action'],	'params' => ['{CONFIG_VALUE}']],
 					]
@@ -277,37 +277,37 @@ class acp_config_controller implements acp_config_interface
 						'dl_physical_quota'		=> ['lang' => 'DL_PHYSICAL_QUOTA',		'validate' => 'int',	'type' => 'custom',		'explain' => false,		'help_key' => 'DL_PHYSICAL_QUOTA',	'function' => [$this, 'select_size'],	'params' => ['{CONFIG_VALUE}', 'dl_physical_quota', '10', '20', 'dl_x_quota', 'gb', true]],
 
 						'legend2'				=> '',
-		
+
 						'dl_report_broken'			=> ['lang' => 'DL_REPORT_BROKEN',		'validate' => 'int',	'type' => 'select',			'explain' => false,		'help_key' => 'DL_REPORT_BROKEN',			'function' => [$this, 'select_report_action'],	'params' => ['{CONFIG_VALUE}']],
 						'dl_report_broken_lock'		=> ['lang' => 'DL_REPORT_BROKEN_LOCK',	'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => false,		'help_key' => 'DL_REPORT_BROKEN_LOCK'],
 						'dl_sort_preform'			=> ['lang' => 'DL_SORT_PREFORM',		'validate' => 'int',	'type' => 'select',			'explain' => false,		'help_key' => 'DL_SORT_PREFORM',			'function' => [$this, 'select_sort'],			'params' => ['{CONFIG_VALUE}']],
 						'dl_posts'					=> ['lang' => 'DL_POSTS',				'validate' => 'int',	'type' => 'text:3:4',		'explain' => false,		'help_key' => 'DL_POSTS'],
-		
+
 						'legend3'				=> '',
-		
+
 						'dl_edit_own_downloads'		=> ['lang' => 'DL_EDIT_OWN_DOWNLOADS',	'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => false,		'help_key' => 'DL_EDIT_OWN_DOWNLOADS'],
-		
+
 						'legend4'				=> '',
-		
+
 						'dl_guest_stats_show'		=> ['lang' => 'DL_GUEST_STATS_SHOW',	'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => false,		'help_key' => 'DL_GUEST_STATS_SHOW'],
-		
+
 						'legend5'				=> '',
-		
+
 						'dl_latest_type'		=> ['lang' => 'DL_LATEST_DOWNLOADS',		'validate' => 'int',	'type' => 'select',		'explain' => false,		'help_key' => 'DL_LATEST_DOWNLOADS',		'function' => [$this, 'select_latest_type'],		'params' => ['{CONFIG_VALUE}']],
 
 						'legend6'				=> '',
-		
+
 						'dl_thumb_fsize'				=> ['lang' => 'DL_THUMB_MAX_SIZE',	'validate' => 'int',	'type' => 'custom',		'explain' => false,		'help_key' => 'DL_THUMB_MAX_SIZE',	 	'function' => [$this, 'select_size'],	'params' => ['{CONFIG_VALUE}', 'dl_thumb_fsize', '10', '20', 'dl_f_quote', 'mb', false]],
 						'dl_thumb_xsize'				=> ['lang' => 'DL_THUMB_MAX_DIM_X',	'validate' => 'int',	'type' => 'text:5:5',	'explain' => false,		'help_key' => 'DL_THUMB_MAX_DIM_X'],
 						'dl_thumb_ysize'				=> ['lang' => 'DL_THUMB_MAX_DIM_Y',	'validate' => 'int',	'type' => 'text:5:5',	'explain' => false,		'help_key' => 'DL_THUMB_MAX_DIM_Y'],
-		
+
 						'legend7'				=> '',
-		
+
 						'dl_enable_rate'			=> ['lang' => 'DL_ENABLE_RATE',	'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => false,		'help_key' => 'DL_ENABLE_RATE'],
 						'dl_rate_points'			=> ['lang' => 'DL_RATE_POINTS',	'validate' => 'int',	'type' => 'text:3:3',		'explain' => false,		'help_key' => 'DL_RATE_POINTS'],
 					]
 				];
-		
+
 				$sql = 'SELECT ext_name FROM ' . EXT_TABLE;
 				$result = $this->db->sql_query($sql);
 				$portal_exists = false;
@@ -320,16 +320,16 @@ class acp_config_controller implements acp_config_interface
 					}
 				}
 				$this->db->sql_freeresult($result);
-		
+
 				if ($portal_exists)
 				{
 					$display_vars['vars'] += [
 						'legend8'				=> '',
-		
+
 						'dl_recent_downloads'	=> ['lang' => 'NUMBER_RECENT_DL_ON_PORTAL',	'validate' => 'int',	'type' => 'text:3:4',	'explain' => false,		'help_key' => 'NUMBER_RECENT_DL_ON_PORTAL'],
 					];
 				}
-		
+
 			break;
 			case 'traffic':
 				$sql = 'SELECT group_id, group_name, group_type FROM ' . GROUPS_TABLE . '
@@ -337,18 +337,18 @@ class acp_config_controller implements acp_config_interface
 						ORDER BY group_type DESC, group_name';
 				$result = $this->db->sql_query($sql);
 				$total_groups = $this->db->sql_affectedrows($result);
-		
+
 				$traffics_overall_group_ids = explode(',', $this->config['dl_traffics_overall_groups']);
 				$traffics_users_group_ids = explode(',', $this->config['dl_traffics_users_groups']);
-		
+
 				$s_groups_overall_select = $s_groups_users_select = '';
-		
+
 				while ($row = $this->db->sql_fetchrow($result))
 				{
 					$group_name = ($row['group_type'] == GROUP_SPECIAL) ? $this->language->lang('G_' . $row['group_name']) : $row['group_name'];
 					$group_sep = ($row['group_type'] == GROUP_SPECIAL) ? ' class="sep"' : '';
 					$group_id = $row['group_id'];
-		
+
 					if (in_array($group_id, $traffics_overall_group_ids) && $this->config['dl_traffics_overall'] > 1)
 					{
 						$s_groups_overall_select .= '<option value="' . $group_id . '" selected="selected"' . $group_sep . '>' . $group_name . '</option>';
@@ -357,7 +357,7 @@ class acp_config_controller implements acp_config_interface
 					{
 						$s_groups_overall_select .= '<option value="' . $group_id . '"' . $group_sep . '>' . $group_name . '</option>';
 					}
-		
+
 					if (in_array($group_id, $traffics_users_group_ids) && $this->config['dl_traffics_users'] > 1)
 					{
 						$s_groups_users_select .= '<option value="' . $group_id . '" selected="selected"' . $group_sep . '>' . $group_name . '</option>';
@@ -367,42 +367,42 @@ class acp_config_controller implements acp_config_interface
 						$s_groups_users_select .= '<option value="' . $group_id . '"' . $group_sep . '>' . $group_name . '</option>';
 					}
 				}
-		
+
 				$this->db->sql_freeresult($result);
-		
+
 				$select_size = ($total_groups < 10) ? $total_groups : 10;
-		
+
 				$display_vars = [
 					'title'	=> 'DL_ACP_CONF_TRAFFIC',
 					'vars'	=> [
 						'legend1'				=> '',
-		
+
 						'dl_traffics_founder'			=> ['lang' => 'DL_TRAFFICS_FOUNDER',			'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => false,		'help_key' => 'DL_TRAFFICS_FOUNDER'],
 						'dl_traffics_overall'			=> ['lang' => 'DL_TRAFFICS_OVERALL',			'validate' => 'int',	'type' => 'select',			'explain' => false,		'help_key' => 'DL_TRAFFICS_OVERALL',			'function' => [$this, 'select_traffic'],		'params' => ['{CONFIG_VALUE}', $total_groups]],
 						'dl_traffics_overall_groups'	=> ['lang' => 'DL_TRAFFICS_OVERALL_GROUPS',								'type' => 'custom',			'explain' => false,		'help_key' => 'DL_TRAFFICS_OVERALL_GROUPS',		'function' => [$this, 'select_traffic_multi'],	'params' => ['dl_traffics_overall_groups', $s_groups_overall_select, $select_size]],
 						'dl_traffics_users'				=> ['lang' => 'DL_TRAFFICS_USERS',				'validate' => 'int',	'type' => 'select',			'explain' => false,		'help_key' => 'DL_TRAFFICS_USERS',				'function' => [$this, 'select_traffic'],		'params' => ['{CONFIG_VALUE}', $total_groups]],
 						'dl_traffics_users_groups'		=> ['lang' => 'DL_TRAFFICS_USERS_GROUPS',								'type' => 'custom',			'explain' => false,		'help_key' => 'DL_TRAFFICS_USERS_GROUPS',		'function' => [$this, 'select_traffic_multi'],	'params' => ['dl_traffics_users_groups', $s_groups_users_select, $select_size]],
 						'dl_traffics_guests'			=> ['lang' => 'DL_TRAFFICS_GUESTS',				'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => false,		'help_key' => 'DL_TRAFFICS_GUESTS'],
-		
+
 						'legend2'				=> '',
-		
+
 						'dl_overall_traffic'			=> ['lang' => 'DL_OVERALL_TRAFFIC',			'validate' => 'int',	'type' => 'custom',		'explain' => false,		'help_key' => 'DL_OVERALL_TRAFFIC',			'function' => [$this, 'select_size'],	'params' => ['{CONFIG_VALUE}', 'dl_overall_traffic', '10', '20', 'dl_x_over', 'gb', true]],
 						'dl_overall_guest_traffic'		=> ['lang' => 'DL_OVERALL_GUEST_TRAFFIC',	'validate' => 'int',	'type' => 'custom',		'explain' => false,		'help_key' => 'DL_OVERALL_GUEST_TRAFFIC',	'function' => [$this, 'select_size'],	'params' => ['{CONFIG_VALUE}', 'dl_overall_guest_traffic', '10', '20', 'dl_x_g_over', 'gb', true]],
-		
+
 						'legend3'				=> '',
-		
+
 						'dl_enable_post_dl_traffic'		=> ['lang' => 'DL_ENABLE_POST_TRAFFIC',		'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => false,		'help_key' => 'DL_ENABLE_POST_TRAFFIC'],
 						'dl_newtopic_traffic'			=> ['lang' => 'DL_NEWTOPIC_TRAFFIC',		'validate' => 'int',	'type' => 'custom',			'explain' => false,		'help_key' => 'DL_NEWTOPIC_TRAFFIC',		'function' => [$this, 'select_size'],	'params' => ['{CONFIG_VALUE}', 'dl_newtopic_traffic', '10', '20', 'dl_x_new', 'gb', false]],
 						'dl_reply_traffic'				=> ['lang' => 'DL_REPLY_TRAFFIC',			'validate' => 'int',	'type' => 'custom',			'explain' => false,		'help_key' => 'DL_REPLY_TRAFFIC',			'function' => [$this, 'select_size'],	'params' => ['{CONFIG_VALUE}', 'dl_reply_traffic', '10', '20', 'dl_x_reply', 'gb', false]],
 						'dl_drop_traffic_postdel'		=> ['lang' => 'DL_DROP_TRAFFIC_POSTDEL',	'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => false,		'help_key' => 'DL_DROP_TRAFFIC_POSTDEL'],
-		
+
 						'legend4'				=> '',
-		
+
 						'dl_delay_auto_traffic'		=> ['lang' => 'DL_DELAY_AUTO_TRAFFIC',		'validate' => 'int',	'type' => 'text:3:4',	'explain' => false,		'help_key' => 'DL_DELAY_AUTO_TRAFFIC'],
 						'dl_delay_post_traffic'		=> ['lang' => 'DL_DELAY_POST_TRAFFIC',		'validate' => 'int',	'type' => 'text:3:4',	'explain' => false,		'help_key' => 'DL_DELAY_POST_TRAFFIC'],
-		
+
 						'legend5'				=> '',
-		
+
 						'dl_user_traffic_once'		=> ['lang' => 'DL_USER_TRAFFIC_ONCE',		'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => false,		'help_key' => 'DL_USER_TRAFFIC_ONCE'],
 						'dl_upload_traffic_count'	=> ['lang' => 'DL_UPLOAD_TRAFFIC_COUNT',	'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => false,		'help_key' => 'DL_UPLOAD_TRAFFIC_COUNT'],
 					]
@@ -428,7 +428,7 @@ class acp_config_controller implements acp_config_interface
 					'title'	=> 'DL_ACP_CONF_TOPIC',
 					'vars'	=> [
 						'legend1'				=> '',
-		
+
 						'dl_enable_dl_topic'		=> ['lang' => 'DL_ENABLE_TOPIC',			'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => false,		'help_key' => 'DL_ENABLE_TOPIC'],
 						'dl_diff_topic_user'		=> ['lang' => 'DL_TOPIC_USER',				'validate' => 'int',	'type' => 'select',			'explain' => false,		'help_key' => 'DL_TOPIC_USER',			'function' => [$this, 'select_topic_user'],		'params' => ['{CONFIG_VALUE}']],
 						'dl_topic_user'				=> ['lang' => 'DL_TOPIC_USER_OTHER',		'validate' => 'string',	'type' => 'custom',			'explain' => false,		'help_key' => 'DL_TOPIC_USER',			'function' => [$this, 'select_dl_user'],		'params' => ['{CONFIG_VALUE}', 'dl_topic_user']],
@@ -446,7 +446,7 @@ class acp_config_controller implements acp_config_interface
 					'title'	=> 'DL_ACP_CONF_RSS',
 					'vars'	=> [
 						'legend1'				=> '',
-		
+
 						'dl_rss_enable'			=> ['lang' => 'DL_RSS_ENABLE',					'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => false,		'help_key' => 'DL_RSS_ENABLE'],
 						'dl_rss_off_action'		=> ['lang' => 'DL_RSS_OFF_ACTION',				'validate' => 'int',	'type' => 'select',			'explain' => false,		'help_key' => 'DL_RSS_OFF_ACTION',			'function' => [$this, 'select_rss_off_action'],	'params' => ['{CONFIG_VALUE}']],
 						'dl_rss_off_text'		=> ['lang' => 'DL_RSS_OFF_TEXT',				'validate' => 'string',	'type' => 'custom',			'explain' => false,		'help_key' => 'DL_RSS_OFF_TEXT',			'function' => [$this, 'textarea_input'],		'params' => ['{CONFIG_VALUE}', 'dl_rss_off_text', 75, 5]],
@@ -461,14 +461,14 @@ class acp_config_controller implements acp_config_interface
 				];
 			break;
 		}
-		
+
 		$this->new_config = $this->config;
 		$cfg_array = (isset($_REQUEST['config'])) ? $this->request->variable('config', ['' => ''], true) : $this->new_config;
 		$error = [];
 
 		// We validate the complete config if whished
 		validate_config_vars($display_vars['vars'], $cfg_array, $error);
-		
+
 		// We go through the display_vars to make sure no one is trying to set variables he/she is not allowed to...
 		foreach ($display_vars['vars'] as $config_name => $null)
 		{
@@ -491,45 +491,45 @@ class acp_config_controller implements acp_config_interface
 				{
 					$this->new_config[$config_name] = $config_value = $this->dlext_extra->dl_user_switch(0, $config_value, $submit);
 				}
-		
+
 				if ($config_name == 'dl_thumb_xsize' || $config_name == 'dl_thumb_ysize')
 				{
 					$this->new_config[$config_name] = $config_value = intval($config_value);
 				}
-		
+
 				if (in_array($config_name, ['dl_thumb_fsize', 'dl_physical_quota', 'dl_overall_traffic', 'dl_overall_guest_traffic', 'dl_newtopic_traffic', 'dl_reply_traffic', 'dl_method_quota']))
 				{
 					$this->new_config[$config_name] = $config_value = $this->dlext_format->resize_value($config_name, $config_value);
 				}
-		
+
 				if ($config_name == 'dl_enable_rate')
 				{
 					$cur_rate_points = $this->config['dl_rate_points'];
 					$new_rate_points = $config_value;
-		
+
 					if (isset($cur_rate_points) && $cur_rate_points <> $new_rate_points)
 					{
 						$sql = 'DELETE FROM ' . DL_RATING_TABLE;
 						$this->db->sql_query($sql);
-		
+
 						$sql = 'UPDATE ' . DOWNLOADS_TABLE . ' SET rating = 0';
 						$this->db->sql_query($sql);
 					}
 				}
-		
+
 				if ($config_name == 'dl_rss_cats')
 				{
 					$this->new_config['dl_rss_cats_select'] = '-';
 					$rss_cats_select = $this->request->variable('dl_rss_cats_select', [0]);
-		
+
 					if (!empty($rss_cats_select))
 					{
 						$this->config->set('dl_rss_cats_select', implode(',', array_map('intval', $rss_cats_select)), false);
 					}
-		
+
 					unset($rss_cats_select);
 				}
-		
+
 				if ($config_name == 'dl_topic_user')
 				{
 					if (!$this->new_config[$config_name])
@@ -542,14 +542,14 @@ class acp_config_controller implements acp_config_interface
 						$result = $this->db->sql_query($sql);
 						$user_exists = $this->db->sql_affectedrows($result);
 						$this->db->sql_freeresult($result);
-		
+
 						if (!$user_exists)
 						{
 							$this->new_config[$config_name] = $this->user->data['user_id'];
 						}
 					}
 				}
-		
+
 				if ($config_name == 'dl_file_hash_algo')
 				{
 					if ($this->new_config[$config_name] != $this->config['dl_file_hash_algo'])
@@ -569,12 +569,12 @@ class acp_config_controller implements acp_config_interface
 					$hint_uid		= '';
 					$hint_bitfield	= '';
 					$hint_flags		= 0;
-			
+
 					if ($config_value)
 					{
 						generate_text_for_storage($config_value, $hint_uid, $hint_bitfield, $hint_flags, $allow_bbcode, true, $allow_smilies);
 					}
-		
+
 					$this->config_text->set($config_name, $config_value, false);
 					$this->config->set('dl_file_edit_hint_bbcode', $hint_uid, false);
 					$this->config->set('dl_file_edit_hint_bitfield', $hint_bitfield, false);
@@ -590,10 +590,10 @@ class acp_config_controller implements acp_config_interface
 				if ($config_name == 'dl_set_user' || $config_name == 'dl_topic_user')
 				{
 					$this->new_config[$config_name] = $config_value = $this->dlext_extra->dl_user_switch($config_value);
-				}	
+				}
 			}
 		}
-		
+
 		if ($submit)
 		{
 			// Refetch all multi select fields which are not provided by the forum default methods
@@ -601,30 +601,30 @@ class acp_config_controller implements acp_config_interface
 			{
 				$dl_traffic_overall_groups	= $this->request->variable('dl_traffics_overall_groups', [0]);
 				$dl_traffics_users_groups	= $this->request->variable('dl_traffics_users_groups', [0]);
-		
+
 				$this->new_config['dl_traffics_overall_groups'] = implode(',', $dl_traffic_overall_groups);
 				$this->new_config['dl_traffics_users_groups'] = implode(',', $dl_traffics_users_groups);
-		
+
 				if (!empty($dl_traffic_overall_groups) && $cfg_array['dl_traffics_overall'] <= 1)
 				{
 					$this->new_config['dl_traffics_overall_groups'] = '';
 				}
-		
+
 				if (!empty($dl_traffics_users_groups) && $cfg_array['dl_traffics_users'] <= 1)
 				{
 					$this->new_config['dl_traffics_users_groups'] = '';
 				}
-		
+
 				$this->config->set('dl_traffics_overall_groups', $this->new_config['dl_traffics_overall_groups'], false);
 				$this->config->set('dl_traffics_users_groups', $this->new_config['dl_traffics_users_groups'], false);
 			}
-		
+
 			$this->phpbb_log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_CONFIG');
-		
+
 			$cache = $this->phpbb_container->get('cache');
 
 			$cache->destroy('config');
-		
+
 			// Purge the extension cache
 			@unlink(DL_EXT_CACHE_PATH . 'data_dl_auth.' . $this->phpEx);
 			@unlink(DL_EXT_CACHE_PATH . 'data_dl_auth_groups.' . $this->phpEx);
@@ -632,16 +632,16 @@ class acp_config_controller implements acp_config_interface
 			@unlink(DL_EXT_CACHE_PATH . 'data_dl_cat_counts.' . $this->phpEx);
 			@unlink(DL_EXT_CACHE_PATH . 'data_dl_cats.' . $this->phpEx);
 			@unlink(DL_EXT_CACHE_PATH . 'data_dl_file_preset.' . $this->phpEx);
-		
+
 			$message = $this->language->lang('DL_CONFIG_UPDATED') . adm_back_link($this->u_action . '&amp;view=' . $view);
 			trigger_error($message);
 		}
-		
+
 		if ($this->config['dl_traffic_off'])
 		{
 			$error[] = $this->language->lang('DL_TRAFFIC_OFF_EXPLAIN');
 		}
-		
+
 		$acl_cat_names = [
 			0 => [$this->language->lang('DL_ACP_CONF_GENERAL'),	'general'],
 			1 => [$this->language->lang('DL_ACP_CONF_VIEW'),	'view'],
@@ -652,9 +652,9 @@ class acp_config_controller implements acp_config_interface
 			6 => [$this->language->lang('DL_ACP_CONF_TOPIC'),	'topic'],
 			7 => [$this->language->lang('DL_ACP_CONF_RSS'),		'rss'],
 		];
-		
+
 		$mode_select = '';
-		
+
 		for ($i = 0; $i < count($acl_cat_names); ++$i)
 		{
 			if ($view == $acl_cat_names[$i][1])
@@ -666,24 +666,24 @@ class acp_config_controller implements acp_config_interface
 				$mode_select .= '<option value="' . $acl_cat_names[$i][1] . '">' . $acl_cat_names[$i][0] . '</option>';
 			}
 		}
-		
+
 		$this->user->add_lang('acp/users');
-		
+
 		$this->template->assign_vars([
 			'L_TITLE'			=> $this->language->lang('DL_CONFIG'),
 			'L_TITLE_PAGE'		=> $this->language->lang($display_vars['title']),
 
 			'EXT_FILES_PATH'	=> DL_EXT_FILEBASE_PATH,
-			
+
 			'S_ERROR'			=> (!empty($error)) ? true : false,
 			'ERROR_MSG'			=> implode('<br />', $error),
 			'S_HIDDEN_FIELDS'	=> (!empty($s_hidden_fields)) ? build_hidden_fields($s_hidden_fields) : '',
 			'S_MODE_SELECT'		=> $mode_select,
 			'U_MODE_SELECT'		=> $this->u_action,
-		
+
 			'U_ACTION'			=> $this->u_action . '&amp;view=' . $view,
 		]);
-		
+
 		// Output relevant page
 		foreach ($display_vars['vars'] as $config_key => $vars)
 		{
@@ -691,19 +691,19 @@ class acp_config_controller implements acp_config_interface
 			{
 				continue;
 			}
-		
+
 			if (strpos($config_key, 'legend') !== false && strpos($config_key, '_legend') === false)
 			{
 				$this->template->assign_block_vars('options', [
 					'S_LEGEND'		=> true,
 					'LEGEND'		=> ($this->language->lang($vars)) ? $this->language->lang($vars) : $vars,
 				]);
-		
+
 				continue;
 			}
-		
+
 			$type = explode(':', $vars['type']);
-		
+
 			$l_explain = '';
 			if ($vars['explain'])
 			{
@@ -718,14 +718,14 @@ class acp_config_controller implements acp_config_interface
 			}
 
 			$content = build_cfg_template($type, $config_key, $this->new_config, $config_key, $vars);
-		
+
 			if (empty($content))
 			{
 				continue;
 			}
-		
+
 			$help_key = $vars['help_key'];
-		
+
 			$this->template->assign_block_vars('options', [
 				'KEY'			=> $config_key,
 				'TITLE'			=> ($this->language->lang($vars['lang'])) ? $this->language->lang($vars['lang']) : $vars['lang'],
@@ -735,7 +735,7 @@ class acp_config_controller implements acp_config_interface
 				'PREVIEW'		=> (isset($vars['preview'])) ? $vars['preview'] : '',
 				'HELP_KEY'		=> $help_key,
 			]);
-		
+
 			unset($display_vars['vars'][$config_key]);
 		}
 	}
@@ -1076,9 +1076,9 @@ class acp_config_controller implements acp_config_interface
 
 	public function select_latest_type($value)
 	{
-		$s_select = '<option value="0">' . $this->language->lang('DL_LATEST_TYPE_OFF') . '</option>'; 
-		$s_select .= '<option value="1">' . $this->language->lang('DL_LATEST_TYPE_DEFAULT') . '</option>'; 
-		$s_select .= '<option value="2">' . $this->language->lang('DL_LATEST_TYPE_COMPLETE') . '</option>'; 
+		$s_select = '<option value="0">' . $this->language->lang('DL_LATEST_TYPE_OFF') . '</option>';
+		$s_select .= '<option value="1">' . $this->language->lang('DL_LATEST_TYPE_DEFAULT') . '</option>';
+		$s_select .= '<option value="2">' . $this->language->lang('DL_LATEST_TYPE_COMPLETE') . '</option>';
 		$s_select = str_replace('value="' . $value . '">', 'value="' . $value . '" selected="selected">', $s_select);
 
 		return $s_select;

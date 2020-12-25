@@ -56,9 +56,9 @@ class release_8_0_14 extends \phpbb\db\migration\migration
 
 		$styles = scandir($styles_folder);
 
-		foreach($styles as $key => $style)
+		foreach ($styles as $key => $style)
 		{
-			if (is_dir($styles_folder . $style) && $style{0} <> '.')
+			if (is_dir($styles_folder . $style) && $style[0] <> '.')
 			{
 				@unlink($styles_folder . $style . '/template/dl_todo_edit_body.html');
 			}

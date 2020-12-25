@@ -128,7 +128,6 @@ class tracker
 
 			// Delete notifications
 
-
 			$bug_tracker = $this->dlext_auth->bug_tracker();
 
 			if ($cancel)
@@ -917,7 +916,7 @@ class tracker
 							'oxpus.dlext.notification.type.bt_assign',
 							'oxpus.dlext.notification.type.bt_status',
 						], $fav_id);
-	
+
 						$fav_id = 0;
 					}
 					else
@@ -1056,7 +1055,7 @@ class tracker
 							$this->config['dl_links_per_page'],
 							$page_start
 						);
-							
+
 						$this->template->assign_vars([
 							'PAGE_NUMBER'	=> $pagination->on_page($total_reports, $this->config['dl_links_per_page'], $page_start),
 							'TOTAL_DL'		=> $this->language->lang('VIEW_BUG_REPORTS', $total_reports),

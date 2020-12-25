@@ -80,7 +80,7 @@ class dlext_hacklist implements dlext_hacklist_interface
 			}
 
 			$this->db->sql_freeresult($result);
-	
+
 			return $dl_files;
 		}
 		else

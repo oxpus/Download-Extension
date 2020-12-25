@@ -236,7 +236,7 @@ class acp_overview_controller implements acp_overview_interface
 
 		if (!empty($index))
 		{
-			foreach($index as $cat_id => $data)
+			foreach ($index as $cat_id => $data)
 			{
 				if ($data['parent'] == 0)
 				{

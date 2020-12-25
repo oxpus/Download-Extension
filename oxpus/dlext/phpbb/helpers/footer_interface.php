@@ -22,7 +22,7 @@ interface footer_interface
 	 * @param string $nav_view current page on breadcrumps
 	 * @param int $cat_id current category
 	 * @param int $df_id current download
-	 * @param array $index the complete downloads category index 
+	 * @param array $index the complete downloads category index
 	 * @return void
 	 * @access public
 	 */

@@ -10,8 +10,6 @@
 
 namespace oxpus\dlext\migrations\basics;
 
-use phpbb\db\tools\tools;
-
 class dl_commons extends \phpbb\db\migration\migration
 {
 	public function effectively_installed()

@@ -18,7 +18,7 @@ interface dlext_extra_interface
 {
 	/**
 	 * Fetch the todo data
-	 * 
+	 *
 	 * @return array the complete todo data to be displayed
 	 * @access public
 	*/
@@ -26,7 +26,7 @@ interface dlext_extra_interface
 
 	/**
 	 * Build the download selection element for all categories used in acp settings
-	 * 
+	 *
 	 * @param int $parent number of parent category
 	 * @param int $level current level, internal use only
 	 * @param int $select_cat current category to be preselected in the dropdown
@@ -35,11 +35,11 @@ interface dlext_extra_interface
 	 * @return string prebuild options for select element
 	 * @access public
 	*/
-	public function dl_dropdown($parent = 0, $level = 0, $select_cat = 0, $perm, $rem_cat = 0);
+	public function dl_dropdown($parent = 0, $level = 0, $select_cat = 0, $perm = 'auth_view', $rem_cat = 0);
 
 	/**
 	 * Build the download jumpbox for the download footer
-	 * 
+	 *
 	 * @param int $parent number of parent category
 	 * @param int $level current level, internal use only
 	 * @param int $perm fetch only categories for this user permission
@@ -47,11 +47,11 @@ interface dlext_extra_interface
 	 * @param int &$catlist returns array with dropdown options
 	 * @access public
 	*/
-	public function dl_jumpbox($parent = 0, $level = 0, $perm, $rem_cat = 0, &$catlist = []);
+	public function dl_jumpbox($parent = 0, $level = 0, $perm = 'auth_view', $rem_cat = 0, &$catlist = []);
 
 	/**
 	 * Build the download multi election element for all categories
-	 * 
+	 *
 	 * @param int $parent number of parent category
 	 * @param int $level current level, internal use only
 	 * @param array $select_cat category ids to preselect them in the option list
@@ -62,7 +62,7 @@ interface dlext_extra_interface
 
 	/**
 	 * Switch user id to username and back
-	 * 
+	 *
 	 * @param int $user_id user_id to be converted to username
 	 * @param string $username username to be converted to user_id
 	 * @param bool $update true for change an username into user_id

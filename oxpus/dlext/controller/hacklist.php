@@ -178,7 +178,7 @@ class hacklist
 				$this->config['dl_links_per_page'],
 				$page_start
 			);
-				
+	
 			$this->template->assign_vars([
 				'PAGE_NUMBER'	=> $pagination->on_page($all_files, $this->config['dl_links_per_page'], $page_start),
 				'TOTAL_DL'		=> $this->language->lang('VIEW_DL_STATS', $all_files),
@@ -215,7 +215,7 @@ class hacklist
 					$desc_bitfield			= $dl_files[$i]['desc_bitfield'];
 					$desc_flags				= $dl_files[$i]['desc_flags'];
 					$hack_name			= generate_text_for_display($hack_name, $desc_uid, $desc_bitfield, $desc_flags);
-			
+
 					$hack_author			= ($dl_files[$i]['hack_author'] != '') ? $dl_files[$i]['hack_author'] : 'n/a';
 					$hack_author_email		= $dl_files[$i]['hack_author_email'];
 					$hack_author_website	= $dl_files[$i]['hack_author_website'];

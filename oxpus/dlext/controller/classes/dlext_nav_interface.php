@@ -18,7 +18,7 @@ interface dlext_nav_interface
 {
 	/**
 	 * Build the breadcrumbs
-	 * 
+	 *
 	 * @param int $parent category id to starts from
 	 * @param string $disp_art url will return the combined linked breadcrumbs, otherwise an array with the separated values will be returned
 	 * @param string $tmp_nav contains the array data if they should be returned

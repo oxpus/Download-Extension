@@ -168,7 +168,7 @@ class upload
 
 		// Initiate custom fields
 		include($this->ext_path . 'phpbb/includes/fields.' . $this->php_ext);
-		$cp = new \oxpus\dlext\phpbb\includes\ custom_profile();
+		$cp = new \oxpus\dlext\phpbb\includes\custom_profile();
 
 		if ($submit)
 		{
@@ -320,7 +320,7 @@ class upload
 						$remain_traffic = $this->config['dl_overall_guest_traffic'] - $this->config['dl_remain_guest_traffic'];
 					}
 
-					if($file_size == 0 || ($remain_traffic && $file_size > $remain_traffic && $this->config['dl_upload_traffic_count']))
+					if ($file_size == 0 || ($remain_traffic && $file_size > $remain_traffic && $this->config['dl_upload_traffic_count']))
 					{
 						$upload_file->remove();
 						trigger_error($this->language->lang('DL_NO_UPLOAD_TRAFFIC'), E_USER_ERROR);
@@ -333,7 +333,7 @@ class upload
 
 				$i = 0;
 
-				while(@file_exists(DL_EXT_FILEBASE_PATH. 'downloads/' . $dl_path . $real_file))
+				while (@file_exists(DL_EXT_FILEBASE_PATH. 'downloads/' . $dl_path . $real_file))
 				{
 					$real_file = md5($i . $file_name);
 					++$i;
@@ -370,7 +370,7 @@ class upload
 			 * @var bool  	allow_thumbs_upload		enable/disable thumbnail upload
 			 * @since 8.1.0-RC2
 			 */
-			
+
 			$vars = array(
 				'thumb_form_name',
 				'allow_thumbs_upload',
@@ -441,7 +441,7 @@ class upload
 				trigger_error(implode('<br />', $error), E_USER_WARNING);
 			}
 
-			if($cat_id)
+			if ($cat_id)
 			{
 				if (!$file_extern)
 				{

@@ -148,30 +148,30 @@ class latest
 		{
 			redirect($this->helper->route('oxpus_dlext_index'));
 		}
-		
+
 		page_header($this->language->lang('DL_LATEST_DOWNLOADS'));
-		
+
 		$sql = 'SELECT dl_id, user_id FROM ' . DL_RATING_TABLE;
 		$result = $this->db->sql_query($sql);
-		
+
 		$ratings = [];
 		while ($row = $this->db->sql_fetchrow($result))
 		{
 			$ratings[$row['dl_id']][] = $row['user_id'];
 		}
 		$this->db->sql_freeresult($result);
-		
+
 		$this->template->set_filenames(['body' => 'dl_overview_body.html']);
-		
+
 		$this->template->assign_vars([
 			'S_FORM_ACTION'		=> $this->helper->route('oxpus_dlext_overall'),
-		
+
 			'U_DL_INDEX'		=> $this->helper->route('oxpus_dlext_index'),
 			'U_DL_AJAX'			=> $this->helper->route('oxpus_dlext_ajax'),
-		
+
 			'PAGE_NAME'			=> $this->language->lang('DL_LATEST_DOWNLOADS'),
 		]);
-		
+
 		if ($this->config['dl_latest_type'] == 1)
 		{
 			$check_add_time		= time() - ($this->config['dl_new_time'] * 86400);
@@ -187,12 +187,12 @@ class latest
 			$sql_sort_by = 'change_time';
 			$sql_sort_order = 'DESC';
 		}
-		
+
 		$dl_files = [];
 		$dl_files = $this->dlext_files->all_files(0, '', '', $sql_latest_where, 0, 0, 'id, cat');
 
 		$total_files = 0;
-		
+
 		if (!empty($dl_files))
 		{
 			for ($i = 0; $i < count($dl_files); ++$i)
@@ -207,7 +207,7 @@ class latest
 				}
 			}
 		}
-		
+
 		if ($total_files)
 		{
 			$this->template->assign_var('S_OVERALL_VIEW', true);
@@ -216,7 +216,7 @@ class latest
 		{
 			redirect($this->helper->route('oxpus_dlext_index'));
 		}
-		
+
 		if ($total_files > $this->config['dl_links_per_page'])
 		{
 			$pagination = $this->phpbb_container->get('pagination');
@@ -228,13 +228,13 @@ class latest
 				$this->config['dl_links_per_page'],
 				$page_start
 			);
-		
+
 			$this->template->assign_vars([
 				'PAGE_NUMBER'	=> $pagination->on_page($total_files, $this->config['dl_links_per_page'], $page_start),
 				'TOTAL_DL'		=> $this->language->lang('VIEW_DOWNLOADS', $total_files),
 			]);
 		}
-		
+
 		$dl_files = [];
 		$dl_files = $this->dlext_files->all_files(0, $sql_sort_by, $sql_sort_order, $sql_latest_where, 0, 0, 'cat, id, description, desc_uid, desc_bitfield, desc_flags, hack_version, extern, file_size, klicks, overall_klicks, rating', $this->config['dl_links_per_page'], $start);
 
@@ -271,25 +271,25 @@ class latest
 					$cat_name = str_replace('&nbsp;&nbsp;|', '', $cat_name);
 					$cat_name = str_replace('___&nbsp;', '', $cat_name);
 					$cat_view = $index[$cat_id]['nav_path'];
-		
+
 					$file_id = $dl_files[$i]['id'];
 					$mini_file_icon = $this->dlext_status->mini_status_file($cat_id, $file_id);
-		
+
 					$description = $dl_files[$i]['description'];
 					$desc_uid = $dl_files[$i]['desc_uid'];
 					$desc_bitfield = $dl_files[$i]['desc_bitfield'];
 					$desc_flags = $dl_files[$i]['desc_flags'];
 					$description = censor_text($description);
 					$description = generate_text_for_display($description, $desc_uid, $desc_bitfield, $desc_flags);
-		
+
 					$dl_link = $this->helper->route('oxpus_dlext_details', ['df_id' => $file_id]);
-		
+
 					$hack_version = '&nbsp;'.$dl_files[$i]['hack_version'];
-		
+
 					$dl_status = [];
 					$dl_status = $this->dlext_status->status($file_id);
 					$status = $dl_status['status'];
-		
+
 					if ($dl_files[$i]['file_size'])
 					{
 						$file_size = $this->dlext_format->dl_size($dl_files[$i]['file_size'], 2);
@@ -298,18 +298,18 @@ class latest
 					{
 						$file_size = $this->language->lang('DL_NOT_AVAILIBLE');
 					}
-		
+
 					$file_klicks = $dl_files[$i]['klicks'];
 					$file_overall_klicks = $dl_files[$i]['overall_klicks'];
-		
+
 					$rating_points = $dl_files[$i]['rating'];
 					$s_rating_perm = false;
-		
+
 					if ($this->config['dl_enable_rate'] && ($rating_points == 0 || !@in_array($this->user->data['user_id'], $ratings[$file_id])) && $this->user->data['is_registered'])
 					{
 						$s_rating_perm = true;
 					}
-		
+
 					if (!empty($ratings[$file_id]) && $this->config['dl_enable_rate'])
 					{
 						$total_ratings = count($ratings[$file_id]);
@@ -326,7 +326,7 @@ class latest
 					{
 						$rating_count_text = $this->language->lang('DL_RATING_NONE');
 					}
-		
+
 					$this->template->assign_block_vars('downloads', [
 						'CAT_NAME'				=> $cat_name,
 						'DESCRIPTION'			=> $mini_file_icon.$description,
@@ -338,7 +338,7 @@ class latest
 						'RATINGS'				=> $rating_count_text,
 						'STATUS'				=> $status,
 						'DF_ID'					=> $file_id,
-		
+
 						'U_CAT_VIEW'			=> $cat_view,
 						'U_DL_LINK'				=> $dl_link,
 					]);
@@ -359,7 +359,7 @@ class latest
 					extract($this->phpbb_dispatcher->trigger_event('oxpus.dlext.latest_display_data_after', compact($vars)));
 				}
 			}
-		
+
 			$this->template->assign_var('S_ENABLE_RATE', (isset($this->config['dl_enable_rate']) && $this->config['dl_enable_rate']) ? true : false);
 		}
 

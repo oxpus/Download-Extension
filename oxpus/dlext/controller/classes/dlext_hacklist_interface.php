@@ -18,7 +18,7 @@ interface dlext_hacklist_interface
 {
 	/**
 	 * Fetch the number of unapproved downloads
-	 * 
+	 *
 	 * @return array index with all accessable download categories
 	 * @access public
 	*/
@@ -26,7 +26,7 @@ interface dlext_hacklist_interface
 
 	/**
 	 * Fetch the number of unapproved downloads
-	 * 
+	 *
 	 * @param string $sql_sort_by fields for sorting the files
 	 * @param string $sql_order sort direction ASC or DESC
 	 * @param int $start start value for a limited select

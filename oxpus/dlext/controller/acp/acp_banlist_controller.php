@@ -100,16 +100,16 @@ class acp_banlist_controller implements acp_banlist_interface
 
 		$action = ($tmp_m1) ? 'edit' : $action;
 		$action = ($tmp_m2) ? 'delete' : $action;
-		
-		if($action == 'add')
+
+		if ($action == 'add')
 		{
 			$user_ip = ($user_ip != '') ? $user_ip : '';
-		
+
 			if (!check_form_key('dl_adm_ban'))
 			{
 				trigger_error('FORM_INVALID', E_USER_WARNING);
 			}
-		
+
 			if ($ban_id)
 			{
 				$sql = 'UPDATE ' . DL_BANLIST_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', [
@@ -117,7 +117,7 @@ class acp_banlist_controller implements acp_banlist_interface
 					'user_ip'		=> $user_ip,
 					'username'		=> $username,
 					'guests'		=> $guests]) . ' WHERE ban_id = ' . (int) $ban_id;
-		
+
 				$this->phpbb_log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_BAN_EDIT', false, [$this->user->data['user_id'] . ' ~ ' . $username, $user_ip, $guests]);
 			}
 			else
@@ -127,42 +127,42 @@ class acp_banlist_controller implements acp_banlist_interface
 					'user_ip'		=> $user_ip,
 					'username'		=> $username,
 					'guests'		=> $guests]);
-		
+
 				$this->phpbb_log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_BAN_ADD', false, [$user_id . ' ~ ' . $username, $user_ip, $guests]);
 			}
-		
+
 			$this->db->sql_query($sql);
-		
+
 			$action = '';
 		}
-		else if($action == 'delete')
+		else if ($action == 'delete')
 		{
 			if (confirm_box(true))
 			{
 				$sql_ext_in = [];
-		
+
 				for ($i = 0; $i < count($ban_id_ary); ++$i)
 				{
 					$sql_ext_in[] = intval($ban_id_ary[$i]);
 				}
-		
+
 				if (!empty($sql_ext_in))
 				{
 					$sql = 'DELETE FROM ' . DL_BANLIST_TABLE . '
 						WHERE ' . $this->db->sql_in_set('ban_id', $sql_ext_in);
 					$this->db->sql_query($sql);
-		
+
 					$this->phpbb_log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_BAN_DEL', false, [implode(', ', $sql_ext_in)]);
-		
+
 					$message = $this->language->lang('DL_BANLIST_UPDATED') . adm_back_link($this->u_action);
-		
+
 					trigger_error($message);
 				}
 			}
 			else
 			{
 				$s_hidden_fields = ['action' => 'delete'];
-		
+
 				for ($i = 0; $i < count($ban_id_ary); ++$i)
 				{
 					$s_hidden_fields += ['ban_id[' . $i . ']' => intval($ban_id_ary[$i])];
@@ -171,14 +171,14 @@ class acp_banlist_controller implements acp_banlist_interface
 				confirm_box(false, 'DL_CONFIRM_DEL_BAN_VALUES', build_hidden_fields($s_hidden_fields));
 			}
 		}
-		
+
 		if ($action == '' || $action == 'edit')
 		{
 			$sql = 'SELECT b.*, u.username AS user2 FROM ' . DL_BANLIST_TABLE . ' b
 				LEFT JOIN ' . USERS_TABLE . ' u ON u.user_id = b.user_id
 				ORDER BY ban_id';
 			$result = $this->db->sql_query($sql);
-		
+
 			while ($row = $this->db->sql_fetchrow($result))
 			{
 				$ban_id = $row['ban_id'];
@@ -187,7 +187,7 @@ class acp_banlist_controller implements acp_banlist_interface
 				$user_ip = $row['user_ip'];
 				$username = $row['username'];
 				$guests = ($row['guests']) ? $this->language->lang('YES') : $this->language->lang('NO');
-		
+
 				$this->template->assign_block_vars('banlist_row', [
 					'BAN_ID'		=> $ban_id,
 					'USER_ID'		=> $user_id . (($user2) ? ' &raquo; ' . $user2 : ''),
@@ -196,21 +196,21 @@ class acp_banlist_controller implements acp_banlist_interface
 					'GUESTS'		=> $guests,
 				]);
 			}
-		
+
 			$s_ban_list = ($this->db->sql_affectedrows($result)) ? true : false;
-		
+
 			$this->db->sql_freeresult($result);
-		
+
 			$banlist_id = (isset($ban_id_ary[0])) ? intval($ban_id_ary[0]) : 0;
-		
+
 			$s_hidden_fields = ['action' => 'add'];
-		
+
 			if ($action == 'edit' && $banlist_id)
 			{
 				$sql = 'SELECT * FROM ' . DL_BANLIST_TABLE . '
 					WHERE ban_id = ' . (int) $banlist_id;
 				$result = $this->db->sql_query($sql);
-		
+
 				while ($row = $this->db->sql_fetchrow($result))
 				{
 					$ban_id		= $row['ban_id'];
@@ -218,7 +218,7 @@ class acp_banlist_controller implements acp_banlist_interface
 					$user_ip	= ($row['user_ip'] != '') ? $row['user_ip'] : '';
 					$username	= $row['username'];
 					$guests		= $row['guests'];
-		
+
 					$s_hidden_fields += ['ban_id' => $ban_id];
 				}
 				$this->db->sql_freeresult($result);
@@ -231,21 +231,21 @@ class acp_banlist_controller implements acp_banlist_interface
 				$username	= '';
 				$guests		= '';
 			}
-		
+
 			add_form_key('dl_adm_ban');
-		
+
 			$this->template->assign_vars([
 				'BANLIST_ACTION'		=> ($action == 'edit') ? $this->language->lang('EDIT') : $this->language->lang('ADD'),
-		
+
 				'DL_USER_ID'			=> $user_id,
 				'DL_USER_IP'			=> $user_ip,
 				'DL_USERNAME'			=> $username,
 				'CHECKED'				=> ($guests) ? 'checked="checked"' : '',
-		
+
 				'S_BAN_LIST'			=> $s_ban_list,
 				'S_HIDDEN_FIELDS'		=> build_hidden_fields($s_hidden_fields),
 				'S_DOWNLOADS_ACTION'	=> $this->u_action,
-		
+
 				'U_BACK'				=> ($action) ? $this->u_action : '',
 			]);
 		}

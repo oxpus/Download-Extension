@@ -18,7 +18,7 @@ interface dlext_topic_interface
 {
 	/**
 	 * Generate the download topic for new downloads
-	 * 
+	 *
 	 * @param int $dl_id download id for which the topic should be posted
 	 * @param bool $force true will create a topic even a topic id was found on the download dataset, otherwise the function will not create the topic
 	 * @return void
@@ -28,7 +28,7 @@ interface dlext_topic_interface
 
 	/**
 	 * Drop or close topics for deleted downloads
-	 * 
+	 *
 	 * @param array $topic_ids topic_ids from the deleted downloads
 	 * @param string $topic_drop_mode delete or close topics
 	 * @param array $dl_ids download ids which should be deleted
@@ -39,7 +39,7 @@ interface dlext_topic_interface
 
 	/**
 	 * Update existing topic for updated download
-	 * 
+	 *
 	 * @param array $topic_id topic_id which need some updates
 	 * @param int $dl_id download id for which the topic needs to be updated
 	 * @param string $topic_drop_mode needed to close topics on deleted downloads
@@ -52,7 +52,7 @@ interface dlext_topic_interface
 	 * _change_auth to switch to an other user if needed as topic poster
 	 * Added by Mickroz for changing permissions
 	 * code by poppertom69 & RMcGirr83
-	 * 
+	 *
 	 * @param int $user_id to switch to the user data
 	 * @param string $mode replace or restore user data
 	 * @param array $bkup_data backup array form the original user

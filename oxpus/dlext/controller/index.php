@@ -160,7 +160,7 @@ class index
 
 		/*
 		* Hide subcategories if wanted by the user
-		*/		
+		*/
 		if ($this->user->data['user_dl_sub_on_index'])
 		{
 			$this->template->assign_var('S_SUB_ON_INDEX', true);
@@ -180,20 +180,20 @@ class index
 
 			$index_auth = [];
 			$index_auth = $this->dlext_main->full_index($cat);
-		
+
 			if (!$cat_auth['auth_view'] && !$index_auth[$cat]['auth_view'] && !$this->auth->acl_get('a_'))
 			{
 				redirect($this->helper->route('oxpus_dlext_index'));
 			}
-		
+
 			$this->template->set_filenames(['body' => 'downloads_body.html']);
-		
+
 			$ratings = [];
 			if ($this->config['dl_enable_rate'])
 			{
 				$sql = "SELECT dl_id, user_id FROM " . DL_RATING_TABLE;
 				$result = $this->db->sql_query($sql);
-		
+
 				while ($row = $this->db->sql_fetchrow($result))
 				{
 					$ratings[$row['dl_id']][] = $row['user_id'];
@@ -201,15 +201,15 @@ class index
 				$this->db->sql_freeresult($result);
 			}
 		}
-		
+
 		$path_dl_array = [];
-		
+
 		page_header($this->language->lang('DOWNLOADS'));
-		
+
 		$user_id = $this->user->data['user_id'];
 		$username = $this->user->data['username'];
 		$user_traffic = $this->user->data['user_traffic'];
-		
+
 		$sql = 'SELECT c.parent, d.cat, d.id, d.change_time, d.description, d.change_user, u.user_id, u.user_colour, u.username
 			FROM ' . DOWNLOADS_TABLE . ' d, ' . USERS_TABLE . ' u, ' . DL_CAT_TABLE . ' c
 			WHERE d.change_user = u.user_id
@@ -217,10 +217,10 @@ class index
 				AND d.cat = c.id
 			ORDER BY cat, change_time DESC, id DESC';
 		$result = $this->db->sql_query($sql);
-		
+
 		$last_dl = [];
 		$last_id = 0;
-		
+
 		while ($row = $this->db->sql_fetchrow($result))
 		{
 			if ($row['cat'] != $last_id)
@@ -240,10 +240,10 @@ class index
 			}
 		}
 		$this->db->sql_freeresult($result);
-		
+
 		if (!empty($index))
 		{
-			foreach(array_keys($index) as $cat_id)
+			foreach (array_keys($index) as $cat_id)
 			{
 				$parent_id = (isset($index[$cat_id]['parent'])) ? $index[$cat_id]['parent'] : 0;
 				$cat_name = (isset($index[$cat_id]['cat_name'])) ? $index[$cat_id]['cat_name'] : '';
@@ -254,7 +254,7 @@ class index
 				$cat_flags = (isset($index[$cat_id]['desc_flags'])) ? $index[$cat_id]['desc_flags'] : 0;
 				$cat_sublevel = (isset($index[$cat_id]['sublevel'])) ? $index[$cat_id]['sublevel'] : '';
 				$cat_icon = (isset($index[$cat_id]['cat_icon'])) ? $index[$cat_id]['cat_icon'] : '';
-		
+
 				if ($cat_desc)
 				{
 					$cat_desc = censor_text($cat_desc);
@@ -270,7 +270,7 @@ class index
 						$cat_desc = generate_text_for_display($cat_desc, $cat_uid, $cat_bitfield, $cat_flags);
 					}
 				}
-		
+
 				$cat_subs = (isset($cat_sublevel['cat_path'])) ? $cat_sublevel['cat_path'] : '';
 
 				$folder_sub = '';
@@ -285,7 +285,7 @@ class index
 
 				$mini_icon = [];
 				$mini_icon = $this->dlext_status->mini_status_cat($cat_id, $cat_id);
-		
+
 				if ($mini_icon[$cat_id]['new'] && !$mini_icon[$cat_id]['edit'])
 				{
 					$mini_cat_icon = '<i class="icon fa-folder' . $folder_sub . ' fa-fw dl-red dl-big" title="' . $this->language->lang('DL_NEW') . '"></i>';
@@ -302,10 +302,10 @@ class index
 				{
 					$mini_cat_icon = '<i class="icon fa-folder' . $folder_sub . ' fa-fw dl-big" title=""></i>';
 				}
-		
+
 				$last_dl_time = $this->dlext_main->find_latest_dl($last_dl, $cat_id, $cat_id, []);
 				$last_cat_id = (isset($last_dl_time['cat_id'])) ? $last_dl_time['cat_id'] : 0;
-		
+
 				if (isset($last_dl[$cat_id]['change_time']) && isset($last_dl_time['change_time']))
 				{
 					if ($last_dl[$cat_id]['change_time'] > $last_dl_time['change_time'])
@@ -313,20 +313,20 @@ class index
 						$last_cat_id = $cat_id;
 					}
 				}
-		
+
 				if ($cat)
 				{
 					$this->template->set_filenames(['subcats' => 'view_dl_subcat_body.html']);
-		
+
 					$block = 'subcats';
-		
+
 					$this->template->assign_var('S_SUBCATS', true);
 				}
 				else
 				{
 					$block = 'downloads';
 				}
-		
+
 				if (isset($index[$cat_id]['total']) && $index[$cat_id]['total'] > $this->config['dl_links_per_page'])
 				{
 					$pagination = $this->phpbb_container->get('pagination');
@@ -338,7 +338,7 @@ class index
 						$this->config['dl_links_per_page'],
 						$page_start
 					);
-		
+
 					$cat_pages = true;
 				}
 
@@ -360,11 +360,11 @@ class index
 					'U_CAT_LAST_LINK'	=> (isset($last_dl[$last_cat_id]['link'])) ? $last_dl[$last_cat_id]['link'] : '',
 					'U_CAT_LAST_USER'	=> (isset($last_dl[$last_cat_id]['user_link'])) ? $last_dl[$last_cat_id]['user_link'] : '',
 				]);
-		
+
 				if ($cat_subs && $this->user->data['user_dl_sub_on_index'])
 				{
 					$this->template->assign_block_vars($block.'.sub', []);
-		
+
 					for ($j = 0; $j < count($cat_subs); ++$j)
 					{
 						$sub_id = $cat_sublevel['cat_id'][$j];
@@ -380,7 +380,7 @@ class index
 						{
 							$folder_sub = '-open';
 						}
-		
+
 						if ($mini_icon[$sub_id]['new'] && !$mini_icon[$sub_id]['edit'])
 						{
 							$mini_cat_icon = '<i class="icon fa-folder' . $folder_sub . ' fa-fw dl-red" title="' . $this->language->lang('DL_NEW') . '"></i>';
@@ -397,7 +397,7 @@ class index
 						{
 							$mini_cat_icon = '<i class="icon fa-folder' . $folder_sub . ' fa-fw" title=""></i>';
 						}
-		
+
 						$this->template->assign_block_vars($block.'.sub.sublevel_row', [
 							'L_SUBLEVEL' => $cat_sublevel['cat_name'][$j],
 							'SUBLEVEL_COUNT' => $cat_sublevel['total'][$j] + $this->dlext_main->get_sublevel_count($sub_id),
@@ -407,11 +407,11 @@ class index
 						]);
 					}
 				}
-		
+
 				if ($cat)
 				{
 					$this->template->assign_var('S_SUBCAT_BOX', true);
-		
+
 					$this->template->assign_display('subcats');
 				}
 			}
@@ -420,13 +420,13 @@ class index
 		{
 			$this->template->assign_var('S_NO_CATEGORY', true);
 		}
-		
+
 		if ($cat)
 		{
 			$index_cat = [];
 			$index_cat = $this->dlext_main->full_index($cat);
 			$total_downloads = (isset($index_cat[$cat]['total'])) ? $index_cat[$cat]['total'] : 0;
-		
+
 			if ($total_downloads > $this->config['dl_links_per_page'])
 			{
 				$pagination = $this->phpbb_container->get('pagination');
@@ -438,13 +438,13 @@ class index
 					$this->config['dl_links_per_page'],
 					$page_start
 				);
-		
+
 				$this->template->assign_vars([
 					'PAGE_NUMBER'	=> $pagination->on_page($total_downloads, $this->config['dl_links_per_page'], $page_start),
 					'TOTAL_DL'		=> $this->language->lang('VIEW_DOWNLOADS', $total_downloads),
 				]);
 			}
-		
+
 			if (isset($index_cat[$cat]['rules']) && $index_cat[$cat]['rules'] != '')
 			{
 				$cat_rule = $index_cat[$cat]['rules'];
@@ -453,15 +453,15 @@ class index
 				$cat_rule_flags = (isset($index_cat[$cat]['rule_flags'])) ? $index_cat[$cat]['rule_flags'] : 0;
 				$cat_rule = censor_text($cat_rule);
 				$cat_rule = generate_text_for_display($cat_rule, $cat_rule_uid, $cat_rule_bitfield, $cat_rule_flags);
-		
+
 				$this->template->assign_var('S_CAT_RULE', true);
 			}
-		
+
 			if ($this->dlext_auth->user_auth($cat, 'auth_mod'))
 			{
 				$this->template->assign_var('S_MODCP', true);
 			}
-		
+
 			$physical_size = $this->dlext_physical->read_dl_sizes();
 			if ($physical_size < $this->config['dl_physical_quota'] && (!$this->config['dl_stop_uploads']) || ($this->auth->acl_get('a_') && $this->user->data['is_registered']))
 			{
@@ -470,9 +470,9 @@ class index
 					$this->template->assign_var('S_DL_UPLOAD', true);
 				}
 			}
-		
+
 			$cat_traffic = 0;
-		
+
 			if (!$this->config['dl_traffic_off'])
 			{
 				if ($this->user->data['is_registered'])
@@ -485,7 +485,7 @@ class index
 					$cat_overall_traffic = $this->config['dl_overall_guest_traffic'];
 					$cat_limit = DL_GUESTS_TRAFFICS;
 				}
-		
+
 				if (isset($index_cat[$cat]['cat_traffic_use']))
 				{
 					$cat_traffic = $index_cat[$cat]['cat_traffic'] - $index_cat[$cat]['cat_traffic_use'];
@@ -494,12 +494,12 @@ class index
 				{
 					$cat_traffic = 0;
 				}
-		
+
 				if ($index_cat[$cat]['cat_traffic'] && $cat_traffic > 0)
 				{
 					$cat_traffic = ($cat_traffic > $cat_overall_traffic && $cat_limit == true) ? $cat_overall_traffic : $cat_traffic;
 					$cat_traffic = $this->dlext_format->dl_size($cat_traffic);
-		
+
 					$this->template->assign_var('S_CAT_TRAFFIC', true);
 				}
 			}
@@ -508,9 +508,9 @@ class index
 				unset($cat_traffic);
 			}
 		}
-		
+
 		$i = 0;
-		
+
 		if ($cat && $total_downloads)
 		{
 			$dl_files = [];
@@ -542,7 +542,7 @@ class index
 						AND approve = ' . true . '
 					GROUP BY id';
 				$result = $this->db->sql_query($sql);
-		
+
 				$comment_count = [];
 				while ($row = $this->db->sql_fetchrow($result))
 				{
@@ -550,28 +550,28 @@ class index
 				}
 				$this->db->sql_freeresult($result);
 			}
-		
+
 			for ($i = 0; $i < count($dl_files); ++$i)
 			{
 				$file_id = $dl_files[$i]['id'];
 				$mini_file_icon = $this->dlext_status->mini_status_file($cat, $file_id);
-		
+
 				$description = $dl_files[$i]['description'];
 				$file_url = $this->helper->route('oxpus_dlext_details', ['df_id' => $file_id]);
-		
+
 				$hack_version = '&nbsp;'.$dl_files[$i]['hack_version'];
-		
+
 				$long_desc_uid = $dl_files[$i]['long_desc_uid'];
 				$long_desc_bitfield = $dl_files[$i]['long_desc_bitfield'];
 				$long_desc_flags = (isset($dl_files[$i]['long_desc_flags'])) ? $dl_files[$i]['long_desc_flags'] : 0;
-		
+
 				$desc_uid = $dl_files[$i]['desc_uid'];
 				$desc_bitfield = $dl_files[$i]['desc_bitfield'];
 				$desc_flags = (isset($dl_files[$i]['desc_flags'])) ? $dl_files[$i]['desc_flags'] : 0;
-		
+
 				$description = censor_text($description);
 				$description = generate_text_for_display($description, $desc_uid, $desc_bitfield, $desc_flags);
-		
+
 				$long_desc = $dl_files[$i]['long_desc'];
 				$long_desc = censor_text($long_desc);
 
@@ -598,7 +598,7 @@ class index
 				$status = $dl_status['status'];
 
 				$broken = $dl_files[$i]['broken'];
-				
+
 				if ($dl_files[$i]['file_size'])
 				{
 					$file_size = $this->dlext_format->dl_size($dl_files[$i]['file_size'], 2);
@@ -607,23 +607,23 @@ class index
 				{
 					$file_size = $this->language->lang('DL_NOT_AVAILIBLE');
 				}
-		
+
 				$file_klicks = $dl_files[$i]['klicks'];
 				$file_overall_klicks = $dl_files[$i]['overall_klicks'];
-		
+
 				$s_rating_perm = false;
 				$rating_count_text = '';
 				$rating_points = 0;
-		
+
 				if ($cat && $this->config['dl_enable_rate'])
 				{
 					$rating_points = $dl_files[$i]['rating'];
-		
+
 					if ((!$rating_points || !@in_array($this->user->data['user_id'], $ratings[$file_id])) && $this->user->data['is_registered'])
 					{
 						$s_rating_perm = true;
 					}
-		
+
 					if (isset($ratings[$file_id]))
 					{
 						$total_ratings = count($ratings[$file_id]);
@@ -633,9 +633,9 @@ class index
 						$total_ratings = 0;
 					}
 				}
-		
+
 				$cat_edit_link = false;
-		
+
 				switch ($this->config['dl_cat_edit'])
 				{
 					case 1:
@@ -659,7 +659,7 @@ class index
 					default:
 						$cat_edit_link = false;
 				}
-		
+
 				$this->template->assign_block_vars('downloads', [
 					'DESCRIPTION'			=> $description,
 					'BROKEN'				=> $broken,
@@ -675,11 +675,11 @@ class index
 					'ADD_USER'				=> $add_user,
 					'ADD_TIME'				=> $add_time,
 					'ADD_TIME_RFC'			=> $add_time_rfc,
-	
+
 					'U_DIRECT_EDIT'			=> ($cat_edit_link) ? $this->helper->route('oxpus_dlext_mcp_edit', ['cat_id' => $cat, 'df_id' => $file_id]) : '',
 					'U_FILE'				=> $file_url,
 				]);
-			
+
 				if ($index_cat[$cat]['comments'] && ($this->dlext_auth->cat_auth_comment_read($cat) || $this->dlext_auth->cat_auth_comment_post($cat)))
 				{
 					$this->template->assign_block_vars('downloads.comments', ['U_COMMENT' => $this->helper->route('oxpus_dlext_details', ['view' => 'comment', 'action' => 'view', 'cat_id' => $cat, 'df_id' => $file_id])]);
@@ -701,11 +701,11 @@ class index
 				extract($this->phpbb_dispatcher->trigger_event('oxpus.dlext.index_display_data_after', compact($vars)));
 			}
 		}
-		
+
 		if ($i)
 		{
 			$this->template->assign_var('S_DOWNLOAD_ROWS', true);
-		
+
 			if ($index_cat[$cat]['comments'] && $this->dlext_auth->cat_auth_comment_read($cat))
 			{
 				$sql = 'SELECT COUNT(dl_id) AS total_comments, id FROM ' . DL_COMMENTS_TABLE . '
@@ -713,7 +713,7 @@ class index
 						AND approve = ' . true . '
 					GROUP BY id';
 				$result = $this->db->sql_query($sql);
-		
+
 				$comment_count = [];
 				while ($row = $this->db->sql_fetchrow($result))
 				{
@@ -724,22 +724,22 @@ class index
 				$this->template->assign_block_vars('comment_header', []);
 			}
 		}
-		
+
 		if ($cat && !$total_downloads)
 		{
 			$this->template->assign_var('S_EMPTY_CATEGORY', true);
 		}
-		
+
 		$this->template->assign_vars([
 			'CAT_RULE'		=> (isset($cat_rule)) ? $cat_rule : '',
 			'CAT_TRAFFIC'	=> (isset($cat_traffic)) ? $this->language->lang('DL_CAT_TRAFFIC_MAIN', $cat_traffic) : '',
 			'T_DL_CAT'		=> (isset($index[$cat]['cat_name']) && $cat) ? $index[$cat]['cat_name'] : $this->language->lang('DL_CAT_NAME'),
 			'DL_UPLOAD'		=> $this->helper->route('oxpus_dlext_upload', ['cat_id' => $cat]),
 			'PHPEX'			=> $this->php_ext,
-		
+
 			'S_ENABLE_DESC_HIDE'	=> (isset($this->config['dl_index_desc_hide']) && $this->config['dl_index_desc_hide']) ? true : false,
 			'S_ENABLE_RATE'			=> (isset($this->config['dl_enable_rate']) && $this->config['dl_enable_rate']) ? true : false,
-		
+
 			'U_DOWNLOADS'	=> ($cat) ? $this->helper->route('oxpus_dlext_index', ['cat' => $cat]) : $this->helper->route('oxpus_dlext_index'),
 			'U_DL_SEARCH'	=> (!empty($index) || $cat) ? $this->helper->route('oxpus_dlext_search') : '',
 			'U_DL_AJAX'		=> $this->helper->route('oxpus_dlext_ajax'),

@@ -107,14 +107,14 @@ class acp_stats_controller implements acp_stats_interface
 
 		$sorting = (!$sorting) ? 'username' : $sorting;
 		$sql_order_dir = ($sort_order === '') ? 'ASC' : $sort_order;
-		
+
 		if ($delete)
 		{
 			if ($del_stat == 1)
 			{
 				$sql = 'DELETE FROM ' . DL_STATS_TABLE;
 				$this->db->sql_query($sql);
-		
+
 				$this->phpbb_log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_STATS_ALL');
 			}
 			else if ($del_stat == 2)
@@ -122,51 +122,47 @@ class acp_stats_controller implements acp_stats_interface
 				$sql = 'DELETE FROM ' . DL_STATS_TABLE . '
 					WHERE user_id = ' . ANONYMOUS;
 				$this->db->sql_query($sql);
-		
+
 				$this->phpbb_log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_STATS_ANONYM');
 			}
 			else if (is_array($del_id) && !empty($del_id))
 			{
 				$dl_id = [];
-				foreach($del_id as $key => $value)
+
+				foreach ($del_id as $key => $value)
 				{
 					$dl_id[] = (int) $value;
 				}
-		
+
 				$sql = 'DELETE FROM ' . DL_STATS_TABLE . '
 					WHERE ' . $this->db->sql_in_set('dl_id', $dl_id);
 				$this->db->sql_query($sql);
-		
+
 				$this->phpbb_log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_STATS_SOME');
 			}
 		}
-		
-		switch($sorting)
+
+		switch ($sorting)
 		{
 			case 'cat':
 				$sql_order_by = 'cat_name ' . $sql_order_dir . ', time_stamp DESC';
-				break;
-		
+			break;
 			case 'id':
 				$sql_order_by = 'description ' . $sql_order_dir . ', time_stamp DESC';
-				break;
-		
+			break;
 			case 'size':
 				$sql_order_by = 'traffic ' . $sql_order_dir . ', time_stamp DESC';
-				break;
-		
+			break;
 			case 'ip':
 				$sql_order_by = 'user_ip ' . $sql_order_dir . ', time_stamp DESC';
-				break;
-		
+			break;
 			case 'time':
 				$sql_order_by = 'time_stamp ' . $sql_order_dir;
-				break;
-		
+			break;
 			default:
 				$sql_order_by = 'username ' . $sql_order_dir . ', time_stamp DESC';
 		}
-		
+
 		$s_sort_order = '<select name="sorting">';
 		$s_sort_order .= '<option value="username">' . $this->language->lang('USERNAME') . '</option>';
 		$s_sort_order .= '<option value="id">' . $this->language->lang('DOWNLOADS') . '</option>';
@@ -176,34 +172,31 @@ class acp_stats_controller implements acp_stats_interface
 		$s_sort_order .= '<option value="time">' . $this->language->lang('TIME') . '</option>';
 		$s_sort_order .= '</select>';
 		$s_sort_order = str_replace('value="' . $sorting . '">', 'value="' . $sorting . '" selected="selected">', $s_sort_order);
-		
+
 		$s_sort_dir = '<select name="sort_order">';
 		$s_sort_dir .= '<option value="ASC">' . $this->language->lang('ASCENDING') . '</option>';
 		$s_sort_dir .= '<option value="DESC">' . $this->language->lang('DESCENDING') . '</option>';
 		$s_sort_dir .= '</select>';
 		$s_sort_dir = str_replace('value="' . $sort_order . '">', 'value="' . $sort_order . '" selected="selected">', $s_sort_dir);
-		
-		switch($filtering)
+
+		switch ($filtering)
 		{
 			case 'cat':
 				$search_filter_by = 'cat_name';
 				$filter_by = 'cat';
-				break;
-		
+			break;
 			case 'id':
 				$search_filter_by = 'description';
 				$filter_by = 'id';
-				break;
-		
+			break;
 			case 'username':
 				$search_filter_by = 'username';
 				$filter_by = 'username';
-				break;
-		
+			break;
 			default:
 				$search_filter_by = $filter_by = '';
 		}
-		
+
 		$s_filter = '<select name="filtering">';
 		$s_filter .= '<option value="-1">' . $this->language->lang('DL_NO_FILTER') . '</option>';
 		$s_filter .= '<option value="username">' . $this->language->lang('USERNAME') . '</option>';
@@ -211,16 +204,16 @@ class acp_stats_controller implements acp_stats_interface
 		$s_filter .= '<option value="cat">' . $this->language->lang('DL_CAT_NAME') . '</option>';
 		$s_filter .= '</select>';
 		$s_filter = str_replace('value="' . $filtering . '">', 'value="' . $filtering . '" selected="selected">', $s_filter);
-		
+
 		$this->template->set_filenames(['stats' => 'dl_stats_admin_body.html']);
-		
+
 		$sql_where = '';
 
 		if (!$show_guests)
 		{
 			$sql_where = ' s.user_id <> ' . ANONYMOUS;
 		}
-		
+
 		$sql_array = [
 			'SELECT'	=> 's.*, d.description, c.cat_name, u.user_colour',
 			'FROM'		=> [DL_STATS_TABLE => 's']
@@ -239,19 +232,19 @@ class acp_stats_controller implements acp_stats_interface
 			'ON'		=> 'u.user_id = s.user_id'
 		];
 		$sql_array['WHERE'] = $sql_where;
-		
+
 		$sql = $this->db->sql_build_query('SELECT', $sql_array);
-		
+
 		$result = $this->db->sql_query($sql);
 		$total_data = $this->db->sql_affectedrows($result);
-		
+
 		if ($total_data)
 		{
 			$search_ids = [];
 			$search_result = false;
-		
+
 			$filter_string = str_replace('*', '', str_replace('%', '', strtolower($filter_string)));
-		
+
 			if ($search_filter_by && $filter_string)
 			{
 				while ($row = $this->db->sql_fetchrow($result))
@@ -264,23 +257,23 @@ class acp_stats_controller implements acp_stats_interface
 					}
 				}
 			}
-		
+
 			$this->db->sql_freeresult($result);
-		
+
 			if ($search_filter_by && $filter_string && $search_result)
 			{
 				$sql_array['WHERE'] .= (($sql_where) ? ' AND ' : '') . $this->db->sql_in_set('s.dl_id', $search_ids);
 			}
-		
+
 			$sql_array['ORDER_BY'] = $sql_order_by;
-		
+
 			if ($start >= $total_data && $start >= $this->config['dl_links_per_page'])
 			{
 				$start -= $this->config['dl_links_per_page'];
 			}
-		
+
 			$page_data = (!empty($search_ids)) ? count($search_ids) : $total_data;
-		
+
 			if ($page_data > $this->config['dl_links_per_page'])
 			{
 				$this->pagination->generate_template_pagination(
@@ -291,7 +284,7 @@ class acp_stats_controller implements acp_stats_interface
 					$this->config['dl_links_per_page'],
 					$start
 				);
-					
+
 				$this->template->assign_vars([
 					'PAGE_NUMBER'	=> $this->pagination->on_page($page_data, $this->config['dl_links_per_page'], $start),
 					'TOTAL_DL'		=> $this->language->lang('VIEW_DL_STATS', $page_data),
@@ -299,9 +292,9 @@ class acp_stats_controller implements acp_stats_interface
 			}
 
 			$sql = $this->db->sql_build_query('SELECT', $sql_array);
-		
+
 			$result = $this->db->sql_query_limit($sql, $this->config['dl_links_per_page'], $start);
-		
+
 			$i = 0;
 			while ($row = $this->db->sql_fetchrow($result))
 			{
@@ -310,15 +303,13 @@ class acp_stats_controller implements acp_stats_interface
 					case 1:
 						$direction = $this->language->lang('DL_UPLOAD_FILE');
 					break;
-		
 					case 2:
 						$direction = $this->language->lang('DL_STAT_EDIT');
 					break;
-		
 					default:
 						$direction = $this->language->lang('DL_DOWNLOAD');
 				}
-		
+
 				$this->template->assign_block_vars('dl_stat_row', [
 					'CAT_NAME'			=> $row['cat_name'],
 					'DESCRIPTION'		=> $row['description'],
@@ -329,27 +320,27 @@ class acp_stats_controller implements acp_stats_interface
 					'TIME_STAMP'		=> $this->user->format_date($row['time_stamp']),
 					'TIME_STAMP_RFC'	=> gmdate(DATE_RFC3339, $row['time_stamp']),
 					'ID'				=> $row['dl_id'],
-		
+
 					'U_CAT_LINK'		=> $this->helper->route('oxpus_dlext_index', ['cat' => $row['cat_id']]),
 					'U_DL_LINK'			=> $this->helper->route('oxpus_dlext_details', ['df_id' => $row['id']]),
 				]);
-		
+
 				++$i;
 			}
-		
+
 			$this->db->sql_freeresult($result);
-		
+
 			$this->template->assign_var('S_FILLED_FOOTER', $i);
 		}
 		else
 		{
 			$this->template->assign_var('S_NO_DL_STAT_ROW', true);
 		}
-		
+
 		$this->template->assign_vars([
 			'TOTAL_DATA'		=> $total_data,
 			'FILTER_STRING'		=> $filter_string,
-		
+
 			'S_FILTER'			=> $s_filter,
 			'S_SHOW_GUESTS'		=> ($show_guests) ? 'checked="checked"' : '',
 			'S_FORM_ACTION'		=> $this->u_action,
