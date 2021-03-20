@@ -949,7 +949,4 @@ class custom_profile
 	}
 }
 
-if (defined('IN_PHPBB'))
-{
-	$cp = new custom_profile();
-}
+$cp = new custom_profile();
