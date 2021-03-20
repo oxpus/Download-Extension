@@ -5,16 +5,18 @@ env:
     SNIFF: 1            # Run code sniffer on your code? 1 or 0
     IMAGE_ICC: 1        # Run icc profile sniffer on your images? 1 or 0
     EPV: 1              # Run EPV (Extension Pre Validator) on your code? 1 or 0
-    EXECUTABLE_FILES: 0 # Run check for executable files? 1 or 0
-    PHPBB_BRANCH: 3.3.x # The phpBB branch to run tests on
+    EXECUTABLE_FILES: 1 # Run check for executable files? 1 or 0
+    PHPBB_BRANCH: 3.3.2 # The phpBB branch to run tests on
 
 on:
     push:
         branches:        # Run tests when commits are pushed to these branches in your repo
             - master
+            - develop
     pull_request:        # Run tests when pull requests are made on these branches in your repo
         branches:
             - master
+            - develop
 
 jobs:
     # START Basic Checks Job (EPV, code sniffer, images check, etc.)
@@ -23,7 +25,7 @@ jobs:
         strategy:
             matrix:
                 include:
-                    - php: '7.1'
+                    - php: '7.2'
                       db: "none"
                       NOTESTS: 1
 
@@ -112,6 +114,14 @@ jobs:
                     - php: '7.2'
                       db: "mysql:5.7"
                     - php: '7.3'
+                      db: "mysql:5.7"
+                    - php: '7.4'
+                      db: "mysql:5.7"
+                    - php: '7.4'
+                      db: "mysql:8.0"
+                    - php: '8.0'
+                      db: "mysql:5.7"
+                    - php: '8.1'
                       db: "mysql:5.7"
 
         name: PHP ${{ matrix.php }} - ${{ matrix.db_alias != '' && matrix.db_alias || matrix.db }}
