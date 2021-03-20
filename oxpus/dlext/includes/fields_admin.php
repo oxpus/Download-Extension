@@ -196,5 +196,3 @@ class custom_profile_admin extends custom_profile
 		return $options;
 	}
 }
-
-$cp = new custom_profile_admin();

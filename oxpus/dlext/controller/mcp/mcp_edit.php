@@ -220,6 +220,8 @@ class mcp_edit
 		// Initiate custom fields
 		include($this->ext_path . 'includes/fields.' . $this->php_ext);
 
+		$cp = new \oxpus\dlext\includes\custom_profile();
+
 		/*
 		* And now the different work from here
 		*/

@@ -1246,6 +1246,8 @@ class details
 		*/
 		include($this->ext_path . 'includes/fields.' . $this->php_ext);
 
+		$cp = new \oxpus\dlext\includes\custom_profile();
+
 		$dl_fields = $cp->generate_profile_fields_template('grab', $file_id);
 		$dl_fields = (isset($dl_fields[$file_id])) ? $cp->generate_profile_fields_template('show', $this->dlext_constants::DL_FALSE, $dl_fields[$file_id]) : [];
 

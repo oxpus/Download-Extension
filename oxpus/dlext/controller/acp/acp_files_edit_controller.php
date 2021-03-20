@@ -194,6 +194,8 @@ class acp_files_edit_controller implements acp_files_edit_interface
 
 		include($this->ext_path . 'includes/fields.' . $this->phpEx);
 
+		$cp = new \oxpus\dlext\includes\custom_profile();
+
 		if ($action == 'edit' || $action == 'add')
 		{
 			$s_hidden_fields = ['action' => 'save'];

@@ -143,6 +143,8 @@ class acp_fields_controller implements acp_fields_interface
 			FIELD_DROPDOWN	=> ['field_length' => 0, 'field_minlen' => 0, 'field_maxlen' => 5, 'field_validation' => '', 'field_novalue' => 0, 'field_default_value' => 0],
 		];
 
+		$cp = new \oxpus\dlext\includes\custom_profile_admin();
+
 		// Build Language array
 		// Based on this, we decide which elements need to be edited later and which language items are missing
 		$this->lang_defs = [];

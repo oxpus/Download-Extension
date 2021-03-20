@@ -163,6 +163,8 @@ class upload
 		// Initiate custom fields
 		include($this->ext_path . 'includes/fields.' . $this->php_ext);
 
+		$cp = new \oxpus\dlext\includes\custom_profile();
+
 		if ($submit)
 		{
 			if (!check_form_key('dl_upload'))

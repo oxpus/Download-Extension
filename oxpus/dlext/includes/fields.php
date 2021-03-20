@@ -948,5 +948,3 @@ class custom_profile
 		$db->sql_freeresult($result);
 	}
 }
-
-$cp = new custom_profile();
