@@ -1,4 +1,3 @@
-
 .dlext
 {
     background-color: #fafafa;
@@ -21,6 +20,10 @@
 {
     background-color: #f5f5f5;
     border: 1px #aaaaaa solid;
+}
+
+.dl-report-panel {
+    background: none;
 }
 
 .dlbutton1
@@ -68,7 +71,7 @@
 }
 
 .dl-bubble {
-    padding: 3px;
+    padding: 2px 5px 3px 5px;
     border-radius: 12px;
     color: #ffffff;
     background-color: #aaaaaa;
@@ -110,6 +113,14 @@
     border: 1px solid #ccc;
     font-size: 12px;
     color: #000000;
+}
+
+a.help {
+    float: right;
+}
+
+a.help:hover {
+    cursor: pointer;
 }
 
 div.dl_help_close
@@ -155,6 +166,30 @@ div.dl_help_close:hover, .dl-close-footer:hover
     margin-bottom: 2%;
 }
 
+.dl-tab-icon
+{
+    color: #aa0000 !important;
+    background: none !important;
+    background-color: #eeeeee !important;
+    border: 1px #aa0000 solid;
+    text-shadow: none !important;
+}
+
+.dl-tab-icon:hover
+{
+    border: 1px #0000aa solid;
+}
+
+.dl-red-icon
+{
+    color: #ff0000 !important;
+}
+
+.dl-green-icon
+{
+    color: #009900 !important;
+}
+
 .dl-red
 {
     color: #ff0000;
@@ -188,7 +223,7 @@ div.dl_help_close:hover, .dl-close-footer:hover
 
 .dl-icon-yellow:hover
 {
-    color: #009900;
+    color: #aa0000;
     text-shadow: none;
 }
 
@@ -344,8 +379,21 @@ table.zebra-list tr.dl-reported:nth-child(even) td {
 	background-color: #ECD5D8 !important;
 }
 
+.dl-rating-image {
+    letter-spacing: -4px;
+}
+
+.dl-rating-count {
+    letter-spacing: normal;
+}
+
 .dl-reported {
     background-color: #ECD5D8 !important;
+}
+
+.dl-report-data {
+    float: left;
+    margin-right: 5em;
 }
 
 .dl-width-5 {
@@ -382,6 +430,10 @@ table.zebra-list tr.dl-reported:nth-child(even) td {
 
 .dl-width-75 {
     width: 75%;
+}
+
+.dl-width-75-max {
+    max-width: 75%;
 }
 
 .dl-width-80 {

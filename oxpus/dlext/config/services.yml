@@ -1,10 +1,12 @@
 imports:
+    - { resource: tables.yml }
     - { resource: services_acp.yml }
     - { resource: services_controller.yml }
-    - { resource: services_classes.yml }
-    - { resource: services_helpers.yml }
+    - { resource: services_core_helpers.yml }
+    - { resource: services_core.yml }
     - { resource: services_mcp.yml }
     - { resource: services_notifications.yml }
+    - { resource: services_tracker.yml }
     - { resource: services_ucp.yml }
 
 services:
@@ -12,21 +14,29 @@ services:
         class: oxpus\dlext\event\listener
         public: true
         arguments:
-            - '%core.root_path%'
-            - '%core.php_ext%'
-            - '%core.table_prefix%'
             - '@ext.manager'
-            - '@path_helper'
-            - '@service_container'
             - '@dbal.conn'
             - '@config'
             - '@controller.helper'
-            - '@auth'
             - '@template'
             - '@user'
             - '@language'
-            - '@oxpus.dlext.dlext_auth'
-            - '@oxpus.dlext.dlext_format'
-            - '@oxpus.dlext.dlext_privacy'
+            - '@request'
+            - '@cache'
+            - '@filesystem'
+            - '@oxpus.dlext.core.auth'
+            - '@oxpus.dlext.core.format'
+            - '@oxpus.dlext.core.main'
+            - '@oxpus.dlext.core.privacy'
+            - '@oxpus.dlext.helpers.constants'
+            - '%oxpus.dlext.tables.dl_banlist%'
+            - '%oxpus.dlext.tables.dl_cat_traf%'
+            - '%oxpus.dlext.tables.dl_comments%'
+            - '%oxpus.dlext.tables.dl_favorites%'
+            - '%oxpus.dlext.tables.dl_hotlink%'
+            - '%oxpus.dlext.tables.dl_notraf%'
+            - '%oxpus.dlext.tables.dl_stats%'
+            - '%oxpus.dlext.tables.downloads%'
+            - '%oxpus.dlext.tables.dl_cat%'
         tags:
             - { name: event.listener }

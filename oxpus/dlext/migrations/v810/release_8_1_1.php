@@ -3,7 +3,7 @@
 /**
 *
 * @package phpBB Extension - Oxpus Downloads
-* @copyright (c) 2002-2020 OXPUS - www.oxpus.net
+* @copyright (c) 2002-2021 OXPUS - www.oxpus.net
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
 */
@@ -21,7 +21,7 @@ class release_8_1_1 extends \phpbb\db\migration\migration
 
 	static public function depends_on()
 	{
-		return ['\oxpus\dlext\migrations\v810\release_8_1_0PL2'];
+		return ['\oxpus\dlext\migrations\v810\release_8_1_0pl2'];
 	}
 
 	public function update_data()

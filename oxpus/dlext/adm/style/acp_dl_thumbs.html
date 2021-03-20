@@ -1,33 +1,25 @@
-{% INCLUDE 'overall_header.html' %}
+<h3>{{ lang('DL_THUMB') }}</h3>
 
-<script type="text/javascript">
-// <![CDATA[
-function select_switch(status)
-{
-	doc_length = document.forms.thumbnails.length;
-	for (i = 0; i < doc_length; i++)
-	{
-		document.forms.thumbnails.elements[i].checked = status;
-	}
-}
-// ]]>
-</script>
-
-<h1>{{ lang('DL_THUMB') }}</h1>
-
-<form action="{{ S_MANAGE_ACTION }}" method="post" id="thumbnails">
+<form action="{{ S_DL_MANAGE_ACTION }}" method="post" id="thumbnails">
 
 <fieldset>
 
 	{% for thumbnails in loops.thumbnails %}
 	<dl>
-		<dt><label><a href="{{ thumbnails.U_REAL_FILE }}" class="genmed">{{ thumbnails.REAL_FILE }}</a></label></dt>
-		<dd>{{ thumbnails.CHECKBOX }}&nbsp;<span>{{ thumbnails.FILE_SIZE }}</span></dd>
+		<dt><label><a href="{{ thumbnails.U_DL_REAL_FILE }}" class="genmed">{{ thumbnails.DL_REAL_FILE }}</a></label></dt>
+		<dd>
+			{% if thumbnails.DL_CHECKBOX %}
+			<input type="checkbox" class="permissions-checkbox" name="thumb[{{ thumbnails.DL_CHECKBOX }}]" value="{{ thumbnails.DL_REAL_FILE_CODE }}" />
+			{% else %}
+			<input type="checkbox" class="permissions-checkbox" name="thumb[{{ thumbnails.DL_CHECKBOX }}]" value="" disabled="disabled" />
+			{% endif %}
+			&nbsp;<span>{{ thumbnails.DL_FILE_SIZE }}</span>
+		</dd>
 	</dl>
 	{% endfor %}
 
-	<p>
-		<a href="javascript:select_switch(true);" class="small">{{ lang('DL_MARK_ALL') }}</a> &bull; <a href="javascript:select_switch(false);" class="small">{{ lang('DL_UNMARK') }}</a>
+	<p class="quick">
+		<span class="small"><a href="#" onclick="marklist('thumbnails', 'thumb', true); return false;">{{ lang('MARK_ALL') }}</a> :: <a href="#" onclick="marklist('thumbnails', 'thumb', false); return false;">{{ lang('UNMARK_ALL') }}</a></span>
 	</p>
 
 	<p class="submit-buttons">
@@ -38,7 +30,3 @@ function select_switch(status)
 </fieldset>
 
 </form>
-
-<fieldset class="submit-buttons">{{ DL_MOD_RELEASE }}</fieldset>
-
-{% INCLUDE 'overall_footer.html' %}

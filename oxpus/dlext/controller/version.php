@@ -3,124 +3,104 @@
 /**
 *
 * @package phpBB Extension - Oxpus Downloads
-* @copyright (c) 2002-2020 OXPUS - www.oxpus.net
+* @copyright (c) 2002-2021 OXPUS - www.oxpus.net
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
 */
 
 namespace oxpus\dlext\controller;
 
-use Symfony\Component\DependencyInjection\Container;
-
 class version
 {
-	/* @var string phpBB root path */
+	/* phpbb objects */
 	protected $root_path;
-
-	/* @var string phpEx */
 	protected $php_ext;
-
-	/* @var Container */
-	protected $phpbb_container;
-
-	/* @var \phpbb\extension\manager */
-	protected $phpbb_extension_manager;
-
-	/* @var \phpbb\path_helper */
-	protected $phpbb_path_helper;
-
-	/* @var \phpbb\db\driver\driver_interface */
 	protected $db;
-
-	/* @var \phpbb\config\config */
 	protected $config;
-
-	/* @var \phpbb\controller\helper */
 	protected $helper;
-
-	/* @var \phpbb\auth\auth */
-	protected $auth;
-
-	/* @var \phpbb\request\request_interface */
 	protected $request;
-
-	/* @var \phpbb\template\template */
 	protected $template;
-
-	/* @var \phpbb\user */
 	protected $user;
-
-	/* @var \phpbb\language\language */
 	protected $language;
+	protected $files_factory;
+	protected $filesystem;
 
-	/** @var extension owned objects */
-	protected $ext_path;
-	protected $ext_path_web;
-	protected $ext_path_ajax;
-
+	/* extension owned objects */
 	protected $dlext_auth;
 	protected $dlext_files;
 	protected $dlext_format;
 	protected $dlext_main;
 	protected $dlext_physical;
 	protected $dlext_status;
+	protected $dlext_constants;
+	protected $dlext_footer;
+
+	protected $dlext_table_dl_ver_files;
+	protected $dlext_table_dl_versions;
 
 	/**
 	* Constructor
 	*
 	* @param string									$root_path
 	* @param string									$php_ext
-	* @param Container 								$phpbb_container
-	* @param \phpbb\extension\manager				$phpbb_extension_manager
-	* @param \phpbb\path_helper						$phpbb_path_helper
-	* @param \phpbb\db\driver\driver_interfacer		$db
+	* @param \phpbb\db\driver\driver_interface		$db
 	* @param \phpbb\config\config					$config
 	* @param \phpbb\controller\helper				$helper
-	* @param \phpbb\auth\auth						$auth
-	* @param \phpbb\request\request_interface 		$request
+	* @param \phpbb\request\request 				$request
 	* @param \phpbb\template\template				$template
 	* @param \phpbb\user							$user
 	* @param \phpbb\language\language				$language
+	* @param \phpbb\files\factory					$files_factory
+	* @param \phpbb\filesystem\filesystem			$filesystem
+	* @param \oxpus\dlext\core\auth					$dlext_auth
+	* @param \oxpus\dlext\core\files				$dlext_files
+	* @param \oxpus\dlext\core\format				$dlext_format
+	* @param \oxpus\dlext\core\main					$dlext_main
+	* @param \oxpus\dlext\core\physical				$dlext_physical
+	* @param \oxpus\dlext\core\status				$dlext_status
+	* @param \oxpus\dlext\core\helpers\constants	$dlext_constants
+	* @param \oxpus\dlext\core\helpers\footer		$dlext_footer
+	* @param string									$dlext_table_dl_ver_files
+	* @param string									$dlext_table_dl_versions
 	*/
 	public function __construct(
 		$root_path,
 		$php_ext,
-		Container $phpbb_container,
-		\phpbb\extension\manager $phpbb_extension_manager,
-		\phpbb\path_helper $phpbb_path_helper,
 		\phpbb\db\driver\driver_interface $db,
 		\phpbb\config\config $config,
 		\phpbb\controller\helper $helper,
-		\phpbb\auth\auth $auth,
-		\phpbb\request\request_interface $request,
+		\phpbb\request\request $request,
 		\phpbb\template\template $template,
 		\phpbb\user $user,
 		\phpbb\language\language $language,
-		$dlext_auth,
-		$dlext_files,
-		$dlext_format,
-		$dlext_main,
-		$dlext_physical,
-		$dlext_status
+		\phpbb\files\factory $files_factory,
+		\phpbb\filesystem\filesystem $filesystem,
+		\oxpus\dlext\core\auth $dlext_auth,
+		\oxpus\dlext\core\files $dlext_files,
+		\oxpus\dlext\core\format $dlext_format,
+		\oxpus\dlext\core\main $dlext_main,
+		\oxpus\dlext\core\physical $dlext_physical,
+		\oxpus\dlext\core\status $dlext_status,
+		\oxpus\dlext\core\helpers\constants $dlext_constants,
+		\oxpus\dlext\core\helpers\footer $dlext_footer,
+		$dlext_table_dl_ver_files,
+		$dlext_table_dl_versions
 	)
 	{
 		$this->root_path				= $root_path;
 		$this->php_ext 					= $php_ext;
-		$this->phpbb_container 			= $phpbb_container;
-		$this->phpbb_extension_manager 	= $phpbb_extension_manager;
-		$this->phpbb_path_helper		= $phpbb_path_helper;
 		$this->db 						= $db;
 		$this->config 					= $config;
 		$this->helper 					= $helper;
-		$this->auth						= $auth;
 		$this->request					= $request;
 		$this->template 				= $template;
 		$this->user 					= $user;
 		$this->language					= $language;
+		$this->files_factory			= $files_factory;
+		$this->filesystem				= $filesystem;
 
-		$this->ext_path					= $this->phpbb_extension_manager->get_extension_path('oxpus/dlext', true);
-		$this->ext_path_web				= $this->phpbb_path_helper->update_web_root_path($this->ext_path);
-		$this->ext_path_ajax			= $this->ext_path_web . 'assets/javascript/';
+		$this->dlext_table_dl_ver_files	= $dlext_table_dl_ver_files;
+		$this->dlext_table_dl_versions	= $dlext_table_dl_versions;
 
 		$this->dlext_auth				= $dlext_auth;
 		$this->dlext_files				= $dlext_files;
@@ -128,14 +108,21 @@ class version
 		$this->dlext_main				= $dlext_main;
 		$this->dlext_physical			= $dlext_physical;
 		$this->dlext_status				= $dlext_status;
+		$this->dlext_constants			= $dlext_constants;
+		$this->dlext_footer				= $dlext_footer;
+
+		$this->dlext_main->dl_handle_active();
 	}
 
 	public function handle()
 	{
-		$nav_view = 'version';
+		$submit		= $this->request->variable('submit', '');
+		$cancel		= $this->request->variable('cancel', '');
+		$action		= $this->request->variable('action', '');
+		$df_id		= $this->request->variable('df_id', 0);
+		$modcp		= $this->request->variable('modcp', 0);
 
-		// Include the default base init script
-		include_once($this->ext_path . 'phpbb/includes/base_init.' . $this->php_ext);
+		$index		= $this->dlext_main->full_index();
 
 		if ($cancel)
 		{
@@ -145,10 +132,10 @@ class version
 		$ver_id			= $this->request->variable('ver_id', 0);
 		$ver_file_id	= $this->request->variable('ver_file_id', 0);
 
-		$sql = 'SELECT * FROM ' . DL_VERSIONS_TABLE . '
+		$sql = 'SELECT * FROM ' . $this->dlext_table_dl_versions . '
 			WHERE ver_id = ' . (int) $ver_id;
 		$result = $this->db->sql_query($sql);
-		$ver_exists = $this->db->sql_affectedrows($result);
+		$ver_exists = $this->db->sql_affectedrows();
 		$ver_data = $this->db->sql_fetchrow($result);
 		$this->db->sql_freeresult($result);
 
@@ -162,8 +149,7 @@ class version
 		/*
 		* default entry point for download details
 		*/
-		$dl_file = [];
-		$dl_file = $this->dlext_files->all_files(0, '', 'ASC', '', $df_id, 0, '*');
+		$dl_file = $this->dlext_files->all_files(0, [], [], $df_id, $modcp, ['*']);
 
 		if (!$dl_file)
 		{
@@ -172,7 +158,6 @@ class version
 
 		$cat_id = $dl_file['cat'];
 
-		$cat_auth = [];
 		$cat_auth = $this->dlext_auth->dl_cat_auth($cat_id);
 
 		$auth_view = $this->dlext_auth->user_auth($cat_id, 'auth_view');
@@ -181,41 +166,27 @@ class version
 		/*
 		* check the permissions
 		*/
-		$user_can_alltimes_load = false;
-
-		if (($cat_auth['auth_mod'] || ($this->auth->acl_get('a_') && $this->user->data['is_registered'])) && !$this->dlext_auth->user_banned())
+		if (($cat_auth['auth_mod'] || $this->dlext_auth->user_admin()) && !$this->dlext_constants->get_value('user_banned'))
 		{
-			$user_can_alltimes_load = true;
-			$user_is_mod = true;
+			$user_is_mod = $this->dlext_constants::DL_TRUE;
 		}
 		else
 		{
-			$user_is_mod = false;
+			$user_is_mod = $this->dlext_constants::DL_FALSE;
 		}
 
-		$user_is_guest = false;
-		$user_is_admin = false;
-		$user_is_founder = false;
+		$user_is_admin = $this->dlext_constants::DL_FALSE;
+		$user_is_founder = $this->dlext_constants::DL_FALSE;
 
-		if (!$this->user->data['is_registered'])
+		if ($this->dlext_auth->user_admin())
 		{
-			$user_is_guest = true;
+			$user_is_admin = $this->dlext_constants::DL_TRUE;
 		}
-		else
+
+		if ($this->user->data['user_type'] == USER_FOUNDER)
 		{
-			if ($this->auth->acl_get('a_'))
-			{
-				$user_is_admin = true;
-			}
-
-			if ($this->user->data['user_type'] == USER_FOUNDER)
-			{
-				$user_is_founder = true;
-			}
+			$user_is_founder = $this->dlext_constants::DL_TRUE;
 		}
-
-		$check_status = [];
-		$check_status = $this->dlext_status->status($df_id);
 
 		if (!$dl_file['id'] || !$auth_view)
 		{
@@ -234,21 +205,18 @@ class version
 			$cat_rule = censor_text($cat_rule);
 			$cat_rule = generate_text_for_display($cat_rule, $cat_rule_uid, $cat_rule_bitfield, $cat_rule_flags);
 
-			$this->template->assign_var('S_CAT_RULE', true);
+			$this->template->assign_var('S_DL_CAT_RULE', $this->dlext_constants::DL_TRUE);
 		}
 		else
 		{
 			$cat_rule = '';
 		}
 
-		$inc_module = true;
-		page_header($this->language->lang('DOWNLOADS') . ' - ' . $dl_file['description']);
-
-		$ver_can_edit = false;
+		$ver_can_edit = $this->dlext_constants::DL_FALSE;
 
 		if (($user_is_mod || $user_is_admin || $user_is_founder) || ($this->config['dl_edit_own_downloads'] && $dl_file['add_user'] == $this->user->data['user_id']))
 		{
-			$ver_can_edit = true;
+			$ver_can_edit = $this->dlext_constants::DL_TRUE;
 		}
 
 		/*
@@ -258,11 +226,10 @@ class version
 		$mini_icon		= $this->dlext_status->mini_status_file($cat_id, $df_id);
 		$ver_version	= '&nbsp;' . $ver_data['ver_version'];
 		$ver_desc		= generate_text_for_display($ver_data['ver_text'], $ver_data['ver_uid'], $ver_data['ver_bitfield'], $ver_data['ver_flags']);
-		$file_status	= [];
-		$file_status	= $this->dlext_status->status($df_id);
-		$status			= $file_status['status_detail'];
+		$check_status	= $this->dlext_status->status($df_id);
+		$file_status	= $check_status['file_status'];
+		$file_load		= $check_status['file_auth'];
 		$file_name		= $ver_data['ver_file_name'];
-		$file_load		= $file_status['auth_dl'];
 
 		if ($ver_data['ver_file_size'])
 		{
@@ -270,19 +237,15 @@ class version
 		}
 		else
 		{
-			$file_size_out = $this->language->lang('DL_NOT_AVAILIBLE');
+			$file_size_out = $this->language->lang('DL_NOT_AVAILABLE');
 		}
-
-		$cat_name = $index[$cat_id]['cat_name'];
-		$cat_view = $index[$cat_id]['nav_path'];
-		$cat_desc = $index[$cat_id]['description'];
 
 		/*
 		* Download an attached file?
 		*/
 		if ($action == 'dl' && $ver_id && $ver_file_id && $auth_dl)
 		{
-			$sql = 'SELECT ver_id, real_name, file_name, file_type FROM ' . DL_VER_FILES_TABLE . '
+			$sql = 'SELECT ver_id, real_name, file_name, file_type FROM ' . $this->dlext_table_dl_ver_files . '
 				WHERE ver_file_id = ' . (int) $ver_file_id;
 			$result = $this->db->sql_query($sql);
 			$row_ver = $this->db->sql_fetchrow($result);
@@ -290,21 +253,24 @@ class version
 
 			if ($row_ver['file_type'] == 0 && $row_ver['ver_id'] == $ver_id)
 			{
-				include_once($this->root_path . 'includes/functions_download.' . $this->php_ext);
+				if (!function_exists('send_file_to_browser'))
+				{
+					include($this->root_path . 'includes/functions_download.' . $this->php_ext);
+				}
 
 				$this->language->add_lang('viewtopic');
 
-				$dl_file_url = DL_EXT_FILEBASE_PATH. 'version/files/';
+				$dl_file_url = $this->dlext_constants->get_value('files_dir') . '/version/files/';
 
 				$dl_ver_data = [
 					'physical_file'		=> $dl_file_url . $row_ver['real_name'],
 					'real_filename'		=> $row_ver['file_name'],
 					'mimetype'			=> 'application/octetstream',
-					'filesize'			=> sprintf("%u", @filesize($dl_file_url . $row_ver['real_name'])),
-					'filetime'			=> @filemtime($dl_file_url . $row_ver['real_name']),
+					'filesize'			=> sprintf("%u", filesize($dl_file_url . $row_ver['real_name'])),
+					'filetime'			=> filemtime($dl_file_url . $row_ver['real_name']),
 				];
 
-				if (@file_exists($dl_file_url . $row_ver['real_name']))
+				if ($this->filesystem->exists($dl_file_url . $row_ver['real_name']))
 				{
 					$this->dlext_physical->send_file_to_browser($dl_ver_data);
 				}
@@ -335,19 +301,22 @@ class version
 
 			foreach ($del_files as $key => $value)
 			{
-				$sql = 'SELECT file_type, real_name FROM ' . DL_VER_FILES_TABLE . '
+				$sql = 'SELECT file_type, real_name FROM ' . $this->dlext_table_dl_ver_files . '
 					WHERE ver_file_id = ' . (int) $value;
 				$result = $this->db->sql_query($sql);
 
 				while ($row = $this->db->sql_fetchrow($result))
 				{
-					switch ($row['file_type'])
+					if ($row['real_name'])
 					{
-						case 1:
-							@unlink(DL_EXT_FILEBASE_PATH. 'version/images/' . $row['real_name']);
-						break;
-						default:
-							@unlink(DL_EXT_FILEBASE_PATH. 'version/files/' . $row['real_name']);
+						switch ($row['file_type'])
+						{
+							case $this->dlext_constants::DL_FILE_TYPE_IMAGE:
+								$this->filesystem->remove($this->dlext_constants->get_value('files_dir') . '/version/images/' . $row['real_name']);
+							break;
+							default:
+								$this->filesystem->remove($this->dlext_constants->get_value('files_dir') . '/version/files/' . $row['real_name']);
+						}
 					}
 				}
 
@@ -356,7 +325,7 @@ class version
 				$dropped_files[] = $value;
 			}
 
-			$sql = 'DELETE FROM ' . DL_VER_FILES_TABLE . '
+			$sql = 'DELETE FROM ' . $this->dlext_table_dl_ver_files . '
 				WHERE ' . $this->db->sql_in_set('ver_file_id', $dropped_files);
 			$this->db->sql_query($sql);
 
@@ -367,7 +336,7 @@ class version
 			{
 				if (!in_array($key, $dropped_files))
 				{
-					$sql = 'UPDATE ' . DL_VER_FILES_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', [
+					$sql = 'UPDATE ' . $this->dlext_table_dl_ver_files . ' SET ' . $this->db->sql_build_array('UPDATE', [
 						'file_title'	=> $value,
 					]) . ' WHERE ver_file_id = ' . (int) $key;
 					$this->db->sql_query($sql);
@@ -375,20 +344,18 @@ class version
 			}
 
 			// Upload new file
-			$factory = $this->phpbb_container->get('files.factory');
 			$form_name = 'ver_new_file';
 			$file = $this->request->file($form_name);
 			$extension = str_replace('.', '', trim(strrchr(strtolower($file['name']), '.')));
 			$allowed_extensions = [$extension];
-			$upload = $factory->get('upload')
+
+			$upload = $this->files_factory->get('upload')
 				->set_allowed_extensions($allowed_extensions)
-				->set_disallowed_content((isset($this->config['mime_triggers']) ? explode('|', $this->config['mime_triggers']) : false));
+				->set_disallowed_content((isset($this->config['mime_triggers']) ? explode('|', $this->config['mime_triggers']) : $this->dlext_constants::DL_FALSE));
 
 			unset($file['local_mode']);
 			$ver_file = $upload->handle_upload('files.types.form', $form_name);
 
-			$ver_file_size = $file['size'];
-			$ver_file_temp = $file['tmp_name'];
 			$ver_file_name = $file['name'];
 
 			$error_count = count($ver_file->error);
@@ -399,25 +366,23 @@ class version
 				trigger_error(implode('<br />', $ver_file->error), E_USER_ERROR);
 			}
 
-			$ver_file->error = [];
-
 			if ($ver_file_name)
 			{
 				do
 				{
-					$file_name = $df_id . '_' . $ver_id . '_' . (md5(microtime() . $ver_file_name) . '.' . $extension);
+					$file_name = $df_id . '_' . $ver_id . '_' . ($this->dlext_format->encrypt($ver_file_name) . '.' . $extension);
 				}
-				while (file_exists(DL_EXT_FILEBASE_PATH. 'version/files/' . $file_name));
+				while ($this->filesystem->exists($this->dlext_constants->get_value('files_dir') . '/version/files/' . $file_name));
 
 				$file['name'] = $file_name;
-				$dest_folder = str_replace($this->root_path, '', substr(DL_EXT_FILEBASE_PATH. 'version/files/', 0, -1));
+				$dest_folder = str_replace($this->root_path, '', substr($this->dlext_constants->get_value('files_dir') . '/version/files/', 0, -1));
 
 				$ver_file->set_upload_ary($file);
-				$ver_file->move_file($dest_folder, false, false, CHMOD_ALL);
+				$ver_file->move_file($dest_folder, $this->dlext_constants::DL_FALSE, $this->dlext_constants::DL_FALSE);
 
-				$ver_file_title = $this->request->variable('ver_new_file_title', '', true);
+				$ver_file_title = $this->request->variable('ver_new_file_title', '', $this->dlext_constants::DL_TRUE);
 
-				$sql = 'INSERT INTO ' . DL_VER_FILES_TABLE . ' ' . $this->db->sql_build_array('INSERT', [
+				$sql = 'INSERT INTO ' . $this->dlext_table_dl_ver_files . ' ' . $this->db->sql_build_array('INSERT', [
 					'dl_id'			=> $df_id,
 					'ver_id'		=> $ver_id,
 					'real_name'		=> $file_name,
@@ -433,19 +398,18 @@ class version
 			}
 
 			// Upload new image
-			$factory = $this->phpbb_container->get('files.factory');
 			$form_name = 'ver_new_image';
 			$file = $this->request->file($form_name);
 			$extension = str_replace('.', '', trim(strrchr(strtolower($file['name']), '.')));
 			$allowed_extensions = [$extension];
-			$upload_image = $factory->get('upload')
+
+			$upload_image = $this->files_factory->get('upload')
 				->set_allowed_extensions($allowed_extensions)
-				->set_disallowed_content((isset($this->config['mime_triggers']) ? explode('|', $this->config['mime_triggers']) : false));
+				->set_disallowed_content((isset($this->config['mime_triggers']) ? explode('|', $this->config['mime_triggers']) : $this->dlext_constants::DL_FALSE));
 
 			unset($file['local_mode']);
 			$ver_image = $upload_image->handle_upload('files.types.form', $form_name);
 
-			$ver_image_size = $file['size'];
 			$ver_image_temp = $file['tmp_name'];
 			$ver_image_name = $file['name'];
 
@@ -457,11 +421,9 @@ class version
 				trigger_error(implode('<br />', $ver_image->error), E_USER_ERROR);
 			}
 
-			$ver_image->error = [];
-
 			if ($ver_image_name)
 			{
-				$pic_size = @getimagesize($ver_image_temp);
+				$pic_size = getimagesize($ver_image_temp);
 				$pic_width = $pic_size[0];
 				$pic_height = $pic_size[1];
 
@@ -471,7 +433,7 @@ class version
 					trigger_error($this->language->lang('DL_UPLOAD_ERROR'), E_USER_ERROR);
 				}
 
-				if ($pic_width > $this->config['dl_thumb_xsize'] || $pic_height > $this->config['dl_thumb_ysize'] || (sprintf("%u", @filesize($ver_image_temp) > $this->config['dl_thumb_fsize'])))
+				if ($pic_width > $this->config['dl_thumb_xsize'] || $pic_height > $this->config['dl_thumb_ysize'] || (sprintf("%u", filesize($ver_image_temp) > $this->config['dl_thumb_fsize'])))
 				{
 					$ver_image->remove();
 					trigger_error($this->language->lang('DL_THUMB_TO_BIG'), E_USER_ERROR);
@@ -479,19 +441,19 @@ class version
 
 				do
 				{
-					$img_name = $df_id . '_' . $ver_id . '_' . (md5(microtime() . $ver_image_name)) . '.' . $extension;
+					$img_name = $df_id . '_' . $ver_id . '_' . ($this->dlext_format->encrypt($ver_image_name)) . '.' . $extension;
 				}
-				while (file_exists(DL_EXT_FILEBASE_PATH. 'version/images/' . $img_name));
+				while ($this->filesystem->exists($this->dlext_constants->get_value('files_dir') . '/version/images/' . $img_name));
 
 				$file['name'] = $img_name;
-				$dest_folder = str_replace($this->root_path, '', substr(DL_EXT_FILEBASE_PATH. 'version/images/', 0, -1));
+				$dest_folder = str_replace($this->root_path, '', substr($this->dlext_constants->get_value('files_dir') . '/version/images/', 0, -1));
 
 				$ver_image->set_upload_ary($file);
-				$ver_image->move_file($dest_folder, false, false, CHMOD_ALL);
+				$ver_image->move_file($dest_folder, $this->dlext_constants::DL_FALSE, $this->dlext_constants::DL_FALSE);
 
-				$ver_file_title = $this->request->variable('ver_new_image_title', '', true);
+				$ver_file_title = $this->request->variable('ver_new_image_title', '', $this->dlext_constants::DL_TRUE);
 
-				$sql = 'INSERT INTO ' . DL_VER_FILES_TABLE . ' ' . $this->db->sql_build_array('INSERT', [
+				$sql = 'INSERT INTO ' . $this->dlext_table_dl_ver_files . ' ' . $this->db->sql_build_array('INSERT', [
 					'dl_id'			=> $df_id,
 					'ver_id'		=> $ver_id,
 					'real_name'		=> $img_name,
@@ -507,20 +469,20 @@ class version
 			}
 
 			// Update release itself
-			$ver_version	= $this->request->variable('ver_version', '', true);
-			$ver_text		= $this->request->variable('message', '', true);
+			$ver_version	= $this->request->variable('ver_version', '', $this->dlext_constants::DL_TRUE);
+			$ver_text		= $this->request->variable('message', '', $this->dlext_constants::DL_TRUE);
 			$ver_active		= $this->request->variable('ver_active', 0);
 
-			$allow_bbcode		= ($this->config['allow_bbcode']) ? true : false;
-			$allow_urls			= true;
-			$allow_smilies		= ($this->config['allow_smilies']) ? true : false;
+			$allow_bbcode		= ($this->config['allow_bbcode']) ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE;
+			$allow_urls			= $this->dlext_constants::DL_TRUE;
+			$allow_smilies		= ($this->config['allow_smilies']) ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE;
 			$ver_uid			= '';
 			$ver_bitfield		= '';
 			$ver_flags			= 0;
 
 			generate_text_for_storage($ver_text, $ver_uid, $ver_bitfield, $ver_flags, $allow_bbcode, $allow_urls, $allow_smilies);
 
-			$sql = 'UPDATE ' . DL_VERSIONS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', [
+			$sql = 'UPDATE ' . $this->dlext_table_dl_versions . ' SET ' . $this->db->sql_build_array('UPDATE', [
 				'ver_version'		=> $ver_version,
 				'ver_text'			=> $ver_text,
 				'ver_uid'			=> $ver_uid,
@@ -553,23 +515,23 @@ class version
 			$ver_data['ver_text']	= $text_ary['text'];
 
 			// Fetch all attachments for this release
-			$sql = 'SELECT ver_file_id, file_type, real_name, file_title, file_name FROM ' . DL_VER_FILES_TABLE . '
+			$sql = 'SELECT ver_file_id, file_type, real_name, file_title, file_name FROM ' . $this->dlext_table_dl_ver_files . '
 				WHERE ver_id = ' . (int) $ver_id . '
 				ORDER BY file_title';
 			$result = $this->db->sql_query($sql);
 
-			$images_exists = false;
+			$images_exists = $this->dlext_constants::DL_FALSE;
 
 			while ($row = $this->db->sql_fetchrow($result))
 			{
 				switch ($row['file_type'])
 				{
-					case 1:
-						$pic_path		= base64_encode(DL_EXT_FILEBASE_PATH . 'version/images/' . str_replace(" ", "%20", $row['real_name']));
-						$file_path		= $this->helper->route('oxpus_dlext_thumbnail', ['thumbnail' => $pic_path, 'disp_art' => true]);
-						$image			= $this->helper->route('oxpus_dlext_thumbnail', ['thumbnail' => $pic_path, 'disp_art' => false]);
+					case $this->dlext_constants::DL_FILE_TYPE_IMAGE:
+						$pic_path		= base64_encode($this->dlext_constants->get_value('files_dir') . '/version/images/' . $row['real_name']);
+						$file_path		= $this->helper->route('oxpus_dlext_thumbnail', ['pic' => $pic_path, 'disp_art' => $this->dlext_constants::DL_TRUE]);
+						$image			= $this->helper->route('oxpus_dlext_thumbnail', ['pic' => $pic_path, 'disp_art' => $this->dlext_constants::DL_FALSE]);
 						$tpl_block		= 'images';
-						$images_exists	= true;
+						$images_exists	= $this->dlext_constants::DL_TRUE;
 					break;
 					default:
 						$file_path		= $row['real_name'];
@@ -578,11 +540,11 @@ class version
 				}
 
 				$this->template->assign_block_vars($tpl_block, [
-					'LINK'			=> $file_path,
-					'FILE_NAME'		=> $row['file_name'],
-					'NAME'			=> $row['file_title'],
-					'IMAGE'			=> $image,
-					'VER_FILE_ID'	=> $row['ver_file_id'],
+					'DL_LINK'			=> $file_path,
+					'DL_FILE_NAME'		=> $row['file_name'],
+					'DL_NAME'			=> $row['file_title'],
+					'DL_IMAGE'			=> $image,
+					'DL_VER_FILE_ID'	=> $row['ver_file_id'],
 				]);
 			}
 
@@ -597,85 +559,87 @@ class version
 			$s_form_action = $this->helper->route('oxpus_dlext_version', $s_form_ary);
 
 			// Status for HTML, BBCode, Smilies, Images and Flash,
-			$bbcode_status	= ($this->config['allow_bbcode']) ? true : false;
-			$smilies_status	= ($bbcode_status && $this->config['allow_smilies']) ? true : false;
-			$img_status		= true;
-			$url_status		= ($this->config['allow_post_links']) ? true : false;
-			$flash_status	= false;
-			$quote_status	= true;
+			$bbcode_status	= ($this->config['allow_bbcode']) ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE;
+			$smilies_status	= ($bbcode_status && $this->config['allow_smilies']) ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE;
+			$img_status		= $this->dlext_constants::DL_TRUE;
+			$url_status		= ($this->config['allow_post_links']) ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE;
+			$flash_status	= $this->dlext_constants::DL_FALSE;
+			$quote_status	= $this->dlext_constants::DL_TRUE;
+
+			$this->language->add_lang('posting');
 
 			// Smilies Block,
 			if ($smilies_status)
 			{
 				if (!function_exists('generate_smilies'))
 				{
-					include_once($this->root_path . 'includes/functions_posting.' . $this->php_ext);
+					include($this->root_path . 'includes/functions_posting.' . $this->php_ext);
 				}
+
 				generate_smilies('inline', 0);
 			}
 
-			// BBCode-Block,
-			$this->language->add_lang('posting');
+			// Display functions
+			if (!function_exists('display_custom_bbcodes'))
+			{
+				include($this->root_path . 'includes/functions_display.' . $this->php_ext);
+			}
+
 			display_custom_bbcodes();
 
-			$this->template->set_filenames(['body' => 'dl_version_edit.html']);
-
 			$this->template->assign_vars([
-				'CAT_RULE'			=> $cat_rule,
-				'DESCRIPTION'		=> $description,
-				'ENCTYPE'			=> 'enctype="multipart/form-data"',
-				'VER_VERSION'		=> $ver_version,
-				'MINI_IMG'			=> $mini_icon,
-				'STATUS'			=> $status,
-				'VER_ACTIVE'		=> ($ver_data['ver_active']) ? 'checked="checked"' : '',
-				'VER_TEXT'			=> $ver_data['ver_text'],
-				'VER_VERSION'		=> $ver_data['ver_version'],
+				'DL_CAT_RULE'			=> $cat_rule,
+				'DL_DESCRIPTION'		=> $description,
+				'DL_MINI_IMG'			=> $mini_icon,
+				'DL_FILE_STATUS'		=> $file_status,
+				'DL_VER_ACTIVE'			=> ($ver_data['ver_active']) ? 'checked="checked"' : '',
+				'DL_VER_TEXT'			=> $ver_data['ver_text'],
+				'DL_VER_VERSION'		=> $ver_data['ver_version'],
 
-				'S_BBCODE_ALLOWED'	=> $bbcode_status,
-				'S_BBCODE_IMG'		=> $img_status,
-				'S_BBCODE_URL'		=> $url_status,
-				'S_BBCODE_FLASH'	=> $flash_status,
-				'S_BBCODE_QUOTE'	=> $quote_status,
-				'S_LINKS_ALLOWED'	=> $url_status,
+				'S_BBCODE_ALLOWED'		=> $bbcode_status,
+				'S_BBCODE_IMG'			=> $img_status,
+				'S_BBCODE_URL'			=> $url_status,
+				'S_BBCODE_FLASH'		=> $flash_status,
+				'S_BBCODE_QUOTE'		=> $quote_status,
+				'S_LINKS_ALLOWED'		=> $url_status,
 
-				'S_CAT_RULE'		=> ($cat_rule) ? true : false,
-				'S_DL_POPUPIMAGE'	=> $images_exists,
-				'S_FORM_ACTION'		=> $s_form_action,
+				'S_DL_CAT_RULE'			=> ($cat_rule) ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE,
+				'S_DL_POPUPIMAGE'		=> $images_exists,
+				'S_DL_FORM_ACTION'		=> $s_form_action,
 			]);
 
 			/*
 			* include the mod footer
 			*/
-			$dl_footer = $this->phpbb_container->get('oxpus.dlext.footer');
-			$dl_footer->set_parameter($nav_view, $cat_id, $df_id, $index);
-			$dl_footer->handle();
-		}
+			$this->dlext_footer->set_parameter('version', $cat_id, $df_id, $index);
+			$this->dlext_footer->handle();
 
-		/*
-		* generate default page
-		*/
-		$this->template->set_filenames(['body' => 'dl_version.html']);
+			/*
+			* generate page
+			*/
+			return $this->helper->render('@oxpus_dlext/dl_version_edit.html', strip_tags($dl_file['description']));
+		}
 
 		/*
 		* Fetch all attachments for this release
 		*/
-		$sql = 'SELECT * FROM ' . DL_VER_FILES_TABLE . '
+		$sql = 'SELECT * FROM ' . $this->dlext_table_dl_ver_files . '
 			WHERE ver_id = ' . (int) $ver_id . '
 			ORDER BY file_title';
 		$result = $this->db->sql_query($sql);
 
-		$images_exists = false;
+		$images_exists = $this->dlext_constants::DL_FALSE;
 
 		while ($row = $this->db->sql_fetchrow($result))
 		{
 			switch ($row['file_type'])
 			{
-				case 1:
+				case $this->dlext_constants::DL_FILE_TYPE_IMAGE:
 					$tpl_block		= 'images';
-					$images_exists	= true;
-					$pic_path		= base64_encode(DL_EXT_FILEBASE_PATH . 'version/images/' . str_replace(" ", "%20", $row['real_name']));
-					$file_path		= $this->helper->route('oxpus_dlext_thumbnail', ['thumbnail' => $pic_path, 'disp_art' => true]);
-					$image			= $this->helper->route('oxpus_dlext_thumbnail', ['thumbnail' => $pic_path, 'disp_art' => false]);
+					$images_exists	= $this->dlext_constants::DL_TRUE;
+					$pic_path		= base64_encode($this->dlext_constants->get_value('files_dir') . '/version/images/' . str_replace(" ", "%20", $row['real_name']));
+					$file_path		= $this->helper->route('oxpus_dlext_thumbnail', ['pic' => $pic_path, 'disp_art' => $this->dlext_constants::DL_TRUE]);
+					$image			= $this->helper->route('oxpus_dlext_thumbnail', ['pic' => $pic_path, 'disp_art' => $this->dlext_constants::DL_FALSE]);
 				break;
 				default:
 					$load_link_ary = [
@@ -690,10 +654,10 @@ class version
 			}
 
 			$this->template->assign_block_vars($tpl_block, [
-				'NAME'		=> ($row['file_title']) ? $row['file_title'] : $row['file_name'],
-				'LINK'		=> $file_path,
-				'IMAGE'		=> $image,
-				'S_AUTH'	=> $file_load,
+				'DL_NAME'		=> ($row['file_title']) ? $row['file_title'] : $row['file_name'],
+				'DL_LINK'		=> $file_path,
+				'DL_IMAGE'		=> $image,
+				'S_DL_AUTH'		=> $file_load,
 			]);
 		}
 
@@ -703,26 +667,31 @@ class version
 		* Send the release values themselves to the template to be able to read something *g*
 		*/
 		$this->template->assign_vars([
-			'DESCRIPTION'		=> $description,
-			'MINI_IMG'			=> $mini_icon,
-			'VER_VERSION'		=> $ver_version,
-			'VER_DESC'			=> ($ver_desc) ? $ver_desc : $this->language->lang('DL_NOT_AVAILIBLE'),
-			'STATUS'			=> $status,
-			'S_ACTIVE'			=> $ver_data['ver_active'],
-			'FILE_SIZE'			=> $file_size_out,
-			'FILE_NAME'			=> ($dl_file['extern']) ? $this->language->lang('DL_EXTERN') : $file_name,
-			'CAT_RULE'			=> $cat_rule,
-			'S_CAT_RULE'		=> ($cat_rule) ? true : false,
-			'S_DL_POPUPIMAGE'	=> $images_exists,
+			'DL_DESCRIPTION'		=> $description,
+			'DL_MINI_IMG'			=> $mini_icon,
+			'DL_VER_VERSION'		=> $ver_version,
+			'DL_VER_DESC'			=> ($ver_desc) ? $ver_desc : $this->language->lang('DL_NOT_AVAILABLE'),
+			'DL_FILE_STATUS'		=> $file_status,
+			'DL_FILE_SIZE'			=> $file_size_out,
+			'DL_FILE_NAME'			=> ($dl_file['extern']) ? $this->language->lang('DL_EXTERN') : $file_name,
+			'DL_CAT_RULE'			=> $cat_rule,
 
-			'U_VER_EDIT'		=> ($ver_can_edit) ? $this->helper->route('oxpus_dlext_version', ['action' => 'edit', 'ver_id' => $ver_id, 'df_id' => $df_id]) : '',
+			'S_DL_ACTIVE'			=> $ver_data['ver_active'],
+			'S_DL_CAT_RULE'			=> ($cat_rule) ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE,
+			'S_DL_POPUPIMAGE'		=> $images_exists,
+
+			'U_DL_VER_EDIT'			=> ($ver_can_edit) ? $this->helper->route('oxpus_dlext_version', ['action' => 'edit', 'ver_id' => $ver_id, 'df_id' => $df_id]) : '',
 		]);
 
 		/*
 		* include the mod footer
 		*/
-		$dl_footer = $this->phpbb_container->get('oxpus.dlext.footer');
-		$dl_footer->set_parameter($nav_view, $cat_id, $df_id, $index);
-		$dl_footer->handle();
+		$this->dlext_footer->set_parameter('version', $cat_id, $df_id, $index);
+		$this->dlext_footer->handle();
+
+		/*
+		* generate page
+		*/
+		return $this->helper->render('@oxpus_dlext/dl_version.html', strip_tags($dl_file['description']));
 	}
 }

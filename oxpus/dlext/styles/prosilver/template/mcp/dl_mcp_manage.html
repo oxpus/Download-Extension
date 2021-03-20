@@ -1,0 +1,193 @@
+{% INCLUDE '@oxpus_dlext/helpers/dl_header.html' %}
+
+<h2>{{ lang('DL_MODCP_MANAGE') }}</h2>
+
+{% if S_DL_MCP_OVERVIEW %}
+<div class="panel">
+	<div class="inner">
+		<fieldset>
+			<h3>{{ lang('DL_MODCP_BROKEN') }}</h3>
+			{% if U_DL_BROKEN_DOWNLOADS %}
+			<a href="{{ U_DL_BROKEN_DOWNLOADS }}" class="forumtitle">{{ L_DL_BROKEN_DOWNLOADS }}</a>
+			{% else %}
+			{{ lang('DL_NO_LAST_TIME') }}
+			{% endif %}
+		</fieldset>
+	</div>
+</div>
+<div class="panel">
+	<div class="inner">
+		<fieldset>
+			<h3>{{ lang('DL_MODCP_APPROVE') }}</h3>
+			{% if U_DL_APPROVE_DOWNLOADS %}
+			<a href="{{ U_DL_APPROVE_DOWNLOADS }}" class="forumtitle">{{ L_DL_APPROVE_DOWNLOADS }}</a>
+			{% else %}
+			{{ lang('DL_NO_APPROVE') }}
+			{% endif %}
+		</fieldset>
+	</div>
+</div>
+<div class="panel">
+	<div class="inner">
+		<fieldset>
+			<h3>{{ lang('DL_MODCP_CAPPROVE') }}</h3>
+			{% if U_DL_APPROVE_COMMENTS %}
+			<a href="{{ U_DL_APPROVE_COMMENTS }}" class="forumtitle">{{ L_DL_APPROVE_COMMENTS }}</a>
+			{% else %}
+			{{ lang('DL_NO_CAPPROVE') }}
+			{% endif %}
+		</fieldset>
+	</div>
+</div>
+{% endif %}
+
+
+{% if S_DL_MCP_TOOLBOX %}
+
+{% if S_DL_SELECT_MCP_CAT %}
+
+<form method="post" id="mcp_cat_select" action="{{ S_DL_FORM_ACTION }}">
+	<div class="panel">
+		<div class="inner">
+			{{ lang('DL_GOTO_MCP') }}
+			<select name="cat_id" onchange="forms['mcp_cat_select'].submit();">
+				<option value="{{ DL_CAT_NONE }}">{{ lang('DL_CAT_NAME') }}</option>
+				{% for mcp_cat_select in loops.mcp_cat_select %}
+				<option value="{{ mcp_cat_select.DL_CAT_ID }}"{% if mcp_cat_select.DL_SELECTED %} selected="selected"{% endif %}>{{ mcp_cat_select.DL_SEPERATOR }}{{ mcp_cat_select.DL_CAT_NAME }}</option>
+				{% endfor %}
+			</select>
+			<input type="submit" value="{{ lang('GO') }}" class="button2" />
+		</div>
+	</div>
+</form>
+	
+<form method="post" id="select_user" action="{{ S_DL_MODCP_ACTION }}" >
+
+<div class="panel">
+	<div class="inner">
+
+	<table class="table1 zebra-list">
+		<thead>
+		<tr>
+			<th class="name">{{ lang('DL_DOWNLOAD') }}</th>
+			<th class="name">{{ lang('DL_HACK_AUTOR') }}</th>
+			<th class="center">{{ lang('OPTIONS') }}</th>
+		</tr>
+		</thead>
+		<tbody>
+		{% for manage_row in loops.manage_row %}
+		<tr{% if manage_row.DL_BROKEN %} class="dl-reported"{% endif %}>
+			<td>
+				<a href="{{ manage_row.U_DL_DOWNLOAD }}" class="forumtitle">{{ manage_row.DL_DESCRIPTION }}</a>&nbsp;
+				{% if manage_row.DL_MINI_ICON eq 'new' %}<i class="icon fa-comment-o fa-fw dl-red" title="{{ lang('DL_FILE_NEW') }}"></i>{% endif %}
+				{% if manage_row.DL_MINI_ICON eq 'edit' %}<i class="icon fa-edit fa-fw dl-blue" title="{{ lang('DL_FILE_EDIT') }}"></i>{% endif %}
+			</td>
+			<td>{{ manage_row.DL_USERNAME }}</dd>
+			<td class="center">
+				&nbsp;<input type="checkbox" class="permissions-checkbox" name="dlo_id[]" id="dlo_id_{{ manage_row.S_ROW_COUNT }}" value="{{ manage_row.DL_FILE_ID }}" />&nbsp;
+				{% if S_SORT_ASC %}
+				&nbsp;<a href="{{ manage_row.U_DL_UP }}" class="button button-icon-only"><i class="icon fa-chevron-up fa-fw" aria-hidden="true" title="{{ lang('DL_UP') }}"></i><span class="sr-only">{{ lang('DL_UP') }}</span></a>
+				&nbsp;<a href="{{ manage_row.U_DL_DOWN }}" class="button button-icon-only"><i class="icon fa-chevron-down fa-fw" aria-hidden="true" title="{{ lang('DL_DOWN') }}"></i><span class="sr-only">{{ lang('DL_DOWN') }}</span></a>
+				{% endif %}
+				&nbsp;<a href="{{ manage_row.U_DL_EDIT }}" class="button button-icon-only"><i class="icon fa-pencil fa-fw" aria-hidden="true" title="{{ lang('DL_EDIT_FILE') }}"></i><span class="sr-only">{{ lang('DL_EDIT_FILE') }}</span></a>
+			</td>
+		</tr>
+		{% else %}
+		<tr class="bg1"><td class="center" colspan="3"><b>{L_DL_EMPTY_CATEGORY}</b></td></tr> 
+		{% endfor %}
+		</tbody>
+	</table>
+
+	{% if S_DL_TOTAL %}
+	<ul class="linklist">
+		<li class="rightside">
+			<span>
+				{% if S_SORT_ASC %}<a href="{{ U_DL_SORT_ASC }}">{{ DL_ABC }}</a> &bull; {% endif %}
+				<a href="#" onclick="marklist('select_user', 'dlo_id', true); return false;">{{ lang('MARK_ALL') }}</a> :: <a href="#" onclick="marklist('select_user', 'dlo_id', false); return false;">{{ lang('UNMARK_ALL') }}</a>
+			</span>
+		</li>
+	</ul>
+	{% endif %}
+
+	{% if loops.pagination|length or DL_TOTAL_DL %}
+	<br />
+
+	<div class="pagination">
+		{{ DL_TOTAL_DL }}
+		{% if loops.pagination|length %}
+			{% INCLUDE 'pagination.html' %}
+		{% else %}
+			&bull; {{ DL_PAGE_NUMBER }}
+		{% endif %}
+	</div>
+	{% endif %}
+
+	</div>
+</div>
+
+{% if S_DL_TOTAL %}
+<div class="panel">
+	<div class="inner">
+
+	<fieldset class="fields1">
+		{% if not S_DL_MODCP_BUTTON %}
+		<h3>{{ lang('DL_MODCP_MOD_SELECT') }}</h3>
+		{% if S_DL_SORT_ASC %}
+		<dl class="dl-option-row">
+			<dt><input type="radio" name="action" class="radio" id="sort" value="sort" /><label for="sort"> {{ lang('DL_ORDER') }}</label></dt>
+		</dl>
+		{% endif %}
+		<dl class="dl-option-row">
+			<dt><input type="radio" name="action" class="radio" id="move"  value="move" /><label for="move"> {{ lang('DL_MOVE') }}</label></dt>
+			<dd>
+				<select name="new_cat">
+					<option value="{{ DL_CAT_NONE }}">{{ lang('DL_CAT_NAME') }}</option>
+					{% for mcp_cat_move in loops.mcp_cat_move %}
+					<option value="{{ mcp_cat_move.DL_CAT_ID }}"{% if mcp_cat_move.DL_SELECTED %} selected="selected"{% endif %}>{{ mcp_cat_move.DL_SEPERATOR }}{{ mcp_cat_move.DL_CAT_NAME }}</option>
+					{% endfor %}
+				</select>
+			</dd>
+		</dl>
+		<dl class="dl-option-row">
+			<dt><input type="radio" name="action" class="radio" id="delete"  value="delete" /><label for="delete"> {{ lang('DL_DELETE') }}</label></dt>
+		</dl>
+		<dl class="dl-option-row">
+			<dt><input type="radio" name="action" class="radio" id="lock"  value="lock" /><label for="lock"> {{ lang('DL_LOCK') }}</label></dt>
+		</dl>
+		<dl>
+			<dt><input type="radio" name="action" class="radio" id="assign"  value="assign" /><label for="assign"> {{ lang('DL_ASSIGN') }}</label></dt>
+			<dd>
+				<input type="text" name="username" id="username" value="" class="inputbox autowidth" size="20" />
+				{{ lang('DL_ASSIGN_CHANGED') }} <input type="checkbox" name="assign_changed" class="radio" id="assign_changed" value="1" /><br />
+				[ <a href="{{ U_DL_FIND_USERNAME }}" onclick="find_username(this.href); return false;">{{ lang('FIND_USERNAME') }}</a> ]
+			</dd>
+		</dl>
+		{% endif %}
+	</fieldset>
+	<fieldset class="submit-buttons">
+		<input type="submit" class="button2" value="{% if not S_DL_MODCP_BUTTON %}{{ lang('SUBMIT') }}{% else %}{{ lang('BACK_TO_PREV') }}{% endif %}" />
+	</fieldset>
+
+	{{ S_DL_HIDDEN_FIELDS }}
+
+	</div>
+</div>
+{% endif %}
+
+</form>
+
+<br />
+
+{% else %}
+
+<div class="panel">
+	<div class="inner">
+		<span>{{ lang('DL_NO_PERMISSION') }}</span>
+	</div>
+</div>
+
+{% endif %}
+
+{% endif %}
+
+{% INCLUDE '@oxpus_dlext/helpers/dl_footer.html' %}

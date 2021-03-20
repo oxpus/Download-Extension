@@ -3,101 +3,80 @@
 /**
 *
 * @package phpBB Extension - Oxpus Downloads
-* @copyright (c) 2002-2020 OXPUS - www.oxpus.net
+* @copyright (c) 2002-2021 OXPUS - www.oxpus.net
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
 */
 
 namespace oxpus\dlext\controller\ucp;
 
-use Symfony\Component\DependencyInjection\Container;
-
 class ucp_favorite_controller implements ucp_favorite_interface
 {
-	protected $u_action;
-
-	/* @var string phpBB root path */
-	protected $root_path;
-
-	/* @var string phpEx */
-	protected $php_ext;
-
-	/* @var \phpbb\config\config */
-	protected $config;
-
-	/* @var \phpbb\request\request_interface */
+	/* phpbb objects */
 	protected $request;
-
-	/* @var \phpbb\db\driver\driver_interface */
 	protected $db;
-
-	/* @var \phpbb\user */
 	protected $user;
-
-	/* @var \phpbb\language\language */
 	protected $language;
-
-	/* @var \phpbb\template\template */
 	protected $template;
-
-	/* @var \phpbb\controller\helper */
 	protected $helper;
+	protected $notification;
 
-	/* @var Container */
-	protected $phpbb_container;
-
-	/** @var extension owned objects */
+	/* extension owned objects */
+	protected $u_action;
 	protected $ext_path;
 
 	protected $dlext_main;
 	protected $dlext_nav;
+	protected $dlext_constants;
+
+	protected $dlext_table_dl_favorites;
+	protected $dlext_table_downloads;
 
 	/**
 	* Constructor
 	*
-	* @param \phpbb\extension\manager				$phpbb_extension_manager
-	* @param string									$root_path
-	* @param string									$php_ext
-	* @param \phpbb\config\config					$config
-	* @param \phpbb\request\request_interface 		$request
-	* @param \phpbb\db\driver\driver_interfacer		$db
+	* @param \phpbb\request\request 				$request
+	* @param \phpbb\db\driver\driver_interface		$db
 	* @param \phpbb\user							$user
 	* @param \phpbb\language\language				$language
 	* @param \phpbb\template\template				$template
 	* @param \phpbb\controller\helper				$helper
-	* @param Container 								$phpbb_container
+	* @param \phpbb\notification\manager			$notification
+	* @param \oxpus\dlext\core\main					$dlext_main
+	* @param \oxpus\dlext\core\nav					$dlext_nav
+	* @param \oxpus\dlext\core\helpers\constants $dlext_constants
+	* @param string									$dlext_table_dl_favorites
+	* @param string									$dlext_table_downloads
 	*/
 	public function __construct(
-		\phpbb\extension\manager $phpbb_extension_manager,
-		$root_path,
-		$php_ext,
-		\phpbb\config\config $config,
-		\phpbb\request\request_interface $request,
+		\phpbb\request\request $request,
 		\phpbb\db\driver\driver_interface $db,
 		\phpbb\user $user,
 		\phpbb\language\language $language,
 		\phpbb\template\template $template,
 		\phpbb\controller\helper $helper,
-		Container $phpbb_container,
-		$dlext_main,
-		$dlext_nav
+		\phpbb\notification\manager $notification,
+		\oxpus\dlext\core\main $dlext_main,
+		\oxpus\dlext\core\nav $dlext_nav,
+		\oxpus\dlext\core\helpers\constants $dlext_constants,
+		$dlext_table_dl_favorites,
+		$dlext_table_downloads
 	)
 	{
-		$this->root_path		= $root_path;
-		$this->php_ext 			= $php_ext;
-		$this->config 			= $config;
 		$this->request			= $request;
 		$this->db 				= $db;
 		$this->user 			= $user;
 		$this->language			= $language;
 		$this->template 		= $template;
 		$this->helper 			= $helper;
-		$this->phpbb_container 	= $phpbb_container;
+		$this->notification 	= $notification;
 
-		$this->ext_path			= $phpbb_extension_manager->get_extension_path('oxpus/dlext', true);
+		$this->dlext_table_dl_favorites	= $dlext_table_dl_favorites;
+		$this->dlext_table_downloads	= $dlext_table_downloads;
 
 		$this->dlext_main		= $dlext_main;
 		$this->dlext_nav		= $dlext_nav;
+		$this->dlext_constants	= $dlext_constants;
 	}
 
 	public function set_action($u_action)
@@ -111,8 +90,6 @@ class ucp_favorite_controller implements ucp_favorite_interface
 		* init and get various values
 		*/
 		$submit = $this->request->variable('submit', '');
-
-		$notification = $this->phpbb_container->get('notification_manager');
 
 		if ($submit)
 		{
@@ -128,7 +105,7 @@ class ucp_favorite_controller implements ucp_favorite_interface
 
 			if (!empty($fav_id))
 			{
-				$sql = 'SELECT fav_dl_id FROM ' . DL_FAVORITES_TABLE . '
+				$sql = 'SELECT fav_dl_id FROM ' . $this->dlext_table_dl_favorites . '
 					WHERE ' . $this->db->sql_in_set('fav_id', $fav_id) . '
 						AND fav_user_id = ' . (int) $this->user->data['user_id'];
 				$result = $this->db->sql_query($sql);
@@ -142,15 +119,15 @@ class ucp_favorite_controller implements ucp_favorite_interface
 
 				$this->db->sql_freeresult($result);
 
-				$sql = 'DELETE FROM ' . DL_FAVORITES_TABLE . '
+				$sql = 'DELETE FROM ' . $this->dlext_table_dl_favorites . '
 					WHERE ' . $this->db->sql_in_set('fav_id', $fav_id) . '
 						AND fav_user_id = ' . (int) $this->user->data['user_id'];
 				$this->db->sql_query($sql);
 
-				$notification->delete_notifications([
+				$this->notification->delete_notifications([
 					'oxpus.dlext.notification.type.update',
 					'oxpus.dlext.notification.type.comments',
-				], $dl_ids, false, $this->user->data['user_id']);
+				], $dl_ids, $this->dlext_constants::DL_FALSE, $this->user->data['user_id']);
 			}
 
 			$message = $this->language->lang('DL_USER_CONFIG_SAVED', '<a href="' . $this->u_action . '">', '</a>');
@@ -161,13 +138,12 @@ class ucp_favorite_controller implements ucp_favorite_interface
 		/*
 		* drop all unaccessable favorites
 		*/
-		$access_cat = [];
-		$access_cat = $this->dlext_main->full_index(0, 0, 0, 1);
+		$access_cat = $this->dlext_main->full_index(0, 0, 0, $this->dlext_constants::DL_AUTH_CHECK_VIEW);
 
 		if (!empty($access_cat))
 		{
-			$sql = 'SELECT fav_dl_id FROM ' . DL_FAVORITES_TABLE . '
-				WHERE ' . $this->db->sql_in_set('fav_dl_cat', $access_cat, true) . '
+			$sql = 'SELECT fav_dl_id FROM ' . $this->dlext_table_dl_favorites . '
+				WHERE ' . $this->db->sql_in_set('fav_dl_cat', $access_cat, $this->dlext_constants::DL_TRUE) . '
 					AND fav_user_id = ' . (int) $this->user->data['user_id'];
 			$result = $this->db->sql_query($sql);
 
@@ -180,46 +156,54 @@ class ucp_favorite_controller implements ucp_favorite_interface
 
 			$this->db->sql_freeresult($result);
 
-			$sql = 'DELETE FROM ' . DL_FAVORITES_TABLE . '
-				WHERE ' . $this->db->sql_in_set('fav_dl_cat', $access_cat, true) . '
+			$sql = 'DELETE FROM ' . $this->dlext_table_dl_favorites . '
+				WHERE ' . $this->db->sql_in_set('fav_dl_cat', $access_cat, $this->dlext_constants::DL_TRUE) . '
 					AND fav_user_id = ' . (int) $this->user->data['user_id'];
 			$this->db->sql_query($sql);
 
 			if (!empty($dl_ids))
 			{
-				$notification->delete_notifications([
+				$this->notification->delete_notifications([
 					'oxpus.dlext.notification.type.update',
 					'oxpus.dlext.notification.type.comments',
-				], $dl_ids, false, $this->user->data['user_id']);
+				], $dl_ids, $this->dlext_constants::DL_FALSE, $this->user->data['user_id']);
 			}
 		}
 
 		/*
 		* fetch all favorite downloads
 		*/
-		$sql = 'SELECT f.fav_id, d.description, d.cat, d.id FROM ' . DL_FAVORITES_TABLE . ' f, ' . DOWNLOADS_TABLE . ' d
+		$sql = 'SELECT f.fav_id, d.description, d.cat, d.id FROM ' . $this->dlext_table_dl_favorites . ' f, ' . $this->dlext_table_downloads . ' d
 			WHERE f.fav_dl_id = d.id
 				AND f.fav_user_id = ' . (int) $this->user->data['user_id'];
 		$result = $this->db->sql_query($sql);
 
-		$total_favorites = $this->db->sql_affectedrows($result);
+		$total_favorites = $this->db->sql_affectedrows();
 
-		$this->template->assign_var('S_FAV_BLOCK', true);
+		$this->template->assign_var('S_DL_FAV_BLOCK', $this->dlext_constants::DL_TRUE);
 
 		if ($total_favorites)
 		{
 			while ($row = $this->db->sql_fetchrow($result))
 			{
-				$path_dl_array = [];
-				$tmp_nav = [];
-				$dl_nav = $this->dlext_nav->nav($row['cat'], 'links', $tmp_nav);
+				$dl_nav = [];
+				$this->dlext_nav->nav($row['cat'], $dl_nav);
 
-				$this->template->assign_block_vars('favorite_row', [
+				$this->template->assign_block_vars('dl_favorite_row', [
 					'DL_ID'			=> $row['fav_id'],
-					'DL_CAT'		=> $dl_nav,
-					'DOWNLOAD'		=> $row['description'],
-					'U_DOWNLOAD'	=> $this->helper->route('oxpus_dlext_details', ['df_id' => $row['id'], 'cat_id' => $row['cat']]),
+					'DL_DOWNLOAD'	=> $row['description'],
+					'U_DL_DOWNLOAD'	=> $this->helper->route('oxpus_dlext_details', ['df_id' => $row['id'], 'cat_id' => $row['cat']]),
 				]);
+
+				for ($i = count($dl_nav); $i > 0; --$i)
+				{
+					$key = $i - 1;
+
+					$this->template->assign_block_vars('dl_favorite_row.dl_cat_path', [
+						'DL_LINK'	=> $this->helper->route('oxpus_dlext_index', ['cat' => $dl_nav[$key]['cat_id']]),
+						'DL_NAME'	=> $dl_nav[$key]['name'],
+					]);
+				}
 			}
 		}
 
@@ -229,7 +213,7 @@ class ucp_favorite_controller implements ucp_favorite_interface
 
 		$this->template->assign_vars([
 			'DL_MOD_RELEASE'	=> $this->language->lang('DL_MOD_VERSION_PUBLIC'),
-			'S_FORM_ACTION'		=> $this->u_action,
+			'S_DL_FORM_ACTION'		=> $this->u_action,
 		]);
 	}
 }

@@ -1,87 +1,84 @@
-{% INCLUDE 'dl_header.html' %}
+{% INCLUDE '@oxpus_dlext/helpers/dl_header.html' %}
 
-	<h2>{{ lang('DL_HACKS_LIST') }}</h2>
+<h2>{{ lang('DL_HACKS_LIST') }}</h2>
 
-	<br />
+<br />
 
-	{% if loops.pagination|length or TOTAL_DL %}
-		<div class="pagination">
-			{{ TOTAL_DL }}
-			{% if loops.pagination|length %}
-				{% INCLUDE 'pagination.html' %}
-			{% else %}
-				&bull; {{ PAGE_NUMBER }}
-			{% endif %}
-		</div>
-	{% endif %}
-
-	<div class="forabg">
-		<div class="inner">
-		<ul class="topiclist">
-			<li class="header">
-				<dl>
-					<dd class="dl-width-40 dl-cell-block dl-intent">{{ lang('DL_NAME') }}</dd>
-					<dd class="dl-width-40 dl-cell-block dl-intent">{{ lang('DL_FILE_DESCRIPTION') }}</dd>
-					<dd class="dl-width-20 dl-cell-block dl-intent">{{ lang('DL_HACK_AUTOR') }}</dd>
-				</dl>
-			</li>
-		</ul>
-		<ul class="topiclist topics">
-		{% for listrow in loops.listrow %}
-			<li class="row{% if listrow.S_ROW_COUNT is even %} bg1{% else %} bg2{% endif %}">
-				<dl>
-					<dd class="dl-width-40 dl-cell-block dl-intent"><div class="dl-text-big">{{ listrow.HACK_NAME }}</div><div class="notice">&nbsp;<b>{{ lang('DL_CAT_NAME') }}{{ lang('COLON') }}</b> {{ listrow.CAT_NAME }}</div></dd>
-					<dd class="dl-width-40 dl-cell-block dl-intent">{{ listrow.HACK_DESCRIPTION }}</dd>
-					<dd class="dl-width-20 dl-cell-block dl-intent">
-						{{ listrow.HACK_AUTHOR }}
-						<br />
-						{{ listrow.HACK_AUTHOR_WEBSITE }}
-						{% if listrow.HACK_AUTHOR_WEBSITE && listrow.HACK_DL_URL %}<br />{% endif %}
-						{{ listrow.HACK_DL_URL }}</dd>
-				</dl>
-			</li>
-		{% endfor %}
-		</ul>
-
-		</div>
+{% if loops.pagination|length or DL_TOTAL_DL %}
+	<div class="pagination">
+		{{ DL_TOTAL_DL }}
+		{% if loops.pagination|length %}
+			{% INCLUDE 'pagination.html' %}
+		{% else %}
+			&bull; {{ DL_PAGE_NUMBER }}
+		{% endif %}
 	</div>
+{% endif %}
 
-	<form action="{{ S_FORM_ACTION }}" method="post">
+<div class="forabg">
+	<div class="inner">
+	<ul class="topiclist">
+		<li class="header">
+			<dl>
+				<dd class="dl-width-40 dl-cell-block dl-intent">{{ lang('DL_NAME') }}</dd>
+				<dd class="dl-width-40 dl-cell-block dl-intent">{{ lang('DL_FILE_DESCRIPTION') }}</dd>
+				<dd class="dl-width-20 dl-cell-block dl-intent">{{ lang('DL_HACK_AUTOR') }}</dd>
+			</dl>
+		</li>
+	</ul>
+	<ul class="topiclist topics">
+	{% for dl_listrow in loops.dl_listrow %}
+		<li class="row{% if dl_listrow.S_ROW_COUNT is even %} bg1{% else %} bg2{% endif %}">
+			<dl>
+				<dd class="dl-width-40 dl-cell-block dl-intent"><div class="dl-text-big">{{ dl_listrow.DL_HACK_NAME }}</div><div class="notice">&nbsp;<b>{{ lang('DL_CAT_NAME') }}{{ lang('COLON') }}</b> {{ dl_listrow.DL_CAT_NAME }}</div></dd>
+				<dd class="dl-width-40 dl-cell-block dl-intent">{{ dl_listrow.DL_HACK_DESCRIPTION }}</dd>
+				<dd class="dl-width-20 dl-cell-block dl-intent">
+					{% if dl_listrow.DL_HACK_AUTHOR_MAIL %}<a href="mailto:{{ dl_listrow.DL_HACK_AUTHOR_MAIL }}">{% endif %}{{ dl_listrow.DL_HACK_AUTHOR }}{% if dl_listrow.DL_HACK_AUTHOR_MAIL %}</a>{% endif %}
+					{% if dl_listrow.DL_HACK_AUTHOR_WEBSITE %}<br /><a href="{{ dl_listrow.DL_HACK_AUTHOR_WEBSITE }}">{{ lang('DL_HACK_AUTOR_WEBSITE') }}</a>{% endif %}
+					{% if dl_listrow.DL_HACK_DL_URL %}<br /><a href="{{ dl_listrow.DL_HACK_DL_URL }}">{{ lang('DL_DOWNLOAD') }}</a>{% endif %}
+				</dd>
+			</dl>
+		</li>
+	{% endfor %}
+	</ul>
 
-	<fieldset class="display-options">
-			<label>{{ lang('SORT_BY') }}</label>
-				<label>
-					<select name="sort_by" onchange="forms['hacklist'].submit()">
-					<option value="0"{{ SELECTED_0 }}>{{ lang('DL_DEFAULT_SORT') }}</option>
-					<option value="1"{{ SELECTED_1 }}>{{ lang('DL_FILE_DESCRIPTION') }}</option>
-					<option value="2"{{ SELECTED_2 }}>{{ lang('DL_HACK_AUTOR') }}</option>
-					</select>
-				</label>
-				<label>{{ lang('DL_ORDER') }}</label>
-				<label>
-					<select name="order" onchange="forms['hacklist'].submit()">
-					<option value="ASC"{{ SELECTED_SORT_0 }}>{{ lang('ASCENDING') }}</option>
-					<option value="DESC"{{ SELECTED_SORT_1 }}>{{ lang('DESCENDING') }}</option>
-					</select>
-				</label>
-			<label><input type="submit" class="button2" value="{{ lang('GO') }}" /></label>
-	</fieldset>
+	</div>
+</div>
 
-	</form>
+<form action="{{ S_DL_FORM_ACTION }}" method="post">
 
-	<hr />
+<fieldset class="display-options">
+	<label>{{ lang('SORT_BY') }}</label>
+		<label>
+			<select name="sort_by" onchange="forms['hacklist'].submit()">
+			<option value="0"{{ DL_SELECTED_0 }}>{{ lang('DL_DEFAULT_SORT') }}</option>
+			<option value="1"{{ DL_SELECTED_1 }}>{{ lang('DL_FILE_DESCRIPTION') }}</option>
+			<option value="2"{{ DL_SELECTED_2 }}>{{ lang('DL_HACK_AUTOR') }}</option>
+			</select>
+		</label>
+		<label>{{ lang('DL_ORDER') }}</label>
+		<label>
+			<select name="order" onchange="forms['hacklist'].submit()">
+			<option value="ASC"{{ DL_SELECTED_SORT_0 }}>{{ lang('ASCENDING') }}</option>
+			<option value="DESC"{{ DL_SELECTED_SORT_1 }}>{{ lang('DESCENDING') }}</option>
+			</select>
+		</label>
+	<label><input type="submit" class="button2" value="{{ lang('GO') }}" /></label>
+</fieldset>
 
-	{% if loops.pagination|length or TOTAL_DL %}
-		<div class="pagination">
-			{{ TOTAL_DL }}
-			{% if loops.pagination|length %}
-				{% INCLUDE 'pagination.html' %}
-			{% else %}
-				&bull; {{ PAGE_NUMBER }}
-			{% endif %}
-		</div>
-	{% endif %}
+</form>
 
-{% INCLUDE 'jumpbox.html' %}
+<hr />
+
+{% if loops.pagination|length or DL_TOTAL_DL %}
+	<div class="pagination">
+		{{ DL_TOTAL_DL }}
+		{% if loops.pagination|length %}
+			{% INCLUDE 'pagination.html' %}
+		{% else %}
+			&bull; {{ DL_PAGE_NUMBER }}
+		{% endif %}
+	</div>
+{% endif %}
 
 {% INCLUDE 'overall_footer.html' %}

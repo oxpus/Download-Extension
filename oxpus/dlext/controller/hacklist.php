@@ -3,98 +3,57 @@
 /**
 *
 * @package phpBB Extension - Oxpus Downloads
-* @copyright (c) 2002-2020 OXPUS - www.oxpus.net
+* @copyright (c) 2002-2021 OXPUS - www.oxpus.net
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
 */
 
 namespace oxpus\dlext\controller;
 
-use Symfony\Component\DependencyInjection\Container;
-
 class hacklist
 {
-	/* @var string phpBB root path */
+	/* phpbb objects */
 	protected $root_path;
-
-	/* @var string phpEx */
 	protected $php_ext;
-
-	/* @var \phpbb\request\request_interface */
 	protected $request;
-
-	/* @var \phpbb\config\config */
 	protected $config;
-
-	/* @var \phpbb\language\language */
 	protected $language;
-
-	/* @var \phpbb\template\template */
 	protected $template;
-
-	/* @var Container */
-	protected $phpbb_container;
-
-	/* @var \phpbb\extension\manager */
-	protected $phpbb_extension_manager;
-
-	/* @var \phpbb\path_helper */
-	protected $phpbb_path_helper;
-
-	/* @var \phpbb\controller\helper */
 	protected $helper;
+	protected $pagination;
 
-	/* @var \phpbb\auth\auth */
-	protected $auth;
-
-	/* @var \phpbb\user */
-	protected $user;
-
-	/* @var \phpbb\db\driver\driver_interface */
-	protected $db;
-
-	/** @var extension owned objects */
-	protected $ext_path;
-	protected $ext_path_web;
-	protected $ext_path_ajax;
-
-	protected $dlext_auth;
+	/* extension owned objects */
 	protected $dlext_hacklist;
-	protected $dlext_main;
+	protected $dlext_footer;
+	protected $dlext_constants;
 
 	/**
 	* Constructor
 	*
 	* @param string									$root_path
 	* @param string									$php_ext
-	* @param \phpbb\request\request_interface 		$request
+	* @param \phpbb\request\request 				$request
 	* @param \phpbb\config\config					$config
 	* @param \phpbb\language\language				$language
 	* @param \phpbb\template\template				$template
-	* @param Container 								$phpbb_container
-	* @param \phpbb\extension\manager				$phpbb_extension_manager
-	* @param \phpbb\path_helper						$phpbb_path_helper
 	* @param \phpbb\controller\helper				$helper
-	* @param \phpbb\user							$user
-	* @param \phpbb\db\driver\driver_interfacer		$db
+	* @param \phpbb\pagination						$pagination
+	* @param \oxpus\dlext\core\hacklist				$dlext_hacklist
+	* @param \oxpus\dlext\core\helpers\footer		$dlext_footer
+	* @param \oxpus\dlext\core\helpers\constants	$dlext_constants
 	*/
 	public function __construct(
 		$root_path,
 		$php_ext,
-		\phpbb\request\request_interface $request,
+		\phpbb\request\request $request,
 		\phpbb\config\config $config,
 		\phpbb\language\language $language,
 		\phpbb\template\template $template,
-		Container $phpbb_container,
-		\phpbb\extension\manager $phpbb_extension_manager,
-		\phpbb\path_helper $phpbb_path_helper,
 		\phpbb\controller\helper $helper,
-		\phpbb\auth\auth $auth,
-		\phpbb\user $user,
-		\phpbb\db\driver\driver_interface $db,
-		$dlext_auth,
-		$dlext_hacklist,
-		$dlext_main
+		\phpbb\pagination $pagination,
+		\oxpus\dlext\core\hacklist $dlext_hacklist,
+		\oxpus\dlext\core\helpers\footer $dlext_footer,
+		\oxpus\dlext\core\helpers\constants $dlext_constants
 	)
 	{
 		$this->root_path				= $root_path;
@@ -103,43 +62,30 @@ class hacklist
 		$this->config 					= $config;
 		$this->language					= $language;
 		$this->template 				= $template;
-		$this->phpbb_container 			= $phpbb_container;
-		$this->phpbb_extension_manager 	= $phpbb_extension_manager;
-		$this->phpbb_path_helper		= $phpbb_path_helper;
 		$this->helper 					= $helper;
-		$this->auth						= $auth;
-		$this->user						= $user;
-		$this->db						= $db;
+		$this->pagination				= $pagination;
 
-		$this->ext_path					= $this->phpbb_extension_manager->get_extension_path('oxpus/dlext', true);
-		$this->ext_path_web				= $this->phpbb_path_helper->update_web_root_path($this->ext_path);
-		$this->ext_path_ajax			= $this->ext_path_web . 'assets/javascript/';
-
-		$this->dlext_auth				= $dlext_auth;
 		$this->dlext_hacklist			= $dlext_hacklist;
-		$this->dlext_main				= $dlext_main;
+		$this->dlext_footer				= $dlext_footer;
+		$this->dlext_constants			= $dlext_constants;
 	}
 
 	public function handle()
 	{
-		$nav_view = 'hacks';
-
-		// Include the default base init script
-		include_once($this->ext_path . 'phpbb/includes/base_init.' . $this->php_ext);
-
 		/*
 		* init and get various values
 		*/
 		$sort_by	= $this->request->variable('sort_by', '');
 		$order		= $this->request->variable('order', '');
 		$start		= $this->request->variable('start', 0);
+		$sort_by	= $this->request->variable('sort_by', 0);
 
 		switch ($sort_by)
 		{
-			case 1:
+			case $this->dlext_constants::DL_HACKLIST_SORT_DESC:
 				$sql_sort_by = 'long_desc';
 				break;
-			case 2:
+			case $this->dlext_constants::DL_HACKLIST_SORT_AUTHOR:
 				$sql_sort_by = 'hack_author';
 				break;
 			default:
@@ -148,7 +94,6 @@ class hacklist
 
 		$sql_order = ($order) ? $order : 'ASC';
 
-		$hacklist = [];
 		$hacklist = $this->dlext_hacklist->hacks_index();
 		$status = $this->config['dl_use_hacklist'];
 
@@ -157,31 +102,24 @@ class hacklist
 			redirect(append_sid($this->root_path . 'index.' . $this->php_ext));
 		}
 
-		page_header($this->language->lang('DL_HACKS_LIST'));
-
-		$this->template->set_filenames(['body' => 'hacks_list_body.html']);
-
-		$dl_files = [];
 		$dl_files = $this->dlext_hacklist->all_files($sql_sort_by, $sql_order, $start, $this->config['dl_links_per_page']);
 
-		$all_files = [];
 		$all_files = $this->dlext_hacklist->all_files('id', 'ASC');
 
 		if ($all_files > $this->config['dl_links_per_page'])
 		{
-			$pagination = $this->phpbb_container->get('pagination');
-			$pagination->generate_template_pagination(
+			$this->pagination->generate_template_pagination(
 				$this->helper->route('oxpus_dlext_hacklist', ['sort_by' => $sort_by, 'order' => $order]),
 				'pagination',
 				'start',
 				$all_files,
 				$this->config['dl_links_per_page'],
-				$page_start
+				$start
 			);
 
 			$this->template->assign_vars([
-				'PAGE_NUMBER'	=> $pagination->on_page($all_files, $this->config['dl_links_per_page'], $page_start),
-				'TOTAL_DL'		=> $this->language->lang('VIEW_DL_STATS', $all_files),
+				'DL_PAGE_NUMBER'	=> $this->pagination->on_page($all_files, $this->config['dl_links_per_page'], $start),
+				'DL_TOTAL_DL'		=> $this->language->lang('DL_VIEW_DL_STATS', $all_files),
 			]);
 		}
 
@@ -193,14 +131,14 @@ class hacklist
 		$selected_sort_1 = ($order == 'DESC') ? ' selected="selected"' : '';
 
 		$this->template->assign_vars([
-			'SELECTED_0'		=> $selected_0,
-			'SELECTED_1'		=> $selected_1,
-			'SELECTED_2'		=> $selected_2,
+			'DL_SELECTED_0'		=> $selected_0,
+			'DL_SELECTED_1'		=> $selected_1,
+			'DL_SELECTED_2'		=> $selected_2,
 
-			'SELECTED_SORT_0'	=> $selected_sort_0,
-			'SELECTED_SORT_1'	=> $selected_sort_1,
+			'DL_SELECTED_SORT_0'	=> $selected_sort_0,
+			'DL_SELECTED_SORT_1'	=> $selected_sort_1,
 
-			'S_FORM_ACTION'		=> $this->helper->route('oxpus_dlext_hacklist'),
+			'S_DL_FORM_ACTION'		=> $this->helper->route('oxpus_dlext_hacklist'),
 		]);
 
 		if (!empty($dl_files))
@@ -214,28 +152,28 @@ class hacklist
 					$desc_uid				= $dl_files[$i]['desc_uid'];
 					$desc_bitfield			= $dl_files[$i]['desc_bitfield'];
 					$desc_flags				= $dl_files[$i]['desc_flags'];
-					$hack_name			= generate_text_for_display($hack_name, $desc_uid, $desc_bitfield, $desc_flags);
+					$hack_name				= generate_text_for_display($hack_name, $desc_uid, $desc_bitfield, $desc_flags);
 
 					$hack_author			= ($dl_files[$i]['hack_author'] != '') ? $dl_files[$i]['hack_author'] : 'n/a';
 					$hack_author_email		= $dl_files[$i]['hack_author_email'];
 					$hack_author_website	= $dl_files[$i]['hack_author_website'];
-					$hackname				= ($dl_files[$i]['hacklist'] != '') ? '&nbsp;'.$dl_files[$i]['description'] : '';
 					$hack_version			= ($dl_files[$i]['hacklist'] != '') ? '&nbsp;'.$dl_files[$i]['hack_version'] : '';
 					$hack_dl_url			= $dl_files[$i]['hack_dl_url'];
+
 					$description			= $dl_files[$i]['long_desc'];
 					$uid					= $dl_files[$i]['long_desc_uid'];
 					$bitfield				= $dl_files[$i]['long_desc_bitfield'];
 					$flags					= (isset($dl_files[$i]['long_desc_flags'])) ? $dl_files[$i]['long_desc_flags'] : 0;
+					$description			= generate_text_for_display($description, $uid, $bitfield, $flags);
 
-					$description = generate_text_for_display($description, $uid, $bitfield, $flags);
-
-					$this->template->assign_block_vars('listrow', [
-						'CAT_NAME'				=> $hacklist[$cat_id],
-						'HACK_NAME'				=> $hackname . $hack_version,
-						'HACK_DESCRIPTION'		=> $description,
-						'HACK_AUTHOR'			=> ($hack_author_email != '') ? '<a href="mailto:' . $hack_author_email . '">'.$hack_author.'</a>' : $hack_author,
-						'HACK_AUTHOR_WEBSITE'	=> ($hack_author_website != '') ? '<a href="' . $hack_author_website . '">' . $this->language->lang('DL_HACK_AUTOR_WEBSITE') . '</a>' : '',
-						'HACK_DL_URL'			=> ($hack_dl_url != '') ? '<a href="' . $hack_dl_url . '">' . $this->language->lang('DL_DOWNLOAD') . '</a>' : '',
+					$this->template->assign_block_vars('dl_listrow', [
+						'DL_CAT_NAME'				=> $hacklist[$cat_id],
+						'DL_HACK_NAME'				=> $hack_name . $hack_version,
+						'DL_HACK_DESCRIPTION'		=> $description,
+						'DL_HACK_AUTHOR'			=> $hack_author,
+						'DL_HACK_AUTHOR_MAIL'		=> $hack_author_email,
+						'DL_HACK_AUTHOR_WEBSITE'	=> $hack_author_website,
+						'DL_HACK_DL_URL'			=> $hack_dl_url,
 					]);
 				}
 			}
@@ -244,8 +182,12 @@ class hacklist
 		/*
 		* include the mod footer
 		*/
-		$dl_footer = $this->phpbb_container->get('oxpus.dlext.footer');
-		$dl_footer->set_parameter($nav_view);
-		$dl_footer->handle();
+		$this->dlext_footer->set_parameter('hacks');
+		$this->dlext_footer->handle();
+
+		/*
+		* generate page
+		*/
+		return $this->helper->render('@oxpus_dlext/hacks_list_body.html', $this->language->lang('DL_HACKS_LIST'));
 	}
 }

@@ -3,135 +3,97 @@
 /**
 *
 * @package phpBB Extension - Oxpus Downloads
-* @copyright (c) 2002-2020 OXPUS - www.oxpus.net
+* @copyright (c) 2002-2021 OXPUS - www.oxpus.net
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
 */
 
 namespace oxpus\dlext\controller;
 
-use Symfony\Component\DependencyInjection\Container;
-
 class stats
 {
-	/* @var string phpBB root path */
-	protected $root_path;
-
-	/* @var string phpEx */
-	protected $php_ext;
-
-	/* @var Container */
-	protected $phpbb_container;
-
-	/* @var \phpbb\extension\manager */
-	protected $phpbb_extension_manager;
-
-	/* @var \phpbb\path_helper */
-	protected $phpbb_path_helper;
-
-	/* @var \phpbb\db\driver\driver_interface */
+	/* phpbb objects */
 	protected $db;
-
-	/* @var \phpbb\config\config */
 	protected $config;
-
-	/* @var \phpbb\controller\helper */
 	protected $helper;
-
-	/* @var \phpbb\auth\auth */
-	protected $auth;
-
-	/* @var \phpbb\request\request_interface */
 	protected $request;
-
-	/* @var \phpbb\template\template */
 	protected $template;
-
-	/* @var \phpbb\user */
 	protected $user;
-
-	/* @var \phpbb\language\language */
 	protected $language;
 
-	/** @var extension owned objects */
-	protected $ext_path;
-	protected $ext_path_web;
-	protected $ext_path_ajax;
-
+	/* extension owned objects */
 	protected $dlext_auth;
 	protected $dlext_format;
 	protected $dlext_main;
+	protected $dlext_footer;
+	protected $dlext_constants;
+
+	protected $dlext_table_dl_stats;
+	protected $dlext_table_downloads;
+	protected $dlext_table_dl_cat;
 
 	/**
 	* Constructor
 	*
-	* @param string									$root_path
-	* @param string									$php_ext
-	* @param Container 								$phpbb_container
-	* @param \phpbb\extension\manager				$phpbb_extension_manager
-	* @param \phpbb\path_helper						$phpbb_path_helper
-	* @param \phpbb\db\driver\driver_interfacer		$db
+	* @param \phpbb\db\driver\driver_interface		$db
 	* @param \phpbb\config\config					$config
 	* @param \phpbb\controller\helper				$helper
-	* @param \phpbb\request\request_interface 		$request
+	* @param \phpbb\request\request 				$request
 	* @param \phpbb\template\template				$template
 	* @param \phpbb\user							$user
 	* @param \phpbb\language\language				$language
+	* @param \oxpus\dlext\core\auth					$dlext_auth
+	* @param \oxpus\dlext\core\format				$dlext_format
+	* @param \oxpus\dlext\core\main					$dlext_main
+	* @param \oxpus\dlext\core\helpers\footer		$dlext_footer
+	* @param \oxpus\dlext\core\helpers\constants	$dlext_constants
+	* @param string									$dlext_table_dl_stats,
+	* @param string									$dlext_table_downloads
+	* @param string									$dlext_table_dl_cat
 	*/
 	public function __construct(
-		$root_path,
-		$php_ext,
-		Container $phpbb_container,
-		\phpbb\extension\manager $phpbb_extension_manager,
-		\phpbb\path_helper $phpbb_path_helper,
 		\phpbb\db\driver\driver_interface $db,
 		\phpbb\config\config $config,
 		\phpbb\controller\helper $helper,
-		\phpbb\auth\auth $auth,
-		\phpbb\request\request_interface $request,
+		\phpbb\request\request $request,
 		\phpbb\template\template $template,
 		\phpbb\user $user,
 		\phpbb\language\language $language,
-		$dlext_auth,
-		$dlext_format,
-		$dlext_main
+		\oxpus\dlext\core\auth $dlext_auth,
+		\oxpus\dlext\core\format $dlext_format,
+		\oxpus\dlext\core\main $dlext_main,
+		\oxpus\dlext\core\helpers\footer $dlext_footer,
+		\oxpus\dlext\core\helpers\constants $dlext_constants,
+		$dlext_table_dl_stats,
+		$dlext_table_downloads,
+		$dlext_table_dl_cat
 	)
 	{
-		$this->root_path				= $root_path;
-		$this->php_ext 					= $php_ext;
-		$this->phpbb_container 			= $phpbb_container;
-		$this->phpbb_extension_manager 	= $phpbb_extension_manager;
-		$this->phpbb_path_helper		= $phpbb_path_helper;
 		$this->db 						= $db;
 		$this->config 					= $config;
 		$this->helper 					= $helper;
-		$this->auth						= $auth;
 		$this->request					= $request;
 		$this->template 				= $template;
 		$this->user 					= $user;
 		$this->language					= $language;
 
-		$this->ext_path					= $this->phpbb_extension_manager->get_extension_path('oxpus/dlext', true);
-		$this->ext_path_web				= $this->phpbb_path_helper->update_web_root_path($this->ext_path);
-		$this->ext_path_ajax			= $this->ext_path_web . 'assets/javascript/';
+		$this->dlext_table_dl_stats		= $dlext_table_dl_stats;
+		$this->dlext_table_downloads	= $dlext_table_downloads;
+		$this->dlext_table_dl_cat		= $dlext_table_dl_cat;
 
 		$this->dlext_auth				= $dlext_auth;
 		$this->dlext_format				= $dlext_format;
 		$this->dlext_main				= $dlext_main;
+		$this->dlext_footer				= $dlext_footer;
+		$this->dlext_constants			= $dlext_constants;
+
+		$this->dlext_main->dl_handle_active();
 	}
 
 	public function handle()
 	{
-		$nav_view = 'stats';
-
-		// Include the default base init script
-		include_once($this->ext_path . 'phpbb/includes/base_init.' . $this->php_ext);
-
-		/*
-		* getting some stats
-		*/
-		$inc_module = true;
-		page_header($this->language->lang('DL_STATS'));
+		$cat		= $this->request->variable('cat', 0);
+		$index 		= ($cat) ? $this->dlext_main->index($cat) : $this->dlext_main->index();
 
 		/*
 		* check permissions and redirect if missing
@@ -144,8 +106,7 @@ class stats
 
 		if (!empty($index))
 		{
-			$access_cats = [];
-			$access_cats = $this->dlext_main->full_index(0, 0, 0, 1);
+			$access_cats = $this->dlext_main->full_index(0, 0, 0, $this->dlext_constants::DL_AUTH_CHECK_VIEW);
 
 			if (!empty($access_cats))
 			{
@@ -157,26 +118,24 @@ class stats
 				/*
 				* latest downloads
 				*/
-				$sql = 'SELECT d.*, u.username, u.user_colour, c.cat_name FROM ' . DOWNLOADS_TABLE . ' d, ' . DL_CAT_TABLE . ' c, ' . USERS_TABLE . ' u
+				$sql = 'SELECT d.*, u.username, u.user_colour, c.cat_name FROM ' . $this->dlext_table_downloads . ' d, ' . $this->dlext_table_dl_cat . ' c, ' . USERS_TABLE . ' u
 					WHERE d.cat = c.id
 						AND d.down_user = u.user_id
 						AND ' . $this->db->sql_in_set('c.id', $access_cats) . "
 						$sql_where
 					ORDER BY d.last_time DESC";
-				$result = $this->db->sql_query_limit($sql, 10);
-				$total_top_ten = $this->db->sql_affectedrows($result);
+				$result = $this->db->sql_query_limit($sql, $this->dlext_constants::DL_STATS_POS_LIMIT);
+				$total_top_ten = $this->db->sql_affectedrows();
 
 				if ($total_top_ten)
 				{
-					$this->template->assign_var('S_LATEST_DOWNLOADS', true);
+					$this->template->assign_var('S_DL_LATEST_DOWNLOADS', $this->dlext_constants::DL_TRUE);
 
 					$dl_pos = 1;
 
 					while ($row = $this->db->sql_fetchrow($result))
 					{
 						$file_id		= $row['id'];
-						$cat_id			= $row['cat'];
-						$file_name_name	= $row['file_name'];
 						$description	= $row['description'];
 						$cat_name		= $row['cat_name'];
 
@@ -188,13 +147,13 @@ class stats
 						$user_link		= get_username_string('full', $row['down_user'], $row['username'], $row['user_colour']);
 
 						$this->template->assign_block_vars('top_ten_latest', [
-							'POS'			=> $dl_pos,
-							'DESCRIPTION'	=> $description,
-							'U_FILE_LINK'	=> $file_link,
-							'CAT_NAME'		=> $cat_name,
-							'USER_LINK'		=> $user_link,
-							'DL_TIME'		=> $dl_time,
-							'DL_TIME_RFC'	=> $dl_time_rfc,
+							'DL_POS'			=> $dl_pos,
+							'DL_DESCRIPTION'	=> $description,
+							'U_DL_FILE_LINK'	=> $file_link,
+							'DL_CAT_NAME'		=> $cat_name,
+							'DL_USER_LINK'		=> $user_link,
+							'DL_TIME'			=> $dl_time,
+							'DL_TIME_RFC'		=> $dl_time_rfc,
 						]);
 
 						++$dl_pos;
@@ -205,26 +164,24 @@ class stats
 				/*
 				* lastest uploads
 				*/
-				$sql = 'SELECT d.*, u.username, u.user_colour, c.cat_name FROM ' . DOWNLOADS_TABLE . ' d, ' . DL_CAT_TABLE . ' c, ' . USERS_TABLE . ' u
+				$sql = 'SELECT d.*, u.username, u.user_colour, c.cat_name FROM ' . $this->dlext_table_downloads . ' d, ' . $this->dlext_table_dl_cat . ' c, ' . USERS_TABLE . ' u
 					WHERE d.cat = c.id
 						AND d.add_user = u.user_id
-						AND approve = ' . true . '
+						AND approve = 1
 						AND ' . $this->db->sql_in_set('c.id', $access_cats) . '
 					ORDER BY d.add_time DESC';
-				$result = $this->db->sql_query_limit($sql, 10);
-				$total_top_ten = $this->db->sql_affectedrows($result);
+				$result = $this->db->sql_query_limit($sql, $this->dlext_constants::DL_STATS_POS_LIMIT);
+				$total_top_ten = $this->db->sql_affectedrows();
 
 				if ($total_top_ten)
 				{
-					$this->template->assign_var('S_LATEST_UPLOADS', true);
+					$this->template->assign_var('S_DL_LATEST_UPLOADS', $this->dlext_constants::DL_TRUE);
 
 					$dl_pos = 1;
 
 					while ($row = $this->db->sql_fetchrow($result))
 					{
 						$file_id		= $row['id'];
-						$cat_id			= $row['cat'];
-						$file_name_name	= $row['file_name'];
 						$description	= $row['description'];
 						$cat_name		= $row['cat_name'];
 
@@ -236,13 +193,13 @@ class stats
 						$user_link		= get_username_string('full', $row['add_user'], $row['username'], $row['user_colour']);
 
 						$this->template->assign_block_vars('top_ten_uploads', [
-							'POS'			=> $dl_pos,
-							'DESCRIPTION'	=> $description,
-							'U_FILE_LINK'	=> $file_link,
-							'CAT_NAME'		=> $cat_name,
-							'USER_LINK'		=> $user_link,
-							'DL_TIME'		=> $dl_time,
-							'DL_TIME_RFC'	=> $dl_time_rfc,
+							'DL_POS'			=> $dl_pos,
+							'DL_DESCRIPTION'	=> $description,
+							'U_DL_FILE_LINK'	=> $file_link,
+							'DL_CAT_NAME'		=> $cat_name,
+							'DL_USER_LINK'		=> $user_link,
+							'DL_TIME'			=> $dl_time,
+							'DL_TIME_RFC'		=> $dl_time_rfc,
 						]);
 
 						++$dl_pos;
@@ -253,24 +210,22 @@ class stats
 				/*
 				* top ten downloads this month
 				*/
-				$sql = 'SELECT d.*, c.cat_name FROM ' . DOWNLOADS_TABLE . ' d, ' . DL_CAT_TABLE . ' c
+				$sql = 'SELECT d.*, c.cat_name FROM ' . $this->dlext_table_downloads . ' d, ' . $this->dlext_table_dl_cat . ' c
 					WHERE d.cat = c.id
 						AND ' . $this->db->sql_in_set('c.id', $access_cats) . '
 					ORDER BY d.klicks DESC';
-				$result = $this->db->sql_query_limit($sql, 10);
-				$total_top_ten = $this->db->sql_affectedrows($result);
+				$result = $this->db->sql_query_limit($sql, $this->dlext_constants::DL_STATS_POS_LIMIT);
+				$total_top_ten = $this->db->sql_affectedrows();
 
 				if ($total_top_ten)
 				{
-					$this->template->assign_var('S_TOP10_DOWN_MONTH', true);
+					$this->template->assign_var('S_DL_TOP10_DOWN_MONTH', $this->dlext_constants::DL_TRUE);
 
 					$dl_pos = 1;
 
 					while ($row = $this->db->sql_fetchrow($result))
 					{
 						$file_id		= $row['id'];
-						$cat_id			= $row['cat'];
-						$file_name_name	= $row['file_name'];
 						$description	= $row['description'];
 						$cat_name		= $row['cat_name'];
 						$dl_klicks		= $row['klicks'];
@@ -278,10 +233,10 @@ class stats
 						$file_link		= $this->helper->route('oxpus_dlext_details', ['df_id' => $file_id]);
 
 						$this->template->assign_block_vars('top_ten_dl_cur_month', [
-							'POS'			=> $dl_pos,
-							'DESCRIPTION'	=> $description,
-							'U_FILE_LINK'	=> $file_link,
-							'CAT_NAME'		=> $cat_name,
+							'DL_POS'			=> $dl_pos,
+							'DL_DESCRIPTION'	=> $description,
+							'U_DL_FILE_LINK'	=> $file_link,
+							'DL_CAT_NAME'		=> $cat_name,
 							'DL_KLICKS'		=> $dl_klicks,
 						]);
 
@@ -293,24 +248,22 @@ class stats
 				/*
 				* top ten downloads overall
 				*/
-				$sql = 'SELECT d.*, c.cat_name FROM ' . DOWNLOADS_TABLE . ' d, ' . DL_CAT_TABLE . ' c
+				$sql = 'SELECT d.*, c.cat_name FROM ' . $this->dlext_table_downloads . ' d, ' . $this->dlext_table_dl_cat . ' c
 					WHERE d.cat = c.id
 						AND ' . $this->db->sql_in_set('c.id', $access_cats) . '
 					ORDER BY d.overall_klicks DESC';
-				$result = $this->db->sql_query_limit($sql, 10);
-				$total_top_ten = $this->db->sql_affectedrows($result);
+				$result = $this->db->sql_query_limit($sql, $this->dlext_constants::DL_STATS_POS_LIMIT);
+				$total_top_ten = $this->db->sql_affectedrows();
 
 				if ($total_top_ten)
 				{
-					$this->template->assign_var('S_TOP10_DOWN_ALL', true);
+					$this->template->assign_var('S_DL_TOP10_DOWN_ALL', $this->dlext_constants::DL_TRUE);
 
 					$dl_pos = 1;
 
 					while ($row = $this->db->sql_fetchrow($result))
 					{
 						$file_id		= $row['id'];
-						$cat_id			= $row['cat'];
-						$file_name_name	= $row['file_name'];
 						$description	= $row['description'];
 						$cat_name		= $row['cat_name'];
 						$dl_klicks		= $row['overall_klicks'];
@@ -318,11 +271,11 @@ class stats
 						$file_link		= $this->helper->route('oxpus_dlext_details', ['df_id' => $file_id]);
 
 						$this->template->assign_block_vars('top_ten_dl_overall', [
-							'POS'			=> $dl_pos,
-							'DESCRIPTION'	=> $description,
-							'U_FILE_LINK'	=> $file_link,
-							'CAT_NAME'		=> $cat_name,
-							'DL_KLICKS'		=> $dl_klicks,
+							'DL_POS'			=> $dl_pos,
+							'DL_DESCRIPTION'	=> $description,
+							'U_DL_FILE_LINK'	=> $file_link,
+							'DL_CAT_NAME'		=> $cat_name,
+							'DL_KLICKS'			=> $dl_klicks,
 						]);
 
 						++$dl_pos;
@@ -335,24 +288,22 @@ class stats
 					/*
 					* top ten traffic this month
 					*/
-					$sql = 'SELECT (d.klicks * d.file_size) AS month_traffic, d.*, c.cat_name FROM ' . DOWNLOADS_TABLE . ' d, ' . DL_CAT_TABLE . ' c
+					$sql = 'SELECT (d.klicks * d.file_size) AS month_traffic, d.*, c.cat_name FROM ' . $this->dlext_table_downloads . ' d, ' . $this->dlext_table_dl_cat . ' c
 						WHERE d.cat = c.id
 							AND ' . $this->db->sql_in_set('c.id', $access_cats) . '
 						ORDER BY month_traffic DESC';
-					$result = $this->db->sql_query_limit($sql, 10);
-					$total_top_ten = $this->db->sql_affectedrows($result);
+					$result = $this->db->sql_query_limit($sql, $this->dlext_constants::DL_STATS_POS_LIMIT);
+					$total_top_ten = $this->db->sql_affectedrows();
 
 					if ($total_top_ten)
 					{
-						$this->template->assign_var('S_TOP10_TRAFFIC_MONTH', true);
+						$this->template->assign_var('S_DL_TOP10_TRAFFIC_MONTH', $this->dlext_constants::DL_TRUE);
 
 						$dl_pos = 1;
 
 						while ($row = $this->db->sql_fetchrow($result))
 						{
 							$file_id		= $row['id'];
-							$cat_id			= $row['cat'];
-							$file_name_name	= $row['file_name'];
 							$description	= $row['description'];
 							$cat_name		= $row['cat_name'];
 							$dl_traffic		= $this->dlext_format->dl_size($row['month_traffic']);
@@ -360,11 +311,11 @@ class stats
 							$file_link		= $this->helper->route('oxpus_dlext_details', ['df_id' => $file_id]);
 
 							$this->template->assign_block_vars('top_ten_traffic_cur_month', [
-								'POS'			=> $dl_pos,
-								'DESCRIPTION'	=> $description,
-								'U_FILE_LINK'	=> $file_link,
-								'CAT_NAME'		=> $cat_name,
-								'DL_TRAFFIC'	=> $dl_traffic,
+								'DL_POS'			=> $dl_pos,
+								'DL_DESCRIPTION'	=> $description,
+								'U_DL_FILE_LINK'	=> $file_link,
+								'DL_CAT_NAME'		=> $cat_name,
+								'DL_TRAFFIC'		=> $dl_traffic,
 							]);
 
 							++$dl_pos;
@@ -375,24 +326,22 @@ class stats
 					/*
 					* top ten traffic overall
 					*/
-					$sql = 'SELECT (d.overall_klicks * d.file_size) AS overall_traffic, d.*, c.cat_name FROM ' . DOWNLOADS_TABLE . ' d, ' . DL_CAT_TABLE . ' c
+					$sql = 'SELECT (d.overall_klicks * d.file_size) AS overall_traffic, d.*, c.cat_name FROM ' . $this->dlext_table_downloads . ' d, ' . $this->dlext_table_dl_cat . ' c
 						WHERE d.cat = c.id
 							AND ' . $this->db->sql_in_set('c.id', $access_cats) . '
 						ORDER BY overall_traffic DESC';
-					$result = $this->db->sql_query_limit($sql, 10);
-					$total_top_ten = $this->db->sql_affectedrows($result);
+					$result = $this->db->sql_query_limit($sql, $this->dlext_constants::DL_STATS_POS_LIMIT);
+					$total_top_ten = $this->db->sql_affectedrows();
 
 					if ($total_top_ten)
 					{
-						$this->template->assign_var('S_TOP10_TRAFFIC_ALL', true);
+						$this->template->assign_var('S_DL_TOP10_TRAFFIC_ALL', $this->dlext_constants::DL_TRUE);
 
 						$dl_pos = 1;
 
 						while ($row = $this->db->sql_fetchrow($result))
 						{
 							$file_id		= $row['id'];
-							$cat_id			= $row['cat'];
-							$file_name_name	= $row['file_name'];
 							$description	= $row['description'];
 							$cat_name		= $row['cat_name'];
 							$dl_traffic		= $this->dlext_format->dl_size($row['overall_traffic']);
@@ -400,11 +349,11 @@ class stats
 							$file_link		= $this->helper->route('oxpus_dlext_details', ['df_id' => $file_id]);
 
 							$this->template->assign_block_vars('top_ten_traffic_overall', [
-								'POS'			=> $dl_pos,
-								'DESCRIPTION'	=> $description,
-								'U_FILE_LINK'	=> $file_link,
-								'CAT_NAME'		=> $cat_name,
-								'DL_TRAFFIC'	=> $dl_traffic,
+								'DL_POS'			=> $dl_pos,
+								'DL_DESCRIPTION'	=> $description,
+								'U_DL_FILE_LINK'	=> $file_link,
+								'DL_CAT_NAME'		=> $cat_name,
+								'DL_TRAFFIC'		=> $dl_traffic,
 							]);
 
 							++$dl_pos;
@@ -424,20 +373,20 @@ class stats
 				unset($sql_array);
 
 				$sql = 'SELECT COUNT(s.id) AS dl_counts, s.user_id, s.username, u.user_colour
-					FROM ' . DL_STATS_TABLE . ' s
+					FROM ' . $this->dlext_table_dl_stats . ' s
 					LEFT JOIN ' . USERS_TABLE . ' u ON u.user_id = s.user_id
 					WHERE s.direction = 0
 						AND ' . $this->db->sql_in_set('s.cat_id', $access_cats) . "
 						$sql_where
 					GROUP BY s.user_id, s.username, u.user_colour
 					ORDER BY dl_counts DESC";
-				$result = $this->db->sql_query_limit($sql, 10);
+				$result = $this->db->sql_query_limit($sql, $this->dlext_constants::DL_STATS_POS_LIMIT);
 
-				$total_top_ten = $this->db->sql_affectedrows($result);
+				$total_top_ten = $this->db->sql_affectedrows();
 
 				if ($total_top_ten)
 				{
-					$this->template->assign_var('S_TOP10_DOWN_CLICKS', true);
+					$this->template->assign_var('S_DL_TOP10_DOWN_CLICKS', $this->dlext_constants::DL_TRUE);
 
 					$dl_pos = 1;
 
@@ -446,9 +395,9 @@ class stats
 						$user_link		= get_username_string('full', $row['user_id'], $row['username'], $row['user_colour']);
 
 						$this->template->assign_block_vars('top_ten_dl_counts', [
-							'POS'			=> $dl_pos,
-							'USER_LINK'		=> $user_link,
-							'DL_COUNTS'		=> $row['dl_counts'],
+							'DL_POS'			=> $dl_pos,
+							'DL_USER_LINK'		=> $user_link,
+							'DL_COUNTS'			=> $row['dl_counts'],
 						]);
 
 						++$dl_pos;
@@ -464,19 +413,19 @@ class stats
 					unset($sql_array);
 
 					$sql = 'SELECT SUM(s.traffic) AS dl_traffic, s.user_id, s.username, u.user_colour
-						FROM ' . DL_STATS_TABLE . ' s
+						FROM ' . $this->dlext_table_dl_stats . ' s
 						LEFT JOIN ' . USERS_TABLE . ' u ON u.user_id = s.user_id
 						WHERE s.direction = 0
 							AND ' . $this->db->sql_in_set('s.cat_id', $access_cats) . "
 							$sql_where
 						GROUP BY s.user_id, s.username, u.user_colour
 						ORDER BY dl_traffic DESC";
-					$result = $this->db->sql_query_limit($sql, 10);
-					$total_top_ten = $this->db->sql_affectedrows($result);
+					$result = $this->db->sql_query_limit($sql, $this->dlext_constants::DL_STATS_POS_LIMIT);
+					$total_top_ten = $this->db->sql_affectedrows();
 
 					if ($total_top_ten)
 					{
-						$this->template->assign_var('S_TOP10_DOWN_TRAFFIC', true);
+						$this->template->assign_var('S_DL_TOP10_DOWN_TRAFFIC', $this->dlext_constants::DL_TRUE);
 
 						$dl_pos = 1;
 
@@ -487,9 +436,9 @@ class stats
 							$dl_traffic	= $this->dlext_format->dl_size($row['dl_traffic']);
 
 							$this->template->assign_block_vars('top_ten_dl_traffic', [
-								'POS'			=> $dl_pos,
-								'USER_LINK'		=> $user_link,
-								'DL_TRAFFIC'	=> $dl_traffic,
+								'DL_POS'			=> $dl_pos,
+								'DL_USER_LINK'		=> $user_link,
+								'DL_TRAFFIC'		=> $dl_traffic,
 							]);
 
 							++$dl_pos;
@@ -504,19 +453,19 @@ class stats
 				unset($sql_array);
 
 				$sql = 'SELECT COUNT(s.id) AS dl_counts, s.user_id, s.username, u.user_colour
-					FROM ' . DL_STATS_TABLE . ' s
+					FROM ' . $this->dlext_table_dl_stats . ' s
 					LEFT JOIN ' . USERS_TABLE . ' u ON u.user_id = s.user_id
 					WHERE s.direction = 1
 						AND ' . $this->db->sql_in_set('s.cat_id', $access_cats) . "
 						$sql_where
 					GROUP BY s.user_id, s.username, u.user_colour
 					ORDER BY dl_counts DESC";
-				$result = $this->db->sql_query_limit($sql, 10);
-				$total_top_ten = $this->db->sql_affectedrows($result);
+				$result = $this->db->sql_query_limit($sql, $this->dlext_constants::DL_STATS_POS_LIMIT);
+				$total_top_ten = $this->db->sql_affectedrows();
 
 				if ($total_top_ten)
 				{
-					$this->template->assign_var('S_TOP10_UP_COUNT', true);
+					$this->template->assign_var('S_DL_TOP10_UP_COUNT', $this->dlext_constants::DL_TRUE);
 
 					$dl_pos = 1;
 
@@ -525,9 +474,9 @@ class stats
 						$user_link		= get_username_string('full', $row['user_id'], $row['username'], $row['user_colour']);
 
 						$this->template->assign_block_vars('top_ten_up_counts', [
-							'POS'			=> $dl_pos,
-							'USER_LINK'		=> $user_link,
-							'DL_COUNTS'		=> $row['dl_counts'],
+							'DL_POS'			=> $dl_pos,
+							'DL_USER_LINK'		=> $user_link,
+							'DL_COUNTS'			=> $row['dl_counts'],
 						]);
 
 						++$dl_pos;
@@ -543,19 +492,19 @@ class stats
 					unset($sql_array);
 
 					$sql = 'SELECT SUM(s.traffic) AS dl_traffic, s.user_id, s.username, u.user_colour
-						FROM ' . DL_STATS_TABLE . ' s
+						FROM ' . $this->dlext_table_dl_stats . ' s
 						LEFT JOIN ' . USERS_TABLE . ' u ON u.user_id = s.user_id
 						WHERE s.direction = 1
 							AND ' . $this->db->sql_in_set('s.cat_id', $access_cats) . "
 							$sql_where
 						GROUP BY s.user_id, s.username, u.user_colour
 						ORDER BY dl_traffic DESC";
-					$result = $this->db->sql_query_limit($sql, 10);
-					$total_top_ten = $this->db->sql_affectedrows($result);
+					$result = $this->db->sql_query_limit($sql, $this->dlext_constants::DL_STATS_POS_LIMIT);
+					$total_top_ten = $this->db->sql_affectedrows();
 
 					if ($total_top_ten)
 					{
-						$this->template->assign_var('S_TOP10_UP_TRAFFIC', true);
+						$this->template->assign_var('S_DL_TOP10_UP_TRAFFIC', $this->dlext_constants::DL_TRUE);
 
 						$dl_pos = 1;
 
@@ -566,9 +515,9 @@ class stats
 							$dl_traffic	= $this->dlext_format->dl_size($row['dl_traffic']);
 
 							$this->template->assign_block_vars('top_ten_up_traffic', [
-								'POS'			=> $dl_pos,
-								'USER_LINK'		=> $user_link,
-								'DL_TRAFFIC'	=> $dl_traffic,
+								'DL_POS'			=> $dl_pos,
+								'DL_USER_LINK'		=> $user_link,
+								'DL_TRAFFIC'		=> $dl_traffic,
 							]);
 
 							++$dl_pos;
@@ -587,13 +536,15 @@ class stats
 			redirect($this->helper->route('oxpus_dlext_index'));
 		}
 
-		$this->template->set_filenames(['body' => 'dl_stat_body.html']);
-
 		/*
 		* include the mod footer
 		*/
-		$dl_footer = $this->phpbb_container->get('oxpus.dlext.footer');
-		$dl_footer->set_parameter($nav_view, 0, 0, $index);
-		$dl_footer->handle();
+		$this->dlext_footer->set_parameter('stats', 0, 0, $index);
+		$this->dlext_footer->handle();
+
+		/*
+		* generate page
+		*/
+		return $this->helper->render('@oxpus_dlext/dl_stat_body.html', $this->language->lang('DL_STATS'));
 	}
 }

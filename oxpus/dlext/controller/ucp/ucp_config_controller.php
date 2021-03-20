@@ -3,7 +3,7 @@
 /**
 *
 * @package phpBB Extension - Oxpus Downloads
-* @copyright (c) 2002-2020 OXPUS - www.oxpus.net
+* @copyright (c) 2002-2021 OXPUS - www.oxpus.net
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
 */
@@ -12,47 +12,41 @@ namespace oxpus\dlext\controller\ucp;
 
 class ucp_config_controller implements ucp_config_interface
 {
+	/* phpbb objects */
+	protected $request;
+	protected $db;
+	protected $user;
+	protected $language;
+	protected $config;
+	protected $template;
+	protected $dispatcher;
+
+	/* extension owmed objects */
 	protected $u_action;
 
-	/* @var \phpbb\request\request_interface */
-	protected $request;
-
-	/* @var \phpbb\db\driver\driver_interface */
-	protected $db;
-
-	/* @var \phpbb\user */
-	protected $user;
-
-	/* @var \phpbb\language\language */
-	protected $language;
-
-	/* @var \phpbb\config\config */
-	protected $config;
-
-	/* @var \phpbb\template\template */
-	protected $template;
-
-	protected $phpbb_dispatcher;
+	protected $dlext_constants;
 
 	/**
 	* Constructor
 	*
-	* @param \phpbb\request\request_interface 		$request
-	* @param \phpbb\db\driver\driver_interfacer		$db
+	* @param \phpbb\request\request 				$request
+	* @param \phpbb\db\driver\driver_interface		$db
 	* @param \phpbb\user							$user
 	* @param \phpbb\language\language				$language
 	* @param \phpbb\config\config					$config
 	* @param \phpbb\template\template				$template
-	* @param \phpbb\event\dispatcher_interface		$phpbb_dispatcher
+	* @param \phpbb\event\dispatcher_interface		$dispatcher
+	* @param \oxpus\dlext\core\helpers\constants	$dlext_constants
 	*/
 	public function __construct(
-		\phpbb\request\request_interface $request,
+		\phpbb\request\request $request,
 		\phpbb\db\driver\driver_interface $db,
 		\phpbb\user $user,
 		\phpbb\language\language $language,
 		\phpbb\config\config $config,
 		\phpbb\template\template $template,
-		\phpbb\event\dispatcher_interface $phpbb_dispatcher
+		\phpbb\event\dispatcher_interface $dispatcher,
+		\oxpus\dlext\core\helpers\constants $dlext_constants
 	)
 	{
 		$this->request			= $request;
@@ -61,7 +55,9 @@ class ucp_config_controller implements ucp_config_interface
 		$this->language			= $language;
 		$this->config 			= $config;
 		$this->template 		= $template;
-		$this->phpbb_dispatcher	= $phpbb_dispatcher;
+		$this->dispatcher		= $dispatcher;
+
+		$this->dlext_constants	= $dlext_constants;
 	}
 
 	public function set_action($u_action)
@@ -100,7 +96,7 @@ class ucp_config_controller implements ucp_config_interface
 			$vars = array(
 				'sql_array',
 			);
-			extract($this->phpbb_dispatcher->trigger_event('oxpus.dlext.ucp_config_sql_update_before', compact($vars)));
+			extract($this->dispatcher->trigger_event('oxpus.dlext.ucp_config_sql_update_before', compact($vars)));
 
 			$sql = 'UPDATE ' . USERS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', $sql_array) . '
 					WHERE user_id = ' . (int) $this->user->data['user_id'];
@@ -113,43 +109,57 @@ class ucp_config_controller implements ucp_config_interface
 
 		add_form_key('dl_ucp');
 
-		$s_user_dl_sort_fix = '<select name="user_dl_sort_fix">';
-		$s_user_dl_sort_fix .= '<option value="0">' . $this->language->lang('DL_DEFAULT_SORT') . '</option>';
-		$s_user_dl_sort_fix .= '<option value="1">' . $this->language->lang('DL_FILE_DESCRIPTION') . '</option>';
-		$s_user_dl_sort_fix .= '<option value="2">' . $this->language->lang('DL_FILE_NAME') . '</option>';
-		$s_user_dl_sort_fix .= '<option value="3">' . $this->language->lang('DL_KLICKS') . '</option>';
-		$s_user_dl_sort_fix .= '<option value="4">' . $this->language->lang('DL_FREE') . '</option>';
-		$s_user_dl_sort_fix .= '<option value="5">' . $this->language->lang('DL_EXTERN') . '</option>';
-		$s_user_dl_sort_fix .= '<option value="6">' . $this->language->lang('DL_FILE_SIZE') . '</option>';
-		$s_user_dl_sort_fix .= '<option value="7">' . $this->language->lang('LAST_UPDATED') . '</option>';
-		$s_user_dl_sort_fix .= '<option value="8">' . $this->language->lang('DL_RATING') . '</option>';
-		$s_user_dl_sort_fix .= '</select>';
-		$s_user_dl_sort_fix = str_replace('value="' . $this->user->data['user_dl_sort_fix'] . '">', 'value="' . $this->user->data['user_dl_sort_fix'] . '" selected="selected">', $s_user_dl_sort_fix);
-
-		$s_user_dl_sort_dir = '<select name="user_dl_sort_dir">';
-		$s_user_dl_sort_dir .= '<option value="0">'.$this->language->lang('ASCENDING').'</option>';
-		$s_user_dl_sort_dir .= '<option value="1">'.$this->language->lang('DESCENDING').'</option>';
-		$s_user_dl_sort_dir .= '</select>';
-		$s_user_dl_sort_dir = str_replace('value="' . $this->user->data['user_dl_sort_dir'] . '">', 'value="' . $this->user->data['user_dl_sort_dir'] . '" selected="selected">', $s_user_dl_sort_dir);
-
 		if (!$this->config['dl_sort_preform'])
 		{
-			$this->template->assign_var('S_SORT_CONFIG_OPTIONS', true);
+			$this->template->assign_var('S_DL_SORT_CONFIG_OPTIONS', $this->dlext_constants::DL_TRUE);
 		}
 
-		$this->template->assign_var('S_DL_UCP_CONFIG', true);
+		$this->template->assign_var('S_DL_UCP_CONFIG', $this->dlext_constants::DL_TRUE);
 
 		add_form_key('dl_ucp');
 
 		$template_ary = [
-			'DL_MOD_RELEASE'			=> $this->language->lang('DL_MOD_VERSION_PUBLIC'),
+			'DL_MOD_RELEASE'		=> $this->language->lang('DL_MOD_VERSION_PUBLIC'),
 
-			'S_USER_DL_SUB_ON_INDEX'	=> $this->user->data['user_dl_sub_on_index'],
-			'S_DL_SORT_USER_OPT'		=> $s_user_dl_sort_fix,
-			'S_DL_SORT_USER_EXT'		=> $this->user->data['user_dl_sort_opt'],
-			'S_DL_SORT_USER_DIR'		=> $s_user_dl_sort_dir,
-			'S_FORM_ACTION'				=> $this->u_action,
+			'S_DL_SUB_ON_INDEX'		=> $this->user->data['user_dl_sub_on_index'],
+			'S_DL_SORT_USER_OPT'	=> $this->user->data['user_dl_sort_fix'],
+			'S_DL_SORT_USER_EXT'	=> $this->user->data['user_dl_sort_opt'],
+			'S_DL_SORT_USER_DIR'	=> $this->user->data['user_dl_sort_dir'],
+			'S_DL_FORM_ACTION'		=> $this->u_action,
 		];
+
+		$user_sort_fields = [
+			$this->dlext_constants::DL_SORT_DEFAULT		=> $this->language->lang('DL_DEFAULT_SORT'),
+			$this->dlext_constants::DL_SORT_DESCRIPTION	=> $this->language->lang('DL_FILE_DESCRIPTION'),
+			$this->dlext_constants::DL_SORT_FILE_NAME	=> $this->language->lang('DL_FILE_NAME'),
+			$this->dlext_constants::DL_SORT_CLICKS		=> $this->language->lang('DL_KLICKS'),
+			$this->dlext_constants::DL_SORT_FREE		=> $this->language->lang('DL_FREE'),
+			$this->dlext_constants::DL_SORT_EXTERN		=> $this->language->lang('DL_EXTERN'),
+			$this->dlext_constants::DL_SORT_FILE_SIZE	=> $this->language->lang('DL_FILE_SIZE'),
+			$this->dlext_constants::DL_SORT_LAST_TIME	=> $this->language->lang('LAST_UPDATED'),
+			$this->dlext_constants::DL_SORT_RATING		=> $this->language->lang('DL_RATING'),
+		];
+
+		$user_dl_sort_dir = [
+			$this->dlext_constants::DL_SORT_ASC		=> $this->language->lang('ASCENDING'),
+			$this->dlext_constants::DL_SORT_DESC	=> $this->language->lang('DESCENDING'),
+		];
+
+		foreach ($user_sort_fields as $key => $value)
+		{
+			$this->template->assign_block_vars('dl_sort_fields', [
+				'DL_KEY'	=> $key,
+				'DL_VALUE'	=> $value,
+			]);
+		}
+
+		foreach ($user_dl_sort_dir as $key => $value)
+		{
+			$this->template->assign_block_vars('dl_sort_order', [
+				'DL_KEY'	=> $key,
+				'DL_VALUE'	=> $value,
+			]);
+		}
 
 		/**
 		 * Display additional data for user download settings
@@ -161,7 +171,7 @@ class ucp_config_controller implements ucp_config_interface
 		$vars = array(
 			'template_ary',
 		);
-		extract($this->phpbb_dispatcher->trigger_event('oxpus.dlext.ucp_config_template_before', compact($vars)));
+		extract($this->dispatcher->trigger_event('oxpus.dlext.ucp_config_template_before', compact($vars)));
 
 		$this->template->assign_vars($template_ary);
 	}

@@ -1,0 +1,104 @@
+{% INCLUDE '@oxpus_dlext/helpers/dl_header.html' %}
+
+<script src="{{ T_SUPER_TEMPLATE_PATH }}/editor.js" ></script>
+
+<h2>{{ lang('DL_BUG_TRACKER') }}</h2>
+
+<br />
+
+{% if S_DL_PREVIEW %}
+<h3>{{ lang('PREVIEW') }}</h3>
+<div class="post bg1">
+	<div class="inner">
+	<div class="postbody">
+		<h3 class="first">{{ DL_PREVIEW_TITLE }}</h3>
+		<div class="content">{{ DL_PREVIEW_TEXT }}</div>
+	</div>
+	</div>
+</div>
+<br />
+{% endif %}
+
+<form action="{{ S_DL_FORM_ACTION }}" method="post" id="postform">
+
+	<div class="panel" id="postingbox">
+		<div class="inner">
+
+			<h3>{{ lang('NEW_POST') }}</h3>
+
+		</div>
+
+		<fieldset class="fields1">
+			{% if DL_ERROR %}<p class="error">{ERROR}</p>{% endif %}
+
+			<dl>
+				<dt><label>{{ lang('SUBJECT') }}</label></dt>
+				<dd>&nbsp;<input type="text" size="75" maxlength="255" class="inputbox autowidth" name="report_title" value="{{ DL_REPORT_TITLE }}" /></dd>
+			</dl>
+
+			<dl>
+				<dt><label>{{ lang('DL_BUG_REPORT_FILE') }}</label></dt>
+				<dd>&nbsp;
+					<select name="df_id">
+						{% for dl_report_select in loops.dl_report_select %}
+						{% if dl_report_select.DL_TYPE eq 'optgrp' %}<optgroup label="{{ dl_report_select.DL_VALUE }}">{% endif %}
+						{% if dl_report_select.DL_TYPE eq 'option' %}<option value="{{ dl_report_select.DL_KEY }}"{% if dl_report_select.DL_KEY eq S_DL_SELECT_DOWNLOAD %} selected="selected"{% endif %}>{{ dl_report_select.DL_VALUE }}</option>{% endif %}
+						{% if dl_report_select.DL_TYPE eq 'optend' %}</opttion>{% endif %}
+						{% endfor %}
+					</select>
+				</dd>
+			</dl>
+
+			<div>{% INCLUDE 'posting_buttons.html' %}</div>
+
+			{% if loops.smiley|length %}
+			<div id="smiley-box" class="smiley-box">
+				<strong>{{ lang('SMILIES') }}</strong><br />
+				{% for smiley in loops.smiley %}
+					<a href="#" onclick="insert_text('{{ smiley.A_SMILEY_CODE }}', true); return false;"><img src="{{ smiley.SMILEY_IMG }}" width="{{ smiley.SMILEY_WIDTH }}" height="{{ smiley.SMILEY_HEIGHT }}" alt="{{ smiley.SMILEY_CODE }}" title="{{ smiley.SMILEY_DESC }}" /></a>
+				{% endfor %}
+				<br /><a href="{{ U_DL_MORE_SMILIES }}" onclick="window.open('{{ U_DL_MORE_SMILIES }}', '_blank', 'HEIGHT=200,resizable=yes,scrollbars=yes,WIDTH=400'); return false;">{{ lang('MORE_SMILIES') }}</a>
+			</div>
+			{% endif %}
+
+			<div id="message-box" class="message-box">
+				<textarea name="message" id="message" rows="13" cols="76" tabindex="3" onselect="storeCaret(this);" onclick="storeCaret(this);" onkeyup="storeCaret(this);" class="inputbox">{{ DL_REPORT_TEXT }}</textarea>
+			</div>
+
+			<dl>
+				<dt><label>{{ lang('DL_HACK_VERSION') }}</label></dt>
+				<dd>&nbsp;<input type="text" size="20" maxlength="50" class="inputbox autowidth" name="report_file_ver" value="{{ DL_REPORT_FILE_VER }}" /></dd>
+			</dl>
+
+			<dl>
+				<dt><label>{{ lang('DL_BUG_REPORT_PHP') }}</label></dt>
+				<dd>&nbsp;<input type="text" size="20" maxlength="50" class="inputbox autowidth" name="report_php" value="{{ DL_REPORT_PHP }}" /></dd>
+			</dl>
+
+			<dl>
+				<dt><label>{{ lang('DL_BUG_REPORT_DB') }}</label></dt>
+				<dd>&nbsp;<input type="text" size="20" maxlength="50" class="inputbox autowidth" name="report_db" value="{{ DL_REPORT_DB }}" /></dd>
+			</dl>
+
+			<dl>
+				<dt><label>{{ lang('DL_BUG_REPORT_FORUM') }}</label></dt>
+				<dd>&nbsp;<input type="text" size="20" maxlength="50" class="inputbox autowidth" name="report_forum" value="{{ DL_REPORT_FORUM }}" /></dd>
+			</dl>
+		</fieldset>
+
+		<fieldset class="submit-buttons">
+			<input type="submit" name="submit" value="{{ lang('SUBMIT') }}" class="button1" />
+			<input type="reset" name="reset" value="{{ lang('RESET') }}" class="button2" />
+			<input type="submit" name="preview" value="{{ lang('PREVIEW') }}" class="button1" />
+			{{ S_FORM_TOKEN }}
+			{{ S_DL_HIDDEN_FIELDS }}
+		</fieldset>
+
+		<br />
+
+	</div>
+
+</form>
+
+
+{% INCLUDE '@oxpus_dlext/helpers/dl_footer.html' %}

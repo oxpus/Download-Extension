@@ -1,26 +1,38 @@
-{% INCLUDE 'dl_header.html' %}
+{% INCLUDE '@oxpus_dlext/helpers/dl_header.html' %}
 
-<h2>{{ STATUS }} <label>{{ DESCRIPTION }} {{ HACK_VERSION }} {{ MINI_IMG }}</label></h2>
+<h2>
+	{% if DL_FILE_STATUS eq 'red' %}<i class="icon fa-ban fa-fw dl-red" title="{{ lang('DL_RED_EXPLAIN_PERM') }}"></i>{% endif %}
+	{% if DL_FILE_STATUS eq 'yellow' %}<i class="icon fa-download fa-fw dl-yellow" title="{{ lang('DL_YELLOW_EXPLAIN') }}"></i>{% endif %}
+	{% if DL_FILE_STATUS eq 'green' %}<i class="icon fa-download fa-fw dl-green" title="{{ lang('DL_GREEN_EXPLAIN') }}"></i>{% endif %}
+	{% if DL_FILE_STATUS eq 'white' %}<i class="icon fa-download fa-fw dl-white" title="{{ lang('DL_WHITE_EXPLAIN') }}"></i>{% endif %}
+	{% if DL_FILE_STATUS eq 'blue' %}<i class="icon fa-info-circle fa-fw dl-blue" title="{{ lang('DL_BLUE_EXPLAIN_FOOT') }}"></i>{% endif %}
+	{% if DL_FILE_STATUS eq 'grey' %}<i class="icon fa-globe fa-fw dl-grey" title="{{ lang('DL_GREY_EXPLAIN') }}"></i>{% endif %}
+	<label>
+		{{ DL_DESCRIPTION }}{{ DL_HACK_VERSION }}
+		{% if DL_MINI_IMG eq 'new' %}<i class="icon fa-comment-o fa-fw dl-red" title="{{ lang('DL_FILE_NEW') }}"></i>{% endif %}
+		{% if DL_MINI_IMG eq 'edit' %}<i class="icon fa-edit fa-fw dl-blue" title="{{ lang('DL_FILE_EDIT') }}"></i>{% endif %}
+	</label>
+</h2>
 
 <br />
 
 <div class="panel">
 	<div class="inner">
 
-	<form action="{{ S_CONFIRM_ACTION }}" method="post" id="confirm_broken_dl">
+	<form action="{{ S_DL_CONFIRM_ACTION }}" method="post" id="confirm_broken_dl">
 
 	<fieldset>
 
-		<h3>{{ MESSAGE_TITLE }}</h3>
+		<h3>{{ DL_MESSAGE_TITLE }}</h3>
 
 		<dl>
 			<dt><b>{{ lang('DL_REPORT_REASON') }}{{ lang('COLON') }}</b></dt>
 			<dd class="lastpost"><textarea class="inputbox autowidth" rows="5" cols="50" name="report_notify_text"></textarea></dd>
 		</dl>
-		{% if CAPTCHA_TEMPLATE %}
+		{% if DL_CAPTCHA_TEMPLATE %}
 				{% DEFINE CAPTCHA_TAB_INDEX = 8 %}
 				<br />{{ lang('DL_CONFIRM_EXPLAIN') }}<br /><br />
-				{% INCLUDE ''~ CAPTCHA_TEMPLATE ~'' %}
+				{% INCLUDE ''~ DL_CAPTCHA_TEMPLATE ~'' %}
 		{% endif %}
 
 	</fieldset>
@@ -29,7 +41,7 @@
 		<input type="submit" name="submit" value="{{ lang('SUBMIT') }}" class="button icon-button" />
 		<input type="submit" name="cancel" value="{{ lang('CANCEL') }}" class="button icon-button" />
 		{{ S_FORM_TOKEN }}
-		{{ S_HIDDEN_FIELDS }}
+		{{ S_DL_HIDDEN_FIELDS }}
 	</fieldset>
 
 	</form>
@@ -39,4 +51,4 @@
 
 <br />
 
-{% INCLUDE 'dl_footer.html' %}
+{% INCLUDE '@oxpus_dlext/helpers/dl_footer.html' %}

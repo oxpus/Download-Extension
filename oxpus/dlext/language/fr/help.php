@@ -3,7 +3,7 @@
 /**
 *
 * @package phpBB Extension - Oxpus Downloads
-* @copyright (c) 2002-2020 OXPUS - www.oxpus.net
+* @copyright (c) 2002-2021 OXPUS - www.oxpus.net
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
 */
@@ -30,7 +30,7 @@ if (empty($lang) || !is_array($lang))
 $lang = array_merge($lang, [
 	'HELP_TITLE' 					=> 'Aide en ligne de l’outil « Téléchargements »',
 
-	'DL_NO_HELP_AVIABLE' 			=> 'Il n’y a pas d’aide disponible pour cette option',
+	'DL_NO_DL_NO_HELP_AVAILABLEHELP_AVIABLE' 			=> 'Il n’y a pas d’aide disponible pour cette option',
 
 	'HELP_DL_ACTIVE'				=> 'Active ou désactive l’outil « Téléchargements » en fonction des options définies dans la rubrique suivante.',
 	'HELP_DL_ANTISPAM'				=> 'Cette option bloque les téléchargements si l’utilisateur a dépassé le <i>nombre de messages</i> défini dans le champ "Nombre de message" durant la <i>période</i> définie en heures dans le champ "Période".<br><br>Exemple :<br>Paramètres : 25 messages en 24 heures.<br>Sur la base de ces paramètres, les téléchargements seront bloqués pour l’utilisateur s’il a publié 25 nouveaux messages, ou plus, durant les dernières 24 heures.<br>Ceci afin d’empêcher les utilisateurs, qui viennent de s’inscrire sur le forum, de spammer dans le forum afin de pouvoir avoir le nombre de contributions nécessaire pour télécharger certains fichiers, et ce sans qu’il y ait besoin qu’un membre de l’équipe ne s’en aperçoive et prenne des mesures adaptées.<br>Le téléchargement n’est intentionnellement pas affiché comme bloqué pour l’utilisateur, de sorte qu’il est tenté de télécharger le fichier. Cependant, il reçoit ensuite un message concernant les droits d’accès manquants..<br><br>Pour désactiver cette vérification, définissez au moins l’une des deux valeurs sur 0.',

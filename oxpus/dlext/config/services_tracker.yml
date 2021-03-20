@@ -1,0 +1,66 @@
+services:
+    oxpus.dlext.tracker.edit:
+        class: oxpus\dlext\controller\tracker\edit
+        public: true
+        arguments:
+            - '%core.root_path%'
+            - '%core.php_ext%'
+            - '@dbal.conn'
+            - '@config'
+            - '@controller.helper'
+            - '@request'
+            - '@template'
+            - '@user'
+            - '@language'
+            - '@notification_manager'
+            - '@oxpus.dlext.core.auth'
+            - '@oxpus.dlext.core.main'
+            - '@oxpus.dlext.helpers.footer'
+            - '@oxpus.dlext.helpers.constants'
+            - '%oxpus.dlext.tables.dl_bug_history%'
+            - '%oxpus.dlext.tables.dl_tracker%'
+            - '%oxpus.dlext.tables.downloads%'
+            - '%oxpus.dlext.tables.dl_cat%'
+    oxpus.dlext.tracker.main:
+        class: oxpus\dlext\controller\tracker\main
+        public: true
+        arguments:
+            - '%core.root_path%'
+            - '%core.php_ext%'
+            - '@dbal.conn'
+            - '@controller.helper'
+            - '@request'
+            - '@template'
+            - '@user'
+            - '@language'
+            - '@notification_manager'
+            - '@oxpus.dlext.core.auth'
+            - '@oxpus.dlext.core.main'
+            - '@oxpus.dlext.helpers.footer'
+            - '@oxpus.dlext.helpers.constants'
+            - '%oxpus.dlext.tables.dl_auth%'
+            - '%oxpus.dlext.tables.dl_bug_history%'
+            - '%oxpus.dlext.tables.dl_tracker%'
+            - '%oxpus.dlext.tables.downloads%'
+            - '%oxpus.dlext.tables.dl_cat%'
+    oxpus.dlext.tracker.view:
+        class: oxpus\dlext\controller\tracker\view
+        public: true
+        arguments:
+            - '@dbal.conn'
+            - '@config'
+            - '@controller.helper'
+            - '@request'
+            - '@template'
+            - '@user'
+            - '@language'
+            - '@notification_manager'
+            - '@pagination'
+            - '@oxpus.dlext.core.auth'
+            - '@oxpus.dlext.core.main'
+            - '@oxpus.dlext.helpers.footer'
+            - '@oxpus.dlext.helpers.constants'
+            - '%oxpus.dlext.tables.dl_bug_history%'
+            - '%oxpus.dlext.tables.dl_tracker%'
+            - '%oxpus.dlext.tables.downloads%'
+            - '%oxpus.dlext.tables.dl_cat%'

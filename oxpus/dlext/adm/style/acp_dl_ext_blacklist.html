@@ -1,22 +1,10 @@
 {% INCLUDE 'overall_header.html' %}
 
-<script type="text/javascript">
-// <![CDATA[
-function select_switch(status)
-{
-	for (i = 0; i < document.forms.extension.length; i++)
-	{
-		document.forms.extension.elements[i].checked = status;
-	}
-}
-// ]]>
-</script>
-
 <h1>{{ lang('DL_EXT_BLACKLIST') }}</h1>
 
 <p>{{ lang('DL_EXT_BLACKLIST_EXPLAIN') }}</p>
 
-<form action="{{ S_DOWNLOADS_ACTION }}" method="post" id="add_ext">
+<form action="{{ S_DL_DOWNLOADS_ACTION }}" method="post" id="add_ext">
 
 <fieldset class="quick">
 	<label><strong>{{ lang('DL_EXTENSION') }}</strong></label>&nbsp;
@@ -28,8 +16,8 @@ function select_switch(status)
 
 </form>
 
-{% if S_EXT_YES %}
-<form action="{{ S_DOWNLOADS_ACTION }}" method="post" id="extension">
+{% if S_DL_EXT_YES %}
+<form action="{{ S_DL_DOWNLOADS_ACTION }}" method="post" id="extension">
 
 <table class="table1">
 <thead>
@@ -39,17 +27,17 @@ function select_switch(status)
 </tr>
 </thead>
 <tbody>
-	{% for extension_row in loops.extension_row %}
-	{% if extension_row.S_ROW_COUNT is even %}<tr class="row4 dl-line-hight">{% else %}<tr class="row3 dl-line-hight">{% endif %}
-		<td class="dl-text-left"><strong>{{ extension_row.EXTENSION }}</strong></td>
-		<td class="dl-text-center"><input type="checkbox" title="{{ extension_row.EXTENSION }}" class="permissions-checkbox" name="extension[]" value="{{ extension_row.EXTENSION }}" /></td>
+	{% for dl_extension_row in loops.dl_extension_row %}
+	{% if dl_extension_row.S_ROW_COUNT is even %}<tr class="row4 dl-line-hight">{% else %}<tr class="row3 dl-line-hight">{% endif %}
+		<td class="dl-text-left"><strong>{{ dl_extension_row.DL_EXTENSION }}</strong></td>
+		<td class="dl-text-center"><input type="checkbox" title="{{ dl_extension_row.DL_EXTENSION }}" class="permissions-checkbox" name="extension[]" value="{{ dl_extension_row.DL_EXTENSION }}" /></td>
 	</tr>
 	{% endfor %}
 </tbody>
 </table>
-	
+
 <fieldset class="quick">
-	<div><a href="javascript:select_switch(true);" class="small">{{ lang('MARK_ALL') }}</a> &bull; <a href="javascript:select_switch(false);" class="small">{{ lang('UNMARK_ALL') }}</a></div>
+	<span class="small"><a href="#" onclick="marklist('extension', 'extension', true); return false;">{{ lang('MARK_ALL') }}</a> :: <a href="#" onclick="marklist('extension', 'extension', false); return false;">{{ lang('UNMARK_ALL') }}</a></span>
 	<br />
 	<input type="submit" name="submit" class="button1" value="{{ lang('DL_DELETE') }}" /><br />
 	<input type="hidden" name="action" value="delete" />

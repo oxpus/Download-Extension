@@ -3,96 +3,107 @@
 /**
 *
 * @package phpBB Extension - Oxpus Downloads
-* @copyright (c) 2002-2020 OXPUS - www.oxpus.net
+* @copyright (c) 2002-2021 OXPUS - www.oxpus.net
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
 */
 
 namespace oxpus\dlext\controller\acp;
 
-use Symfony\Component\DependencyInjection\Container;
-
 /**
 * @package acp
 */
 class acp_config_controller implements acp_config_interface
 {
-	public $u_action;
-	public $db;
-	public $user;
-	public $auth;
-	public $phpEx;
-	public $root_path;
-	public $phpbb_extension_manager;
-	public $phpbb_container;
-	public $phpbb_path_helper;
-	public $phpbb_log;
+	/* phpbb objects */
+	protected $db;
+	protected $user;
+	protected $phpEx;
+	protected $root_path;
+	protected $log;
+	protected $config;
+	protected $config_text;
+	protected $language;
+	protected $request;
+	protected $template;
+	protected $cache;
 
-	public $config;
-	public $config_text;
-	public $helper;
-	public $language;
-	public $request;
-	public $template;
-
-	public $ext_path;
-	public $ext_path_web;
-	public $ext_path_ajax;
+	/* extension owned objects */
+	protected $u_action;
+	protected $ext_path;
 
 	protected $dlext_extra;
 	protected $dlext_format;
 	protected $dlext_physical;
+	protected $dlext_constants;
 
-	/*
+	protected $dlext_table_dl_ratings;
+	protected $dlext_table_dl_versions;
+	protected $dlext_table_downloads;
+
+	/**
+	 * Constructor
+	 *
 	 * @param string								$root_path
 	 * @param string								$phpEx
-	 * @param Container 							$phpbb_container
-	 * @param \phpbb\extension\manager				$phpbb_extension_manager
-	 * @param \phpbb\path_helper					$phpbb_path_helper
-	 * @param \phpbb\db\driver\driver_interfacer	$db
+	 * @param \phpbb\config\config					$config
+	 * @param \phpbb\config\db_text					$config_text
+	 * @param \phpbb\language\language				$language
+	 * @param \phpbb\request\request 				$request
+	 * @param \phpbb\template\template				$template
+	 * @param \phpbb\db\driver\driver_interface		$db
 	 * @param \phpbb\log\log_interface 				$log
-	 * @param \phpbb\auth\auth						$auth
 	 * @param \phpbb\user							$user
+	 * @param \phpbb\cache\service					$cache
+	 * @param \oxpus\dlext\core\extra				$dlext_extra
+	 * @param \oxpus\dlext\core\format				$dlext_format
+	 * @param \oxpus\dlext\core\physical			$dlext_physical
+	 * @param \oxpus\dlext\core\helpers\constants	$dlext_constants
+	 * @param string								$dlext_table_dl_ratings
+	 * @param string								$dlext_table_dl_versions
+	 * @param string								$dlext_table_downloads
 	 */
 	public function __construct(
 		$root_path,
 		$phpEx,
-		Container $phpbb_container,
-		\phpbb\extension\manager $phpbb_extension_manager,
-		\phpbb\path_helper $phpbb_path_helper,
+		\phpbb\config\config $config,
+		\phpbb\config\db_text $config_text,
+		\phpbb\language\language $language,
+		\phpbb\request\request $request,
+		\phpbb\template\template $template,
 		\phpbb\db\driver\driver_interface $db,
 		\phpbb\log\log_interface $log,
-		\phpbb\auth\auth $auth,
 		\phpbb\user $user,
-		$dlext_extra,
-		$dlext_format,
-		$dlext_physical
+		\phpbb\cache\service $cache,
+		\oxpus\dlext\core\extra $dlext_extra,
+		\oxpus\dlext\core\format $dlext_format,
+		\oxpus\dlext\core\physical $dlext_physical,
+		\oxpus\dlext\core\helpers\constants $dlext_constants,
+		$dlext_table_dl_ratings,
+		$dlext_table_dl_versions,
+		$dlext_table_downloads
 	)
 	{
 		$this->root_path				= $root_path;
 		$this->phpEx					= $phpEx;
-		$this->phpbb_container			= $phpbb_container;
-		$this->phpbb_extension_manager	= $phpbb_extension_manager;
-		$this->phpbb_path_helper		= $phpbb_path_helper;
 		$this->db						= $db;
-		$this->phpbb_log				= $log;
-		$this->auth						= $auth;
+		$this->log						= $log;
 		$this->user						= $user;
+		$this->cache					= $cache;
+		$this->config					= $config;
+		$this->config_text				= $config_text;
+		$this->language					= $language;
+		$this->request					= $request;
+		$this->template					= $template;
 
-		$this->config					= $this->phpbb_container->get('config');
-		$this->config_text				= $this->phpbb_container->get('config_text');
-		$this->helper					= $this->phpbb_container->get('controller.helper');
-		$this->language					= $this->phpbb_container->get('language');
-		$this->request					= $this->phpbb_container->get('request');
-		$this->template					= $this->phpbb_container->get('template');
-
-		$this->ext_path					= $this->phpbb_extension_manager->get_extension_path('oxpus/dlext', true);
-		$this->ext_path_web				= $this->phpbb_path_helper->update_web_root_path($this->ext_path);
-		$this->ext_path_ajax			= $this->ext_path_web . 'assets/javascript/';
+		$this->dlext_table_dl_ratings	= $dlext_table_dl_ratings;
+		$this->dlext_table_dl_versions	= $dlext_table_dl_versions;
+		$this->dlext_table_downloads	= $dlext_table_downloads;
 
 		$this->dlext_extra				= $dlext_extra;
 		$this->dlext_format				= $dlext_format;
 		$this->dlext_physical			= $dlext_physical;
+		$this->dlext_constants			= $dlext_constants;
 	}
 
 	public function set_action($u_action)
@@ -102,13 +113,8 @@ class acp_config_controller implements acp_config_interface
 
 	public function handle()
 	{
-		$this->auth->acl($this->user->data);
-		if (!$this->auth->acl_get('a_dl_config'))
-		{
-			trigger_error('DL_NO_PERMISSION', E_USER_WARNING);
-		}
-
-		include_once($this->ext_path . 'phpbb/includes/acm_init.' . $this->phpEx);
+		$submit				= $this->request->variable('submit', '');
+		$view				= $this->request->variable('view', 'general');
 
 		if ($submit && !check_form_key('dl_adm_config'))
 		{
@@ -139,24 +145,24 @@ class acp_config_controller implements acp_config_interface
 					'vars'	=> [
 						'legend1'				=> '',
 
-						'dl_active'			=> ['lang' => 'DL_ACTIVE',			'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => false,		'help_key' => 'DL_ACTIVE'],
-						'dl_traffic_off'	=> ['lang' => 'DL_TRAFFIC_OFF',		'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => false,		'help_key' => 'DL_TRAFFIC_OFF'],
-						'dl_stop_uploads'	=> ['lang' => 'DL_STOP_UPLOADS',	'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => false,		'help_key' => 'DL_STOP_UPLOADS'],
-						'dl_use_hacklist'	=> ['lang' => 'DL_USE_HACKLIST',	'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => false,		'help_key' => 'DL_USE_HACKLIST'],
-						'dl_todo_onoff'		=> ['lang' => 'DL_USE_TODOLIST',	'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => false,		'help_key' => 'DL_USE_TODOLIST'],
+						'dl_active'			=> ['lang' => 'DL_ACTIVE',				'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_ACTIVE'],
+						'dl_traffic_off'	=> ['lang' => 'DL_TRAFFIC_OFF',			'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_TRAFFIC_OFF'],
+						'dl_stop_uploads'	=> ['lang' => 'DL_STOP_UPLOADS',		'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_STOP_UPLOADS'],
+						'dl_use_hacklist'	=> ['lang' => 'DL_USE_HACKLIST',		'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_USE_HACKLIST'],
+						'dl_todo_onoff'		=> ['lang' => 'DL_USE_TODOLIST',		'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_USE_TODOLIST'],
 
 						'legend2'				=> '',
 
-						'dl_off_now_time'	=> ['lang' => 'DL_OFF_NOW_TIME',		'validate' => 'bool',	'type' => 'custom',			'explain' => false,		'help_key' => 'DL_OFF_NOW_TIME', 		'function' => [$this, 'mod_disable'],	'params' => ['{CONFIG_VALUE}']],
-						'dl_off_from'		=> ['lang' => 'DL_OFF_PERIOD',			'validate' => 'string',	'type' => 'text:5:5',		'explain' => false,		'help_key' => 'DL_OFF_PERIOD'],
-						'dl_off_till'		=> ['lang' => 'DL_OFF_PERIOD_TILL',		'validate' => 'string',	'type' => 'text:5:5',		'explain' => false,		'help_key' => 'DL_OFF_PERIOD_TILL'],
-						'dl_on_admins'		=> ['lang' => 'DL_ON_ADMINS',			'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => false,		'help_key' => 'DL_ON_ADMINS'],
-						'dl_off_hide'		=> ['lang' => 'DL_OFF_HIDE',			'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => false,		'help_key' => 'DL_OFF_HIDE'],
+						'dl_off_now_time'	=> ['lang' => 'DL_OFF_NOW_TIME',		'validate' => 'bool',	'type' => 'custom',			'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_OFF_NOW_TIME', 		'function' => [$this, 'mod_disable'],	'params' => ['{CONFIG_VALUE}']],
+						'dl_off_from'		=> ['lang' => 'DL_OFF_PERIOD',			'validate' => 'string',	'type' => 'text:5:5',		'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_OFF_PERIOD'],
+						'dl_off_till'		=> ['lang' => 'DL_OFF_PERIOD_TILL',		'validate' => 'string',	'type' => 'text:5:5',		'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_OFF_PERIOD_TILL'],
+						'dl_on_admins'		=> ['lang' => 'DL_ON_ADMINS',			'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_ON_ADMINS'],
+						'dl_off_hide'		=> ['lang' => 'DL_OFF_HIDE',			'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_OFF_HIDE'],
 
 						'legend3'				=> '',
 
-						'dl_set_add'		=> ['lang' => 'DL_SET_ADD',				'validate' => 'int',	'type' => 'select',		'explain' => false,		'help_key' => 'DL_SET_ADD', 				'function' => [$this, 'select_topic_user'],	'params' => ['{CONFIG_VALUE}']],
-						'dl_set_user'		=> ['lang' => 'DL_TOPIC_USER_OTHER',	'validate' => 'string',	'type' => 'custom',		'explain' => false,		'help_key' => 'DL_SET_ADD',					'function' => [$this, 'select_dl_user'], 	'params' => ['{CONFIG_VALUE}', 'dl_set_user']],
+						'dl_set_add'		=> ['lang' => 'DL_SET_ADD',				'validate' => 'int',	'type' => 'select',			'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_SET_ADD', 			'function' => [$this, 'select_topic_user'],	'params' => ['{CONFIG_VALUE}']],
+						'dl_set_user'		=> ['lang' => 'DL_TOPIC_USER_OTHER',	'validate' => 'string',	'type' => 'custom',			'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_SET_ADD',				'function' => [$this, 'select_dl_user'], 	'params' => ['{CONFIG_VALUE}', 'dl_set_user']],
 					]
 				];
 			break;
@@ -166,54 +172,54 @@ class acp_config_controller implements acp_config_interface
 					'vars'	=> [
 						'legend1'				=> '',
 
-						'dl_icon_free_for_reg'		=> ['lang' => 'DL_ICON_FREE_FOR_REG',		'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => false,		'help_key' => 'DL_ICON_FREE_FOR_REG'],
-						'dl_new_time'				=> ['lang' => 'DL_NEW_TIME',				'validate' => 'string',	'type' => 'text:3:4',		'explain' => false,		'help_key' => 'DL_NEW_TIME'],
-						'dl_edit_time'				=> ['lang' => 'DL_EDIT_TIME',				'validate' => 'string',	'type' => 'text:3:4',		'explain' => false,		'help_key' => 'DL_EDIT_TIME'],
-						'dl_show_footer_legend'		=> ['lang' => 'DL_SHOW_FOOTER_LEGEND',		'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => false,		'help_key' => 'DL_SHOW_FOOTER_LEGEND'],
-						'dl_show_footer_stat'		=> ['lang' => 'DL_SHOW_FOOTER_STAT',		'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => false,		'help_key' => 'DL_SHOW_FOOTER_STAT'],
-						'dl_mini_stats_ext'			=> ['lang' => 'DL_SHOW_FOOTER_EXT_STATS',	'validate' => 'int',	'type' => 'select',			'explain' => false,		'help_key' => 'DL_SHOW_FOOTER_EXT_STATS',	'function' => [$this, 'select_dl_ext_stats'],	'params' => ['{CONFIG_VALUE}']],
-						'dl_overview_link_onoff'	=> ['lang' => 'DL_OVERVIEW_LINK',			'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => false,		'help_key' => 'DL_OVERVIEW_LINK'],
-						'dl_todo_link_onoff'		=> ['lang' => 'DL_TODO_LINK',				'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => false,		'help_key' => 'DL_TODO_LINK'],
-						'dl_enable_jumpbox'			=> ['lang' => 'DL_ENABLE_JUMPBOX',			'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => false,		'help_key' => 'DL_ENABLE_JUMPBOX'],
-						'dl_cat_edit'				=> ['lang' => 'DL_CAT_EDIT_LINK',			'validate' => 'int',	'type' => 'select',			'explain' => false,		'help_key' => 'DL_CAT_EDIT_LINK',		'function' => [$this, 'select_dl_cat_edit'],	'params' => ['{CONFIG_VALUE}']],
+						'dl_icon_free_for_reg'		=> ['lang' => 'DL_ICON_FREE_FOR_REG',		'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_ICON_FREE_FOR_REG'],
+						'dl_new_time'				=> ['lang' => 'DL_NEW_TIME',				'validate' => 'string',	'type' => 'text:3:4',		'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_NEW_TIME'],
+						'dl_edit_time'				=> ['lang' => 'DL_EDIT_TIME',				'validate' => 'string',	'type' => 'text:3:4',		'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_EDIT_TIME'],
+						'dl_show_footer_legend'		=> ['lang' => 'DL_SHOW_FOOTER_LEGEND',		'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_SHOW_FOOTER_LEGEND'],
+						'dl_show_footer_stat'		=> ['lang' => 'DL_SHOW_FOOTER_STAT',		'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_SHOW_FOOTER_STAT'],
+						'dl_mini_stats_ext'			=> ['lang' => 'DL_SHOW_FOOTER_EXT_STATS',	'validate' => 'int',	'type' => 'select',			'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_SHOW_FOOTER_EXT_STATS',			'function' => [$this, 'select_dl_ext_stats'],	'params' => ['{CONFIG_VALUE}']],
+						'dl_overview_link_onoff'	=> ['lang' => 'DL_OVERVIEW_LINK',			'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_OVERVIEW_LINK'],
+						'dl_todo_link_onoff'		=> ['lang' => 'DL_TODO_LINK',				'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_TODO_LINK'],
+						'dl_enable_jumpbox'			=> ['lang' => 'DL_ENABLE_JUMPBOX',			'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_ENABLE_JUMPBOX'],
+						'dl_cat_edit'				=> ['lang' => 'DL_CAT_EDIT_LINK',			'validate' => 'int',	'type' => 'select',			'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_CAT_EDIT_LINK',					'function' => [$this, 'select_dl_cat_edit'],	'params' => ['{CONFIG_VALUE}']],
 
 						'legend2'				=> '',
 
-						'dl_links_per_page'			=> ['lang' => 'DL_LINKS_PER_PAGE',			'validate' => 'string',	'type' => 'text:3:4',		'explain' => false,		'help_key' => 'DL_LINKS_PER_PAGE'],
-						'dl_shorten_extern_links'	=> ['lang' => 'DL_SHORTEN_EXTERN_LINKS',	'validate' => 'string',	'type' => 'text:3:4',		'explain' => false,		'help_key' => 'DL_SHORTEN_EXTERN_LINKS'],
-						'dl_index_desc_hide'		=> ['lang' => 'DL_INDEX_DESC_HIDE',			'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => false,		'help_key' => 'DL_INDEX_DESC_HIDE'],
-						'dl_desc_index'				=> ['lang' => 'DL_ENABLE_INDEX_DESC',		'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => false,		'help_key' => 'DL_ENABLE_INDEX_DESC'],
-						'dl_limit_desc_on_index'	=> ['lang' => 'DL_LIMIT_DESC_ON_INDEX',		'validate' => 'string',	'type' => 'text:5:10',		'explain' => false,		'help_key' => 'DL_LIMIT_DESC_ON_INDEX'],
-						'dl_desc_search'			=> ['lang' => 'DL_ENABLE_SEARCH_DESC',		'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => false,		'help_key' => 'DL_ENABLE_SEARCH_DESC'],
-						'dl_limit_desc_on_search'	=> ['lang' => 'DL_LIMIT_DESC_ON_SEARCH',	'validate' => 'string',	'type' => 'text:5:10',		'explain' => false,		'help_key' => 'DL_LIMIT_DESC_ON_SEARCH'],
+						'dl_links_per_page'			=> ['lang' => 'DL_LINKS_PER_PAGE',			'validate' => 'string',	'type' => 'text:3:4',		'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_LINKS_PER_PAGE'],
+						'dl_shorten_extern_links'	=> ['lang' => 'DL_SHORTEN_EXTERN_LINKS',	'validate' => 'string',	'type' => 'text:3:4',		'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_SHORTEN_EXTERN_LINKS'],
+						'dl_index_desc_hide'		=> ['lang' => 'DL_INDEX_DESC_HIDE',			'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_INDEX_DESC_HIDE'],
+						'dl_desc_index'				=> ['lang' => 'DL_ENABLE_INDEX_DESC',		'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_ENABLE_INDEX_DESC'],
+						'dl_limit_desc_on_index'	=> ['lang' => 'DL_LIMIT_DESC_ON_INDEX',		'validate' => 'string',	'type' => 'text:5:10',		'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_LIMIT_DESC_ON_INDEX'],
+						'dl_desc_search'			=> ['lang' => 'DL_ENABLE_SEARCH_DESC',		'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_ENABLE_SEARCH_DESC'],
+						'dl_limit_desc_on_search'	=> ['lang' => 'DL_LIMIT_DESC_ON_SEARCH',	'validate' => 'string',	'type' => 'text:5:10',		'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_LIMIT_DESC_ON_SEARCH'],
 
 						'legend3'				=> '',
 
-						'dl_show_real_filetime'		=> ['lang' => 'DL_SHOW_REAL_FILETIME',		'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => false,		'help_key' => 'DL_SHOW_REAL_FILETIME'],
-						'dl_file_hash_algo'			=> ['lang' => 'DL_FILE_HASH_ALGO',			'validate' => 'string',	'type' => 'select',			'explain' => false,		'help_key' => 'DL_FILE_HASH_ALGO',		'function' => [$this, 'select_dl_hash_algo'],	'params' => ['{CONFIG_VALUE}']],
-						'dl_ext_new_window'			=> ['lang' => 'DL_EXT_NEW_WINDOW',			'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => false,		'help_key' => 'DL_EXT_NEW_WINDOW'],
-						'dl_report_broken_message'	=> ['lang' => 'DL_REPORT_BROKEN_MESSAGE',	'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => false,		'help_key' => 'DL_REPORT_BROKEN_MESSAGE'],
+						'dl_show_real_filetime'		=> ['lang' => 'DL_SHOW_REAL_FILETIME',		'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_SHOW_REAL_FILETIME'],
+						'dl_file_hash_algo'			=> ['lang' => 'DL_FILE_HASH_ALGO',			'validate' => 'string',	'type' => 'select',			'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_FILE_HASH_ALGO',					'function' => [$this, 'select_dl_hash_algo'],	'params' => ['{CONFIG_VALUE}']],
+						'dl_ext_new_window'			=> ['lang' => 'DL_EXT_NEW_WINDOW',			'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_EXT_NEW_WINDOW'],
+						'dl_report_broken_message'	=> ['lang' => 'DL_REPORT_BROKEN_MESSAGE',	'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_REPORT_BROKEN_MESSAGE'],
 
 						'legend4'				=> '',
 
-						'dl_nav_link_main'			=> ['lang' => 'DL_NAV_LINK_MAIN',			'validate' => 'string',	'type' => 'select',			'explain' => false,		'help_key' => false,		'function' => [$this, 'select_nav_link_pos'],	'params' => ['{CONFIG_VALUE}']],
-						'dl_nav_link_hacks'			=> ['lang' => 'DL_NAV_LINK_HACKS',			'validate' => 'string',	'type' => 'select',			'explain' => false,		'help_key' => false,		'function' => [$this, 'select_nav_link_pos'],	'params' => ['{CONFIG_VALUE}']],
-						'dl_nav_link_tracker'		=> ['lang' => 'DL_NAV_LINK_TRACKER',		'validate' => 'string',	'type' => 'select',			'explain' => false,		'help_key' => false,		'function' => [$this, 'select_nav_link_pos'],	'params' => ['{CONFIG_VALUE}']],
+						'dl_nav_link_main'			=> ['lang' => 'DL_NAV_LINK_MAIN',			'validate' => 'string',	'type' => 'select',			'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => $this->dlext_constants::DL_FALSE,		'function' => [$this, 'select_nav_link_pos'],	'params' => ['{CONFIG_VALUE}']],
+						'dl_nav_link_hacks'			=> ['lang' => 'DL_NAV_LINK_HACKS',			'validate' => 'string',	'type' => 'select',			'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => $this->dlext_constants::DL_FALSE,		'function' => [$this, 'select_nav_link_pos'],	'params' => ['{CONFIG_VALUE}']],
+						'dl_nav_link_tracker'		=> ['lang' => 'DL_NAV_LINK_TRACKER',		'validate' => 'string',	'type' => 'select',			'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => $this->dlext_constants::DL_FALSE,		'function' => [$this, 'select_nav_link_pos'],	'params' => ['{CONFIG_VALUE}']],
 					]
 				];
 
-				$fulltext_dl_search_enabled = false;
+				$fulltext_dl_search_enabled = $this->dlext_constants::DL_FALSE;
 				global $dbms;
 
 				if (strpos(strtolower($dbms), 'mysql') !== false)
 				{
-					$sql = 'SHOW INDEX FROM ' . DOWNLOADS_TABLE;
+					$sql = 'SHOW INDEX FROM ' . $this->dlext_table_downloads;
 					$result = $this->db->sql_query($sql);
 					while ($row = $this->db->sql_fetchrow($result))
 					{
 						if ($row['Key_name'] == 'desc_search')
 						{
-							$fulltext_dl_search_enabled = true;
+							$fulltext_dl_search_enabled = $this->dlext_constants::DL_TRUE;
 						}
 					}
 					$this->db->sql_freeresult($result);
@@ -224,8 +230,8 @@ class acp_config_controller implements acp_config_interface
 					$display_vars['vars'] += [
 						'legend5'				=> '',
 
-						'dl_similar_dl'		=> ['lang' => 'DL_SIMILAR_DL_OPTION',		'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => false,		'help_key' => 'DL_SIMILAR_DL'],
-						'dl_similar_limit'	=> ['lang' => 'DL_SIMILAR_DL_LIMIT',		'validate' => 'int',	'type' => 'text:3:5',		'explain' => false,		'help_key' => 'DL_SIMILAR_DL_LIMIT'],
+						'dl_similar_dl'		=> ['lang' => 'DL_SIMILAR_DL_OPTION',		'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_SIMILAR_DL'],
+						'dl_similar_limit'	=> ['lang' => 'DL_SIMILAR_DL_LIMIT',		'validate' => 'int',	'type' => 'text:3:5',		'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_SIMILAR_DL_LIMIT'],
 					];
 				}
 				else
@@ -240,31 +246,31 @@ class acp_config_controller implements acp_config_interface
 					'vars'	=> [
 						'legend1'				=> '',
 
-						'dl_global_guests'		=> ['lang' => 'DL_GLOBAL_GUESTS',		'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => false,		'help_key' => 'DL_GLOBAL_GUESTS'],
-						'dl_global_bots'		=> ['lang' => 'DL_GLOBAL_BOTS',			'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => false,		'help_key' => 'DL_GLOBAL_BOTS'],
+						'dl_global_guests'		=> ['lang' => 'DL_GLOBAL_GUESTS',		'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_GLOBAL_GUESTS'],
+						'dl_global_bots'		=> ['lang' => 'DL_GLOBAL_BOTS',			'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_GLOBAL_BOTS'],
 
 						'legend2'				=> '',
 
-						'dl_use_ext_blacklist'	=> ['lang' => 'DL_USE_EXT_BLACKLIST',	'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => false,		'help_key' => 'DL_USE_EXT_BLACKLIST'],
+						'dl_use_ext_blacklist'	=> ['lang' => 'DL_USE_EXT_BLACKLIST',	'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_USE_EXT_BLACKLIST'],
 
 						'legend3'				=> 'DL_ANTISPAM',
 
-						'dl_antispam_posts'		=> ['lang' => 'DL_ANTISPAM_POSTS',		'validate' => 'int',	'type' => 'text:5:10',		'explain' => false,		'help_key' => 'DL_ANTISPAM'],
-						'dl_antispam_hours'		=> ['lang' => 'DL_ANTISPAM_HOURS',		'validate' => 'int',	'type' => 'text:5:10',		'explain' => false,		'help_key' => 'DL_ANTISPAM'],
+						'dl_antispam_posts'		=> ['lang' => 'DL_ANTISPAM_POSTS',		'validate' => 'int',	'type' => 'text:5:10',		'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_ANTISPAM'],
+						'dl_antispam_hours'		=> ['lang' => 'DL_ANTISPAM_HOURS',		'validate' => 'int',	'type' => 'text:5:10',		'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_ANTISPAM'],
 
 						'legend4'				=> '',
 
-						'dl_download_vc'		=> ['lang' => 'DL_VISUAL_CONFIRMATION',	'validate' => 'int',	'type' => 'select',		'explain' => true,		'help_key' => 'DL_VISUAL_CONFIRMATION',		'function' => [$this, 'select_dl_vc'],		'params' => ['{CONFIG_VALUE}']],
-						'dl_report_broken_vc'	=> ['lang' => 'DL_REPORT_BROKEN_VC',	'validate' => 'int',	'type' => 'select',		'explain' => false,		'help_key' => 'DL_REPORT_BROKEN_VC',		'function' => [$this, 'select_report_vc'],	'params' => ['{CONFIG_VALUE}']],
+						'dl_download_vc'		=> ['lang' => 'DL_VISUAL_CONFIRMATION',	'validate' => 'int',	'type' => 'select',			'explain' => $this->dlext_constants::DL_TRUE,		'help_key' => 'DL_VISUAL_CONFIRMATION',		'function' => [$this, 'select_dl_vc'],			'params' => ['{CONFIG_VALUE}']],
+						'dl_report_broken_vc'	=> ['lang' => 'DL_REPORT_BROKEN_VC',	'validate' => 'int',	'type' => 'select',			'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_REPORT_BROKEN_VC',		'function' => [$this, 'select_report_vc'],		'params' => ['{CONFIG_VALUE}']],
 
 						'legend5'				=> '',
 
-						'dl_stats_perm'			=> ['lang' => 'DL_STAT_PERM',	'validate' => 'int',	'type' => 'select',		'explain' => false,		'help_key' => 'DL_STAT_PERM',	'function' => [$this, 'select_stat_perm'],	'params' => ['{CONFIG_VALUE}']],
+						'dl_stats_perm'			=> ['lang' => 'DL_STAT_PERM',			'validate' => 'int',	'type' => 'select',			'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_STAT_PERM',				'function' => [$this, 'select_stat_perm'],		'params' => ['{CONFIG_VALUE}']],
 
 						'legend6'				=> '',
 
-						'dl_prevent_hotlink'	=> ['lang' => 'DL_PREVENT_HOTLINK',	'validate' => 'int',	'type' => 'switch:yes_no',	'explain' => false,		'help_key' => 'DL_PREVENT_HOTLINK'],
-						'dl_hotlink_action'		=> ['lang' => 'DL_HOTLINK_ACTION',	'validate' => 'int',	'type' => 'select',			'explain' => false,		'help_key' => 'DL_HOTLINK_ACTION',		'function' => [$this, 'select_hotlink_action'],	'params' => ['{CONFIG_VALUE}']],
+						'dl_prevent_hotlink'	=> ['lang' => 'DL_PREVENT_HOTLINK',		'validate' => 'int',	'type' => 'switch:yes_no',	'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_PREVENT_HOTLINK'],
+						'dl_hotlink_action'		=> ['lang' => 'DL_HOTLINK_ACTION',		'validate' => 'int',	'type' => 'select',			'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_HOTLINK_ACTION',			'function' => [$this, 'select_hotlink_action'],	'params' => ['{CONFIG_VALUE}']],
 					]
 				];
 			break;
@@ -274,69 +280,63 @@ class acp_config_controller implements acp_config_interface
 					'vars'	=> [
 						'legend1'				=> '',
 
-						'dl_physical_quota'		=> ['lang' => 'DL_PHYSICAL_QUOTA',		'validate' => 'int',	'type' => 'custom',		'explain' => false,		'help_key' => 'DL_PHYSICAL_QUOTA',	'function' => [$this, 'select_size'],	'params' => ['{CONFIG_VALUE}', 'dl_physical_quota', '10', '20', 'dl_x_quota', 'gb', true]],
+						'dl_physical_quota'		=> ['lang' => 'DL_PHYSICAL_QUOTA',			'validate' => 'int',	'type' => 'custom',			'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_PHYSICAL_QUOTA',			'function' => [$this, 'select_size'],			'params' => ['{CONFIG_VALUE}', 'dl_physical_quota', '10', '20', 'dl_x_quota', $this->dlext_constants::DL_FILE_RANGE_GBYTE, $this->dlext_constants::DL_TRUE]],
 
 						'legend2'				=> '',
 
-						'dl_report_broken'			=> ['lang' => 'DL_REPORT_BROKEN',		'validate' => 'int',	'type' => 'select',			'explain' => false,		'help_key' => 'DL_REPORT_BROKEN',			'function' => [$this, 'select_report_action'],	'params' => ['{CONFIG_VALUE}']],
-						'dl_report_broken_lock'		=> ['lang' => 'DL_REPORT_BROKEN_LOCK',	'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => false,		'help_key' => 'DL_REPORT_BROKEN_LOCK'],
-						'dl_sort_preform'			=> ['lang' => 'DL_SORT_PREFORM',		'validate' => 'int',	'type' => 'select',			'explain' => false,		'help_key' => 'DL_SORT_PREFORM',			'function' => [$this, 'select_sort'],			'params' => ['{CONFIG_VALUE}']],
-						'dl_posts'					=> ['lang' => 'DL_POSTS',				'validate' => 'int',	'type' => 'text:3:4',		'explain' => false,		'help_key' => 'DL_POSTS'],
+						'dl_report_broken'			=> ['lang' => 'DL_REPORT_BROKEN',		'validate' => 'int',	'type' => 'select',			'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_REPORT_BROKEN',			'function' => [$this, 'select_report_action'],	'params' => ['{CONFIG_VALUE}']],
+						'dl_report_broken_lock'		=> ['lang' => 'DL_REPORT_BROKEN_LOCK',	'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_REPORT_BROKEN_LOCK'],
+						'dl_sort_preform'			=> ['lang' => 'DL_SORT_PREFORM',		'validate' => 'int',	'type' => 'select',			'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_SORT_PREFORM',			'function' => [$this, 'select_sort'],			'params' => ['{CONFIG_VALUE}']],
+						'dl_posts'					=> ['lang' => 'DL_POSTS',				'validate' => 'int',	'type' => 'text:3:4',		'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_POSTS'],
 
 						'legend3'				=> '',
 
-						'dl_edit_own_downloads'		=> ['lang' => 'DL_EDIT_OWN_DOWNLOADS',	'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => false,		'help_key' => 'DL_EDIT_OWN_DOWNLOADS'],
+						'dl_edit_own_downloads'		=> ['lang' => 'DL_EDIT_OWN_DOWNLOADS',	'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_EDIT_OWN_DOWNLOADS'],
 
 						'legend4'				=> '',
 
-						'dl_guest_stats_show'		=> ['lang' => 'DL_GUEST_STATS_SHOW',	'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => false,		'help_key' => 'DL_GUEST_STATS_SHOW'],
+						'dl_guest_stats_show'		=> ['lang' => 'DL_GUEST_STATS_SHOW',	'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_GUEST_STATS_SHOW'],
 
 						'legend5'				=> '',
 
-						'dl_latest_type'		=> ['lang' => 'DL_LATEST_DOWNLOADS',		'validate' => 'int',	'type' => 'select',		'explain' => false,		'help_key' => 'DL_LATEST_DOWNLOADS',		'function' => [$this, 'select_latest_type'],		'params' => ['{CONFIG_VALUE}']],
+						'dl_latest_type'		=> ['lang' => 'DL_LATEST_DOWNLOADS',		'validate' => 'int',	'type' => 'select',			'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_LATEST_DOWNLOADS',		'function' => [$this, 'select_latest_type'],	'params' => ['{CONFIG_VALUE}']],
 
 						'legend6'				=> '',
 
-						'dl_thumb_fsize'				=> ['lang' => 'DL_THUMB_MAX_SIZE',	'validate' => 'int',	'type' => 'custom',		'explain' => false,		'help_key' => 'DL_THUMB_MAX_SIZE',	 	'function' => [$this, 'select_size'],	'params' => ['{CONFIG_VALUE}', 'dl_thumb_fsize', '10', '20', 'dl_f_quote', 'mb', false]],
-						'dl_thumb_xsize'				=> ['lang' => 'DL_THUMB_MAX_DIM_X',	'validate' => 'int',	'type' => 'text:5:5',	'explain' => false,		'help_key' => 'DL_THUMB_MAX_DIM_X'],
-						'dl_thumb_ysize'				=> ['lang' => 'DL_THUMB_MAX_DIM_Y',	'validate' => 'int',	'type' => 'text:5:5',	'explain' => false,		'help_key' => 'DL_THUMB_MAX_DIM_Y'],
+						'dl_thumb_fsize'		=> ['lang' => 'DL_THUMB_MAX_SIZE',			'validate' => 'int',	'type' => 'custom',			'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_THUMB_MAX_SIZE',	 		'function' => [$this, 'select_size'],			'params' => ['{CONFIG_VALUE}', 'dl_thumb_fsize', '10', '20', 'dl_f_quote', $this->dlext_constants::DL_FILE_RANGE_MBYTE, $this->dlext_constants::DL_FALSE]],
+						'dl_thumb_xsize'		=> ['lang' => 'DL_THUMB_MAX_DIM_X',			'validate' => 'int',	'type' => 'text:5:5',		'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_THUMB_MAX_DIM_X'],
+						'dl_thumb_ysize'		=> ['lang' => 'DL_THUMB_MAX_DIM_Y',			'validate' => 'int',	'type' => 'text:5:5',		'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_THUMB_MAX_DIM_Y'],
 
 						'legend7'				=> '',
 
-						'dl_enable_rate'			=> ['lang' => 'DL_ENABLE_RATE',	'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => false,		'help_key' => 'DL_ENABLE_RATE'],
-						'dl_rate_points'			=> ['lang' => 'DL_RATE_POINTS',	'validate' => 'int',	'type' => 'text:3:3',		'explain' => false,		'help_key' => 'DL_RATE_POINTS'],
+						'dl_enable_rate'		=> ['lang' => 'DL_ENABLE_RATE',				'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_ENABLE_RATE'],
+						'dl_rate_points'		=> ['lang' => 'DL_RATE_POINTS',				'validate' => 'int',	'type' => 'text:3:3',		'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_RATE_POINTS'],
 					]
 				];
 
-				$sql = 'SELECT ext_name FROM ' . EXT_TABLE;
+				$sql = 'SELECT ext_name
+						FROM ' . EXT_TABLE . '
+						WHERE ext_name ' . $this->db->sql_like_expression($this->db->get_any_char() . 'portal' . $this->db->get_any_char());
 				$result = $this->db->sql_query($sql);
-				$portal_exists = false;
-				while ($row = $this->db->sql_fetchrow($result))
-				{
-					if (strtolower(strpos($row['ext_name'], 'portal')))
-					{
-						$portal_exists = true;
-						break;
-					}
-				}
-				$this->db->sql_freeresult($result);
 
-				if ($portal_exists)
+				if ($this->db->sql_affectedrows())
 				{
 					$display_vars['vars'] += [
 						'legend8'				=> '',
 
-						'dl_recent_downloads'	=> ['lang' => 'NUMBER_RECENT_DL_ON_PORTAL',	'validate' => 'int',	'type' => 'text:3:4',	'explain' => false,		'help_key' => 'NUMBER_RECENT_DL_ON_PORTAL'],
+						'dl_recent_downloads'	=> ['lang' => 'DL_NUMBER_RECENT_DL_ON_PORTAL',	'validate' => 'int',	'type' => 'text:3:4',	'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_NUMBER_RECENT_DL_ON_PORTAL'],
 					];
 				}
+
+				$this->db->sql_freeresult($result);
 
 			break;
 			case 'traffic':
 				$sql = 'SELECT group_id, group_name, group_type FROM ' . GROUPS_TABLE . '
-						WHERE ' . $this->db->sql_in_set('group_name', ['GUESTS', 'BOTS'], true) . '
+						WHERE ' . $this->db->sql_in_set('group_name', ['GUESTS', 'BOTS'], $this->dlext_constants::DL_TRUE) . '
 						ORDER BY group_type DESC, group_name';
 				$result = $this->db->sql_query($sql);
-				$total_groups = $this->db->sql_affectedrows($result);
+				$total_groups = $this->db->sql_affectedrows();
 
 				$traffics_overall_group_ids = explode(',', $this->config['dl_traffics_overall_groups']);
 				$traffics_users_group_ids = explode(',', $this->config['dl_traffics_users_groups']);
@@ -358,7 +358,7 @@ class acp_config_controller implements acp_config_interface
 						$s_groups_overall_select .= '<option value="' . $group_id . '"' . $group_sep . '>' . $group_name . '</option>';
 					}
 
-					if (in_array($group_id, $traffics_users_group_ids) && $this->config['dl_traffics_users'] > 1)
+					if (in_array($group_id, $traffics_users_group_ids) && $this->config['dl_traffics_users'] > $this->dlext_constants::DL_TRAFFICS_ON_ALL)
 					{
 						$s_groups_users_select .= '<option value="' . $group_id . '" selected="selected"' . $group_sep . '>' . $group_name . '</option>';
 					}
@@ -370,41 +370,41 @@ class acp_config_controller implements acp_config_interface
 
 				$this->db->sql_freeresult($result);
 
-				$select_size = ($total_groups < 10) ? $total_groups : 10;
+				$select_size = ($total_groups < $this->dlext_constants::DL_SELECT_MAX_SIZE) ? $total_groups : $this->dlext_constants::DL_SELECT_MAX_SIZE;
 
 				$display_vars = [
 					'title'	=> 'DL_ACP_CONF_TRAFFIC',
 					'vars'	=> [
 						'legend1'				=> '',
 
-						'dl_traffics_founder'			=> ['lang' => 'DL_TRAFFICS_FOUNDER',			'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => false,		'help_key' => 'DL_TRAFFICS_FOUNDER'],
-						'dl_traffics_overall'			=> ['lang' => 'DL_TRAFFICS_OVERALL',			'validate' => 'int',	'type' => 'select',			'explain' => false,		'help_key' => 'DL_TRAFFICS_OVERALL',			'function' => [$this, 'select_traffic'],		'params' => ['{CONFIG_VALUE}', $total_groups]],
-						'dl_traffics_overall_groups'	=> ['lang' => 'DL_TRAFFICS_OVERALL_GROUPS',								'type' => 'custom',			'explain' => false,		'help_key' => 'DL_TRAFFICS_OVERALL_GROUPS',		'function' => [$this, 'select_traffic_multi'],	'params' => ['dl_traffics_overall_groups', $s_groups_overall_select, $select_size]],
-						'dl_traffics_users'				=> ['lang' => 'DL_TRAFFICS_USERS',				'validate' => 'int',	'type' => 'select',			'explain' => false,		'help_key' => 'DL_TRAFFICS_USERS',				'function' => [$this, 'select_traffic'],		'params' => ['{CONFIG_VALUE}', $total_groups]],
-						'dl_traffics_users_groups'		=> ['lang' => 'DL_TRAFFICS_USERS_GROUPS',								'type' => 'custom',			'explain' => false,		'help_key' => 'DL_TRAFFICS_USERS_GROUPS',		'function' => [$this, 'select_traffic_multi'],	'params' => ['dl_traffics_users_groups', $s_groups_users_select, $select_size]],
-						'dl_traffics_guests'			=> ['lang' => 'DL_TRAFFICS_GUESTS',				'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => false,		'help_key' => 'DL_TRAFFICS_GUESTS'],
+						'dl_traffics_founder'			=> ['lang' => 'DL_TRAFFICS_FOUNDER',			'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_TRAFFICS_FOUNDER'],
+						'dl_traffics_overall'			=> ['lang' => 'DL_TRAFFICS_OVERALL',			'validate' => 'int',	'type' => 'select',			'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_TRAFFICS_OVERALL',			'function' => [$this, 'select_traffic'],		'params' => ['{CONFIG_VALUE}', $total_groups]],
+						'dl_traffics_overall_groups'	=> ['lang' => 'DL_TRAFFICS_OVERALL_GROUPS',								'type' => 'custom',			'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_TRAFFICS_OVERALL_GROUPS',		'function' => [$this, 'select_traffic_multi'],	'params' => ['dl_traffics_overall_groups', $s_groups_overall_select, $select_size]],
+						'dl_traffics_users'				=> ['lang' => 'DL_TRAFFICS_USERS',				'validate' => 'int',	'type' => 'select',			'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_TRAFFICS_USERS',				'function' => [$this, 'select_traffic'],		'params' => ['{CONFIG_VALUE}', $total_groups]],
+						'dl_traffics_users_groups'		=> ['lang' => 'DL_TRAFFICS_USERS_GROUPS',								'type' => 'custom',			'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_TRAFFICS_USERS_GROUPS',		'function' => [$this, 'select_traffic_multi'],	'params' => ['dl_traffics_users_groups', $s_groups_users_select, $select_size]],
+						'dl_traffics_guests'			=> ['lang' => 'DL_TRAFFICS_GUESTS',				'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_TRAFFICS_GUESTS'],
 
 						'legend2'				=> '',
 
-						'dl_overall_traffic'			=> ['lang' => 'DL_OVERALL_TRAFFIC',			'validate' => 'int',	'type' => 'custom',		'explain' => false,		'help_key' => 'DL_OVERALL_TRAFFIC',			'function' => [$this, 'select_size'],	'params' => ['{CONFIG_VALUE}', 'dl_overall_traffic', '10', '20', 'dl_x_over', 'gb', true]],
-						'dl_overall_guest_traffic'		=> ['lang' => 'DL_OVERALL_GUEST_TRAFFIC',	'validate' => 'int',	'type' => 'custom',		'explain' => false,		'help_key' => 'DL_OVERALL_GUEST_TRAFFIC',	'function' => [$this, 'select_size'],	'params' => ['{CONFIG_VALUE}', 'dl_overall_guest_traffic', '10', '20', 'dl_x_g_over', 'gb', true]],
+						'dl_overall_traffic'			=> ['lang' => 'DL_OVERALL_TRAFFIC',				'validate' => 'int',	'type' => 'custom',			'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_OVERALL_TRAFFIC',				'function' => [$this, 'select_size'],	'params' => ['{CONFIG_VALUE}', 'dl_overall_traffic', '10', '20', 'dl_x_over', $this->dlext_constants::DL_FILE_RANGE_GBYTE, $this->dlext_constants::DL_TRUE]],
+						'dl_overall_guest_traffic'		=> ['lang' => 'DL_OVERALL_GUEST_TRAFFIC',		'validate' => 'int',	'type' => 'custom',			'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_OVERALL_GUEST_TRAFFIC',		'function' => [$this, 'select_size'],	'params' => ['{CONFIG_VALUE}', 'dl_overall_guest_traffic', '10', '20', 'dl_x_g_over', $this->dlext_constants::DL_FILE_RANGE_GBYTE, $this->dlext_constants::DL_TRUE]],
 
 						'legend3'				=> '',
 
-						'dl_enable_post_dl_traffic'		=> ['lang' => 'DL_ENABLE_POST_TRAFFIC',		'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => false,		'help_key' => 'DL_ENABLE_POST_TRAFFIC'],
-						'dl_newtopic_traffic'			=> ['lang' => 'DL_NEWTOPIC_TRAFFIC',		'validate' => 'int',	'type' => 'custom',			'explain' => false,		'help_key' => 'DL_NEWTOPIC_TRAFFIC',		'function' => [$this, 'select_size'],	'params' => ['{CONFIG_VALUE}', 'dl_newtopic_traffic', '10', '20', 'dl_x_new', 'gb', false]],
-						'dl_reply_traffic'				=> ['lang' => 'DL_REPLY_TRAFFIC',			'validate' => 'int',	'type' => 'custom',			'explain' => false,		'help_key' => 'DL_REPLY_TRAFFIC',			'function' => [$this, 'select_size'],	'params' => ['{CONFIG_VALUE}', 'dl_reply_traffic', '10', '20', 'dl_x_reply', 'gb', false]],
-						'dl_drop_traffic_postdel'		=> ['lang' => 'DL_DROP_TRAFFIC_POSTDEL',	'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => false,		'help_key' => 'DL_DROP_TRAFFIC_POSTDEL'],
+						'dl_enable_post_dl_traffic'		=> ['lang' => 'DL_ENABLE_POST_TRAFFIC',			'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_ENABLE_POST_TRAFFIC'],
+						'dl_newtopic_traffic'			=> ['lang' => 'DL_NEWTOPIC_TRAFFIC',			'validate' => 'int',	'type' => 'custom',			'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_NEWTOPIC_TRAFFIC',			'function' => [$this, 'select_size'],	'params' => ['{CONFIG_VALUE}', 'dl_newtopic_traffic', '10', '20', 'dl_x_new', $this->dlext_constants::DL_FILE_RANGE_GBYTE, $this->dlext_constants::DL_FALSE]],
+						'dl_reply_traffic'				=> ['lang' => 'DL_REPLY_TRAFFIC',				'validate' => 'int',	'type' => 'custom',			'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_REPLY_TRAFFIC',				'function' => [$this, 'select_size'],	'params' => ['{CONFIG_VALUE}', 'dl_reply_traffic', '10', '20', 'dl_x_reply', $this->dlext_constants::DL_FILE_RANGE_GBYTE, $this->dlext_constants::DL_FALSE]],
+						'dl_drop_traffic_postdel'		=> ['lang' => 'DL_DROP_TRAFFIC_POSTDEL',		'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_DROP_TRAFFIC_POSTDEL'],
 
 						'legend4'				=> '',
 
-						'dl_delay_auto_traffic'		=> ['lang' => 'DL_DELAY_AUTO_TRAFFIC',		'validate' => 'int',	'type' => 'text:3:4',	'explain' => false,		'help_key' => 'DL_DELAY_AUTO_TRAFFIC'],
-						'dl_delay_post_traffic'		=> ['lang' => 'DL_DELAY_POST_TRAFFIC',		'validate' => 'int',	'type' => 'text:3:4',	'explain' => false,		'help_key' => 'DL_DELAY_POST_TRAFFIC'],
+						'dl_delay_auto_traffic'		=> ['lang' => 'DL_DELAY_AUTO_TRAFFIC',				'validate' => 'int',	'type' => 'text:3:4',		'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_DELAY_AUTO_TRAFFIC'],
+						'dl_delay_post_traffic'		=> ['lang' => 'DL_DELAY_POST_TRAFFIC',				'validate' => 'int',	'type' => 'text:3:4',		'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_DELAY_POST_TRAFFIC'],
 
 						'legend5'				=> '',
 
-						'dl_user_traffic_once'		=> ['lang' => 'DL_USER_TRAFFIC_ONCE',		'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => false,		'help_key' => 'DL_USER_TRAFFIC_ONCE'],
-						'dl_upload_traffic_count'	=> ['lang' => 'DL_UPLOAD_TRAFFIC_COUNT',	'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => false,		'help_key' => 'DL_UPLOAD_TRAFFIC_COUNT'],
+						'dl_user_traffic_once'		=> ['lang' => 'DL_USER_TRAFFIC_ONCE',				'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_USER_TRAFFIC_ONCE'],
+						'dl_upload_traffic_count'	=> ['lang' => 'DL_UPLOAD_TRAFFIC_COUNT',			'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_UPLOAD_TRAFFIC_COUNT'],
 					]
 				];
 			break;
@@ -414,12 +414,12 @@ class acp_config_controller implements acp_config_interface
 					'vars'	=> [
 						'legend1'				=> '',
 
-						'dl_disable_email'			=> ['lang' => 'DL_DISABLE_NOTIFY',			'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => false,		'help_key' => 'DL_DISABLE_NOTIFY'],
-						'dl_disable_popup_notify'	=> ['lang' => 'DL_DISABLE_POPUP_NOTIFY',	'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => false,		'help_key' => 'DL_DISABLE_POPUP_NOTIFY'],
+						'dl_disable_email'			=> ['lang' => 'DL_DISABLE_NOTIFY',			'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_DISABLE_NOTIFY'],
+						'dl_disable_popup_notify'	=> ['lang' => 'DL_DISABLE_POPUP_NOTIFY',	'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_DISABLE_POPUP_NOTIFY'],
 
 						'legend2'				=> '',
 
-						'dl_file_edit_hint'			=> ['lang' => 'DL_FILE_EDIT_HINT',			'validate' => 'string',	'type' => 'custom',			'explain' => false,		'help_key' => 'DL_FILE_EDIT_HINT',		'preview' => $formated_hint_text,	'function' => [$this, 'textarea_input'],		'params' => ['{CONFIG_VALUE}', 'dl_file_edit_hint', 75, 5]],
+						'dl_file_edit_hint'			=> ['lang' => 'DL_FILE_EDIT_HINT',			'validate' => 'string',	'type' => 'custom',			'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_FILE_EDIT_HINT',		'preview' => $formated_hint_text,	'function' => [$this, 'textarea_input'],		'params' => ['{CONFIG_VALUE}', 'dl_file_edit_hint', 75, 5]],
 					]
 				];
 			break;
@@ -429,15 +429,15 @@ class acp_config_controller implements acp_config_interface
 					'vars'	=> [
 						'legend1'				=> '',
 
-						'dl_enable_dl_topic'		=> ['lang' => 'DL_ENABLE_TOPIC',			'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => false,		'help_key' => 'DL_ENABLE_TOPIC'],
-						'dl_diff_topic_user'		=> ['lang' => 'DL_TOPIC_USER',				'validate' => 'int',	'type' => 'select',			'explain' => false,		'help_key' => 'DL_TOPIC_USER',			'function' => [$this, 'select_topic_user'],		'params' => ['{CONFIG_VALUE}']],
-						'dl_topic_user'				=> ['lang' => 'DL_TOPIC_USER_OTHER',		'validate' => 'string',	'type' => 'custom',			'explain' => false,		'help_key' => 'DL_TOPIC_USER',			'function' => [$this, 'select_dl_user'],		'params' => ['{CONFIG_VALUE}', 'dl_topic_user']],
-						'dl_topic_forum'			=> ['lang' => 'DL_TOPIC_FORUM',				'validate' => 'int',	'type' => 'select',			'explain' => false,		'help_key' => 'DL_TOPIC_FORUM',			'function' => [$this, 'select_dl_forum'],		'params' => ['{CONFIG_VALUE}']],
-						'dl_topic_text'				=> ['lang' => 'DL_TOPIC_TEXT',				'validate' => 'string',	'type' => 'custom',			'explain' => false,		'help_key' => 'DL_TOPIC_TEXT',			'function' => [$this, 'textarea_input'],		'params' => ['{CONFIG_VALUE}', 'dl_topic_text', 75, 5]],
-						'dl_topic_more_details'		=> ['lang' => 'DL_TOPIC_DETAILS',			'validate' => 'int',	'type' => 'select',			'explain' => false,		'help_key' => 'DL_TOPIC_DETAILS',		'function' => [$this, 'select_topic_details'],	'params' => ['{CONFIG_VALUE}']],
-						'dl_topic_title_catname'	=> ['lang' => 'DL_TOPIC_TITLE_CATNAME',		'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => false,		'help_key' => 'DL_TOPIC_TITLE_CATNAME'],
-						'dl_topic_post_catname'		=> ['lang' => 'DL_TOPIC_POST_CATNAME',		'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => false,		'help_key' => 'DL_TOPIC_POST_CATNAME'],
-						'dl_topic_type'				=> ['lang' => 'POST_TOPIC_AS',				'validate' => 'bool',	'type' => 'select',			'explain' => false,		'help_key' => 'DL_TOPIC_TYPE', 			'function' => [$this, 'select_topic_type'],		'params' => ['{CONFIG_VALUE}']],
+						'dl_enable_dl_topic'		=> ['lang' => 'DL_ENABLE_TOPIC',			'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_ENABLE_TOPIC'],
+						'dl_diff_topic_user'		=> ['lang' => 'DL_TOPIC_USER',				'validate' => 'int',	'type' => 'select',			'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_TOPIC_USER',			'function' => [$this, 'select_topic_user'],		'params' => ['{CONFIG_VALUE}']],
+						'dl_topic_user'				=> ['lang' => 'DL_TOPIC_USER_OTHER',		'validate' => 'string',	'type' => 'custom',			'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_TOPIC_USER',			'function' => [$this, 'select_dl_user'],		'params' => ['{CONFIG_VALUE}', 'dl_topic_user']],
+						'dl_topic_forum'			=> ['lang' => 'DL_TOPIC_FORUM',				'validate' => 'int',	'type' => 'select',			'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_TOPIC_FORUM',			'function' => [$this, 'select_dl_forum'],		'params' => ['{CONFIG_VALUE}']],
+						'dl_topic_text'				=> ['lang' => 'DL_TOPIC_TEXT',				'validate' => 'string',	'type' => 'custom',			'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_TOPIC_TEXT',			'function' => [$this, 'textarea_input'],		'params' => ['{CONFIG_VALUE}', 'dl_topic_text', 75, 5]],
+						'dl_topic_more_details'		=> ['lang' => 'DL_TOPIC_DETAILS',			'validate' => 'int',	'type' => 'select',			'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_TOPIC_DETAILS',		'function' => [$this, 'select_topic_details'],	'params' => ['{CONFIG_VALUE}']],
+						'dl_topic_title_catname'	=> ['lang' => 'DL_TOPIC_TITLE_CATNAME',		'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_TOPIC_TITLE_CATNAME'],
+						'dl_topic_post_catname'		=> ['lang' => 'DL_TOPIC_POST_CATNAME',		'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_TOPIC_POST_CATNAME'],
+						'dl_topic_type'				=> ['lang' => 'POST_TOPIC_AS',				'validate' => 'bool',	'type' => 'select',			'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_TOPIC_TYPE', 			'function' => [$this, 'select_topic_type'],		'params' => ['{CONFIG_VALUE}']],
 					]
 				];
 			break;
@@ -447,23 +447,24 @@ class acp_config_controller implements acp_config_interface
 					'vars'	=> [
 						'legend1'				=> '',
 
-						'dl_rss_enable'			=> ['lang' => 'DL_RSS_ENABLE',					'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => false,		'help_key' => 'DL_RSS_ENABLE'],
-						'dl_rss_off_action'		=> ['lang' => 'DL_RSS_OFF_ACTION',				'validate' => 'int',	'type' => 'select',			'explain' => false,		'help_key' => 'DL_RSS_OFF_ACTION',			'function' => [$this, 'select_rss_off_action'],	'params' => ['{CONFIG_VALUE}']],
-						'dl_rss_off_text'		=> ['lang' => 'DL_RSS_OFF_TEXT',				'validate' => 'string',	'type' => 'custom',			'explain' => false,		'help_key' => 'DL_RSS_OFF_TEXT',			'function' => [$this, 'textarea_input'],		'params' => ['{CONFIG_VALUE}', 'dl_rss_off_text', 75, 5]],
-						'dl_rss_cats'			=> ['lang' => 'DL_RSS_CATS',					'validate' => 'int',	'type' => 'custom',			'explain' => false,		'help_key' => 'DL_RSS_CATS', 				'function' => [$this, 'select_rss_cats'],		'params' => ['{CONFIG_VALUE}']],
-						'dl_rss_perms'			=> ['lang' => 'DL_RSS_PERMS',					'validate' => 'bool',	'type' => 'custom',			'explain' => false,		'help_key' => 'DL_RSS_PERMS', 				'function' => [$this, 'rss_perm'],				'params' => ['{CONFIG_VALUE}']],
-						'dl_rss_number'			=> ['lang' => 'DL_RSS_NUMBER',					'validate' => 'int',	'type' => 'text:3:5',		'explain' => false,		'help_key' => 'DL_RSS_NUMBER'],
-						'dl_rss_select'			=> ['lang' => 'DL_RSS_SELECT',					'validate' => 'bool',	'type' => 'custom',			'explain' => false,		'help_key' => 'DL_RSS_SELECT', 				'function' => [$this, 'rss_select'],			'params' => ['{CONFIG_VALUE}']],
-						'dl_rss_new_update'		=> ['lang' => 'DL_RSS_NEW_UPDATE',				'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => false,		'help_key' => 'DL_RSS_NEW_UPDATE'],
-						'dl_rss_desc_length'	=> ['lang' => 'DL_RSS_DESC_LENGTH',				'validate' => 'int',	'type' => 'select',			'explain' => false,		'help_key' => 'DL_RSS_DESC_LENGTH',			'function' => [$this, 'select_rss_length'],		'params' => ['{CONFIG_VALUE}']],
-						'dl_rss_desc_shorten'	=> ['lang' => 'DL_RSS_DESC_LENGTH_SHORTEN',		'validate' => 'int',	'type' => 'text:5:5',		'explain' => false,		'help_key' => 'DL_RSS_DESC_LENGTH_SHORTEN'],
+						'dl_rss_enable'			=> ['lang' => 'DL_RSS_ENABLE',					'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_RSS_ENABLE'],
+						'dl_rss_off_action'		=> ['lang' => 'DL_RSS_OFF_ACTION',				'validate' => 'int',	'type' => 'select',			'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_RSS_OFF_ACTION',			'function' => [$this, 'select_rss_off_action'],	'params' => ['{CONFIG_VALUE}']],
+						'dl_rss_off_text'		=> ['lang' => 'DL_RSS_OFF_TEXT',				'validate' => 'string',	'type' => 'custom',			'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_RSS_OFF_TEXT',			'function' => [$this, 'textarea_input'],		'params' => ['{CONFIG_VALUE}', 'dl_rss_off_text', 75, 5]],
+						'dl_rss_cats'			=> ['lang' => 'DL_RSS_CATS',					'validate' => 'int',	'type' => 'custom',			'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_RSS_CATS', 				'function' => [$this, 'select_rss_cats'],		'params' => ['{CONFIG_VALUE}']],
+						'dl_rss_perms'			=> ['lang' => 'DL_RSS_PERMS',					'validate' => 'bool',	'type' => 'custom',			'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_RSS_PERMS', 				'function' => [$this, 'rss_perm'],				'params' => ['{CONFIG_VALUE}']],
+						'dl_rss_number'			=> ['lang' => 'DL_RSS_NUMBER',					'validate' => 'int',	'type' => 'text:3:5',		'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_RSS_NUMBER'],
+						'dl_rss_select'			=> ['lang' => 'DL_RSS_SELECT',					'validate' => 'bool',	'type' => 'custom',			'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_RSS_SELECT', 				'function' => [$this, 'rss_select'],			'params' => ['{CONFIG_VALUE}']],
+						'dl_rss_new_update'		=> ['lang' => 'DL_RSS_NEW_UPDATE',				'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_RSS_NEW_UPDATE'],
+						'dl_rss_desc_length'	=> ['lang' => 'DL_RSS_DESC_LENGTH',				'validate' => 'int',	'type' => 'select',			'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_RSS_DESC_LENGTH',			'function' => [$this, 'select_rss_length'],		'params' => ['{CONFIG_VALUE}']],
+						'dl_rss_desc_shorten'	=> ['lang' => 'DL_RSS_DESC_LENGTH_SHORTEN',		'validate' => 'int',	'type' => 'text:5:5',		'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_RSS_DESC_LENGTH_SHORTEN'],
 					]
 				];
 			break;
 		}
 
 		$this->new_config = $this->config;
-		$cfg_array = (isset($_REQUEST['config'])) ? $this->request->variable('config', ['' => ''], true) : $this->new_config;
+		$conf_new_ary = $this->request->variable('config', ['' => ''], $this->dlext_constants::DL_TRUE);
+		$cfg_array = (empty($conf_new_ary)) ? $this->new_config : $conf_new_ary;
 		$error = [];
 
 		// We validate the complete config if whished
@@ -472,6 +473,19 @@ class acp_config_controller implements acp_config_interface
 		// We go through the display_vars to make sure no one is trying to set variables he/she is not allowed to...
 		foreach ($display_vars['vars'] as $config_name => $null)
 		{
+			if ($config_name == 'dl_file_hash_algo')
+			{
+				if ($submit && $this->config[$config_name] != $cfg_array[$config_name])
+				{
+					$sql = 'UPDATE ' . $this->dlext_table_downloads . ' SET ' . $this->db->sql_build_array('UPDATE', [
+						'file_hash' => '']);
+					$this->db->sql_query($sql);
+					$sql = 'UPDATE ' . $this->dlext_table_dl_versions . ' SET ' . $this->db->sql_build_array('UPDATE', [
+						'ver_file_hash' => '']);
+					$this->db->sql_query($sql);
+				}
+			}
+
 			if (!isset($cfg_array[$config_name]))
 			{
 				$this->new_config[$config_name] = $config_value = 0;
@@ -487,7 +501,7 @@ class acp_config_controller implements acp_config_interface
 
 			if ($submit)
 			{
-				if ($config_name == 'dl_set_user' ||$config_name == 'dl_topic_user')
+				if ($config_name == 'dl_set_user' || $config_name == 'dl_topic_user')
 				{
 					$this->new_config[$config_name] = $config_value = $this->dlext_extra->dl_user_switch(0, $config_value, $submit);
 				}
@@ -507,12 +521,12 @@ class acp_config_controller implements acp_config_interface
 					$cur_rate_points = $this->config['dl_rate_points'];
 					$new_rate_points = $config_value;
 
-					if (isset($cur_rate_points) && $cur_rate_points <> $new_rate_points)
+					if (isset($cur_rate_points) && $cur_rate_points != $new_rate_points)
 					{
-						$sql = 'DELETE FROM ' . DL_RATING_TABLE;
+						$sql = 'DELETE FROM ' . $this->dlext_table_dl_ratings;
 						$this->db->sql_query($sql);
 
-						$sql = 'UPDATE ' . DOWNLOADS_TABLE . ' SET rating = 0';
+						$sql = 'UPDATE ' . $this->dlext_table_downloads . ' SET rating = 0';
 						$this->db->sql_query($sql);
 					}
 				}
@@ -524,7 +538,7 @@ class acp_config_controller implements acp_config_interface
 
 					if (!empty($rss_cats_select))
 					{
-						$this->config->set('dl_rss_cats_select', implode(',', array_map('intval', $rss_cats_select)), false);
+						$this->config->set('dl_rss_cats_select', implode(',', array_map('intval', $rss_cats_select)));
 					}
 
 					unset($rss_cats_select);
@@ -540,7 +554,7 @@ class acp_config_controller implements acp_config_interface
 					{
 						$sql = 'SELECT * FROM ' . USERS_TABLE . ' WHERE user_id = ' . (int) $this->new_config[$config_name];
 						$result = $this->db->sql_query($sql);
-						$user_exists = $this->db->sql_affectedrows($result);
+						$user_exists = $this->db->sql_affectedrows();
 						$this->db->sql_freeresult($result);
 
 						if (!$user_exists)
@@ -550,39 +564,27 @@ class acp_config_controller implements acp_config_interface
 					}
 				}
 
-				if ($config_name == 'dl_file_hash_algo')
-				{
-					if ($this->new_config[$config_name] != $this->config['dl_file_hash_algo'])
-					{
-						$sql = 'UPDATE ' . DOWNLOADS_TABLE . " SET file_hash = ''";
-						$this->db->sql_query($sql);
-						$sql = 'UPDATE ' . DL_VERSIONS_TABLE . " SET ver_file_hash = ''";
-						$this->db->sql_query($sql);
-					}
-				}
-
 				if ($config_name == 'dl_file_edit_hint')
 				{
-					$allow_bbcode	= ($this->config['allow_bbcode']) ? true : false;
-					$allow_urls		= true;
-					$allow_smilies	= ($this->config['allow_smilies']) ? true : false;
+					$allow_bbcode	= ($this->config['allow_bbcode']) ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE;
+					$allow_smilies	= ($this->config['allow_smilies']) ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE;
 					$hint_uid		= '';
 					$hint_bitfield	= '';
 					$hint_flags		= 0;
 
 					if ($config_value)
 					{
-						generate_text_for_storage($config_value, $hint_uid, $hint_bitfield, $hint_flags, $allow_bbcode, true, $allow_smilies);
+						generate_text_for_storage($config_value, $hint_uid, $hint_bitfield, $hint_flags, $allow_bbcode, $this->dlext_constants::DL_TRUE, $allow_smilies);
 					}
 
-					$this->config_text->set($config_name, $config_value, false);
-					$this->config->set('dl_file_edit_hint_bbcode', $hint_uid, false);
-					$this->config->set('dl_file_edit_hint_bitfield', $hint_bitfield, false);
-					$this->config->set('dl_file_edit_hint_flags', $hint_flags, false);
+					$this->config_text->set($config_name, $config_value);
+					$this->config->set('dl_file_edit_hint_bbcode', $hint_uid);
+					$this->config->set('dl_file_edit_hint_bitfield', $hint_bitfield);
+					$this->config->set('dl_file_edit_hint_flags', $hint_flags);
 				}
 				else
 				{
-					$this->config->set($config_name, $config_value, false);
+					$this->config->set($config_name, $config_value);
 				}
 			}
 			else
@@ -610,28 +612,26 @@ class acp_config_controller implements acp_config_interface
 					$this->new_config['dl_traffics_overall_groups'] = '';
 				}
 
-				if (!empty($dl_traffics_users_groups) && $cfg_array['dl_traffics_users'] <= 1)
+				if (!empty($dl_traffics_users_groups) && $cfg_array['dl_traffics_users'] <= $this->dlext_constants::DL_TRAFFICS_ON_ALL)
 				{
 					$this->new_config['dl_traffics_users_groups'] = '';
 				}
 
-				$this->config->set('dl_traffics_overall_groups', $this->new_config['dl_traffics_overall_groups'], false);
-				$this->config->set('dl_traffics_users_groups', $this->new_config['dl_traffics_users_groups'], false);
+				$this->config->set('dl_traffics_overall_groups', $this->new_config['dl_traffics_overall_groups']);
+				$this->config->set('dl_traffics_users_groups', $this->new_config['dl_traffics_users_groups']);
 			}
 
-			$this->phpbb_log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_CONFIG');
+			$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_CONFIG');
 
-			$cache = $this->phpbb_container->get('cache');
-
-			$cache->destroy('config');
+			$this->cache->destroy('config');
 
 			// Purge the extension cache
-			@unlink(DL_EXT_CACHE_PATH . 'data_dl_auth.' . $this->phpEx);
-			@unlink(DL_EXT_CACHE_PATH . 'data_dl_auth_groups.' . $this->phpEx);
-			@unlink(DL_EXT_CACHE_PATH . 'data_dl_black.' . $this->phpEx);
-			@unlink(DL_EXT_CACHE_PATH . 'data_dl_cat_counts.' . $this->phpEx);
-			@unlink(DL_EXT_CACHE_PATH . 'data_dl_cats.' . $this->phpEx);
-			@unlink(DL_EXT_CACHE_PATH . 'data_dl_file_preset.' . $this->phpEx);
+			$this->cache->destroy('_dlext_auth.');
+			$this->cache->destroy('_dlext_auth_groups.');
+			$this->cache->destroy('_dlext_black.');
+			$this->cache->destroy('_dlext_cat_counts.');
+			$this->cache->destroy('_dlext_cats.');
+			$this->cache->destroy('_dlext_file_preset.');
 
 			$message = $this->language->lang('DL_CONFIG_UPDATED') . adm_back_link($this->u_action . '&amp;view=' . $view);
 			trigger_error($message);
@@ -670,18 +670,17 @@ class acp_config_controller implements acp_config_interface
 		$this->user->add_lang('acp/users');
 
 		$this->template->assign_vars([
-			'L_TITLE'			=> $this->language->lang('DL_CONFIG'),
-			'L_TITLE_PAGE'		=> $this->language->lang($display_vars['title']),
+			'DL_TITLE_PAGE'			=> $this->language->lang($display_vars['title']),
 
-			'EXT_FILES_PATH'	=> DL_EXT_FILEBASE_PATH,
+			'DL_EXT_FILES_PATH'		=> $this->dlext_constants->get_value('files_dir'),
+			'DL_ERROR_MSG'			=> implode('<br />', $error),
 
-			'S_ERROR'			=> (!empty($error)) ? true : false,
-			'ERROR_MSG'			=> implode('<br />', $error),
-			'S_HIDDEN_FIELDS'	=> (!empty($s_hidden_fields)) ? build_hidden_fields($s_hidden_fields) : '',
-			'S_MODE_SELECT'		=> $mode_select,
-			'U_MODE_SELECT'		=> $this->u_action,
+			'S_DL_ERROR'			=> (!empty($error)) ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE,
+			'S_DL_HIDDEN_FIELDS'	=> (!empty($s_hidden_fields)) ? build_hidden_fields($s_hidden_fields) : '',
+			'S_DL_MODE_SELECT'		=> $mode_select,
+			'U_DL_MODE_SELECT'		=> $this->u_action,
 
-			'U_ACTION'			=> $this->u_action . '&amp;view=' . $view,
+			'U_DL_ACTION'			=> $this->u_action . '&amp;view=' . $view,
 		]);
 
 		// Output relevant page
@@ -694,9 +693,9 @@ class acp_config_controller implements acp_config_interface
 
 			if (strpos($config_key, 'legend') !== false && strpos($config_key, '_legend') === false)
 			{
-				$this->template->assign_block_vars('options', [
-					'S_LEGEND'		=> true,
-					'LEGEND'		=> ($this->language->lang($vars)) ? $this->language->lang($vars) : $vars,
+				$this->template->assign_block_vars('dl_options', [
+					'DL_LEGEND'		=> ($this->language->lang($vars)) ? $this->language->lang($vars) : $vars,
+					'S_DL_LEGEND'		=> $this->dlext_constants::DL_TRUE,
 				]);
 
 				continue;
@@ -726,14 +725,14 @@ class acp_config_controller implements acp_config_interface
 
 			$help_key = $vars['help_key'];
 
-			$this->template->assign_block_vars('options', [
-				'KEY'			=> $config_key,
-				'TITLE'			=> ($this->language->lang($vars['lang'])) ? $this->language->lang($vars['lang']) : $vars['lang'],
-				'S_EXPLAIN'		=> $vars['explain'],
-				'TITLE_EXPLAIN'	=> $l_explain,
-				'CONTENT'		=> $content,
-				'PREVIEW'		=> (isset($vars['preview'])) ? $vars['preview'] : '',
-				'HELP_KEY'		=> $help_key,
+			$this->template->assign_block_vars('dl_options', [
+				'DL_KEY'			=> $config_key,
+				'DL_TITLE'			=> ($this->language->lang($vars['lang'])) ? $this->language->lang($vars['lang']) : $vars['lang'],
+				'DL_TITLE_EXPLAIN'	=> $l_explain,
+				'DL_CONTENT'		=> $content,
+				'DL_PREVIEW'		=> (isset($vars['preview'])) ? $vars['preview'] : '',
+				'DL_HELP_KEY'		=> $help_key,
+				'S_DL_EXPLAIN'		=> $vars['explain'],
 			]);
 
 			unset($display_vars['vars'][$config_key]);
@@ -772,10 +771,10 @@ class acp_config_controller implements acp_config_interface
 
 	public function select_dl_cat_edit($value)
 	{
-		$s_select = '<option value="0">' . $this->language->lang('DL_CAT_EDIT_LINK_0') . '</option>';
-		$s_select .= '<option value="1">' . $this->language->lang('DL_CAT_EDIT_LINK_1') . '</option>';
-		$s_select .= '<option value="2">' . $this->language->lang('DL_CAT_EDIT_LINK_2') . '</option>';
-		$s_select .= '<option value="3">' . $this->language->lang('DL_CAT_EDIT_LINK_3') . '</option>';
+		$s_select = '<option value="' . $this->dlext_constants::DL_CAT_EDIT_OFF . '">' . $this->language->lang('DL_CAT_EDIT_LINK_0') . '</option>';
+		$s_select .= '<option value="' . $this->dlext_constants::DL_CAT_EDIT_ADMIN_ONLY . '">' . $this->language->lang('DL_CAT_EDIT_LINK_1') . '</option>';
+		$s_select .= '<option value="' . $this->dlext_constants::DL_CAT_EDIT_ADMIN_MOD . '">' . $this->language->lang('DL_CAT_EDIT_LINK_2') . '</option>';
+		$s_select .= '<option value="' . $this->dlext_constants::DL_CAT_EDIT_ADMIN_MOD_OWN . '">' . $this->language->lang('DL_CAT_EDIT_LINK_3') . '</option>';
 		$s_select = str_replace('value="' . $value . '">', 'value="' . $value . '" selected="selected">', $s_select);
 
 		return $s_select;
@@ -783,8 +782,8 @@ class acp_config_controller implements acp_config_interface
 
 	public function select_dl_hash_algo($value)
 	{
-		$s_select = '<option value="md5">MD5</option>';
-		$s_select .= '<option value="sha1">SHA1</option>';
+		$s_select = '<option value="' . $this->dlext_constants::DL_FILE_HASH_MD5 . '">' . $this->language->lang('DL_FILE_HASH_MD5') . '</option>';
+		$s_select .= '<option value="' . $this->dlext_constants::DL_FILE_HASH_SHA . '">' . $this->language->lang('DL_FILE_HASH_SHA1') . '</option>';
 		$s_select = str_replace('value="' . $value . '">', 'value="' . $value . '" selected="selected">', $s_select);
 
 		return $s_select;
@@ -792,9 +791,7 @@ class acp_config_controller implements acp_config_interface
 
 	public function select_dl_forum($dl_topic_forum)
 	{
-		$config = $this->config;
-
-		$forum_select_tmp = get_forum_list('f_list', false);
+		$forum_select_tmp = get_forum_list('f_list', $this->dlext_constants::DL_FALSE);
 		$select = '';
 
 		foreach ($forum_select_tmp as $key => $value)
@@ -814,7 +811,7 @@ class acp_config_controller implements acp_config_interface
 			}
 		}
 
-		$select = '<option value="-1">' . $this->language->lang('DL_TOPIC_FORUM_C') . '</option><option value="0">' . $this->language->lang('DEACTIVATE') . '</option>' . $select . '</optgroup>';
+		$select = '<option value="' . $this->dlext_constants::DL_NONE . '">' . $this->language->lang('DL_TOPIC_FORUM_C') . '</option><option value="0">' . $this->language->lang('DEACTIVATE') . '</option>' . $select . '</optgroup>';
 		$select = str_replace('value="' . $dl_topic_forum . '">', 'value="' . $dl_topic_forum . '" selected="selected">', $select);
 
 		return $select;
@@ -822,12 +819,12 @@ class acp_config_controller implements acp_config_interface
 
 	public function select_dl_vc($value)
 	{
-		$s_select = '<option value="0">' . $this->language->lang('DL_CAPTCHA_PERM_0') . '</option>';
-		$s_select .= '<option value="1">' . $this->language->lang('DL_CAPTCHA_PERM_1') . '</option>';
-		$s_select .= '<option value="2">' . $this->language->lang('DL_CAPTCHA_PERM_2') . '</option>';
-		$s_select .= '<option value="3">' . $this->language->lang('DL_CAPTCHA_PERM_3') . '</option>';
-		$s_select .= '<option value="4">' . $this->language->lang('DL_CAPTCHA_PERM_4') . '</option>';
-		$s_select .= '<option value="5">' . $this->language->lang('DL_CAPTCHA_PERM_5') . '</option>';
+		$s_select = '<option value="' . $this->dlext_constants::DL_CAPTCHA_PERM_OFF . '">' . $this->language->lang('DL_CAPTCHA_PERM_0') . '</option>';
+		$s_select .= '<option value="' . $this->dlext_constants::DL_CAPTCHA_PERM_GUESTS . '">' . $this->language->lang('DL_CAPTCHA_PERM_1') . '</option>';
+		$s_select .= '<option value="' . $this->dlext_constants::DL_CAPTCHA_PERM_USER . '">' . $this->language->lang('DL_CAPTCHA_PERM_2') . '</option>';
+		$s_select .= '<option value="' . $this->dlext_constants::DL_CAPTCHA_PERM_MODS . '">' . $this->language->lang('DL_CAPTCHA_PERM_3') . '</option>';
+		$s_select .= '<option value="' . $this->dlext_constants::DL_CAPTCHA_PERM_ADMINS . '">' . $this->language->lang('DL_CAPTCHA_PERM_4') . '</option>';
+		$s_select .= '<option value="' . $this->dlext_constants::DL_CAPTCHA_PERM_ALL . '">' . $this->language->lang('DL_CAPTCHA_PERM_5') . '</option>';
 		$s_select = str_replace('value="' . $value . '">', 'value="' . $value . '" selected="selected">', $s_select);
 
 		return $s_select;
@@ -835,8 +832,8 @@ class acp_config_controller implements acp_config_interface
 
 	public function select_hotlink_action($value)
 	{
-		$s_select = '<option value="1">' . $this->language->lang('DL_HOTLINK_ACTION_ONE') . '</option>';
-		$s_select .= '<option value="0">' . $this->language->lang('DL_HOTLINK_ACTION_TWO') . '</option>';
+		$s_select = '<option value="' . $this->dlext_constants::DL_HOTLINK_DETAILS . '">' . $this->language->lang('DL_HOTLINK_ACTION_ONE') . '</option>';
+		$s_select .= '<option value="' . $this->dlext_constants::DL_HOTLINK_MESSAGE . '">' . $this->language->lang('DL_HOTLINK_ACTION_TWO') . '</option>';
 		$s_select = str_replace('value="' . $value . '">', 'value="' . $value . '" selected="selected">', $s_select);
 
 		return $s_select;
@@ -844,9 +841,9 @@ class acp_config_controller implements acp_config_interface
 
 	public function select_report_action($value)
 	{
-		$s_select = '<option value="0">' . $this->language->lang('NO') . '</option>';
-		$s_select .= '<option value="1">' . $this->language->lang('YES') . '</option>';
-		$s_select .= '<option value="2">' . $this->language->lang('DL_OFF_GUESTS') . '</option>';
+		$s_select = '<option value="' . $this->dlext_constants::DL_REPORT_OFF . '">' . $this->language->lang('NO') . '</option>';
+		$s_select .= '<option value="' . $this->dlext_constants::DL_REPORT_ALL . '">' . $this->language->lang('YES') . '</option>';
+		$s_select .= '<option value="' . $this->dlext_constants::DL_REPORT_REG_USER . '">' . $this->language->lang('DL_OFF_GUESTS') . '</option>';
 		$s_select = str_replace('value="' . $value . '">', 'value="' . $value . '" selected="selected">', $s_select);
 
 		return $s_select;
@@ -854,12 +851,12 @@ class acp_config_controller implements acp_config_interface
 
 	public function select_report_vc($value)
 	{
-		$s_select = '<option value="0">' . $this->language->lang('DL_CAPTCHA_PERM_0') . '</option>';
-		$s_select .= '<option value="1">' . $this->language->lang('DL_CAPTCHA_PERM_1') . '</option>';
-		$s_select .= '<option value="2">' . $this->language->lang('DL_CAPTCHA_PERM_2') . '</option>';
-		$s_select .= '<option value="3">' . $this->language->lang('DL_CAPTCHA_PERM_3') . '</option>';
-		$s_select .= '<option value="4">' . $this->language->lang('DL_CAPTCHA_PERM_4') . '</option>';
-		$s_select .= '<option value="5">' . $this->language->lang('DL_CAPTCHA_PERM_5') . '</option>';
+		$s_select = '<option value="' . $this->dlext_constants::DL_CAPTCHA_PERM_OFF . '">' . $this->language->lang('DL_CAPTCHA_PERM_0') . '</option>';
+		$s_select .= '<option value="' . $this->dlext_constants::DL_CAPTCHA_PERM_GUESTS . '">' . $this->language->lang('DL_CAPTCHA_PERM_1') . '</option>';
+		$s_select .= '<option value="' . $this->dlext_constants::DL_CAPTCHA_PERM_USER . '">' . $this->language->lang('DL_CAPTCHA_PERM_2') . '</option>';
+		$s_select .= '<option value="' . $this->dlext_constants::DL_CAPTCHA_PERM_MODS . '">' . $this->language->lang('DL_CAPTCHA_PERM_3') . '</option>';
+		$s_select .= '<option value="' . $this->dlext_constants::DL_CAPTCHA_PERM_ADMINS . '">' . $this->language->lang('DL_CAPTCHA_PERM_4') . '</option>';
+		$s_select .= '<option value="' . $this->dlext_constants::DL_CAPTCHA_PERM_ALL . '">' . $this->language->lang('DL_CAPTCHA_PERM_5') . '</option>';
 		$s_select = str_replace('value="' . $value . '">', 'value="' . $value . '" selected="selected">', $s_select);
 
 		return $s_select;
@@ -867,14 +864,32 @@ class acp_config_controller implements acp_config_interface
 
 	public function select_rss_cats($value)
 	{
-		$s_select = '<label><input type="radio" name="config[dl_rss_cats]" id="dl_rss_cats" class="radio" value="0" ' . (($value == 0) ? 'checked="checked"' : '' ) . ' />' . $this->language->lang('DL_RSS_CATS_ALL') . '</label>&nbsp;';
-		$s_select .= '<label><input type="radio" name="config[dl_rss_cats]" class="radio" value="1" ' . (($value == 1) ? 'checked="checked"' : '' ) . ' />' . $this->language->lang('DL_RSS_CATS_SELECTED') . '</label>&nbsp;';
-		$s_select .= '<label><input type="radio" name="config[dl_rss_cats]" class="radio" value="2" ' . (($value == 2) ? 'checked="checked"' : '' ) . ' />' . $this->language->lang('DL_RSS_CATS_NOT_SELECTED') . '</label>&nbsp;';
+		$s_select = '<label><input type="radio" name="config[dl_rss_cats]" id="dl_rss_cats" class="radio" value="' . $this->dlext_constants::DL_RSS_CATS_ALL . '" ' . (($value == $this->dlext_constants::DL_RSS_CATS_ALL) ? 'checked="checked"' : '' ) . ' />' . $this->language->lang('DL_RSS_CATS_ALL') . '</label>&nbsp;';
+		$s_select .= '<label><input type="radio" name="config[dl_rss_cats]" class="radio" value="' . $this->dlext_constants::DL_RSS_CATS_SELECTED . '" ' . (($value == $this->dlext_constants::DL_RSS_CATS_SELECTED) ? 'checked="checked"' : '' ) . ' />' . $this->language->lang('DL_RSS_CATS_SELECTED') . '</label>&nbsp;';
+		$s_select .= '<label><input type="radio" name="config[dl_rss_cats]" class="radio" value="' . $this->dlext_constants::DL_RSS_CATS_OTHER . '" ' . (($value == $this->dlext_constants::DL_RSS_CATS_OTHER) ? 'checked="checked"' : '' ) . ' />' . $this->language->lang('DL_RSS_CATS_NOT_SELECTED') . '</label>&nbsp;';
 
-		if ($value <> 0)
+		if ($value != $this->dlext_constants::DL_RSS_CATS_ALL)
 		{
 			$rss_cats = $this->dlext_extra->dl_cat_select(0, 0, array_map('intval', explode(',', $this->config['dl_rss_cats_select'])));
-			$s_select .= '<br /><select name="dl_rss_cats_select[]" id="dl_rss_cats_select" multiple="multiple" size="5">' . $rss_cats . '</select>';
+
+			$s_select .= '<br /><select name="dl_rss_cats_select[]" id="dl_rss_cats_select" multiple="multiple" size="10">';
+
+			if (!empty($rss_cats) && is_array($rss_cats))
+			{
+				foreach ($rss_cats as $key => $value)
+				{
+					$s_select .= '<option value="' . $rss_cats[$key]['value'] . '"';
+
+					if ($rss_cats[$key]['selected'])
+					{
+						$s_select .= ' selected="selected"';
+					}
+
+					$s_select .= '>' . $rss_cats[$key]['name'] . '</option>';
+				}
+			}
+
+			$s_select .=  '</select>';
 		}
 
 		return $s_select;
@@ -882,9 +897,9 @@ class acp_config_controller implements acp_config_interface
 
 	public function select_rss_length($value)
 	{
-		$s_select = '<option value="0">' . $this->language->lang('DL_RSS_DESC_LENGTH_NONE') . '</option>';
-		$s_select .= '<option value="1">' . $this->language->lang('DL_RSS_DESC_LENGTH_FULL') . '</option>';
-		$s_select .= '<option value="2">' . $this->language->lang('DL_RSS_DESC_LENGTH_SHORT') . '</option>';
+		$s_select = '<option value="' . $this->dlext_constants::DL_RSS_DESC_LENGTH_NONE . '">' . $this->language->lang('DL_RSS_DESC_LENGTH_NONE') . '</option>';
+		$s_select .= '<option value="' . $this->dlext_constants::DL_RSS_DESC_LENGTH_FULL . '">' . $this->language->lang('DL_RSS_DESC_LENGTH_FULL') . '</option>';
+		$s_select .= '<option value="' . $this->dlext_constants::DL_RSS_DESC_LENGTH_SHORT . '">' . $this->language->lang('DL_RSS_DESC_LENGTH_SHORT') . '</option>';
 		$s_select = str_replace('value="' . $value . '">', 'value="' . $value . '" selected="selected">', $s_select);
 
 		return $s_select;
@@ -892,9 +907,9 @@ class acp_config_controller implements acp_config_interface
 
 	public function select_rss_off_action($value)
 	{
-		$s_select = '<option value="0">' . $this->language->lang('DL_RSS_ACTION_R_DLX') . '</option>';
-		$s_select .= '<option value="1">' . $this->language->lang('DL_RSS_ACTION_R_IDX') . '</option>';
-		$s_select .= '<option value="2">' . $this->language->lang('DL_RSS_ACTION_D_TXT') . '</option>';
+		$s_select = '<option value="' . $this->dlext_constants::DL_RSS_ACTION_R_DLX . '">' . $this->language->lang('DL_RSS_ACTION_R_DLX') . '</option>';
+		$s_select .= '<option value="' . $this->dlext_constants::DL_RSS_ACTION_R_IDX . '">' . $this->language->lang('DL_RSS_ACTION_R_IDX') . '</option>';
+		$s_select .= '<option value="' . $this->dlext_constants::DL_RSS_ACTION_D_TXT . '">' . $this->language->lang('DL_RSS_ACTION_D_TXT') . '</option>';
 		$s_select = str_replace('value="' . $value . '">', 'value="' . $value . '" selected="selected">', $s_select);
 
 		return $s_select;
@@ -902,20 +917,20 @@ class acp_config_controller implements acp_config_interface
 
 	public function select_size($value, $field, $size, $maxlength, $quote, $max_quote, $remain = false)
 	{
-		$quota_tmp = $this->dlext_format->dl_size($this->config[$field], 2, 'select');
+		$quota_tmp = $this->dlext_format->dl_size($value, 2, 'select');
 		$quota_out = $quota_tmp['size_out'];
 		$range_select = $quota_tmp['range'];
 
 		$s_select = '<select name="' . $quote . '" id="' . $quote . '">';
-		$s_select .= '<option value="byte">' . $this->language->lang('DL_BYTES_LONG') . '</option>';
-		$s_select .= '<option value="kb">' . $this->language->lang('DL_KB') . '</option>';
-		if ($max_quote == 'mb' || $max_quote == 'gb')
+		$s_select .= '<option value="' . $this->dlext_constants::DL_FILE_RANGE_BYTE . '">' . $this->language->lang('DL_BYTES_LONG') . '</option>';
+		$s_select .= '<option value="' . $this->dlext_constants::DL_FILE_RANGE_KBYTE . '">' . $this->language->lang('DL_KB') . '</option>';
+		if ($max_quote == $this->dlext_constants::DL_FILE_RANGE_MBYTE || $max_quote == $this->dlext_constants::DL_FILE_RANGE_GBYTE)
 		{
-			$s_select .= '<option value="mb">' . $this->language->lang('DL_MB') . '</option>';
+			$s_select .= '<option value="' . $this->dlext_constants::DL_FILE_RANGE_MBYTE . '">' . $this->language->lang('DL_MB') . '</option>';
 		}
-		if ($max_quote == 'gb')
+		if ($max_quote == $this->dlext_constants::DL_FILE_RANGE_GBYTE)
 		{
-			$s_select .= '<option value="gb">' . $this->language->lang('DL_GB') . '</option>';
+			$s_select .= '<option value="' . $this->dlext_constants::DL_FILE_RANGE_GBYTE . '">' . $this->language->lang('DL_GB') . '</option>';
 		}
 		$s_select .= '</select>';
 
@@ -960,8 +975,8 @@ class acp_config_controller implements acp_config_interface
 
 	public function select_sort($value)
 	{
-		$s_select = '<option value="1">' . $this->language->lang('DL_SORT_ACP') . '</option>';
-		$s_select .= '<option value="0">' . $this->language->lang('DL_SORT_USER') . '</option>';
+		$s_select = '<option value="' . $this->dlext_constants::DL_SORT_ACP . '">' . $this->language->lang('DL_SORT_ACP') . '</option>';
+		$s_select .= '<option value="' . $this->dlext_constants::DL_SORT_USER . '">' . $this->language->lang('DL_SORT_USER') . '</option>';
 		$s_select = str_replace('value="' . $value . '">', 'value="' . $value . '" selected="selected">', $s_select);
 
 		return $s_select;
@@ -969,11 +984,11 @@ class acp_config_controller implements acp_config_interface
 
 	public function select_stat_perm($value)
 	{
-		$s_select = '<option value="9">' . $this->language->lang('DL_EXT_STATS_0') . '</option>';
-		$s_select .= '<option value="0">' . $this->language->lang('DL_STAT_PERM_ALL') . '</option>';
-		$s_select .= '<option value="1">' . $this->language->lang('DL_STAT_PERM_USER') . '</option>';
-		$s_select .= '<option value="2">' . $this->language->lang('DL_STAT_PERM_MOD') . '</option>';
-		$s_select .= '<option value="3">' . $this->language->lang('DL_STAT_PERM_ADMIN') . '</option>';
+		$s_select = '<option value="' . $this->dlext_constants::DL_PERM_OFF . '">' . $this->language->lang('DL_EXT_STATS_0') . '</option>';
+		$s_select .= '<option value="' . $this->dlext_constants::DL_PERM_ALL . '">' . $this->language->lang('DL_STAT_PERM_ALL') . '</option>';
+		$s_select .= '<option value="' . $this->dlext_constants::DL_PERM_USER . '">' . $this->language->lang('DL_STAT_PERM_USER') . '</option>';
+		$s_select .= '<option value="' . $this->dlext_constants::DL_PERM_MOD . '">' . $this->language->lang('DL_STAT_PERM_MOD') . '</option>';
+		$s_select .= '<option value="' . $this->dlext_constants::DL_PERM_ADMIN . '">' . $this->language->lang('DL_STAT_PERM_ADMIN') . '</option>';
 		$s_select = str_replace('value="' . $value . '">', 'value="' . $value . '" selected="selected">', $s_select);
 
 		return $s_select;
@@ -981,9 +996,9 @@ class acp_config_controller implements acp_config_interface
 
 	public function select_topic_details($value)
 	{
-		$s_select = '<option value="0">' . $this->language->lang('DL_TOPIC_NO_MORE_DETAILS') . '</option>';
-		$s_select .= '<option value="1">' . $this->language->lang('DL_TOPIC_MORE_DETAILS_UNDER') . '</option>';
-		$s_select .= '<option value="2">' . $this->language->lang('DL_TOPIC_MORE_DETAILS_OVER') . '</option>';
+		$s_select = '<option value="' . $this->dlext_constants::DL_TOPIC_NO_MORE_DETAILS . '">' . $this->language->lang('DL_TOPIC_NO_MORE_DETAILS') . '</option>';
+		$s_select .= '<option value="' . $this->dlext_constants::DL_TOPIC_MORE_DETAILS_UNDER . '">' . $this->language->lang('DL_TOPIC_MORE_DETAILS_UNDER') . '</option>';
+		$s_select .= '<option value="' . $this->dlext_constants::DL_TOPIC_MORE_DETAILS_OVER . '">' . $this->language->lang('DL_TOPIC_MORE_DETAILS_OVER') . '</option>';
 		$s_select = str_replace('value="' . $value . '">', 'value="' . $value . '" selected="selected">', $s_select);
 
 		return $s_select;
@@ -991,9 +1006,9 @@ class acp_config_controller implements acp_config_interface
 
 	public function select_topic_user($value)
 	{
-		$s_select = '<option value="0">' . $this->language->lang('DL_TOPIC_USER_SELF') . '</option>';
-		$s_select .= '<option value="1">' . $this->language->lang('DL_TOPIC_USER_OTHER') . '</option>';
-		$s_select .= '<option value="2">' . $this->language->lang('DL_TOPIC_USER_CAT') . '</option>';
+		$s_select = '<option value="' . $this->dlext_constants::DL_TOPIC_USER_SELF . '">' . $this->language->lang('DL_TOPIC_USER_SELF') . '</option>';
+		$s_select .= '<option value="' . $this->dlext_constants::DL_TOPIC_USER_OTHER . '">' . $this->language->lang('DL_TOPIC_USER_OTHER') . '</option>';
+		$s_select .= '<option value="' . $this->dlext_constants::DL_TOPIC_USER_CAT . '">' . $this->language->lang('DL_TOPIC_USER_CAT') . '</option>';
 		$s_select = str_replace('value="' . $value . '">', 'value="' . $value . '" selected="selected">', $s_select);
 
 		return $s_select;
@@ -1001,13 +1016,13 @@ class acp_config_controller implements acp_config_interface
 
 	public function select_traffic($value, $total_groups)
 	{
-		$s_select = '<option value="1">' . $this->language->lang('DL_TRAFFICS_ON_ALL') . '</option>';
+		$s_select = '<option value="' . $this->dlext_constants::DL_TRAFFICS_ON_ALL . '">' . $this->language->lang('DL_TRAFFICS_ON_ALL') . '</option>';
 		if ($total_groups)
 		{
-			$s_select .= '<option value="2">' . $this->language->lang('DL_TRAFFICS_ON_GROUPS') . '</option>';
-			$s_select .= '<option value="3">' . $this->language->lang('DL_TRAFFICS_OFF_GROUPS') . '</option>';
+			$s_select .= '<option value="' . $this->dlext_constants::DL_TRAFFICS_ON_GROUPS . '">' . $this->language->lang('DL_TRAFFICS_ON_GROUPS') . '</option>';
+			$s_select .= '<option value="' . $this->dlext_constants::DL_TRAFFICS_OFF_GROUPS . '">' . $this->language->lang('DL_TRAFFICS_OFF_GROUPS') . '</option>';
 		}
-		$s_select .= '<option value="0">' . $this->language->lang('DL_TRAFFICS_OFF_ALL') . '</option>';
+		$s_select .= '<option value="' . $this->dlext_constants::DL_TRAFFICS_OFF_ALL . '">' . $this->language->lang('DL_TRAFFICS_OFF_ALL') . '</option>';
 		$s_select = str_replace('value="' . $value . '">', 'value="' . $value . '" selected="selected">', $s_select);
 
 		return $s_select;
@@ -1025,11 +1040,11 @@ class acp_config_controller implements acp_config_interface
 
 	public function select_dl_ext_stats($value)
 	{
-		$s_select = '<option value="0">' . $this->language->lang('DL_EXT_STATS_0') . '</option>';
-		$s_select .= '<option value="1">' . $this->language->lang('DL_EXT_STATS_1') . '</option>';
-		$s_select .= '<option value="2">' . $this->language->lang('DL_EXT_STATS_2') . '</option>';
-		$s_select .= '<option value="3">' . $this->language->lang('DL_EXT_STATS_3') . '</option>';
-		$s_select .= '<option value="4">' . $this->language->lang('DL_EXT_STATS_4') . '</option>';
+		$s_select = '<option value="' . $this->dlext_constants::DL_FOOTER_STATS_OFF . '">' . $this->language->lang('DL_EXT_STATS_0') . '</option>';
+		$s_select .= '<option value="' . $this->dlext_constants::DL_FOOTER_STATS_GUESTS_USER . '">' . $this->language->lang('DL_EXT_STATS_1') . '</option>';
+		$s_select .= '<option value="' . $this->dlext_constants::DL_FOOTER_STATS_ALL . '">' . $this->language->lang('DL_EXT_STATS_2') . '</option>';
+		$s_select .= '<option value="' . $this->dlext_constants::DL_FOOTER_STATS_ADMIN_ONLY . '">' . $this->language->lang('DL_EXT_STATS_3') . '</option>';
+		$s_select .= '<option value="' . $this->dlext_constants::DL_FOOTER_STATS_FOUNDER_ONLY . '">' . $this->language->lang('DL_EXT_STATS_4') . '</option>';
 		$s_select = str_replace('value="' . $value . '">', 'value="' . $value . '" selected="selected">', $s_select);
 
 		return $s_select;
@@ -1049,7 +1064,7 @@ class acp_config_controller implements acp_config_interface
 	public function select_dl_user($value, $config)
 	{
 		$input_field = '<input class="text medium" type="text" id="' . $config . '" name="config[' . $config . ']" value="' . $value . '" />';
-		$input_field .= '<br />&nbsp;&nbsp;&nbsp;&nbsp;[ <a href="' . append_sid("{$this->root_path}memberlist.{$this->phpEx}", 'mode=searchuser&amp;form=acp_dl_config&amp;field=' . $config . '&amp;select_single=true') . '" onclick="find_username(this.href); return false;">' . $this->language->lang('FIND_USERNAME') . '</a> ]';
+		$input_field .= '&nbsp;[ <a href="' . append_sid($this->root_path . 'memberlist.' . $this->phpEx, 'mode=searchuser&amp;form=acp_dl_config&amp;field=' . $config . '&amp;select_single=1') . '" onclick="find_username(this.href); return false;">' . $this->language->lang('FIND_USERNAME') . '</a> ]';
 
 		return $input_field;
 	}
@@ -1076,9 +1091,9 @@ class acp_config_controller implements acp_config_interface
 
 	public function select_latest_type($value)
 	{
-		$s_select = '<option value="0">' . $this->language->lang('DL_LATEST_TYPE_OFF') . '</option>';
-		$s_select .= '<option value="1">' . $this->language->lang('DL_LATEST_TYPE_DEFAULT') . '</option>';
-		$s_select .= '<option value="2">' . $this->language->lang('DL_LATEST_TYPE_COMPLETE') . '</option>';
+		$s_select = '<option value="' . $this->dlext_constants::DL_LATEST_TYPE_OFF . '">' . $this->language->lang('DL_LATEST_TYPE_OFF') . '</option>';
+		$s_select .= '<option value="' . $this->dlext_constants::DL_LATEST_TYPE_DEFAULT . '">' . $this->language->lang('DL_LATEST_TYPE_DEFAULT') . '</option>';
+		$s_select .= '<option value="' . $this->dlext_constants::DL_LATEST_TYPE_COMPLETE . '">' . $this->language->lang('DL_LATEST_TYPE_COMPLETE') . '</option>';
 		$s_select = str_replace('value="' . $value . '">', 'value="' . $value . '" selected="selected">', $s_select);
 
 		return $s_select;

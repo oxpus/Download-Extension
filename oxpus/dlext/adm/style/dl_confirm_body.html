@@ -4,10 +4,10 @@
 
 <fieldset>
 
-	<h1>{MESSAGE_TITLE}</h1>
-	<p>{MESSAGE_TEXT}</p>
+	<h1>{{ MESSAGE_TITLE }}</h1>
+	<p>{{ MESSAGE_TEXT }}</p>
 
-	{% if S_DELETE_FILES_CONFIRM %}
+	{% if S_DL_DELETE_FILES_CONFIRM %}
 	<br />
 
 	<dl>
@@ -16,7 +16,7 @@
 	</dl>
 	{% endif %}
 
-	{% if S_DELETE_TOPIC_CONFIRM %}
+	{% if S_DL_DELETE_TOPIC_CONFIRM %}
 	<br />
 
 	<dl>
@@ -28,12 +28,21 @@
 	</dl>
 	{% endif %}
 
-	{% if S_SWITCH_CAT %}
+	{% if S_DL_SWITCH_CAT %}
 	<br />
 
 	<dl>
 		<dt>{{ lang('DL_DELETE_CAT_CONFIRM') }}</dt>
-		<dd>{{ S_SWITCH_CAT }}</dd>
+		<dd>
+			<select name="new_cat_id">
+				<option value="{{ DL_DELETE_CAT }}">{{ lang('DL_DELETE_CAT_ONLY') }}</option>
+				<option value="{{ DL_DELETE_ALL }}" selected="selected">{{ lang('DL_DELETE_CAT_AND_FILES') }}</option>
+				<option value="---">----------------------------------------</option>
+				{% for target_cat_select in loops.target_cat_select %}
+				<option value="{{ target_cat_select.DL_CAT_ID }}">{{ target_cat_select.DL_SEPERATOR }}{{ target_cat_select.DL_CAT_NAME }}</option>
+				{% endfor %}
+			</select>
+		</dd>
 	</dl>
 	{% endif %}
 

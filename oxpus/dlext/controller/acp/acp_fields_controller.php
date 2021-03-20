@@ -2,84 +2,107 @@
 
 /**
 *
+* @package phpBB3
+* @version $Id$
+* @copyright (c) 2005 phpBB Group
+* @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
+*
+* taken and modified for
 * @package phpBB Extension - Oxpus Downloads
-* @copyright (c) 2002-2020 OXPUS - www.oxpus.net
+* @copyright (c) 2002-2021 OXPUS - www.oxpus.net
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
 */
 
 namespace oxpus\dlext\controller\acp;
 
-use Symfony\Component\DependencyInjection\Container;
-
 /**
 * @package acp
 */
 class acp_fields_controller implements acp_fields_interface
 {
-	public $u_action;
-	public $db;
-	public $user;
-	public $auth;
-	public $phpEx;
-	public $root_path;
-	public $phpbb_extension_manager;
-	public $phpbb_container;
-	public $phpbb_path_helper;
-	public $phpbb_log;
+	/* phpbb objects */
+	protected $db;
+	protected $user;
+	protected $phpEx;
+	protected $root_path;
+	protected $extension_manager;
+	protected $log;
+	protected $config;
+	protected $language;
+	protected $request;
+	protected $template;
 
-	public $config;
-	public $helper;
-	public $language;
-	public $request;
-	public $template;
+	/* extension owned objects */
+	protected $u_action;
+	protected $ext_path;
 
-	public $ext_path;
-	public $ext_path_web;
-	public $ext_path_ajax;
+	protected $lang_defs;
 
-	/*
+	protected $dlext_constants;
+
+	protected $dlext_table_dl_fields;
+	protected $dlext_table_dl_fields_data;
+	protected $dlext_table_dl_fields_lang;
+	protected $dlext_table_dl_lang;
+
+	/**
+	 * Constructor
+	 *
 	 * @param string								$root_path
 	 * @param string								$phpEx
-	 * @param Container 							$phpbb_container
-	 * @param \phpbb\extension\manager				$phpbb_extension_manager
-	 * @param \phpbb\path_helper					$phpbb_path_helper
-	 * @param \phpbb\db\driver\driver_interfacer	$db
+	 * @param \phpbb\config\config					$config
+	 * @param \phpbb\language\language				$language
+	 * @param \phpbb\request\request 				$request
+	 * @param \phpbb\template\template				$template
+	 * @param \phpbb\extension\manager				$extension_manager
+	 * @param \phpbb\db\driver\driver_interface		$db
 	 * @param \phpbb\log\log_interface 				$log
-	 * @param \phpbb\auth\auth						$auth
 	 * @param \phpbb\user							$user
+	 * @param \oxpus\dlext\core\helpers\constants	$dlext_constants
+	 * @param string								$dlext_table_dl_fields
+	 * @param string								$dlext_table_dl_fields_data
+	 * @param string								$dlext_table_dl_fields_lang
+	 * @param string								$dlext_table_dl_lang
 	 */
 	public function __construct(
 		$root_path,
 		$phpEx,
-		Container $phpbb_container,
-		\phpbb\extension\manager $phpbb_extension_manager,
-		\phpbb\path_helper $phpbb_path_helper,
+		\phpbb\config\config $config,
+		\phpbb\language\language $language,
+		\phpbb\request\request $request,
+		\phpbb\template\template $template,
+		\phpbb\extension\manager $extension_manager,
 		\phpbb\db\driver\driver_interface $db,
 		\phpbb\log\log_interface $log,
-		\phpbb\auth\auth $auth,
-		\phpbb\user $user
+		\phpbb\user $user,
+		\oxpus\dlext\core\helpers\constants $dlext_constants,
+		$dlext_table_dl_fields,
+		$dlext_table_dl_fields_data,
+		$dlext_table_dl_fields_lang,
+		$dlext_table_dl_lang
 	)
 	{
 		$this->root_path				= $root_path;
 		$this->phpEx					= $phpEx;
-		$this->phpbb_container			= $phpbb_container;
-		$this->phpbb_extension_manager	= $phpbb_extension_manager;
-		$this->phpbb_path_helper		= $phpbb_path_helper;
+		$this->extension_manager		= $extension_manager;
 		$this->db						= $db;
-		$this->phpbb_log				= $log;
-		$this->auth						= $auth;
+		$this->log						= $log;
 		$this->user						= $user;
 
-		$this->config					= $this->phpbb_container->get('config');
-		$this->helper					= $this->phpbb_container->get('controller.helper');
-		$this->language					= $this->phpbb_container->get('language');
-		$this->request					= $this->phpbb_container->get('request');
-		$this->template					= $this->phpbb_container->get('template');
+		$this->config					= $config;
+		$this->language					= $language;
+		$this->request					= $request;
+		$this->template					= $template;
 
-		$this->ext_path					= $this->phpbb_extension_manager->get_extension_path('oxpus/dlext', true);
-		$this->ext_path_web				= $this->phpbb_path_helper->update_web_root_path($this->ext_path);
-		$this->ext_path_ajax			= $this->ext_path_web . 'assets/javascript/';
+		$this->dlext_constants			= $dlext_constants;
+
+		$this->dlext_table_dl_fields		= $dlext_table_dl_fields;
+		$this->dlext_table_dl_fields_data	= $dlext_table_dl_fields_data;
+		$this->dlext_table_dl_fields_lang	= $dlext_table_dl_fields_lang;
+		$this->dlext_table_dl_lang			= $dlext_table_dl_lang;
+
+		$this->ext_path					= $this->extension_manager->get_extension_path('oxpus/dlext', $dlext_constants::DL_TRUE);
 	}
 
 	public function set_action($u_action)
@@ -89,24 +112,18 @@ class acp_fields_controller implements acp_fields_interface
 
 	public function handle()
 	{
-		$this->auth->acl($this->user->data);
-		if (!$this->auth->acl_get('a_dl_fields'))
-		{
-			trigger_error('DL_NO_PERMISSION', E_USER_WARNING);
-		}
+		$action				= $this->request->variable('action', '');
+		$cancel				= $this->request->variable('cancel', '');
+		$mode				= $this->request->variable('mode', 'overview');
 
-		// Define the ext path
-		$ext_path	= $this->phpbb_extension_manager->get_extension_path('oxpus/dlext', true);
-
-		include_once($this->ext_path . 'phpbb/includes/acm_init.' . $this->phpEx);
-		include_once($this->root_path . 'includes/functions_posting.' . $this->phpEx);
-		include_once($this->root_path . 'includes/functions_user.' . $this->phpEx);
-		include_once($this->ext_path . 'phpbb/includes/fields.' . $this->phpEx);
-		include_once($this->ext_path . 'phpbb/includes/fields_admin.' . $this->phpEx);
+		include($this->root_path . 'includes/functions_posting.' . $this->phpEx);
+		include($this->root_path . 'includes/functions_user.' . $this->phpEx);
+		include($this->ext_path . 'includes/fields.' . $this->phpEx);
+		include($this->ext_path . 'includes/fields_admin.' . $this->phpEx);
 
 		$this->user->add_lang(['ucp', 'acp/profile']);
 
-		$create = $this->request->variable('create', '', true);
+		$create = $this->request->variable('create', '', $this->dlext_constants::DL_TRUE);
 		$action = ($create) ? 'create' : $action;
 
 		if ($cancel)
@@ -115,7 +132,6 @@ class acp_fields_controller implements acp_fields_interface
 		}
 
 		$error = [];
-		$s_hidden_fields = '';
 
 		// Define some default values for each field type
 		$default_values = [
@@ -126,8 +142,6 @@ class acp_fields_controller implements acp_fields_interface
 			FIELD_BOOL		=> ['field_length' => 1, 'field_minlen' => 0, 'field_maxlen' => 0, 'field_validation' => '', 'field_novalue' => 0, 'field_default_value' => 0],
 			FIELD_DROPDOWN	=> ['field_length' => 0, 'field_minlen' => 0, 'field_maxlen' => 5, 'field_validation' => '', 'field_novalue' => 0, 'field_default_value' => 0],
 		];
-
-		$cp = new \oxpus\dlext\phpbb\includes\custom_profile_admin();
 
 		// Build Language array
 		// Based on this, we decide which elements need to be edited later and which language items are missing
@@ -147,7 +161,7 @@ class acp_fields_controller implements acp_fields_interface
 		$this->db->sql_freeresult($result);
 
 		$sql = 'SELECT field_id, lang_id
-			FROM ' . DL_LANG_TABLE . '
+			FROM ' . $this->dlext_table_dl_lang . '
 			ORDER BY lang_id';
 		$result = $this->db->sql_query($sql);
 
@@ -178,10 +192,10 @@ class acp_fields_controller implements acp_fields_interface
 					trigger_error($this->language->lang('NO_FIELD_ID') . adm_back_link($this->u_action), E_USER_WARNING);
 				}
 
-				if (confirm_box(true))
+				if (confirm_box($this->dlext_constants::DL_TRUE))
 				{
 					$sql = 'SELECT field_ident
-						FROM ' . DL_FIELDS_TABLE . '
+						FROM ' . $this->dlext_table_dl_fields . '
 						WHERE field_id = ' . (int) $field_id;
 					$result = $this->db->sql_query($sql);
 					$field_ident = (string) $this->db->sql_fetchfield('field_ident');
@@ -189,16 +203,16 @@ class acp_fields_controller implements acp_fields_interface
 
 					$this->db->sql_transaction('begin');
 
-					$this->db->sql_query('DELETE FROM ' . DL_FIELDS_TABLE . ' WHERE field_id = ' . (int) $field_id);
-					$this->db->sql_query('DELETE FROM ' . DL_FIELDS_LANG_TABLE . ' WHERE field_id = ' . (int) $field_id);
-					$this->db->sql_query('DELETE FROM ' . DL_LANG_TABLE . ' WHERE field_id = ' . (int) $field_id);
+					$this->db->sql_query('DELETE FROM ' . $this->dlext_table_dl_fields . ' WHERE field_id = ' . (int) $field_id);
+					$this->db->sql_query('DELETE FROM ' . $this->dlext_table_dl_fields_lang . ' WHERE field_id = ' . (int) $field_id);
+					$this->db->sql_query('DELETE FROM ' . $this->dlext_table_dl_lang . ' WHERE field_id = ' . (int) $field_id);
 
-					$this->db->sql_query('ALTER TABLE ' . DL_FIELDS_DATA_TABLE . " DROP COLUMN pf_$field_ident");
+					$this->db->sql_query('ALTER TABLE ' . $this->dlext_table_dl_fields_data . " DROP COLUMN pf_$field_ident");
 
 					$order = 0;
 
 					$sql = 'SELECT *
-						FROM ' . DL_FIELDS_TABLE . '
+						FROM ' . $this->dlext_table_dl_fields . '
 						ORDER BY field_order';
 					$result = $this->db->sql_query($sql);
 
@@ -208,7 +222,7 @@ class acp_fields_controller implements acp_fields_interface
 
 						if ($row['field_order'] != $order)
 						{
-							$sql = 'UPDATE ' . DL_FIELDS_TABLE . "
+							$sql = 'UPDATE ' . $this->dlext_table_dl_fields . "
 								SET field_order = $order
 								WHERE field_id = {$row['field_id']}";
 							$this->db->sql_query($sql);
@@ -219,16 +233,16 @@ class acp_fields_controller implements acp_fields_interface
 
 					$this->db->sql_transaction('commit');
 
-					$this->phpbb_log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_FIELD_REMOVED', false, [$field_ident]);
+					$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_FIELD_REMOVED', $this->dlext_constants::DL_FALSE, [$field_ident]);
 					trigger_error($this->language->lang('DL_FIELD_REMOVED') . adm_back_link($this->u_action));
 				}
 				else
 				{
-					confirm_box(false, 'DL_FIELD_DELETE', build_hidden_fields([
+					confirm_box($this->dlext_constants::DL_FALSE, 'DL_FIELD_DELETE', build_hidden_fields([
 						'mode'		=> $mode,
 						'action'	=> $action,
 						'field_id'	=> $field_id,
-					]));
+					]), '@oxpus_dlext/dl_confirm_body.html');
 				}
 
 			break;
@@ -253,19 +267,19 @@ class acp_fields_controller implements acp_fields_interface
 					trigger_error($this->language->lang('DEFAULT_LANGUAGE_NOT_FILLED') . adm_back_link($this->u_action), E_USER_WARNING);
 				}
 
-				$sql = 'UPDATE ' . DL_FIELDS_TABLE . '
+				$sql = 'UPDATE ' . $this->dlext_table_dl_fields . '
 					SET field_active = 1
 					WHERE field_id = ' . (int) $field_id;
 				$this->db->sql_query($sql);
 
 				$sql = 'SELECT field_ident
-					FROM ' . DL_FIELDS_TABLE . '
+					FROM ' . $this->dlext_table_dl_fields . '
 					WHERE field_id = ' . (int) $field_id;
 				$result = $this->db->sql_query($sql);
 				$field_ident = (string) $this->db->sql_fetchfield('field_ident');
 				$this->db->sql_freeresult($result);
 
-				$this->phpbb_log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_FIELD_ACTIVATE', false, [$field_ident]);
+				$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_FIELD_ACTIVATE', $this->dlext_constants::DL_FALSE, [$field_ident]);
 				trigger_error($this->language->lang('DL_FIELD_ACTIVATED') . adm_back_link($this->u_action));
 
 			break;
@@ -278,19 +292,19 @@ class acp_fields_controller implements acp_fields_interface
 					trigger_error($this->language->lang('NO_FIELD_ID') . adm_back_link($this->u_action), E_USER_WARNING);
 				}
 
-				$sql = 'UPDATE ' . DL_FIELDS_TABLE . '
+				$sql = 'UPDATE ' . $this->dlext_table_dl_fields . '
 					SET field_active = 0
 					WHERE field_id = ' . (int) $field_id;
 				$this->db->sql_query($sql);
 
 				$sql = 'SELECT field_ident
-					FROM ' . DL_FIELDS_TABLE . '
+					FROM ' . $this->dlext_table_dl_fields . '
 					WHERE field_id = ' . (int) $field_id;
 				$result = $this->db->sql_query($sql);
 				$field_ident = (string) $this->db->sql_fetchfield('field_ident');
 				$this->db->sql_freeresult($result);
 
-				$this->phpbb_log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_FIELD_DEACT', false, [$field_ident]);
+				$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_FIELD_DEACT', $this->dlext_constants::DL_FALSE, [$field_ident]);
 				trigger_error($this->language->lang('DL_FIELD_DEACTIVATED') . adm_back_link($this->u_action));
 
 			break;
@@ -300,9 +314,19 @@ class acp_fields_controller implements acp_fields_interface
 				$field_order = $this->request->variable('order', 0);
 				$order_total = $field_order * 2 + (($action == 'move_up') ? -1 : 1);
 
-				$sql = 'UPDATE ' . DL_FIELDS_TABLE . '
+				$field_order_ary[] = $field_order;
+				if ($action == 'move_up')
+				{
+					$field_order_ary[] = $field_order - 1;
+				}
+				else
+				{
+					$field_order_ary[] = $field_order + 1;
+				}
+
+				$sql = 'UPDATE ' . $this->dlext_table_dl_fields . '
 					SET field_order = ' . (int) $order_total . ' - field_order
-					WHERE field_order IN (' . (int) $field_order . ', ' . (($action == 'move_up') ? (int) $field_order - 1 : (int) $field_order + 1) . ')';
+					WHERE ' . $this->db->sql_in_set('field_order', $field_order_ary);
 				$this->db->sql_query($sql);
 
 			break;
@@ -313,11 +337,11 @@ class acp_fields_controller implements acp_fields_interface
 				$field_id = $this->request->variable('field_id', 0);
 				$step = $this->request->variable('step', 1);
 
-				$req_next = $this->request->variable('next', '', true);
-				$req_prev = $this->request->variable('prev', '', true);
-				$req_save = $this->request->variable('save', '', true);
-				$submit = ($req_next || $req_prev) ? true : false;
-				$save = ($req_save) ? true : false;
+				$req_next = $this->request->variable('next', '', $this->dlext_constants::DL_TRUE);
+				$req_prev = $this->request->variable('prev', '', $this->dlext_constants::DL_TRUE);
+				$req_save = $this->request->variable('save', '', $this->dlext_constants::DL_TRUE);
+				$submit = ($req_next || $req_prev) ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE;
+				$save = ($req_save) ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE;
 
 				// The language id of default language
 				$this->edit_lang_id = $this->lang_defs['iso'][$this->config['default_lang']];
@@ -331,7 +355,7 @@ class acp_fields_controller implements acp_fields_interface
 					}
 
 					$sql = 'SELECT l.*, f.*
-						FROM ' . DL_LANG_TABLE . ' l, ' . DL_FIELDS_TABLE . ' f
+						FROM ' . $this->dlext_table_dl_lang . ' l, ' . $this->dlext_table_dl_fields . ' f
 						WHERE l.lang_id = ' . (int) $this->edit_lang_id . '
 							AND f.field_id = ' . (int) $field_id . '
 							AND l.field_id = f.field_id';
@@ -343,7 +367,7 @@ class acp_fields_controller implements acp_fields_interface
 					{
 						// Some admin changed the default language?
 						$sql = 'SELECT l.*, f.*
-							FROM ' . DL_LANG_TABLE . ' l, ' . DL_FIELDS_TABLE . ' f
+							FROM ' . $this->dlext_table_dl_lang . ' l, ' . $this->dlext_table_dl_fields . ' f
 							WHERE l.lang_id <> ' . (int) $this->edit_lang_id . '
 							AND f.field_id = ' . (int) $field_id . '
 							AND l.field_id = f.field_id';
@@ -362,7 +386,7 @@ class acp_fields_controller implements acp_fields_interface
 
 					// Get language entries
 					$sql = 'SELECT *
-						FROM ' . DL_FIELDS_LANG_TABLE . '
+						FROM ' . $this->dlext_table_dl_fields_lang . '
 						WHERE lang_id = ' . (int) $this->edit_lang_id . '
 							AND field_id = ' . (int) $field_id . '
 						ORDER BY option_id ASC';
@@ -390,9 +414,9 @@ class acp_fields_controller implements acp_fields_interface
 					}
 
 					$field_row = array_merge($default_values[$field_type], [
-						'field_ident'		=> str_replace(' ', '_', utf8_clean_string($this->request->variable('field_ident', '', true))),
+						'field_ident'		=> str_replace(' ', '_', utf8_clean_string($this->request->variable('field_ident', '', $this->dlext_constants::DL_TRUE))),
 						'field_required'	=> 0,
-						'lang_name'			=> $this->request->variable('field_ident', '', true),
+						'lang_name'			=> $this->request->variable('field_ident', '', $this->dlext_constants::DL_TRUE),
 						'lang_explain'		=> '',
 						'lang_default_value'=> '',
 					]);
@@ -421,10 +445,10 @@ class acp_fields_controller implements acp_fields_interface
 					$exclude[1][] = 'lang_options';
 				}
 
-				$cp->vars['field_ident']		= ($action == 'create' && $step == 1) ? $this->request->variable('field_ident', $field_row['field_ident'], true) : $this->request->variable('field_ident', $field_row['field_ident']);
-				$cp->vars['lang_name']			= $this->request->variable('lang_name', $field_row['lang_name'], true);
-				$cp->vars['lang_explain']		= $this->request->variable('lang_explain', $field_row['lang_explain'], true);
-				$cp->vars['lang_default_value']	= $this->request->variable('lang_default_value', $field_row['lang_default_value'], true);
+				$cp->vars['field_ident']		= ($action == 'create' && $step == 1) ? $this->request->variable('field_ident', $field_row['field_ident'], $this->dlext_constants::DL_TRUE) : $this->request->variable('field_ident', $field_row['field_ident']);
+				$cp->vars['lang_name']			= $this->request->variable('lang_name', $field_row['lang_name'], $this->dlext_constants::DL_TRUE);
+				$cp->vars['lang_explain']		= $this->request->variable('lang_explain', $field_row['lang_explain'], $this->dlext_constants::DL_TRUE);
+				$cp->vars['lang_default_value']	= $this->request->variable('lang_default_value', $field_row['lang_default_value'], $this->dlext_constants::DL_TRUE);
 
 				// Visibility Options...
 				$visibility_ary = ['field_required'];
@@ -437,11 +461,11 @@ class acp_fields_controller implements acp_fields_interface
 				// A boolean field expects an array as the lang options
 				if ($field_type == FIELD_BOOL)
 				{
-					$options = $this->request->variable('lang_options', [''], true);
+					$options = $this->request->variable('lang_options', [''], $this->dlext_constants::DL_TRUE);
 				}
 				else
 				{
-					$options = $this->request->variable('lang_options', '', true);
+					$options = $this->request->variable('lang_options', '', $this->dlext_constants::DL_TRUE);
 				}
 
 				// If the user has submitted a form with options (i.e. dropdown field)
@@ -469,13 +493,13 @@ class acp_fields_controller implements acp_fields_interface
 				// step 2
 				foreach ($exclude[2] as $key)
 				{
-					$var = $this->request->variable($key, $field_row[$key], true);
+					$var = $this->request->variable($key, $field_row[$key], $this->dlext_constants::DL_TRUE);
 
 					// Manipulate the intended variables a little bit if needed
 					if ($field_type == FIELD_DROPDOWN && $key == 'field_maxlen')
 					{
 						// Get the number of options if this key is 'field_maxlen'
-						$var = count(explode("\n", $this->request->variable('lang_options', '', true)));
+						$var = count(explode("\n", $this->request->variable('lang_options', '', $this->dlext_constants::DL_TRUE)));
 					}
 					else if ($field_type == FIELD_TEXT && $key == 'field_length')
 					{
@@ -539,7 +563,7 @@ class acp_fields_controller implements acp_fields_interface
 				{
 					// Get language entries
 					$sql = 'SELECT *
-						FROM ' . DL_FIELDS_LANG_TABLE . '
+						FROM ' . $this->dlext_table_dl_fields_lang . '
 						WHERE lang_id <> ' . (int) $this->edit_lang_id . '
 							AND field_id = ' . (int) $field_id . '
 						ORDER BY option_id ASC';
@@ -553,7 +577,7 @@ class acp_fields_controller implements acp_fields_interface
 					$this->db->sql_freeresult($result);
 
 					$sql = 'SELECT lang_id, lang_name, lang_explain, lang_default_value
-						FROM ' . DL_LANG_TABLE . '
+						FROM ' . $this->dlext_table_dl_lang . '
 						WHERE lang_id <> ' . (int) $this->edit_lang_id . '
 							AND field_id = ' . (int) $field_id . '
 						ORDER BY lang_id ASC';
@@ -571,7 +595,7 @@ class acp_fields_controller implements acp_fields_interface
 
 				foreach ($exclude[3] as $key)
 				{
-					$cp->vars[$key] = $this->request->variable($key, [0 => ''], true);
+					$cp->vars[$key] = $this->request->variable($key, [0 => ''], $this->dlext_constants::DL_TRUE);
 
 					if (!$cp->vars[$key] && $action == 'edit')
 					{
@@ -579,7 +603,7 @@ class acp_fields_controller implements acp_fields_interface
 					}
 					else if ($key == 'l_lang_options' && $field_type == FIELD_BOOL)
 					{
-						$cp->vars[$key] = $this->request->variable($key, [0 => ['']], true);
+						$cp->vars[$key] = $this->request->variable($key, [0 => ['']], $this->dlext_constants::DL_TRUE);
 					}
 					else if ($key == 'l_lang_options' && is_array($cp->vars[$key]))
 					{
@@ -629,7 +653,7 @@ class acp_fields_controller implements acp_fields_interface
 					if ($action != 'edit')
 					{
 						$sql = 'SELECT field_ident
-							FROM ' . DL_FIELDS_TABLE . "
+							FROM ' . $this->dlext_table_dl_fields . "
 							WHERE field_ident = '" . $this->db->sql_escape($cp->vars['field_ident']) . "'";
 						$result = $this->db->sql_query($sql);
 						$row = $this->db->sql_fetchrow($result);
@@ -647,7 +671,6 @@ class acp_fields_controller implements acp_fields_interface
 				if (!empty($error))
 				{
 					--$step;
-					$submit = false;
 				}
 
 				// Build up the specific hidden fields
@@ -662,7 +685,7 @@ class acp_fields_controller implements acp_fields_interface
 
 					foreach ($key_ary as $key)
 					{
-						$req_lang_opt = $this->request->variable($key, [['']], true);
+						$req_lang_opt = $this->request->variable($key, [['']], $this->dlext_constants::DL_TRUE);
 						$reg_def_day = $this->request->variable('field_default_value_day', 0);
 
 						if ($field_type == FIELD_TEXT && $key == 'field_length' && $rows)
@@ -689,16 +712,16 @@ class acp_fields_controller implements acp_fields_interface
 						}
 						else if ($field_type == FIELD_BOOL && $key == 'l_lang_options' && is_array($req_lang_opt))
 						{
-							$_new_key_ary[$key] = $this->request->variable($key, [['']], true);
+							$_new_key_ary[$key] = $this->request->variable($key, [['']], $this->dlext_constants::DL_TRUE);
 						}
 						else
 						{
-							$req_key = $this->request->variable($key, '', true);
-							$req_ary = $this->request->variable($key, [''], true);
+							$req_key = $this->request->variable($key, '', $this->dlext_constants::DL_TRUE);
+							$req_ary = $this->request->variable($key, [''], $this->dlext_constants::DL_TRUE);
 
 							if (!$req_key && empty($req_ary))
 							{
-								$var = false;
+								continue;
 							}
 							else if ($key == 'field_ident' && isset($cp->vars[$key]))
 							{
@@ -727,15 +750,15 @@ class acp_fields_controller implements acp_fields_interface
 				}
 
 				$this->template->assign_vars([
-					'S_EDIT'			=> true,
-					'S_EDIT_MODE'		=> ($action == 'edit') ? true : false,
-					'ERROR_MSG'			=> (!empty($error)) ? implode('<br />', $error) : '',
+					'S_DL_EDIT'			=> $this->dlext_constants::DL_TRUE,
+					'S_DL_EDIT_MODE'	=> ($action == 'edit') ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE,
+					'DL_ERROR_MSG'		=> (!empty($error)) ? implode('<br />', $error) : '',
 
-					'L_TITLE'			=> $this->language->lang('DL_FIELDS_STEP' . $step . '_TITLE_' . strtoupper($action)),
-					'L_EXPLAIN'			=> $this->language->lang('DL_FIELDS_STEP' . $step . '_EXPLAIN'),
+					'L_DL_TITLE'		=> $this->language->lang('DL_FIELDS_STEP' . $step . '_TITLE_' . strtoupper($action)),
+					'L_DL_EXPLAIN'		=> $this->language->lang('DL_FIELDS_STEP' . $step . '_EXPLAIN'),
 
-					'U_ACTION'			=> $this->u_action . "&amp;action=$action&amp;step=$step",
-					'U_BACK'			=> $this->u_action,
+					'U_DL_ACTION'		=> $this->u_action . "&amp;action=$action&amp;step=$step",
+					'U_DL_BACK'			=> $this->u_action,
 				]);
 
 				// Now go through the steps
@@ -746,25 +769,25 @@ class acp_fields_controller implements acp_fields_interface
 
 						// Build common create options
 						$this->template->assign_vars([
-							'S_STEP_ONE'		=> true,
-							'S_FIELD_REQUIRED'	=> ($cp->vars['field_required']) ? true : false,
+							'S_DL_STEP_ONE'			=> $this->dlext_constants::DL_TRUE,
+							'S_DL_FIELD_REQUIRED'	=> ($cp->vars['field_required']) ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE,
 
-							'L_LANG_SPECIFIC'	=> $this->language->lang('LANG_SPECIFIC_OPTIONS', $this->config['default_lang']),
-							'FIELD_TYPE'		=> $this->language->lang('FIELD_' . strtoupper($cp->profile_types[$field_type])),
-							'FIELD_IDENT'		=> $cp->vars['field_ident'],
-							'LANG_NAME'			=> $cp->vars['lang_name'],
-							'LANG_EXPLAIN'		=> $cp->vars['lang_explain'],
+							'L_DL_LANG_SPECIFIC'	=> $this->language->lang('LANG_SPECIFIC_OPTIONS', $this->config['default_lang']),
+							'DL_FIELD_TYPE'			=> $this->language->lang('FIELD_' . strtoupper($cp->profile_types[$field_type])),
+							'DL_FIELD_IDENT'		=> $cp->vars['field_ident'],
+							'DL_LANG_NAME'			=> $cp->vars['lang_name'],
+							'DL_LANG_EXPLAIN'		=> $cp->vars['lang_explain'],
 						]);
 
 						// String and Text needs to set default values here...
 						if ($field_type == FIELD_STRING || $field_type == FIELD_TEXT)
 						{
 							$this->template->assign_vars([
-								'S_TEXT'		=> ($field_type == FIELD_TEXT) ? true : false,
-								'S_STRING'		=> ($field_type == FIELD_STRING) ? true : false,
+								'S_DL_TEXT'		=> ($field_type == FIELD_TEXT) ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE,
+								'S_DL_STRING'	=> ($field_type == FIELD_STRING) ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE,
 
-								'L_DEFAULT_VALUE_EXPLAIN'	=> $this->language->lang(strtoupper($cp->profile_types[$field_type]) . '_DEFAULT_VALUE_EXPLAIN'),
-								'LANG_DEFAULT_VALUE'		=> $cp->vars['lang_default_value'],
+								'L_DL_DEFAULT_VALUE_EXPLAIN'	=> $this->language->lang(strtoupper($cp->profile_types[$field_type]) . '_DEFAULT_VALUE_EXPLAIN'),
+								'DL_LANG_DEFAULT_VALUE'			=> $cp->vars['lang_default_value'],
 							]);
 						}
 
@@ -787,13 +810,13 @@ class acp_fields_controller implements acp_fields_interface
 							}
 
 							$this->template->assign_vars([
-								'S_BOOL'		=> ($field_type == FIELD_BOOL) ? true : false,
-								'S_DROPDOWN'	=> ($field_type == FIELD_DROPDOWN) ? true : false,
+								'SDL_BOOL'		=> ($field_type == FIELD_BOOL) ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE,
+								'S_DL_DROPDOWN'	=> ($field_type == FIELD_DROPDOWN) ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE,
 
-								'L_LANG_OPTIONS_EXPLAIN'	=> $this->language->lang(strtoupper($cp->profile_types[$field_type]) . '_ENTRIES_EXPLAIN'),
-								'LANG_OPTIONS'				=> ($field_type == FIELD_DROPDOWN) ? implode("\n", $cp->vars['lang_options']) : '',
-								'FIRST_LANG_OPTION'			=> ($field_type == FIELD_BOOL) ? $cp->vars['lang_options'][0] : '',
-								'SECOND_LANG_OPTION'		=> ($field_type == FIELD_BOOL) ? $cp->vars['lang_options'][1] : '',
+								'L_DL_LANG_OPTIONS_EXPLAIN'	=> $this->language->lang(strtoupper($cp->profile_types[$field_type]) . '_ENTRIES_EXPLAIN'),
+								'DL_LANG_OPTIONS'			=> ($field_type == FIELD_DROPDOWN) ? implode("\n", $cp->vars['lang_options']) : '',
+								'DL_FIRST_LANG_OPTION'		=> ($field_type == FIELD_BOOL) ? $cp->vars['lang_options'][0] : '',
+								'DL_SECOND_LANG_OPTION'		=> ($field_type == FIELD_BOOL) ? $cp->vars['lang_options'][1] : '',
 							]);
 						}
 
@@ -802,8 +825,8 @@ class acp_fields_controller implements acp_fields_interface
 					case 2:
 
 						$this->template->assign_vars([
-							'S_STEP_TWO'		=> true,
-							'L_NEXT_STEP'			=> (count($this->lang_defs['iso']) == 1) ? $this->language->lang('SAVE') : $this->language->lang('PROFILE_LANG_OPTIONS'),
+							'S_DL_STEP_TWO'		=> $this->dlext_constants::DL_TRUE,
+							'L_DL_NEXT_STEP'	=> (count($this->lang_defs['iso']) == 1) ? $this->language->lang('SAVE') : $this->language->lang('PROFILE_LANG_OPTIONS'),
 						]);
 
 						// Build options based on profile type
@@ -812,7 +835,7 @@ class acp_fields_controller implements acp_fields_interface
 
 						foreach ($options as $num => $option_ary)
 						{
-							$this->template->assign_block_vars('option', $option_ary);
+							$this->template->assign_block_vars('dl_option', $option_ary);
 						}
 
 					break;
@@ -820,21 +843,21 @@ class acp_fields_controller implements acp_fields_interface
 					// Define remaining language variables
 					case 3:
 
-						$this->template->assign_var('S_STEP_THREE', true);
+						$this->template->assign_var('S_DL_STEP_THREE', $this->dlext_constants::DL_TRUE);
 						$options = $this->build_language_options($cp, $field_type, $action);
 
 						foreach ($options as $lang_id => $lang_ary)
 						{
 							$this->template->assign_block_vars('options', [
-								'LANGUAGE'		=> $this->language->lang((($lang_id == $this->edit_lang_id) ? 'DEFAULT_' : '') . 'ISO_LANGUAGE', $lang_ary['lang_iso'])
+								'DL_LANGUAGE'		=> $this->language->lang((($lang_id == $this->edit_lang_id) ? 'DEFAULT_' : '') . 'ISO_LANGUAGE', $lang_ary['lang_iso'])
 							]);
 
 							foreach ($lang_ary['fields'] as $field_ident => $field_ary)
 							{
 								$this->template->assign_block_vars('options.field', [
-									'L_TITLE'		=> $field_ary['TITLE'],
-									'L_EXPLAIN'		=> (isset($field_ary['EXPLAIN'])) ? $field_ary['EXPLAIN'] : '',
-									'FIELD'			=> $field_ary['FIELD'],
+									'L_DL_TITLE'		=> $field_ary['TITLE'],
+									'L_DL_EXPLAIN'		=> (isset($field_ary['EXPLAIN'])) ? $field_ary['EXPLAIN'] : '',
+									'DL_FIELD'			=> $field_ary['FIELD'],
 								]);
 							}
 						}
@@ -844,43 +867,43 @@ class acp_fields_controller implements acp_fields_interface
 
 				$s_hidden_fields += ['step' => $step];
 
-				$this->template->assign_vars(['S_HIDDEN_FIELDS'	=> build_hidden_fields($s_hidden_fields)]);
+				$this->template->assign_vars(['S_DL_HIDDEN_FIELDS'	=> build_hidden_fields($s_hidden_fields)]);
 
 			break;
 		}
 
 		$sql = 'SELECT *
-			FROM ' . DL_FIELDS_TABLE . '
+			FROM ' . $this->dlext_table_dl_fields . '
 			ORDER BY field_order';
 		$result = $this->db->sql_query($sql);
 
-		$s_one_need_edit = false;
+		$s_one_need_edit = $this->dlext_constants::DL_FALSE;
 		while ($row = $this->db->sql_fetchrow($result))
 		{
 			$active_lang = (!$row['field_active']) ? 'ACTIVATE' : 'DEACTIVATE';
 			$active_value = (!$row['field_active']) ? 'activate' : 'deactivate';
 			$id = $row['field_id'];
 
-			$s_need_edit = (!empty($this->lang_defs['diff'][$row['field_id']])) ? true : false;
+			$s_need_edit = (!empty($this->lang_defs['diff'][$row['field_id']])) ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE;
 
 			if ($s_need_edit)
 			{
-				$s_one_need_edit = true;
+				$s_one_need_edit = $this->dlext_constants::DL_TRUE;
 			}
 
 			$this->template->assign_block_vars('fields', [
-				'FIELD_IDENT'		=> $row['field_ident'],
-				'FIELD_TYPE'		=> $this->language->lang('FIELD_' . strtoupper($cp->profile_types[$row['field_type']])),
+				'DL_FIELD_IDENT'		=> $row['field_ident'],
+				'DL_FIELD_TYPE'			=> $this->language->lang('FIELD_' . strtoupper($cp->profile_types[$row['field_type']])),
 
-				'L_ACTIVATE_DEACTIVATE'		=> $this->language->lang($active_lang),
-				'U_ACTIVATE_DEACTIVATE'		=> $this->u_action . "&amp;action=$active_value&amp;field_id=$id",
-				'U_EDIT'					=> $this->u_action . "&amp;action=edit&amp;field_id=$id",
-				'U_TRANSLATE'				=> $this->u_action . "&amp;action=edit&amp;field_id=$id&amp;step=3",
-				'U_DELETE'					=> $this->u_action . "&amp;action=delete&amp;field_id=$id",
-				'U_MOVE_UP'					=> $this->u_action . "&amp;action=move_up&amp;order={$row['field_order']}",
-				'U_MOVE_DOWN'				=> $this->u_action . "&amp;action=move_down&amp;order={$row['field_order']}",
+				'L_DL_ACTIVATE_DEACTIVATE'		=> $this->language->lang($active_lang),
+				'U_DL_ACTIVATE_DEACTIVATE'		=> $this->u_action . "&amp;action=$active_value&amp;field_id=$id",
+				'U_DL_EDIT'						=> $this->u_action . "&amp;action=edit&amp;field_id=$id",
+				'U_DL_TRANSLATE'				=> $this->u_action . "&amp;action=edit&amp;field_id=$id&amp;step=3",
+				'U_DL_DELETE'					=> $this->u_action . "&amp;action=delete&amp;field_id=$id",
+				'U_DL_MOVE_UP'					=> $this->u_action . "&amp;action=move_up&amp;order={$row['field_order']}",
+				'U_DL_MOVE_DOWN'				=> $this->u_action . "&amp;action=move_down&amp;order={$row['field_order']}",
 
-				'S_NEED_EDIT'				=> $s_need_edit,
+				'S_DL_NEED_EDIT'				=> $s_need_edit,
 			]);
 		}
 		$this->db->sql_freeresult($result);
@@ -888,7 +911,7 @@ class acp_fields_controller implements acp_fields_interface
 		// At least one option field needs editing?
 		if ($s_one_need_edit)
 		{
-			$this->template->assign_var('S_NEED_EDIT', true);
+			$this->template->assign_var('S_DL_NEED_EDIT', $this->dlext_constants::DL_TRUE);
 		}
 
 		$s_select_type = '';
@@ -898,8 +921,8 @@ class acp_fields_controller implements acp_fields_interface
 		}
 
 		$this->template->assign_vars([
-			'U_ACTION'			=> $this->u_action,
-			'S_TYPE_OPTIONS'	=> $s_select_type,
+			'U_DL_ACTION'		=> $this->u_action,
+			'S_DL_TYPE_OPTIONS'	=> $s_select_type,
 		]);
 	}
 
@@ -971,7 +994,7 @@ class acp_fields_controller implements acp_fields_interface
 			$lang_options[$lang_id]['lang_iso'] = $lang_iso;
 			foreach ($options as $field => $field_type)
 			{
-				$value = ($action == 'create') ? utf8_normalize_nfc($this->request->variable('l_' . $field, [0 => ''], true)) : $cp->vars['l_' . $field];
+				$value = ($action == 'create') ? $this->request->variable('l_' . $field, [0 => ''], $this->dlext_constants::DL_TRUE) : $cp->vars['l_' . $field];
 				if ($field == 'lang_options')
 				{
 					$var = (!isset($cp->vars['l_lang_options'][$lang_id]) || !is_array($cp->vars['l_lang_options'][$lang_id])) ? $cp->vars['lang_options'] : $cp->vars['l_lang_options'][$lang_id];
@@ -1038,7 +1061,7 @@ class acp_fields_controller implements acp_fields_interface
 		if ($action == 'create')
 		{
 			$sql = 'SELECT MAX(field_order) as max_field_order
-				FROM ' . DL_FIELDS_TABLE;
+				FROM ' . $this->dlext_table_dl_fields;
 			$result = $this->db->sql_query($sql);
 			$new_field_order = (int) $this->db->sql_fetchfield('max_field_order');
 			$this->db->sql_freeresult($result);
@@ -1067,14 +1090,14 @@ class acp_fields_controller implements acp_fields_interface
 				'field_active'		=> 1
 			];
 
-			$sql = 'INSERT INTO ' . DL_FIELDS_TABLE . ' ' . $this->db->sql_build_array('INSERT', $profile_fields);
+			$sql = 'INSERT INTO ' . $this->dlext_table_dl_fields . ' ' . $this->db->sql_build_array('INSERT', $profile_fields);
 			$this->db->sql_query($sql);
 
 			$field_id = $this->db->sql_nextid();
 		}
 		else
 		{
-			$sql = 'UPDATE ' . DL_FIELDS_TABLE . '
+			$sql = 'UPDATE ' . $this->dlext_table_dl_fields . '
 				SET ' . $this->db->sql_build_array('UPDATE', $profile_fields) . '
 				WHERE field_id = ' . (int) $field_id;
 			$this->db->sql_query($sql);
@@ -1097,11 +1120,11 @@ class acp_fields_controller implements acp_fields_interface
 			$sql_ary['field_id'] = $field_id;
 			$sql_ary['lang_id'] = $default_lang_id;
 
-			$profile_sql[] = 'INSERT INTO ' . DL_LANG_TABLE . ' ' . $this->db->sql_build_array('INSERT', $sql_ary);
+			$profile_sql[] = 'INSERT INTO ' . $this->dlext_table_dl_lang . ' ' . $this->db->sql_build_array('INSERT', $sql_ary);
 		}
 		else
 		{
-			$this->update_insert(DL_LANG_TABLE, $sql_ary, ['field_id' => $field_id, 'lang_id' => $default_lang_id]);
+			$this->update_insert($this->dlext_table_dl_lang, $sql_ary, ['field_id' => $field_id, 'lang_id' => $default_lang_id]);
 		}
 
 		if (is_array($cp->vars['l_lang_name']) && !empty($cp->vars['l_lang_name']))
@@ -1112,7 +1135,7 @@ class acp_fields_controller implements acp_fields_interface
 					|| ($cp->vars['lang_explain'] != '' && $cp->vars['l_lang_explain'][$lang_id] == '')
 					|| ($cp->vars['lang_default_value'] != '' && $cp->vars['l_lang_default_value'][$lang_id] == ''))
 				{
-					$empty_lang[$lang_id] = true;
+					$empty_lang[$lang_id] = $this->dlext_constants::DL_TRUE;
 					break;
 				}
 
@@ -1130,7 +1153,7 @@ class acp_fields_controller implements acp_fields_interface
 
 			foreach ($empty_lang as $lang_id => $NULL)
 			{
-				$sql = 'DELETE FROM ' . DL_LANG_TABLE . '
+				$sql = 'DELETE FROM ' . $this->dlext_table_dl_lang . '
 					WHERE field_id = ' . (int) $field_id . '
 					AND lang_id = ' . (int) $lang_id;
 				$this->db->sql_query($sql);
@@ -1138,17 +1161,17 @@ class acp_fields_controller implements acp_fields_interface
 		}
 
 		// These are always arrays because the key is the language id...
-		$cp->vars['l_lang_name']			= utf8_normalize_nfc($this->request->variable('l_lang_name', [0 => ''], true));
-		$cp->vars['l_lang_explain']			= utf8_normalize_nfc($this->request->variable('l_lang_explain', [0 => ''], true));
-		$cp->vars['l_lang_default_value']	= utf8_normalize_nfc($this->request->variable('l_lang_default_value', [0 => ''], true));
+		$cp->vars['l_lang_name']			= $this->request->variable('l_lang_name', [0 => ''], $this->dlext_constants::DL_TRUE);
+		$cp->vars['l_lang_explain']			= $this->request->variable('l_lang_explain', [0 => ''], $this->dlext_constants::DL_TRUE);
+		$cp->vars['l_lang_default_value']	= $this->request->variable('l_lang_default_value', [0 => ''], $this->dlext_constants::DL_TRUE);
 
 		if ($field_type != FIELD_BOOL)
 		{
-			$cp->vars['l_lang_options']			= utf8_normalize_nfc($this->request->variable('l_lang_options', [0 => ''], true));
+			$cp->vars['l_lang_options']		= $this->request->variable('l_lang_options', [0 => ''], $this->dlext_constants::DL_TRUE);
 		}
 		else
 		{
-			$cp->vars['l_lang_options']	= utf8_normalize_nfc($this->request->variable('l_lang_options', [0 => ['']], true));
+			$cp->vars['l_lang_options']		= $this->request->variable('l_lang_options', [0 => ['']], $this->dlext_constants::DL_TRUE);
 		}
 
 		if ($cp->vars['lang_options'])
@@ -1160,7 +1183,7 @@ class acp_fields_controller implements acp_fields_interface
 
 			if ($action != 'create')
 			{
-				$sql = 'DELETE FROM ' . DL_FIELDS_LANG_TABLE . '
+				$sql = 'DELETE FROM ' . $this->dlext_table_dl_fields_lang . '
 					WHERE field_id = ' . (int) $field_id . '
 						AND lang_id = ' . (int) $default_lang_id;
 				$this->db->sql_query($sql);
@@ -1179,11 +1202,11 @@ class acp_fields_controller implements acp_fields_interface
 					$sql_ary['lang_id'] = $default_lang_id;
 					$sql_ary['option_id'] = (int) $option_id;
 
-					$profile_sql[] = 'INSERT INTO ' . DL_FIELDS_LANG_TABLE . ' ' . $this->db->sql_build_array('INSERT', $sql_ary);
+					$profile_sql[] = 'INSERT INTO ' . $this->dlext_table_dl_fields_lang . ' ' . $this->db->sql_build_array('INSERT', $sql_ary);
 				}
 				else
 				{
-					$this->update_insert(DL_FIELDS_LANG_TABLE, $sql_ary, [
+					$this->update_insert($this->dlext_table_dl_fields_lang, $sql_ary, [
 						'field_id'	=> $field_id,
 						'lang_id'	=> (int) $default_lang_id,
 						'option_id'	=> (int) $option_id,
@@ -1205,14 +1228,14 @@ class acp_fields_controller implements acp_fields_interface
 
 				if (count($lang_ary) != count($cp->vars['lang_options']))
 				{
-					$empty_lang[$lang_id] = true;
+					$empty_lang[$lang_id] = $this->dlext_constants::DL_TRUE;
 				}
 
 				if (!isset($empty_lang[$lang_id]))
 				{
 					if ($action != 'create')
 					{
-						$sql = 'DELETE FROM ' . DL_FIELDS_LANG_TABLE . '
+						$sql = 'DELETE FROM ' . $this->dlext_table_dl_fields_lang . '
 							WHERE field_id = ' . (int) $field_id . '
 							AND lang_id = ' . (int) $lang_id;
 						$this->db->sql_query($sql);
@@ -1233,7 +1256,7 @@ class acp_fields_controller implements acp_fields_interface
 
 			foreach ($empty_lang as $lang_id => $NULL)
 			{
-				$sql = 'DELETE FROM ' . DL_FIELDS_LANG_TABLE . '
+				$sql = 'DELETE FROM ' . $this->dlext_table_dl_fields_lang . '
 					WHERE field_id = ' . (int) $field_id . '
 					AND lang_id = ' . (int) $lang_id;
 				$this->db->sql_query($sql);
@@ -1244,14 +1267,14 @@ class acp_fields_controller implements acp_fields_interface
 		{
 			if ($action == 'create')
 			{
-				$profile_sql[] = 'INSERT INTO ' . DL_LANG_TABLE . ' ' . $this->db->sql_build_array('INSERT', $sql);
+				$profile_sql[] = 'INSERT INTO ' . $this->dlext_table_dl_lang . ' ' . $this->db->sql_build_array('INSERT', $sql);
 			}
 			else
 			{
 				$lang_id = $sql['lang_id'];
 				unset($sql['lang_id'], $sql['field_id']);
 
-				$this->update_insert(DL_LANG_TABLE, $sql, ['lang_id' => (int) $lang_id, 'field_id' => $field_id]);
+				$this->update_insert($this->dlext_table_dl_lang, $sql, ['lang_id' => (int) $lang_id, 'field_id' => $field_id]);
 			}
 		}
 
@@ -1261,7 +1284,7 @@ class acp_fields_controller implements acp_fields_interface
 			{
 				if ($action == 'create')
 				{
-					$profile_sql[] = 'INSERT INTO ' . DL_FIELDS_LANG_TABLE . ' ' . $this->db->sql_build_array('INSERT', $sql);
+					$profile_sql[] = 'INSERT INTO ' . $this->dlext_table_dl_fields_lang . ' ' . $this->db->sql_build_array('INSERT', $sql);
 				}
 				else
 				{
@@ -1269,7 +1292,7 @@ class acp_fields_controller implements acp_fields_interface
 					$option_id = $sql['option_id'];
 					unset($sql['lang_id'], $sql['field_id'], $sql['option_id']);
 
-					$this->update_insert(DL_FIELDS_LANG_TABLE, $sql, [
+					$this->update_insert($this->dlext_table_dl_fields_lang, $sql, [
 						'lang_id'	=> $lang_id,
 						'field_id'	=> $field_id,
 						'option_id'	=> $option_id,
@@ -1292,12 +1315,12 @@ class acp_fields_controller implements acp_fields_interface
 
 		if ($action == 'edit')
 		{
-			$this->phpbb_log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_FIELD_EDIT', false, [$cp->vars['field_ident'] . ':' . $cp->vars['lang_name']]);
+			$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_FIELD_EDIT', $this->dlext_constants::DL_FALSE, [$cp->vars['field_ident'] . ':' . $cp->vars['lang_name']]);
 			trigger_error($this->language->lang('DL_FIELD_CHANGED') . adm_back_link($this->u_action));
 		}
 		else
 		{
-			$this->phpbb_log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_FIELD_CREATE', false, [substr($field_ident, 3) . ':' . $cp->vars['lang_name']]);
+			$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_FIELD_CREATE', $this->dlext_constants::DL_FALSE, [substr($field_ident, 3) . ':' . $cp->vars['lang_name']]);
 			trigger_error($this->language->lang('DL_FIELD_ADDED') . adm_back_link($this->u_action));
 		}
 	}
@@ -1365,7 +1388,7 @@ class acp_fields_controller implements acp_fields_interface
 			case 'phpbb\\db\\driver\\mysqli':
 
 				// We are defining the biggest common value, because of the possibility to edit the min/max values of each field.
-				$sql = 'ALTER TABLE ' . DL_FIELDS_DATA_TABLE . " ADD $field_ident ";
+				$sql = 'ALTER TABLE ' . $this->dlext_table_dl_fields_data . " ADD $field_ident ";
 
 				switch ($field_type)
 				{
@@ -1427,7 +1450,7 @@ class acp_fields_controller implements acp_fields_interface
 				}
 
 				// We are defining the biggest common value, because of the possibility to edit the min/max values of each field.
-				$sql = 'ALTER TABLE ' . DL_FIELDS_DATA_TABLE . " ADD $field_ident [$type]";
+				$sql = 'ALTER TABLE ' . $this->dlext_table_dl_fields_data . " ADD $field_ident [$type]";
 
 			break;
 
@@ -1436,7 +1459,7 @@ class acp_fields_controller implements acp_fields_interface
 			case 'phpbb\\db\\driver\\mssqlnative':
 
 				// We are defining the biggest common value, because of the possibility to edit the min/max values of each field.
-				$sql = 'ALTER TABLE [' . DL_FIELDS_DATA_TABLE . '] ADD [\'' . $field_ident . '\'] ';
+				$sql = 'ALTER TABLE [' . $this->dlext_table_dl_fields_data . '] ADD [\'' . $field_ident . '\'] ';
 
 				switch ($field_type)
 				{
@@ -1467,7 +1490,7 @@ class acp_fields_controller implements acp_fields_interface
 			case 'phpbb\\db\\driver\\postgres':
 
 				// We are defining the biggest common value, because of the possibility to edit the min/max values of each field.
-				$sql = 'ALTER TABLE ' . DL_FIELDS_DATA_TABLE . ' ADD COLUMN "$field_ident" ';
+				$sql = 'ALTER TABLE ' . $this->dlext_table_dl_fields_data . ' ADD COLUMN "$field_ident" ';
 
 				switch ($field_type)
 				{
@@ -1501,7 +1524,7 @@ class acp_fields_controller implements acp_fields_interface
 			case 'phpbb\\db\\driver\\oracle':
 
 				// We are defining the biggest common value, because of the possibility to edit the min/max values of each field.
-				$sql = 'ALTER TABLE ' . DL_FIELDS_DATA_TABLE . ' ADD ' . $field_ident . ' ';
+				$sql = 'ALTER TABLE ' . $this->dlext_table_dl_fields_data . ' ADD ' . $field_ident . ' ';
 
 				switch ($field_type)
 				{

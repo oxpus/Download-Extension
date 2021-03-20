@@ -4,15 +4,30 @@
 
 <p>{{ lang('DL_CAT_EDIT_EXPLAIN') }}</p>
 
-<div>{{ U_CAT_NAV }}</div>
-
-{% if S_IDX_TYPE %}
+{% if S_DL_IDX_TYPE %}
 <fieldset class="quick">
-	<a href="{{ U_IDX_ACTION }}{% if S_IDX_TYPE == 'c' %}f{% else %}c{% endif %}" alt="" title="">{% if S_IDX_TYPE == 'c' %}{{ lang('DL_ACP_IDX_TYPE_F') }}{% else %}{{ lang('DL_ACP_IDX_TYPE_C') }}{% endif %}</a>
+	<a href="{{ U_DL_IDX_ACTION }}{% if S_DL_IDX_TYPE == 'c' %}f{% else %}c{% endif %}" alt="" title="">
+		{% if S_DL_IDX_TYPE == 'c' %}
+		{{ lang('DL_ACP_IDX_TYPE_F') }}
+		{% else %}
+		{{ lang('DL_ACP_IDX_TYPE_C') }}
+		{% endif %}
+	</a>
 </fieldset>
 {% endif %}
 
-<form action="{{ S_CATEGORY_ACTION }}" method="post" id="dl_cat">
+{% if S_DL_CAT_PATH %}
+<fieldset>
+	<strong>
+	{% for dl_acp_cat_navi in loops.dl_acp_cat_navi %}
+	<a href="{{ dl_acp_cat_navi.DL_LINK }}">{{ dl_acp_cat_navi.DL_NAME }}</a>{% if not dl_acp_cat_navi.S_LAST_ROW %} &laquo; {% endif %}
+	{% endfor %}
+	</strong>
+</fieldset>
+<div>{{ U_DL_CAT_NAV }}</div>
+{% endif %}
+
+<form action="{{ S_DL_CATEGORY_ACTION }}" method="post" id="dl_cat">
 
 <table width="100%" cellpadding="3" cellspacing="1" class="table1">
 <thead>
@@ -24,45 +39,65 @@
 <tbody>
 {% for categories in loops.categories %}
 <tr valign="top" class="row1">
-	<td class="dl-width-30p"><img src="{{ categories.CAT_FOLDER }}" alt="{{ categories.CAT_NAME }}" title="{{ categories.CAT_NAME }}" /></td>
-	<td class="dl-width-50 list-inner"><div class="forumtitle">{% if categories.CAT_ICON %}<img src="{{ categories.CAT_ICON }}" alt="{{ categories.CAT_NAME }}" title="{{ categories.CAT_NAME }}" />&nbsp;{% endif %}
-		{% if categories.U_CAT_OPEN %}<a href="{{ categories.U_CAT_OPEN }}" title="">{% endif %}<strong>{{ categories.CAT_NAME }}</strong>{% if categories.U_CAT_OPEN %}</a>{% endif %}</div>{% if categories.CAT_DESCRIPTION %}<br /><span class="small">{{ categories.CAT_DESCRIPTION }}</span>{% endif %}</td>
+	<td class="dl-width-30p">
+		<img src="{{ categories.DL_CAT_FOLDER }}" alt="{{ categories.DL_CAT_NAME }}" title="{{ categories.DL_CAT_NAME }}" />
+	</td>
+	<td class="dl-width-50 list-inner">
+		<div class="forumtitle">
+			{% if categories.DL_CAT_ICON %}
+			<img src="{{ categories.DL_CAT_ICON }}" alt="{{ categories.DL_CAT_NAME }}" title="{{ categories.DL_CAT_NAME }}" />
+			{% endif %}
+			{% if categories.U_DL_CAT_OPEN %}
+			<a href="{{ categories.U_DL_CAT_OPEN }}" title="">
+			{% endif %}
+			<strong>{{ categories.DL_CAT_NAME }}</strong>
+			{% if categories.U_DL_CAT_OPEN %}
+			</a>
+			{% endif %}
+		</div>
+		{% if categories.DL_CAT_DESCRIPTION %}
+		<br />
+		<span class="small">
+			{{ categories.DL_CAT_DESCRIPTION }}
+		</span>
+		{% endif %}
+	</td>
 	<td class="dl-width-10 dl-text-center">
 		{% if categories.S_FIRST_ROW && not categories.S_LAST_ROW %}
 		{{ ICON_MOVE_UP_DISABLED }}
-		<a href="{{ categories.U_CATEGORY_MOVE_DOWN }}">{{ ICON_MOVE_DOWN }}</a>
+		<a href="{{ categories.U_DL_CATEGORY_MOVE_DOWN }}">{{ ICON_MOVE_DOWN }}</a>
 		{% elseif not categories.S_FIRST_ROW && not categories.S_LAST_ROW%}
-		<a href="{{ categories.U_CATEGORY_MOVE_UP }}">{{ ICON_MOVE_UP }}</a>
-		<a href="{{ categories.U_CATEGORY_MOVE_DOWN }}">{{ ICON_MOVE_DOWN }}</a>
+		<a href="{{ categories.U_DL_CATEGORY_MOVE_UP }}">{{ ICON_MOVE_UP }}</a>
+		<a href="{{ categories.U_DL_CATEGORY_MOVE_DOWN }}">{{ ICON_MOVE_DOWN }}</a>
 		{% elseif categories.S_LAST_ROW && not categories.S_FIRST_ROW %}
-		<a href="{{ categories.U_CATEGORY_MOVE_UP }}">{{ ICON_MOVE_UP }}</a>
+		<a href="{{ categories.U_DL_CATEGORY_MOVE_UP }}">{{ ICON_MOVE_UP }}</a>
 		{{ ICON_MOVE_DOWN_DISABLED }}
 		{% else %}
 		{{ ICON_MOVE_UP_DISABLED }}
 		{{ ICON_MOVE_DOWN_DISABLED }}
 		{% endif %}
-		<a href="{{ categories.U_CAT_EDIT }}">{{ ICON_EDIT }}</a>
-		{% if categories.U_CAT_DELETE %}
-			<a href="{{ categories.U_CAT_DELETE }}">{{ ICON_DELETE }}</a>
+		<a href="{{ categories.U_DL_CAT_EDIT }}">{{ ICON_EDIT }}</a>
+		{% if categories.U_DL_CAT_DELETE %}
+			<a href="{{ categories.U_DL_CAT_DELETE }}">{{ ICON_DELETE }}</a>
 		{% else %}
 			{{ ICON_DELETE_DISABLED }}
 		{% endif %}
 	</td>
 	<td>
-		{% if categories.L_DELETE_STATS %}&nbsp;&bull;&nbsp;<a href="{{ categories.U_DELETE_STATS }}">{{ categories.L_DELETE_STATS }}</a> {% endif %}
-		{% if categories.L_DELETE_COMMENTS %}&nbsp;&bull;&nbsp;<a href="{{ categories.U_DELETE_COMMENTS }}">{{ categories.L_DELETE_COMMENTS }}</a>{% endif %}
-		{% if categories.L_SORT_ASC %}{% if categories.L_DELETE_STATS or categories.L_DELETE_COMMENTS %}<br />{% endif %}&nbsp;&bull;&nbsp;<a href="{{ categories.U_CATEGORY_ASC_SORT }}">{{ categories.L_SORT_ASC }}</a> {% endif %}
-	&nbsp;</td>
+		{% if categories.L_DL_DELETE_STATS %}&nbsp;&bull;&nbsp;<a href="{{ categories.U_DL_DELETE_STATS }}">{{ categories.L_DL_DELETE_STATS }}</a> {% endif %}
+		{% if categories.L_DL_DELETE_COMMENTS %}&nbsp;&bull;&nbsp;<a href="{{ categories.U_DL_DELETE_COMMENTS }}">{{ categories.L_DL_DELETE_COMMENTS }}</a>{% endif %}
+		{% if categories.L_DL_SORT_ASC %}{% if categories.L_DELETE_STATS or categories.L_DL_DELETE_COMMENTS %}<br />{% endif %}&nbsp;&bull;&nbsp;<a href="{{ categories.U_DL_CATEGORY_ASC_SORT }}">{{ categories.L_DL_SORT_ASC }}</a> {% endif %}
+	</td>
 </tr>
 {% endfor %}
 </tbody>
 </table>
 
-{% if S_SORT_MAIN or S_TOTAL_STATS or S_TOTAL_COMMENTS %}
+{% if S_DL_SORT_MAIN or S_DL_TOTAL_STATS or S_DL_TOTAL_COMMENTS %}
 <fieldset>
-	{% if S_SORT_MAIN %}<a href="{{ U_SORT_LEVEL_ZERO }}" class="button2">{{ lang('DL_SUB_SORT_ASC_ZERO') }}</a>{% endif %}
-	{% if S_TOTAL_STATS %}<a href="{{ U_DELETE_STATS_ALL }}" class="button2">{{ lang('DELETE_STATS_ALL') }}</a>{% endif %}
-	{% if S_TOTAL_COMMENTS %}<a href="{{ U_DELETE_COMMENTS_ALL }}" class="button2">{{ lang('DELETE_COMMENTS_ALL') }}</a>{% endif %}
+	{% if S_DL_SORT_MAIN %}<a href="{{ U_DL_SORT_LEVEL_ZERO }}" class="button2">{{ lang('DL_SUB_SORT_ASC_ZERO') }}</a>{% endif %}
+	{% if S_DL_TOTAL_STATS %}<a href="{{ U_DL_DELETE_STATS_ALL }}" class="button2">{{ lang('DL_STATS_DELETE_ALL') }}</a>{% endif %}
+	{% if S_DL_TOTAL_COMMENTS %}<a href="{{ U_DL_DELETE_COMMENTS_ALL }}" class="button2">{{ lang('DL_COMMENTS_DELETE_ALL') }}</a>{% endif %}
 </fieldset>
 {% endif %}
 

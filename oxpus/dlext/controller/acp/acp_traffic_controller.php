@@ -3,84 +3,81 @@
 /**
 *
 * @package phpBB Extension - Oxpus Downloads
-* @copyright (c) 2002-2020 OXPUS - www.oxpus.net
+* @copyright (c) 2002-2021 OXPUS - www.oxpus.net
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
 */
 
 namespace oxpus\dlext\controller\acp;
 
-use Symfony\Component\DependencyInjection\Container;
-
 /**
 * @package acp
 */
 class acp_traffic_controller implements acp_traffic_interface
 {
-	public $u_action;
-	public $db;
-	public $user;
-	public $auth;
-	public $phpEx;
-	public $phpbb_extension_manager;
-	public $phpbb_container;
-	public $phpbb_path_helper;
-	public $phpbb_log;
+	/* phpbb objects */
+	protected $db;
+	protected $user;
+	protected $phpEx;
+	protected $root_path;
+	protected $log;
+	protected $cache;
+	protected $config;
+	protected $language;
+	protected $request;
+	protected $template;
 
-	public $config;
-	public $helper;
-	public $language;
-	public $request;
-	public $template;
+	/* extension owned objects */
+	protected $u_action;
 
-	protected $ext_path;
-	protected $ext_path_web;
-	protected $ext_path_ajax;
+	protected $dlext_format;
+	protected $dlext_constants;
 
-	protected $dlext_init;
-
-	/*
+	/**
+	 * Constructor
+	 *
+	 * @param string								$root_path
 	 * @param string								$phpEx
-	 * @param Container 							$phpbb_container
-	 * @param \phpbb\extension\manager				$phpbb_extension_manager
-	 * @param \phpbb\path_helper					$phpbb_path_helper
-	 * @param \phpbb\db\driver\driver_interfacer	$db
+	 * @param \phpbb\config\config					$config
+	 * @param \phpbb\language\language				$language
+	 * @param \phpbb\request\request 				$request
+	 * @param \phpbb\template\template				$template
+	 * @param \phpbb\db\driver\driver_interface		$db
 	 * @param \phpbb\log\log_interface 				$log
-	 * @param \phpbb\auth\auth						$auth
+	 * @param \phpbb\cache\service					$cache
 	 * @param \phpbb\user							$user
+	 * @param \oxpus\dlext\core\format				$dlext_format
+	 * @param \oxpus\dlext\core\helpers\constants	$dlext_constants
 	 */
 	public function __construct(
+		$root_path,
 		$phpEx,
-		Container $phpbb_container,
-		\phpbb\extension\manager $phpbb_extension_manager,
-		\phpbb\path_helper $phpbb_path_helper,
+		\phpbb\config\config $config,
+		\phpbb\language\language $language,
+		\phpbb\request\request $request,
+		\phpbb\template\template $template,
 		\phpbb\db\driver\driver_interface $db,
 		\phpbb\log\log_interface $log,
-		\phpbb\auth\auth $auth,
+		\phpbb\cache\service $cache,
 		\phpbb\user $user,
-		$dlext_init
+		\oxpus\dlext\core\format $dlext_format,
+		\oxpus\dlext\core\helpers\constants $dlext_constants
 	)
 	{
+		$this->root_path				= $root_path;
 		$this->phpEx					= $phpEx;
-		$this->phpbb_container			= $phpbb_container;
-		$this->phpbb_extension_manager	= $phpbb_extension_manager;
-		$this->phpbb_path_helper		= $phpbb_path_helper;
 		$this->db						= $db;
-		$this->phpbb_log				= $log;
-		$this->auth						= $auth;
+		$this->log						= $log;
+		$this->cache					= $cache;
 		$this->user						= $user;
 
-		$this->config					= $this->phpbb_container->get('config');
-		$this->helper					= $this->phpbb_container->get('controller.helper');
-		$this->language					= $this->phpbb_container->get('language');
-		$this->request					= $this->phpbb_container->get('request');
-		$this->template					= $this->phpbb_container->get('template');
+		$this->config					= $config;
+		$this->language					= $language;
+		$this->request					= $request;
+		$this->template					= $template;
 
-		$this->ext_path					= $this->phpbb_extension_manager->get_extension_path('oxpus/dlext', true);
-		$this->ext_path_web				= $this->phpbb_path_helper->update_web_root_path($this->ext_path);
-		$this->ext_path_ajax			= $this->ext_path_web . 'assets/javascript/';
-
-		$this->dlext_init				= $dlext_init;
+		$this->dlext_format				= $dlext_format;
+		$this->dlext_constants			= $dlext_constants;
 	}
 
 	public function set_action($u_action)
@@ -90,13 +87,22 @@ class acp_traffic_controller implements acp_traffic_interface
 
 	public function handle()
 	{
-		$this->auth->acl($this->user->data);
-		if (!$this->auth->acl_get('a_dl_traffic'))
-		{
-			trigger_error('DL_NO_PERMISSION', E_USER_WARNING);
-		}
+		$submit				= $this->request->variable('submit', '');
+		$action				= $this->request->variable('action', '');
+		$func				= $this->request->variable('func', '');
 
-		include_once($this->ext_path . 'phpbb/includes/acm_init.' . $this->phpEx);
+		$traffic_range		= $this->request->variable('traffic_range', '');
+		$user_auto_traffic	= $this->request->variable('user_dl_auto_traffic', 0);
+		$group_traffic_ary	= $this->request->variable('group_dl_auto_traffic', [0]);
+		$data_group_range	= $this->request->variable('data_group_range', ['']);
+		$data_user_range	= $this->request->variable('data_user_range', '');
+
+		$user_traffic		= $this->request->variable('user_traffic', 0);
+		$all_traffic		= $this->request->variable('all_traffic', 0);
+		$group_traffic		= $this->request->variable('group_traffic', 0);
+		$username			= $this->request->variable('username', '', $this->dlext_constants::DL_TRUE);
+		$group_id			= $this->request->variable('g', 0);
+		$user_id			= $this->request->variable('user_id', 0);
 
 		if ($submit)
 		{
@@ -109,23 +115,7 @@ class acp_traffic_controller implements acp_traffic_interface
 			{
 				case 'single':
 
-					switch ($x)
-					{
-						case 'B':
-							$traffic_bytes = $user_traffic;
-						break;
-						case 'KB':
-							$traffic_bytes = floor($user_traffic * 1024);
-						break;
-						case 'MB':
-							$traffic_bytes = floor($user_traffic * 1048576);
-						break;
-						case 'GB':
-							$traffic_bytes = floor($user_traffic * 1073741824);
-						break;
-						default:
-							$traffic_bytes = 0;
-					}
+					$traffic_bytes = $this->dlext_format->get_traffic_save_value($user_traffic, $traffic_range);
 
 					if ($traffic_bytes)
 					{
@@ -148,13 +138,13 @@ class acp_traffic_controller implements acp_traffic_interface
 						{
 							$user_traffic += $traffic_bytes;
 
-							$this->phpbb_log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_USER_TR_ADD', false, [$username, $user_traffic, $x]);
+							$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_USER_TR_ADD', $this->dlext_constants::DL_FALSE, [$username, $user_traffic, $traffic_range]);
 						}
 						else
 						{
 							$user_traffic = $traffic_bytes;
 
-							$this->phpbb_log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_USER_TR_SET', false, [$username, $user_traffic, $x]);
+							$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_USER_TR_SET', $this->dlext_constants::DL_FALSE, [$username, $user_traffic, $traffic_range]);
 						}
 
 						$sql = 'UPDATE ' . USERS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', [
@@ -170,23 +160,7 @@ class acp_traffic_controller implements acp_traffic_interface
 
 				case 'all':
 
-					switch ($y)
-					{
-						case 'B':
-							$traffic_bytes = $all_traffic;
-						break;
-						case 'KB':
-							$traffic_bytes = floor($all_traffic * 1024);
-						break;
-						case 'MB':
-							$traffic_bytes = floor($all_traffic * 1048576);
-						break;
-						case 'GB':
-							$traffic_bytes = floor($all_traffic * 1073741824);
-						break;
-						default:
-							$traffic_bytes = 0;
-					}
+					$traffic_bytes = $this->dlext_format->get_traffic_save_value($all_traffic, $traffic_range);
 
 					if ($traffic_bytes)
 					{
@@ -208,7 +182,7 @@ class acp_traffic_controller implements acp_traffic_interface
 
 							$this->db->sql_freeresult($result);
 
-							$this->phpbb_log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_ALL_TR_ADD', false, [$all_traffic, $y]);
+							$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_ALL_TR_ADD', $this->dlext_constants::DL_FALSE, [$all_traffic, $traffic_range]);
 						}
 						if ($func == 'set')
 						{
@@ -216,7 +190,7 @@ class acp_traffic_controller implements acp_traffic_interface
 								'user_traffic' => $traffic_bytes]) . ' WHERE user_id <> ' . ANONYMOUS;
 							$this->db->sql_query($sql);
 
-							$this->phpbb_log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_ALL_TR_SET', false, [$all_traffic, $y]);
+							$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_ALL_TR_SET', $this->dlext_constants::DL_FALSE, [$all_traffic, $traffic_range]);
 						}
 
 						$message = $this->language->lang('DL_USER_AUTO_TRAFFIC_USER') . adm_back_link($this->u_action);
@@ -228,23 +202,7 @@ class acp_traffic_controller implements acp_traffic_interface
 
 				case 'group':
 
-					switch ($z)
-					{
-						case 'B':
-							$traffic_bytes = $group_traffic;
-						break;
-						case 'KB':
-							$traffic_bytes = floor($group_traffic * 1024);
-						break;
-						case 'MB':
-							$traffic_bytes = floor($group_traffic * 1048576);
-						break;
-						case 'GB':
-							$traffic_bytes = floor($group_traffic * 1073741824);
-						break;
-						default:
-							$traffic_bytes = 0;
-					}
+					$traffic_bytes = $this->dlext_format->get_traffic_save_value($group_traffic, $traffic_range);
 
 					if ($traffic_bytes)
 					{
@@ -259,7 +217,7 @@ class acp_traffic_controller implements acp_traffic_interface
 
 						$sql = 'SELECT u.user_traffic, u.user_id FROM ' . USER_GROUP_TABLE . ' ug, ' . USERS_TABLE . ' u
 							WHERE ug.user_id = u.user_id
-								AND ug.user_pending <> ' . true . '
+								AND ug.user_pending <> ' . (int) $this->dlext_constants::DL_TRUE . '
 								AND ug.group_id = ' . (int) $group_id;
 						$result = $this->db->sql_query($sql);
 
@@ -286,11 +244,11 @@ class acp_traffic_controller implements acp_traffic_interface
 
 						if ($func == 'add')
 						{
-							$this->phpbb_log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_GRP_TR_ADD', false, [$group_name, $group_traffic, $z]);
+							$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_GRP_TR_ADD', $this->dlext_constants::DL_FALSE, [$group_name, $group_traffic, $traffic_range]);
 						}
 						else
 						{
-							$this->phpbb_log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_GRP_TR_SET', false, [$group_name, $group_traffic, $z]);
+							$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_GRP_TR_SET', $this->dlext_constants::DL_FALSE, [$group_name, $group_traffic, $traffic_range]);
 						}
 
 						$message = $this->language->lang('DL_USER_AUTO_TRAFFIC_USER') . adm_back_link($this->u_action);
@@ -311,62 +269,24 @@ class acp_traffic_controller implements acp_traffic_interface
 						$group_id	= $row['group_id'];
 						$group_name = ($row['group_type'] == GROUP_SPECIAL) ? $this->language->lang('G_' . $row['group_name']) : $row['group_name'];
 
-						if ($data_group_range[$group_id] == 'B')
-						{
-							$traffic = $group_traffic_ary[$group_id];
-						}
-						else if ($data_group_range[$group_id] == 'KB')
-						{
-							$traffic = floor($group_traffic_ary[$group_id] * 1024);
-						}
-						else if ($data_group_range[$group_id] == 'MB')
-						{
-							$traffic = floor($group_traffic_ary[$group_id] * 1048576);
-						}
-						else if ($data_group_range[$group_id] == 'GB')
-						{
-							$traffic = floor($group_traffic_ary[$group_id] * 1073741824);
-						}
-						else
-						{
-							$traffic = 0;
-						}
+						$traffic = $this->dlext_format->get_traffic_save_value($group_traffic_ary[$group_id], $data_group_range[$group_id]);
 
 						$sql = 'UPDATE ' . GROUPS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', [
 								'group_dl_auto_traffic' => $traffic]) . ' WHERE group_id = ' . (int) $group_id;
 						$this->db->sql_query($sql);
 
-						$this->phpbb_log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_AUTO_TR_GRP', false, [$group_name, $group_traffic_ary[$group_id], $data_group_range[$group_id]]);
+						$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_AUTO_TR_GRP', $this->dlext_constants::DL_FALSE, [$group_name, $group_traffic_ary[$group_id], $data_group_range[$group_id]]);
 					}
 
-					if ($data_user_range == 'B')
-					{
-						$traffic = $user_auto_traffic;
-					}
-					else if ($data_user_range == 'KB')
-					{
-						$traffic = floor($user_auto_traffic * 1024);
-					}
-					else if ($data_user_range == 'MB')
-					{
-						$traffic = floor($user_auto_traffic * 1048576);
-					}
-					else if ($data_user_range == 'GB')
-					{
-						$traffic = floor($user_auto_traffic * 1073741824);
-					}
-					else
-					{
-						$traffic = 0;
-					}
+					$this->db->sql_freeresult($result);
 
-					$this->config->set('dl_user_dl_auto_traffic', $traffic, false);
+					$traffic = $this->dlext_format->get_traffic_save_value($user_auto_traffic, $data_user_range);
 
-					$cache = $this->phpbb_container->get('cache');
+					$this->config->set('dl_user_dl_auto_traffic', $traffic);
 
-					$cache->purge('config');
+					$this->cache->purge('config');
 
-					$this->phpbb_log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_AUTO_TR_USER', false, [$user_auto_traffic, $data_user_range]);
+					$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_AUTO_TR_USER', $this->dlext_constants::DL_FALSE, [$user_auto_traffic, $data_user_range]);
 
 					$message = $this->language->lang('DL_USER_AUTO_TRAFFIC_USER') . adm_back_link($this->u_action);
 
@@ -378,123 +298,78 @@ class acp_traffic_controller implements acp_traffic_interface
 
 		add_form_key('dl_adm_traffic');
 
-		$s_select_datasize = '<option value="B">' . $this->language->lang('DL_BYTES_LONG') . '</option>';
-		$s_select_datasize .= '<option value="KB">' . $this->language->lang('DL_KB') . '</option>';
-		$s_select_datasize .= '<option value="MB">' . $this->language->lang('DL_MB') . '</option>';
-		$s_select_datasize .= '<option value="GB">' . $this->language->lang('DL_GB') . '</option>';
-		$s_select_datasize .= '</select>';
-
 		$sql = 'SELECT group_id, group_name, group_dl_auto_traffic, group_type FROM ' . GROUPS_TABLE . '
 				ORDER BY group_type DESC, group_name';
 		$result = $this->db->sql_query($sql);
-		$total_groups = $this->db->sql_affectedrows($result);
 
-		if ($total_groups)
+		if ($this->db->sql_affectedrows())
 		{
-			$this->template->assign_var('S_GROUP_BLOCK', true);
+			$this->template->assign_var('S_DL_GROUP_BLOCK', $this->dlext_constants::DL_TRUE);
 
-			$s_select_list = '<select name="g">';
+			$s_select_groups = [];
 
 			while ($row = $this->db->sql_fetchrow($result))
 			{
-				$group_dl_auto_traffic = ($row['group_dl_auto_traffic']) ? $row['group_dl_auto_traffic'] : 0;
-				$data_range_select = 'B';
-
-				if ($group_dl_auto_traffic > 1073741823)
-				{
-					$group_traffic = number_format($group_dl_auto_traffic / 1073741824, 2);
-					$data_range_select = 'GB';
-				}
-				if ($group_dl_auto_traffic < 1073741824)
-				{
-					$group_traffic = number_format($group_dl_auto_traffic / 1048576, 2);
-					$data_range_select = 'MB';
-				}
-				if ($group_dl_auto_traffic < 1048576)
-				{
-					$group_traffic = number_format($group_dl_auto_traffic / 1024, 2);
-					$data_range_select = 'KB';
-				}
-				if ($group_dl_auto_traffic < 1024)
-				{
-					$group_traffic = number_format($group_dl_auto_traffic, 2);
-					$data_range_select = 'B';
-				}
-
-				$s_group_data_range = str_replace('value="' . $data_range_select . '">', 'value="' . $data_range_select . '" selected="selected">', $s_select_datasize);
-				$s_group_data_range = '<select name="data_group_range[' . $row['group_id'] . ']">' . $s_group_data_range;
+				$traffic_ary		= $this->dlext_format->get_traffic_display_value($row['group_dl_auto_traffic']);
 
 				$group_name = ($row['group_type'] == GROUP_SPECIAL) ? $this->language->lang('G_' . $row['group_name']) : $row['group_name'];
-				$group_sep = ($row['group_type'] == GROUP_SPECIAL) ? ' class="sep"' : '';
+				$group_sep = ($row['group_type'] == GROUP_SPECIAL) ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE;
 
 				$this->template->assign_block_vars('group_row', [
-					'GROUP_ID'				=> $row['group_id'],
-					'GROUP_NAME'			=> $group_name,
-					'GROUP_SPECIAL'			=> ($row['group_type'] == GROUP_SPECIAL) ? true : false,
-					'GROUP_DL_AUTO_TRAFFIC'	=> $group_traffic,
+					'DL_GROUP_ID'				=> $row['group_id'],
+					'DL_GROUP_NAME'				=> $group_name,
+					'DL_GROUP_SPECIAL'			=> $group_sep,
+					'DL_GROUP_DL_AUTO_TRAFFIC'	=> $traffic_ary['traffic_value'],
 
-					'S_GROUP_DATA_RANGE'	=> $s_group_data_range,
+					'S_DL_GROUP_DATA_RANGE'		=> $traffic_ary['traffic_range'],
 				]);
 
-				$s_select_list .= '<option value="' . $row['group_id'] . '"' . $group_sep . '>' . $group_name . '</option>';
+				$s_select_groups[] = ['value' => $row['group_id'], 'special' => $group_sep, 'name' => $group_name];
 			}
-
-			$s_select_list .= '</select>';
 		}
 
 		$this->db->sql_freeresult($result);
 
-		$user_dl_auto_traffic = $this->config['dl_user_dl_auto_traffic'];
-
-		if ($user_dl_auto_traffic > 1073741823)
+		for ($i = 0; $i < count($s_select_groups); ++$i)
 		{
-			$user_traffic = number_format($user_dl_auto_traffic / 1073741824, 2);
-			$data_range_select = 'GB';
+			$this->template->assign_block_vars('group_select', [
+				'DL_VALUE'		=> $s_select_groups[$i]['value'],
+				'DL_SPECIAL'	=> $s_select_groups[$i]['special'],
+				'DL_NAME'		=> $s_select_groups[$i]['name'],
+			]);
 		}
 
-		if ($user_dl_auto_traffic < 1073741824)
+		$traffic_ary		= $this->dlext_format->get_traffic_display_value($this->config['dl_user_dl_auto_traffic']);
+		$user_traffic		= $traffic_ary['traffic_value'];
+
+		$select_datasize[] = ['value' => $this->dlext_constants::DL_FILE_RANGE_BYTE, 	'lang' => $this->language->lang('DL_BYTES_LONG')];
+		$select_datasize[] = ['value' => $this->dlext_constants::DL_FILE_RANGE_KBYTE, 	'lang' => $this->language->lang('DL_KB')];
+		$select_datasize[] = ['value' => $this->dlext_constants::DL_FILE_RANGE_MBYTE, 	'lang' => $this->language->lang('DL_MB')];
+		$select_datasize[] = ['value' => $this->dlext_constants::DL_FILE_RANGE_GBYTE, 	'lang' => $this->language->lang('DL_GB')];
+
+		for ($i = 0; $i < count($select_datasize); ++$i)
 		{
-			$user_traffic = number_format($user_dl_auto_traffic / 1048576, 2);
-			$data_range_select = 'MB';
+			$this->template->assign_block_vars('data_range_select', [
+				'DL_VALUE'	=> $select_datasize[$i]['value'],
+				'DL_LANG'	=> $select_datasize[$i]['lang'],
+			]);
 		}
 
-		if ($user_dl_auto_traffic < 1048576)
-		{
-			$user_traffic = number_format($user_dl_auto_traffic / 1024, 2);
-			$data_range_select = 'KB';
-		}
-
-		if ($user_dl_auto_traffic < 1024)
-		{
-			$user_traffic = $user_dl_auto_traffic;
-			$data_range_select = 'B';
-		}
-
-		$s_user_data_range	= str_replace('value="' . $data_range_select . '">', 'value="' . $data_range_select . '" selected="selected">', $s_select_datasize);
-		$s_user_range		= str_replace('value="KB">', 'value="KB" selected="selected">', $s_select_datasize);
-
-		$s_user_data_range		= '<select name="data_user_range">' . $s_user_data_range;
-		$s_user_single_range	= '<select name="x">' . $s_user_range;
-		$s_user_all_range		= '<select name="y">' . $s_user_range;
-		$s_user_group_range		= '<select name="z">' . $s_user_range;
-
-		$u_user_select = append_sid($this->dlext_init->root_path() . 'memberlist.' . $this->dlext_init->php_ext(), 'mode=searchuser&amp;form=user_traffic&amp;field=username&amp;select_single=true');
+		$u_user_select = append_sid($this->root_path . 'memberlist.' . $this->phpEx, 'mode=searchuser&amp;form=user_traffic&amp;field=username&amp;select_single=1');
 
 		$this->template->assign_vars([
-			'USER_DL_AUTO_TRAFFIC'		=> $user_traffic,
+			'DL_USER_DL_AUTO_TRAFFIC'	=> $traffic_ary['traffic_value'],
 
-			'S_GROUP_SELECT'			=> $s_select_list,
-			'S_USER_DATA_RANGE'			=> $s_user_data_range,
-			'S_USER_SINGLE_RANGE'		=> $s_user_single_range,
-			'S_USER_ALL_RANGE'			=> $s_user_all_range,
-			'S_USER_GROUP_RANGE'		=> $s_user_group_range,
+			'S_DL_USER_DATA_RANGE'		=> $traffic_ary['traffic_range'],
+			'S_DL_TRAFFIC_RANGE'		=> $this->dlext_constants::DL_FILE_RANGE_MBYTE,
+			'S_DL_TRAFFIC_MANAGEMENT'	=> $this->config['dl_traffic_off'],
 
-			'S_PROFILE_ACTION_ALL'		=> $this->u_action . '&amp;action=all',
-			'S_PROFILE_ACTION_USER'		=> $this->u_action . '&amp;action=single',
-			'S_PROFILE_ACTION_GROUP'	=> $this->u_action . '&amp;action=group',
-			'S_CONFIG_ACTION'			=> $this->u_action . '&amp;action=auto',
+			'S_DL_PROFILE_ACTION_ALL'	=> $this->u_action . '&amp;action=all',
+			'S_DL_PROFILE_ACTION_USER'	=> $this->u_action . '&amp;action=single',
+			'S_DL_PROFILE_ACTION_GROUP'	=> $this->u_action . '&amp;action=group',
+			'S_DL_CONFIG_ACTION'		=> $this->u_action . '&amp;action=auto',
 
-			'U_FIND_USERNAME'			=> $u_user_select,
+			'U_DL_FIND_USERNAME'		=> $u_user_select,
 		]);
 
 		$acl_cat_names = [
@@ -506,7 +381,7 @@ class acp_traffic_controller implements acp_traffic_interface
 
 		for ($i = 0; $i < count($acl_cat_names); ++$i)
 		{
-			$this->template->assign_block_vars('category', ['CAT_NAME' => $acl_cat_names[$i]]);
+			$this->template->assign_block_vars('category', ['DL_CAT_NAME' => $acl_cat_names[$i]]);
 		}
 	}
 }

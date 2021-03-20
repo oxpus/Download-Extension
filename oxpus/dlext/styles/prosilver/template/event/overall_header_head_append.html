@@ -1,19 +1,17 @@
 {% INCLUDECSS '@oxpus_dlext/dl_ext.css' %}
-{% if S_DL_POPUPIMAGE %}{% INCLUDECSS ''~ EXT_DL_PATH_WEB ~'vendor/prettyPhoto/css/prettyPhoto.css' %}{% endif %}
+{% if S_DL_POPUPIMAGE %}{% INCLUDECSS ''~ EXT_DL_PATH ~'/vendor/prettyPhoto/css/prettyPhoto.css' %}{% endif %}
 <script>
-	var ajax_path = '{{ U_HELP_POPUP }}';
-	{% if S_DL_DETAIL_JS %}
-	var phpEx = '{{ PHPEX }}';
-	var dlAjaxUrl = '{{ U_DL_AJAX }}';
-	var activeCat = {{ S_OPEN_PANEL }};
-	var LANG_TOO_FEW_CHARS = '{{ lang('TOO_FEW_CHARS') }}';
-	var LANG_L_NO_TEXT_SELECTED = '{{ lang('NO_TEXT_SELECTED') }}';
-	var form_name = 'postform';
-	var text_name = 'message';
-	{% endif %}
+	var ajax_path = '{{ U_DL_HELP_POPUP }}';
 </script>
-{% if S_DL_POPUPIMAGE %}{% INCLUDEJS ''~ EXT_DL_PATH_WEB ~'vendor/prettyPhoto/js/jquery.prettyPhoto.js' %}{% endif %}
-{% INCLUDEJS ''~ EXT_DL_PATH_WEB ~'assets/javascript/dl_footer.js' %}
-{% if S_DL_DETAIL_JS %}{% INCLUDEJS ''~ EXT_DL_PATH_WEB ~'assets/javascript/dl_main.js' %}{% endif %}
-{% if S_ENABLE_RATE %}{% INCLUDEJS ''~ EXT_DL_PATH_WEB ~'assets/javascript/ajax_dl.js' %}{% endif %}
-{% if S_TOTAL_IMAGES or S_DL_POPUPIMAGE or S_CAPTCHA %}{% INCLUDEJS ''~ EXT_DL_PATH_WEB ~'assets/javascript/pretty.js' %}{% endif %}
+{% if S_DL_DETAIL_JS %}
+<script>
+	var phpEx = '{{ DL_PHPEX }}';
+	var dlAjaxUrl = '{{ U_DL_AJAX }}';
+	var activeCat = '{{ S_DL_OPEN_PANEL }}';
+</script>
+{% endif %}
+{% if S_DL_POPUPIMAGE %}{% INCLUDEJS ''~ EXT_DL_PATH ~'vendor/prettyPhoto/js/jquery.prettyPhoto.js' %}{% endif %}
+{% INCLUDEJS ''~ EXT_DL_PATH ~'assets/javascript/dl_footer.js' %}
+{% if S_DL_DETAIL_JS %}{% INCLUDEJS ''~ EXT_DL_MAIN_FILE ~'' %}{% endif %}
+{% if S_DL_ENABLE_RATE %}{% INCLUDEJS ''~ EXT_DL_RATE_FILE ~'' %}{% endif %}
+{% if S_TOTAL_IMAGES or S_DL_POPUPIMAGE or S_DL_CAPTCHA %}{% INCLUDEJS ''~ EXT_DL_PATH ~'assets/javascript/pretty.js' %}{% endif %}

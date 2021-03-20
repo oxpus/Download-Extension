@@ -1,8 +1,8 @@
-{% INCLUDE 'dl_header.html' %}
+{% INCLUDE '@oxpus_dlext/helpers/dl_header.html' %}
 
 <h2 class="solo">{{ lang('DL_STATS') }}</h2>
 
-{% if S_LATEST_DOWNLOADS %}
+{% if S_DL_LATEST_DOWNLOADS %}
 <div class="panel dlext">
 	<div class="inner">
 		<h2>{{ lang('DL_LATEST_DOWNLOADS') }}</h2>
@@ -22,11 +22,11 @@
 			{% for top_ten_latest in loops.top_ten_latest %}
 			<li class="row">
 				<dl>
-					<dd class="dl-width-5 dl-cell-block dl-text-center dl-text-big">{{ top_ten_latest.POS }}</dd>
-					<dd class="dl-width-30 dl-cell-block dl-intent"><a href="{{ top_ten_latest.U_FILE_LINK }}" class="forumtitle">{{ top_ten_latest.DESCRIPTION }}</a></dd>
-					<dd class="dl-width-25 dl-cell-block dl-intent">{{ top_ten_latest.CAT_NAME }}</dd>
+					<dd class="dl-width-5 dl-cell-block dl-text-center dl-text-big">{{ top_ten_latest.DL_POS }}</dd>
+					<dd class="dl-width-30 dl-cell-block dl-intent"><a href="{{ top_ten_latest.U_DL_FILE_LINK }}" class="forumtitle">{{ top_ten_latest.DL_DESCRIPTION }}</a></dd>
+					<dd class="dl-width-25 dl-cell-block dl-intent">{{ top_ten_latest.DL_CAT_NAME }}</dd>
 					<dd class="dl-width-20 dl-cell-block dl-intent"><time datetime="{{ top_ten_latest.DL_TIME_RFC }}">{{ top_ten_latest.DL_TIME }}</time></dd>
-					<dd class="dl-width-20 dl-cell-block dl-intent">{{ top_ten_latest.USER_LINK }}</dd>
+					<dd class="dl-width-20 dl-cell-block dl-intent">{{ top_ten_latest.DL_USER_LINK }}</dd>
 				</dl>
 			</li>
 			{% endfor %}
@@ -35,7 +35,7 @@
 </div>
 {% endif %}
 
-{% if S_LATEST_UPLOADS %}
+{% if S_DL_LATEST_UPLOADS %}
 <div class="panel dlext">
 	<div class="inner">
 		<h2>{{ lang('DL_LATEST_UPLOADS') }}</h2>
@@ -55,11 +55,11 @@
 			{% for top_ten_uploads in loops.top_ten_uploads %}
 			<li class="row">
 				<dl>
-					<dd class="dl-width-5 dl-cell-block dl-text-center dl-text-big">{{ top_ten_uploads.POS }}</dd>
-					<dd class="dl-width-30 dl-cell-block dl-intent"><a href="{{ top_ten_uploads.U_FILE_LINK }}" class="forumtitle">{{ top_ten_uploads.DESCRIPTION }}</a></dd>
-					<dd class="dl-width-25 dl-cell-block dl-intent">{{ top_ten_uploads.CAT_NAME }}</dd>
+					<dd class="dl-width-5 dl-cell-block dl-text-center dl-text-big">{{ top_ten_uploads.DL_POS }}</dd>
+					<dd class="dl-width-30 dl-cell-block dl-intent"><a href="{{ top_ten_uploads.U_DL_FILE_LINK }}" class="forumtitle">{{ top_ten_uploads.DL_DESCRIPTION }}</a></dd>
+					<dd class="dl-width-25 dl-cell-block dl-intent">{{ top_ten_uploads.DL_CAT_NAME }}</dd>
 					<dd class="dl-width-20 dl-cell-block dl-intent"><time datetime="{{ top_ten_uploads.DL_TIME_RFC }}">{{ top_ten_uploads.DL_TIME }}</time></dd>
-					<dd class="dl-width-20 dl-cell-block dl-intent">{{ top_ten_uploads.USER_LINK }}</span></dd>
+					<dd class="dl-width-20 dl-cell-block dl-intent">{{ top_ten_uploads.DL_USER_LINK }}</span></dd>
 				</dl>
 			</li>
 			{% endfor %}
@@ -68,7 +68,7 @@
 </div>
 {% endif %}
 
-{% if S_TOP10_DOWN_MONTH %}
+{% if S_DL_TOP10_DOWN_MONTH %}
 <div class="panel dlext">
 	<div class="inner">
 		<h2>{{ lang('DL_DOWNLOADS_CUR_MONTH') }}</h2>
@@ -87,9 +87,9 @@
 			{% for top_ten_dl_cur_month in loops.top_ten_dl_cur_month %}
 			<li class="row">
 				<dl>
-					<dd class="dl-width-5 dl-cell-block dl-text-center dl-text-big">{{ top_ten_dl_cur_month.POS }}</dd>
-					<dd class="dl-width-40 dl-cell-block dl-intent"><a href="{{ top_ten_dl_cur_month.U_FILE_LINK }}" class="forumtitle">{{ top_ten_dl_cur_month.DESCRIPTION }}</a></dd>
-					<dd class="dl-width-25 dl-cell-block dl-intent">{{ top_ten_dl_cur_month.CAT_NAME }}</dd>
+					<dd class="dl-width-5 dl-cell-block dl-text-center dl-text-big">{{ top_ten_dl_cur_month.DL_POS }}</dd>
+					<dd class="dl-width-40 dl-cell-block dl-intent"><a href="{{ top_ten_dl_cur_month.U_DL_FILE_LINK }}" class="forumtitle">{{ top_ten_dl_cur_month.DL_DESCRIPTION }}</a></dd>
+					<dd class="dl-width-25 dl-cell-block dl-intent">{{ top_ten_dl_cur_month.DL_CAT_NAME }}</dd>
 					<dd class="dl-width-30 dl-cell-block dl-intent">{{ top_ten_dl_cur_month.DL_KLICKS }}</dd>
 				</dl>
 			</li>
@@ -99,7 +99,7 @@
 </div>
 {% endif %}
 
-{% if S_TOP10_DOWN_ALL %}
+{% if S_DL_TOP10_DOWN_ALL %}
 <div class="panel dlext">
 	<div class="inner">
 		<h2>{{ lang('DL_DOWNLOADS_OVERALL') }}</h2>
@@ -118,9 +118,9 @@
 			{% for top_ten_dl_overall in loops.top_ten_dl_overall %}
 			<li class="row">
 				<dl>
-					<dd class="dl-width-5 dl-cell-block dl-text-center dl-text-big">{{ top_ten_dl_overall.POS }}</dd>
-					<dd class="dl-width-40 dl-cell-block dl-intent"><a href="{{ top_ten_dl_overall.U_FILE_LINK }}" class="forumtitle">{{ top_ten_dl_overall.DESCRIPTION }}</a></dd>
-					<dd class="dl-width-25 dl-cell-block dl-intent">{{ top_ten_dl_overall.CAT_NAME }}</dd>
+					<dd class="dl-width-5 dl-cell-block dl-text-center dl-text-big">{{ top_ten_dl_overall.DL_POS }}</dd>
+					<dd class="dl-width-40 dl-cell-block dl-intent"><a href="{{ top_ten_dl_overall.U_DL_FILE_LINK }}" class="forumtitle">{{ top_ten_dl_overall.DL_DESCRIPTION }}</a></dd>
+					<dd class="dl-width-25 dl-cell-block dl-intent">{{ top_ten_dl_overall.DL_CAT_NAME }}</dd>
 					<dd class="dl-width-30 dl-cell-block dl-intent">{{ top_ten_dl_overall.DL_KLICKS }}</dd>
 				</dl>
 			</li>
@@ -130,7 +130,7 @@
 </div>
 {% endif %}
 
-{% if S_TOP10_TRAFFIC_MONTH %}
+{% if S_DL_TOP10_TRAFFIC_MONTH %}
 <div class="panel dlext">
 	<div class="inner">
 		<h2>{{ lang('DL_TRAFFIC_CUR_MONTH') }}</h2>
@@ -149,9 +149,9 @@
 			{% for top_ten_traffic_cur_month in loops.top_ten_traffic_cur_month %}
 			<li class="row">
 				<dl>
-					<dd class="dl-width-5 dl-cell-block dl-text-center dl-text-big">{{ top_ten_traffic_cur_month.POS }}</dd>
-					<dd class="dl-width-40 dl-cell-block dl-intent"><a href="{{ top_ten_traffic_cur_month.U_FILE_LINK }}" class="forumtitle">{{ top_ten_traffic_cur_month.DESCRIPTION }}</a></dd>
-					<dd class="dl-width-25 dl-cell-block dl-intent">{{ top_ten_traffic_cur_month.CAT_NAME }}</dd>
+					<dd class="dl-width-5 dl-cell-block dl-text-center dl-text-big">{{ top_ten_traffic_cur_month.DL_POS }}</dd>
+					<dd class="dl-width-40 dl-cell-block dl-intent"><a href="{{ top_ten_traffic_cur_month.U_DL_FILE_LINK }}" class="forumtitle">{{ top_ten_traffic_cur_month.DL_DESCRIPTION }}</a></dd>
+					<dd class="dl-width-25 dl-cell-block dl-intent">{{ top_ten_traffic_cur_month.DL_CAT_NAME }}</dd>
 					<dd class="dl-width-30 dl-cell-block dl-intent">{{ top_ten_traffic_cur_month.DL_TRAFFIC }}</dd>
 				</dl>
 			</li>
@@ -161,7 +161,7 @@
 </div>
 {% endif %}
 
-{% if S_TOP10_TRAFFIC_ALL %}
+{% if S_DL_TOP10_TRAFFIC_ALL %}
 <div class="panel dlext">
 	<div class="inner">
 		<h2>{{ lang('DL_TRAFFIC_OVERALL') }}</h2>
@@ -180,9 +180,9 @@
 			{% for top_ten_traffic_overall in loops.top_ten_traffic_overall %}
 			<li class="row">
 				<dl>
-					<dd class="dl-width-5 dl-cell-block dl-text-center dl-text-big">{{ top_ten_traffic_overall.POS }}</dd>
-					<dd class="dl-width-40 dl-cell-block dl-intent"><a href="{{ top_ten_traffic_overall.U_FILE_LINK }}" class="forumtitle">{{ top_ten_traffic_overall.DESCRIPTION }}</a></dd>
-					<dd class="dl-width-25 dl-cell-block dl-intent">{{ top_ten_traffic_overall.CAT_NAME }}</dd>
+					<dd class="dl-width-5 dl-cell-block dl-text-center dl-text-big">{{ top_ten_traffic_overall.DL_POS }}</dd>
+					<dd class="dl-width-40 dl-cell-block dl-intent"><a href="{{ top_ten_traffic_overall.U_DL_FILE_LINK }}" class="forumtitle">{{ top_ten_traffic_overall.DL_DESCRIPTION }}</a></dd>
+					<dd class="dl-width-25 dl-cell-block dl-intent">{{ top_ten_traffic_overall.DL_CAT_NAME }}</dd>
 					<dd class="dl-width-30 dl-cell-block dl-intent">{{ top_ten_traffic_overall.DL_TRAFFIC }}</dd>
 				</dl>
 			</li>
@@ -192,7 +192,7 @@
 </div>
 {% endif %}
 
-{% if S_TOP10_DOWN_CLICKS %}
+{% if S_DL_TOP10_DOWN_CLICKS %}
 <div class="panel dlext">
 	<div class="inner">
 		<h2>{{ lang('DL_DOWNLOADS_COUNT') }}</h2>
@@ -210,8 +210,8 @@
 			{% for top_ten_dl_counts in loops.top_ten_dl_counts %}
 			<li class="row">
 				<dl>
-					<dd class="dl-width-5 dl-cell-block dl-text-center dl-text-big">{{ top_ten_dl_counts.POS }}</dd>
-					<dd class="dl-width-75 dl-cell-block dl-intent"><label>{{ top_ten_dl_counts.USER_LINK }}</label></dd>
+					<dd class="dl-width-5 dl-cell-block dl-text-center dl-text-big">{{ top_ten_dl_counts.DL_POS }}</dd>
+					<dd class="dl-width-75 dl-cell-block dl-intent"><label>{{ top_ten_dl_counts.DL_USER_LINK }}</label></dd>
 					<dd class="dl-width-20 dl-cell-block dl-text-center">{{ top_ten_dl_counts.DL_COUNTS }}</dd>
 				</dl>
 			</li>
@@ -221,7 +221,7 @@
 </div>
 {% endif %}
 
-{% if S_TOP10_DOWN_TRAFFIC %}
+{% if S_DL_TOP10_DOWN_TRAFFIC %}
 <div class="panel dlext">
 	<div class="inner">
 		<h2>{{ lang('DL_DOWNLOADS_TRAFFIC') }}</h2>
@@ -230,7 +230,7 @@
 				<dl>
 					<dd class="dl-width-5 dl-cell-block dl-text-center dl-text-big">{{ lang('DL_POS') }}</dd>
 					<dd class="dl-width-75 dl-cell-block dl-intent">{{ lang('USERNAME') }}</dd>
-					<dd class="dl-width-20 dl-cell-block dl-text-center">{{ lang('TRAFFIC') }}</dd>
+					<dd class="dl-width-20 dl-cell-block dl-text-center">{{ lang('DL_TRAFFIC') }}</dd>
 				</dl>
 			</li>
 		</ul>
@@ -239,8 +239,8 @@
 			{% for top_ten_dl_traffic in loops.top_ten_dl_traffic %}
 			<li class="row">
 				<dl>
-					<dd class="dl-width-5 dl-cell-block dl-text-center dl-text-big">{{ top_ten_dl_traffic.POS }}</dd>
-					<dd class="dl-width-75 dl-cell-block dl-intent"><label>{{ top_ten_dl_traffic.USER_LINK }}</label></dd>
+					<dd class="dl-width-5 dl-cell-block dl-text-center dl-text-big">{{ top_ten_dl_traffic.DL_POS }}</dd>
+					<dd class="dl-width-75 dl-cell-block dl-intent"><label>{{ top_ten_dl_traffic.DL_USER_LINK }}</label></dd>
 					<dd class="dl-width-20 dl-cell-block dl-text-center">{{ top_ten_dl_traffic.DL_TRAFFIC }}</dd>
 				</dl>
 			</li>
@@ -250,7 +250,7 @@
 </div>
 {% endif %}
 
-{% if S_TOP10_UP_COUNT %}
+{% if S_DL_TOP10_UP_COUNT %}
 <div class="panel dlext">
 	<div class="inner">
 		<h2>{{ lang('DL_UPLOADS_COUNT') }}</h2>
@@ -268,8 +268,8 @@
 			{% for top_ten_up_counts in loops.top_ten_up_counts %}
 			<li class="row">
 				<dl>
-					<dd class="dl-width-5 dl-cell-block dl-text-center dl-text-big">{{ top_ten_up_counts.POS }}</dd>
-					<dd class="dl-width-75 dl-cell-block dl-intent"><label>{{ top_ten_up_counts.USER_LINK }}</label></dd>
+					<dd class="dl-width-5 dl-cell-block dl-text-center dl-text-big">{{ top_ten_up_counts.DL_POS }}</dd>
+					<dd class="dl-width-75 dl-cell-block dl-intent"><label>{{ top_ten_up_counts.DL_USER_LINK }}</label></dd>
 					<dd class="dl-width-20 dl-cell-block dl-text-center">{{ top_ten_up_counts.DL_COUNTS }}</dd>
 				</dl>
 			</li>
@@ -279,7 +279,7 @@
 </div>
 {% endif %}
 
-{% if S_TOP10_UP_TRAFFIC %}
+{% if S_DL_TOP10_UP_TRAFFIC %}
 <div class="panel dlext">
 	<div class="inner">
 		<h2>{{ lang('DL_UPLOADS_TRAFFIC') }}</h2>
@@ -288,7 +288,7 @@
 				<dl>
 					<dd class="dl-width-5 dl-cell-block dl-text-center dl-text-big">{{ lang('DL_POS') }}</dd>
 					<dd class="dl-width-75 dl-cell-block dl-intent">{{ lang('USERNAME') }}</dd>
-					<dd class="dl-width-20 dl-cell-block dl-text-center">{{ lang('TRAFFIC') }}</dd>
+					<dd class="dl-width-20 dl-cell-block dl-text-center">{{ lang('DL_TRAFFIC') }}</dd>
 				</dl>
 			</li>
 		</ul>
@@ -297,8 +297,8 @@
 			{% for top_ten_up_traffic in loops.top_ten_up_traffic %}
 			<li class="row">
 				<dl>
-					<dd class="dl-width-5 dl-cell-block dl-text-center dl-text-big">{{ top_ten_up_traffic.POS }}</dd>
-					<dd class="dl-width-75 dl-cell-block dl-intent"><label>{{ top_ten_up_traffic.USER_LINK }}</label></dd>
+					<dd class="dl-width-5 dl-cell-block dl-text-center dl-text-big">{{ top_ten_up_traffic.DL_POS }}</dd>
+					<dd class="dl-width-75 dl-cell-block dl-intent"><label>{{ top_ten_up_traffic.DL_USER_LINK }}</label></dd>
 					<dd class="dl-width-20 dl-cell-block dl-text-center">{{ top_ten_up_traffic.DL_TRAFFIC }}</dd>
 				</dl>
 			</li>
@@ -310,4 +310,4 @@
 
 <br />
 
-{% INCLUDE 'dl_footer.html' %}
+{% INCLUDE '@oxpus_dlext/helpers/dl_footer.html' %}

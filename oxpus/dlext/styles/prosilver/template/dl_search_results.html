@@ -1,4 +1,4 @@
-{% INCLUDE 'dl_header.html' %}
+{% INCLUDE '@oxpus_dlext/helpers/dl_header.html' %}
 
 	<h2>{{ lang('DL_SEARCH_RESULTS') }}</h2>
 
@@ -22,22 +22,30 @@
 				<dl>
 					<dt>
 						<div class="list-inner">
-							<strong>{{ searchresults.STATUS }}</strong> <a href="{{ searchresults.U_FILE_LINK }}" class="topictitle">{{ searchresults.DESCRIPTION }}</a> {{ searchresults.MINI_ICON }}
-							{% EVENT dlext_search_result_download_title_append %}
-							<br />{{ lang('POST_BY_AUTHOR') }} {{ searchresults.ADD_USER }} &raquo; <time datetime="{{ searchresults.ADD_TIME_RFC }}">{{ searchresults.ADD_TIME }}</time>
-							{% if searchresults.LONG_DESC %}<hr />{{ searchresults.LONG_DESC }}{% endif %}
+							{% if searchresults.DL_FILE_STATUS eq 'red' %}<i class="icon fa-ban fa-fw dl-red" title="{{ lang('DL_RED_EXPLAIN_PERM') }}"></i>{% endif %}
+							{% if searchresults.DL_FILE_STATUS eq 'yellow' %}<i class="icon fa-download fa-fw dl-yellow" title="{{ lang('DL_YELLOW_EXPLAIN') }}"></i>{% endif %}
+							{% if searchresults.DL_FILE_STATUS eq 'green' %}<i class="icon fa-download fa-fw dl-green" title="{{ lang('DL_GREEN_EXPLAIN') }}"></i>{% endif %}
+							{% if searchresults.DL_FILE_STATUS eq 'white' %}<i class="icon fa-download fa-fw dl-white" title="{{ lang('DL_WHITE_EXPLAIN') }}"></i>{% endif %}
+							{% if searchresults.DL_FILE_STATUS eq 'blue' %}<i class="icon fa-info-circle fa-fw dl-blue" title="{{ lang('DL_BLUE_EXPLAIN_FOOT') }}"></i>{% endif %}
+							{% if searchresults.DL_FILE_STATUS eq 'grey' %}<i class="icon fa-globe fa-fw dl-grey" title="{{ lang('DL_GREY_EXPLAIN') }}"></i>{% endif %}
+							<a href="{{ searchresults.U_DL_FILE_LINK }}" class="topictitle">{{ searchresults.DL_DESCRIPTION }}</a>
+							{% if searchresults.DL_MINI_ICON eq 'new' %}<i class="icon fa-comment-o fa-fw dl-red" title="{{ lang('DL_FILE_NEW') }}"></i>{% endif %}
+							{% if searchresults.DL_MINI_ICON eq 'edit' %}<i class="icon fa-edit fa-fw dl-blue" title="{{ lang('DL_FILE_EDIT') }}"></i>{% endif %}
+							{% EVENT oxpus_dlext_search_result_download_title_append %}
+							<br />{{ lang('POST_BY_AUTHOR') }} {{ searchresults.DL_ADD_USER }} &raquo; <time datetime="{{ searchresults.DL_ADD_TIME_RFC }}">{{ searchresults.DL_ADD_TIME }}</time>
+							{% if searchresults.DL_LONG_DESC %}<hr />{{ searchresults.DL_LONG_DESC }}{% endif %}
 						</div>
 					</dt>
 					<dd class="lastpost">
-						<div><strong>{{ lang('DL_CAT_NAME') }}{{ lang('COLON') }} </strong><a href="{{ searchresults.U_CAT_LINK }}">{{ searchresults.CAT_NAME }}</a></div>
-						<div>{{ searchresults.FILE_NAME }}</div>
+						<div><strong>{{ lang('DL_CAT_NAME') }}{{ lang('COLON') }} </strong><a href="{{ searchresults.U_DL_CAT_LINK }}">{{ searchresults.DL_CAT_NAME }}</a></div>
+						<div>{{ searchresults.DL_FILE_NAME }}</div>
 					</dd>
 				</dl>
 			</li>
 		{% endfor %}
 		</ul>
 
-		{% if S_NO_RESULTS %}
+		{% if S_DL_NO_RESULTS %}
 		<div class="panel">
 			<div class="inner">
 			<strong>{{ lang('NO_SEARCH_RESULTS') }}</strong>
@@ -48,17 +56,17 @@
 		</div>
 	</div>
 
-	{% if loops.pagination|length or TOTAL_DL %}
+	{% if loops.pagination|length or DL_TOTAL_DL %}
 		<div class="pagination">
-			{{ TOTAL_DL }}
+			{{ DL_TOTAL_DL }}
 			{% if loops.pagination|length %}
 				{% INCLUDE 'pagination.html' %}
 			{% else %}
-				&bull; {{ PAGE_NUMBER }}
+				&bull; {{ DL_PAGE_NUMBER }}
 			{% endif %}
 		</div>
 	{% endif %}
 
 <br />
 
-{% INCLUDE 'dl_footer.html' %}
+{% INCLUDE '@oxpus_dlext/helpers/dl_footer.html' %}

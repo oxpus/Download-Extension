@@ -3,7 +3,7 @@
 /**
 *
 * @package phpBB Extension - Oxpus Downloads
-* @copyright (c) 2002-2020 OXPUS - www.oxpus.net
+* @copyright (c) 2002-2021 OXPUS - www.oxpus.net
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
 */
@@ -21,7 +21,7 @@ class main_module
 	{
 		global $phpbb_container;
 
-		$this->tpl_name = 'dl_user_config_body';
+		$this->tpl_name = '@oxpus_dlext/ucp/dl_user_config_body';
 
 		/*
 		* set the current module title

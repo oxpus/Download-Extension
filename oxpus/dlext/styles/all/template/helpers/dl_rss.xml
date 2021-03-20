@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+
+	<channel>
+
+		<title>{{ DL_SITENAME }} - {{ lang('DL_ACP_CONF_RSS') }} {{ lang('DL_DOWNLOADS') }}</title>
+		<description>{{ DL_SITE_DESCRIPTION }}</description>
+		<language>{{ DL_RSS_LANG }}</language>
+		<link>{{ DL_BOARD_URL }}</link>
+		<lastBuildDate>{{ DL_RSS_TIME_TMP }}</lastBuildDate>
+
+		<atom:link href="{{ U_DL_RSS }}" rel="self" type="application/rss+xml" />
+
+		{% for dl_rss_feed in loops.dl_rss_feed %}
+		<item>
+			<title>{{ dl_rss_feed.DL_RSS_TITLE }} {{ dl_rss_feed.DL_RSS_MINI_S }}</title>
+			{% if dl_rss_feed.DL_RSS_DESC %}
+			<description><![CDATA[{{dl_rss_feed.DL_RSS_DESC }}]]></description>
+			{% endif %}
+			<link>{{ dl_rss_feed.U_DL_RSS }}</link>
+			<pubDate>{{ dl_rss_feed.DL_RSS_TIME }}</pubDate>
+			<guid>{{ dl_rss_feed.U_DL_RSS }}</guid>
+			<atom:link href="{{ dl_rss_feed.U_DL_RSS }}" rel="self" type="application/rss+xml" />
+		</item>
+		{% endfor %}
+
+	</channel>
+
+</rss>

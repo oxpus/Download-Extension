@@ -14,65 +14,65 @@
 	<tbody>
 	<tr>
 		<td>{{ lang('DL_ACP_MAIN_STATS_TRAFFIC') }}{{ lang('COLON') }}</td>
-		<td><span class="{% if S_DL_TRAFFIC_OFF %}dl-red{% else %}dl-green{% endif %}"><strong>{% if S_DL_TRAFFIC_OFF %}{{ lang('DL_ACP_MAIN_STATS_TRAFFIC_OFF') }}{% else %}{{ lang('DL_ACP_MAIN_STATS_TRAFFIC_ON') }}{% endif %}</strong></span></td>
+		<td><span class="dl-{% if S_DL_TRAFFIC_OFF %}red{% else %}green{% endif %}"><strong>{% if S_DL_TRAFFIC_OFF %}{{ lang('DL_ACP_MAIN_STATS_TRAFFIC_OFF') }}{% else %}{{ lang('DL_ACP_MAIN_STATS_TRAFFIC_ON') }}{% endif %}</strong></span></td>
 		<td>{{ lang('DL_VERSION_CHECK') }}{{ lang('COLON') }}</td>
 		<td><strong>{{ DL_MOD_VERSION_SIMPLE }}</strong></td>
 	</tr>
 	<tr>
 		<td>{{ lang('DL_ACP_MAIN_STATS_TOTAL_NUM') }}{{ lang('COLON') }}</td>
-		<td><strong>{{ TOTAL_NUM }}</strong></td>
+		<td><strong>{{ DL_TOTAL_NUM }}</strong></td>
 		<td>{{ lang('DL_ACP_MAIN_STATS_TOTAL_EXTERN') }}{{ lang('COLON') }}</td>
-		<td><strong>{{ TOTAL_EXTERN }}</strong></td>
+		<td><strong>{{ DL_TOTAL_EXTERN }}</strong></td>
 	</tr>
 	<tr>
 		<td>{{ lang('DL_ACP_MAIN_STATS_TOTAL_LIMIT') }}{{ lang('COLON') }}</td>
-		<td><strong>{{ TOTAL_LIMIT }}</strong></td>
+		<td><strong>{{ DL_TOTAL_LIMIT }}</strong></td>
 		<td>{{ lang('DL_ACP_MAIN_STATS_TOTAL_SIZE') }}{{ lang('COLON') }}</td>
-		<td><strong>{{ TOTAL_SIZE }}</strong></td>
+		<td><strong>{{ DL_TOTAL_SIZE }}</strong></td>
 	</tr>
 	{% if not S_DL_TRAFFIC_OFF %}
 	<tr>
 		<td>{{ lang('DL_ACP_MAIN_STATS_TOTAL_TRAFFIC') }}{{ lang('COLON') }}</td>
-		<td><strong>{{ OVERALL_TRAFFIC }}</strong></td>
+		<td><strong>{{ DL_OVERALL_TRAFFIC }}</strong></td>
 		<td>{{ lang('DL_ACP_MAIN_STATS_REMAIN_TRAFFIC') }}{{ lang('COLON') }}</td>
-		<td><strong>{{ REMAIN_TRAFFIC }}</strong></td>
+		<td><strong>{{ DL_REMAIN_TRAFFIC }}</strong></td>
 	</tr>
 	<tr>
 		<td>{{ lang('DL_ACP_MAIN_STATS_TOTAL_GTRAFFIC') }}{{ lang('COLON') }}</td>
-		<td><strong>{{ OVERALL_GTRAFFIC }}</strong></td>
+		<td><strong>{{ DL_OVERALL_GTRAFFIC }}</strong></td>
 		<td>{{ lang('DL_ACP_MAIN_STATS_REMAIN_GTRAFFIC') }}{{ lang('COLON') }}</td>
-		<td><strong>{{ REMAIN_GTRAFFIC }}</strong></td>
+		<td><strong>{{ DL_REMAIN_GTRAFFIC }}</strong></td>
 	</tr>
 	{% endif %}
 	<tr>
 		<td>{{ lang('DL_OVERALL_KLICKS') }}{{ lang('COLON') }}</td>
-		<td><strong>{{ OCLICKS }}</strong></td>
+		<td><strong>{{ DL_OCLICKS }}</strong></td>
 		<td>{{ lang('DL_KLICKS') }}{{ lang('COLON') }}</td>
-		<td><strong>{{ MCLICKS }}</strong></td>
+		<td><strong>{{ DL_MCLICKS }}</strong></td>
 	</tr>
 	<tr>
 		<td>{{ lang('DL_ACP_MAIN_STATS_CATEGORIES') }}{{ lang('COLON') }}</td>
-		<td><strong>{{ CATEGORIES }}</strong></td>
+		<td><strong>{{ DL_CATEGORIES }}</strong></td>
 		<td>{{ lang('DL_ACP_MAIN_STATS_SUBCATEGORIES') }}{{ lang('COLON') }}</td>
-		<td><strong>{{ SUBCATEGORIES }}</strong></td>
+		<td><strong>{{ DL_SUBCATEGORIES }}</strong></td>
 	</tr>
 	<tr>
 		<td>{{ lang('DL_ACP_MAIN_STATS_TOTAL_TSIZE') }}{{ lang('COLON') }}</td>
-		<td><strong>{{ TOTAL_THUMBS_SIZE }}</strong></td>
+		<td><strong>{{ DL_TOTAL_THUMBS_SIZE }}</strong></td>
 		<td>{{ lang('DL_ACP_MAIN_STATS_TOTAL_VERSIONS') }}{{ lang('COLON') }}</td>
-		<td><strong>{{ TOTAL_VERSIONS }}</strong></td>
+		<td><strong>{{ DL_TOTAL_VERSIONS }}</strong></td>
 	</tr>
 	<tr>
 		<td>{{ lang('DL_ACP_MAIN_STATS_TOTAL_VFSIZE') }}{{ lang('COLON') }}</td>
-		<td><strong>{{ TOTAL_VERSION_FSIZE }}</strong></td>
+		<td><strong>{{ DL_TOTAL_VERSION_FSIZE }}</strong></td>
 		<td>{{ lang('DL_ACP_MAIN_STATS_TOTAL_TFSIZE') }}{{ lang('COLON') }}</td>
-		<td><strong>{{ TOTAL_VERSION_TSIZE }}</strong></td>
+		<td><strong>{{ DL_TOTAL_VERSION_TSIZE }}</strong></td>
 	</tr>
 	<tr>
 		<td>{{ lang('DL_ACP_MAIN_STATS_TOTAL_TODOS') }}{{ lang('COLON') }}</td>
-		<td><strong class="color: {% if TOTAL_TODOS %}dl-red{% else %}dl-green{% endif %}">{{ TOTAL_TODOS }}</strong></td>
+		<td><strong class="dl-{% if DL_TOTAL_TODOS %}red{% else %}green{% endif %}">{{ DL_TOTAL_TODOS }}</strong></td>
 		<td>{{ lang('DL_ACP_MAIN_STATS_TOTAL_BROKEN') }}{{ lang('COLON') }}</td>
-		<td><strong class="color: {% if TOTAL_BROKEN %}dl-red{% else %}dl-green{% endif %}">{{ TOTAL_BROKEN }}</strong></td>
+		<td><strong class="dl-{% if DL_TOTAL_BROKEN %}red{% else %}green{% endif %}">{{ DL_TOTAL_BROKEN }}</strong></td>
 	</tr>
 	</tbody>
 </table>

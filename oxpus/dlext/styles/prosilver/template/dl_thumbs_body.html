@@ -1,10 +1,21 @@
-{% INCLUDE 'dl_header.html' %}
+{% INCLUDE '@oxpus_dlext/helpers/dl_header.html' %}
 
-<h2>{{ STATUS }} <label>{{ DESCRIPTION }}{{ HACK_VERSION }} {{ MINI_IMG }}</label></h2>
+<h2>
+	{% if DL_FILE_STATUS eq 'red' %}<i class="icon fa-ban fa-fw dl-red" title="{{ lang('DL_RED_EXPLAIN_PERM') }}"></i>{% endif %}
+	{% if DL_FILE_STATUS eq 'yellow' %}<i class="icon fa-download fa-fw dl-yellow" title="{{ lang('DL_YELLOW_EXPLAIN') }}"></i>{% endif %}
+	{% if DL_FILE_STATUS eq 'green' %}<i class="icon fa-download fa-fw dl-green" title="{{ lang('DL_GREEN_EXPLAIN') }}"></i>{% endif %}
+	{% if DL_FILE_STATUS eq 'white' %}<i class="icon fa-download fa-fw dl-white" title="{{ lang('DL_WHITE_EXPLAIN') }}"></i>{% endif %}
+	{% if DL_FILE_STATUS eq 'blue' %}<i class="icon fa-info-circle fa-fw dl-blue" title="{{ lang('DL_BLUE_EXPLAIN_FOOT') }}"></i>{% endif %}
+	{% if DL_FILE_STATUS eq 'grey' %}<i class="icon fa-globe fa-fw dl-grey" title="{{ lang('DL_GREY_EXPLAIN') }}"></i>{% endif %}
+	<label>{{ DL_DESCRIPTION }}{{ DL_HACK_VERSION }}
+		{% if DL_MINI_IMG eq 'new' %}<i class="icon fa-comment-o fa-fw dl-red" title="{{ lang('DL_FILE_NEW') }}"></i>{% endif %}
+		{% if DL_MINI_IMG eq 'edit' %}<i class="icon fa-edit fa-fw dl-blue" title="{{ lang('DL_FILE_EDIT') }}"></i>{% endif %}
+	</label>
+</h2>
 
 <br />
 
-<form action="{{ S_FORMS_ACTION }}" method="post" {{ ENCTYPE }} id="dl_thumbs">
+<form action="{{ S_DL_FORMS_ACTION }}" method="post" enctype="multipart/form-data" id="dl_thumbs">
 
 <div class="panel">
 	<div class="inner">
@@ -19,7 +30,7 @@
 	</dl>
 	<dl>
 		<dt><label>{{ lang('DL_FILE_DESCRIPTION') }}</label></dt>
-		<dd><input type="text" name="img_title" size="70" maxlength="255" value="{{ EDIT_IMG_TITLE }}" class="inputbox autowidth" /></dd>
+		<dd><input type="text" name="img_title" size="70" maxlength="255" value="{{ DL_EDIT_IMG_TITLE }}" class="inputbox autowidth" /></dd>
 	</dl>
 
 	</fieldset>
@@ -33,12 +44,12 @@
 	<input type="submit" name="cancel" value="{{ lang('CANCEL') }}" class="button icon-button" />
 </fieldset>
 
-<div>{{ S_FORM_TOKEN }}{{ S_HIDDEN_FIELDS }}</div>
+<div>{{ S_FORM_TOKEN }}{{ S_DL_HIDDEN_FIELDS }}</div>
 
 </form>
 
-{% for thumbnails in loops.thumbnails %}
-{% if thumbnails.S_FIRST_ROW %}
+{% for dl_thumbnails in loops.dl_thumbnails %}
+{% if dl_thumbnails.S_FIRST_ROW %}
 <br />
 
 <div class="rules">
@@ -55,15 +66,15 @@
 
 	<div class="dl-left dl-cell-block dl-intent-right dl-thumb-box-manage">
 		<div class="dl-thumb-cell">
-			<a href="{{ thumbnails.IMG_LINK }}" rel="prettyPhoto[pp_gal]" title="{{ thumbnails.IMG_TITLE }}"><img src="{{ thumbnails.IMG_PIC }}" alt="{{ thumbnails.IMG_TITLE }}" title="{{ thumbnails.IMG_TITLE }}" class="dl-thumb-box" /></a>
+			<a href="{{ dl_thumbnails.DL_IMG_LINK }}" rel="prettyPhoto[pp_gal]" title="{{ dl_thumbnails.DL_IMG_TITLE }}"><img src="{{ dl_thumbnails.DL_IMG_PIC }}" alt="{{ dl_thumbnails.DL_IMG_TITLE }}" title="{{ dl_thumbnails.DL_IMG_TITLE }}" class="dl-thumb-box" /></a>
 		</div>
 		<div class="dl-thumb-cell-button">
-			<a href="{{ thumbnails.U_DELETE }}" title="{{ lang('DL_DELETE') }}" class="button button-icon-only"><i class="icon fa-times fa-fw" aria-hidden="true"></i><span>{{ lang('DL_DELETE') }}</span></a>
-			<a href="{{ thumbnails.U_EDIT }}" title="{{ lang('DL_EDIT_FILE') }}" class="button button-icon-only"><i class="icon fa-pencil fa-fw" aria-hidden="true"></i><span>{{ lang('DL_EDIT_FILE') }}</span></a>
+			<a href="{{ dl_thumbnails.U_DL_DELETE }}" title="{{ lang('DL_DELETE') }}" class="button button-icon-only"><i class="icon fa-times fa-fw" aria-hidden="true"></i><span>{{ lang('DL_DELETE') }}</span></a>
+			<a href="{{ dl_thumbnails.U_DL_EDIT }}" title="{{ lang('DL_EDIT_FILE') }}" class="button button-icon-only"><i class="icon fa-pencil fa-fw" aria-hidden="true"></i><span>{{ lang('DL_EDIT_FILE') }}</span></a>
 		</div>
 	</div>
 
-{% if thumbnails.S_LAST_ROW %}
+{% if dl_thumbnails.S_LAST_ROW %}
 	</div>
 </div>
 {% endif %}
@@ -71,4 +82,4 @@
 
 <br />
 
-{% INCLUDE 'dl_footer.html' %}
+{% INCLUDE '@oxpus_dlext/helpers/dl_footer.html' %}

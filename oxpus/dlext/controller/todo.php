@@ -3,132 +3,108 @@
 /**
 *
 * @package phpBB Extension - Oxpus Downloads
-* @copyright (c) 2002-2020 OXPUS - www.oxpus.net
+* @copyright (c) 2002-2021 OXPUS - www.oxpus.net
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
 */
 
 namespace oxpus\dlext\controller;
 
-use Symfony\Component\DependencyInjection\Container;
-
 class todo
 {
-	/* @var string phpBB root path */
+	/* phpbb objects */
 	protected $root_path;
-
-	/* @var string phpEx */
 	protected $php_ext;
-
-	/* @var Container */
-	protected $phpbb_container;
-
-	/* @var \phpbb\extension\manager */
-	protected $phpbb_extension_manager;
-
-	/* @var \phpbb\path_helper */
-	protected $phpbb_path_helper;
-
-	/* @var \phpbb\db\driver\driver_interface */
 	protected $db;
-
-	/* @var \phpbb\config\config */
 	protected $config;
-
-	/* @var \phpbb\controller\helper */
 	protected $helper;
-
-	/* @var \phpbb\auth\auth */
-	protected $auth;
-
-	/* @var \phpbb\request\request_interface */
 	protected $request;
-
-	/* @var \phpbb\template\template */
 	protected $template;
-
-	/* @var \phpbb\user */
 	protected $user;
-
-	/* @var \phpbb\language\language */
 	protected $language;
 
-	/** @var extension owned objects */
-	protected $ext_path;
-	protected $ext_path_web;
-	protected $ext_path_ajax;
-
-	protected $dlext_auth;
+	/* extension owned objects */
 	protected $dlext_extra;
 	protected $dlext_files;
 	protected $dlext_main;
+	protected $dlext_footer;
+	protected $dlext_constants;
+
+	protected $dlext_table_downloads;
+	protected $dlext_table_dl_cat;
 
 	/**
 	* Constructor
 	*
 	* @param string									$root_path
 	* @param string									$php_ext
-	* @param Container 								$phpbb_container
-	* @param \phpbb\extension\manager				$phpbb_extension_manager
-	* @param \phpbb\path_helper						$phpbb_path_helper
-	* @param \phpbb\db\driver\driver_interfacer		$db
+	* @param \phpbb\db\driver\driver_interface		$db
 	* @param \phpbb\config\config					$config
 	* @param \phpbb\controller\helper				$helper
-	* @param \phpbb\request\request_interface 		$request
+	* @param \phpbb\request\request 				$request
 	* @param \phpbb\template\template				$template
 	* @param \phpbb\user							$user
 	* @param \phpbb\language\language				$language
+	* @param \oxpus\dlext\core\extra				$dlext_extra
+	* @param \oxpus\dlext\core\files				$dlext_files
+	* @param \oxpus\dlext\core\main					$dlext_main
+	* @param \oxpus\dlext\core\helpers\footer		$dlext_footer
+	* @param \oxpus\dlext\core\helpers\constants	$dlext_constants
+	* @param string									$dlext_table_downloads
+	* @param string									$dlext_table_dl_cat
 	*/
 	public function __construct(
 		$root_path,
 		$php_ext,
-		Container $phpbb_container,
-		\phpbb\extension\manager $phpbb_extension_manager,
-		\phpbb\path_helper $phpbb_path_helper,
 		\phpbb\db\driver\driver_interface $db,
 		\phpbb\config\config $config,
 		\phpbb\controller\helper $helper,
-		\phpbb\auth\auth $auth,
-		\phpbb\request\request_interface $request,
+		\phpbb\request\request $request,
 		\phpbb\template\template $template,
 		\phpbb\user $user,
 		\phpbb\language\language $language,
-		$dlext_auth,
-		$dlext_extra,
-		$dlext_files,
-		$dlext_main
+		\oxpus\dlext\core\extra $dlext_extra,
+		\oxpus\dlext\core\files $dlext_files,
+		\oxpus\dlext\core\main $dlext_main,
+		\oxpus\dlext\core\helpers\footer $dlext_footer,
+		\oxpus\dlext\core\helpers\constants $dlext_constants,
+		$dlext_table_downloads,
+		$dlext_table_dl_cat
 	)
 	{
 		$this->root_path				= $root_path;
 		$this->php_ext 					= $php_ext;
-		$this->phpbb_container 			= $phpbb_container;
-		$this->phpbb_extension_manager 	= $phpbb_extension_manager;
-		$this->phpbb_path_helper		= $phpbb_path_helper;
 		$this->db 						= $db;
 		$this->config 					= $config;
 		$this->helper 					= $helper;
-		$this->auth						= $auth;
 		$this->request					= $request;
 		$this->template 				= $template;
 		$this->user 					= $user;
 		$this->language					= $language;
 
-		$this->ext_path					= $this->phpbb_extension_manager->get_extension_path('oxpus/dlext', true);
-		$this->ext_path_web				= $this->phpbb_path_helper->update_web_root_path($this->ext_path);
-		$this->ext_path_ajax			= $this->ext_path_web . 'assets/javascript/';
+		$this->dlext_table_downloads	= $dlext_table_downloads;
+		$this->dlext_table_dl_cat		= $dlext_table_dl_cat;
 
-		$this->dlext_auth				= $dlext_auth;
 		$this->dlext_extra				= $dlext_extra;
 		$this->dlext_files				= $dlext_files;
 		$this->dlext_main				= $dlext_main;
+		$this->dlext_footer				= $dlext_footer;
+		$this->dlext_constants			= $dlext_constants;
+
+		$this->dlext_main->dl_handle_active();
 	}
 
 	public function handle()
 	{
-		$nav_view = 'todo';
+		$cat			= $this->request->variable('cat', 0);
+		$submit			= $this->request->variable('submit', '');
+		$cancel			= $this->request->variable('cancel', '');
+		$delete			= $this->request->variable('delete', '');
+		$edit			= $this->request->variable('edit', '');
+		$df_id			= $this->request->variable('df_id', 0);
+		$cat_id			= $this->request->variable('cat_id', 0);
 
-		// Include the default base init script
-		include_once($this->ext_path . 'phpbb/includes/base_init.' . $this->php_ext);
+		$index 			= ($cat) ? $this->dlext_main->index($cat) : $this->dlext_main->index();
 
 		/*
 		* create todo list
@@ -138,12 +114,11 @@ class todo
 			redirect($this->helper->route('oxpus_dlext_index'));
 		}
 
-		$todo_access_ids = $this->dlext_main->full_index(0, 0, 0, 2);
-		$total_todo_ids = count($todo_access_ids);
+		$todo_access_ids = $this->dlext_main->full_index(0, 0, 0, $this->dlext_constants::DL_AUTH_CHECK_MOD);
 
-		if ($total_todo_ids > 0 && $this->user->data['is_registered'])
+		if (count($todo_access_ids) > 0 && $this->user->data['is_registered'])
 		{
-			$todo = $this->request->variable('message', '', true);
+			$todo = $this->request->variable('message', '', $this->dlext_constants::DL_TRUE);
 
 			add_form_key('dl_todo');
 
@@ -152,7 +127,7 @@ class todo
 			{
 				if ($delete)
 				{
-					if (confirm_box(true))
+					if (confirm_box($this->dlext_constants::DL_TRUE))
 					{
 						$todo = '';
 					}
@@ -161,11 +136,11 @@ class todo
 						$s_hidden_fields = [
 							'view'		=> 'todo',
 							'df_id'		=> $df_id,
-							'submit'	=> true,
-							'delete'	=> true,
+							'submit'	=> $this->dlext_constants::DL_TRUE,
+							'delete'	=> $this->dlext_constants::DL_TRUE,
 						];
 
-						confirm_box(false, $this->language->lang('DELETE_POST'), build_hidden_fields($s_hidden_fields));
+						confirm_box($this->dlext_constants::DL_FALSE, $this->language->lang('DELETE_POST'), build_hidden_fields($s_hidden_fields), '@oxpus_dlext/helpers/dl_confirm_body.html');
 					}
 				}
 
@@ -176,9 +151,9 @@ class todo
 						trigger_error('FORM_INVALID');
 					}
 
-					$allow_bbcode		= ($this->config['allow_bbcode']) ? true : false;
-					$allow_urls			= true;
-					$allow_smilies		= ($this->config['allow_smilies']) ? true : false;
+					$allow_bbcode		= ($this->config['allow_bbcode']) ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE;
+					$allow_urls			= $this->dlext_constants::DL_TRUE;
+					$allow_smilies		= ($this->config['allow_smilies']) ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE;
 					$todo_uid			= '';
 					$todo_bitfield		= '';
 					$todo_flags			= 0;
@@ -188,7 +163,7 @@ class todo
 						generate_text_for_storage($todo, $todo_uid, $todo_bitfield, $todo_flags, $allow_bbcode, $allow_urls, $allow_smilies);
 					}
 
-					$sql = 'UPDATE ' . DOWNLOADS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', [
+					$sql = 'UPDATE ' . $this->dlext_table_downloads . ' SET ' . $this->db->sql_build_array('UPDATE', [
 						'todo'			=> $todo,
 						'todo_uid'		=> $todo_uid,
 						'todo_bitfield'	=> $todo_bitfield,
@@ -196,7 +171,7 @@ class todo
 					$this->db->sql_query($sql);
 
 					$meta_url	= $this->helper->route('oxpus_dlext_todo');
-					$message	= $this->language->lang('DOWNLOAD_UPDATED') . '<br /><br />' . $this->language->lang('CLICK_RETURN_TODO_EDIT', '<a href="' . $meta_url . '">', '</a>');
+					$message	= $this->language->lang('DL_DOWNLOAD_UPDATED') . '<br /><br />' . $this->language->lang('CLICK_RETURN_TODO_EDIT', '<a href="' . $meta_url . '">', '</a>');
 
 					meta_refresh(3, $meta_url);
 
@@ -207,8 +182,8 @@ class todo
 			// Will we edit a todo??
 			if ($edit && $df_id)
 			{
-				$dl_file = [];
-				$dl_file = $this->dlext_files->all_files(0, '', 'ASC', '', $df_id, 0, 'description, desc_uid, desc_flags, todo, todo_uid, todo_flags, hack_version');
+				$fields			= ['description', 'desc_uid', 'desc_flags', 'todo', 'todo_uid', 'todo_flags', 'hack_version'];
+				$dl_file		= $this->dlext_files->all_files(0, [], [], $df_id, 0, $fields);
 
 				$description	= $dl_file['description'];
 				$desc_uid		= $dl_file['desc_uid'];
@@ -219,7 +194,7 @@ class todo
 				$todo_flags		= $dl_file['todo_flags'];
 
 				$text_ary		= generate_text_for_edit($description, $desc_uid, $desc_flags);
-				$s_downloads	= $text_ary['text'];
+				$description	= $text_ary['text'];
 
 				$text_ary		= generate_text_for_edit($todo, $todo_uid, $todo_flags);
 				$todo			= $text_ary['text'];
@@ -229,23 +204,21 @@ class todo
 					'df_id'		=> $df_id,
 				];
 
-				$total_possible_todo = true;
+				$total_possible_todo = $this->dlext_constants::DL_TRUE;
 			}
 			else
 			{
 				$todo = '';
 				$hack_version = '';
 
-				$s_downloads = '<select name="df_id" class="select autowidth">';
-
-				$sql = 'SELECT c.cat_name, d.id, d.description, d.desc_uid, d.desc_flags, d.todo_uid, d.todo_flags FROM ' . DOWNLOADS_TABLE . ' d, ' . DL_CAT_TABLE . ' c
+				$sql = 'SELECT c.cat_name, d.id, d.description, d.desc_uid, d.desc_flags, d.todo_uid, d.todo_flags FROM ' . $this->dlext_table_downloads . ' d, ' . $this->dlext_table_dl_cat . ' c
 					WHERE d.cat = c.id
 						AND ' . $this->db->sql_in_set('d.cat', $todo_access_ids) . "
 						AND (todo = '' OR todo IS NULL)
 					ORDER BY c.parent, c.sort, c.id, d.description";
 				$result = $this->db->sql_query($sql);
 
-				$total_possible_todo = $this->db->sql_affectedrows($result);
+				$total_possible_todo = $this->db->sql_affectedrows();
 
 				$dl_select = [];
 
@@ -260,9 +233,12 @@ class todo
 
 				foreach ($dl_select as $category => $row)
 				{
-					if ($cur_cat <> $category)
+					if ($cur_cat != $category)
 					{
-						$s_downloads .= '<optgroup label="' . $category . '">';
+						$this->template->assign_block_vars('dl_todo_select', [
+							'DL_TYPE'	=> 'optgrp',
+							'DL_VALUE'	=> $category,
+						]);
 
 						foreach ($dl_select[$category] as $row)
 						{
@@ -273,66 +249,73 @@ class todo
 							$text_ary		= generate_text_for_edit($description, $desc_uid, $desc_flags);
 							$description	= $text_ary['text'];
 
-							$s_downloads .= '<option value="' . $row['id'] . '">' . $description . '</option>';
+							$this->template->assign_block_vars('dl_todo_select', [
+								'DL_TYPE'	=> 'option',
+								'DL_KEY'	=> $row['id'],
+								'DL_VALUE'	=> $description,
+							]);
 						}
 
-						$s_downloads .= '</optgroup>';
+						$this->template->assign_block_vars('dl_todo_select', [
+							'DL_TYPE'	=> 'optend',
+						]);
+
 						$cur_cat = $category;
 					}
 				}
-
-				$s_downloads .= '</select>';
 
 				$s_hidden_fields = [];
 			}
 
 			// Status for HTML, BBCode, Smilies, Images and Flash,
-			$bbcode_status	= ($this->config['allow_bbcode']) ? true : false;
-			$smilies_status	= ($bbcode_status && $this->config['allow_smilies']) ? true : false;
-			$img_status		= true;
-			$url_status		= ($this->config['allow_post_links']) ? true : false;
-			$flash_status	= false;
-			$quote_status	= true;
+			$bbcode_status	= ($this->config['allow_bbcode']) ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE;
+			$smilies_status	= ($bbcode_status && $this->config['allow_smilies']) ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE;
+			$img_status		= $this->dlext_constants::DL_TRUE;
+			$url_status		= ($this->config['allow_post_links']) ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE;
+			$flash_status	= $this->dlext_constants::DL_FALSE;
+			$quote_status	= $this->dlext_constants::DL_TRUE;
 
-			// Smilies Block,
+			$this->language->add_lang('posting');
+
+			// Smilies Block
 			if ($smilies_status)
 			{
 				if (!function_exists('generate_smilies'))
 				{
-					include_once($this->root_path . 'includes/functions_posting.' . $this->php_ext);
+					include($this->root_path . 'includes/functions_posting.' . $this->php_ext);
 				}
+
 				generate_smilies('inline', 0);
 			}
 
-			// BBCode-Block,
-			$this->language->add_lang('posting');
+			// Display functions
+			if (!function_exists('display_custom_bbcodes'))
+			{
+				include($this->root_path . 'includes/functions_display.' . $this->php_ext);
+			}
+
 			display_custom_bbcodes();
 
-			// Initiate todo list management page
-			$this->template->set_filenames(['body' => 'dl_todo_body.html']);
-
 			$this->template->assign_vars([
-				'HACK_VERSION'		=> $hack_version,
-				'TODO_TEXT'			=> $todo,
+				'DL_HACK_VERSION'		=> $hack_version,
+				'DL_TODO_TEXT'			=> $todo,
 
-				'S_BBCODE_ALLOWED'	=> $bbcode_status,
-				'S_BBCODE_IMG'		=> $img_status,
-				'S_BBCODE_URL'		=> $url_status,
-				'S_BBCODE_FLASH'	=> $flash_status,
-				'S_BBCODE_QUOTE'	=> $quote_status,
-				'S_LINKS_ALLOWED'	=> $url_status,
+				'S_BBCODE_ALLOWED'		=> $bbcode_status,
+				'S_BBCODE_IMG'			=> $img_status,
+				'S_BBCODE_URL'			=> $url_status,
+				'S_BBCODE_FLASH'		=> $flash_status,
+				'S_BBCODE_QUOTE'		=> $quote_status,
+				'S_LINKS_ALLOWED'		=> $url_status,
 
-				'S_ADD_TODO'		=> ($edit) ? false : true,
-				'S_TODO_ADD'		=> $total_possible_todo,
-				'S_DOWNLOAD'		=> $s_downloads,
-				'S_HIDDEN_FIELDS'	=> build_hidden_fields($s_hidden_fields),
-				'S_FORM_ACTION'		=> $this->helper->route('oxpus_dlext_todo'),
+				'S_DL_ADD_TODO'			=> ($edit) ? $this->dlext_constants::DL_FALSE : $this->dlext_constants::DL_TRUE,
+				'S_DL_TODO_ADD'			=> $total_possible_todo,
+				'S_DL_HIDDEN_FIELDS'	=> build_hidden_fields($s_hidden_fields),
+				'S_DL_FORM_ACTION'		=> $this->helper->route('oxpus_dlext_todo'),
 
-				'U_MORE_SMILIES'	=> append_sid($this->root_path . 'posting.' . $this->php_ext, 'mode=smilies'),
+				'U_DL_MORE_SMILIES'		=> append_sid($this->root_path . 'posting.' . $this->php_ext, 'mode=smilies'),
 			]);
 
 			// Build todo edit list for existing entries
-			$dl_todo = [];
 			$dl_todo = $this->dlext_extra->get_todo();
 
 			if (!empty($dl_todo['file_name'][0]))
@@ -342,22 +325,20 @@ class todo
 					$df_id = $dl_todo['df_id'][$i];
 
 					$this->template->assign_block_vars('todolist_row', [
-						'FILENAME'		=> $dl_todo['file_name'][$i],
-						'FILE_LINK'		=> $this->helper->route('oxpus_dlext_details', ['df_id' => $df_id]),
-						'HACK_VERSION'	=> $dl_todo['hack_version'][$i],
-						'TODO'			=> $dl_todo['todo'][$i],
+						'DL_FILENAME'		=> $dl_todo['file_name'][$i],
+						'DL_FILE_LINK'		=> $this->helper->route('oxpus_dlext_details', ['df_id' => $df_id]),
+						'DL_HACK_VERSION'	=> $dl_todo['hack_version'][$i],
+						'DL_TODO'			=> $dl_todo['todo'][$i],
 
-						'U_TODO_EDIT'	=> $this->helper->route('oxpus_dlext_todo', ['edit' => true, 'df_id' => $df_id]),
-						'U_TODO_DELETE'	=> $this->helper->route('oxpus_dlext_todo', ['delete' => true, 'submit' => true, 'df_id' => $df_id]),
+						'U_DL_TODO_EDIT'	=> $this->helper->route('oxpus_dlext_todo', ['edit' => $this->dlext_constants::DL_TRUE, 'df_id' => $df_id]),
+						'U_DL_TODO_DELETE'	=> $this->helper->route('oxpus_dlext_todo', ['delete' => $this->dlext_constants::DL_TRUE, 'submit' => $this->dlext_constants::DL_TRUE, 'df_id' => $df_id]),
 					]);
 				}
 			}
 			else
 			{
-				$this->template->assign_var('S_NO_TODOLIST', true);
+				$this->template->assign_var('S_DL_NO_TODOLIST', $this->dlext_constants::DL_TRUE);
 			}
-
-			page_header($this->language->lang('DL_MOD_TODO'));
 		}
 		else
 		{
@@ -367,8 +348,12 @@ class todo
 		/*
 		* include the mod footer
 		*/
-		$dl_footer = $this->phpbb_container->get('oxpus.dlext.footer');
-		$dl_footer->set_parameter($nav_view, $cat_id, $df_id, $index);
-		$dl_footer->handle();
+		$this->dlext_footer->set_parameter('todo', $cat_id, $df_id, $index);
+		$this->dlext_footer->handle();
+
+		/*
+		* generate page
+		*/
+		return $this->helper->render('@oxpus_dlext/dl_todo_body.html', $this->language->lang('DL_MOD_TODO'));
 	}
 }

@@ -3,8 +3,8 @@
 	"type": "phpbb-extension",
 	"description": "Download Extension",
 	"homepage": "https://phpbb3.oxpus.net",
-	"version": "8.1.9",
-	"time": "2020-12-19",
+	"version": "8.2.0",
+	"time": "2021-03-20",
 	"license": "GPL-2.0-only",
 	"authors": [{
 			"name": "Karsten Ude",
@@ -13,12 +13,12 @@
 			"role": "Lead Developer"
 		}],
 	"require": {
-		"php": ">=7.0.0"
+		"php": ">=7.2.0"
 	},
 	"extra": {
 		"display-name": "Hotschi's Downloads",
 		"soft-require": {
-			"phpbb/phpbb": ">=3.2"
+			"phpbb/phpbb": ">=3.2,<4.0.0@dev"
 		},
 		"version-check": {
 			"host": "www.oxpus.net",

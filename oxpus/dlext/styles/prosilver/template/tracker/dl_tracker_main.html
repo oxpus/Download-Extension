@@ -1,0 +1,158 @@
+{% INCLUDE '@oxpus_dlext/helpers/dl_header.html' %}
+
+<h2>{{ lang('DL_BUG_TRACKER_REPORT') }}</h2>
+
+<br />
+
+<div class="dl-report-panel panel dl-left dl-width-75 dl-top">
+	<div class="inner">
+
+		<div class="dl-width-95">
+
+			<h3>{{ lang('DL_BUG_REPORT_TITLE') }}</h3>
+			<div class="title">{{ DL_REPORT_TITLE }}</div>
+
+			<br />
+
+			<h3>{{ lang('DL_BUG_REPORT_TEXT') }}</h3>
+			<div class="message">{{ DL_REPORT_TEXT }}</div>
+
+			{% if U_DL_BUG_REPORT_EDIT %}
+			<ul class="post-buttons">
+				<li>
+					<a href="{{ U_DL_BUG_REPORT_EDIT }}" title="{{ lang('DL_EDIT_FILE') }}" class="button button-icon-only">
+						<i class="icon fa-pencil fa-fw" aria-hidden="true"></i><span class="sr-only">{{ lang('DL_EDIT_FILE') }}</span>
+					</a>
+				</li>
+			</ul>
+			{% endif %}
+			{% if U_REPORT_DELETE %}
+			<ul class="post-buttons">
+				<li>
+					<a href="{{ U_DL_REPORT_DELETE }}" title="{{ lang('DL_DELETE') }}" class="button button-icon-only">
+						<i class="icon fa-times fa-fw" aria-hidden="true"></i><span class="sr-only">{{ lang('DL_DELETE') }}</span>
+					</a>
+				</li>
+			</ul>
+			{% endif %}
+
+		</div>
+
+	</div>
+</div>
+
+<div class="panel dl-right dl-width-20 dl-top">
+	<div class="inner">
+
+		<div class="dl-width-95">
+			<h3>{{ lang('DL_BUG_REPORT_ID') }}</h3>
+			<span class="value">{{ DL_REPORT_ID }}</span>
+			<h3>{{ lang('DL_BUG_REPORT_FILE') }}</h3>
+			<span class="value"><a href="{{ U_DL_DOWNLOAD_FILE }}" class="genmed">{{ DL_REPORT_FILE }}</a></span>
+			{% if DL_REPORT_FILE_VER %}<h3>{{ lang('DL_HACK_VERSION') }}</h3>
+			<span class="value">{{ DL_REPORT_FILE_VER }}</span>{% endif %}
+			<h3>{{ lang('DL_BUG_REPORT_DATE') }}</h3>
+			<span class="value"><time datetime="{{ DL_REPORT_DATE_RFC }}">{{ DL_REPORT_DATE }}</time></span>
+			<h3>{{ lang('DL_BUG_REPORT_AUTHOR') }}</h3>
+			<span class="value">{{ DL_REPORT_AUTHOR }}</span>
+			{% if DL_REPORT_PHP %}<h3>{{ lang('DL_BUG_REPORT_PHP') }}</h3>
+			<span class="value">{{ DL_REPORT_PHP }}</span>{% endif %}
+			{% if DL_REPORT_DB %}<h3>{{ lang('DL_BUG_REPORT_DB') }}</h3>
+			<span class="value">{{ DL_REPORT_DB }}</span>{% endif %}
+			{% if DL_REPORT_FORUM %}<h3>{{ lang('DL_BUG_REPORT_FORUM') }}</h3>
+			<span class="value">{{ DL_REPORT_FORUM }}</span>{% endif %}
+			<h3>{{ lang('DL_BUG_REPORT_STATUS') }}</h3>
+			<span class="value">{{ DL_REPORT_STATUS }}</span>
+			<h3>{{ lang('DL_BUG_REPORT_STATUS_DATE') }}</h3>
+			<span class="value"><time datetime="{{ DL_STATUS_DATE_RFC }}">{{ DL_STATUS_DATE }}</time></span>
+			{% for assign in loops.assign %}
+			<h3>{{ lang('DL_BUG_REPORT_ASSIGNED') }}</h3>
+			<span class="value">{{ assign.DL_ASSIGN_TO }}</span>
+			<h3>{{ lang('DL_BUG_REPORT_ASSIGN_DATE') }}</h3>
+			<span class="value"><time datetime="{{ assign.DL_ASSIGN_DATE_RFC }}">{{ assign.DL_ASSIGN_DATE }}</time></span>
+			{% endfor %}
+			{% if S_DL_NO_ASSIGN %}
+			<h3>{{ lang('DL_BUG_REPORT_UNASSIGNED') }}</h3>
+			{% endif %}
+			{% if S_DL_ASSIGN_MOD %}
+			<h3>{{ lang('DL_BUG_REPORT_REASSIGN') }}</h3>
+			<form action="{{ S_DL_FORM_ASSIGN_ACTION }}" id="assign_user" method="post">
+				<div>
+					<select name="user_assign">
+						{% for assign_users in loops.assign_users %}
+							<option value="{{ assign_users.DL_USER_ID }}"{% if assign_users.DL_USER_ID eq S_DL_SELECT_ASSIGNED_USER %} selected="selected"{% endif %}>{{ assign_users.DL_USER_NAME }}</option>
+						{% endfor %}
+					</select>
+					<input type="submit" name="submit" value="{{ lang('DL_BUG_REPORT_ASSIGN') }}" class="button2" />
+					{{ S_FORM_TOKEN }}
+				</div>
+			</form>
+			{% endif %}
+
+		</div>
+
+	</div>
+</div>
+
+<br class="clear" />
+
+{% if S_DL_SELECT_STATUS %}
+<div class="panel bg2">
+	<div class="inner">
+
+	<form action="{{ S_DL_FORM_STATUS_ACTION }}" method="post" id="status_change">
+
+	<h3>{{ lang('DL_BUG_REPORT_STATUS') }}</h3>
+
+	<ul class="linklist">
+		<li>
+			<dl>
+				<dd>
+					<select name="new_status">
+						{% for dl_report_new_status in loops.dl_report_new_status %}
+						<option value="{{ dl_report_new_status.DL_VALUE }}">{{ dl_report_new_status.DL_LANG }}</option>
+						{% endfor %}
+					</select>
+					<input type="submit" name="submit" value="{{ lang('DL_BUG_REPORT_STATUS_UPDATE') }}" class="button2" />
+				</dd>
+				<dd><label>{{ lang('DL_BUG_REPORT_STATUS_TEXT') }}</label><br /><textarea cols="75" rows="3" class="inputbox" name="new_status_text"></textarea></dd>
+			</dl>
+		</li>
+	</ul>
+
+	<div>{{ S_FORM_TOKEN }}</div>
+
+	</form>
+
+	</div>
+</div>
+{% endif %}
+
+{% if S_DL_HISTORY %}
+<div class="panel bg1">
+	<div class="inner">
+
+	<h3>{{ lang('DL_BUG_REPORT_HISTORY') }}</h3>
+
+	<table cellpadding="0" cellspacing="0" class="table1">
+	{% for history_row in loops.history_row %}
+	<tr>
+		<td class="row bg3 dl-width-15 dl-text-top">
+			<label>{{ history_row.DL_VALUE }}</label>
+			<br />
+			<span class="small"><time datetime="{{ history_row.DL_DATE_RFC }}">{{ history_row.DL_DATE }}</time></span>
+		</td>
+		<td class="row bg2 dl-width-85 dl-text-top">
+			<span>{{ history_row.DL_TEXT }}</span>
+		</td>
+	</tr>
+	{% endfor %}
+	</table>
+
+	</div>
+</div>
+{% endif %}
+
+<br />
+
+{% INCLUDE '@oxpus_dlext/helpers/dl_footer.html' %}

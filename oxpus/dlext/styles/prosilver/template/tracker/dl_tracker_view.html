@@ -1,0 +1,119 @@
+{% INCLUDE '@oxpus_dlext/helpers/dl_header.html' %}
+
+<h2>{{ lang('DL_BUG_TRACKER') }}</h2>
+
+<br />
+
+{% if S_DL_NO_BUG_TRACKER %}
+<h3 class="solo">{{ lang('DL_NO_BUG_TRACKER') }}</h3>
+
+<br />
+{% else %}
+
+<div class="forabg">
+	<div class="inner">
+
+	<ul class="topiclist">
+		<li class="header">
+			<dl>
+				<dt>{{ lang('DL_BUG_REPORT_TITLE_DETAILS') }}</dt>
+				<dd class="dl-text-center dl-width-10 dl-left">{{ lang('DL_BUG_REPORT_PHP') }} / {{ lang('DL_BUG_REPORT_DB') }} / {{ lang('DL_BUG_REPORT_FORUM') }}</dd>
+				<dd class="time">{{ lang('DL_BUG_REPORT_STATUS') }}</dd>
+			</dl>
+		</li>
+	</ul>
+	<ul class="topiclist topics">
+		{% for bug_tracker_row in loops.bug_tracker_row %}
+		<li class="row{% if bug_tracker_row.S_ROW_COUNT is even %} bg1{% else %} bg2{% endif %}">
+			<dl>
+				<dt>
+					<div class="post">
+					<ul class="post-buttons">
+						<li>
+							<a href="{{ bug_tracker_row.DL_REPORT_DETAIL }}" title="{{ lang('DL_BUG_REPORT_DETAIL') }}" class="button button-icon-only">
+								<i class="icon fa-eye fa-fw" aria-hidden="true"></i><span class="sr-only">{{ lang('DL_BUG_REPORT_DETAIL') }}</span>
+							</a>&nbsp;
+						</li>
+						{% for modext in bug_tracker_row.modext %}
+						<li>
+							<a href="{{ modext.U_DL_DELETE }}" title="{{ lang('DL_DELETE') }}" class="button button-icon-only">
+								<i class="icon fa-times fa-fw" aria-hidden="true"></i><span class="sr-only">{{ lang('DL_DELETE') }}</span>
+							</a>&nbsp;
+						</li>
+						{% endfor %}
+					</ul>
+					<label>{{ bug_tracker_row.DL_REPORT_ID }}&nbsp;&bull;&nbsp;{{ bug_tracker_row.DL_REPORT_TITLE }}</label>
+					<br /><strong>{{ bug_tracker_row.DL_REPORT_FILE }} {{ bug_tracker_row.DL_REPORT_FILE_VER }}</strong>
+					<br /><span>{{ lang('DL_BUG_REPORT_DATE') }} <time datetime="{{ bug_tracker_row.DL_REPORT_DATE_RFC }}">{{ bug_tracker_row.DL_REPORT_DATE }}</time>
+					<br />{{ lang('DL_BUG_REPORT_AUTHOR') }} {{ bug_tracker_row.DL_REPORT_AUTHOR_LINK }}</span>
+					{% if S_DL_REPORT_TEXT %}<hr /><span class="small"><i>{{ bug_tracker_row.DL_REPORT_TEXT }}</i></span>{% endif %}
+					</div>
+				</dt>
+				<dd class="dl-text-center dl-width-10 dl-left">
+					{{ bug_tracker_row.DL_REPORT_PHP }}
+					<br />
+					{{ bug_tracker_row.DL_REPORT_DB }}
+					<br />
+					{{ bug_tracker_row.DL_REPORT_FORUM }}
+				</dd>
+				<dd class="time"><span>
+					<time datetime="{{ bug_tracker_row.DL_REPORT_STATUS_DATE_RFC }}">{{ bug_tracker_row.DL_REPORT_STATUS_DATE }}</time>&nbsp;<b>{{ bug_tracker_row.DL_REPORT_STATUS }}</b></span>
+					{% for assign in bug_tracker_row.assign %}
+					&nbsp;{{ lang('DL_BUG_REPORT_ASSIGN_DATE') }}&nbsp;<time datetime="{{ assign.DL_REPORT_ASSIGN_DATE_RFC }}">{{ assign.DL_REPORT_ASSIGN_DATE }}</time>
+					&nbsp;{{ assign.REPORT_ASSIGN_LINK }}
+					{% endfor %}
+					{% if S_DL_NO_ASSIGN %}
+					&nbsp;{{ lang('DL_BUG_REPORT_UNASSIGNED') }}
+					{% endif %}
+				</dd>
+			</dl>
+		</li>
+		{% endfor %}
+	</ul>
+
+	</div>
+</div>
+
+{% endif %}
+
+<br />
+
+<div class="panel">
+	<div class="inner">
+
+		<fieldset class="submit-buttons">
+		<form action="{{ S_DL_FORM_ACTION }}" method="post" id="filter_report" class="dl-left dl-margin-right-small">
+			<div>
+				<select name="bt_filter">
+					{% for dl_report_filter in loops.dl_report_filter %}
+					<option value="{{ dl_report_filter.DL_VALUE }}"{% if dl_report_filter.DL_VALUE eq S_DL_SELECT_FILTER %} selected="selected"{% endif %}>{{ dl_report_filter.DL_LANG }}{% if dl_report_filter.DL_COUNT %} ({{ dl_report_filter.DL_COUNT }}){% endif %}</option>
+					{% endfor %}
+				</select>
+				<input type="submit" name="submit" value="{{ lang('DL_FILTER') }}" class="button1" />
+			</div>
+		</form>
+		{% if S_DL_OWN_REPORT %}
+		<form action="{{ S_DL_FORM_OWN_ACTION }}" method="post" id="filter_own_report" class="dl-left dl-margin-right-small">
+			<div><input type="submit" name="submit" value="{{ lang('DL_FILTER_BT_OWN') }}" class="button2" /></div>
+		</form>
+		{% endif %}
+		{% if S_DL_ASSIGN_REPORT %}
+		<form action="{{ S_DL_FORM_ASSIGN_ACTION }}" method="post" id="filter_assign_report" class="dl-left dl-margin-right-small">
+			<div><input type="submit" name="submit" value="{{ lang('DL_FILTER_BT_ASSIGN') }}" class="button2" /></div>
+		</form>
+		{% endif %}
+		{% if S_DL_ADD_NEW_REPORT %}
+		<form action="{{ S_DL_FORM_ADD_ACTION }}" method="post" id="add_new_report" class="dl-left dl-margin-right-small">
+			<div><input type="submit" name="submit" value="{{ lang('NEW_POST') }}" class="button1" /></div>
+			{{ S_DL_HIDDEN_FIELD }}
+		</form>
+		{% endif %}
+
+		</fieldset>
+
+	</div>
+</div>
+
+<br />
+
+{% INCLUDE '@oxpus_dlext/helpers/dl_footer.html' %}

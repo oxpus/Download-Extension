@@ -3,7 +3,7 @@
 /**
 *
 * @package phpBB Extension - Oxpus Downloads
-* @copyright (c) 2002-2020 OXPUS - www.oxpus.net
+* @copyright (c) 2002-2021 OXPUS - www.oxpus.net
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
 */
@@ -39,19 +39,11 @@ class comments extends \phpbb\notification\type\base
 		'group'	=> 'DL_NOTIFICATIONS',
 	];
 
-	/** @var \phpbb\config\config */
-	protected $config;
-
 	/** @var \phpbb\user_loader */
 	protected $user_loader;
 
 	/** @var \phpbb\controller\helper */
 	protected $helper;
-
-	public function set_config(\phpbb\config\config $config)
-	{
-		$this->config = $config;
-	}
 
 	public function set_user_loader(\phpbb\user_loader $user_loader)
 	{

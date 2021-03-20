@@ -3,7 +3,7 @@
 /**
 *
 * @package phpBB Extension - Oxpus Downloads
-* @copyright (c) 2002-2020 OXPUS - www.oxpus.net
+* @copyright (c) 2002-2021 OXPUS - www.oxpus.net
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
 */
@@ -29,27 +29,6 @@ class release_7_0_10 extends \phpbb\db\migration\migration
 		return [
 			// Set the current version
 			['config.update', ['dl_ext_version', $this->dl_ext_version]],
-
-			['custom', [[$this, 'drop_wrong_cache_files']]],
 		];
-	}
-
-	public function drop_wrong_cache_files()
-	{
-		$drop_files = [
-			'auth',
-			'black',
-			'cat_counts',
-			'cats',
-			'file_preset',
-		];
-
-		foreach ($drop_files as $file)
-		{
-			if (@file_exists($this->phpbb_root_path . 'DL_EXT_CACHE_PATHdata_dl_' . $file . '.' . $this->php_ext))
-			{
-				@unlink($this->phpbb_root_path . 'DL_EXT_CACHE_PATHdata_dl_' . $file . '.' . $this->php_ext);
-			}
-		}
 	}
 }

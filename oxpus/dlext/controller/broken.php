@@ -3,130 +3,103 @@
 /**
 *
 * @package phpBB Extension - Oxpus Downloads
-* @copyright (c) 2002-2020 OXPUS - www.oxpus.net
+* @copyright (c) 2002-2021 OXPUS - www.oxpus.net
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
 */
 
 namespace oxpus\dlext\controller;
 
-use Symfony\Component\DependencyInjection\Container;
-
 class broken
 {
-	/* @var string phpBB root path */
-	protected $root_path;
-
-	/* @var string phpEx */
-	protected $php_ext;
-
-	/* @var Container */
-	protected $phpbb_container;
-
-	/* @var \phpbb\extension\manager */
-	protected $phpbb_extension_manager;
-
-	/* @var \phpbb\path_helper */
-	protected $phpbb_path_helper;
-
-	/* @var \phpbb\db\driver\driver_interface */
+	/* phpbb objects */
 	protected $db;
-
-	/* @var \phpbb\config\config */
 	protected $config;
-
-	/* @var \phpbb\controller\helper */
 	protected $helper;
-
-	/* @var \phpbb\auth\auth */
-	protected $auth;
-
-	/* @var \phpbb\request\request_interface */
 	protected $request;
-
-	/* @var \phpbb\template\template */
 	protected $template;
-
-	/* @var \phpbb\user */
 	protected $user;
-
-	/* @var \phpbb\language\language */
 	protected $language;
+	protected $notifications;
+	protected $captcha;
 
-	/** @var extension owned objects */
-	protected $ext_path;
-	protected $ext_path_web;
-	protected $ext_path_ajax;
-
+	/* extension owned objects */
 	protected $dlext_auth;
 	protected $dlext_main;
 	protected $dlext_status;
+	protected $dlext_constants;
+	protected $dlext_footer;
+
+	protected $dlext_table_downloads;
 
 	/**
 	* Constructor
 	*
-	* @param string									$root_path
-	* @param string									$php_ext
-	* @param Container 								$phpbb_container
-	* @param \phpbb\extension\manager				$phpbb_extension_manager
-	* @param \phpbb\path_helper						$phpbb_path_helper
-	* @param \phpbb\db\driver\driver_interfacer		$db
+	* @param \phpbb\db\driver\driver_interface		$db
 	* @param \phpbb\config\config					$config
 	* @param \phpbb\controller\helper				$helper
-	* @param \phpbb\auth\auth						$auth
-	* @param \phpbb\request\request_interface 		$request
+	* @param \phpbb\request\request 				$request
 	* @param \phpbb\template\template				$template
 	* @param \phpbb\user							$user
 	* @param \phpbb\language\language				$language
+	* @param \phpbb\notification\manager			$notification
+	* @param \phpbb\captcha\factory					$captcha
+	* @param \oxpus\dlext\core\auth					$dlext_auth
+	* @param \oxpus\dlext\core\main					$dlext_main
+	* @param \oxpus\dlext\core\status				$dlext_status
+	* @param \oxpus\dlext\core\helpers\constants	$dlext_constants
+	* @param \oxpus\dlext\core\helpers\footer		$dlext_footer
+	* @param string									$dlext_table_downloads
 	*/
 	public function __construct(
-		$root_path,
-		$php_ext,
-		Container $phpbb_container,
-		\phpbb\extension\manager $phpbb_extension_manager,
-		\phpbb\path_helper $phpbb_path_helper,
 		\phpbb\db\driver\driver_interface $db,
 		\phpbb\config\config $config,
 		\phpbb\controller\helper $helper,
-		\phpbb\auth\auth $auth,
-		\phpbb\request\request_interface $request,
+		\phpbb\request\request $request,
 		\phpbb\template\template $template,
 		\phpbb\user $user,
 		\phpbb\language\language $language,
-		$dlext_auth,
-		$dlext_main,
-		$dlext_status
+		\phpbb\notification\manager $notification,
+		\phpbb\captcha\factory $captcha,
+		\oxpus\dlext\core\auth $dlext_auth,
+		\oxpus\dlext\core\main $dlext_main,
+		\oxpus\dlext\core\status $dlext_status,
+		\oxpus\dlext\core\helpers\constants $dlext_constants,
+		\oxpus\dlext\core\helpers\footer $dlext_footer,
+		$dlext_table_downloads
 	)
 	{
-		$this->root_path				= $root_path;
-		$this->php_ext 					= $php_ext;
-		$this->phpbb_container 			= $phpbb_container;
-		$this->phpbb_extension_manager 	= $phpbb_extension_manager;
-		$this->phpbb_path_helper		= $phpbb_path_helper;
 		$this->db 						= $db;
 		$this->config 					= $config;
 		$this->helper 					= $helper;
-		$this->auth						= $auth;
 		$this->request					= $request;
 		$this->template 				= $template;
 		$this->user 					= $user;
 		$this->language					= $language;
+		$this->notification				= $notification;
+		$this->captcha					= $captcha;
 
-		$this->ext_path					= $this->phpbb_extension_manager->get_extension_path('oxpus/dlext', true);
-		$this->ext_path_web				= $this->phpbb_path_helper->update_web_root_path($this->ext_path);
-		$this->ext_path_ajax			= $this->ext_path_web . 'assets/javascript/';
+		$this->dlext_table_downloads	= $dlext_table_downloads;
 
 		$this->dlext_auth				= $dlext_auth;
 		$this->dlext_main				= $dlext_main;
 		$this->dlext_status				= $dlext_status;
+		$this->dlext_constants			= $dlext_constants;
+		$this->dlext_footer				= $dlext_footer;
+
+		$this->dlext_main->dl_handle_active();
 	}
 
 	public function handle()
 	{
-		$nav_view = 'broken';
+		$cat		= $this->request->variable('cat', 0);
+		$submit		= $this->request->variable('submit', '');
+		$cancel		= $this->request->variable('cancel', '');
+		$confirm	= $this->request->variable('confirm', '');
+		$df_id		= $this->request->variable('df_id', 0);
+		$cat_id		= $this->request->variable('cat_id', 0);
 
-		// Include the default base init script
-		include_once($this->ext_path . 'phpbb/includes/base_init.' . $this->php_ext);
+		$index 		= ($cat) ? $this->dlext_main->index($cat) : $this->dlext_main->index();
 
 		if ($cancel)
 		{
@@ -146,105 +119,96 @@ class broken
 		if ($df_id && $cat_id && ($this->user->data['is_registered'] || (!$this->user->data['is_registered'] && $this->config['dl_report_broken'])))
 		{
 			$sql = 'SELECT description, desc_uid, desc_bitfield, desc_flags, hack_version
-					FROM ' . DOWNLOADS_TABLE . '
-					WHERE approve = ' . true . '
+					FROM ' . $this->dlext_table_downloads . '
+					WHERE approve = 1
 						AND id = ' . (int) $df_id . '
 					ORDER BY cat, sort';
 			$result = $this->db->sql_query($sql);
 
 			while ($row = $this->db->sql_fetchrow($result))
 			{
-				$description	= $row['description'];
 				$hack_version	= $row['hack_version'];
 
-				$description	= generate_text_for_display($description, $row['desc_uid'], $row['desc_bitfield'], $row['desc_flags']);
+				$description	= generate_text_for_display($row['description'], $row['desc_uid'], $row['desc_bitfield'], $row['desc_flags']);
 
 				$mini_icon		= $this->dlext_status->mini_status_file($cat_id, $df_id);
-
-				$file_status	= [];
-				$file_status	= $this->dlext_status->status($df_id);
-
-				$status			= $file_status['status_detail'];
+				$check_status	= $this->dlext_status->status($df_id);
 			}
 
 			$this->db->sql_freeresult($result);
 
 			// Prepare the captcha permissions for the current user
-			$captcha_active = true;
-			$user_is_guest = false;
-			$user_is_mod = false;
-			$user_is_admin = false;
-			$user_is_founder = false;
+			$captcha_active = $this->dlext_constants::DL_TRUE;
+			$user_is_guest = $this->dlext_constants::DL_FALSE;
+			$user_is_mod = $this->dlext_constants::DL_FALSE;
+			$user_is_admin = $this->dlext_constants::DL_FALSE;
+			$user_is_founder = $this->dlext_constants::DL_FALSE;
 
 			if (!$this->user->data['is_registered'])
 			{
-				$user_is_guest = true;
+				$user_is_guest = $this->dlext_constants::DL_TRUE;
 			}
 			else
 			{
-				$cat_auth_tmp = [];
 				$cat_auth_tmp = $this->dlext_auth->dl_cat_auth($cat_id);
 
-				if (($cat_auth_tmp['auth_mod'] || ($this->auth->acl_get('a_') && $this->user->data['is_registered'])) && !$this->dlext_auth->user_banned())
+				if (($cat_auth_tmp['auth_mod'] || $this->dlext_auth->user_admin()) && !$this->dlext_constants->get_value('user_banned'))
 				{
-					$user_is_mod = true;
+					$user_is_mod = $this->dlext_constants::DL_TRUE;
 				}
 
-				if ($this->auth->acl_get('a_'))
+				if ($this->dlext_auth->user_admin())
 				{
-					$user_is_admin = true;
+					$user_is_admin = $this->dlext_constants::DL_TRUE;
 				}
 
 				if ($this->user->data['user_type'] == USER_FOUNDER)
 				{
-					$user_is_founder = true;
+					$user_is_founder = $this->dlext_constants::DL_TRUE;
 				}
 			}
 
 			switch ($this->config['dl_report_broken_vc'])
 			{
-				case 0:
-					$captcha_active = false;
+				case $this->dlext_constants::DL_CAPTCHA_PERM_OFF:
+					$captcha_active = $this->dlext_constants::DL_FALSE;
 				break;
 
-				case 1:
+				case $this->dlext_constants::DL_CAPTCHA_PERM_GUESTS:
 					if (!$user_is_guest)
 					{
-						$captcha_active = false;
+						$captcha_active = $this->dlext_constants::DL_FALSE;
 					}
 				break;
 
-				case 2:
+				case $this->dlext_constants::DL_CAPTCHA_PERM_USER:
 					if ($user_is_mod || $user_is_admin || $user_is_founder)
 					{
-						$captcha_active = false;
+						$captcha_active = $this->dlext_constants::DL_FALSE;
 					}
 				break;
 
-				case 3:
+				case $this->dlext_constants::DL_CAPTCHA_PERM_MODS:
 					if ($user_is_admin || $user_is_founder)
 					{
-						$captcha_active = false;
+						$captcha_active = $this->dlext_constants::DL_FALSE;
 					}
 				break;
 
-				case 4:
+				case $this->dlext_constants::DL_CAPTCHA_PERM_ADMINS:
 					if ($user_is_founder)
 					{
-						$captcha_active = false;
+						$captcha_active = $this->dlext_constants::DL_FALSE;
 					}
 				break;
 			}
 
 			if ($captcha_active)
 			{
-				$code_match = false;
+				$code_match = $this->dlext_constants::DL_FALSE;
 
-				$captcha = $this->phpbb_container->get('captcha.factory')->get_instance($this->config['captcha_plugin']);
+				$captcha = $this->captcha->get_instance($this->config['captcha_plugin']);
 				$captcha->init(CONFIRM_POST);
-
-				$s_hidden_fields = [];
-				$error = [];
 
 				if ($confirm == 'code')
 				{
@@ -263,82 +227,72 @@ class broken
 					if (empty($error))
 					{
 						$captcha->reset();
-						$code_match = true;
+						$code_match = $this->dlext_constants::DL_TRUE;
 					}
 					else if ($captcha->is_solved())
 					{
-						$s_hidden_fields += $captcha->get_hidden_fields();
-						$code_match = false;
+						$code_match = $this->dlext_constants::DL_FALSE;
 					}
 				}
 				else if (!$captcha->is_solved())
 				{
 					add_form_key('dl_report');
 
-					page_header();
-
-					$this->template->set_filenames(['body' => 'dl_report_code_body.html']);
-
-					$s_hidden_fields += [
-						'cat_id' => $cat_id,
-						'df_id' => $df_id,
-						'view' => 'broken',
-						'confirm' => 'code'
+					$s_hidden_fields = [
+						'cat_id'	=> $cat_id,
+						'df_id'		=> $df_id,
+						'view'		=> 'broken',
+						'confirm'	=> 'code'
 					];
 
 					$this->template->assign_vars([
-						'DESCRIPTION'		=> $description,
-						'MINI_IMG'			=> $mini_icon,
-						'HACK_VERSION'		=> $hack_version,
-						'STATUS'			=> $status,
-						'MESSAGE_TITLE'		=> $this->language->lang('DL_BROKEN'),
-						'MESSAGE_TEXT'		=> $this->language->lang('DL_REPORT_CONFIRM_CODE'),
+						'DL_DESCRIPTION'		=> $description,
+						'DL_MINI_IMG'			=> $mini_icon,
+						'DL_HACK_VERSION'		=> $hack_version,
+						'DL_FILE_STATUS'		=> $check_status['file_status'],
+						'DL_MESSAGE_TITLE'		=> $this->language->lang('DL_BROKEN'),
+						'DL_CAPTCHA_TEMPLATE'	=> $captcha->get_template(),
 
-						'CAPTCHA_TEMPLATE'	=> $captcha->get_template(),
-
-						'S_CONFIRM_ACTION'	=> $this->helper->route('oxpus_dlext_broken'),
-						'S_HIDDEN_FIELDS'	=> build_hidden_fields($s_hidden_fields),
-						'S_CONFIRM_CODE'	=> true,
+						'S_DL_CONFIRM_ACTION'	=> $this->helper->route('oxpus_dlext_broken'),
+						'S_DL_HIDDEN_FIELDS'	=> build_hidden_fields($s_hidden_fields),
+						'S_DL_CONFIRM_CODE'	=> $this->dlext_constants::DL_TRUE,
 					]);
 
 					/*
 					* include the mod footer
 					*/
-					$dl_footer = $this->phpbb_container->get('oxpus.dlext.footer');
-					$dl_footer->set_parameter($nav_view, $cat_id, $df_id, $index);
-					$dl_footer->handle();
+					$this->dlext_footer->set_parameter('broken', $cat_id, $df_id, $index);
+					$this->dlext_footer->handle();
+
+					return $this->helper->render('@oxpus_dlext/dl_report_code_body.html');
 				}
 			}
 			else if (!$submit)
 			{
-				page_header();
-
-				$this->template->set_filenames(['body' => 'dl_report_code_body.html']);
-
 				$s_hidden_fields = [
-					'cat_id' => $cat_id,
-					'df_id' => $df_id,
-					'view' => 'broken',
+					'cat_id'	=> $cat_id,
+					'df_id'		=> $df_id,
+					'view'		=> 'broken',
 				];
 
 				$this->template->assign_vars([
-					'DESCRIPTION'		=> $description,
-					'MINI_IMG'			=> $mini_icon,
-					'HACK_VERSION'		=> $hack_version,
-					'STATUS'			=> $status,
-					'MESSAGE_TITLE'		=> $this->language->lang('DL_BROKEN'),
-					'MESSAGE_TEXT'		=> $this->language->lang('DL_REPORT_CONFIRM_CODE'),
+					'DL_DESCRIPTION'		=> $description,
+					'DL_MINI_IMG'			=> $mini_icon,
+					'DL_HACK_VERSION'		=> $hack_version,
+					'DL_FILE_STATUS'		=> $check_status['file_status'],
+					'DL_MESSAGE_TITLE'		=> $this->language->lang('DL_BROKEN'),
 
-					'S_CONFIRM_ACTION'	=> $this->helper->route('oxpus_dlext_broken'),
-					'S_HIDDEN_FIELDS'	=> build_hidden_fields($s_hidden_fields),
+					'S_DL_CONFIRM_ACTION'	=> $this->helper->route('oxpus_dlext_broken'),
+					'S_DL_HIDDEN_FIELDS'	=> build_hidden_fields($s_hidden_fields),
 				]);
 
 				/*
 				* include the mod footer
 				*/
-				$dl_footer = $this->phpbb_container->get('oxpus.dlext.footer');
-				$dl_footer->set_parameter($nav_view, $cat_id, $df_id, $index);
-				$dl_footer->handle();
+				$this->dlext_footer->set_parameter('broken', $cat_id, $df_id, $index);
+				$this->dlext_footer->handle();
+
+				return $this->helper->render('@oxpus_dlext/dl_report_code_body.html');
 			}
 
 			if ($captcha_active && !$code_match)
@@ -347,14 +301,14 @@ class broken
 			}
 			else
 			{
-				$sql = 'UPDATE ' . DOWNLOADS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', [
-					'broken' => true]) . ' WHERE id = ' . (int) $df_id;
+				$sql = 'UPDATE ' . $this->dlext_table_downloads . ' SET ' . $this->db->sql_build_array('UPDATE', [
+					'broken' => $this->dlext_constants::DL_TRUE]) . ' WHERE id = ' . (int) $df_id;
 				$this->db->sql_query($sql);
 
 				$processing_user = $this->dlext_auth->dl_auth_users($cat_id, 'auth_mod');
-				$reporter = ($this->dlext_auth->user_logged_in()) ? $this->user->data['username'] : $this->language->lang('DL_A_GUEST');
+				$reporter = ($this->user->data['is_registered']) ? $this->user->data['username'] : $this->language->lang('DL_A_GUEST');
 
-				$report_notify_text = $this->request->variable('report_notify_text', '', true);
+				$report_notify_text = $this->request->variable('report_notify_text', '', $this->dlext_constants::DL_TRUE);
 				$report_notify_text = ($report_notify_text) ? $this->language->lang('DL_REPORT_NOTIFY_TEXT', $report_notify_text) : '';
 
 				$notification_data = [
@@ -365,9 +319,7 @@ class broken
 					'report_notify_text'	=> $report_notify_text,
 				];
 
-				$notification = $this->phpbb_container->get('notification_manager');
-
-				$notification->add_notifications('oxpus.dlext.notification.type.broken', $notification_data);
+				$this->notification->add_notifications('oxpus.dlext.notification.type.broken', $notification_data);
 			}
 		}
 

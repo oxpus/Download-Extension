@@ -3,91 +3,81 @@
 /**
 *
 * @package phpBB Extension - Oxpus Downloads
-* @copyright (c) 2002-2020 OXPUS - www.oxpus.net
+* @copyright (c) 2002-2021 OXPUS - www.oxpus.net
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
 */
 
 namespace oxpus\dlext\controller\acp;
 
-use Symfony\Component\DependencyInjection\Container;
-
 /**
 * @package acp
 */
 class acp_perm_check_controller implements acp_perm_check_interface
 {
-	public $u_action;
-	public $db;
-	public $user;
-	public $auth;
-	public $phpEx;
-	public $root_path;
-	public $phpbb_extension_manager;
-	public $phpbb_container;
-	public $phpbb_path_helper;
+	/* phpbb objects */
+	protected $db;
+	protected $user;
+	protected $auth;
+	protected $phpEx;
+	protected $root_path;
+	protected $config;
+	protected $request;
+	protected $template;
 
-	public $config;
-	public $helper;
-	public $language;
-	public $request;
-	public $template;
-
-	public $ext_path;
-	public $ext_path_web;
-	public $ext_path_ajax;
+	/* extension owned objects */
+	protected $u_action;
 
 	protected $dlext_auth;
 	protected $dlext_format;
 	protected $dlext_main;
+	protected $dlext_constants;
 
-	/*
+	/**
+	 * Constructor
+	 *
 	 * @param string								$root_path
 	 * @param string								$phpEx
-	 * @param Container 							$phpbb_container
-	 * @param \phpbb\extension\manager				$phpbb_extension_manager
-	 * @param \phpbb\path_helper					$phpbb_path_helper
-	 * @param \phpbb\db\driver\driver_interfacer	$db
-	 * @param \phpbb\log\log_interface 				$log
+	 * @param \phpbb\config\config					$config
+	 * @param \phpbb\request\request 				$request
+	 * @param \phpbb\template\template				$template
+	 * @param \phpbb\db\driver\driver_interface		$db
 	 * @param \phpbb\auth\auth						$auth
 	 * @param \phpbb\user							$user
+	 * @param \oxpus\dlext\core\auth				$dlext_auth
+	 * @param \oxpus\dlext\core\format				$dlext_format
+	 * @param \oxpus\dlext\core\main				$dlext_main
+	 * @param \oxpus\dlext\core\helpers\constants	$dlext_constants
 	 */
 	public function __construct(
 		$root_path,
 		$phpEx,
-		Container $phpbb_container,
-		\phpbb\extension\manager $phpbb_extension_manager,
-		\phpbb\path_helper $phpbb_path_helper,
+		\phpbb\config\config $config,
+		\phpbb\request\request $request,
+		\phpbb\template\template $template,
 		\phpbb\db\driver\driver_interface $db,
 		\phpbb\auth\auth $auth,
 		\phpbb\user $user,
-		$dlext_auth,
-		$dlext_format,
-		$dlext_main
+		\oxpus\dlext\core\auth $dlext_auth,
+		\oxpus\dlext\core\format $dlext_format,
+		\oxpus\dlext\core\main $dlext_main,
+		\oxpus\dlext\core\helpers\constants $dlext_constants
 	)
 	{
-		$this->root_path				= $root_path;
-		$this->phpEx					= $phpEx;
-		$this->phpbb_container			= $phpbb_container;
-		$this->phpbb_extension_manager	= $phpbb_extension_manager;
-		$this->phpbb_path_helper		= $phpbb_path_helper;
-		$this->db						= $db;
-		$this->auth						= $auth;
-		$this->user						= $user;
+		$this->root_path			= $root_path;
+		$this->phpEx				= $phpEx;
+		$this->db					= $db;
+		$this->auth					= $auth;
+		$this->user					= $user;
 
-		$this->config					= $this->phpbb_container->get('config');
-		$this->helper					= $this->phpbb_container->get('controller.helper');
-		$this->language					= $this->phpbb_container->get('language');
-		$this->request					= $this->phpbb_container->get('request');
-		$this->template					= $this->phpbb_container->get('template');
+		$this->config				= $config;
+		$this->request				= $request;
+		$this->template				= $template;
 
-		$this->ext_path					= $this->phpbb_extension_manager->get_extension_path('oxpus/dlext', true);
-		$this->ext_path_web				= $this->phpbb_path_helper->update_web_root_path($this->ext_path);
-		$this->ext_path_ajax			= $this->ext_path_web . 'assets/javascript/';
-
-		$this->dlext_auth				= $dlext_auth;
-		$this->dlext_format				= $dlext_format;
-		$this->dlext_main				= $dlext_main;
+		$this->dlext_auth			= $dlext_auth;
+		$this->dlext_format			= $dlext_format;
+		$this->dlext_main			= $dlext_main;
+		$this->dlext_constants		= $dlext_constants;
 	}
 
 	public function set_action($u_action)
@@ -97,15 +87,11 @@ class acp_perm_check_controller implements acp_perm_check_interface
 
 	public function handle()
 	{
-		$this->auth->acl($this->user->data);
-		if (!$this->auth->acl_get('a_dl_perm_check'))
-		{
-			trigger_error('DL_NO_PERMISSION', E_USER_WARNING);
-		}
+		$check_user			= $this->request->variable('check_user', '', $this->dlext_constants::DL_TRUE);
+		$submit				= $this->request->variable('submit', '');
+		$user_id			= $this->request->variable('user_id', 0);
 
-		include_once($this->ext_path . 'phpbb/includes/acm_init.' . $this->phpEx);
-
-		$s_display_perms = false;
+		$s_display_perms = $this->dlext_constants::DL_FALSE;
 
 		if ($submit && $check_user)
 		{
@@ -125,21 +111,20 @@ class acp_perm_check_controller implements acp_perm_check_interface
 				}
 
 				// Check for selected user and reinit the download classes to get the right content
-				$reset_user_data = false;
-				if ($user_id <> $this->user->data['user_id'])
+				$reset_user_data = $this->dlext_constants::DL_FALSE;
+				if ($user_id != $this->user->data['user_id'])
 				{
 					$tmp_user_data = $this->user->data;
 					$this->user->data = $row;
-					$this->user->data['is_registered'] = true;
+					$this->user->data['is_registered'] = $this->dlext_constants::DL_TRUE;
 					$this->user->data['session_browser'] = $tmp_user_data['session_browser'];
 					$this->user->data['session_ip'] = $tmp_user_data['session_ip'];
 					$this->auth->acl($this->user->data);
-					$reset_user_data = true;
+					$reset_user_data = $this->dlext_constants::DL_TRUE;
 				}
 
 				// Fetch category permissions
 				$cat_perm_ary   = [];
-				$dl_index       = [];
 				$dl_index       = $this->dlext_main->full_index();
 
 				foreach ($dl_index as $cat_id => $value)
@@ -152,39 +137,39 @@ class acp_perm_check_controller implements acp_perm_check_interface
 					$cat_perm_ary[$cat_id]['comment_read']	= $this->dlext_auth->cat_auth_comment_read($cat_id);
 					$cat_perm_ary[$cat_id]['comment_post']	= $this->dlext_auth->cat_auth_comment_post($cat_id);
 
-					$cat_perm_ary[$cat_id]['cat_remain']    = ($this->config['dl_traffic_off']) ? true : false;
+					$cat_perm_ary[$cat_id]['cat_remain']    = ($this->config['dl_traffic_off']) ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE;
 					if (($dl_index[$cat_id]['cat_traffic'] && ($dl_index[$cat_id]['cat_traffic'] - $dl_index[$cat_id]['cat_traffic_use'] <= 0)) && !$this->config['dl_traffic_off'])
 					{
-						if (FOUNDER_TRAFFICS_OFF == true)
+						if ($this->dlext_constants->get_value('founder_traffics'))
 						{
-							$cat_perm_ary[$cat_id]['cat_remain'] = true;
+							$cat_perm_ary[$cat_id]['cat_remain'] = $this->dlext_constants::DL_TRUE;
 						}
 					}
 				}
 
 				// General user permissions
 				$this->template->assign_vars([
-					'USER_IS_ADMIN'         => $this->dlext_auth->user_admin(),
-					'USER_IS_BANNED'        => $this->dlext_auth->user_banned(),
-					'USER_CAN_VIEW_STATS'   => $this->dlext_auth->stats_perm(),
-					'USER_CAN_SEE_TRACKER'  => $this->dlext_auth->bug_tracker(),
-					'USER_HAVE_TRAFFIC'     => $this->dlext_format->dl_size($this->user->data['user_traffic']),
-					'USER_HAVE_POSTS'       => $this->user->data['user_posts'] . ' / ' .$this->config['dl_posts'],
-					'CHECK_USERNAME'        => $this->user->data['username'],
+					'DL_USER_IS_ADMIN'         => $this->dlext_auth->user_admin(),
+					'DL_USER_IS_BANNED'        => $this->dlext_constants->get_value('user_banned'),
+					'DL_USER_CAN_VIEW_STATS'   => $this->dlext_auth->stats_perm(),
+					'DL_USER_CAN_SEE_TRACKER'  => $this->dlext_auth->bug_tracker(),
+					'DL_USER_HAVE_TRAFFIC'     => $this->dlext_format->dl_size($this->user->data['user_traffic']),
+					'DL_USER_HAVE_POSTS'       => $this->user->data['user_posts'] . ' / ' .$this->config['dl_posts'],
+					'DL_CHECK_USERNAME'        => $this->user->data['username'],
 
-					'U_BACK'				=> $this->u_action,
+					'U_DL_BACK'					=> $this->u_action,
 				]);
 
 				foreach ($cat_perm_ary as $cat_id => $data_ary)
 				{
-					$this->template->assign_block_vars('cat_row', [
-						'CAT_NAME'  => $data_ary['cat_name'],
-						'CAT_VIEW'  => $data_ary['auth_view'],
-						'CAT_DL'    => $data_ary['auth_dl'],
-						'CAT_UP'    => $data_ary['auth_up'],
-						'CAT_MOD'   => $data_ary['auth_mod'],
-						'CAT_CREAD' => $data_ary['comment_read'],
-						'CAT_CPOST' => $data_ary['comment_post'],
+					$this->template->assign_block_vars('dl_cat_row', [
+						'DL_CAT_NAME'  => $data_ary['cat_name'],
+						'DL_CAT_VIEW'  => $data_ary['auth_view'],
+						'DL_CAT_DL'    => $data_ary['auth_dl'],
+						'DL_CAT_UP'    => $data_ary['auth_up'],
+						'DL_CAT_MOD'   => $data_ary['auth_mod'],
+						'DL_CAT_CREAD' => $data_ary['comment_read'],
+						'DL_CAT_CPOST' => $data_ary['comment_post'],
 					]);
 				}
 
@@ -196,18 +181,18 @@ class acp_perm_check_controller implements acp_perm_check_interface
 					$this->auth->acl($this->user->data);
 				}
 
-				$s_display_perms = true;
+				$s_display_perms = $this->dlext_constants::DL_TRUE;
 			}
 		}
 
-		$u_user_select = append_sid("{$this->root_path}memberlist.{$this->phpEx}", "mode=searchuser&amp;form=select_user&amp;field=check_user&amp;select_single=true");
+		$u_user_select = append_sid($this->root_path . 'memberlist.' . $this->phpEx, 'mode=searchuser&amp;form=select_user&amp;field=check_user&amp;select_single=' . $this->dlext_constants::DL_TRUE);
 
 		$this->template->assign_vars([
-			'S_FORM_ACTION'     => $this->u_action,
-			'S_DL_PERM_CHECK'   => true,
-			'S_DISPLAY_PERMS'   => $s_display_perms,
+			'S_DL_FORM_ACTION'		=> $this->u_action,
+			'S_DL_PERM_CHECK'   	=> $this->dlext_constants::DL_TRUE,
+			'S_DL_DISPLAY_PERMS'	=> $s_display_perms,
 
-			'U_FIND_USERNAME'   => $u_user_select,
+			'U_DL_FIND_USERNAME'	=> $u_user_select,
 		]);
 	}
 }

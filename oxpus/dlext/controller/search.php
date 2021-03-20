@@ -3,155 +3,118 @@
 /**
 *
 * @package phpBB Extension - Oxpus Downloads
-* @copyright (c) 2002-2020 OXPUS - www.oxpus.net
+* @copyright (c) 2002-2021 OXPUS - www.oxpus.net
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
 */
 
 namespace oxpus\dlext\controller;
 
-use Symfony\Component\DependencyInjection\Container;
-
 class search
 {
-	/* @var string phpBB root path */
-	protected $root_path;
-
-	/* @var string phpEx */
-	protected $php_ext;
-
-	/* @var Container */
-	protected $phpbb_container;
-
-	/* @var \phpbb\extension\manager */
-	protected $phpbb_extension_manager;
-
-	/* @var \phpbb\path_helper */
-	protected $phpbb_path_helper;
-
-	/* @var \phpbb\db\driver\driver_interface */
+	/* phpbb objects */
 	protected $db;
-
-	/* @var \phpbb\config\config */
 	protected $config;
-
-	/* @var \phpbb\controller\helper */
 	protected $helper;
-
-	/* @var \phpbb\auth\auth */
-	protected $auth;
-
-	/* @var \phpbb\request\request_interface */
 	protected $request;
-
-	/* @var \phpbb\template\template */
 	protected $template;
-
-	/* @var \phpbb\user */
 	protected $user;
-
-	/* @var \phpbb\language\language */
 	protected $language;
+	protected $dispatcher;
+	protected $pagination;
 
-	/** @var extension owned objects */
-	protected $ext_path;
-	protected $ext_path_web;
-	protected $ext_path_ajax;
-
-	protected $phpbb_dispatcher;
-
+	/* extension owned objects */
 	protected $dlext_auth;
 	protected $dlext_extra;
 	protected $dlext_main;
 	protected $dlext_status;
+	protected $dlext_footer;
+	protected $dlext_constants;
+
+	protected $dlext_table_downloads;
+	protected $dlext_table_dl_cat;
 
 	/**
 	* Constructor
 	*
-	* @param string									$root_path
-	* @param string									$php_ext
-	* @param Container 								$phpbb_container
-	* @param \phpbb\extension\manager				$phpbb_extension_manager
-	* @param \phpbb\path_helper						$phpbb_path_helper
-	* @param \phpbb\db\driver\driver_interfacer		$db
+	* @param \phpbb\db\driver\driver_interface		$db
 	* @param \phpbb\config\config					$config
 	* @param \phpbb\controller\helper				$helper
-	* @param \phpbb\auth\auth						$auth
-	* @param \phpbb\request\request_interface 		$request
+	* @param \phpbb\request\request 				$request
 	* @param \phpbb\template\template				$template
 	* @param \phpbb\user							$user
 	* @param \phpbb\language\language				$language
-	* @param \phpbb\event\dispatcher_interface		$phpbb_dispatcher
+	* @param \phpbb\event\dispatcher_interface		$dispatcher
+	* @param \phpbb\pagination						$pagination
+	* @param \oxpus\dlext\core\auth					$dlext_auth
+	* @param \oxpus\dlext\core\extra				$dlext_extra
+	* @param \oxpus\dlext\core\main					$dlext_main
+	* @param \oxpus\dlext\core\status				$dlext_status
+	* @param \oxpus\dlext\core\helpers\footer		$dlext_footer
+	* @param \oxpus\dlext\core\helpers\constants	$dlext_constants
+	* @param string									$dlext_table_downloads
+	* @param string									$dlext_table_dl_cat
 	*/
 	public function __construct(
-		$root_path,
-		$php_ext,
-		Container $phpbb_container,
-		\phpbb\extension\manager $phpbb_extension_manager,
-		\phpbb\path_helper $phpbb_path_helper,
 		\phpbb\db\driver\driver_interface $db,
 		\phpbb\config\config $config,
 		\phpbb\controller\helper $helper,
-		\phpbb\auth\auth $auth,
-		\phpbb\request\request_interface $request,
+		\phpbb\request\request $request,
 		\phpbb\template\template $template,
 		\phpbb\user $user,
 		\phpbb\language\language $language,
-		\phpbb\event\dispatcher_interface $phpbb_dispatcher,
-		$dlext_auth,
-		$dlext_extra,
-		$dlext_main,
-		$dlext_status
+		\phpbb\event\dispatcher_interface $dispatcher,
+		\phpbb\pagination $pagination,
+		\oxpus\dlext\core\auth $dlext_auth,
+		\oxpus\dlext\core\extra $dlext_extra,
+		\oxpus\dlext\core\main $dlext_main,
+		\oxpus\dlext\core\status $dlext_status,
+		\oxpus\dlext\core\helpers\footer $dlext_footer,
+		\oxpus\dlext\core\helpers\constants $dlext_constants,
+		$dlext_table_downloads,
+		$dlext_table_dl_cat
 	)
 	{
-		$this->root_path				= $root_path;
-		$this->php_ext 					= $php_ext;
-		$this->phpbb_container 			= $phpbb_container;
-		$this->phpbb_extension_manager 	= $phpbb_extension_manager;
-		$this->phpbb_path_helper		= $phpbb_path_helper;
 		$this->db 						= $db;
 		$this->config 					= $config;
 		$this->helper 					= $helper;
-		$this->auth						= $auth;
 		$this->request					= $request;
 		$this->template 				= $template;
 		$this->user 					= $user;
 		$this->language					= $language;
-		$this->phpbb_dispatcher			= $phpbb_dispatcher;
+		$this->dispatcher				= $dispatcher;
+		$this->pagination				= $pagination;
 
-		$this->ext_path					= $this->phpbb_extension_manager->get_extension_path('oxpus/dlext', true);
-		$this->ext_path_web				= $this->phpbb_path_helper->update_web_root_path($this->ext_path);
-		$this->ext_path_ajax			= $this->ext_path_web . 'assets/javascript/';
+		$this->dlext_table_downloads	= $dlext_table_downloads;
+		$this->dlext_table_dl_cat		= $dlext_table_dl_cat;
 
 		$this->dlext_auth				= $dlext_auth;
 		$this->dlext_extra				= $dlext_extra;
 		$this->dlext_main				= $dlext_main;
 		$this->dlext_status				= $dlext_status;
+		$this->dlext_footer				= $dlext_footer;
+		$this->dlext_constants			= $dlext_constants;
+
+		$this->dlext_main->dl_handle_active();
 	}
 
 	public function handle()
 	{
-		$nav_view = 'search';
+		$cat		= $this->request->variable('cat', 0);
+		$start		= $this->request->variable('start', 0);
 
-		// Include the default base init script
-		include_once($this->ext_path . 'phpbb/includes/base_init.' . $this->php_ext);
-
-		/*
-		* open the search for downloads
-		*/
-		$inc_module = true;
-		page_header($this->language->lang('SEARCH').' '.$this->language->lang('DOWNLOADS'));
+		$index 		= ($cat) ? $this->dlext_main->index($cat) : $this->dlext_main->index();
 
 		$this->language->add_lang('search');
 
 		/*
 		* define initial search vars
 		*/
-		$search_keywords	= $this->request->variable('search_keywords', '', true);
-		$search_cat			= $this->request->variable('search_cat', -1);
+		$search_keywords	= $this->request->variable('search_keywords', '', $this->dlext_constants::DL_TRUE);
+		$search_cat			= $this->request->variable('search_cat', $this->dlext_constants::DL_NONE);
 		$sort_dir			= $this->request->variable('sort_dir', 'ASC');
 		$search_in_fields	= $this->request->variable('search_fields', 'all');
-		$search_author		= $this->request->variable('search_author', '', true);
+		$search_author		= $this->request->variable('search_author', '', $this->dlext_constants::DL_TRUE);
 		$search_user		= $this->request->variable('search_user_id', 0);
 
 		$search_fnames		= [
@@ -184,15 +147,14 @@ class search
 		*/
 		if ($search_keywords != '' && !$search_author && !$search_user)
 		{
-			$this->template->set_filenames(['body' => 'dl_search_results.html']);
+			$tpl_filename = '@oxpus_dlext/dl_search_results.html';
 
 			$search_keywords = str_replace(['sql', 'union', '  ', ' ', '*', '?', '%'], ' ', strtolower($search_keywords));
 
-			$access_cats		= [];
-			$access_cats		= $this->dlext_main->full_index(0, 0, 0, 1);
-			$sql_access_cats	= ($this->auth->acl_get('a_') && $this->user->data['is_registered']) ? '' : ' AND ' . $this->db->sql_in_set('d.cat', $access_cats) . ' ';
+			$access_cats		= $this->dlext_main->full_index(0, 0, 0, $this->dlext_constants::DL_AUTH_CHECK_VIEW);
+			$sql_access_cats	= ($this->dlext_auth->user_admin()) ? '' : ' AND ' . $this->db->sql_in_set('d.cat', $access_cats) . ' ';
 
-			$sql_cat			= ($search_cat == -1) ? '' : ' AND d.cat = ' . (int) $search_cat;
+			$sql_cat			= ($search_cat == $this->dlext_constants::DL_NONE) ? '' : ' AND d.cat = ' . (int) $search_cat;
 
 			switch ($search_in_fields)
 			{
@@ -215,12 +177,10 @@ class search
 
 			$search_words = array_unique(explode(' ', $search_keywords));
 
-			$sql = "SELECT d.id, $sql_fields FROM " . DOWNLOADS_TABLE . ' d
-				WHERE d.approve = ' . true . "
-				$sql_access_cats
-				$sql_cat";
+			$sql = "SELECT d.id, $sql_fields FROM " . $this->dlext_table_downloads . ' d
+				WHERE d.approve = 1 ' . (string) $sql_access_cats . (string) $sql_cat;
 			$result = $this->db->sql_query($sql);
-			$total_found_dl = $this->db->sql_affectedrows($result);
+			$total_found_dl = $this->db->sql_affectedrows();
 
 			$search_counter = 0;
 
@@ -249,7 +209,7 @@ class search
 
 					switch ($search_type)
 					{
-						case 0:
+						case $this->dlext_constants::DL_SEARCH_TYPE_ALL:
 							if ($counter == count($search_words))
 							{
 								$search_ids[] = $row['id'];
@@ -276,36 +236,35 @@ class search
 			$vars = array(
 				'search_ids',
 			);
-			extract($this->phpbb_dispatcher->trigger_event('oxpus.dlext.search_keywords_fetch_download_data', compact($vars)));
+			extract($this->dispatcher->trigger_event('oxpus.dlext.search_keywords_fetch_download_data', compact($vars)));
 
 			if ($search_counter > $this->config['dl_links_per_page'])
 			{
-				$pagination = $this->phpbb_container->get('pagination');
-				$pagination->generate_template_pagination(
+				$this->pagination->generate_template_pagination(
 					$this->helper->route('oxpus_dlext_search', ['search_keywords' => $search_keywords, 'search_cat' => $search_cat, 'sort_dir' => $sort_dir]),
 					'pagination',
 					'start',
 					$search_counter,
 					$this->config['dl_links_per_page'],
-					$page_start
+					$start
 				);
 
 				$this->template->assign_vars([
-					'PAGE_NUMBER'	=> $pagination->on_page($search_counter, $this->config['dl_links_per_page'], $page_start),
-					'TOTAL_DL'		=> $this->language->lang('VIEW_DOWNLOADS', $search_counter),
+					'DL_PAGE_NUMBER'	=> $this->pagination->on_page($search_counter, $this->config['dl_links_per_page'], $start),
+					'DL_TOTAL_DL'		=> $this->language->lang('DL_VIEW_DOWNLOADS', $search_counter),
 				]);
 			}
 
 			if (!$search_counter)
 			{
-				$this->template->assign_var('S_NO_RESULTS', true);
+				$this->template->assign_var('S_DL_NO_RESULTS', $this->dlext_constants::DL_TRUE);
 			}
 			else
 			{
 				$sql_array['SELECT'] = 'd.*, c.cat_name, u.username, u.user_colour';
 
-				$sql_array['FROM'][DOWNLOADS_TABLE] = 'd';
-				$sql_array['FROM'][DL_CAT_TABLE] = 'c';
+				$sql_array['FROM'][$this->dlext_table_downloads] = 'd';
+				$sql_array['FROM'][$this->dlext_table_dl_cat] = 'c';
 
 				$sql_array['LEFT_JOIN'][] = [
 					'FROM'	=> [USERS_TABLE => 'u'],
@@ -323,18 +282,16 @@ class search
 				{
 					$cat_id				= $row['cat'];
 					$file_id			= $row['id'];
-					$u_file_link		= $this->helper->route('oxpus_dlext_details', ['df_id' => $file_id]);
+					$cat_name			= $row['cat_name'];
+					$file_name			= $row['file_name'];
 
-					$dl_status			= [];
-					$dl_status			= $this->dlext_status->status($file_id);
-
-					$status				= $dl_status['status'];
-					$file_name			= $dl_status['file_name'];
+					$check_status		= $this->dlext_status->status($file_id);
+					$file_status		= $check_status['file_status'];
 
 					$mini_icon			= $this->dlext_status->mini_status_file($cat_id, $file_id);
 
-					$cat_name			= $row['cat_name'];
 					$u_cat_link			= $this->helper->route('oxpus_dlext_index', ['cat' => $cat_id]);
+					$u_file_link		= $this->helper->route('oxpus_dlext_details', ['df_id' => $file_id]);
 
 					if (!$row['username'])
 					{
@@ -368,18 +325,18 @@ class search
 					}
 
 					$this->template->assign_block_vars('searchresults', [
-						'STATUS'		=> $status,
-						'CAT_NAME'		=> $cat_name,
-						'DESCRIPTION'	=> $description,
-						'MINI_ICON'		=> $mini_icon,
-						'FILE_NAME'		=> $file_name,
-						'LONG_DESC'		=> ($this->config['dl_desc_search']) ? $long_desc : '',
-						'ADD_USER'		=> $add_user,
-						'ADD_TIME'		=> $add_time,
-						'ADD_TIME_RFC'	=> $add_time_rfc,
+						'DL_FILE_STATUS'	=> $file_status,
+						'DL_CAT_NAME'		=> $cat_name,
+						'DL_DESCRIPTION'	=> $description,
+						'DL_MINI_ICON'		=> $mini_icon,
+						'DL_FILE_NAME'		=> $file_name,
+						'DL_LONG_DESC'		=> ($this->config['dl_desc_search']) ? $long_desc : '',
+						'DL_ADD_USER'		=> $add_user,
+						'DL_ADD_TIME'		=> $add_time,
+						'DL_ADD_TIME_RFC'	=> $add_time_rfc,
 
-						'U_CAT_LINK'	=> $u_cat_link,
-						'U_FILE_LINK'	=> $u_file_link,
+						'U_DL_CAT_LINK'	=> $u_cat_link,
+						'U_DL_FILE_LINK'	=> $u_file_link,
 					]);
 
 					/**
@@ -395,7 +352,7 @@ class search
 						'block',
 						'file_id',
 					);
-					extract($this->phpbb_dispatcher->trigger_event('oxpus.dlext.search_keywords_display_data_after', compact($vars)));
+					extract($this->dispatcher->trigger_event('oxpus.dlext.search_keywords_display_data_after', compact($vars)));
 				}
 
 				$this->db->sql_freeresult($result);
@@ -403,10 +360,9 @@ class search
 		}
 		else if ($search_author || $search_user)
 		{
-			$this->template->set_filenames(['body' => 'dl_search_results.html']);
+			$tpl_filename = '@oxpus_dlext/dl_search_results.html';
 
-			$sql_cat		= ($search_cat == -1) ? '' : ' AND cat = ' . $search_cat;
-			$sql_cat_count	= ($search_cat == -1) ? '' : ' AND cat = ' . $search_cat;
+			$sql_cat_count	= ($search_cat == $this->dlext_constants::DL_NONE) ? '' : ' AND cat = ' . $search_cat;
 
 			if ($search_user)
 			{
@@ -421,7 +377,7 @@ class search
 				$sql = 'SELECT user_id FROM ' . USERS_TABLE . '
 					WHERE username ' . $this->db->sql_like_expression($this->db->get_any_char() . $search_author . $this->db->get_any_char());
 				$result = $this->db->sql_query($sql);
-				$total_users = $this->db->sql_affectedrows($result);
+				$total_users = $this->db->sql_affectedrows();
 
 				if ($total_users)
 				{
@@ -451,19 +407,14 @@ class search
 				}
 			}
 
-			$access_cats		= [];
-			$access_cats		= $this->dlext_main->full_index(0, 0, 0, 1);
+			$access_cats		= $this->dlext_main->full_index(0, 0, 0, $this->dlext_constants::DL_AUTH_CHECK_VIEW);
 
-			$sql_access_cats	= ($this->auth->acl_get('a_') && $this->user->data['is_registered']) ? '' : ' AND ' . $this->db->sql_in_set('cat', $access_cats);
-			$sql_access_dls		= ($this->auth->acl_get('a_') && $this->user->data['is_registered']) ? '' : ' AND ' . $this->db->sql_in_set('d.cat', $access_cats);
+			$sql_access_cats	= ($this->dlext_auth->user_admin()) ? '' : ' AND ' . $this->db->sql_in_set('cat', $access_cats);
 
-			$sql = 'SELECT id FROM ' . DOWNLOADS_TABLE . '
-				WHERE approve = ' . true . "
-					$sql_matching_users
-					$sql_access_cats
-					$sql_cat_count";
+			$sql = 'SELECT id FROM ' . $this->dlext_table_downloads . '
+				WHERE approve = 1 ' . (string) $sql_matching_users . (string)  $sql_access_cats . (string) $sql_cat_count;
 			$result = $this->db->sql_query($sql);
-			$total_found_dl = $this->db->sql_affectedrows($result);
+			$total_found_dl = $this->db->sql_affectedrows();
 
 			$search_ids = [];
 
@@ -485,25 +436,24 @@ class search
 					$pagination_url = $this->helper->route('oxpus_dlext_search', ['search_author' => $search_author, 'search_cat' => $search_cat, 'sort_dir' => $sort_dir]);
 				}
 
-				$pagination = $this->phpbb_container->get('pagination');
-				$pagination->generate_template_pagination(
+				$this->pagination->generate_template_pagination(
 					$pagination_url,
 					'pagination',
 					'start',
 					$total_found_dl,
 					$this->config['dl_links_per_page'],
-					$page_start
+					$start
 				);
 
 				$this->template->assign_vars([
-					'PAGE_NUMBER'	=> $pagination->on_page($total_found_dl, $this->config['dl_links_per_page'], $page_start),
-					'TOTAL_DL'		=> $this->language->lang('VIEW_DOWNLOADS', $total_found_dl),
+					'DL_PAGE_NUMBER'	=> $this->pagination->on_page($total_found_dl, $this->config['dl_links_per_page'], $start),
+					'DL_TOTAL_DL'		=> $this->language->lang('DL_VIEW_DOWNLOADS', $total_found_dl),
 				]);
 			}
 
 			if ($total_found_dl == 0)
 			{
-				$this->template->assign_var('S_NO_RESULTS', true);
+				$this->template->assign_var('S_DL_NO_RESULTS', $this->dlext_constants::DL_TRUE);
 			}
 			else
 			{
@@ -517,19 +467,19 @@ class search
 				$vars = array(
 					'search_ids',
 				);
-				extract($this->phpbb_dispatcher->trigger_event('oxpus.dlext.search_user_fetch_download_data', compact($vars)));
+				extract($this->dispatcher->trigger_event('oxpus.dlext.search_user_fetch_download_data', compact($vars)));
 
 				$sql_array['SELECT'] = 'd.*, c.cat_name, u.username, u.user_colour';
 
-				$sql_array['FROM'][DOWNLOADS_TABLE] = 'd';
-				$sql_array['FROM'][DL_CAT_TABLE] = 'c';
+				$sql_array['FROM'][$this->dlext_table_downloads] = 'd';
+				$sql_array['FROM'][$this->dlext_table_dl_cat] = 'c';
 
 				$sql_array['LEFT_JOIN'][] = [
 					'FROM'	=> [USERS_TABLE => 'u'],
 					'ON'	=> 'd.add_user = u.user_id'
 				];
 
-				$sql_array['WHERE'] = 'd.cat = c.id AND d.approve = ' . true . ' AND ' . $this->db->sql_in_set('d.id', $search_ids);
+				$sql_array['WHERE'] = 'd.cat = c.id AND d.approve = 1 AND ' . $this->db->sql_in_set('d.id', $search_ids);
 				$sql_array['ORDER_BY'] = ' c.cat_name, d.sort ' . (string) $sort_dir;
 
 				$sql = $this->db->sql_build_query('SELECT', $sql_array);
@@ -540,18 +490,16 @@ class search
 				{
 					$cat_id			= $row['cat'];
 					$file_id		= $row['id'];
-					$u_file_link	= $this->helper->route('oxpus_dlext_details', ['df_id' => $file_id]);
+					$cat_name		= $row['cat_name'];
+					$file_name		= $row['file_name'];
 
-					$dl_status		= [];
-					$dl_status		= $this->dlext_status->status($file_id);
-
-					$status			= $dl_status['status'];
-					$file_name		= $dl_status['file_name'];
+					$check_status	= $this->dlext_status->status($file_id);
+					$file_status	= $check_status['file_status'];
 
 					$mini_icon		= $this->dlext_status->mini_status_file($cat_id, $file_id);
 
-					$cat_name		= $row['cat_name'];
 					$u_cat_link		= $this->helper->route('oxpus_dlext_index', ['cat' => $cat_id]);
+					$u_file_link	= $this->helper->route('oxpus_dlext_details', ['df_id' => $file_id]);
 
 					if (!$row['username'])
 					{
@@ -580,23 +528,23 @@ class search
 					$long_desc			= generate_text_for_display($long_desc, $long_desc_uid, $long_desc_bitfield, $long_desc_flags);
 					if ((int) $this->config['dl_limit_desc_on_search'] && utf8_strlen($long_desc) > (int) $this->config['dl_limit_desc_on_search'])
 					{
-						$long_desc			= truncate_string($long_desc, (int) $this->config['dl_limit_desc_on_search'], 16777215, false, '[...]');
+						$long_desc			= truncate_string($long_desc, (int) $this->config['dl_limit_desc_on_search'], $this->dlext_constants::DL_MAX_STRING_LENGTH, $this->dlext_constants::DL_FALSE, '[...]');
 						$long_desc 			= htmlspecialchars_decode(str_replace(['<br>', '<br />'], "\n", $long_desc));
 					}
 
 					$this->template->assign_block_vars('searchresults', [
-						'STATUS'		=> $status,
-						'CAT_NAME'		=> $cat_name,
-						'DESCRIPTION'	=> $description,
-						'MINI_ICON'		=> $mini_icon,
-						'FILE_NAME'		=> $file_name,
-						'LONG_DESC'		=> ($this->config['dl_desc_search']) ? $long_desc : '',
-						'ADD_USER'		=> $add_user,
-						'ADD_TIME'		=> $add_time,
-						'ADD_TIME_RFC'	=> $add_time_rfc,
+						'DL_FILE_STATUS'	=> $file_status,
+						'DL_CAT_NAME'		=> $cat_name,
+						'DL_DESCRIPTION'	=> $description,
+						'DL_MINI_ICON'		=> $mini_icon,
+						'DL_FILE_NAME'		=> $file_name,
+						'DL_LONG_DESC'		=> ($this->config['dl_desc_search']) ? $long_desc : '',
+						'DL_ADD_USER'		=> $add_user,
+						'DL_ADD_TIME'		=> $add_time,
+						'DL_ADD_TIME_RFC'	=> $add_time_rfc,
 
-						'U_CAT_LINK'	=> $u_cat_link,
-						'U_FILE_LINK'	=> $u_file_link,
+						'U_DL_CAT_LINK'	=> $u_cat_link,
+						'U_DL_FILE_LINK'	=> $u_file_link,
 					]);
 
 					/**
@@ -612,7 +560,7 @@ class search
 						'block',
 						'file_id',
 					);
-					extract($this->phpbb_dispatcher->trigger_event('oxpus.dlext.search_user_display_data_after', compact($vars)));
+					extract($this->dispatcher->trigger_event('oxpus.dlext.search_user_display_data_after', compact($vars)));
 				}
 			}
 		}
@@ -621,46 +569,48 @@ class search
 			/*
 			* default entry point of download searching
 			*/
-			$select_categories = '<select name="search_cat" size="10"><option value="-1" selected="selected">' . $this->language->lang('DL_ALL') . '</option>';
-			$select_categories .= $this->dlext_extra->dl_dropdown(0, 0, 0, 'auth_view');
-			$select_categories .= '</select>';
+			$select_categories = $this->dlext_extra->dl_dropdown(0, 0, 0, 'auth_view');
 
-			$s_sort_dir = '<select name="sort_dir">';
-			if ($sort_dir == 'ASC')
+			if (!empty($select_categories) && is_array($select_categories))
 			{
-				$s_sort_dir .= '<option value="ASC" selected="selected">' . $this->language->lang('ASCENDING') . '</option><option value="DESC">' . $this->language->lang('DESCENDING') . '</option>';
+				foreach ($select_categories as $key => $value)
+				{
+					$this->template->assign_block_vars('search_cat_select', [
+						'DL_CAT_ID'			=> $select_categories[$key]['cat_id'],
+						'DL_SEPERATOR'		=> $select_categories[$key]['seperator'],
+						'DL_CAT_NAME'		=> $select_categories[$key]['cat_name'],
+					]);
+				}
 			}
-			else
-			{
-				$s_sort_dir .= '<option value="ASC">' . $this->language->lang('ASCENDING') . '</option><option value="DESC" selected="selected">' . $this->language->lang('DESCENDING') . '</option>';
-			}
-			$s_sort_dir .= '</select>';
-
-			$s_search_fields = '<select name="search_fields">';
 
 			for ($i = 0; $i < count($search_fields); ++$i)
 			{
-				$s_search_fields .= '<option value="' . $search_fields[$i] . '">' . $search_fnames[$i] . '</option>';
+				$this->template->assign_block_vars('search_field_select', [
+					'DL_FIELD'	=> $search_fields[$i],
+					'DL_NAME'	=> $search_fnames[$i],
+				]);
 			}
-			$s_search_fields .= '</select>';
 
-			$this->template->set_filenames(['body' => 'dl_search_body.html']);
+			$tpl_filename = '@oxpus_dlext/dl_search_body.html';
 
 			add_form_key('dl_search');
 
 			$this->template->assign_vars([
 				'S_DL_SEARCH_ACTION'	=> $this->helper->route('oxpus_dlext_search'),
-				'S_DL_CATEGORY_OPTIONS'	=> $select_categories,
-				'S_DL_SORT_ORDER'		=> $s_sort_dir,
-				'S_DL_SORT_OPTIONS'		=> $s_search_fields,
+				'S_DL_CATEGORY_OPTIONS'	=> $this->dlext_constants::DL_NONE,
+				'S_DL_SORT_ORDER'		=> $sort_dir,
 			]);
 		}
 
 		/*
 		* include the mod footer
 		*/
-		$dl_footer = $this->phpbb_container->get('oxpus.dlext.footer');
-		$dl_footer->set_parameter($nav_view, 0, 0, $index);
-		$dl_footer->handle();
+		$this->dlext_footer->set_parameter('search', 0, 0, $index);
+		$this->dlext_footer->handle();
+
+		/*
+		* generate page
+		*/
+		return $this->helper->render($tpl_filename, $this->language->lang('DL_SEARCH_DOWNLOAD'));
 	}
 }

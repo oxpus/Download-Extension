@@ -1,6 +1,3 @@
-oxpus_dlext_ajax:
-    path: /dlext/ajax
-    defaults: { _controller: oxpus.dlext.ajax:handle }
 oxpus_dlext_broken:
     path: /dlext/broken
     defaults: { _controller: oxpus.dlext.broken:handle }
@@ -34,6 +31,9 @@ oxpus_dlext_load:
 oxpus_dlext_overall:
     path: /dlext/overall
     defaults: { _controller: oxpus.dlext.overall:handle }
+oxpus_dlext_rate:
+    path: /dlext/rate
+    defaults: { _controller: oxpus.dlext.rate:handle }
 oxpus_dlext_search:
     path: /dlext/search
     defaults: { _controller: oxpus.dlext.search:handle }
@@ -45,13 +45,19 @@ oxpus_dlext_thumbs:
     defaults: { _controller: oxpus.dlext.thumbs:handle }
 oxpus_dlext_thumbnail:
     path: /dlext/thumbnail
-    defaults: { _controller: oxpus.dlext.dlext_thumbs:handle }
+    defaults: { _controller: oxpus.dlext.core.thumbnail:handle }
 oxpus_dlext_todo:
     path: /dlext/todo
     defaults: { _controller: oxpus.dlext.todo:handle }
-oxpus_dlext_tracker:
-    path: /dlext/tracker
-    defaults: { _controller: oxpus.dlext.tracker:handle }
+oxpus_dlext_tracker_edit:
+    path: /dlext/tracker/edit
+    defaults: { _controller: oxpus.dlext.tracker.edit:handle }
+oxpus_dlext_tracker_view:
+    path: /dlext/tracker/view
+    defaults: { _controller: oxpus.dlext.tracker.view:handle }
+oxpus_dlext_tracker_main:
+    path: /dlext/tracker/main
+    defaults: { _controller: oxpus.dlext.tracker.main:handle }
 oxpus_dlext_unbroken:
     path: /dlext/unbroken
     defaults: { _controller: oxpus.dlext.unbroken:handle }

@@ -1,26 +1,20 @@
 {% INCLUDE 'overall_header.html' %}
 
-<script type="text/javascript">
-// <![CDATA[
-function select_switch(status)
-{
-	for (i = 0; i < document.forms.banlist.length; i++)
-	{
-		document.forms.banlist.elements[i].checked = status;
-	}
-}
-// ]]>
-</script>
-
 <h1>{{ lang('DL_ACP_BANLIST') }}</h1>
 
 <p>{{ lang('DL_ACP_BANLIST_EXPLAIN') }}</p>
 
-<form action="{{ S_DOWNLOADS_ACTION }}" method="post" id="add_ban">
+{% if U_DL_BACK %}
+<p class="quick">
+	<a href="{{ U_DL_BACK }}">&laquo;{{ lang('BACK') }}</a>
+</p>
+{% endif %}
+
+<form action="{{ S_DL_DOWNLOADS_ACTION }}" method="post" id="add_ban">
 
 <fieldset>
 
-	<legend>{{ BANLIST_ACTION }}</legend>
+	<legend>{{ DL_BANLIST_ACTION }}</legend>
 
 	<table width="100%" cellpadding="2" cellspacing="1">
 	<thead>
@@ -36,7 +30,7 @@ function select_switch(status)
 		<td><input type="text" size="5" maxlength="8" name="user_id" value="{{ DL_USER_ID }}" /></td>
 		<td><input type="text" size="15" maxlength="15" name="user_ip" value="{{ DL_USER_IP }}" /></td>
 		<td><input type="text" size="25" maxlength="25" name="username" value="{{ DL_USERNAME }}" /></td>
-		<td><input type="checkbox" class="radio switch" name="guests" value="1" {{ CHECKED }} id="guests" /><label class="switch" for="guests">&nbsp;</label></td>
+		<td><input type="checkbox" class="radio switch" name="guests" value="1" {{ DL_CHECKED }} id="guests" /><label class="switch" for="guests">&nbsp;</label></td>
 	</tr>
 	</tbody>
 	</table>
@@ -45,14 +39,14 @@ function select_switch(status)
 
 <fieldset class="quick">
 	<input type="submit" class="button1" name="submit" value="{{ lang('SUBMIT') }}" />
-	{{ S_HIDDEN_FIELDS }}
+	{{ S_DL_HIDDEN_FIELDS }}
 	{{ S_FORM_TOKEN }}
 </fieldset>
 
 </form>
 
-{% if S_BAN_LIST %}
-<form action="{{ S_DOWNLOADS_ACTION }}" method="post" id="banlist">
+{% if S_DL_BAN_LIST %}
+<form action="{{ S_DL_DOWNLOADS_ACTION }}" method="post" id="banlist">
 
 <fieldset>
 
@@ -67,13 +61,13 @@ function select_switch(status)
 	</tr>
 	</thead>
 	<tbody>
-	{% for banlist_row in loops.banlist_row %}
+	{% for dl_banlist_row in loops.dl_banlist_row %}
 	<tr>
-		<td><span class="genmed">&nbsp;{{ banlist_row.USER_ID }}&nbsp;</span></td>
-		<td><span class="genmed">&nbsp;{{ banlist_row.USER_IP }}&nbsp;</span></td>
-		<td><span class="genmed">&nbsp;{{ banlist_row.USERNAME }}&nbsp;</span></td>
-		<td><span class="genmed">&nbsp;{{ banlist_row.GUESTS }}&nbsp;</span></td>
-		<td><input type="checkbox" class="permissions-checkbox" name="ban_id[]" value="{{ banlist_row.BAN_ID }}" /></td>
+		<td><span class="genmed">&nbsp;{{ dl_banlist_row.DL_USER_ID }}&nbsp;</span></td>
+		<td><span class="genmed">&nbsp;{{ dl_banlist_row.DL_USER_IP }}&nbsp;</span></td>
+		<td><span class="genmed">&nbsp;{{ dl_banlist_row.DL_USERNAME }}&nbsp;</span></td>
+		<td><span class="genmed">&nbsp;{{ dl_banlist_row.DL_GUESTS }}&nbsp;</span></td>
+		<td><input type="checkbox" class="permissions-checkbox" name="ban_id[]" value="{{ dl_banlist_row.DL_BAN_ID }}" /></td>
 	</tr>
 	{% endfor %}
 	<tr>
@@ -83,7 +77,7 @@ function select_switch(status)
 	</table>
 
 	<p class="dl-text-right">
-		<span><a href="javascript:select_switch(true);" class="small">{{ lang('MARK_ALL') }}</a> &bull; <a href="javascript:select_switch(false);" class="small">{{ lang('UNMARK_ALL') }}</a></span>
+		<a href="#" onclick="marklist('banlist', 'ban_id', true); return false;">{{ lang('MARK_ALL') }}</a> :: <a href="#" onclick="marklist('banlist', 'ban_id', false); return false;">{{ lang('UNMARK_ALL') }}</a>
 	</p>
 
 </fieldset>
@@ -91,7 +85,7 @@ function select_switch(status)
 <fieldset class="quick">
 	<input type="submit" name="edit_banlist" class="button1" value="{{ lang('EDIT') }}" />&nbsp;
 	<input type="submit" name="delete_banlist" class="button2" value="{{ lang('DL_DELETE') }}" />
-	{{ S_HIDDEN_FIELDS }}
+	{{ S_DL_HIDDEN_FIELDS }}
 	{{ S_FORM_TOKEN }}
 </fieldset>
 

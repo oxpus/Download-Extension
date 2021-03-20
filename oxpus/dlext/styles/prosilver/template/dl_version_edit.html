@@ -1,27 +1,38 @@
-{% INCLUDE 'dl_header.html' %}
+{% INCLUDE '@oxpus_dlext/helpers/dl_header.html' %}
 
-{% if S_CAT_RULE %}
+{% if S_DL_CAT_RULE %}
 <div class="rules">
 	<div class="inner">
 
-	<span>{{ CAT_RULE }}</span>
+	<span>{{ DL_CAT_RULE }}</span>
 
 	</div>
 </div>
 {% endif %}
 
-<h2>{{ STATUS }} <label>{{ DESCRIPTION }}{{ HACK_VERSION }} {{ MINI_IMG }}</label></h2>
+<h2>
+	{% if DL_FILE_STATUS eq 'red' %}<i class="icon fa-ban fa-fw dl-red" title="{{ lang('DL_RED_EXPLAIN_PERM') }}"></i>{% endif %}
+	{% if DL_FILE_STATUS eq 'yellow' %}<i class="icon fa-download fa-fw dl-yellow" title="{{ lang('DL_YELLOW_EXPLAIN') }}"></i>{% endif %}
+	{% if DL_FILE_STATUS eq 'green' %}<i class="icon fa-download fa-fw dl-green" title="{{ lang('DL_GREEN_EXPLAIN') }}"></i>{% endif %}
+	{% if DL_FILE_STATUS eq 'white' %}<i class="icon fa-download fa-fw dl-white" title="{{ lang('DL_WHITE_EXPLAIN') }}"></i>{% endif %}
+	{% if DL_FILE_STATUS eq 'blue' %}<i class="icon fa-info-circle fa-fw dl-blue" title="{{ lang('DL_BLUE_EXPLAIN_FOOT') }}"></i>{% endif %}
+	{% if DL_FILE_STATUS eq 'grey' %}<i class="icon fa-globe fa-fw dl-grey" title="{{ lang('DL_GREY_EXPLAIN') }}"></i>{% endif %}
+	<label>{{ DL_DESCRIPTION }}{{ DL_HACK_VERSION }}
+		{% if DL_MINI_IMG eq 'new' %}<i class="icon fa-comment-o fa-fw dl-red" title="{{ lang('DL_FILE_NEW') }}"></i>{% endif %}
+		{% if DL_MINI_IMG eq 'edit' %}<i class="icon fa-edit fa-fw dl-blue" title="{{ lang('DL_FILE_EDIT') }}"></i>{% endif %}
+	</label>
+</h2>
 
 <br />
 
-<form action="{{ S_FORM_ACTION }}" method="post" {{ ENCTYPE }} name="postform">
+<form action="{{ S_DL_FORM_ACTION }}" method="post" enctype="multipart/form-data" name="postform">
 
 <div class="panel dl-edit-box-light">
 	<div class="inner">
 
 	<div class="panel dl-edit-box-medium">
 		<div class="inner">
-		
+
 		<fieldset class="fields1">
 			<legend><h3>{{ lang('DL_VERSION') }}</h3></legend>
 
@@ -32,25 +43,27 @@
 					{% if smiley.S_FIRST_ROW %}
 					<div id="smiley-box" class="smiley-box">
 					{% endif %}
-						<a href="#" onclick="insert_text('{smiley.A_SMILEY_CODE}', true); return false;"><img src="{smiley.SMILEY_IMG}" width="{smiley.SMILEY_WIDTH}" height="{smiley.SMILEY_HEIGHT}" alt="{smiley.SMILEY_CODE}" title="{smiley.SMILEY_DESC}" /></a>
+						<a href="#" onclick="insert_text('{smiley.A_SMILEY_CODE}', true); return false;">
+							<img src="{smiley.SMILEY_IMG}" width="{smiley.SMILEY_WIDTH}" height="{smiley.SMILEY_HEIGHT}" alt="{smiley.SMILEY_CODE}" title="{smiley.SMILEY_DESC}" />
+						</a>
 					{% if smiley.S_LAST_ROW %}
-						<a href="{U_MORE_SMILIES}" onclick="window.open('{U_MORE_SMILIES}', '_blank', 'HEIGHT=200,resizable=yes,scrollbars=yes,WIDTH=400'); return false;">{L_MORE_SMILIES}</a>
+						<a href="{U_DL_MORE_SMILIES}" onclick="window.open('{U_MORE_SMILIES}', '_blank', 'HEIGHT=200,resizable=yes,scrollbars=yes,WIDTH=400'); return false;">{L_MORE_SMILIES}</a>
 					</div>
 					{% endif %}
 					{% endfor %}
 					{% INCLUDE 'posting_buttons.html' %}
 					<div id="message-box" class="message-box">
-						<textarea name="message" rows="5" cols="50" class="dl-comment-height inputbox autowidth">{{ VER_TEXT }}</textarea>
+						<textarea name="message" rows="5" cols="50" class="dl-comment-height inputbox autowidth">{{ DL_VER_TEXT }}</textarea>
 					</div>
 				</dd>
 			</dl>
 			<dl>
 				<dt><label>{{ lang('DL_HACK_VERSION') }}</label></dt>
-				<dd><input type="text" name="ver_version" size="10" maxlength="32" class="inputbox_autosize" value="{{ VER_VERSION }}" /></dd>
+				<dd><input type="text" name="ver_version" size="10" maxlength="32" class="inputbox_autosize" value="{{ DL_VER_VERSION }}" /></dd>
 			</dl>
 			<dl>
 				<dt><label>{{ lang('DL_APPROVE') }}</label></dt>
-				<dd><input type="checkbox" name="ver_active" value="1" {{ VER_ACTIVE }} class="permissions_checkbox" /></dd>
+				<dd><input type="checkbox" name="ver_active" value="1" {{ DL_VER_ACTIVE }} class="permissions_checkbox" /></dd>
 			</dl>
 
 		</fieldset>
@@ -60,18 +73,20 @@
 
 	<div class="panel dl-edit-box-medium">
 		<div class="inner">
-	
+
 		<fieldset class="fields1">
 			<legend><h3>{{ lang('DL_IMAGES') }}</h3></legend>
 
 			{% for images in loops.images %}
 			<dl{% if images.S_ROW_COUNT is even %} class="row bg2"{% endif %}>
 				<dt>
-					<a href="{{ images.IMAGE }}" title="{{ images.NAME }}" rel="prettyPhoto[pp_gal]"><img src="{{ images.LINK }}" alt="{{ images.NAME }}" title="{{ images.NAME }}" class="dl-thumb-box" /></a>
+					<a href="{{ images.DL_IMAGE }}" title="{{ images.DL_NAME }}" rel="prettyPhoto[pp_gal]">
+						<img src="{{ images.DL_LINK }}" alt="{{ images.DL_NAME }}" title="{{ images.DL_NAME }}" class="dl-thumb-box" />
+					</a>
 				</dt>
 				<dd>
-					<input type="text" maxlength="255" name="ver_title[{{ images.VER_FILE_ID }}]" value="{{ images.NAME }}" class="inputbox autowidth" />
-					 &nbsp; <input type="checkbox" value="{{ images.VER_FILE_ID }}" name="ver_title_del[]" /> {{ lang('DL_DELETE') }}
+					<input type="text" maxlength="255" name="ver_title[{{ images.DL_VER_FILE_ID }}]" value="{{ images.DL_NAME }}" class="inputbox autowidth" />
+					&nbsp;<input type="checkbox" value="{{ images.DL_VER_FILE_ID }}" name="ver_title_del[]" /> {{ lang('DL_DELETE') }}
 				</dd>
 			</dl>
 			{% endfor %}
@@ -95,16 +110,16 @@
 
 	<div class="panel dl-edit-box-medium">
 		<div class="inner">
-	
+
 		<fieldset class="fields1">
 			<legend><h3>{{ lang('DL_FILES_TITLE') }}</h3></legend>
 
 			{% for files in loops.files %}
 			<dl{% if files.S_ROW_COUNT is even %} class="row bg2"{% endif %}>
-				<dt>{{ lang('DL_FILE_NAME') }}{{ lang('COLON') }} {{ files.FILE_NAME }}</dt>
+				<dt>{{ lang('DL_FILE_NAME') }}{{ lang('COLON') }} {{ files.DL_FILE_NAME }}</dt>
 				<dd>
-					<input type="text" maxlength="255" name="ver_title[{{ files.VER_FILE_ID }}]" value="{{ files.NAME }}" class="inputbox autowidth" />
-					 &nbsp; <input type="checkbox" value="{{ files.VER_FILE_ID }}" name="ver_title_del[]" /> {{ lang('DL_DELETE') }}
+					<input type="text" maxlength="255" name="ver_title[{{ files.DL_VER_FILE_ID }}]" value="{{ files.DL_NAME }}" class="inputbox autowidth" />
+					 &nbsp; <input type="checkbox" value="{{ files.DL_VER_FILE_ID }}" name="ver_title_del[]" /> {{ lang('DL_DELETE') }}
 				</dd>
 			</dl>
 			{% endfor %}
@@ -125,7 +140,7 @@
 	</div>
 
 	<fieldset class="submit-buttons">
-		<input type="submit" name="submit" value="{{ lang('SUBMIT') }}" class="button icon-button" />&nbsp;&nbsp;
+		<input type="submit" name="submit" value="{{ lang('SUBMIT') }}" class="button icon-button" />
 	</fieldset>
 
 	</div>
@@ -135,4 +150,4 @@
 
 <br />
 
-{% INCLUDE 'dl_footer.html' %}
+{% INCLUDE '@oxpus_dlext/helpers/dl_footer.html' %}

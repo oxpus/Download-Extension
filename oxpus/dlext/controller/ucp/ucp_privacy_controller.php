@@ -3,69 +3,76 @@
 /**
 *
 * @package phpBB Extension - Oxpus Downloads
-* @copyright (c) 2002-2020 OXPUS - www.oxpus.net
+* @copyright (c) 2002-2021 OXPUS - www.oxpus.net
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
 */
 
 namespace oxpus\dlext\controller\ucp;
 
-use Symfony\Component\DependencyInjection\Container;
-
 class ucp_privacy_controller implements ucp_privacy_interface
 {
-	protected $u_action;
-
-	/* @var string phpEx */
+	/* phpbb objects */
+	protected $root_path;
 	protected $php_ext;
-
-	/* @var \phpbb\request\request_interface */
 	protected $request;
-
-	/* @var \phpbb\template\template */
 	protected $template;
-
-	/* @var \phpbb\user */
 	protected $user;
-
-	/* @var \phpbb\db\driver\driver_interface */
 	protected $db;
 
-	/* @var Container */
-	protected $phpbb_container;
-
-	/** @var extension owned objects */
+	/* extension owned objects */
+	protected $u_action;
 	protected $ext_path;
+
+	protected $dlext_physical;
+	protected $dlext_constants;
+
+	protected $dlext_table_dl_tracker;
+	protected $dlext_table_dl_comments;
+	protected $dlext_table_dl_stats;
 
 	/**
 	* Constructor
 	*
-	* @param \phpbb\extension\manager				$phpbb_extension_manager
+	* @param string									$root_path
 	* @param string									$php_ext
-	* @param \phpbb\request\request_interface 		$request
+	* @param \phpbb\request\request 				$request
 	* @param \phpbb\template\template				$template
 	* @param \phpbb\user							$user
-	* @param \phpbb\db\driver\driver_interfacer		$db
-	* @param Container 								$phpbb_container
+	* @param \phpbb\db\driver\driver_interface		$db
+	* @param \oxpus\dlext\core\physical				$dlext_physical
+	* @param \oxpus\dlext\core\helpers\constants 	$dlext_constants
+	* @param string									$dlext_table_dl_tracker
+	* @param string									$dlext_table_dl_comments
+	* @param string									$dlext_table_dl_stats
 	*/
 	public function __construct(
-		\phpbb\extension\manager $phpbb_extension_manager,
+		$root_path,
 		$php_ext,
-		\phpbb\request\request_interface $request,
+		\phpbb\request\request $request,
 		\phpbb\template\template $template,
 		\phpbb\user $user,
 		\phpbb\db\driver\driver_interface $db,
-		Container $phpbb_container
+		\oxpus\dlext\core\physical $dlext_physical,
+		\oxpus\dlext\core\helpers\constants $dlext_constants,
+		$dlext_table_dl_tracker,
+		$dlext_table_dl_comments,
+		$dlext_table_dl_stats
 	)
 	{
+		$this->root_path		= $root_path;
 		$this->php_ext 			= $php_ext;
 		$this->request			= $request;
 		$this->template 		= $template;
 		$this->user 			= $user;
 		$this->db 				= $db;
-		$this->phpbb_container 	= $phpbb_container;
 
-		$this->ext_path			= $phpbb_extension_manager->get_extension_path('oxpus/dlext', true);
+		$this->dlext_physical	= $dlext_physical;
+		$this->dlext_constants	= $dlext_constants;
+
+		$this->dlext_table_dl_tracker	= $dlext_table_dl_tracker;
+		$this->dlext_table_dl_comments	= $dlext_table_dl_comments;
+		$this->dlext_table_dl_stats		= $dlext_table_dl_stats;
 	}
 
 	public function set_action($u_action)
@@ -89,19 +96,19 @@ class ucp_privacy_controller implements ucp_privacy_interface
 					$fields = 'df_id, report_title, report_text, report_file_ver, report_date, report_status, report_status_date, report_php, report_db, report_forum';
 					$time_fields = ['report_date', 'report_status_date'];
 					$user_field = 'report_author_id';
-					$table = DL_BUGS_TABLE;
+					$table = $this->dlext_table_dl_tracker;
 				break;
 				case 'comments':
 					$fields = 'dl_id, username, comment_time, comment_edit_time, comment_text';
 					$time_fields = ['comment_time', 'comment_edit_time'];
 					$user_field = 'user_id';
-					$table = DL_COMMENTS_TABLE;
+					$table = $this->dlext_table_dl_comments;
 				break;
 				case 'stats':
 					$fields = 'dl_id, username, traffic, direction, user_ip, time_stamp';
 					$time_fields = ['time_stamp'];
 					$user_field = 'user_id';
-					$table = DL_STATS_TABLE;
+					$table = $this->dlext_table_dl_stats;
 				break;
 				default:
 					$table = '';
@@ -113,8 +120,8 @@ class ucp_privacy_controller implements ucp_privacy_interface
 						WHERE ' . $user_field . ' = ' . (int) $this->user->data['user_id'];
 				$result = $this->db->sql_query($sql);
 
-				$output_row = [];
 				$counter = 0;
+				$output_row = [];
 
 				while ($row = $this->db->sql_fetchrow($result))
 				{
@@ -135,32 +142,31 @@ class ucp_privacy_controller implements ucp_privacy_interface
 
 				$this->db->sql_freeresult($result);
 
-				header("Content-type: text/csv");
-				header("Content-Disposition: attachment; filename=my_dl_" . $dl_privacy . "_data.csv");
-				header("Pragma: no-cache");
-				header("Expires: 0");
-
-				$this->template->set_filenames(['body' => 'dl_privacy.html']);
-
-				$this->template->assign_var('FIELDS', $fields);
+				$file_stream = $fields . "\n";
 
 				foreach ($output_row as $key => $data)
 				{
-					$this->template->assign_block_vars('fields_row', [
-						'DATA'	=> implode(', ', $data),
-					]);
+					$file_stream .= implode(', ', $data) . "\n";
 				}
 
-				$this->template->display('body');
+				$dl_file_data = [
+					'physical_file'		=> $file_stream,
+					'real_filename'		=> 'my_dl_' . $dl_privacy . '_data_' . date(DATE_RFC3339) . '.csv',
+					'mimetype'			=> 'application/octetstream',
+					'filesize'			=> sprintf("%u", strlen($file_stream)),
+					'filetime'			=> time(),
+					'filestream'		=> $this->dlext_constants::DL_TRUE,
+				];
 
-				garbage_collection();
-				exit_handler();
+				include($this->root_path . 'includes/functions_download.' . $this->php_ext);
+
+				$this->dlext_physical->send_file_to_browser($dl_file_data);
 			}
 		}
 
 		$this->template->assign_vars([
-			'S_DL_UCP_PRIVACY'		=> true,
-			'S_FORM_ACTION'			=> $this->u_action,
+			'S_DL_UCP_PRIVACY'		=> $this->dlext_constants::DL_TRUE,
+			'S_SL_FORM_ACTION'		=> $this->u_action,
 			'U_DL_PRIVACY_BUGS'		=> $this->u_action . '&amp;submit=1&amp;privacy=tracker',
 			'U_DL_PRIVACY_COMMENTS'	=> $this->u_action . '&amp;submit=1&amp;privacy=comments',
 			'U_DL_PRIVACY_STATS'	=> $this->u_action . '&amp;submit=1&amp;privacy=stats',

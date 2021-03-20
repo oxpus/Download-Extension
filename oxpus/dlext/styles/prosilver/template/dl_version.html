@@ -1,16 +1,27 @@
-{% INCLUDE 'dl_header.html' %}
+{% INCLUDE '@oxpus_dlext/helpers/dl_header.html' %}
 
-{% if S_CAT_RULE %}
+{% if S_DL_CAT_RULE %}
 <div class="rules">
 	<div class="inner">
 
-	<span>{{ CAT_RULE }}</span>
+	<span>{{ DL_CAT_RULE }}</span>
 
 	</div>
 </div>
 {% endif %}
 
-<h2>{{ STATUS }} <label>{{ DESCRIPTION }} {{ MINI_IMG }}</label></h2>
+<h2>
+	{% if DL_FILE_STATUS eq 'red' %}<i class="icon fa-ban fa-fw dl-red" title="{{ lang('DL_RED_EXPLAIN_PERM') }}"></i>{% endif %}
+	{% if DL_FILE_STATUS eq 'yellow' %}<i class="icon fa-download fa-fw dl-yellow" title="{{ lang('DL_YELLOW_EXPLAIN') }}"></i>{% endif %}
+	{% if DL_FILE_STATUS eq 'green' %}<i class="icon fa-download fa-fw dl-green" title="{{ lang('DL_GREEN_EXPLAIN') }}"></i>{% endif %}
+	{% if DL_FILE_STATUS eq 'white' %}<i class="icon fa-download fa-fw dl-white" title="{{ lang('DL_WHITE_EXPLAIN') }}"></i>{% endif %}
+	{% if DL_FILE_STATUS eq 'blue' %}<i class="icon fa-info-circle fa-fw dl-blue" title="{{ lang('DL_BLUE_EXPLAIN_FOOT') }}"></i>{% endif %}
+	{% if DL_FILE_STATUS eq 'grey' %}<i class="icon fa-globe fa-fw dl-grey" title="{{ lang('DL_GREY_EXPLAIN') }}"></i>{% endif %}
+	<label>{{ DL_DESCRIPTION }}
+		{% if DL_MINI_IMG eq 'new' %}<i class="icon fa-comment-o fa-fw dl-red" title="{{ lang('DL_FILE_NEW') }}"></i>{% endif %}
+		{% if DL_MINI_IMG eq 'edit' %}<i class="icon fa-edit fa-fw dl-blue" title="{{ lang('DL_FILE_EDIT') }}"></i>{% endif %}
+	</label>
+</h2>
 
 <br />
 
@@ -19,21 +30,28 @@
 		<div class="panel">
 
 			<div class="postbody dl-width-100">
-				<h3>{{ lang('DL_HACK_VERSION') }}{{ lang('COLON') }} {{ VER_VERSION }}</h3>
-				{% if not S_ACTIVE %}<br /><div class="rules">{{ lang('DL_NOT_ACTIVE') }}</div>{% endif %}
-				{% if U_VER_EDIT %}
+				<h3>{{ lang('DL_HACK_VERSION') }}{{ lang('COLON') }} {{ DL_VER_VERSION }}</h3>
+				{% if not S_DL_ACTIVE %}<br /><div class="rules">{{ lang('DL_NOT_ACTIVE') }}</div>{% endif %}
+				{% if U_DL_VER_EDIT %}
 				<ul class="post-buttons">
 					<li class="rightside">
-                        <a href="{{ U_VER_EDIT }}" title="{{ lang('DL_EDIT_FILE') }}" class="button button-icon-only">
+                        <a href="{{ U_DL_VER_EDIT }}" title="{{ lang('DL_EDIT_FILE') }}" class="button button-icon-only">
                             <i class="icon fa-pencil fa-fw"></i><span>{{ lang('DL_EDIT_FILE') }}</span>
                         </a>
                     </li>
 				</ul>
 				{% endif %}
-				<div class="content">{{ VER_DESC }}</div>
+				<div class="content">{{ DL_VER_DESC }}</div>
 			</div>
 
-			<div class="notice dl-text-center"><strong>{{ lang('DL_FILE_NAME') }}{{ lang('COLON') }}</strong> {{ FILE_NAME }}{% if FILE_SIZE %}, <strong>{{ lang('DL_FILE_SIZE') }}{{ lang('COLON') }}</strong> {{ FILE_SIZE }}{% endif %}</div>
+			<div class="notice dl-text-center">
+				<strong>{{ lang('DL_FILE_NAME') }}{{ lang('COLON') }}</strong>
+				{{ DL_FILE_NAME }}
+				{% if DL_FILE_SIZE %}
+				, <strong>{{ lang('DL_FILE_SIZE') }}{{ lang('COLON') }}</strong>
+				{{ DL_FILE_SIZE }}
+				{% endif %}
+			</div>
 
 			{% for images in loops.images %}
 			{% if images.S_FIRST_ROW %}
@@ -42,7 +60,15 @@
 			<dl>
 				<ul class="dl-detail-row">
 			{% endif %}
-					<li class="dl-left dl-thumb-box dl_thumb-cell dl-intent-right">{% if S_DL_POPUPIMAGE %}<a href="{{ images.IMAGE }}" title="{{ images.NAME }}" rel="prettyPhoto[pp_gal]">{% endif %}<img src="{{ images.LINK }}" alt="{{ images.NAME }}" title="{{ images.NAME }}" class="dl-thumb-box" />{% if S_DL_POPUPIMAGE %}</a>{% endif %}</li>
+					<li class="dl-left dl-thumb-box dl_thumb-cell dl-intent-right">
+						{% if S_DL_POPUPIMAGE %}
+						<a href="{{ images.DL_IMAGE }}" title="{{ images.DL_NAME }}" rel="prettyPhoto[pp_gal]">
+						{% endif %}
+							<img src="{{ images.DL_LINK }}" alt="{{ images.DL_NAME }}" title="{{ images.DL_NAME }}" class="dl-thumb-box" />
+						{% if S_DL_POPUPIMAGE %}
+						</a>
+						{% endif %}
+					</li>
 			{% if images.S_LAST_ROW %}
 				</ul>
 			</dl>
@@ -56,7 +82,11 @@
 			<dl>
 				<ul class="topiclist">
 			{% endif %}
-					<li class="dl-margin-right-small dl-a-button">{% if files.S_AUTH %}<a href="{{ files.LINK }}" title="{{ files.NAME }}">{% endif %}<strong>{{ files.NAME }}</strong>{% if files.S_AUTH %}</a>{% endif %}</li>
+					<li class="dl-margin-right-small dl-a-button">
+						{% if files.S_DL_AUTH %}
+						<a href="{{ files.DL_LINK }}" title="{{ files.DL_NAME }}">{% endif %}<strong>{{ files.DL_NAME }}</strong>{% if files.S_DL_AUTH %}</a>
+						{% endif %}
+					</li>
 			{% if files.S_LAST_ROW %}
 				</ul>
 			</dl>
@@ -71,4 +101,4 @@
 
 <br />
 
-{% INCLUDE 'dl_footer.html' %}
+{% INCLUDE '@oxpus_dlext/helpers/dl_footer.html' %}

@@ -3,7 +3,7 @@
 /**
 *
 * @package phpBB Extension - Oxpus Downloads
-* @copyright (c) 2002-2020 OXPUS - www.oxpus.net
+* @copyright (c) 2002-2021 OXPUS - www.oxpus.net
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
 */
@@ -40,9 +40,6 @@ class release_8_0_3 extends \phpbb\db\migration\migration
 			]],
 
 			['permission.remove', ['a_dl_browser']],
-			['permission.permission_unset', ['ROLE_ADMIN_FULL', 'a_dl_browser']],
-
-			['custom', [[$this, 'remove_deprecated_files']]],
 		];
 	}
 
@@ -59,22 +56,5 @@ class release_8_0_3 extends \phpbb\db\migration\migration
 	public function revert_schema()
 	{
 		return [];
-	}
-
-	public function remove_deprecated_files()
-	{
-		global $phpbb_container, $phpEx, $phpbb_extension_manager;
-
-		if ($phpbb_container->get('request')->variable('action', '') == 'delete_data')
-		{
-			return;
-		}
-
-		$ext_path = $phpbb_extension_manager->get_extension_path('oxpus/dlext', true);
-
-		@unlink($ext_path . 'adm/style/acp_dl_browser.html');
-		@unlink($ext_path . 'controller/acp/acp_browser_controller.' . $phpEx);
-		@unlink($ext_path . 'controller/acp/acp_browser_interface.' . $phpEx);
-		@unlink($ext_path . 'phpbb/includes/user_agents.' . $phpEx);
 	}
 }

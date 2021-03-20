@@ -1,42 +1,42 @@
 {% INCLUDE 'overall_header.html' %}
 
-<h1>{{ lang('TITLE') }}</h1>
+<h1>{{ lang('DL_CONFIG') }}</h1>
 
-<h2>{{ lang('TITLE_PAGE') }}</h2>
+<h2>{{ DL_TITLE_PAGE }}</h2>
 
-{% if S_ERROR %}
+{% if S_DL_ERROR %}
 <div class="errorbox">
-	<p>{{ ERROR_MSG }}</p>
+	<p>{{ DL_ERROR_MSG }}</p>
 </div>
 {% endif %}
 
 <div class="successbox">
-	<p><strong>{{ lang('DOWNLOAD_PATH') }}{{ lang('COLON') }} {{ EXT_FILES_PATH }}</strong></p><p>{{ lang('DOWNLOAD_PATH_EXPLAIN') }}</p>
+	<p><strong>{{ lang('DL_DOWNLOAD_PATH') }}{{ lang('COLON') }} {{ DL_EXT_FILES_PATH }}</strong></p><p>{{ lang('DL_DOWNLOAD_PATH_EXPLAIN') }}</p>
 </div>
 
-<form id="mode_select" method="post" action="{{ U_MODE_SELECT }}">
+<form id="mode_select" method="post" action="{{ U_DL_MODE_SELECT }}">
 	<fieldset class="quick">
-		{{ lang('SELECT_FORM') }}{{ lang('COLON') }} <select name="view" onchange="if (this.options[this.selectedIndex].value != '') this.form.submit();">{{ S_MODE_SELECT }}</select> <input class="button2" type="submit" value="{{ lang('GO') }}" />
+		{{ lang('SELECT_FORM') }}{{ lang('COLON') }} <select name="view" onchange="if (this.options[this.selectedIndex].value != '') this.form.submit();">{{ S_DL_MODE_SELECT }}</select> <input class="button2" type="submit" value="{{ lang('GO') }}" />
 		{{ S_FORM_TOKEN }}
 	</fieldset>
 </form>
 
-<form id="acp_dl_config" method="post" action="{{ U_ACTION }}">
+<form id="acp_dl_config" method="post" action="{{ U_DL_ACTION }}">
 
-{% for options in loops.options %}
-	{% if options.S_LEGEND %}
-		{% if not options.S_FIRST_ROW %}
+{% for dl_options in loops.dl_options %}
+	{% if dl_options.S_DL_LEGEND %}
+		{% if not dl_options.S_FIRST_ROW %}
 			</fieldset>
 		{% endif %}
 		<fieldset>
-			<legend>{{ options.LEGEND }}</legend>
+			<legend>{{ dl_options.DL_LEGEND }}</legend>
 	{% else %}
 
 		<dl>
-			<dt><label for="{{ options.KEY }}">{{ options.TITLE }}{{ lang('COLON') }}</label>{% if options.S_EXPLAIN %}<br /><span>{{ options.TITLE_EXPLAIN }}</span>{% endif %}</dt>
+			<dt><label for="{{ dl_options.DL_KEY }}">{{ dl_options.DL_TITLE }}{{ lang('COLON') }}</label>{% if dl_options.S_DL_EXPLAIN %}<br /><span>{{ dl_options.DL_TITLE_EXPLAIN }}</span>{% endif %}</dt>
 			<dd>
-				{% if options.HELP_KEY %}<a href="javascript:void(0)" onclick="javascript:help_popup('{{ options.HELP_KEY }}')">{{ ICON_DL_HELP }}</a>{% else %}&nbsp;{% endif %}&nbsp;&nbsp;{{ options.CONTENT }}
-				{% if options.PREVIEW %}<br /><br /><hr /><div class="small">{{ options.PREVIEW }}</div>{% endif %}
+				{% if dl_options.DL_HELP_KEY %}<a class="help" key="{{ dl_options.DL_HELP_KEY }}"><i class="icon fa-info-circle fa-fw dl-icon-yellow"></i></a>{% else %}&nbsp;{% endif %}&nbsp;&nbsp;{{ dl_options.DL_CONTENT }}
+				{% if dl_options.DL_PREVIEW %}<br /><br /><hr /><div class="small">{{ dl_options.DL_PREVIEW }}</div>{% endif %}
 			</dd>
 		</dl>
 
@@ -49,7 +49,7 @@
 		<input class="button1" type="submit" id="submit" name="submit" value="{{ lang('SUBMIT') }}" />&nbsp;
 		<input class="button2" type="reset" id="reset" name="reset" value="{{ lang('RESET') }}" />
 		{{ S_FORM_TOKEN }}
-		{{ S_HIDDEN_FIELDS }}
+		{{ S_DL_HIDDEN_FIELDS }}
 	</fieldset>
 
 </form>

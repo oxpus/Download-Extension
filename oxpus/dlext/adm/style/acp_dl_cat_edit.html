@@ -2,42 +2,76 @@
 
 <h1>{{ lang('DL_CAT_TITLE') }}</h1>
 
-{% if S_ERROR %}
+{% if S_DL_ERROR %}
 	<div class="errorbox">
 		<h3>{{ lang('WARNING') }}</h3>
-		<p>{{ ERROR_MSG }}</p>
+		<p>{{ DL_ERROR_MSG }}</p>
 	</div>
 {% endif %}
 
-<form action="{{ S_CATEGORY_ACTION }}" method="post" id="dl_edit_cat">
+{% if U_DL_BACK %}
+<p class="quick">
+	<a href="{{ U_DL_BACK }}">&laquo;{{ lang('BACK') }}</a>
+</p>
+{% endif %}
+
+<form action="{{ S_DL_CATEGORY_ACTION }}" method="post" id="dl_edit_cat">
 
 <fieldset>
 
-	<legend>{{ lang('DL_CAT_MODE') }}</legend>
+	<legend>{% if S_DL_CAT_MODE eq 'add' %}{{ lang('ADD') }}{% else %}{{ lang('EDIT') }}{% endif %}</legend>
 
 	<dl>
 		<dt><label>{{ lang('DL_CAT_NAME') }}</label></dt>
-		<dd><a href="javascript:void(0)" onclick="javascript:help_popup('DL_CAT_NAME')" class="nav">{{ ICON_DL_HELP }}</a>&nbsp;<input type="text" name="cat_name" size="40" maxlength="255" value="{{ CAT_NAME }}" /></dd>
+		<dd>
+			<a class="help nav" key="DL_CAT_NAME"><i class="icon fa-info-circle fa-fw dl-icon-yellow"></i></a>&nbsp;
+			<input type="text" name="cat_name" size="40" maxlength="255" value="{{ DL_CAT_NAME }}" />
+		</dd>
 	</dl>
 	<dl>
 		<dt><label>{{ lang('DL_CAT_PARENT') }}</label></dt>
-		<dd><a href="javascript:void(0)" onclick="javascript:help_popup('DL_CAT_PARENT')" class="nav">{{ ICON_DL_HELP }}</a>&nbsp;{{ CAT_PARENT }}</dd>
+		<dd>
+			<a class="help nav" key="DL_CAT_PARENT"><i class="icon fa-info-circle fa-fw dl-icon-yellow"></i></a>&nbsp;
+			<select name="parent">
+				<option value="0">&nbsp;»&nbsp;{{ lang('DL_CAT_INDEX') }}</option>
+				{% for select_cat_parent in loops.select_cat_parent %}
+				<option value="{{ select_cat_parent.DL_CAT_ID }}"{% if select_cat_parent.DL_SELECTED %} selected="selected"{% endif %}>{{ select_cat_parent.DL_SEPERATOR }}{% if select_cat_parent.DL_SEPERATOR %}{% endif %}{{ select_cat_parent.DL_CAT_NAME }}</option>
+				{% endfor %}
+			</select>
+		</dd>
 	</dl>
 	<dl>
 		<dt><label>{{ lang('DL_CAT_PATH') }}</label></dt>
-		<dd><a href="javascript:void(0)" onclick="javascript:help_popup('DL_CAT_PATH')" class="nav">{{ ICON_DL_HELP }}</a>&nbsp;{{ S_CAT_PATH }}</dd>
+		<dd>
+			<a class="help nav" key="DL_CAT_PATH"><i class="icon fa-info-circle fa-fw dl-icon-yellow"></i></a>&nbsp;
+			<select name="path">
+				<option value="/">{{ lang('DL_CAT_PATH_SELECT') }}</option>
+				{% for dl_cat_path_select in loops.dl_cat_path_select %}
+				<option value="{{ dl_cat_path_select.DL_VALUE }}"{% if dl_cat_path_select.DL_SELECTED %} selected="selected"{% endif %}>{{ dl_cat_path_select.DL_NAME }}</option>
+				{% endfor %}
+			</select>
+		</dd>
 	</dl>
 	<dl>
 		<dt><label>{{ lang('DL_CAT_DESCRIPTION') }}</label></dt>
-		<dd><a href="javascript:void(0)" onclick="javascript:help_popup('DL_CAT_DESCRIPTION')" class="nav">{{ ICON_DL_HELP }}</a>&nbsp;<textarea name="description" rows="3" cols="40">{{ DESCRIPTION }}</textarea></dd>
+		<dd>
+			<a class="help nav" key="DL_CAT_DESCRIPTION"><i class="icon fa-info-circle fa-fw dl-icon-yellow"></i></a>&nbsp;
+			<textarea name="description" rows="3" cols="40">{{ DL_DESCRIPTION }}</textarea>
+		</dd>
 	</dl>
 	<dl>
 		<dt><label>{{ lang('DL_CAT_ICON') }}</label></dt>
-		<dd><a href="javascript:void(0)" onclick="javascript:help_popup('DL_CAT_ICON')" class="nav">{{ ICON_DL_HELP }}</a>&nbsp;<input type="text" name="cat_icon" size="40" maxlength="255" value="{{ CAT_ICON }}" /></dd>
+		<dd>
+			<a class="help nav" key="DL_CAT_ICON"><i class="icon fa-info-circle fa-fw dl-icon-yellow"></i></a>&nbsp;
+			<input type="text" name="cat_icon" size="40" maxlength="255" value="{{ DL_CAT_ICON }}" />
+		</dd>
 	</dl>
 	<dl>
 		<dt><label>{{ lang('DL_CAT_RULES') }}</label></dt>
-		<dd><a href="javascript:void(0)" onclick="javascript:help_popup('DL_CAT_RULES')" class="nav">{{ ICON_DL_HELP }}</a>&nbsp;<textarea name="rules" rows="3" cols="40">{{ RULES }}</textarea></dd>
+		<dd>
+			<a class="help nav" key="DL_CAT_RULES"><i class="icon fa-info-circle fa-fw dl-icon-yellow"></i></a>&nbsp;
+			<textarea name="rules" rows="3" cols="40">{{ DL_RULES }}</textarea>
+		</dd>
 	</dl>
 
 </fieldset>
@@ -46,15 +80,29 @@
 
 	<dl>
 		<dt><label>{{ lang('DL_COPY_PERMISSIONS') }}</label></dt>
-		<dd><a href="javascript:void(0)" onclick="javascript:help_popup('DL_COPY_PERMISSIONS')" class="nav">{{ ICON_DL_HELP }}</a>&nbsp;{{ PERMS_COPY_FROM }}</dd>
+		<dd><a class="help nav" key="DL_COPY_PERMISSIONS"><i class="icon fa-info-circle fa-fw dl-icon-yellow"></i></a>&nbsp;
+			<select name="perms_copy_from">
+				{% if S_DL_CAT_MODE eq 'edit' %}<option value="{{ DL_PERM_COPY_NONE }}">&nbsp;»&nbsp;{{ lang('DL_NO_PERMS_COPY') }}</option>{% endif %}
+				<option value="{{ DL_PERM_COPY_PARENT }}">&nbsp;»&nbsp;{{ lang('DL_CAT_PARENT') }}</option>
+				{% for select_cat_perm_copy in loops.select_cat_perm_copy %}
+				<option value="{{ select_cat_perm_copy.DL_CAT_ID }}"{% if select_cat_perm_copy.DL_SELECTED %} selected="selected"{% endif %}>{{ select_cat_perm_copy.DL_SEPERATOR }}{% if select_cat_perm_copy.DL_SEPERATOR %}{% endif %}{{ select_cat_perm_copy.DL_CAT_NAME }}</option>
+				{% endfor %}
+			</select>
+		</dd>
 	</dl>
 	<dl>
 		<dt><label>{{ lang('DL_MUST_APPROVE') }}</label></dt>
-		<dd><a href="javascript:void(0)" onclick="javascript:help_popup('DL_MUST_APPROVE')" class="nav">{{ ICON_DL_HELP }}</a>&nbsp;<input type="checkbox" class="radio switch" name="must_approve" value="1" {{ MUST_APPROVE }} id="must_approve" /><label class="switch" for="must_approve">&nbsp;</label></dd>
+		<dd>
+			<a class="help nav" key="DL_MUST_APPROVE"><i class="icon fa-info-circle fa-fw dl-icon-yellow"></i></a>&nbsp;
+			<input type="checkbox" class="radio switch" name="must_approve" value="1" {{ DL_MUST_APPROVE }} id="must_approve" /><label class="switch" for="must_approve">&nbsp;</label>
+		</dd>
 	</dl>
 	<dl>
 		<dt><label>{{ lang('DL_MOD_DESC_ALLOW') }}</label></dt>
-		<dd><a href="javascript:void(0)" onclick="javascript:help_popup('DL_MOD_DESC_ALLOW')" class="nav">{{ ICON_DL_HELP }}</a>&nbsp;<input type="checkbox" class="radio switch" name="allow_mod_desc" value="1" {{ ALLOW_MOD_DESC }} id="allow_mod_desc" /><label class="switch" for="allow_mod_desc">&nbsp;</label></dd>
+		<dd>
+			<a class="help nav" key="DL_MOD_DESC_ALLOW"><i class="icon fa-info-circle fa-fw dl-icon-yellow"></i></a>&nbsp;
+			<input type="checkbox" class="radio switch" name="allow_mod_desc" value="1" {{ DL_ALLOW_MOD_DESC }} id="allow_mod_desc" /><label class="switch" for="allow_mod_desc">&nbsp;</label>
+		</dd>
 	</dl>
 
 </fieldset>
@@ -63,82 +111,162 @@
 
 	<dl>
 		<dt><label>{{ lang('DL_STATISTICS') }}</label></dt>
-		<dd><a href="javascript:void(0)" onclick="javascript:help_popup('DL_STATISTICS')" class="nav">{{ ICON_DL_HELP }}</a>&nbsp;<input type="checkbox" class="radio switch" name="statistics" value="1" {{ STATS }} id="statistics"  /><label class="switch" for="statistics">&nbsp;</label></dd>
+		<dd>
+			<a class="help nav" key="DL_STATISTICS"><i class="icon fa-info-circle fa-fw dl-icon-yellow"></i></a>&nbsp;
+			<input type="checkbox" class="radio switch" name="statistics" value="1" {{ DL_STATS }} id="statistics"  /><label class="switch" for="statistics">&nbsp;</label>
+		</dd>
 	</dl>
 	<dl>
 		<dt><label>{{ lang('DL_STATS_PRUNE') }}</label></dt>
-		<dd><a href="javascript:void(0)" onclick="javascript:help_popup('DL_STATS_PRUNE')" class="nav">{{ ICON_DL_HELP }}</a>&nbsp;<input type="text" name="stats_prune" value="{{ STATS_PRUNE }}" size="10" maxlength="8" /></dd>
+		<dd>
+			<a class="help nav" key="DL_STATS_PRUNE"><i class="icon fa-info-circle fa-fw dl-icon-yellow"></i></a>&nbsp;
+			<input type="text" name="stats_prune" value="{{ DL_STATS_PRUNE }}" size="10" maxlength="8" />
+		</dd>
 	</dl>
 	<dl>
 		<dt><label>{{ lang('DL_COMMENTS') }}</label></dt>
-		<dd><a href="javascript:void(0)" onclick="javascript:help_popup('DL_COMMENTS')" class="nav">{{ ICON_DL_HELP }}</a>&nbsp;<input type="checkbox" class="radio switch" name="comments" value="1" {{ COMMENTS }}  id="comments" /><label class="switch" for="comments">&nbsp;</label></dd>
+		<dd>
+			<a class="help nav" key="DL_COMMENTS"><i class="icon fa-info-circle fa-fw dl-icon-yellow"></i></a>&nbsp;
+			<input type="checkbox" class="radio switch" name="comments" value="1" {{ DL_COMMENTS }}  id="comments" /><label class="switch" for="comments">&nbsp;</label>
+		</dd>
 	</dl>
 	<dl>
 		<dt><label>{{ lang('DL_APPROVE_COMMENTS') }}</label></dt>
-		<dd><a href="javascript:void(0)" onclick="javascript:help_popup('DL_APPROVE_COMMENTS')" class="nav">{{ ICON_DL_HELP }}</a>&nbsp;<input type="checkbox" class="radio switch" name="approve_comments" value="1" {{ APPROVE_COMMENTS }} id="approve_comments"  /><label class="switch" for="approve_comments">&nbsp;</label></dd>
+		<dd>
+			<a class="help nav" key="DL_APPROVE_COMMENTS"><i class="icon fa-info-circle fa-fw dl-icon-yellow"></i></a>&nbsp;
+			<input type="checkbox" class="radio switch" name="approve_comments" value="1" {{ DL_APPROVE_COMMENTS }} id="approve_comments"  /><label class="switch" for="approve_comments">&nbsp;</label>
+		</dd>
 	</dl>
-	{% if S_THUMNAILS %}
+	{% if S_DL_THUMBNAILS %}
 	<dl>
 		<dt><label>{{ lang('DL_THUMB_CAT') }}</label></dt>
-		<dd><a href="javascript:void(0)" onclick="javascript:help_popup('DL_THUMB_CAT')" class="nav">{{ ICON_DL_HELP }}</a>&nbsp;<input type="checkbox" class="radio switch" name="allow_thumbs" value="1" {{ ALLOW_THUMBS }} id="allow_thumbs"  /><label class="switch" for="allow_thumbs">&nbsp;</label></dd>
+		<dd>
+			<a class="help nav" key="DL_THUMB_CAT"><i class="icon fa-info-circle fa-fw dl-icon-yellow"></i></a>&nbsp;
+			<input type="checkbox" class="radio switch" name="allow_thumbs" value="1" {{ DL_ALLOW_THUMBS }} id="allow_thumbs"  /><label class="switch" for="allow_thumbs">&nbsp;</label>
+		</dd>
 	</dl>
 	{% endif %}
 	<dl>
 		<dt><label>{{ lang('DL_BUG_TRACKER_CAT') }}</label></dt>
-		<dd><a href="javascript:void(0)" onclick="javascript:help_popup('DL_BUG_TRACKER_CAT')" class="nav">{{ ICON_DL_HELP }}</a>&nbsp;<input type="checkbox" class="radio switch" name="bug_tracker" value="1" {{ BUG_TRACKER }} id="bug_tracker" /><label class="switch" for="bug_tracker">&nbsp;</label></dd>
+		<dd>
+			<a class="help nav" key="DL_BUG_TRACKER_CAT"><i class="icon fa-info-circle fa-fw dl-icon-yellow"></i></a>&nbsp;
+			<input type="checkbox" class="radio switch" name="bug_tracker" value="1" {{ DL_BUG_TRACKER }} id="bug_tracker" /><label class="switch" for="bug_tracker">&nbsp;</label>
+		</dd>
 	</dl>
 	<dl>
 		<dt><label>{{ lang('DL_CAT_TRAFFIC') }}</label></dt>
-		<dd><a href="javascript:void(0)" onclick="javascript:help_popup('DL_CAT_TRAFFIC', '{{ lang('DL_CAT_TRAFFIC_HELP') }}')" class="nav">{{ ICON_DL_HELP }}</a>&nbsp;<input type="text" name="cat_traffic" size="10" maxlength="10" value="{{ CAT_TRAFFIC }}" />&nbsp;{{ S_CAT_TRAFFIC_RANGE }}</dd>
+		<dd>
+			<a class="help nav" key="DL_CAT_TRAFFIC" param="{{ lang('DL_CAT_TRAFFIC_HELP') }}"><i class="icon fa-info-circle fa-fw dl-icon-yellow"></i></a>&nbsp;
+			<input type="text" name="cat_traffic" size="10" maxlength="10" value="{{ DL_CAT_TRAFFIC }}" />
+			<select name="cat_traffic_range">
+				{% for dl_cat_traffic_range in loops.dl_cat_traffic_range %}
+				<option value="{{ dl_cat_traffic_range.DL_VALUE }}"{% if dl_cat_traffic_range.DL_VALUE eq S_DL_CAT_TRAFFIC_RANGE %} selected="selected"{% endif %}>{{ dl_cat_traffic_range.DL_NAME }}</option>
+				{% endfor %}
+			</select>
+		</dd>
 	</dl>
 	<dl>
 		<dt><label>{{ lang('DL_SHOW_FILE_HASH') }}</label></dt>
-		<dd><a href="javascript:void(0)" onclick="javascript:help_popup('DL_SHOW_FILE_HASH')" class="nav">{{ ICON_DL_HELP }}</a>&nbsp;<input type="checkbox" class="radio switch" name="show_file_hash" value="1" {{ SHOW_FILE_HASH }} id="show_file_hash" /><label class="switch" for="show_file_hash">&nbsp;</label></dd>
+		<dd>
+			<a class="help nav" key="DL_SHOW_FILE_HASH"><i class="icon fa-info-circle fa-fw dl-icon-yellow"></i></a>&nbsp;
+			<input type="checkbox" class="radio switch" name="show_file_hash" value="1" {{ DL_SHOW_FILE_HASH }} id="show_file_hash" /><label class="switch" for="show_file_hash">&nbsp;</label>
+		</dd>
 	</dl>
 
 </fieldset>
 
-{% if S_SET_USER_ON %}
+{% if S_DL_SET_USER_ON %}
 <fieldset>
 
 	<dl>
 		<dt><label>{{ lang('DL_SET_ADD') }}</label></dt>
-		<dd><a href="javascript:void(0)" onclick="javascript:help_popup('DL_SET_ADD')" class="nav">{{ ICON_DL_HELP }}</a>&nbsp;<label>{{ S_SET_USER }}</label></dd>
-	</dl>
-	<dl>
-		<dt><label>{{ lang('SELECT') }}</label></dt>
-		<dd><a href="javascript:void(0)" onclick="javascript:help_popup('DL_SET_ADD')" class="nav">{{ ICON_DL_HELP }}</a>&nbsp;<input type="text" id="set_user" name="set_user" value="{{ SET_USER }}" class="inputbox autowidth" size="32" /><br />&nbsp;&nbsp;&nbsp;[ <a href="{{ S_USER_SELECT }}" onclick="find_username(this.href); return false;" >{{ lang('FIND_USERNAME') }}</a> ]</dd>
+		<dd>
+			<a class="help nav" key="DL_SET_ADD"><i class="icon fa-info-circle fa-fw dl-icon-yellow"></i></a>&nbsp;
+			<label>
+				<select name="set_add">
+					{% for dl_user_select in loops.dl_user_select %}
+					<option value="{{ dl_user_select.DL_VALUE }}"{% if dl_user_select.DL_VALUE eq S_DL_SET_USER %} selected="selected"{% endif %}>{{ dl_user_select.DL_NAME }}</option>
+					{% endfor %}
+				</select>
+			</label>
+			<input type="text" name="set_user" id="set_user" value="{{ DL_SET_USER }}" class="inputbox autowidth" size="32" />
+			&nbsp;[ <a href="{{ S_DL_USER_SELECT }}" onclick="find_username(this.href); return false;" >{{ lang('FIND_USERNAME') }}</a> ]
+		</dd>
 	</dl>
 
 </fieldset>
 {% endif %}
 
-{% if S_ENTER_TOPIC_FORUM %}
+{% if S_DL_ENTER_TOPIC_FORUM %}
 <fieldset>
 
 	<dl>
 		<dt><label>{{ lang('DL_TOPIC_FORUM_T') }}</label></dt>
-		<dd><a href="javascript:void(0)" onclick="javascript:help_popup('DL_TOPIC_FORUM_C')">{{ ICON_DL_HELP }}</a>&nbsp;&nbsp;<label>{{ S_DL_TOPIC_FORUM }}</label></dd>
+		<dd>
+			<a class="help nav" key="DL_TOPIC_FORUM_C"><i class="icon fa-info-circle fa-fw dl-icon-yellow"></i></a>&nbsp;
+			<label>
+				<select name="dl_topic_forum">
+					<option value="{{ DL_TOPIC_DEACTIVATED }}">{{ lang('DEACTIVATE') }}</option>
+					{% for s_forum_select in loops.s_forum_select %}
+					{% if s_forum_select.DL_TYPE eq 'optgrp' %}<optgroup label="{{ s_forum_select.DL_VALUE }}">{% endif %}
+					{% if s_forum_select.DL_TYPE eq 'option' %}<option value="{{ s_forum_select.DL_KEY }}"{% if s_forum_select.DL_KEY eq S_DL_TOPIC_FORUM %} selected="selected"{% endif %}>{{ s_forum_select.DL_VALUE }}</option>{% endif %}
+					{% if s_forum_select.DL_TYPE eq 'optend' %}</optgroup>{% endif %}
+					{% endfor %}
+				</select>
+			</label>
+		</dd>
 	</dl>
 	<dl>
 		<dt><label>{{ lang('DL_TOPIC_TEXT') }}</label></dt>
-		<dd><a href="javascript:void(0)" onclick="javascript:help_popup('DL_TOPIC_TEXT')">{{ ICON_DL_HELP }}</a>&nbsp;&nbsp;<label><textarea cols="75" rows="5" class="inputbox autowidth" name="dl_topic_text">{{ TOPIC_TEXT }}</textarea></label></dd>
+		<dd>
+			<a class="help nav" key="DL_TOPIC_TEXT"><i class="icon fa-info-circle fa-fw dl-icon-yellow"></i></a>&nbsp;
+			<label><textarea cols="75" rows="5" class="inputbox autowidth" name="dl_topic_text">{{ DL_TOPIC_TEXT }}</textarea></label>
+		</dd>
 	</dl>
-	{% if S_TOPIC_USER_ON %}
+	{% if S_DL_TOPIC_USER_ON %}
 	<dl>
 		<dt><label>{{ lang('DL_TOPIC_USER') }}</label></dt>
-		<dd><a href="javascript:void(0)" onclick="javascript:help_popup('DL_TOPIC_USER')">{{ ICON_DL_HELP }}</a>&nbsp;&nbsp;<label>{{ S_DL_DIFF_TOPIC_USER }}</label><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<input type="text" name="dl_topic_user" id="dl_topic_user" value="{{ TOPIC_USER }}" class="inputbox autowidth" size="32" /><br />&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;[ <a href="{{ S_USER_SELECT_2 }}" onclick="find_username(this.href); return false;" >{{ lang('FIND_USERNAME') }}</a> ]</dd>
+		<dd>
+			<a class="help nav" key="DL_TOPIC_USER"><i class="icon fa-info-circle fa-fw dl-icon-yellow"></i></a>&nbsp;
+			<label>
+				<select name="diff_topic_user">
+					{% for dl_topic_user_select in loops.dl_topic_user_select %}
+					<option value="{{ dl_topic_user_select.DL_VALUE }}"{% if dl_topic_user_select.DL_VALUE eq S_DL_DIFF_TOPIC_USER %} selected="selected"{% endif %}>{{ dl_topic_user_select.DL_NAME }}</option>
+					{% endfor %}
+				</select>
+			</label>
+			<input type="text" name="dl_topic_user" id="dl_topic_user" value="{{ DL_TOPIC_USER }}" class="inputbox autowidth" size="32" />
+			&nbsp;[ <a href="{{ S_DL_USER_SELECT_2 }}" onclick="find_username(this.href); return false;" >{{ lang('FIND_USERNAME') }}</a> ]
+		</dd>
 	</dl>
 	{% endif %}
-	{% if S_TOPIC_DETAILS %}
+	{% if S_DL_TOPIC_DETAILS %}
 	<dl>
 		<dt><label>{{ lang('DL_TOPIC_DETAILS') }}</label></dt>
-		<dd><a href="javascript:void(0)" onclick="javascript:help_popup('{{ lang('DL_TOPIC_DETAILS_EXPLAIN') }}')">{{ ICON_DL_HELP }}</a>&nbsp;&nbsp;<label>{{ S_TOPIC_MORE_DETAILS }}</label></dd>
+		<dd>
+			<a class="help nav" key="DL_TOPIC_DETAILS_EXPLAIN"><i class="icon fa-info-circle fa-fw dl-icon-yellow"></i></a>&nbsp;
+			<label>
+				<select name="topic_more_details">
+					{% for dl_topic_details in loops.dl_topic_details %}
+					<option value="{{ dl_topic_details.DL_VALUE }}"{% if dl_topic_details.DL_VALUE eq S_DL_TOPIC_MORE_DETAILS %} selected="selected"{% endif %}>{{ dl_topic_details.DL_NAME }}</option>
+					{% endfor %}
+				</select>
+			</label>
+		</dd>
 	</dl>
 	{% endif %}
 	<dl>
 		<dt><label>{{ lang('POST_TOPIC_AS') }}</label></dt>
-		<dd><a href="javascript:void(0)" onclick="javascript:help_popup('DL_TOPIC_TYPE')">{{ ICON_DL_HELP }}</a>&nbsp;&nbsp;<label>{{ S_TOPIC_TYPE }}</label></dd>
+		<dd>
+			<a class="help nav" key="DL_TOPIC_TYPE"><i class="icon fa-info-circle fa-fw dl-icon-yellow"></i></a>&nbsp;
+			<label>
+				<select name="topic_type">
+					{% for dl_topic_type_select in loops.dl_topic_type_select %}
+					<option value="{{ dl_topic_type_select.DL_VALUE }}"{% if dl_topic_type_select.DL_VALUE eq S_DL_TOPIC_TYPE %} selected="selected"{% endif %}>{{ dl_topic_type_select.DL_NAME }}</option>
+					{% endfor %}
+				</select>
+			</label>
+		</dd>
 	</dl>
 
 </fieldset>
@@ -147,7 +275,7 @@
 <fieldset class="quick">
 	<input type="submit" name="save_cat" value="{{ lang('SUBMIT') }}" class="button1" />
 	<input type="reset" name="reset" value="{{ lang('RESET') }}" class="button2" />
-	{{ S_HIDDEN_FIELDS }}
+	{{ S_DL_HIDDEN_FIELDS }}
 	{{ S_FORM_TOKEN }}
 </fieldset>
 

@@ -1,0 +1,139 @@
+{% INCLUDE 'ucp_header.html' %}
+
+{% if S_FAV_BLOCK %}
+<script type="text/javascript">
+function select_switch(status)
+{
+	for (i = 0; i < document.forms.user_dl_config.length; i++)
+	{
+		document.forms.user_dl_config.elements[i].checked = status;
+	}
+}
+</script>
+{% endif %}
+
+<h2>{{ DL_MOD_RELEASE }}</h2>
+
+<form action="{{ S_DL_FORM_ACTION }}" method="post" id="user_dl_config">
+
+{% if S_DL_UCP_CONFIG %}
+
+{% if S_DL_SORT_CONFIG_OPTIONS %}
+<div class="panel">
+	<div class="inner">
+	<h3>{{ lang('SORT_BY') }}</h3>
+
+	<fieldset>
+
+		<dl>
+			<dt><label>{{ lang('DL_SORT_USER_OPT') }}</label></dt>
+			<dd>
+				<select name="user_dl_sort_fix">
+				{% for dl_sort_fields in loops.dl_sort_fields %}
+					<option value="{{ dl_sort_fields.DL_KEY }}"{% if dl_sort_fields.DL_KEY eq S_DL_SORT_USER_OPT %} selected="selected" {% endif %}>{{dl_sort_fields.DL_VALUE }}</option>
+				{% endfor %}
+				</select>
+				&nbsp;
+				<select name="user_dl_sort_dir">
+				{% for dl_sort_order in loops.dl_sort_order %}
+					<option value="{{ dl_sort_order.DL_KEY }}"{% if dl_sort_order.DL_KEY eq S_DL_SORT_USER_DIR %} selected="selected" {% endif %}>{{dl_sort_order.DL_VALUE }}</option>
+				{% endfor %}
+				</select>
+				&nbsp;<label><input type="checkbox" class="permissions-checkbox" name="user_dl_sort_opt" value="1"{% if S_DL_SORT_USER_EXT eq 1 %} checked="checked"{% endif %} />&nbsp;{{ lang('DL_SORT_USER_EXT') }}</label>
+			</dd>
+		</dl>
+
+	</fieldset>
+	</div>
+</div>
+{% endif %}
+
+<div class="panel">
+	<div class="inner">
+	<h3>{{ lang('DL_CAT_TITLE') }}</h3>
+
+	<fieldset>
+
+		<dl>
+			<dt><label>{{ lang('DL_SUB_ON_INDEX') }}</label></dt>
+			<dd>
+				<label><input type="radio" class="radio" name="user_dl_sub_on_index" value="1"{% if S_DL_SUB_ON_INDEX eq 1 %} checked="checked"{% endif %} />&nbsp;{{ lang('YES') }}</label>
+				<label><input type="radio" class="radio" name="user_dl_sub_on_index" value="0"{% if S_DL_SUB_ON_INDEX eq 0 %} checked="checked"{% endif %} />&nbsp;{{ lang('NO') }}</label>
+			</dd>
+		</dl>
+
+	</fieldset>
+	</div>
+</div>
+
+{% EVENT oxpus_dlext_ucp_configuration_append %}
+
+{% if not S_DL_FAV_BLOCK %}
+<p>&nbsp;</p>
+{% endif %}
+{% endif %}
+
+{% if S_DL_FAV_BLOCK %}
+<div class="panel">
+	<div class="inner">
+
+	<h3>{{ lang('DL_FAVORITE') }}</h3>
+
+	<table class="table1 dl-width-100">
+		<tbody>
+		{% for dl_favorite_row in loops.dl_favorite_row %}
+		<tr class="bg{% if dl_favorite_row.S_ROW_COUNT is even %}1{% else %}2{% endif %}">
+			<td class="dl-width-90">
+				<a href="{{ dl_favorite_row.U_DL_DOWNLOAD }}" class="topictitle">{{ dl_favorite_row.DL_DOWNLOAD }}</a>
+				<div class="small">
+					{% for dl_cat_path in dl_favorite_row.dl_cat_path %}
+					<span class="crumb">
+						<a href="{{ dl_cat_path.DL_LINK }}">{{ dl_cat_path.DL_NAME }}</a>
+						{% if not dl_cat_path.S_LAST_ROW %} &raquo;{% endif %}
+					</span>
+					{% endfor %}
+				</div>
+			</td>
+			<td class="center dl-width-10"><input type="checkbox" name="fav_id[]" value="{{ dl_favorite_row.DL_ID }}" /></td>
+		</tr>
+		{% endfor %}
+		</tbody>
+	</table>
+
+	</div>
+</div>
+
+<div class="dl-right">
+	<a href="#" onclick="marklist('user_dl_config', 'fav_id', true); return false;">{{ lang('MARK_ALL') }}</a> :: <a href="#" onclick="marklist('user_dl_config', 'fav_id', false); return false;">{{ lang('UNMARK_ALL') }}</a>
+</div>
+{% endif %}
+
+{% if S_DL_UCP_PRIVACY %}
+<div class="panel">
+	<div class="inner">
+
+	<h3>{{ lang('DL_PRIVACY') }}</h3>
+
+	<p>{{ lang('DL_PRIVACY_EXPLAIN') }}</p>
+
+	<a href="{{ U_DL_PRIVACY_BUGS }}" class="button icon-button"><span>{{ lang('DL_PRIVACY_BUGS') }}</span> <i class="icon fa fa-download fa-fw"></i> </a>
+	<a href="{{ U_DL_PRIVACY_COMMENTS }}" class="button icon-button"><span>{{ lang('DL_PRIVACY_COMMENTS') }}</span> <i class="icon fa fa-download fa-fw"></i> </a>
+	<a href="{{ U_DL_PRIVACY_STATS }}" class="button icon-button"><span>{{ lang('DL_PRIVACY_STATS') }}</span> <i class="icon fa fa-download fa-fw"></i> </a>
+
+	</div>
+</div>
+{% endif %}
+
+{% if not S_DL_UCP_PRIVACY %}
+<fieldset class="submit-buttons">
+	<input type="reset" value="{{ lang('RESET') }}" name="reset" class="button2 icon-button" />&nbsp;&nbsp;
+    <input type="submit" name="submit" value="{{ lang('SUBMIT') }}" class="button1 icon-button" />
+	{{ S_FORM_TOKEN }}
+</fieldset>
+{% endif %}
+
+</form>
+
+<br />
+
+{% INCLUDE 'ucp_footer.html' %}

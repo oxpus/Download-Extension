@@ -17,10 +17,20 @@
     top: 20%;
     left: 50%;
     margin-left: -250px;
-    background: none repeat scroll 0 0 #FFFFFF;
-    border: 1px solid #ccc;
+    background: none repeat scroll 0 0 #ffffff;
+    border: 1px solid #cccccc;
     font-size: 12px;
-    color: #000;
+    color: #000000;
+}
+
+a.help {
+    float: right;
+}
+
+a.help:hover {
+    text-decoration: none !important;
+    color: #aa0000;
+    cursor: pointer;
 }
 
 div.dl_help_close {
@@ -65,7 +75,20 @@ div.dl_help_close:hover {
 .dl-grey-bg .hint {
     color: #cc0000;
     font-weight: bold;
-    padding-left: 2.5em;
+}
+
+.dl-folder-bg {
+    background-color: #eeeeee;
+    padding: 5px;
+    margin-top: -3px;
+    margin-right: 1em;
+}
+
+.dl-folder-bg>a {
+    display: block;
+    font-size: 1.1em;
+    font-weight: bold;
+    color: #aa0000;
 }
 
 .dl-left {

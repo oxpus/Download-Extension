@@ -3,60 +3,46 @@
 /**
 *
 * @package phpBB Extension - Oxpus Downloads
-* @copyright (c) 2002-2020 OXPUS - www.oxpus.net
+* @copyright (c) 2002-2021 OXPUS - www.oxpus.net
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
 */
 
 namespace oxpus\dlext\controller;
 
-use Symfony\Component\DependencyInjection\Container;
-
 class feed
 {
-	/* @var string phpBB root path */
+	/* phpbb objects */
 	protected $root_path;
-
-	/* @var string phpEx */
 	protected $php_ext;
-
-	/* @var \phpbb\db\driver\driver_interface */
 	protected $db;
-
-	/* @var \phpbb\config\config */
 	protected $config;
-
-	/* @var \phpbb\controller\helper */
 	protected $helper;
-
-	/* @var \phpbb\auth\auth */
-	protected $auth;
-
-	/* @var \phpbb\template\template */
 	protected $template;
-
-	/* @var \phpbb\user */
 	protected $user;
-
-	/* @var \phpbb\request\request_interface */
-	protected $request;
-
-	/* @var \phpbb\language\language */
 	protected $language;
 
-	/** @var extension owned objects */
-	protected $ext_path;
-	protected $ext_path_web;
-	protected $ext_path_ajax;
-
-	protected $dlext_auth;
+	/* extension owned objects */
 	protected $dlext_files;
 	protected $dlext_main;
 	protected $dlext_status;
+	protected $dlext_constants;
 
 	/**
 	* Constructor
 	*
+	* @param string									$root_path
+	* @param string									$php_ext
+	* @param \phpbb\db\driver\driver_interface		$db
+	* @param \phpbb\config\config					$config
+	* @param \phpbb\controller\helper				$helper
+	* @param \phpbb\template\template				$template
+	* @param \phpbb\user							$user
+	* @param \phpbb\language\language				$language
+	* @param \oxpus\dlext\core\files				$dlext_files
+	* @param \oxpus\dlext\core\main					$dlext_main
+	* @param \oxpus\dlext\core\status				$dlext_status
+	* @param \oxpus\dlext\core\helpers\constants	$dlext_constants
 	*/
 	public function __construct(
 		$root_path,
@@ -64,17 +50,13 @@ class feed
 		\phpbb\db\driver\driver_interface $db,
 		\phpbb\config\config $config,
 		\phpbb\controller\helper $helper,
-		\phpbb\auth\auth $auth,
 		\phpbb\template\template $template,
 		\phpbb\user $user,
-		\phpbb\request\request_interface $request,
 		\phpbb\language\language $language,
-		\phpbb\extension\manager $phpbb_extension_manager,
-		Container $phpbb_container,
-		$dlext_auth,
-		$dlext_files,
-		$dlext_main,
-		$dlext_status
+		\oxpus\dlext\core\files $dlext_files,
+		\oxpus\dlext\core\main $dlext_main,
+		\oxpus\dlext\core\status $dlext_status,
+		\oxpus\dlext\core\helpers\constants $dlext_constants
 	)
 	{
 		$this->root_path		= $root_path;
@@ -82,32 +64,22 @@ class feed
 		$this->db				= $db;
 		$this->config			= $config;
 		$this->helper			= $helper;
-		$this->auth				= $auth;
 		$this->template 		= $template;
 		$this->user				= $user;
-		$this->request			= $request;
 		$this->language			= $language;
 
-		$this->ext_path			= $phpbb_extension_manager->get_extension_path('oxpus/dlext', true);
-		$phpbb_path_helper		= $phpbb_container->get('path_helper');
-		$this->ext_path_web		= $phpbb_path_helper->update_web_root_path($this->ext_path);
-		$this->ext_path_ajax	= $this->ext_path_web . 'assets/javascript/';
-
-		$this->dlext_auth		= $dlext_auth;
 		$this->dlext_files		= $dlext_files;
 		$this->dlext_main		= $dlext_main;
 		$this->dlext_status		= $dlext_status;
+		$this->dlext_constants	= $dlext_constants;
+
+		$this->dlext_main->dl_handle_active();
 	}
 
 	public function handle()
 	{
-		// Include the default base init script
-		include_once($this->ext_path . 'phpbb/includes/base_init.' . $this->php_ext);
-
 		// disable the feed until it is enabled and contains at least one entry
-		$display_feed = false;
-
-		page_header($this->language->lang('DL_ACP_CONF_RSS') . ' ' . $this->language->lang('DOWNLOADS'));
+		$display_feed = $this->dlext_constants::DL_FALSE;
 
 		if ($this->config['dl_rss_enable'])
 		{
@@ -129,60 +101,53 @@ class feed
 				$this->user->data['user_permissions'] = '';
 				$this->user->data['session_user_id'] = ANONYMOUS;
 				$this->user->data['session_admin'] = 0;
-				$this->user->data['is_registered'] = false;
+				$this->user->data['is_registered'] = $this->dlext_constants::DL_FALSE;
 				$this->user->data['user_perm_from'] = ANONYMOUS;
 
 				unset($row);
 			}
 
 			// Get the possible categories
-			$access_cats = [];
-			$access_cats = $this->dlext_main->full_index(0, 0, 0, 1);
+			$access_cats = $this->dlext_main->full_index(0, 0, 0, $this->dlext_constants::DL_AUTH_CHECK_VIEW);
 
 			// Does we have some cats? miau ...
 			if (!empty($access_cats))
 			{
-				$sql_where_cats = ' AND ' . $this->db->sql_in_set('cat', $access_cats);
+				$where_cats = ['{cat_perm}' => ['AND', 'IN', $this->db->sql_in_set('cat', $access_cats)]];
 
 				$rss_cats_ary = array_map('intval', explode(',', $this->config['dl_rss_cats_select']));
 
 				switch ($this->config['dl_rss_cats'])
 				{
-					case 1:
-						$sql_where_cats .= ' AND ' . $this->db->sql_in_set('cat', $rss_cats_ary);
+					case $this->dlext_constants::DL_RSS_CATS_SELECTED:
+						$where_cats += ['cat' => ['AND', 'IN', $this->db->sql_in_set('cat', $rss_cats_ary)]];
 					break;
 
-					case 2:
-						$sql_where_cats .= ' AND ' . $this->db->sql_in_set('cat', $rss_cats_ary, true);
+					case $this->dlext_constants::DL_RSS_CATS_OTHER:
+						$where_cats += ['cat' => ['AND', 'NOT IN', $this->db->sql_in_set('cat', $rss_cats_ary, $this->dlext_constants::DL_TRUE)]];
 					break;
-
-					default:
-						$sql_where_cats .= '';
 				}
 
-				$sql_sort_by = ($this->config['dl_rss_select']) ? 'rand()' : 'change_time';
-				$sql_order_by = ($this->config['dl_rss_select']) ? '' : 'DESC';
-				$sql_limit = intval($this->config['dl_rss_number']);
+				$sort_by = ($this->config['dl_rss_select']) ? 'rand()' : 'change_time';
+				$order_by = ($this->config['dl_rss_select']) ? '' : 'DESC';
+				$sort_ary = [$sort_by => $order_by];
 
 				if ($this->config['dl_rss_desc_length'])
 				{
-					$sql_fields = 'id, cat, description, desc_uid, hack_version, add_time, change_time, long_desc, long_desc_uid';
+					$fields = ['id', 'cat', 'description', 'desc_uid', 'hack_version', 'add_time', 'change_time', 'long_desc', 'long_desc_uid'];
 				}
 				else
 				{
-					$sql_fields = 'id, cat, description, desc_uid, hack_version, add_time, change_time';
+					$fields = ['id', 'cat', 'description', 'desc_uid', 'hack_version', 'add_time', 'change_time'];
 				}
 
-				$rss = true;
+				$rss = $this->dlext_constants::DL_TRUE;
 
-				$dl_files = [];
-				$dl_files = $this->dlext_files->all_files(0, $sql_sort_by, $sql_order_by , $sql_where_cats, 0, 0, $sql_fields, $sql_limit);
+				$dl_files = $this->dlext_files->all_files(0, $sort_ary , $where_cats, 0, 0, $fields, $this->config['dl_rss_number']);
 
 				if (!empty($dl_files))
 				{
 					header("Content-Type: application/rss+xml");
-
-					$this->template->set_filenames(['body' => 'dl_rss.xml']);
 
 					for ($i = 0; $i < count($dl_files); ++$i)
 					{
@@ -199,7 +164,7 @@ class feed
 						$description	= $dl_files[$i]['description'];
 						$desc_uid		= $dl_files[$i]['desc_uid'];
 						$description	= censor_text($description);
-						@strip_bbcode($description, $desc_uid);
+						strip_bbcode($description, $desc_uid);
 						$description	.= ' ' . $hack_version;
 
 						if ($this->config['dl_rss_desc_length'])
@@ -207,7 +172,7 @@ class feed
 							$long_desc			= $dl_files[$i]['long_desc'];
 							$long_desc_uid		= $dl_files[$i]['long_desc_uid'];
 
-							if ($this->config['dl_rss_desc_length'] == 2)
+							if ($this->config['dl_rss_desc_length'] == $this->dlext_constants::DL_RSS_DESC_LENGTH_SHORT)
 							{
 								if (intval($this->config['dl_rss_desc_shorten']) && strlen($long_desc) > intval($this->config['dl_rss_desc_shorten']))
 								{
@@ -222,7 +187,7 @@ class feed
 							if ($long_desc)
 							{
 								$long_desc = censor_text($long_desc);
-								@strip_bbcode($long_desc, $long_desc_uid);
+								strip_bbcode($long_desc, $long_desc_uid);
 							}
 						}
 						else
@@ -245,11 +210,11 @@ class feed
 							'DL_RSS_DESC'	=> $long_desc,
 							'DL_RSS_TIME'	=> $last_time,
 
-							'U_DL_RSS'		=> generate_board_url(true) . $this->helper->route('oxpus_dlext_details', ['df_id' => $dl_id]),
+							'U_DL_RSS'		=> generate_board_url($this->dlext_constants::DL_TRUE) . $this->helper->route('oxpus_dlext_details', ['df_id' => $dl_id]),
 						]);
 					}
 
-					$display_feed = true;
+					$display_feed = $this->dlext_constants::DL_TRUE;
 				}
 			}
 
@@ -265,11 +230,11 @@ class feed
 		{
 			switch ($this->config['dl_rss_off_action'])
 			{
-				case 0:
+				case $this->dlext_constants::DL_RSS_ACTION_R_DLX:
 					redirect($this->helper->route('oxpus_dlext_index'));
 				break;
 
-				case 1:
+				case $this->dlext_constants::DL_RSS_ACTION_R_IDX:
 					redirect(append_sid($this->root_path . 'index.' . $this->php_ext));
 				break;
 
@@ -279,17 +244,15 @@ class feed
 		}
 
 		$this->template->assign_vars([
-			'SITENAME'				=> $this->config['sitename'],
-			'BOARD_URL'				=> generate_board_url() . '/',
+			'DL_SITENAME'				=> $this->config['sitename'],
+			'DL_BOARD_URL'				=> generate_board_url() . '/',
 			'DL_RSS_TIME_TMP'   	=> $timetmp,
-			'SITE_DESCRIPTION'		=> $this->config['site_desc'],
-			'RSS_LANG'				=> $this->user->data['user_lang'],
+			'DL_SITE_DESCRIPTION'		=> $this->config['site_desc'],
+			'DL_RSS_LANG'				=> $this->user->data['user_lang'],
 
-			'S_CONTENT_ENCODING'	=> 'utf-8',
-
-			'U_DL_RSS'				=> generate_board_url(true) . $this->helper->route('oxpus_dlext_feed'),
+			'U_DL_RSS'				=> generate_board_url($this->dlext_constants::DL_TRUE) . $this->helper->route('oxpus_dlext_feed'),
 		]);
 
-		page_footer();
+		return $this->helper->render('@oxpus_dlext/helpers/dl_rss.xml', $this->language->lang('DL_FEED'));
 	}
 }

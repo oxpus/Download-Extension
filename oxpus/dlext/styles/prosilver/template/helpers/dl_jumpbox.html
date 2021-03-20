@@ -1,0 +1,23 @@
+<div class="jumpbox dropdown-container dropdown-container-right dropdown-up dropdown-{{ S_CONTENT_FLOW_BEGIN }} dropdown-button-control" id="jumpbox">
+	<span title="{{ lang('DL_GOTO') }}" class="button button-secondary dropdown-trigger dropdown-select">
+		<span>{{ lang('DL_GOTO') }}</span>
+		<span class="caret">
+			<i class="icon fa-sort-down fa-fw" aria-hidden="true"></i>
+		</span>
+	</span>
+	<div class="dropdown">
+		<div class="pointer"><div class="pointer-inner"></div></div>
+		<ul class="dropdown-contents">
+			{% for dl_jumpbox in loops.dl_jumpbox %}
+			<li>
+				<a href="{{ dl_jumpbox.U_DL_CAT_LINK }}" class="jumpbox-{% if dl_jumpbox.DL_CAT_SUB %}sub{% else %}cat{% endif %}-link">
+					{% if dl_jumpbox.DL_CAT_SUB %}
+					<span class="spacer"></span>{{ dl_jumpbox.DL_CAT_LEVEL }}
+					{% endif %}
+					<span>{{ dl_jumpbox.DL_CAT_NAME }}</span>
+				</a>
+			</li>
+			{% endfor %}
+		</ul>
+	</div>
+</div>

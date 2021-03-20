@@ -1,8 +1,8 @@
-{% INCLUDE 'dl_header.html' %}
+{% INCLUDE '@oxpus_dlext/helpers/dl_header.html' %}
 
 <h2>{{ lang('DL_MOD_TODO') }}</h2>
 
-{% if S_NO_TODOLIST %}
+{% if S_DL_NO_TODOLIST %}
 <div class="panel"><strong>{{ lang('DL_NO_MOD_TODO') }}</strong></div>
 {% else %}
 
@@ -13,21 +13,21 @@
 		<dl>
 			<dt>
 				<div class="posts">
-				<h3><a href="{{ todolist_row.FILE_LINK }}" class="forumtitle">{{ todolist_row.FILENAME }}&nbsp;{{ todolist_row.HACK_VERSION }}</a></h3>
+				<h3><a href="{{ todolist_row.DL_FILE_LINK }}" class="forumtitle">{{ todolist_row.DL_FILENAME }}&nbsp;{{ todolist_row.DL_HACK_VERSION }}</a></h3>
 				<ul class="post-buttons">
 					<li>
-						<a href="{{ todolist_row.U_TODO_EDIT }}" title="{{ lang('DL_EDIT_FILE') }}" class="button button-icon-only">
+						<a href="{{ todolist_row.U_DL_TODO_EDIT }}" title="{{ lang('DL_EDIT_FILE') }}" class="button button-icon-only">
 							<i class="icon fa-pencil fa-fw" aria-hidden="true"></i><span class="sr-only">{{ lang('DL_EDIT_FILE') }}</span>
 						</a>
 					</li>
 					<li>
-						<a href="{{ todolist_row.U_TODO_DELETE }}" title="{{ lang('DL_DELETE') }}" class="button button-icon-only">
+						<a href="{{ todolist_row.U_DL_TODO_DELETE }}" title="{{ lang('DL_DELETE') }}" class="button button-icon-only">
 							<i class="icon fa-times fa-fw" aria-hidden="true"></i><span class="sr-only">{{ lang('DL_DELETE') }}</span>
 						</a>
 					</li>
 				</ul>
 				</div>
-				<div class="postbody"><div class="content">{{ todolist_row.TODO }}</div></div>
+				<div class="postbody"><div class="content">{{ todolist_row.DL_TODO }}</div></div>
 			</dt>
 		</dl>
 
@@ -37,24 +37,36 @@
 
 {% endif %}
 
-{% if S_TODO_ADD %}
+{% if S_DL_TODO_ADD %}
 <br />
 
-<form action="{{ S_FORM_ACTION }}" method="post" name="postform">
+<form action="{{ S_DL_FORM_ACTION }}" method="post" name="postform">
 
 	<div class="panel">
 		<div class="inner">
 
-		<h3>{% if S_ADD_TODO %}{{ lang('DL_TODO_ADD') }}{{ lang('COLON') }} {{ S_DOWNLOAD }}{% else %}{{ lang('DL_TODO_EDIT') }}{% endif %}</h3>
+		<h3>{% if S_DL_ADD_TODO %}
+			{{ lang('DL_TODO_ADD') }}{{ lang('COLON') }}
+			<select name="df_id" class="select autowidth">
+				{% for dl_todo_select in loops.dl_todo_select %}
+				{% if dl_todo_select.DL_TYPE eq 'optgrp' %}<optgroup label="{{ dl_todo_select.DL_VALUE }}">{% endif %}
+				{% if dl_todo_select.DL_TYPE eq 'option' %}<option value="{{ dl_todo_select.DL_KEY }}">{{ dl_todo_select.DL_VALUE }}</option>{% endif %}
+				{% if dl_todo_select.DL_TYPE eq 'optend' %}</option>{% endif %}
+				{% endfor %}
+			</select>
+			{% else %}
+			{{ lang('DL_TODO_EDIT') }}
+			{% endif %}
+		</h3>
 
 		<fieldset>
 
 		<table width="100%">
 		<tr>
-			<td class="dl-width-15 dl-text-top"><br /><strong>{% if S_ADD_TODO %}{{ lang('DL_MOD_TODO') }}{% else %}{{ S_DOWNLOAD }} {{ HACK_VERSION }}{% endif %}</strong></td>
+			<td class="dl-width-15 dl-text-top"><br /><strong>{% if S_DL_ADD_TODO %}{{ lang('DL_MOD_TODO') }}{% else %}{{ S_DL_DOWNLOAD }} {{ DL_HACK_VERSION }}{% endif %}</strong></td>
 			<td class="dl-width-70 dl-text-top">
 				{% INCLUDE 'posting_buttons.html' %}
-				<textarea name="message" id="message" rows="10" cols="100" class="inputbox autowidth">{{ TODO_TEXT }}</textarea>
+				<textarea name="message" id="message" rows="10" cols="100" class="inputbox autowidth">{{ DL_TODO_TEXT }}</textarea>
 			</td>
 			<td class="dl-width-15 dl-text-top">
 				{% for smiley in loops.smiley %}
@@ -63,7 +75,7 @@
 				{% endif %}
 					<a href="#" onclick="insert_text('{smiley.A_SMILEY_CODE}', true); return false;"><img src="{smiley.SMILEY_IMG}" width="{smiley.SMILEY_WIDTH}" height="{smiley.SMILEY_HEIGHT}" alt="{smiley.SMILEY_CODE}" title="{smiley.SMILEY_DESC}" /></a>
 				{% if smiley.S_LAST_ROW %}
-					<a href="{U_MORE_SMILIES}" onclick="window.open('{U_MORE_SMILIES}', '_blank', 'HEIGHT=200,resizable=yes,scrollbars=yes,WIDTH=400'); return false;">{L_MORE_SMILIES}</a>
+					<a href="{U_DL_MORE_SMILIES}" onclick="window.open('{U_MORE_SMILIES}', '_blank', 'HEIGHT=200,resizable=yes,scrollbars=yes,WIDTH=400'); return false;">{L_MORE_SMILIES}</a>
 				</div>
 				{% endif %}
 				{% endfor %}
@@ -80,7 +92,7 @@
 		<input type="submit" name="submit" value="{{ lang('SUBMIT') }}" class="button icon-button" />&nbsp;&nbsp;
 		<input type="reset" name="reset" value="{{ lang('RESET') }}" class="button icon-button" />
 		{{ S_FORM_TOKEN }}
-		{{ S_HIDDEN_FIELDS }}
+		{{ S_DL_HIDDEN_FIELDS }}
 	</fieldset>
 
 </form>
@@ -88,4 +100,4 @@
 
 <br />
 
-{% INCLUDE 'dl_footer.html' %}
+{% INCLUDE '@oxpus_dlext/helpers/dl_footer.html' %}

@@ -1,30 +1,18 @@
 {% INCLUDE 'overall_header.html' %}
 
-<script type="text/javascript">
-// <![CDATA[
-	function select_switch(status)
-	{
-		for (i = 0; i < {{ S_FILLED_FOOTER }}; i++)
-		{
-			document.forms.dl_stats.elements[i].checked = status;
-		}
-	}
-// ]]>
-</script>
-
 <h1>{{ lang('DL_STATS') }}</h1>
 
 <br />
 
-{% if S_FILLED_FOOTER %}
-<form action="{{ S_FORM_ACTION }}" method="post" id="dl_stats">
+{% if S_DL_FILLED_FOOTER %}
+<form action="{{ S_DL_FORM_ACTION }}" method="post" id="dl_stats">
 
 	<table width="100%" cellpadding="0" cellspacing="1" border="0">
 	<thead>
 	<tr>
 		<th>{{ lang('USERNAME') }}</th>
-		<th>{{ lang('DOWNLOADS') }}<br />{{ lang('DL_CAT_NAME') }}</th>
-		<th>{{ lang('TRAFFIC') }}</th>
+		<th>{{ lang('DL_DOWNLOADS') }}<br />{{ lang('DL_CAT_NAME') }}</th>
+		<th>{{ lang('DL_TRAFFIC') }}</th>
 		<th>{{ lang('TIME') }}<br />{{ lang('DL_DIRECTION') }}</th>
 		<th>{{ lang('DL_IP') }}</th>
 		<th>&nbsp;</th>
@@ -33,89 +21,138 @@
 	<tbody>
 	{% for dl_stat_row in loops.dl_stat_row %}
 	<tr>
-		<td><span>{{ dl_stat_row.USERNAME }}</span></td>
-		<td><b><a href="{{ dl_stat_row.U_DL_LINK }}">{{ dl_stat_row.DESCRIPTION }}</a></b><br /><a href="{{ dl_stat_row.U_CAT_LINK }}">{{ dl_stat_row.CAT_NAME }}</a></td>
-		<td><span>{{ dl_stat_row.TRAFFIC }}</span></td>
-		<td><time datetime="{{ dl_stat_row.TIME_STAMP_RFC }}">{{ dl_stat_row.TIME_STAMP }}</time><br /><span>{{ dl_stat_row.DIRECTION }}</span></td>
-		<td><span>{{ dl_stat_row.USER_IP }}</span></td>
-		<td><input type="checkbox" class="permissions-checkbox" name="del_id[{{ dl_stat_row.S_ROW_COUNT }}]" value="{{ dl_stat_row.ID }}" /></td>
+		<td><span>{{ dl_stat_row.DL_USERNAME }}</span></td>
+		<td>
+			<strong>
+				<a href="{{ dl_stat_row.U_DL_LINK }}">{{ dl_stat_row.DL_DESCRIPTION }}</a>
+			</strong>
+			<br />
+			<a href="{{ dl_stat_row.U_DL_CAT_LINK }}">{{ dl_stat_row.DL_CAT_NAME }}</a>
+		</td>
+		<td><span>{{ dl_stat_row.DL_TRAFFIC }}</span></td>
+		<td>
+			<time datetime="{{ dl_stat_row.DL_TIME_STAMP_RFC }}">{{ dl_stat_row.DL_TIME_STAMP }}</time>
+			<br />
+			<span>{{ dl_stat_row.DL_DIRECTION }}</span>
+		</td>
+		<td><span>{{ dl_stat_row.DL_USER_IP }}</span></td>
+		<td><input type="checkbox" class="permissions-checkbox" name="del_id[{{ dl_stat_row.S_ROW_COUNT }}]" value="{{ dl_stat_row.DL_ID }}" /></td>
 	</tr>
 	{% endfor %}
 	</tbody>
 	</table>
 
-	{% if loops.pagination|length or TOTAL_DL %}
+	{% if loops.pagination|length or DL_TOTAL_DL %}
 		<div class="pagination">
-			{{ TOTAL_DL }}
+			{{ DL_TOTAL_DL }}
 			{% if loops.pagination|length %}
 				{% INCLUDE 'pagination.html' %}
 			{% else %}
-				&bull; {{ PAGE_NUMBER }}
+				&bull; {{ DL_PAGE_NUMBER }}
 			{% endif %}
 		</div>
 	{% endif %}
 
 	<p class="dl-text-right">
-		<a href="javascript:select_switch(true);" class="small">{{ lang('MARK_ALL') }}</a> &bull; <a href="javascript:select_switch(false);" class="small">{{ lang('UNMARK_ALL') }}</a>
+		<span class="small">
+			<a href="#" onclick="marklist('dl_stats', 'del_id', true); return false;">{{ lang('MARK_ALL') }}</a> :: <a href="#" onclick="marklist('dl_stats', 'del_id', false); return false;">{{ lang('UNMARK_ALL') }}</a>
+		</span>
 	</p>
 
-<fieldset>
+	<fieldset>
 
-	<legend>{{ lang('DELETE') }}</legend>
+		<legend>{{ lang('DELETE') }}</legend>
 
-	<dl>
-		<dt><label>{{ lang('DELETE_MARKED') }}</label></dt>
-		<dd><input type="radio" class="permissions-checkbox" name="del_stat" value="0" checked="checked" /></dd>
-	</dl>
-	<dl>
-		<dt><label>{{ lang('DL_GUEST_STAT_DELETE') }}</label></dt>
-		<dd><input type="radio" class="permissions-checkbox" name="del_stat" value="2" /></dd>
-	</dl>
-	<dl>
-		<dt><label>{{ lang('DL_ALL_STAT_DELETE') }}</label></dt>
-		<dd><input type="radio" class="permissions-checkbox" name="del_stat" value="1" /></dd>
-	</dl>
+		<dl>
+			<dt><label>{{ lang('DELETE_MARKED') }}</label></dt>
+			<dd><input type="radio" class="permissions-checkbox" name="del_stat" value="0" checked="checked" /></dd>
+		</dl>
+		<dl>
+			<dt><label>{{ lang('DL_GUEST_STAT_DELETE') }}</label></dt>
+			<dd><input type="radio" class="permissions-checkbox" name="del_stat" value="2" /></dd>
+		</dl>
+		<dl>
+			<dt><label>{{ lang('DL_ALL_STAT_DELETE') }}</label></dt>
+			<dd><input type="radio" class="permissions-checkbox" name="del_stat" value="1" /></dd>
+		</dl>
 
-</fieldset>
+	</fieldset>
 
-<fieldset class="quick">
-	<input type="submit" name="delete" value="{{ lang('DELETE') }}" class="button2" />
-</fieldset>
+	<fieldset class="quick">
+		<input type="submit" name="delete" value="{{ lang('DELETE') }}" class="button2" />
+		{{ S_FORM_TOKEN }}
+	</fieldset>
 
-<fieldset>
+</form>
 
-	<legend>{{ lang('DL_ORDER') }}</legend>
+<form action="{{ S_DL_FORM_ACTION }}" method="post" id="dl_stats">
 
-	<dl>
-		<dt><label>{{ lang('SORT_BY') }}</label></dt>
-		<dd>{{ S_SORT_ORDER }}&nbsp;{{ S_SORT_DIR }}</dd>
-	</dl>
+	<fieldset>
 
-</fieldset>
+		<legend>{{ lang('DL_ORDER') }}</legend>
 
-<fieldset class="quick">
-	<input type="submit" name="delete" value="{{ lang('DL_ORDER') }}" class="button2" />
-</fieldset>
+		<dl>
+			<dt><label>{{ lang('SORT_BY') }}</label></dt>
+			<dd>
+				<select name="sorting">';
+					<option value="username">{{ lang('USERNAME') }}</option>
+					<option value="id">{{ lang('DL_DOWNLOADS') }}</option>
+					<option value="cat">{{ lang('DL_CAT_NAME') }}</option>
+					<option value="size">{{ lang('DL_TRAFFIC') }}</option>
+					<option value="ip">{{ lang('DL_IP') }}</option>
+					<option value="time">{{ lang('TIME') }}</option>
+				</select>
+				&nbsp;
+				<select name="sort_order">
+					<option value="ASC">{{ lang('ASCENDING') }}</option>
+					<option value="DESC">{{ lang('DESCENDING') }}</option>
+				</select>
+			</dd>
+		</dl>
 
-<fieldset>
+	</fieldset>
 
-	<legend>{{ lang('DL_FILTER') }}</legend>
+	<fieldset class="quick">
+		<input type="submit" name="delete" value="{{ lang('DL_ORDER') }}" class="button2" />
+		{{ S_FORM_TOKEN }}
+	</fieldset>
 
-	<dl>
-		<dt><label>{{ S_FILTER }}</label></dt>
-		<dd><input type="text" name="filter_string" value="{{ FILTER_STRING }}" size="30" maxlength="50" /><p>({{ lang('DL_FILTER_STRING') }})</p></dd>
-	</dl>
-	<dl>
-		<dt><label>{{ lang('DL_GUEST_STATS_ADMIN') }}</label></dt>
-		<dd><input type="checkbox" class="radio switch" name="show_guests" value="1" {{ S_SHOW_GUESTS }} id="show_guests" /><label class="switch" for="show_guests">&nbsp;</label></dd>
-	</dl>
+</form>
 
-</fieldset>
+<form action="{{ S_DL_FORM_ACTION }}" method="post" id="dl_stats">
 
-<fieldset class="quick">
-	<input type="submit" name="delete" value="{{ lang('DL_FILTER') }}" class="button2" />
-	{{ S_FORM_TOKEN }}
-</fieldset>
+	<fieldset>
+
+		<legend>{{ lang('DL_FILTER') }}</legend>
+
+		<dl>
+			<dt>
+				<select name="filtering">
+					<option value="{{ DL_SELECT_NONE }}">{{ lang('DL_NO_FILTER') }}</option>
+					<option value="username">{{ lang('USERNAME') }}</option>
+					<option value="id">{{ lang('DL_DOWNLOADS') }}</option>
+					<option value="cat">{{ lang('DL_CAT_NAME') }}</option>
+				</select>
+			</dt>
+			<dd>
+				<input type="text" name="filter_string" value="{{ DL_FILTER_STRING }}" size="30" maxlength="50" />
+				<p>({{ lang('DL_FILTER_STRING') }})</p>
+			</dd>
+		</dl>
+		<dl>
+			<dt><label>{{ lang('DL_GUEST_STATS_ADMIN') }}</label></dt>
+			<dd>
+				<input type="checkbox" class="radio switch" id="show_guests" name="show_guests" value="1"{% if S_DL_SHOW_GUESTS %} checked="checked"{% endif %} />
+				<label class="switch" for="show_guests"></label>
+			</dd>
+		</dl>
+
+	</fieldset>
+
+	<fieldset class="quick">
+		<input type="submit" name="delete" value="{{ lang('DL_FILTER') }}" class="button2" />
+		{{ S_FORM_TOKEN }}
+	</fieldset>
 
 </form>
 

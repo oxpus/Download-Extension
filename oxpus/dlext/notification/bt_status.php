@@ -3,7 +3,7 @@
 /**
 *
 * @package phpBB Extension - Oxpus Downloads
-* @copyright (c) 2002-2020 OXPUS - www.oxpus.net
+* @copyright (c) 2002-2021 OXPUS - www.oxpus.net
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
 */
@@ -39,19 +39,11 @@ class bt_status extends \phpbb\notification\type\base
 		'group'	=> 'DL_NOTIFICATIONS_TRACKER',
 	];
 
-	/** @var \phpbb\config\config */
-	protected $config;
-
 	/** @var \phpbb\user_loader */
 	protected $user_loader;
 
 	/** @var \phpbb\controller\helper */
 	protected $helper;
-
-	public function set_config(\phpbb\config\config $config)
-	{
-		$this->config = $config;
-	}
 
 	public function set_user_loader(\phpbb\user_loader $user_loader)
 	{
@@ -156,7 +148,7 @@ class bt_status extends \phpbb\notification\type\base
 			'REPORT_TITLE'	=> strip_tags(htmlspecialchars_decode($this->get_data('report_title'))),
 			'STATUS'		=> strip_tags(htmlspecialchars_decode($this->language->lang('DL_REPORT_STATUS_' . $this->get_data('report_status')))),
 			'STATUS_TEXT'	=> strip_tags(htmlspecialchars_decode($this->get_data('status_text'))),
-			'U_BUG_REPORT'	=> generate_board_url(true) . $this->helper->route('oxpus_dlext_tracker', ['action' => 'detail', 'fav_id' => $this->get_data('fav_id')], false),
+			'U_BUG_REPORT'	=> generate_board_url(true) . $this->helper->route('oxpus_dlext_tracker_main', ['fav_id' => $this->get_data('fav_id')], false),
 		];
 	}
 
@@ -167,7 +159,7 @@ class bt_status extends \phpbb\notification\type\base
 	*/
 	public function get_url()
 	{
-		return $this->helper->route('oxpus_dlext_tracker', ['action' => 'detail', 'fav_id' => $this->get_data('fav_id')]);
+		return $this->helper->route('oxpus_dlext_tracker_main', ['fav_id' => $this->get_data('fav_id')]);
 	}
 
 	/**

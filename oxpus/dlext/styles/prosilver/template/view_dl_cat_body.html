@@ -1,4 +1,4 @@
-{% INCLUDE 'dl_header.html' %}
+{% INCLUDE '@oxpus_dlext/helpers/dl_header.html' %}
 
 <h2 class="dl-left">{{ lang('DL_CAT_TITLE') }}</h2>
 
@@ -34,7 +34,7 @@
 		</li>
 	</ul>
 	<ul class="topiclist forums">
-		{% if S_NO_CATEGORY %}
+		{% if S_DL_NO_CATEGORY %}
 		<li class="row">
 			<dl>
 				<dt>{{ lang('DL_NO_CATEGORY_INDEX') }}</dt>
@@ -42,13 +42,18 @@
 		</li>
 		{% else %}
 		{% for downloads in loops.downloads %}
-		<li class="row dlTooltip" id="{{ downloads.CAT_ID }}">
+		<li class="row dlTooltip" id="{{ downloads.DL_CAT_ID }}">
 			<dl>
-				<dt{% if S_ENABLE_DESC_HIDE %} title="{{ downloads.CAT_DESC }}"{% endif %}>
-					<span class="forum-image">{{ downloads.MINI_IMG }}</span>
-					{% if downloads.CAT_ICON %}<span class="forum-image"><img src="{{ downloads.CAT_ICON }}" alt="" title="{{ downloads.CAT_NAME }}" /></span>{% endif %}
-					<a href="{{ downloads.U_CAT_VIEW }}" class="forumtitle">{{ downloads.CAT_NAME }}</a><br />
-					{% if not S_ENABLE_DESC_HIDE %}<div class="dl-index-desc list-inner"><br />{{ downloads.CAT_DESC }}</div>{% endif %}
+				<dt{% if S_DL_ENABLE_DESC_HIDE %} title="{{ downloads.DL_CAT_DESC }}"{% endif %}>
+					<span class="forum-image">
+						{% if downloads.DL_MINI_IMG eq 'new' %}<i class="icon fa-folder{% if downloads.DL_SUBLEVEL_SUB %}-open{% endif %} fa-fw dl-red dl-big" title="{{ lang('DL_NEW') }}"></i>{% endif %}
+						{% if downloads.DL_MINI_IMG eq 'edit' %}<i class="icon fa-folder{% if downloads.DL_SUBLEVEL_SUB %}-open{% endif %} fa-fw dl-blue dl-big" title="{{ lang('DL_EDIT') }}"></i>{% endif %}
+						{% if downloads.DL_MINI_IMG eq 'new_edit' %}<i class="icon fa-folder{% if downloads.DL_SUBLEVEL_SUB %}-open{% endif %} fa-fw dl-yellow dl-big" title="{{ lang('DL_NEW_EDIT') }}"></i>{% endif %}
+						{% if downloads.DL_MINI_IMG eq 'default' %}<i class="icon fa-folder{% if downloads.DL_SUBLEVEL_SUB %}-open{% endif %} fa-fw dl-big" title=""></i>{% endif %}
+					</span>
+					{% if downloads.DL_CAT_ICON %}<span class="forum-image"><img src="{{ downloads.DL_CAT_ICON }}" alt="" title="{{ downloads.DL_CAT_NAME }}" /></span>{% endif %}
+					<a href="{{ downloads.U_DL_CAT_VIEW }}" class="forumtitle">{{ downloads.DL_CAT_NAME }}</a><br />
+					{% if not S_DL_ENABLE_DESC_HIDE %}<div class="dl-index-desc list-inner"><br />{{ downloads.DL_CAT_DESC }}</div>{% endif %}
 					{% if downloads.pagination|length %}
 					<div class="pagination">
 						<ul>
@@ -63,29 +68,42 @@
 						</ul>
 					</div>
 					{% endif %}
-					{% if S_SUB_ON_INDEX %}
+					{% if S_DL_SUB_ON_INDEX %}
 					{% for sub in downloads.sub %}
 					<br />
 					{% for sublevel_row in sub.sublevel_row %}
 					<div class="dl-padding-left-3-5">
-						{{ sublevel_row.M_SUBLEVEL }}
-						{% if sublevel_row.M_SUBLEVEL_ICON %}
-						<img src="{{ sublevel_row.M_SUBLEVEL_ICON }}" alt="" title="{{ sublevel_row.L_SUBLEVEL }}" class="dl-subfolder-small" />{% endif %}
-						 &nbsp; <a href="{{ sublevel_row.U_SUBLEVEL }}" class="small"{% if sublevel_row.SUBLEVEL_COUNT %} title="{{ sublevel_row.SUBLEVEL_COUNT }} {{ lang('DL_CAT_FILES') }}"{% endif %}><strong>{{ sublevel_row.L_SUBLEVEL }}</strong></a>
+						{% if sublevel_row.M_DL_SUBLEVEL eq 'new' %}<i class="icon fa-folder{% if sublevel_row.M_DL_SUBLEVEL_SUB %}-open{% endif %} fa-fw dl-red" title="{{ lang('DL_NEW') }}"></i>{% endif %}
+						{% if sublevel_row.M_DL_SUBLEVEL eq 'edit' %}<i class="icon fa-folder{% if sublevel_row.M_DL_SUBLEVEL_SUB %}-open{% endif %} fa-fw dl-blue" title="{{ lang('DL_EDIT') }}"></i>{% endif %}
+						{% if sublevel_row.M_DL_SUBLEVEL eq 'new_edit' %}<i class="icon fa-folder{% if sublevel_row.M_DL_SUBLEVEL_SUB %}-open{% endif %} fa-fw dl-yellow" title="{{ lang('DL_NEW_EDIT') }}"></i>{% endif %}
+						{% if sublevel_row.M_DL_SUBLEVEL eq 'default' %}<i class="icon fa-folder{% if sublevel_row.M_DL_SUBLEVEL_SUB %}-open{% endif %} fa-fw" title=""></i>{% endif %}
+						{% if sublevel_row.M_DL_SUBLEVEL_ICON %}
+						<img src="{{ sublevel_row.M_DL_SUBLEVEL_ICON }}" alt="" title="{{ sublevel_row.L_DL_SUBLEVEL }}" class="dl-subfolder-small" />
+						{% endif %}
+						&nbsp; <a href="{{ sublevel_row.U_DL_SUBLEVEL }}" class="small"{% if sublevel_row.DL_SUBLEVEL_COUNT %} title="{{ sublevel_row.DL_SUBLEVEL_COUNT }} {{ lang('DL_CAT_FILES') }}"{% endif %}><strong>{{ sublevel_row.L_DL_SUBLEVEL }}</strong></a>
 					</div>
 					{% endfor %}
 					{% endfor %}
 					{% endif %}
 				</dt>
 				<dd class="posts">
-					<strong>{{ downloads.CAT_DL }}</strong>
+					<strong>{{ downloads.DL_CAT_DL }}</strong>
 				</dd>
 				<dd class="lastpost">
-					{% if downloads.CAT_LAST_DL %}
+					{% if downloads.DL_CAT_LAST_DL %}
 					<div class="dl-padding-left-1">
-						<a href="{{ downloads.U_CAT_LAST_LINK }}">{{ downloads.CAT_LAST_ICON }}{{ downloads.CAT_LAST_DL }}</a><br />
-	                    <a href="{{ downloads.U_CAT_LAST_USER }}">{{ downloads.CAT_LAST_USER }}</a>
-						{% if downloads.CAT_LAST_TIME %}&nbsp;<time datetime="{{ downloads.CAT_LAST_TIME_RFC }}">{{ downloads.CAT_LAST_TIME }}</time>{% endif %}
+						<a href="{{ downloads.U_DL_CAT_LAST_LINK }}">
+							{% if downloads.DL_CAT_LAST_ICON eq 'red' %}<i class="icon fa-ban fa-fw dl-red" title="{{ lang('DL_RED_EXPLAIN_PERM') }}"></i>{% endif %}
+							{% if downloads.DL_CAT_LAST_ICON eq 'yellow' %}<i class="icon fa-download fa-fw dl-yellow" title="{{ lang('DL_YELLOW_EXPLAIN') }}"></i>{% endif %}
+							{% if downloads.DL_CAT_LAST_ICON eq 'green' %}<i class="icon fa-download fa-fw dl-green" title="{{ lang('DL_GREEN_EXPLAIN') }}"></i>{% endif %}
+							{% if downloads.DL_CAT_LAST_ICON eq 'white' %}<i class="icon fa-download fa-fw dl-white" title="{{ lang('DL_WHITE_EXPLAIN') }}"></i>{% endif %}
+							{% if downloads.DL_CAT_LAST_ICON eq 'blue' %}<i class="icon fa-info-circle fa-fw dl-blue" title="{{ lang('DL_BLUE_EXPLAIN_FOOT') }}"></i>{% endif %}
+							{% if downloads.DL_CAT_LAST_ICON eq 'grey' %}<i class="icon fa-globe fa-fw dl-grey" title="{{ lang('DL_GREY_EXPLAIN') }}"></i>{% endif %}
+							{{ downloads.DL_CAT_LAST_DL }}
+						</a>
+						<br />
+	                    <a href="{{ downloads.U_DL_CAT_LAST_USER }}">{{ downloads.DL_CAT_LAST_USER }}</a>
+						{% if downloads.DL_CAT_LAST_TIME %}&nbsp;<time datetime="{{ downloads.DL_CAT_LAST_TIME_RFC }}">{{ downloads.DL_CAT_LAST_TIME }}</time>{% endif %}
 					</div>
 					{% endif %}
                 </dd>
@@ -100,4 +118,4 @@
 
 <br />
 
-{% INCLUDE 'dl_footer.html' %}
+{% INCLUDE '@oxpus_dlext/helpers/dl_footer.html' %}

@@ -3,7 +3,7 @@
 /**
 *
 * @package phpBB Extension - Oxpus Downloads
-* @copyright (c) 2002-2020 OXPUS - www.oxpus.net
+* @copyright (c) 2002-2021 OXPUS - www.oxpus.net
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
 */
@@ -28,7 +28,7 @@ if (empty($lang) || !is_array($lang))
 $lang = array_merge($lang, [
 	'HELP_TITLE' => 'Ayuda Online de la Extensión Descargas',
 
-	'DL_NO_HELP_AVIABLE' => 'No hay ayuda disponible para esta opción',
+	'DL_NO_HELP_AVAILABLE' => 'No hay ayuda disponible para esta opción',
 
 	'HELP_DL_ACTIVE'			=> 'Convierte las Descargas de acuerdo con las siguientes opciones on u off.',
 	'HELP_DL_ANTISPAM'			=> 'Esta opción bloquea las descargas por lo que el usuario debe tener la cantidad necesaria de tráfico en el número requerido de mensajes publicados, y el usuario debe haber publicado un número de mensajes en las últimas horas.<br /><br />Example:<br />La configuración contiene 25 mensajes en 24 horas.<br />Sobre la base de esta configuración las descargas serán bloqueados para el usuario si él/ella no ha publicado 25 nuevos mensajes o más en las últimas 24 horas.<br />Esta opción impedirá el spam en las descargas, especialmente para los nuevos usuarios, antes de que un miembro del equipo tenga conocimiento sobre este para tomar acciones.<br />La descarga aún se mostrará como disponibles para seducir al usuario. El usuario sólo recibirá un mensaje acerca de que le faltan permisos.<br /><br />Para desactivar esto, simplemente establezca uno o ambos valores en 0.',

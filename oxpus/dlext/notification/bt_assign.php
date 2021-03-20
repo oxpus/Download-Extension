@@ -3,7 +3,7 @@
 /**
 *
 * @package phpBB Extension - Oxpus Downloads
-* @copyright (c) 2002-2020 OXPUS - www.oxpus.net
+* @copyright (c) 2002-2021 OXPUS - www.oxpus.net
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
 */
@@ -39,21 +39,15 @@ class bt_assign extends \phpbb\notification\type\base
 		'group'	=> 'DL_NOTIFICATIONS_TRACKER',
 	];
 
-	/** @var \phpbb\config\config */
-	protected $config;
-
 	/** @var \phpbb\user_loader */
 	protected $user_loader;
 
 	/** @var \phpbb\controller\helper */
 	protected $helper;
 
+	/* extension owned objects */
 	protected $dlext_main;
-
-	public function set_config(\phpbb\config\config $config)
-	{
-		$this->config = $config;
-	}
+	protected $dlext_constants;
 
 	public function set_user_loader(\phpbb\user_loader $user_loader)
 	{
@@ -70,6 +64,11 @@ class bt_assign extends \phpbb\notification\type\base
 		$this->dlext_main	= $dlext_main;
 	}
 
+	public function set_constants($dlext_constants)
+	{
+		$this->dlext_constants	= $dlext_constants;
+	}
+
 	/**
 	* Is this type available to the current user (defines whether or not it will be shown in the UCP Edit notification options)
 	*
@@ -77,8 +76,7 @@ class bt_assign extends \phpbb\notification\type\base
 	*/
 	public function is_available()
 	{
-		$access_cat = [];
-		$access_cat = $this->dlext_main->full_index(0, 0, 0, 2);
+		$access_cat = $this->dlext_main->full_index(0, 0, 0, $this->dlext_constants::DL_AUTH_CHECK_MOD);
 
 		return (!empty($access_cat)) ? true : false;
 	}
@@ -163,7 +161,7 @@ class bt_assign extends \phpbb\notification\type\base
 	public function get_email_template_variables()
 	{
 		return [
-			'U_BUG_REPORT'	=> generate_board_url(true) . $this->helper->route('oxpus_dlext_tracker', ['action' => 'detail', 'fav_id' => (int) $this->get_data('fav_id')], false),
+			'U_BUG_REPORT'	=> generate_board_url(true) . $this->helper->route('oxpus_dlext_tracker_main', ['fav_id' => (int) $this->get_data('fav_id')], false),
 		];
 	}
 
@@ -174,7 +172,7 @@ class bt_assign extends \phpbb\notification\type\base
 	*/
 	public function get_url()
 	{
-		return $this->helper->route('oxpus_dlext_tracker', ['action' => 'detail', 'fav_id' => $this->get_data('fav_id')]);
+		return $this->helper->route('oxpus_dlext_tracker_main', ['fav_id' => $this->get_data('fav_id')]);
 	}
 
 	/**

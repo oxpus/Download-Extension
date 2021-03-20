@@ -3,127 +3,144 @@
 /**
 *
 * @package phpBB Extension - Oxpus Downloads
-* @copyright (c) 2002-2020 OXPUS - www.oxpus.net
+* @copyright (c) 2002-2021 OXPUS - www.oxpus.net
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
 */
 
 namespace oxpus\dlext\event;
 
+use Symfony\Component\EventDispatcher\EventSubscriberInterface;
+
 /**
 * @ignore
 */
-use Symfony\Component\DependencyInjection\Container;
-use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
 * Event listener
 */
 class listener implements EventSubscriberInterface
 {
-	/* @var string phpbb_root_path */
-	protected $root_path;
-
-	/* @var string phpEx */
-	protected $php_ext;
-
-	/* @var \phpbb\extension\manager */
-	protected $phpbb_extension_manager;
-
-	/* @var \phpbb\path_helper */
-	protected $phpbb_path_helper;
-
-	/* @var Container */
-	protected $phpbb_container;
-
-	/* @var \phpbb\db\driver\driver_interface */
+	/* phpbb objects */
+	protected $extension_manager;
 	protected $db;
-
-	/* @var \phpbb\config\config */
 	protected $config;
-
-	/* @var \phpbb\controller\helper */
 	protected $helper;
-
-	/* @var \phpbb\auth\auth */
-	protected $auth;
-
-	/* @var \phpbb\template\template */
 	protected $template;
-
-	/* @var \phpbb\user */
 	protected $user;
-
-	/** @var \phpbb\language\language $language Language object */
 	protected $language;
+	protected $request;
+	protected $cache;
+	protected $filesystem;
 
-	/** @var extension owned objects */
+	/* extension owned objects */
 	protected $ext_path;
-	protected $ext_path_web;
 
 	protected $dlext_auth;
 	protected $dlext_format;
+	protected $dlext_main;
 	protected $dlext_privacy;
+	protected $dlext_constants;
 
 	protected $dl_index;
+
+	protected $dlext_table_dl_banlist;
+	protected $dlext_table_dl_cat_traf;
+	protected $dlext_table_dl_comments;
+	protected $dlext_table_dl_favorites;
+	protected $dlext_table_dl_hotlink;
+	protected $dlext_table_dl_notraf;
+	protected $dlext_table_dl_stats;
+	protected $dlext_table_downloads;
+	protected $dlext_table_dl_cat;
 
 	/**
 	* Constructor
 	*
-	* @param string									$root_path
-	* @param string									$php_ext
-	* @param string									$table_prefix
-	* @param \phpbb\extension\manager				$phpbb_extension_manager
-	* @param \phpbb\path_helper						$phpbb_path_helper
-	* @param Container								$phpbb_container
-	* @param \phpbb\db\driver\driver_interfacer		$db
+	* @param \phpbb\extension\manager				$extension_manager
+	* @param \phpbb\db\driver\driver_interface		$db
 	* @param \phpbb\config\config					$config
 	* @param \phpbb\controller\helper				$helper
-	* @param \phpbb\auth\auth						$auth
 	* @param \phpbb\template\template				$template
 	* @param \phpbb\user							$user
+	* @param \phpbb\language\language				$language
+	* @param \phpbb\request\request 				$request
+	* @param \phpbb\cache\service					$cache
+	* @param \phpbb\filesystem\filesystem			$filesystem
+	* @param \oxpus\dlext\core\auth					$dlext_auth
+	* @param \oxpus\dlext\core\format 				$dlext_format
+	* @param \oxpus\dlext\core\main 				$dlext_main
+	* @param \oxpus\dlext\core\privacy 				$dlext_privacy
+	* @param \oxpus\dlext\core\helpers\constants 	$dlext_constants
+	* @param string									$dlext_table_dl_banlist
+	* @param string									$dlext_table_dl_cat_traf
+	* @param string									$dlext_table_dl_comments
+	* @param string									$dlext_table_dl_favorites
+	* @param string									$dlext_table_dl_hotlink
+	* @param string									$dlext_table_dl_notraf
+	* @param string									$dlext_table_dl_stats
+	* @param string									$dlext_table_downloads
+	* @param string									$dlext_table_dl_cat
 	*/
 	public function __construct(
-		$root_path,
-		$php_ext,
-		$table_prefix,
-		\phpbb\extension\manager $phpbb_extension_manager,
-		\phpbb\path_helper $phpbb_path_helper,
-		Container $phpbb_container,
+		\phpbb\extension\manager $extension_manager,
 		\phpbb\db\driver\driver_interface $db,
 		\phpbb\config\config $config,
 		\phpbb\controller\helper $helper,
-		\phpbb\auth\auth $auth,
 		\phpbb\template\template $template,
 		\phpbb\user $user,
 		\phpbb\language\language $language,
-		$dlext_auth,
-		$dlext_format,
-		$dlext_privacy
+		\phpbb\request\request $request,
+		\phpbb\cache\service $cache,
+		\phpbb\filesystem\filesystem $filesystem,
+		\oxpus\dlext\core\auth $dlext_auth,
+		\oxpus\dlext\core\format $dlext_format,
+		\oxpus\dlext\core\main $dlext_main,
+		\oxpus\dlext\core\privacy $dlext_privacy,
+		\oxpus\dlext\core\helpers\constants $dlext_constants,
+		$dlext_table_dl_banlist, 
+		$dlext_table_dl_cat_traf, 
+		$dlext_table_dl_comments, 
+		$dlext_table_dl_favorites,
+		$dlext_table_dl_hotlink,
+		$dlext_table_dl_notraf, 
+		$dlext_table_dl_stats, 
+		$dlext_table_downloads, 
+		$dlext_table_dl_cat
 	)
 	{
-		$this->root_path				= $root_path;
-		$this->php_ext 					= $php_ext;
-		$this->phpbb_extension_manager	= $phpbb_extension_manager;
-		$this->phpbb_path_helper		= $phpbb_path_helper;
-		$this->phpbb_container 			= $phpbb_container;
+		$this->extension_manager		= $extension_manager;
 		$this->db 						= $db;
 		$this->config 					= $config;
 		$this->helper 					= $helper;
-		$this->auth						= $auth;
 		$this->template 				= $template;
 		$this->user 					= $user;
 		$this->language					= $language;
+		$this->request					= $request;
+		$this->cache					= $cache;
+		$this->filesystem				= $filesystem;
 
-		$this->ext_path					= $this->phpbb_extension_manager->get_extension_path('oxpus/dlext', true);
-		$this->phpbb_path_helper		= $this->phpbb_container->get('path_helper');
-		$this->ext_path_web				= $this->phpbb_path_helper->update_web_root_path($this->ext_path);
+		$this->dlext_table_dl_banlist		= $dlext_table_dl_banlist;
+		$this->dlext_table_dl_cat_traf		= $dlext_table_dl_cat_traf;
+		$this->dlext_table_dl_comments		= $dlext_table_dl_comments;
+		$this->dlext_table_dl_favorites		= $dlext_table_dl_favorites;
+		$this->dlext_table_dl_hotlink		= $dlext_table_dl_hotlink;
+		$this->dlext_table_dl_notraf		= $dlext_table_dl_notraf;
+		$this->dlext_table_dl_stats			= $dlext_table_dl_stats;
+		$this->dlext_table_downloads		= $dlext_table_downloads;
+		$this->dlext_table_dl_cat			= $dlext_table_dl_cat;
+
+		$this->ext_path					= $this->extension_manager->get_extension_path('oxpus/dlext', $dlext_constants::DL_TRUE);
 
 		$this->dlext_auth				= $dlext_auth;
 		$this->dlext_format				= $dlext_format;
+		$this->dlext_main				= $dlext_main;
 		$this->dlext_privacy			= $dlext_privacy;
+		$this->dlext_constants			= $dlext_constants;
 
 		$this->dl_index					= $this->dlext_auth->dl_index();
+
+		$this->dlext_constants->init();
 	}
 
 	static public function getSubscribedEvents()
@@ -145,6 +162,7 @@ class listener implements EventSubscriberInterface
 			'core.group_delete_user_after'				=> 'core_group_change_user_after',
 			'core.ucp_display_module_before'			=> 'core_ucp_display_module_before',
 			'core.build_config_template'				=> 'core_build_config_template',
+			'core.adm_page_footer'						=> 'core_adm_page_footer',
 
 			// Events by extensions
 			'tas2580.privacyprotection_delete_ip_after'	=> 'tas2580_privacyprotection_delete_ip_after',
@@ -153,83 +171,61 @@ class listener implements EventSubscriberInterface
 
 	public function core_user_setup($event)
 	{
-		$this->phpbb_container->get('oxpus.dlext.constants')->init();
-
 		$lang_set_ext = $event['lang_set_ext'];
 		$lang_set_ext[] = [
 			'ext_name' => 'oxpus/dlext',
 			'lang_set' => 'common',
 		];
 
-		if (defined('ADMIN_START'))
-		{
-			$lang_set_ext[] = [
-				'ext_name' => 'oxpus/dlext',
-				'lang_set' => 'permissions_dl_ext',
-			];
-		}
-
 		$event['lang_set_ext'] = $lang_set_ext;
 	}
 
-	public function core_page_header($event)
+	public function core_page_header()
 	{
-		$dl_mod_is_active = true;
-		$dl_mod_link_show = true;
+		$dl_mod_link_show = $this->dlext_main->dl_handle_active($this->dlext_constants::DL_FALSE);
+
+		$main_js_file_style = $this->ext_path . 'styles/' . rawurlencode($this->user->style['style_path'] . '/template/dl_main.js');
+		$main_js_file_all = $this->ext_path . 'styles/all/template/dl_main.js';
+
+		if ($this->filesystem->exists($main_js_file_style))
+		{
+			$dlext_main_js = $main_js_file_style;
+		}
+		else
+		{
+			$dlext_main_js = $main_js_file_all;
+		}
+
+		$rate_js_file_style = $this->ext_path . 'styles/' . rawurlencode($this->user->style['style_path'] . '/template/dl_rate.js');
+		$rate_js_file_all = $this->ext_path . 'styles/all/template/dl_rate.js';
+
+		if ($this->filesystem->exists($rate_js_file_style))
+		{
+			$dlext_rate_js = $rate_js_file_style;
+		}
+		else
+		{
+			$dlext_rate_js = $rate_js_file_all;
+		}
 
 		$this->template->assign_vars([
-			'EXT_DL_PATH'			=> $this->ext_path,
-			'EXT_DL_PATH_WEB'		=> $this->ext_path_web,
+			'EXT_DL_PATH'		=> $this->ext_path,
+			'EXT_DL_RATE_FILE'	=> $dlext_rate_js,
+			'EXT_DL_MAIN_FILE'	=> $dlext_main_js,
+			'U_DL_HELP_POPUP'	=> $this->helper->route('oxpus_dlext_help'),
 		]);
-
-		if (isset($this->config['dl_active']) && !$this->config['dl_active'])
-		{
-			if (isset($this->config['dl_off_now_time']) && $this->config['dl_off_now_time'])
-			{
-				$dl_mod_is_active = false;
-			}
-			else
-			{
-				if (isset($this->config['dl_off_from']) && isset($this->config['dl_off_till']))
-				{
-					$curr_time = (date('H', time()) * 60) + date('i', time());
-					$off_from = (substr($this->config['dl_off_from'], 0, 2) * 60) + (substr($this->config['dl_off_from'], -2));
-					$off_till = (substr($this->config['dl_off_till'], 0, 2) * 60) + (substr($this->config['dl_off_till'], -2));
-
-					if ($curr_time >= $off_from && $curr_time <= $off_till)
-					{
-						$dl_mod_is_active = false;
-					}
-				}
-			}
-		}
-
-		if (!$dl_mod_is_active && isset($this->config['dl_off_hide']) && $this->config['dl_off_hide'])
-		{
-			$dl_mod_link_show = false;
-		}
-
-		if (!$dl_mod_is_active && $this->auth->acl_get('a_') && isset($this->config['dl_on_admins']) && $this->config['dl_on_admins'])
-		{
-			$dl_mod_link_show = true;
-		}
-
-		if (!$this->config['dl_global_guests'] && !$this->user->data['is_registered'])
-		{
-			$dl_mod_link_show = false;
-		}
 
 		$dl_index = $this->dlext_auth->dl_index();
 
 		if (empty($dl_index))
 		{
-			$dl_mod_link_show = false;
+			$dl_mod_link_show = $this->dlext_constants::DL_FALSE;
 		}
 
 		if ($dl_mod_link_show)
 		{
 			$sql = 'SELECT COUNT(id) as total
-					FROM ' . DOWNLOADS_TABLE . ' 
+					FROM ' . $this->dlext_table_downloads . '
 					WHERE add_user = ' . (int) $this->user->data['user_id'];
 			$result = $this->db->sql_query($sql);
 			$total_downloads = $this->db->sql_fetchfield('total');
@@ -243,9 +239,9 @@ class listener implements EventSubscriberInterface
 				'U_DL_SELF'		=> ($total_downloads) ? $dl_main_self : '',
 			]);
 
-			if (isset($this->config['dl_use_hacklist']) && $this->config['dl_use_hacklist'])
+			if ($this->config['dl_use_hacklist'])
 			{
-				$sql = 'SELECT COUNT(id) AS total FROM ' . DOWNLOADS_TABLE . '
+				$sql = 'SELECT COUNT(id) AS total FROM ' . $this->dlext_table_downloads . '
 					WHERE hacklist = 1';
 				$result = $this->db->sql_query($sql);
 
@@ -268,7 +264,7 @@ class listener implements EventSubscriberInterface
 
 			if ($this->user->data['is_registered'])
 			{
-				$sql = 'SELECT count(d.id) as total FROM ' . DOWNLOADS_TABLE . ' d, ' . DL_CAT_TABLE . ' c
+				$sql = 'SELECT count(d.id) as total FROM ' . $this->dlext_table_downloads . ' d, ' . $this->dlext_table_dl_cat . ' c
 					WHERE c.id = d.cat
 						AND c.bug_tracker = 1';
 				$result = $this->db->sql_query($sql);
@@ -281,7 +277,7 @@ class listener implements EventSubscriberInterface
 
 				if (isset($row) && $row['total'] != 0)
 				{
-					$dl_bt_link = $this->helper->route('oxpus_dlext_tracker');
+					$dl_bt_link = $this->helper->route('oxpus_dlext_tracker_view');
 
 					$this->template->assign_vars([
 						'U_DL_BUG_TRACKER'	=> $dl_bt_link,
@@ -291,6 +287,8 @@ class listener implements EventSubscriberInterface
 
 			$this->_dl_reset_values();
 			$this->_dl_navi_links();
+			$this->_dl_purge_hotlinks();
+			$this->_dl_mcp_link($dl_mod_link_show);
 		}
 	}
 
@@ -301,10 +299,20 @@ class listener implements EventSubscriberInterface
 			$event['location'] = $this->language->lang('DL_PAGE_DL_HACKSLIST');
 			$event['location_url'] = $this->helper->route('oxpus_dlext_hacklist');
 		}
-		else if (strpos($event['row']['session_page'], 'dlext/tracker') !== false)
+		else if (strpos($event['row']['session_page'], 'dlext/tracker/edit') !== false)
 		{
 			$event['location'] = $this->language->lang('DL_PAGE_BUG_TRACKER');
-			$event['location_url'] = $this->helper->route('oxpus_dlext_tracker');
+			$event['location_url'] = $this->helper->route('oxpus_dlext_tracker_edit');
+		}
+		else if (strpos($event['row']['session_page'], 'dlext/tracker/view') !== false)
+		{
+			$event['location'] = $this->language->lang('DL_PAGE_BUG_TRACKER');
+			$event['location_url'] = $this->helper->route('oxpus_dlext_tracker_view');
+		}
+		else if (strpos($event['row']['session_page'], 'dlext/tracker/main') !== false)
+		{
+			$event['location'] = $this->language->lang('DL_PAGE_BUG_TRACKER');
+			$event['location_url'] = $this->helper->route('oxpus_dlext_tracker_main');
 		}
 		else if (strpos($event['row']['session_page'], 'dlext') !== false)
 		{
@@ -317,18 +325,17 @@ class listener implements EventSubscriberInterface
 	{
 		$member	= $event['member'];
 
-		$username	= $member['username'];
 		$user_id	= $member['user_id'];
 
 		$sql = 'SELECT COUNT(id) as total
-				FROM ' . DOWNLOADS_TABLE . ' 
+				FROM ' . $this->dlext_table_downloads . '
 				WHERE add_user = ' . (int) $user_id;
 		$result = $this->db->sql_query($sql);
 		$total_downloads = $this->db->sql_fetchfield('total');
 		$this->db->sql_freeresult($result);
 
 		$sql = 'SELECT COUNT(id) as total
-				FROM ' . DL_COMMENTS_TABLE . ' 
+				FROM ' . $this->dlext_table_dl_comments . '
 				WHERE user_id = ' . (int) $user_id;
 		$result = $this->db->sql_query($sql);
 		$total_comments = $this->db->sql_fetchfield('total');
@@ -353,12 +360,7 @@ class listener implements EventSubscriberInterface
 
 	public function core_update_username($event)
 	{
-		if (!defined('DL_BANLIST_TABLE'))
-		{
-			$this->phpbb_container->get('oxpus.dlext.constants')->init();
-		}
-
-		$update_ary = [DL_BANLIST_TABLE, DL_COMMENTS_TABLE, DL_STATS_TABLE];
+		$update_ary = [$this->dlext_table_dl_banlist, $this->dlext_table_dl_comments, $this->dlext_table_dl_stats];
 
 		foreach ($update_ary as $table)
 		{
@@ -371,12 +373,7 @@ class listener implements EventSubscriberInterface
 
 	public function core_delete_user_after($event)
 	{
-		if (!defined('DL_NOTRAF_TABLE'))
-		{
-			$this->phpbb_container->get('oxpus.dlext.constants')->init();
-		}
-
-		$table_ary = [DL_NOTRAF_TABLE];
+		$table_ary = [$this->dlext_table_dl_notraf];
 
 		// Delete the miscellaneous (non-post) data for the user
 		foreach ($table_ary as $table)
@@ -386,22 +383,14 @@ class listener implements EventSubscriberInterface
 			$this->db->sql_query($sql);
 		}
 
-		$sql = 'DELETE FROM ' . DL_FAVORITES_TABLE . '
+		$sql = 'DELETE FROM ' . $this->dlext_table_dl_favorites . '
 			WHERE ' . $this->db->sql_in_set('fav_user_id', $event['user_ids']);
 		$this->db->sql_query($sql);
 	}
 
 	public function core_submit_post_end($event)
 	{
-		if (!defined('UL_USERS_TRAFFICS'))
-		{
-			$this->phpbb_container->get('oxpus.dlext.constants')->init();
-		}
-
-		$user_traffics_on = DL_USERS_TRAFFICS;
-		$founder_traffics_off = FOUNDER_TRAFFICS_OFF;
-
-		if ($this->config['dl_enable_post_dl_traffic'] && !$this->config['dl_traffic_off'] && $user_traffics_on && !$founder_traffics_off)
+		if ($this->config['dl_enable_post_dl_traffic'] && !$this->config['dl_traffic_off'] && $this->dlext_constants->get_value('users_traffics') && !$this->dlext_constants->get_value('founder_traffics'))
 		{
 			if (!$this->config['dl_delay_post_traffic'] || ((time() - $this->user->data['user_regdate']) / 84600) > $this->config['dl_delay_post_traffic'])
 			{
@@ -429,15 +418,7 @@ class listener implements EventSubscriberInterface
 
 	public function core_modify_posting_parameters($event)
 	{
-		if (!defined('UL_USERS_TRAFFICS'))
-		{
-			$this->phpbb_container->get('oxpus.dlext.constants')->init();
-		}
-
-		$user_traffics_on = DL_USERS_TRAFFICS;
-		$founder_traffics_off = FOUNDER_TRAFFICS_OFF;
-
-		if ($this->config['dl_drop_traffic_postdel'] && !$this->config['dl_traffic_off'] && $user_traffics_on && !$founder_traffics_off)
+		if ($this->config['dl_drop_traffic_postdel'] && !$this->config['dl_traffic_off'] && $this->dlext_constants->get_value('users_traffics') && !$this->dlext_constants->get_value('founder_traffics'))
 		{
 			if ($event['mode'] == 'delete')
 			{
@@ -526,29 +507,24 @@ class listener implements EventSubscriberInterface
 	}
 
 	// Using privacy protection by tas2580
-	public function tas2580_privacyprotection_delete_ip_after($event)
+	public function tas2580_privacyprotection_delete_ip_after()
 	{
 		$this->dlext_privacy->dl_privacy();
 	}
 
 	private function _dl_mod_callback($part)
 	{
-		if (!defined('DOWNLOADS_TABLE'))
-		{
-			$this->phpbb_container->get('oxpus.dlext.constants')->init();
-		}
-
-		if (isset($part[5]) && (int) $part[5])
+		if (!empty($part[5]))
 		{
 			$dl_id = $part[5];
 			$link_text = 'preview';
 		}
-		else if (isset($part[4]) && (int) $part[4])
+		else if (!empty($part[4]))
 		{
 			$dl_id = $part[4];
 			$link_text = 'link_text';
 		}
-		else if (isset($part[6]) && (int) $part[6])
+		else if (!empty($part[6]))
 		{
 			$dl_id = $part[6];
 			$link_text = 'url';
@@ -559,7 +535,7 @@ class listener implements EventSubscriberInterface
 			$link_text = 'postlink';
 		}
 
-		$sql = 'SELECT cat, description, desc_uid, desc_bitfield, desc_flags FROM ' . DOWNLOADS_TABLE . '
+		$sql = 'SELECT cat, description, desc_uid, desc_bitfield, desc_flags FROM ' . $this->dlext_table_downloads . '
 			WHERE id = ' . (int) $dl_id;
 		$result = $this->db->sql_query($sql);
 		$row = $this->db->sql_fetchrow($result);
@@ -608,19 +584,14 @@ class listener implements EventSubscriberInterface
 
 	private function _dl_reset_values()
 	{
-		if (!defined('DL_CAT_TRAF_TABLE'))
-		{
-			$this->phpbb_container->get('oxpus.dlext.constants')->init();
-		}
-
-		$current_month	= @gmdate('Ym', time());
+		$current_month	= gmdate('Ym', time());
 
 		/*
 		* set the overall traffic and categories traffic if needed (each first day of a month)
 		*/
 		if (isset($this->config['dl_traffic_retime']) && !$this->config['dl_traffic_off'])
 		{
-			$auto_overall_traffic_month = @gmdate('Ym', $this->config['dl_traffic_retime']);
+			$auto_overall_traffic_month = gmdate('Ym', $this->config['dl_traffic_retime']);
 
 			if ($auto_overall_traffic_month < $current_month)
 			{
@@ -631,11 +602,11 @@ class listener implements EventSubscriberInterface
 				$this->config->set('dl_remain_traffic', 0);
 				$this->config->set('dl_remain_guest_traffic', 0);
 
-				$sql = 'UPDATE ' . DL_CAT_TRAF_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', [
+				$sql = 'UPDATE ' . $this->dlext_table_dl_cat_traf . ' SET ' . $this->db->sql_build_array('UPDATE', [
 					'cat_traffic_use' => 0]);
 				$this->db->sql_query($sql);
 
-				$this->config->set('dl_traffic_retime', $this->config['dl_traffic_retime'], false);
+				$this->config->set('dl_traffic_retime', $this->config['dl_traffic_retime']);
 			}
 		}
 
@@ -644,33 +615,33 @@ class listener implements EventSubscriberInterface
 		*/
 		if (isset($this->config['dl_click_reset_time']))
 		{
-			$auto_click_reset_month = @gmdate('Ym', $this->config['dl_click_reset_time']);
+			$auto_click_reset_month = gmdate('Ym', $this->config['dl_click_reset_time']);
 
 			if ($auto_click_reset_month < $current_month)
 			{
-				$sql = 'UPDATE ' . DOWNLOADS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', [
+				$sql = 'UPDATE ' . $this->dlext_table_downloads . ' SET ' . $this->db->sql_build_array('UPDATE', [
 					'klicks' => 0]);
 				$this->db->sql_query($sql);
 
-				@unlink(DL_EXT_CACHE_PATH . 'data_dl_file_p.' . $this->php_ext);
+				$this->cache->destroy('_dlext_file_p.');
 
-				$this->config->set('dl_click_reset_time', time(), false);
+				$this->config->set('dl_click_reset_time', time());
 			}
 		}
 
 		/*
 		* set the user traffic if needed (each first day of the month)
 		*/
-		if ($this->user->data['user_id'] <> ANONYMOUS && !$this->config['dl_traffic_off'] && (intval($this->config['dl_delay_auto_traffic']) == 0 || (time() - $this->user->data['user_regdate']) / 84600 > $this->config['dl_delay_auto_traffic']))
+		if ($this->user->data['user_id'] != ANONYMOUS && !$this->config['dl_traffic_off'] && (intval($this->config['dl_delay_auto_traffic']) == 0 || (time() - $this->user->data['user_regdate']) / 84600 > $this->config['dl_delay_auto_traffic']))
 		{
-			$user_auto_traffic_month = @gmdate('Ym', $this->user->data['user_dl_update_time']);
+			$user_auto_traffic_month = gmdate('Ym', $this->user->data['user_dl_update_time']);
 
 			if ($user_auto_traffic_month < $current_month)
 			{
 				$sql = 'SELECT max(g.group_dl_auto_traffic) AS max_traffic FROM ' . GROUPS_TABLE . ' g, ' . USER_GROUP_TABLE . ' ug
 					WHERE g.group_id = ug.group_id
 						AND ug.user_id = ' . (int) $this->user->data['user_id'] . '
-						AND ug.user_pending <> ' . true;
+						AND ug.user_pending <> 1';
 				$result = $this->db->sql_query($sql);
 				$max_group_row = $this->db->sql_fetchfield('max_traffic');
 				$this->db->sql_freeresult($result);
@@ -688,14 +659,9 @@ class listener implements EventSubscriberInterface
 		}
 	}
 
-	public function core_group_change_user_after($event)
+	public function core_group_change_user_after()
 	{
-		if (!defined('DL_EXT_CACHE_PATH'))
-		{
-			$this->phpbb_container->get('oxpus.dlext.constants')->init();
-		}
-
-		@unlink(DL_EXT_CACHE_PATH . 'data_dl_auth_groups.' . $this->php_ext);
+		$this->cache->destroy('_dlext_auth_groups');
 	}
 
 	public function core_ucp_display_module_before($event)
@@ -707,14 +673,14 @@ class listener implements EventSubscriberInterface
 			$user_id = $this->user->data['user_id'];
 
 			$sql = 'SELECT COUNT(id) as total
-					FROM ' . DOWNLOADS_TABLE . ' 
+					FROM ' . $this->dlext_table_downloads . '
 					WHERE add_user = ' . (int) $user_id;
 			$result = $this->db->sql_query($sql);
 			$total_downloads = $this->db->sql_fetchfield('total');
 			$this->db->sql_freeresult($result);
 
 			$sql = 'SELECT COUNT(id) as total
-					FROM ' . DL_COMMENTS_TABLE . ' 
+					FROM ' . $this->dlext_table_dl_comments . '
 					WHERE user_id = ' . (int) $user_id;
 			$result = $this->db->sql_query($sql);
 			$total_comments = $this->db->sql_fetchfield('total');
@@ -731,50 +697,50 @@ class listener implements EventSubscriberInterface
 	private function _dl_navi_links()
 	{
 		$this->template->assign_vars([
-			'S_DL_NAV_MAIN_NHQLB'		=> ($this->config['dl_nav_link_main'] == 'NHQLB') ? true : false,
-			'S_DL_NAV_MAIN_NHQLA'		=> ($this->config['dl_nav_link_main'] == 'NHQLA') ? true : false,
-			'S_DL_NAV_MAIN_OHNP' 		=> ($this->config['dl_nav_link_main'] == 'OHNP') ? true : false,
-			'S_DL_NAV_MAIN_OHNA' 		=> ($this->config['dl_nav_link_main'] == 'OHNA') ? true : false,
-			'S_DL_NAV_MAIN_NHUPP'		=> ($this->config['dl_nav_link_main'] == 'NHUPP') ? true : false,
-			'S_DL_NAV_MAIN_NHUP' 		=> ($this->config['dl_nav_link_main'] == 'NHUP') ? true : false,
-			'S_DL_NAV_MAIN_NHPLB'		=> ($this->config['dl_nav_link_main'] == 'NHPLB') ? true : false,
-			'S_DL_NAV_MAIN_NHPLA'		=> ($this->config['dl_nav_link_main'] == 'NHPLA') ? true : false,
-			'S_DL_NAV_MAIN_NHUA'		=> ($this->config['dl_nav_link_main'] == 'NHUA') ? true : false,
-			'S_DL_NAV_MAIN_NHUPA'		=> ($this->config['dl_nav_link_main'] == 'NHUPA') ? true : false,
-			'S_DL_NAV_MAIN_OFTzB'		=> ($this->config['dl_nav_link_main'] == 'OFTzB') ? true : false,
-			'S_DL_NAV_MAIN_OFTzA'		=> ($this->config['dl_nav_link_main'] == 'OFTzA') ? true : false,
-			'S_DL_NAV_MAIN_OFTlB'		=> ($this->config['dl_nav_link_main'] == 'OFTlB') ? true : false,
-			'S_DL_NAV_MAIN_OFTlA'		=> ($this->config['dl_nav_link_main'] == 'OFTlA') ? true : false,
+			'S_DL_NAV_MAIN_NHQLB'		=> ($this->config['dl_nav_link_main'] == 'NHQLB') ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE,
+			'S_DL_NAV_MAIN_NHQLA'		=> ($this->config['dl_nav_link_main'] == 'NHQLA') ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE,
+			'S_DL_NAV_MAIN_OHNP' 		=> ($this->config['dl_nav_link_main'] == 'OHNP') ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE,
+			'S_DL_NAV_MAIN_OHNA' 		=> ($this->config['dl_nav_link_main'] == 'OHNA') ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE,
+			'S_DL_NAV_MAIN_NHUPP'		=> ($this->config['dl_nav_link_main'] == 'NHUPP') ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE,
+			'S_DL_NAV_MAIN_NHUP' 		=> ($this->config['dl_nav_link_main'] == 'NHUP') ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE,
+			'S_DL_NAV_MAIN_NHPLB'		=> ($this->config['dl_nav_link_main'] == 'NHPLB') ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE,
+			'S_DL_NAV_MAIN_NHPLA'		=> ($this->config['dl_nav_link_main'] == 'NHPLA') ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE,
+			'S_DL_NAV_MAIN_NHUA'		=> ($this->config['dl_nav_link_main'] == 'NHUA') ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE,
+			'S_DL_NAV_MAIN_NHUPA'		=> ($this->config['dl_nav_link_main'] == 'NHUPA') ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE,
+			'S_DL_NAV_MAIN_OFTzB'		=> ($this->config['dl_nav_link_main'] == 'OFTzB') ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE,
+			'S_DL_NAV_MAIN_OFTzA'		=> ($this->config['dl_nav_link_main'] == 'OFTzA') ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE,
+			'S_DL_NAV_MAIN_OFTlB'		=> ($this->config['dl_nav_link_main'] == 'OFTlB') ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE,
+			'S_DL_NAV_MAIN_OFTlA'		=> ($this->config['dl_nav_link_main'] == 'OFTlA') ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE,
 
-			'S_DL_NAV_HACKS_NHQLB'		=> ($this->config['dl_nav_link_hacks'] == 'NHQLB') ? true : false,
-			'S_DL_NAV_HACKS_NHQLA'		=> ($this->config['dl_nav_link_hacks'] == 'NHQLA') ? true : false,
-			'S_DL_NAV_HACKS_OHNP' 		=> ($this->config['dl_nav_link_hacks'] == 'OHNP') ? true : false,
-			'S_DL_NAV_HACKS_OHNA' 		=> ($this->config['dl_nav_link_hacks'] == 'OHNA') ? true : false,
-			'S_DL_NAV_HACKS_NHUPP'		=> ($this->config['dl_nav_link_hacks'] == 'NHUPP') ? true : false,
-			'S_DL_NAV_HACKS_NHUP' 		=> ($this->config['dl_nav_link_hacks'] == 'NHUP') ? true : false,
-			'S_DL_NAV_HACKS_NHPLB'		=> ($this->config['dl_nav_link_hacks'] == 'NHPLB') ? true : false,
-			'S_DL_NAV_HACKS_NHPLA'		=> ($this->config['dl_nav_link_hacks'] == 'NHPLA') ? true : false,
-			'S_DL_NAV_HACKS_NHUA'		=> ($this->config['dl_nav_link_hacks'] == 'NHUA') ? true : false,
-			'S_DL_NAV_HACKS_NHUPA'		=> ($this->config['dl_nav_link_hacks'] == 'NHUPA') ? true : false,
-			'S_DL_NAV_HACKS_OFTzB'		=> ($this->config['dl_nav_link_hacks'] == 'OFTzB') ? true : false,
-			'S_DL_NAV_HACKS_OFTzA'		=> ($this->config['dl_nav_link_hacks'] == 'OFTzA') ? true : false,
-			'S_DL_NAV_HACKS_OFTlB'		=> ($this->config['dl_nav_link_hacks'] == 'OFTlB') ? true : false,
-			'S_DL_NAV_HACKS_OFTlA'		=> ($this->config['dl_nav_link_hacks'] == 'OFTlA') ? true : false,
+			'S_DL_NAV_HACKS_NHQLB'		=> ($this->config['dl_nav_link_hacks'] == 'NHQLB') ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE,
+			'S_DL_NAV_HACKS_NHQLA'		=> ($this->config['dl_nav_link_hacks'] == 'NHQLA') ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE,
+			'S_DL_NAV_HACKS_OHNP' 		=> ($this->config['dl_nav_link_hacks'] == 'OHNP') ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE,
+			'S_DL_NAV_HACKS_OHNA' 		=> ($this->config['dl_nav_link_hacks'] == 'OHNA') ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE,
+			'S_DL_NAV_HACKS_NHUPP'		=> ($this->config['dl_nav_link_hacks'] == 'NHUPP') ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE,
+			'S_DL_NAV_HACKS_NHUP' 		=> ($this->config['dl_nav_link_hacks'] == 'NHUP') ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE,
+			'S_DL_NAV_HACKS_NHPLB'		=> ($this->config['dl_nav_link_hacks'] == 'NHPLB') ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE,
+			'S_DL_NAV_HACKS_NHPLA'		=> ($this->config['dl_nav_link_hacks'] == 'NHPLA') ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE,
+			'S_DL_NAV_HACKS_NHUA'		=> ($this->config['dl_nav_link_hacks'] == 'NHUA') ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE,
+			'S_DL_NAV_HACKS_NHUPA'		=> ($this->config['dl_nav_link_hacks'] == 'NHUPA') ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE,
+			'S_DL_NAV_HACKS_OFTzB'		=> ($this->config['dl_nav_link_hacks'] == 'OFTzB') ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE,
+			'S_DL_NAV_HACKS_OFTzA'		=> ($this->config['dl_nav_link_hacks'] == 'OFTzA') ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE,
+			'S_DL_NAV_HACKS_OFTlB'		=> ($this->config['dl_nav_link_hacks'] == 'OFTlB') ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE,
+			'S_DL_NAV_HACKS_OFTlA'		=> ($this->config['dl_nav_link_hacks'] == 'OFTlA') ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE,
 
-			'S_DL_NAV_TRACKER_NHQLB'	=> ($this->config['dl_nav_link_tracker'] == 'NHQLB') ? true : false,
-			'S_DL_NAV_TRACKER_NHQLA'	=> ($this->config['dl_nav_link_tracker'] == 'NHQLA') ? true : false,
-			'S_DL_NAV_TRACKER_OHNP' 	=> ($this->config['dl_nav_link_tracker'] == 'OHNP') ? true : false,
-			'S_DL_NAV_TRACKER_OHNA' 	=> ($this->config['dl_nav_link_tracker'] == 'OHNA') ? true : false,
-			'S_DL_NAV_TRACKER_NHUPP'	=> ($this->config['dl_nav_link_tracker'] == 'NHUPP') ? true : false,
-			'S_DL_NAV_TRACKER_NHUP' 	=> ($this->config['dl_nav_link_tracker'] == 'NHUP') ? true : false,
-			'S_DL_NAV_TRACKER_NHPLB'	=> ($this->config['dl_nav_link_tracker'] == 'NHPLB') ? true : false,
-			'S_DL_NAV_TRACKER_NHPLA'	=> ($this->config['dl_nav_link_tracker'] == 'NHPLA') ? true : false,
-			'S_DL_NAV_TRACKER_NHUA'		=> ($this->config['dl_nav_link_tracker'] == 'NHUA') ? true : false,
-			'S_DL_NAV_TRACKER_NHUPA'	=> ($this->config['dl_nav_link_tracker'] == 'NHUPA') ? true : false,
-			'S_DL_NAV_TRACKER_OFTzB'	=> ($this->config['dl_nav_link_tracker'] == 'OFTzB') ? true : false,
-			'S_DL_NAV_TRACKER_OFTzA'	=> ($this->config['dl_nav_link_tracker'] == 'OFTzA') ? true : false,
-			'S_DL_NAV_TRACKER_OFTlB'	=> ($this->config['dl_nav_link_tracker'] == 'OFTlB') ? true : false,
-			'S_DL_NAV_TRACKER_OFTlA'	=> ($this->config['dl_nav_link_tracker'] == 'OFTlA') ? true : false,
+			'S_DL_NAV_TRACKER_NHQLB'	=> ($this->config['dl_nav_link_tracker'] == 'NHQLB') ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE,
+			'S_DL_NAV_TRACKER_NHQLA'	=> ($this->config['dl_nav_link_tracker'] == 'NHQLA') ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE,
+			'S_DL_NAV_TRACKER_OHNP' 	=> ($this->config['dl_nav_link_tracker'] == 'OHNP') ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE,
+			'S_DL_NAV_TRACKER_OHNA' 	=> ($this->config['dl_nav_link_tracker'] == 'OHNA') ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE,
+			'S_DL_NAV_TRACKER_NHUPP'	=> ($this->config['dl_nav_link_tracker'] == 'NHUPP') ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE,
+			'S_DL_NAV_TRACKER_NHUP' 	=> ($this->config['dl_nav_link_tracker'] == 'NHUP') ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE,
+			'S_DL_NAV_TRACKER_NHPLB'	=> ($this->config['dl_nav_link_tracker'] == 'NHPLB') ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE,
+			'S_DL_NAV_TRACKER_NHPLA'	=> ($this->config['dl_nav_link_tracker'] == 'NHPLA') ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE,
+			'S_DL_NAV_TRACKER_NHUA'		=> ($this->config['dl_nav_link_tracker'] == 'NHUA') ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE,
+			'S_DL_NAV_TRACKER_NHUPA'	=> ($this->config['dl_nav_link_tracker'] == 'NHUPA') ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE,
+			'S_DL_NAV_TRACKER_OFTzB'	=> ($this->config['dl_nav_link_tracker'] == 'OFTzB') ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE,
+			'S_DL_NAV_TRACKER_OFTzA'	=> ($this->config['dl_nav_link_tracker'] == 'OFTzA') ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE,
+			'S_DL_NAV_TRACKER_OFTlB'	=> ($this->config['dl_nav_link_tracker'] == 'OFTlB') ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE,
+			'S_DL_NAV_TRACKER_OFTlA'	=> ($this->config['dl_nav_link_tracker'] == 'OFTlA') ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE,
 		]);
 	}
 
@@ -785,12 +751,69 @@ class listener implements EventSubscriberInterface
 		$key		= $event['key'];
 		$tpl		= $event['tpl'];
 		$name		= 'config[' . $key . ']';
+		$checked	= ($new_ary[$key]) ? 'checked="checked"' : '';
 
 		if ($tpl_type[0] == 'switch')
 		{
-			$tpl = '<input type="checkbox" name="' . $name . '"' . (($new_ary[$key]) ? ' value="1" checked="checked"' : '') . ' class="radio switch" id="switch_' . $key . '" /><label class="switch" for="switch_' . $key . '">&nbsp;</label>';
+			$tpl = '<input type="checkbox" name="' . $name . '"  value="1" ' . $checked . ' class="radio switch" id="switch_' . $key . '" /><label class="switch" for="switch_' . $key . '">&nbsp;</label>';
 		}
 
 		$event['tpl'] = $tpl;
+	}
+
+	private function _dl_purge_hotlinks()
+	{
+		$session_ids = ['0'];
+
+		$sql = 'SELECT session_id FROM ' . SESSIONS_TABLE . '
+			WHERE session_user_id = ' . ANONYMOUS;
+		$result = $this->db->sql_query($sql);
+
+		while ($row = $this->db->sql_fetchrow($result))
+		{
+			$session_ids[] = $row['session_id'];
+		}
+		$this->db->sql_freeresult($result);
+
+		$sql = 'DELETE FROM ' . $this->dlext_table_dl_hotlink . '
+			WHERE user_id = ' . (int) $this->user->data['user_id'] . '
+				OR ' . $this->db->sql_in_set('session_id', $session_ids, $this->dlext_constants::DL_TRUE);
+		$this->db->sql_query($sql);
+	}
+
+	public function core_adm_page_footer()
+	{
+		if ($this->extension_manager->is_enabled('oxpus/dlext'))
+		{
+			$this->template->assign_vars([
+				'DL_MOD_RELEASE'	=> $this->language->lang('DL_MOD_VERSION', $this->config['dl_ext_version']),
+				'U_DL_HELP_POPUP'	=> $this->helper->route('oxpus_dlext_help'),
+			]);
+		}
+	}
+
+	private function _dl_mcp_link($dl_mod_link_show)
+	{
+		$access_cat = $this->dlext_main->full_index(0, 0, 0, $this->dlext_constants::DL_AUTH_CHECK_MOD);
+
+		if (empty($access_cat) || !$dl_mod_link_show)
+		{
+			return;
+		}
+
+		$cat		= $this->request->variable('cat', 0);
+		$cat_id		= $this->request->variable('cat_id', 0);
+
+		$mcp_cat	= ($cat_id) ? $cat_id : $cat;
+
+		$this->template->assign_vars([
+			'U_DL_MCP_MANAGE'		=> $this->helper->route('oxpus_dlext_mcp_manage'),
+			'U_DL_MCP_EDIT'			=> $this->helper->route('oxpus_dlext_mcp_edit'),
+			'U_DL_MCP_APPROVE'		=> $this->helper->route('oxpus_dlext_mcp_approve'),
+			'U_DL_MCP_BROKEN'		=> $this->helper->route('oxpus_dlext_mcp_broken'),
+			'U_DL_MCP_CAPPROVE'		=> $this->helper->route('oxpus_dlext_mcp_capprove'),
+
+			'U_MCP'					=> ($mcp_cat && $this->dlext_auth->user_auth($mcp_cat, 'auth_mod')) ? $this->helper->route('oxpus_dlext_mcp_manage', ['view' => 'toolbox', 'cat_id' => $mcp_cat]) : $this->helper->route('oxpus_dlext_mcp_manage'),
+		]);
 	}
 }

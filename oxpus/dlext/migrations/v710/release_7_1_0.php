@@ -3,7 +3,7 @@
 /**
 *
 * @package phpBB Extension - Oxpus Downloads
-* @copyright (c) 2002-2020 OXPUS - www.oxpus.net
+* @copyright (c) 2002-2021 OXPUS - www.oxpus.net
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
 */
@@ -67,6 +67,16 @@ class release_7_1_0 extends \phpbb\db\migration\migration
 		return [
 			'drop_tables' => [
 				$this->table_prefix . 'dl_ver_files',
+			],
+
+			'drop_columns'	=> [
+				$this->table_prefix . 'dl_versions' => [
+					'ver_text',
+					'ver_uid',
+					'ver_bitfield',
+					'ver_flags',
+					'ver_active',
+				],
 			],
 		];
 	}

@@ -3,39 +3,33 @@
 /**
 *
 * @package phpBB Extension - Oxpus Downloads
-* @copyright (c) 2002-2020 OXPUS - www.oxpus.net
+* @copyright (c) 2002-2021 OXPUS - www.oxpus.net
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
 */
 
 namespace oxpus\dlext\controller;
 
+use Symfony\Component\HttpFoundation\Response;
+
 class help
 {
-	/* @var \phpbb\language\language */
+	/* phpbb objects */
 	protected $language;
-
-	/* @var \phpbb\template\template */
-	protected $template;
-
-	/* @var \phpbb\request\request_interface */
 	protected $request;
 
 	/**
 	* Constructor
 	*
-	* @param \phpbb\language\language 				$language
-	* @param \phpbb\template\template				$template
-	* @param \phpbb\request\request_interface 		$request
+	* @param \phpbb\language\language 		$language
+	* @param \phpbb\request\request 		$request
 	*/
 	public function __construct(
 		\phpbb\language\language $language,
-		\phpbb\template\template $template,
-		\phpbb\request\request_interface $request
+		\phpbb\request\request $request
 	)
 	{
 		$this->language		= $language;
-		$this->template 	= $template;
 		$this->request		= $request;
 	}
 
@@ -56,7 +50,7 @@ class help
 		}
 		else
 		{
-			$help_string = $this->language->lang('DL_NO_HELP_AVIABLE');
+			$help_string = $this->language->lang('DL_NO_HELP_AVAILABLE');
 		}
 
 		if ($value)
@@ -77,24 +71,6 @@ class help
 			$help_option = '';
 		}
 
-		$json_out = json_encode(['title' => $this->language->lang('HELP_TITLE'), 'option' => $help_option, 'string' => $help_string]);
-
-		$http_headers = [
-			'Content-type' => 'text/html; charset=UTF-8',
-			'Cache-Control' => 'private, no-cache="set-cookie"',
-			'Expires' => gmdate('D, d M Y H:i:s', time()) . ' GMT',
-		];
-
-		foreach ($http_headers as $hname => $hval)
-		{
-			header((string) $hname . ': ' . (string) $hval);
-		}
-
-		$this->template->set_filenames(['body' => 'dl_json.html']);
-		$this->template->assign_var('JSON_OUTPUT', $json_out);
-		$this->template->display('body');
-
-		garbage_collection();
-		exit_handler();
+		return new Response(json_encode(['title' => $this->language->lang('HELP_TITLE'), 'option' => $help_option, 'string' => $help_string]));
 	}
 }

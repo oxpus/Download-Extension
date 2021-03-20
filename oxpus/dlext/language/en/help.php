@@ -3,7 +3,7 @@
 /**
 *
 * @package phpBB Extension - Oxpus Downloads
-* @copyright (c) 2002-2020 OXPUS - www.oxpus.net
+* @copyright (c) 2002-2021 OXPUS - www.oxpus.net
 * @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
 */
@@ -28,7 +28,7 @@ if (empty($lang) || !is_array($lang))
 $lang = array_merge($lang, [
 	'HELP_TITLE' => 'Download Extension Online Help',
 
-	'DL_NO_HELP_AVIABLE' => 'There is no help available for this option',
+	'DL_NO_HELP_AVAILABLE' => 'There is no help available for this option',
 
 	'HELP_DL_ACTIVE'			=> 'Turns the Downloads according to the following options on or off.',
 	'HELP_DL_ANTISPAM'			=> 'This option blocks downloads for which the user must have beside the required amount of traffic the required number of posted and the user posted the number of posts in the last hours.<br /><br />Example:<br />The settings contains 25 posts in 24 hours.<br />Based on this settings the downloads will blocked for the user if he/she will post 25 or more new posts in the last 24 hours.<br />This option shall prevent spamming for downloads, specially for new users, before a team member will get knowledge about this to take actions.<br />The download will still be shown as available to seduce the user. The user will only get a message about missing permissions.<br /><br />To disable this check just set one or both values to 0.',
@@ -78,7 +78,7 @@ $lang = array_merge($lang, [
 
 	'HELP_DL_HACK_AUTOR'			=> 'The author of this download file.<br />Leave this empty to hide this value at the download details and overall view.',
 	'HELP_DL_HACK_AUTOR_EMAIL'		=> 'The email address of the author.<br />If you do not enter it here, it will be hidden at the download details and overall view.',
-	'HELP_DL_HACK_AUTOR_WEBSITE'	=> 'Website of the author.<br />This URL should be the website of the author, not the page for the download (not all times the same).<br />Please do not enter links to protected sites or websites with doubtful contents.',
+	'HELP_DL_HACK_AUTOR_WEBSITE'	=> 'Website of the author.<br />This URL should be the website of the author, not the page for the download (not all times the same).<br />Please do not enter links to private sites or websites with doubtful contents.',
 	'HELP_DL_HACK_DL_URL'			=> 'The page to an alternative download for this file.<br />This can be the website of the author or an other alternative website.<br />Please do not enter links for a direct download if the author will not allow this.',
 	'HELP_DL_HACK_VERSION'			=> 'The declaration about the download release.<br />This will be all times displayed beside the download.<br />You can not search for this.',
 	'HELP_DL_HACKLIST'				=> 'With this option you can add this download to the hack list (this must be enabled in the main configuration) if you choose Yes here.<br />No will not insert the download into the hack list.<br />Showing extra informations will display this block only in the download details.',

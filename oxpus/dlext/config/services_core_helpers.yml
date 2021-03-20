@@ -1,0 +1,42 @@
+services:
+    oxpus.dlext.helpers.constants:
+        class: oxpus\dlext\core\helpers\constants
+        public: true
+        arguments:
+            - '%core.root_path%'
+            - '@config'
+            - '@user'
+            - '@dbal.conn'
+            - '@filesystem'
+            - '%oxpus.dlext.tables.dl_banlist%'
+    oxpus.dlext.helpers.footer:
+        class: oxpus\dlext\core\helpers\footer
+        public: true
+        arguments:
+            - '@language'
+            - '@template'
+            - '@controller.helper'
+            - '@config'
+            - '@user'
+            - '@request'
+            - '@oxpus.dlext.core.auth'
+            - '@oxpus.dlext.core.cache'
+            - '@oxpus.dlext.core.counter'
+            - '@oxpus.dlext.core.extra'
+            - '@oxpus.dlext.core.files'
+            - '@oxpus.dlext.core.format'
+            - '@oxpus.dlext.core.main'
+            - '@oxpus.dlext.core.physical'
+            - '@oxpus.dlext.helpers.constants'
+            - '@oxpus.dlext.helpers.navigation'
+    oxpus.dlext.helpers.navigation:
+        class: oxpus\dlext\core\helpers\navigation
+        public: true
+        arguments:
+            - '@language'
+            - '@template'
+            - '@controller.helper'
+            - '@dbal.conn'
+            - '@oxpus.dlext.core.auth'
+            - '@oxpus.dlext.core.nav'
+            - '%oxpus.dlext.tables.downloads%'
