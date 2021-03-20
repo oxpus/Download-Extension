@@ -51,4 +51,9 @@ class release_8_1_0rc1 extends \phpbb\db\migration\migration
 			],
 		];
 	}
+
+	public function revert_schema()
+	{
+		return [];
+	}
 }
