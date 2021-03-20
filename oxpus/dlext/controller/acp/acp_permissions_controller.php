@@ -209,11 +209,11 @@ class acp_permissions_controller implements acp_permissions_interface
 					'FROM'	=> [GROUPS_TABLE => 'g'],
 					'ON'	=> 'g.group_id = a.group_id'
 				];
-		
+
 				$sql_array['WHERE'] = $this->db->sql_in_set('c.id', $s_presel_cats);
-		
+
 				$sql_array['ORDER_BY']	= 'c.sort, c.cat_name, g.group_type DESC, g.group_name';
-		
+
 				$sql = $this->db->sql_build_query('SELECT', $sql_array);
 				$result = $this->db->sql_query($sql);
 

@@ -90,7 +90,7 @@ class mcp_edit
 		$php_ext,
 		\phpbb\extension\manager $extension_manager,
 		\phpbb\cache\service $cache,
-		\phpbb\notification\manager  $notification,
+		\phpbb\notification\manager $notification,
 		\phpbb\db\driver\driver_interface $db,
 		\phpbb\config\config $config,
 		\phpbb\config\db_text $config_text,
@@ -855,7 +855,7 @@ class mcp_edit
 					{
 						$thumb_pic_extension = trim(strrchr(strtolower($thumb_name), '.'));
 						$thumb_upload_filename = $df_id . '_' . unique_id() . $thumb_pic_extension;
-	
+
 						if ($dl_file['thumbnail'])
 						{
 							$this->filesystem->remove($this->dlext_constants->get_value('files_dir') . '/thumbs/' . $dl_file['thumbnail']);

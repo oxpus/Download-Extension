@@ -88,8 +88,8 @@ class mcp_manage
 	public function __construct(
 		$root_path,
 		$php_ext,
-		\phpbb\cache\service $cache, 
-		\phpbb\notification\manager  $notification,
+		\phpbb\cache\service $cache,
+		\phpbb\notification\manager $notification,
 		\phpbb\pagination $pagination,
 		\phpbb\db\driver\driver_interface $db,
 		\phpbb\config\config $config,
@@ -107,16 +107,16 @@ class mcp_manage
 		\oxpus\dlext\core\topic $dlext_topic,
 		\oxpus\dlext\core\status $dlext_status,
 		\oxpus\dlext\core\helpers\constants $dlext_constants,
-		$dlext_table_dl_comments, 
-		$dlext_table_dl_favorites, 
-		$dlext_table_dl_fields_data, 
-		$dlext_table_dl_images, 
-		$dlext_table_dl_notraf, 
-		$dlext_table_dl_ratings, 
-		$dlext_table_dl_stats, 
-		$dlext_table_dl_ver_files, 
-		$dlext_table_dl_versions, 
-		$dlext_table_downloads, 
+		$dlext_table_dl_comments,
+		$dlext_table_dl_favorites,
+		$dlext_table_dl_fields_data,
+		$dlext_table_dl_images,
+		$dlext_table_dl_notraf,
+		$dlext_table_dl_ratings,
+		$dlext_table_dl_stats,
+		$dlext_table_dl_ver_files,
+		$dlext_table_dl_versions,
+		$dlext_table_downloads,
 		$dlext_table_dl_cat
 	)
 	{
@@ -167,7 +167,7 @@ class mcp_manage
 
 		$this->template->assign_vars([
 			'DL_MCP_TAB_MODULE'		=> $this->language->lang('DL_MANAGE'),
-	
+
 			'S_DL_MCP'				=> $this->dlext_constants::DL_TRUE,
 			'S_DL_MCP_TAB_MANAGE'	=> $this->dlext_constants::DL_TRUE,
 		]);
@@ -436,7 +436,7 @@ class mcp_manage
 								$sql_image = 'SELECT img_name FROM ' . $this->dlext_table_dl_images . '
 										WHERE ' . $this->db->sql_in_set('dl_id', $dlo_id);
 								$result_image = $this->db->sql_query($sql_image);
-			
+
 								while ($row_image = $this->db->sql_fetchrow($result_image))
 								{
 									if ($row_image['img_name'])
@@ -444,7 +444,7 @@ class mcp_manage
 										$this->filesystem->remove($this->dlext_constants->get_value('files_dir') . '/thumbs/' . $row_image['img_name']);
 									}
 								}
-			
+
 								$this->db->sql_freeresult($result_image);
 							}
 

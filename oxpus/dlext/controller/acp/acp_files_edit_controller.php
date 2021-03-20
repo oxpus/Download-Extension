@@ -772,7 +772,7 @@ class acp_files_edit_controller implements acp_files_edit_interface
 						while ($this->filesystem->exists($this->dlext_constants->get_value('files_dir') . '/downloads/' . $file_path_new . $new_real_file))
 						{
 							$new_real_file = $this->dlext_format->encrypt($file_name) . '.' . $extension;
- 						}
+						}
 
 						$this->filesystem->rename($this->dlext_constants->get_value('files_dir') . '/downloads/' . $file_path_old . $file_name, $this->dlext_constants->get_value('files_dir') . '/downloads/' . $file_path_new . $new_real_file);
 

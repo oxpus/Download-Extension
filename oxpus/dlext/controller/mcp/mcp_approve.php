@@ -50,7 +50,7 @@ class mcp_approve
 	* @param string									$dlext_table_downloads
 	*/
 	public function __construct(
-		\phpbb\notification\manager  $notification,
+		\phpbb\notification\manager $notification,
 		\phpbb\pagination $pagination,
 		\phpbb\db\driver\driver_interface $db,
 		\phpbb\config\config $config,

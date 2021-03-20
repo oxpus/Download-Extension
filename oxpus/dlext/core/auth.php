@@ -83,7 +83,7 @@ class auth implements auth_interface
 
 		if (!empty($group_perm_ids))
 		{
-			$cat_auth_array = $this->dlext_cache->obtain_dl_access_groups($auth_cat, $group_perm_ids, $user_id, $auth_perm);
+			$cat_auth_array = $this->dlext_cache->obtain_dl_access_groups($auth_cat, $user_id, $auth_perm, $group_perm_ids);
 		}
 
 		return $cat_auth_array;

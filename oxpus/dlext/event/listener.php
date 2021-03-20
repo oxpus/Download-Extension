@@ -98,14 +98,14 @@ class listener implements EventSubscriberInterface
 		\oxpus\dlext\core\main $dlext_main,
 		\oxpus\dlext\core\privacy $dlext_privacy,
 		\oxpus\dlext\core\helpers\constants $dlext_constants,
-		$dlext_table_dl_banlist, 
-		$dlext_table_dl_cat_traf, 
-		$dlext_table_dl_comments, 
+		$dlext_table_dl_banlist,
+		$dlext_table_dl_cat_traf,
+		$dlext_table_dl_comments,
 		$dlext_table_dl_favorites,
 		$dlext_table_dl_hotlink,
-		$dlext_table_dl_notraf, 
-		$dlext_table_dl_stats, 
-		$dlext_table_downloads, 
+		$dlext_table_dl_notraf,
+		$dlext_table_dl_stats,
+		$dlext_table_downloads,
 		$dlext_table_dl_cat
 	)
 	{

@@ -54,7 +54,7 @@ class mcp_capprove
 	public function __construct(
 		$root_path,
 		$php_ext,
-		\phpbb\notification\manager  $notification,
+		\phpbb\notification\manager $notification,
 		\phpbb\pagination $pagination,
 		\phpbb\db\driver\driver_interface $db,
 		\phpbb\config\config $config,

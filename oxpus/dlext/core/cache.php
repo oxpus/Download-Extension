@@ -293,7 +293,7 @@ class cache implements cache_interface
 	/**
 	 * Download Extension Auth Group Settings Cache
 	*/
-	public function obtain_dl_access_groups($auth_cat, $group_perm_ids = [], $user_id, $auth_perm)
+	public function obtain_dl_access_groups($auth_cat, $user_id, $auth_perm, $group_perm_ids = [])
 	{
 		$cat_auth_array	= [];
 		$dl_auth_groups	= [];

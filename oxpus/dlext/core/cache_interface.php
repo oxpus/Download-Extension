@@ -62,11 +62,11 @@ interface cache_interface
 	 * Download Extension Auth Group Settings Cache
 	 *
 	 * @param array $auth_cat category ids used in auth table
-	 * @param int $group_perm_ids group ids used in auth table
 	 * @param int $user_id user id to proof permissions fore
 	 * @param array $auth_perm predefined permissions
+	 * @param int $group_perm_ids group ids used in auth table
 	 * @return array complete download auth group data based on user groups
 	 * @access public
 	*/
-	public function obtain_dl_access_groups($auth_cat, $group_perm_ids, $user_id, $auth_perm);
+	public function obtain_dl_access_groups($auth_cat, $user_id, $auth_perm, $group_perm_ids = []);
 }

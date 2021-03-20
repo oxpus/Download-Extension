@@ -87,16 +87,16 @@ class topic implements topic_interface
 		{
 			return;
 		}
-	
+
 		$sql = 'SELECT id, description, dl_topic, long_desc, file_name, extern, file_size, cat, hack_version, add_user, long_desc_uid, long_desc_flags, desc_uid, desc_bitfield, desc_flags
 				FROM ' . $this->dlext_table_downloads . '
 				WHERE id = ' . (int) $dl_id;
 		$result = $this->db->sql_query($sql);
 		$row = $this->db->sql_fetchrow($result);
 		$this->db->sql_freeresult($result);
-	
+
 		$topic_id = $row['dl_topic'];
-	
+
 		if (!$topic_id && $mode == 'edit')
 		{
 			$mode = 'post';
@@ -110,13 +110,13 @@ class topic implements topic_interface
 			$result = $this->db->sql_query($sql);
 			$topic_exists = $this->db->sql_affectedrows();
 			$this->db->sql_freeresult($result);
-	
+
 			if ($topic_exists)
 			{
 				$mode = 'edit';
 			}
 		}
-	
+
 		$description		= $row['description'];
 		$long_desc			= $row['long_desc'];
 		$file_name			= $row['file_name'];
@@ -130,30 +130,30 @@ class topic implements topic_interface
 		$desc_bitfield		= $row['desc_bitfield'];
 		$desc_flags			= $row['desc_flags'];
 		$cat_id				= $row['cat'];
-	
+
 		$long_text			= generate_text_for_edit($long_desc, $long_desc_uid, $long_desc_flags);
 		$long_desc			= $long_text['text'];
 		$dl_title			= generate_text_for_display($description, $desc_uid, $desc_bitfield, $desc_flags);
 		$desc_text			= generate_text_for_edit($description, $desc_uid, $desc_flags);
 		$description		= $desc_text['text'];
-	
+
 		if ($this->config['dl_topic_title_catname'])
 		{
 			$dl_title .= ' (' . $this->dl_index[$cat_id]['cat_name_nav'] . ')';
 		}
-	
+
 		$topic_text_add = "\n[b]" . $this->language->lang('DL_NAME') . ":[/b] " . $description;
-	
+
 		if ($this->config['dl_topic_post_catname'])
 		{
 			$topic_text_add .= "\n[b]" . $this->language->lang('DL_CAT_NAME') . ":[/b] " . $this->dl_index[$cat_id]['cat_name_nav'];
 		}
-	
+
 		$sql = 'SELECT username, user_colour
 				FROM ' . USERS_TABLE . '
 				WHERE user_id = ' . (int) $add_user;
 		$result = $this->db->sql_query($sql);
-	
+
 		if ($this->db->sql_affectedrows())
 		{
 			$row = $this->db->sql_fetchrow($result);
@@ -167,11 +167,11 @@ class topic implements topic_interface
 			$user_colour = $this->user->data['user_colour'];
 			$user_id = $this->user->data['user_id'];
 		}
-	
+
 		$this->db->sql_freeresult($result);
-	
+
 		$author_url		= get_username_string('profile', $user_id, $username, $user_colour);
-	
+
 		if ($user_colour)
 		{
 			$author_link = '[url=' . $author_url . '][color=#' . $user_colour . ']' . $username . '[/color][/url]';
@@ -180,20 +180,20 @@ class topic implements topic_interface
 		{
 			$author_link = '[url=' . $author_url . ']' . $username . '[/url]';
 		}
-	
+
 		$topic_text_add .= "\n[b]" . $this->language->lang('DL_HACK_AUTOR') . ":[/b] " . $author_link;
-	
+
 		$topic_text_add .= ($long_desc) ? "\n[b]" . $this->language->lang('DL_FILE_DESCRIPTION') . ":[/b] " . html_entity_decode($long_desc) : '';
 		$topic_text_add .= ($version) ? "\n\n[b]" . $this->language->lang('DL_HACK_VERSION') . ":[/b] " . $version : '';
 		$topic_text_add .= (!$topic_drop_mode) ? "\n[b]" . ((($extern) ? $this->language->lang('DL_EXTERN') : $this->language->lang('DL_FILE_NAME')) . ":[/b] " . $file_name) : '';
 		$topic_text_add .= (!$topic_drop_mode) ? (($extern) ? '' : "\n[b]" . $this->language->lang('DL_FILE_SIZE') . ":[/b] " . str_replace('&nbsp;', ' ', $this->dlext_format->dl_size($file_size))) : '';
-	
+
 		if ($this->config['dl_topic_forum'] == $this->dlext_constants::DL_NONE)
 		{
 			$topic_forum	= $this->dl_index[$cat_id]['dl_topic_forum'];
 			$topic_text		= $this->dl_index[$cat_id]['dl_topic_text'];
 			$topic_type		= $this->dl_index[$cat_id]['dl_topic_type'];
-	
+
 			if ($this->dl_index[$cat_id]['topic_more_details'] == $this->dlext_constants::DL_TOPIC_MORE_DETAILS_UNDER)
 			{
 				$topic_text .= "\n" . $topic_text_add;
@@ -208,7 +208,7 @@ class topic implements topic_interface
 			$topic_forum	= $this->config['dl_topic_forum'];
 			$topic_text		= $this->config['dl_topic_text'];
 			$topic_type		= $this->config['dl_topic_type'];
-	
+
 			if ($this->config['dl_topic_more_details'] == $this->dlext_constants::DL_TOPIC_MORE_DETAILS_UNDER)
 			{
 				$topic_text .= "\n" . $topic_text_add;
@@ -218,21 +218,21 @@ class topic implements topic_interface
 				$topic_text = $topic_text_add . "\n\n" . $topic_text;
 			}
 		}
-	
+
 		if (!$topic_forum)
 		{
 			return;
 		}
-	
+
 		$reset_perms = $this->dlext_constants::DL_FALSE;
-	
+
 		if (!$this->config['dl_diff_topic_user'] || ($this->config['dl_diff_topic_user'] == $this->dlext_constants::DL_TOPIC_USER_CAT && !$this->dl_index[$cat_id]['diff_topic_user']))
 		{
 			$sql_tmp = 'SELECT user_id
 						FROM ' . USERS_TABLE . '
 						WHERE user_id = ' . (int) $add_user;
 			$result_tmp = $this->db->sql_query($sql_tmp);
-	
+
 			if ($this->db->sql_affectedrows())
 			{
 				//Get add_user permissions
@@ -243,7 +243,7 @@ class topic implements topic_interface
 			{
 				$dl_topic_user_id = $this->user->data['user_id'];
 			}
-	
+
 			$this->db->sql_freeresult($result_tmp);
 		}
 		else if ($this->config['dl_diff_topic_user'] == $this->dlext_constants::DL_TOPIC_USER_OTHER && $this->config['dl_topic_user'])
@@ -252,7 +252,7 @@ class topic implements topic_interface
 						FROM ' . USERS_TABLE . '
 						WHERE user_id = ' . (int) $this->config['dl_topic_user'];
 			$result_tmp = $this->db->sql_query($sql_tmp);
-	
+
 			if ($this->db->sql_affectedrows())
 			{
 				//Get dl_topic_user permissions
@@ -263,7 +263,7 @@ class topic implements topic_interface
 			{
 				$dl_topic_user_id = $this->user->data['user_id'];
 			}
-	
+
 			$this->db->sql_freeresult($result_tmp);
 		}
 		else if ($this->config['dl_diff_topic_user'] == $this->dlext_constants::DL_TOPIC_USER_CAT && $this->dl_index[$cat_id]['diff_topic_user'])
@@ -272,7 +272,7 @@ class topic implements topic_interface
 						FROM ' . USERS_TABLE . '
 						WHERE user_id = ' . (int) $this->dl_index[$cat_id]['topic_user'];
 			$result_tmp = $this->db->sql_query($sql_tmp);
-	
+
 			if ($this->db->sql_affectedrows())
 			{
 				//Get category topic_user permissions
@@ -283,15 +283,15 @@ class topic implements topic_interface
 			{
 				$dl_topic_user_id = $this->user->data['user_id'];
 			}
-	
+
 			$this->db->sql_freeresult($result_tmp);
 		}
-	
+
 		if ($reset_perms)
 		{
 			$perms = $this->_change_auth($dl_topic_user_id);
 		}
-	
+
 		if ($this->config['dl_topic_title_catname'])
 		{
 			$topic_title = utf8_normalize_nfc($dl_title);
@@ -300,7 +300,7 @@ class topic implements topic_interface
 		{
 			$topic_title = utf8_normalize_nfc($this->language->lang('DL_TOPIC_SUBJECT', $dl_title));
 		}
-	
+
 		if ($topic_drop_mode)
 		{
 			$topic_text .= "\n\n[b]" . $this->language->lang('DL_VIEW_LINK') . ':[/b] ' . $this->language->lang('DL_TOPIC_DROP_MODE_MISSING');
@@ -309,11 +309,11 @@ class topic implements topic_interface
 		{
 			$topic_text .= "\n\n[b]" . $this->language->lang('DL_VIEW_LINK') . ':[/b] [url=' . generate_board_url($this->dlext_constants::DL_TRUE) . $this->helper->route('oxpus_dlext_details', ['df_id' => $dl_id], $this->dlext_constants::DL_TRUE, '') . ']' . $dl_title . '[/url]';
 		}
-	
+
 		$poll = [];
 		$forum_data = [];
 		$post_data = [];
-	
+
 		if ($mode == 'post')
 		{
 			$update_message	= $this->dlext_constants::DL_FALSE;
@@ -322,14 +322,14 @@ class topic implements topic_interface
 		{
 			$update_message	= $this->dlext_constants::DL_TRUE;
 		}
-	
+
 		$sql = 'SELECT forum_parents, forum_name
 				FROM ' . FORUMS_TABLE . '
 				WHERE forum_id = ' . (int) $topic_forum;
 		$result = $this->db->sql_query($sql);
 		$forum_data = $this->db->sql_fetchrow($result);
 		$this->db->sql_freeresult($result);
-	
+
 		if ($topic_id)
 		{
 			$sql = 'SELECT topic_first_post_id, topic_last_post_id, topic_time, topic_posts_approved, topic_posts_unapproved, topic_posts_softdeleted
@@ -338,7 +338,7 @@ class topic implements topic_interface
 			$result = $this->db->sql_query($sql);
 			$post_data = $this->db->sql_fetchrow($result);
 			$this->db->sql_freeresult($result);
-	
+
 			$post_id			= $post_data['topic_first_post_id'];
 			$post_edit_reason	= $this->language->lang('DL_DOWNLOAD_UPDATED');
 			$post_edit_user		= $this->user->data['user_id'];
@@ -353,9 +353,9 @@ class topic implements topic_interface
 			$post_edit_reason	= '';
 			$post_edit_user		= 0;
 		}
-	
+
 		$message		= utf8_normalize_nfc($topic_text);
-	
+
 		$bbcode_status	= $this->dlext_constants::DL_TRUE;
 		$smilies_status	= $this->dlext_constants::DL_TRUE;
 		$img_status		= $this->dlext_constants::DL_TRUE;
@@ -363,23 +363,23 @@ class topic implements topic_interface
 		$flash_status	= ($this->auth->acl_get('f_flash', $topic_forum) && $this->config['allow_post_flash']) ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE;
 		$quote_status	= $this->dlext_constants::DL_TRUE;
 		$enable_sig		= $this->dlext_constants::DL_TRUE;
-	
+
 		if (!class_exists('parse_message'))
 		{
 			include($this->root_path . 'includes/message_parser.' . $this->php_ext);
 		}
-	
+
 		$message_parser = new \parse_message();
-	
+
 		if (isset($message))
 		{
 			$message_parser->message = &$message;
 			unset($message);
 		}
-	
+
 		$message_parser->parse($bbcode_status, $url_status, $smilies_status, $img_status, $flash_status, $quote_status, $url_status);
 		$message_md5 = $this->dlext_format->encrypt($message_parser->message, 'post');
-	
+
 		$data = [
 			'topic_title'				=> $topic_title,
 			'topic_first_post_id'		=> (int) $post_data['topic_first_post_id'],
@@ -412,25 +412,25 @@ class topic implements topic_interface
 			'message'					=> $message_parser->message,
 			'topic_status'				=> ITEM_UNLOCKED,
 		];
-	
+
 		if ($mode == 'edit')
 		{
 			$data['topic_posts_approved']		= $post_data['topic_posts_approved'];
 			$data['topic_posts_unapproved']		= $post_data['topic_posts_unapproved'];
 			$data['topic_posts_softdeleted']	= $post_data['topic_posts_softdeleted'];
 		}
-	
+
 		if (!function_exists('submit_post'))
 		{
 			include($this->root_path . 'includes/functions_posting.' . $this->php_ext);
 		}
-	
+
 		submit_post($mode, $topic_title, $this->user->data['username'], $topic_type, $poll, $data, $update_message, $this->dlext_constants::DL_TRUE);
-	
+
 		if ($mode == 'post')
 		{
 			$topic_id = (int) $data['topic_id'];
-	
+
 			$sql = 'UPDATE ' . $this->dlext_table_downloads . ' SET ' . $this->db->sql_build_array('UPDATE', [
 				'dl_topic' => $topic_id]) . ' WHERE id = ' . (int) $dl_id;
 			$this->db->sql_query($sql);
@@ -442,24 +442,24 @@ class topic implements topic_interface
 				$sql = 'UPDATE ' . TOPICS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', ['topic_status' => ITEM_LOCKED]) . ' WHERE topic_id = ' . (int) $topic_id;
 				$this->db->sql_query($sql);
 			}
-	
+
 			// We need to sync the forum if we changed from current user to user id and back to get the correct colour, so do this for every updated download
 			if (!function_exists('sync'))
 			{
 				include($this->root_path . 'includes/functions_admin.' . $this->php_ext);
 			}
-	
+
 			sync('topic', 'topic_id', $topic_id, $this->dlext_constants::DL_FALSE, $this->dlext_constants::DL_FALSE);
 			sync('forum', 'forum_id', $topic_forum, $this->dlext_constants::DL_FALSE, $this->dlext_constants::DL_FALSE);
 		}
-	
+
 		if ($reset_perms)
 		{
 			//Restore user permissions
 			$this->_change_auth('', 'restore', $perms);
 		}
 	}
-	
+
 	public function delete_dl_topic($topic_ids, $topic_drop_mode = 'drop', $dl_ids = [])
 	{
 		if (!$topic_ids)

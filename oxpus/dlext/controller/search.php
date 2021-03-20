@@ -412,7 +412,7 @@ class search
 			$sql_access_cats	= ($this->dlext_auth->user_admin()) ? '' : ' AND ' . $this->db->sql_in_set('cat', $access_cats);
 
 			$sql = 'SELECT id FROM ' . $this->dlext_table_downloads . '
-				WHERE approve = 1 ' . (string) $sql_matching_users . (string)  $sql_access_cats . (string) $sql_cat_count;
+				WHERE approve = 1 ' . (string) $sql_matching_users . (string) $sql_access_cats . (string) $sql_cat_count;
 			$result = $this->db->sql_query($sql);
 			$total_found_dl = $this->db->sql_affectedrows();
 
