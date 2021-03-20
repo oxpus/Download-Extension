@@ -16,11 +16,6 @@
 
 namespace oxpus\dlext\includes;
 
-if (!defined('IN_PHPBB'))
-{
-	exit;
-}
-
 /**
 * Custom Profile Fields ACP
 * @package phpBB3
@@ -200,6 +195,11 @@ class custom_profile_admin extends custom_profile
 
 		return $options;
 	}
+}
+
+if (!defined('IN_PHPBB'))
+{
+	exit;
 }
 
 $cp = new custom_profile_admin();

@@ -16,11 +16,6 @@
 
 namespace oxpus\dlext\includes;
 
-if (!defined('IN_PHPBB'))
-{
-	exit;
-}
-
 /**
 * Custom Profile Fields
 * @package phpBB3
@@ -952,6 +947,11 @@ class custom_profile
 		$this->profile_fields = (!($row = $db->sql_fetchrow($result))) ? [] : $row;
 		$db->sql_freeresult($result);
 	}
+}
+
+if (!defined('IN_PHPBB'))
+{
+	exit;
 }
 
 $cp = new custom_profile();
