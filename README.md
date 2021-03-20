@@ -1,4 +1,4 @@
-Hotschi Download Extension
+# Hotschi Download Extension
 
 Download extension for phpBB forum systems.
 Offers files for download based on an extensive rule set.
