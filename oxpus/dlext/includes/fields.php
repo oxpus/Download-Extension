@@ -949,9 +949,7 @@ class custom_profile
 	}
 }
 
-if (!defined('IN_PHPBB'))
+if (defined('IN_PHPBB'))
 {
-	exit;
+	$cp = new custom_profile();
 }
-
-$cp = new custom_profile();

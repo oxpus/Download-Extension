@@ -197,9 +197,7 @@ class custom_profile_admin extends custom_profile
 	}
 }
 
-if (!defined('IN_PHPBB'))
+if (defined('IN_PHPBB'))
 {
-	exit;
+	$cp = new custom_profile_admin();
 }
-
-$cp = new custom_profile_admin();
