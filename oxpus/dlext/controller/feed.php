@@ -147,8 +147,6 @@ class feed
 
 				if (!empty($dl_files))
 				{
-					header("Content-Type: application/rss+xml");
-
 					for ($i = 0; $i < count($dl_files); ++$i)
 					{
 						$dl_id			= $dl_files[$i]['id'];
@@ -161,38 +159,34 @@ class feed
 							$timetmp	= $last_time;
 						}
 
-						$description	= $dl_files[$i]['description'];
-						$desc_uid		= $dl_files[$i]['desc_uid'];
+						$description		= $dl_files[$i]['description'];
+						$desc_uid			= $dl_files[$i]['desc_uid'];
+						$long_desc			= $dl_files[$i]['long_desc'];
+						$long_desc_uid		= $dl_files[$i]['long_desc_uid'];
+
 						$description	= censor_text($description);
 						strip_bbcode($description, $desc_uid);
 						$description	.= ' ' . $hack_version;
 
-						if ($this->config['dl_rss_desc_length'])
+						if ($long_desc)
 						{
-							$long_desc			= $dl_files[$i]['long_desc'];
-							$long_desc_uid		= $dl_files[$i]['long_desc_uid'];
+							$long_desc = censor_text($long_desc);
+							strip_bbcode($long_desc, $long_desc_uid);
 
-							if ($this->config['dl_rss_desc_length'] == $this->dlext_constants::DL_RSS_DESC_LENGTH_SHORT)
+							if ($this->config['dl_rss_desc_length'])
 							{
-								if (intval($this->config['dl_rss_desc_shorten']) && strlen($long_desc) > intval($this->config['dl_rss_desc_shorten']))
+								if ($this->config['dl_rss_desc_length'] == $this->dlext_constants::DL_RSS_DESC_LENGTH_SHORT)
 								{
-									$long_desc = substr($long_desc, 0, intval($this->config['dl_rss_desc_shorten'])) . ' [...] ';
-								}
-								else
-								{
-									$long_desc = '';
+									if (intval($this->config['dl_rss_desc_shorten']) && strlen($long_desc) > intval($this->config['dl_rss_desc_shorten']))
+									{
+										$long_desc = substr($long_desc, 0, intval($this->config['dl_rss_desc_shorten'])) . ' [...] ';
+									}
+									else
+									{
+										$long_desc = '';
+									}
 								}
 							}
-
-							if ($long_desc)
-							{
-								$long_desc = censor_text($long_desc);
-								strip_bbcode($long_desc, $long_desc_uid);
-							}
-						}
-						else
-						{
-							$long_desc = '';
 						}
 
 						if ($this->config['dl_rss_new_update'])
@@ -244,11 +238,11 @@ class feed
 		}
 
 		$this->template->assign_vars([
-			'DL_SITENAME'				=> $this->config['sitename'],
-			'DL_BOARD_URL'				=> generate_board_url() . '/',
+			'DL_SITENAME'			=> $this->config['sitename'],
+			'DL_BOARD_URL'			=> generate_board_url() . '/',
 			'DL_RSS_TIME_TMP'   	=> $timetmp,
-			'DL_SITE_DESCRIPTION'		=> $this->config['site_desc'],
-			'DL_RSS_LANG'				=> $this->user->data['user_lang'],
+			'DL_SITE_DESCRIPTION'	=> $this->config['site_desc'],
+			'DL_RSS_LANG'			=> $this->user->data['user_lang'],
 
 			'U_DL_RSS'				=> generate_board_url($this->dlext_constants::DL_TRUE) . $this->helper->route('oxpus_dlext_feed'),
 		]);
