@@ -34,7 +34,7 @@ class dlext extends \phpbb\notification\type\base
 	* @var bool|array False if the service should use it's default data
 	* 					Array of data (including keys 'id', 'lang', and 'group')
 	*/
-	public static $notification_option = [
+	static public $notification_option = [
 		'lang'	=> 'DL_NOTIFY_TYPE_NEW',
 		'group'	=> 'DL_NOTIFICATIONS',
 	];
@@ -71,7 +71,7 @@ class dlext extends \phpbb\notification\type\base
 	* @param array $data The data for the updated rules
 	* @return int Id of the notification
 	*/
-	public static function get_item_id($data)
+	static public function get_item_id($data)
 	{
 		return $data['df_id'];
 	}
@@ -82,7 +82,7 @@ class dlext extends \phpbb\notification\type\base
 	* @param array $data The data for the updated rules
 	* @return int Id of the parent
 	*/
-	public static function get_item_parent_id($data)
+	static public function get_item_parent_id($data)
 	{
 		// No parent
 		return 0;
