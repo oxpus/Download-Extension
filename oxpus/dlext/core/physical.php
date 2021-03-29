@@ -226,9 +226,17 @@ class physical implements physical_interface
 
 	/**
 	 * Send the selected file to the user client (webbrowser) = download
+	 * Function taken from phpBB 3.3.3
+	 * original (c) phpBB Limited <https://www.phpbb.com>
+	 * modified by oxpus for download extension
 	*/
 	public function send_file_to_browser($dl_file_data)
 	{
+		if (@ob_get_length())
+		{
+			@ob_end_clean();
+		}
+	
 		// Now the tricky part... let's dance
 		header('Cache-Control: private');
 
@@ -257,6 +265,9 @@ class physical implements physical_interface
 			}
 		}
 
+		// Close the db connection before sending the file etc.
+		file_gc($this->dlext_constants::DL_FALSE);
+
 		if (!set_modified_headers($dl_file_data['filetime'], $this->user->browser))
 		{
 			$size = $dl_file_data['filesize'];
@@ -269,29 +280,42 @@ class physical implements physical_interface
 			// Try to deliver in chunks
 			set_time_limit(0);
 
-			if (isset($dl_file_data['filestream']))
-			{
-				$stream = $dl_file_data['physical_file'];
-			}
-			else
-			{
-				$stream = file_get_contents($dl_file_data['physical_file']);
-			}
-
-			// Simulate the stream
-			$fp = fopen('php://temp', 'w+b');
-			fwrite($fp, $stream);
-			rewind($fp);
-
-			// Close the db connection before sending the file etc.
-			file_gc($this->dlext_constants::DL_FALSE);
+			$fp = @fopen($dl_file_data['physical_file'], 'rb');
 
 			if ($fp !== false)
 			{
-				$output = fopen('php://output', 'w+b');
-				stream_copy_to_stream($fp, $output);
+				// Deliver file partially if requested
+				if ($range = phpbb_http_byte_range($size))
+				{
+					fseek($fp, $range['byte_pos_start']);
+	
+					send_status_line(206, 'Partial Content');
+					header('Content-Range: bytes ' . $range['byte_pos_start'] . '-' . $range['byte_pos_end'] . '/' . $range['bytes_total']);
+					header('Content-Length: ' . $range['bytes_requested']);
+	
+					// First read chunks
+					while (!feof($fp) && ftell($fp) < $range['byte_pos_end'] - 8192)
+					{
+						echo fread($fp, 8192);
+					}
+					// Then, read the remainder
+					echo fread($fp, $range['bytes_requested'] % 8192);
+				}
+				else
+				{
+					while (!feof($fp))
+					{
+						echo fread($fp, 8192);
+					}
+				}
 				fclose($fp);
 			}
+			else
+			{
+				@readfile($dl_file_data['physical_file']);
+			}
+	
+			flush();
 		}
 
 		exit_handler();
