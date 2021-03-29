@@ -236,7 +236,7 @@ class physical implements physical_interface
 		{
 			@ob_end_clean();
 		}
-	
+
 		// Now the tricky part... let's dance
 		header('Cache-Control: private');
 
@@ -288,11 +288,11 @@ class physical implements physical_interface
 				if ($range = phpbb_http_byte_range($size))
 				{
 					fseek($fp, $range['byte_pos_start']);
-	
+
 					send_status_line(206, 'Partial Content');
 					header('Content-Range: bytes ' . $range['byte_pos_start'] . '-' . $range['byte_pos_end'] . '/' . $range['bytes_total']);
 					header('Content-Length: ' . $range['bytes_requested']);
-	
+
 					// First read chunks
 					while (!feof($fp) && ftell($fp) < $range['byte_pos_end'] - 8192)
 					{
@@ -314,7 +314,7 @@ class physical implements physical_interface
 			{
 				@readfile($dl_file_data['physical_file']);
 			}
-	
+
 			flush();
 		}
 
