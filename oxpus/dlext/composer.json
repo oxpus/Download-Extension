@@ -3,8 +3,8 @@
 	"type": "phpbb-extension",
 	"description": "Download Extension",
 	"homepage": "https://phpbb3.oxpus.net",
-	"version": "8.2.0",
-	"time": "2021-03-20",
+	"version": "8.2.1",
+	"time": "2021-03-31",
 	"license": "GPL-2.0-only",
 	"authors": [{
 			"name": "Karsten Ude",
