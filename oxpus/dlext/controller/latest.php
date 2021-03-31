@@ -374,7 +374,7 @@ class latest
 						'DL_RATE_COUNT'				=> ($rating_img_data != $this->dlext_constants::DL_FALSE) ? $rating_img_data['count']['count'] : '',
 						'DL_RATE_UNDO'				=> ($rating_img_data != $this->dlext_constants::DL_FALSE) ? $rating_img_data['count']['undo'] : '',
 						'DL_RATE_TITLE'				=> ($rating_img_data != $this->dlext_constants::DL_FALSE) ? $rating_img_data['count']['title'] : '',
-	
+
 						'U_DL_CAT_VIEW'				=> $cat_view,
 						'U_DL_LINK'					=> $dl_link,
 					]);
@@ -389,7 +389,7 @@ class latest
 							]);
 						}
 					}
-	
+
 					/**
 					 * Fetch additional data for the downloads
 					 *
