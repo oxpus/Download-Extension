@@ -649,6 +649,7 @@ class index
 
 				$s_rating_perm = $this->dlext_constants::DL_FALSE;
 				$rating_points = 0;
+				$total_ratings = 0;
 
 				if ($cat && $this->config['dl_enable_rate'])
 				{
@@ -699,8 +700,6 @@ class index
 				* Build rating imageset
 				*/
 				$rating_img_data	= $this->dlext_format->rating_img($rating_points, $s_rating_perm, $file_id, $total_ratings);
-				$rating_stars		= $rating_img_data['stars'];
-				$rating_data		= $rating_img_data['count'];
 
 				$this->template->assign_block_vars('downloads', [
 					'DL_DESCRIPTION'			=> $description,
@@ -716,20 +715,23 @@ class index
 					'DL_ADD_USER'				=> $add_user,
 					'DL_ADD_TIME'				=> $add_time,
 					'DL_ADD_TIME_RFC'			=> $add_time_rfc,
-					'DL_RATE_COUNT'				=> $rating_data['count'],
-					'DL_RATE_UNDO'				=> $rating_data['undo'],
-					'DL_RATE_TITLE'				=> $rating_data['title'],
+					'DL_RATE_COUNT'				=> ($rating_img_data != $this->dlext_constants::DL_FALSE) ? $rating_img_data['count']['count'] : '',
+					'DL_RATE_UNDO'				=> ($rating_img_data != $this->dlext_constants::DL_FALSE) ? $rating_img_data['count']['undo'] : '',
+					'DL_RATE_TITLE'				=> ($rating_img_data != $this->dlext_constants::DL_FALSE) ? $rating_img_data['count']['title'] : '',
 
 					'U_DL_DIRECT_EDIT'			=> ($cat_edit_link) ? $this->helper->route('oxpus_dlext_mcp_edit', ['cat_id' => $cat, 'df_id' => $file_id]) : '',
 					'U_DL_FILE'					=> $file_url,
 				]);
 
-				foreach ($rating_stars as $key => $data)
+				if ($rating_img_data != $this->dlext_constants::DL_FALSE)
 				{
-					$this->template->assign_block_vars('downloads.rating_img', [
-						'DL_RATE_STAR' 	=> $rating_stars[$key]['icon'],
-						'DL_RATE_AJAX'	=> $rating_stars[$key]['ajax'],
-					]);
+					foreach ($rating_img_data['stars'] as $key => $data)
+					{
+						$this->template->assign_block_vars('downloads.rating_img', [
+							'DL_RATE_STAR' 	=> $rating_img_data['stars'][$key]['icon'],
+							'DL_RATE_AJAX'	=> $rating_img_data['stars'][$key]['ajax'],
+						]);
+					}
 				}
 
 				if ($index_cat[$cat]['comments'] && ($this->dlext_auth->cat_auth_comment_read($cat) || $this->dlext_auth->cat_auth_comment_post($cat)))

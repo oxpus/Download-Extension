@@ -343,9 +343,7 @@ class overall
 						/*
 						* Build rating imageset
 						*/
-						$rating_img_data	= $this->dlext_format->rating_img($rating_points, $s_rating_perm, $file_id, $total_ratings);
-						$rating_stars		= $rating_img_data['stars'];
-						$rating_data		= $rating_img_data['count'];
+						$rating_img_data = $this->dlext_format->rating_img($rating_points, $s_rating_perm, $file_id, $total_ratings);
 
 						$this->template->assign_block_vars('downloads', [
 							'DL_CAT_NAME'				=> $cat_name,
@@ -357,22 +355,25 @@ class overall
 							'DL_HACK_VERSION'			=> $hack_version,
 							'DL_FILE_STATUS'			=> $file_status,
 							'DL_DF_ID'					=> $file_id,
-							'DL_RATE_COUNT'				=> $rating_data['count'],
-							'DL_RATE_UNDO'				=> $rating_data['undo'],
-							'DL_RATE_TITLE'				=> $rating_data['title'],
-
+							'DL_RATE_COUNT'				=> ($rating_img_data != $this->dlext_constants::DL_FALSE) ? $rating_img_data['count']['count'] : '',
+							'DL_RATE_UNDO'				=> ($rating_img_data != $this->dlext_constants::DL_FALSE) ? $rating_img_data['count']['undo'] : '',
+							'DL_RATE_TITLE'				=> ($rating_img_data != $this->dlext_constants::DL_FALSE) ? $rating_img_data['count']['title'] : '',
+	
 							'U_DL_CAT_VIEW'				=> $cat_view,
 							'U_DL_LINK'					=> $dl_link,
 						]);
 
-						foreach ($rating_stars as $key => $data)
+						if ($rating_img_data != $this->dlext_constants::DL_FALSE)
 						{
-							$this->template->assign_block_vars('downloads.rating_img', [
-								'DL_RATE_STAR' 	=> $rating_stars[$key]['icon'],
-								'DL_RATE_AJAX'		=> $rating_stars[$key]['ajax'],
-							]);
+							foreach ($rating_img_data['stars'] as $key => $data)
+							{
+								$this->template->assign_block_vars('downloads.rating_img', [
+									'DL_RATE_STAR' 	=> $rating_img_data['stars'][$key]['icon'],
+									'DL_RATE_AJAX'	=> $rating_img_data['stars'][$key]['ajax'],
+								]);
+							}
 						}
-
+	
 						/**
 						 * Fetch additional data for the downloads
 						 *

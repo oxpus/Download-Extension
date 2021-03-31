@@ -1151,8 +1151,6 @@ class details
 		* Build rating imageset
 		*/
 		$rating_img_data	= $this->dlext_format->rating_img($rating_points, $s_rating_perm, $df_id, $ratings);
-		$rating_stars		= $rating_img_data['stars'];
-		$rating_data		= $rating_img_data['count'];
 
 		/*
 		* Send the values to the template to be able to read something *g*
@@ -1195,9 +1193,9 @@ class details
 			'DL_HACK_AUTHOR_MAIL'		=> $hack_author_email,
 			'DL_HACK_AUTHOR_WEBSITE'	=> $hack_author_website,
 			'DL_HACK_DL_URL'			=> $hack_dl_url,
-			'DL_RATE_COUNT'				=> $rating_data['count'],
-			'DL_RATE_UNDO'				=> $rating_data['undo'],
-			'DL_RATE_TITLE'				=> $rating_data['title'],
+			'DL_RATE_COUNT'				=> ($rating_img_data != $this->dlext_constants::DL_FALSE) ? $rating_img_data['count']['count'] : '',
+			'DL_RATE_UNDO'				=> ($rating_img_data != $this->dlext_constants::DL_FALSE) ? $rating_img_data['count']['undo'] : '',
+			'DL_RATE_TITLE'				=> ($rating_img_data != $this->dlext_constants::DL_FALSE) ? $rating_img_data['count']['title'] : '',
 
 			'S_DL_ACTION'			=> $this->helper->route('oxpus_dlext_details'),
 			'S_DL_ENABLE_RATE'		=> (isset($this->config['dl_enable_rate']) && $this->config['dl_enable_rate']) ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE,
@@ -1232,12 +1230,15 @@ class details
 			'U_DL_AJAX'				=> $this->helper->route('oxpus_dlext_rate'),
 		]);
 
-		foreach ($rating_stars as $key => $data)
+		if ($rating_img_data != $this->dlext_constants::DL_FALSE)
 		{
-			$this->template->assign_block_vars('dl_rating_img', [
-				'DL_RATE_STAR' 	=> $rating_stars[$key]['icon'],
-				'DL_RATE_AJAX'		=> $rating_stars[$key]['ajax'],
-			]);
+			foreach ($rating_img_data['stars'] as $key => $data)
+			{
+				$this->template->assign_block_vars('dl_rating_img', [
+					'DL_RATE_STAR' 	=> $rating_img_data['stars'][$key]['icon'],
+					'DL_RATE_AJAX'	=> $rating_img_data['stars'][$key]['ajax'],
+				]);
+			}
 		}
 
 		/**
