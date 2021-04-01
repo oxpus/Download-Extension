@@ -280,40 +280,23 @@ class physical implements physical_interface
 			// Try to deliver in chunks
 			set_time_limit(0);
 
-			$fp = @fopen($dl_file_data['physical_file'], 'rb');
+			$out = fopen('php://output', 'wb');
 
-			if ($fp !== false)
+			if (isset($dl_file_data['filestream']))
 			{
-				// Deliver file partially if requested
-				if ($range = phpbb_http_byte_range($size))
-				{
-					fseek($fp, $range['byte_pos_start']);
-
-					send_status_line(206, 'Partial Content');
-					header('Content-Range: bytes ' . $range['byte_pos_start'] . '-' . $range['byte_pos_end'] . '/' . $range['bytes_total']);
-					header('Content-Length: ' . $range['bytes_requested']);
-
-					// First read chunks
-					while (!feof($fp) && ftell($fp) < $range['byte_pos_end'] - 8192)
-					{
-						echo fread($fp, 8192);
-					}
-					// Then, read the remainder
-					echo fread($fp, $range['bytes_requested'] % 8192);
-				}
-				else
-				{
-					while (!feof($fp))
-					{
-						echo fread($fp, 8192);
-					}
-				}
-				fclose($fp);
+				$file = fopen('php://memory', 'r+');
+				fwrite($file, $dl_file_data['physical_file']);
+				rewind($file);
 			}
 			else
 			{
-				@readfile($dl_file_data['physical_file']);
+				$file = fopen($dl_file_data['physical_file'], 'rb');
 			}
+
+			stream_copy_to_stream($file, $out);
+
+			fclose($out);
+			fclose($file);
 
 			flush();
 		}
