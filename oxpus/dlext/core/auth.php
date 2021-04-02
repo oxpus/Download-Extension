@@ -221,7 +221,7 @@ class auth implements auth_interface
 			break;
 
 			case $this->dlext_constants::DL_PERM_MOD:
-				foreach ($this->dl_index as $key)
+				foreach ($this->dl_index as $key => $value)
 				{
 					if ($this->user_auth($this->dl_index[$key]['id'], 'auth_mod'))
 					{
