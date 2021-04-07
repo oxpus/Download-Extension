@@ -539,14 +539,19 @@ class listener implements EventSubscriberInterface
 					AND d.id = ' . (int) $dl_id;
 		$result = $this->db->sql_query($sql);
 		$row = $this->db->sql_fetchrow($result);
+		$dl_found = $this->db->sql_affectedrows();
+		$this->db->sql_freeresult($result);
+
+		if (!$dl_found)
+		{
+			return $part[0];
+		}
 
 		$title			= $row['description'];
 		$desc_uid		= $row['desc_uid'];
 		$desc_bitfield	= $row['desc_bitfield'];
 		$desc_flags		= $row['desc_flags'];
 		$cat_name		= $row['cat_name'];
-
-		$this->db->sql_freeresult($result);
 
 		$title = generate_text_for_display($title, $desc_uid, $desc_bitfield, $desc_flags);
 
