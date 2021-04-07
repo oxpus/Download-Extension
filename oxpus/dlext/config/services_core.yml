@@ -124,6 +124,7 @@ services:
             - '@oxpus.dlext.core.format'
             - '@oxpus.dlext.helpers.constants'
             - '%oxpus.dlext.tables.dl_versions%'
+            - '%oxpus.dlext.tables.downloads%'
     oxpus.dlext.core.privacy:
         class: oxpus\dlext\core\privacy
         public: true

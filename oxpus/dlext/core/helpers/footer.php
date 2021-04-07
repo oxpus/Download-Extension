@@ -267,7 +267,7 @@ class footer implements footer_interface
 				{
 					foreach ($dl_file_p as $key => $value)
 					{
-						$total_cur_clicks += $dl_file_p[$key]['klicks'];
+						$total_cur_clicks += $dl_file_p[$key]['k'];
 					}
 				}
 
@@ -290,15 +290,14 @@ class footer implements footer_interface
 					$check_edit_time	= time() - ($this->config['dl_edit_time'] * $this->dlext_constants::DL_ONE_DAY);
 
 					$sql_latest_where = ['add_time' => ['AND', '>=', (int) $check_add_time], 'change_time' => ['OR', '>=', (int) $check_edit_time]];
+					$dl_latest_files = $this->dlext_files->all_files(0, [], $sql_latest_where, 0, 0, ['id'], 1);
+
+					if (!empty($dl_latest_files))
+					{
+						$this->template->assign_var('U_DL_LATEST_DOWNLOADS', $this->helper->route('oxpus_dlext_latest'));
+					}
 				}
 				else
-				{
-					$sql_latest_where = [];
-				}
-
-				$dl_latest_files = $this->dlext_files->all_files(0, [], $sql_latest_where, 0, 0, ['id'], 1);
-
-				if (!empty($dl_latest_files))
 				{
 					$this->template->assign_var('U_DL_LATEST_DOWNLOADS', $this->helper->route('oxpus_dlext_latest'));
 				}

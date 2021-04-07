@@ -318,20 +318,17 @@ class acp_permissions_controller implements acp_permissions_interface
 						]);
 					}
 
-					if ($row['group_type'])
-					{
-						$group_name = ($row['group_type'] == GROUP_SPECIAL) ? $this->language->lang('G_' . $row['group_name']) : $row['group_name'];
-						$group_sep = ($row['group_type'] == GROUP_SPECIAL) ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE;
+					$group_name = ($row['group_type'] == GROUP_SPECIAL) ? $this->language->lang('G_' . $row['group_name']) : $row['group_name'];
+					$group_sep = ($row['group_type'] == GROUP_SPECIAL) ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE;
 
-						$this->template->assign_block_vars('cat_perm_block.perm_row', [
-							'DL_GROUP_NAME'		=> $group_name,
-							'DL_GROUP_SEP'		=> $group_sep,
-							'DL_AUTH_VIEW'		=> $row['auth_view'],
-							'DL_AUTH_DL'		=> $row['auth_dl'],
-							'DL_AUTH_UP'		=> $row['auth_up'],
-							'DL_AUTH_MOD'		=> $row['auth_mod'],
-						]);
-					}
+					$this->template->assign_block_vars('cat_perm_block.perm_row', [
+						'DL_GROUP_NAME'		=> $group_name,
+						'DL_GROUP_SEP'		=> $group_sep,
+						'DL_AUTH_VIEW'		=> $row['auth_view'],
+						'DL_AUTH_DL'		=> $row['auth_dl'],
+						'DL_AUTH_UP'		=> $row['auth_up'],
+						'DL_AUTH_MOD'		=> $row['auth_mod'],
+					]);
 				}
 
 				$this->db->sql_freeresult($result);

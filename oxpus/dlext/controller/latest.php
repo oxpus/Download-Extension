@@ -212,12 +212,27 @@ class latest
 			'U_DL_AJAX'			=> $this->helper->route('oxpus_dlext_rate'),
 		]);
 
+		$total_files = 0;
+		$access_cats = [];
+
+		foreach ($index as $cat_id => $value)
+		{
+			if (!empty($index[$cat_id]['total']))
+			{
+				$total_files += $index[$cat_id]['total'];
+			}
+			$access_cats[] = $cat_id;
+		}
+
+		$latest_where = ['{cat_perm}' => ['AND', 'IN', $this->db->sql_in_set('cat', $access_cats)]];
+
 		if ($this->config['dl_latest_type'] == $this->dlext_constants::DL_LATEST_TYPE_DEFAULT)
 		{
 			$check_add_time		= time() - ($this->config['dl_new_time'] * $this->dlext_constants::DL_ONE_DAY);
 			$check_edit_time	= time() - ($this->config['dl_edit_time'] * $this->dlext_constants::DL_ONE_DAY);
 
-			$latest_where = ['add_time' => ['AND', '>=', (int) $check_add_time], 'change_time' => ['OR', '>=', (int) $check_edit_time]];
+			$latest_where += ['add_time' => ['AND', '>=', (int) $check_add_time]];
+			$latest_where += ['change_time' => ['OR', '>=', (int) $check_edit_time]];
 
 			if ($sql_sort_by == 'sort')
 			{
@@ -230,26 +245,7 @@ class latest
 		}
 		else
 		{
-			$latest_where = [];
 			$sort_ary = ['change_time' => 'DESC'];
-		}
-
-		$dl_files = $this->dlext_files->all_files(0, [], $latest_where, 0, 0, ['id', 'cat']);
-
-		$total_files = 0;
-
-		if (!empty($dl_files))
-		{
-			for ($i = 0; $i < count($dl_files); ++$i)
-			{
-				$cat_id = $dl_files[$i]['cat'];
-				$cat_auth = $this->dlext_auth->dl_cat_auth($cat_id);
-
-				if (isset($cat_auth['auth_view']) && $cat_auth['auth_view'] || isset($index[$cat_id]['auth_view']) && $index[$cat_id]['auth_view'] || $this->dlext_auth->user_admin())
-				{
-					++$total_files;
-				}
-			}
 		}
 
 		if ($total_files)

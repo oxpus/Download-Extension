@@ -209,21 +209,16 @@ class overall
 				'U_DL_AJAX'			=> $this->helper->route('oxpus_dlext_rate'),
 			]);
 
-			$dl_files = $this->dlext_files->all_files(0, [], [], 0, 0, ['id', 'cat']);
-
 			$total_files = 0;
+			$access_cats = [];
 
-			if (!empty($dl_files))
+			foreach ($index as $cat_id => $value)
 			{
-				for ($i = 0; $i < count($dl_files); ++$i)
+				if (!empty($index[$cat_id]['total']))
 				{
-					$cat_id = $dl_files[$i]['cat'];
-					$cat_auth = $this->dlext_auth->dl_cat_auth($cat_id);
-					if (isset($cat_auth['auth_view']) && $cat_auth['auth_view'] || isset($index[$cat_id]['auth_view']) && $index[$cat_id]['auth_view'] || $this->dlext_auth->user_admin())
-					{
-						++$total_files;
-					}
+					$total_files += $index[$cat_id]['total'];
 				}
+				$access_cats[] = $cat_id;
 			}
 
 			if ($total_files)
@@ -263,7 +258,8 @@ class overall
 			}
 
 			$fields = ['cat', 'id', 'description', 'desc_uid', 'desc_bitfield', 'desc_flags', 'hack_version', 'extern', 'file_size', 'klicks', 'overall_klicks', 'rating'];
-			$dl_files = $this->dlext_files->all_files(0, $sort_ary, [], 0, 0, $fields, $this->config['dl_links_per_page'], $start);
+			$where_cats = ['{cat_perm}' => ['AND', 'IN', $this->db->sql_in_set('cat', $access_cats)]];
+			$dl_files = $this->dlext_files->all_files(0, $sort_ary, $where_cats, 0, 0, $fields, $this->config['dl_links_per_page'], $start);
 
 			/**
 			 * Fetch additional data for the downloads

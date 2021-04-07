@@ -366,13 +366,14 @@ class cache implements cache_interface
 
 		if (($dl_file_p = $this->cache->get('_dlext_file_p')) === false)
 		{
-			$sql = 'SELECT id, cat, file_name, real_file, file_size, extern, free, file_traffic, klicks FROM ' . $this->dlext_table_downloads . '
+			$sql = 'SELECT id as i, cat as c, file_size as s, extern as e, free as f, file_traffic as t, klicks as k 
+					FROM ' . $this->dlext_table_downloads . '
 					WHERE approve = 1';
 			$result = $this->db->sql_query($sql);
 
 			while ($row = $this->db->sql_fetchrow($result))
 			{
-				$dl_file_p[$row['id']] = $row;
+				$dl_file_p[$row['i']] = $row;
 			}
 			$this->db->sql_freeresult($result);
 

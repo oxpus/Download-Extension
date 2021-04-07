@@ -28,11 +28,12 @@ class physical implements physical_interface
 	protected $dlext_constants;
 
 	protected $dlext_table_dl_versions;
+	protected $dlext_table_downloads;
 
 	/**
 	* Constructor
 	*
-	* @param string 										$root_path
+	* @param string 								$root_path
 	* @param \phpbb\language\language				$language
 	* @param \phpbb\db\driver\driver_interface		$db
 	* @param \phpbb\user							$user
@@ -42,6 +43,7 @@ class physical implements physical_interface
 	* @param \oxpus\dlext\core\format				$dlext_format
 	* @param \oxpus\dlext\core\helpers\constants	$dlext_constants
 	* @param string									$dlext_table_dl_versions
+	* @param string									$dlext_table_downloads
 	*/
 	public function __construct(
 		$root_path,
@@ -53,7 +55,8 @@ class physical implements physical_interface
 		\oxpus\dlext\core\files $dlext_files,
 		\oxpus\dlext\core\format $dlext_format,
 		\oxpus\dlext\core\helpers\constants $dlext_constants,
-		$dlext_table_dl_versions
+		$dlext_table_dl_versions,
+		$dlext_table_downloads
 	)
 	{
 		$this->root_path			= $root_path;
@@ -70,6 +73,7 @@ class physical implements physical_interface
 		$this->dlext_constants		= $dlext_constants;
 
 		$this->dlext_table_dl_versions	= $dlext_table_dl_versions;
+		$this->dlext_table_downloads	= $dlext_table_downloads;
 	}
 
 	public function read_exist_files()
@@ -119,24 +123,29 @@ class physical implements physical_interface
 
 	public function read_dl_sizes($download_dir = '')
 	{
-		$file_size = 0;
-
-		if (!$download_dir)
+		if ($download_dir)
 		{
-			$download_dir = $this->dlext_constants->get_value('files_dir', $this->dlext_constants::DL_TRUE) . '/downloads/';
-		}
+			$file_size = 0;
 
-		$files = $this->finder
+			$files = $this->finder
 			->set_extensions([])
 			->core_path($download_dir)
 			->find(false);
 
-		foreach ($files as $file => $path)
-		{
-			if (basename($file) != 'index.html')
+			foreach ($files as $file => $path)
 			{
-				$file_size += sprintf("%u", filesize($this->root_path . $file));
+				if (basename($file) != 'index.html')
+				{
+					$file_size += sprintf("%u", filesize($this->root_path . $file));
+				}
 			}
+		}
+		else
+		{
+			$sql = 'SELECT SUM(file_size) AS total_size FROM . ' . $this->dlext_table_downloads;
+			$result = $this->db->sql_query($sql);
+			$file_size = $this->db->sql_fetchfield('total_size');
+			$this->db->sql_freeresult($result);
 		}
 
 		return $file_size;

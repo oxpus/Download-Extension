@@ -148,7 +148,7 @@ class status implements status_interface
 	*/
 	public function status($df_id)
 	{
-		if (!isset($this->dl_file_p[$df_id]['cat']) || $this->dlext_constants->get_value('user_banned'))
+		if (!isset($this->dl_file_p[$df_id]['c']) || $this->dlext_constants->get_value('user_banned'))
 		{
 			return [
 				'file_auth' 	=> $this->dlext_constants::DL_FALSE,
@@ -156,7 +156,7 @@ class status implements status_interface
 			];
 		}
 
-		$cat_id			= $this->dl_file_p[$df_id]['cat'];
+		$cat_id			= $this->dl_file_p[$df_id]['c'];
 		$cat_auth		= $this->dlext_auth->dl_cat_auth($cat_id);
 		$index			= $this->dlext_main->full_index($cat_id);
 
@@ -170,12 +170,12 @@ class status implements status_interface
 				$file_status = 'yellow';
 				$file_auth = $this->dlext_constants::DL_TRUE;
 			}
-			else if ($this->user->data['is_registered'] && intval($this->user->data['user_traffic']) >= $this->dl_file_p[$df_id]['file_size'] && !$this->dl_file_p[$df_id]['extern'])
+			else if ($this->user->data['is_registered'] && intval($this->user->data['user_traffic']) >= $this->dl_file_p[$df_id]['s'] && !$this->dl_file_p[$df_id]['e'])
 			{
 				$file_status = 'yellow';
 				$file_auth = $this->dlext_constants::DL_TRUE;
 			}
-			else if ($this->user->data['is_registered'] && intval($this->user->data['user_traffic']) < $this->dl_file_p[$df_id]['file_size'] && !$this->dl_file_p[$df_id]['extern'])
+			else if ($this->user->data['is_registered'] && intval($this->user->data['user_traffic']) < $this->dl_file_p[$df_id]['s'] && !$this->dl_file_p[$df_id]['e'])
 			{
 				$file_status = 'red';
 				$file_auth = $this->dlext_constants::DL_FALSE;
@@ -187,25 +187,25 @@ class status implements status_interface
 			$file_auth = $this->dlext_constants::DL_TRUE;
 		}
 
-		if ($this->user->data['user_posts'] < $this->config['dl_posts'] && !$this->dl_file_p[$df_id]['extern'] && !$this->dl_file_p[$df_id]['free'])
+		if ($this->user->data['user_posts'] < $this->config['dl_posts'] && !$this->dl_file_p[$df_id]['e'] && !$this->dl_file_p[$df_id]['f'])
 		{
 			$file_status = 'red';
 			$file_auth = $this->dlext_constants::DL_FALSE;
 		}
 
-		if (!$this->user->data['is_registered'] && !$this->dl_file_p[$df_id]['extern'] && !$this->dl_file_p[$df_id]['free'])
+		if (!$this->user->data['is_registered'] && !$this->dl_file_p[$df_id]['e'] && !$this->dl_file_p[$df_id]['f'])
 		{
 			$file_status = 'red';
 			$file_auth = $this->dlext_constants::DL_FALSE;
 		}
 
-		if ($this->dl_file_p[$df_id]['free'] == $this->dlext_constants::DL_FILE_FREE_ALL)
+		if ($this->dl_file_p[$df_id]['f'] == $this->dlext_constants::DL_FILE_FREE_ALL)
 		{
 			$file_status = 'green';
 			$file_auth = $this->dlext_constants::DL_TRUE;
 		}
 
-		if ($this->dl_file_p[$df_id]['free'] == $this->dlext_constants::DL_FILE_FREE_REG_USER)
+		if ($this->dl_file_p[$df_id]['f'] == $this->dlext_constants::DL_FILE_FREE_REG_USER)
 		{
 			if (($this->config['dl_icon_free_for_reg'] && !$this->user->data['is_registered']) || (!$this->config['dl_icon_free_for_reg'] && $this->user->data['is_registered']))
 			{
@@ -228,7 +228,7 @@ class status implements status_interface
 			$file_auth = $this->dlext_constants::DL_FALSE;
 		}
 
-		if ($this->dl_file_p[$df_id]['file_traffic'] && $this->dl_file_p[$df_id]['klicks'] * $this->dl_file_p[$df_id]['file_size'] >= $this->dl_file_p[$df_id]['file_traffic'] && !$this->config['dl_traffic_off'])
+		if ($this->dl_file_p[$df_id]['t'] && $this->dl_file_p[$df_id]['k'] * $this->dl_file_p[$df_id]['s'] >= $this->dl_file_p[$df_id]['t'] && !$this->config['dl_traffic_off'])
 		{
 			$file_status = 'blue';
 
@@ -255,7 +255,7 @@ class status implements status_interface
 			$remain_traffic = $this->config['dl_remain_guest_traffic'];
 		}
 
-		if (($overall_traffic - (int) $remain_traffic <= $this->dl_file_p[$df_id]['file_size']) && !$this->config['dl_traffic_off'] && $load_limit == $this->dlext_constants::DL_TRUE)
+		if (($overall_traffic - (int) $remain_traffic <= $this->dl_file_p[$df_id]['s']) && !$this->config['dl_traffic_off'] && $load_limit == $this->dlext_constants::DL_TRUE)
 		{
 			$file_status = 'blue';
 
@@ -283,7 +283,7 @@ class status implements status_interface
 			}
 		}
 
-		if ($this->dl_file_p[$df_id]['extern'])
+		if ($this->dl_file_p[$df_id]['e'])
 		{
 			$file_status = 'grey';
 			$file_auth = $this->dlext_constants::DL_TRUE;

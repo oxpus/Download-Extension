@@ -138,8 +138,6 @@ class listener implements EventSubscriberInterface
 		$this->dlext_privacy			= $dlext_privacy;
 		$this->dlext_constants			= $dlext_constants;
 
-		$this->dl_index					= $this->dlext_auth->dl_index();
-
 		$this->dlext_constants->init();
 	}
 
@@ -215,7 +213,7 @@ class listener implements EventSubscriberInterface
 			'U_DL_HELP_POPUP'	=> $this->helper->route('oxpus_dlext_help'),
 		]);
 
-		$dl_index = $this->dlext_auth->dl_index();
+		$dl_index = $this->dlext_main->full_index(0, 0, 0, $this->dlext_constants::DL_AUTH_CHECK_VIEW);
 
 		if (empty($dl_index))
 		{
@@ -535,8 +533,10 @@ class listener implements EventSubscriberInterface
 			$link_text = 'postlink';
 		}
 
-		$sql = 'SELECT cat, description, desc_uid, desc_bitfield, desc_flags FROM ' . $this->dlext_table_downloads . '
-			WHERE id = ' . (int) $dl_id;
+		$sql = 'SELECT c.cat_name, d.description, d.desc_uid, d.desc_bitfield, d.desc_flags 
+				FROM ' . $this->dlext_table_downloads . ' d, ' . $this->dlext_table_dl_cat . ' c
+				WHERE c.id = d.cat
+					AND d.id = ' . (int) $dl_id;
 		$result = $this->db->sql_query($sql);
 		$row = $this->db->sql_fetchrow($result);
 
@@ -544,7 +544,7 @@ class listener implements EventSubscriberInterface
 		$desc_uid		= $row['desc_uid'];
 		$desc_bitfield	= $row['desc_bitfield'];
 		$desc_flags		= $row['desc_flags'];
-		$cat_id			= $row['cat'];
+		$cat_name		= $row['cat_name'];
 
 		$this->db->sql_freeresult($result);
 
@@ -554,7 +554,7 @@ class listener implements EventSubscriberInterface
 		{
 			if ($this->config['dl_topic_post_catname'])
 			{
-				$title .= ' (' . $this->dl_index[$cat_id]['cat_name_nav'] . ')';
+				$title .= ' (' . $cat_name . ')';
 			}
 
 			$title = strip_tags($title);
@@ -763,21 +763,10 @@ class listener implements EventSubscriberInterface
 
 	private function _dl_purge_hotlinks()
 	{
-		$session_ids = ['0'];
-
-		$sql = 'SELECT session_id FROM ' . SESSIONS_TABLE . '
-			WHERE session_user_id = ' . ANONYMOUS;
-		$result = $this->db->sql_query($sql);
-
-		while ($row = $this->db->sql_fetchrow($result))
-		{
-			$session_ids[] = $row['session_id'];
-		}
-		$this->db->sql_freeresult($result);
+		$user_ids = [ANONYMOUS, $this->user->data['user_id']];
 
 		$sql = 'DELETE FROM ' . $this->dlext_table_dl_hotlink . '
-			WHERE user_id = ' . (int) $this->user->data['user_id'] . '
-				OR ' . $this->db->sql_in_set('session_id', $session_ids, $this->dlext_constants::DL_TRUE);
+			WHERE ' . $this->db->sql_in_set('user_id', $user_ids);
 		$this->db->sql_query($sql);
 	}
 
