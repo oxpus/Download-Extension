@@ -286,7 +286,6 @@ class listener implements EventSubscriberInterface
 			$this->_dl_reset_values();
 			$this->_dl_navi_links();
 			$this->_dl_purge_hotlinks();
-			$this->_dl_mcp_link($dl_mod_link_show);
 		}
 	}
 
@@ -533,7 +532,7 @@ class listener implements EventSubscriberInterface
 			$link_text = 'postlink';
 		}
 
-		$sql = 'SELECT c.cat_name, d.description, d.desc_uid, d.desc_bitfield, d.desc_flags 
+		$sql = 'SELECT c.cat_name, d.description, d.desc_uid, d.desc_bitfield, d.desc_flags
 				FROM ' . $this->dlext_table_downloads . ' d, ' . $this->dlext_table_dl_cat . ' c
 				WHERE c.id = d.cat
 					AND d.id = ' . (int) $dl_id;
@@ -784,30 +783,5 @@ class listener implements EventSubscriberInterface
 				'U_DL_HELP_POPUP'	=> $this->helper->route('oxpus_dlext_help'),
 			]);
 		}
-	}
-
-	private function _dl_mcp_link($dl_mod_link_show)
-	{
-		$access_cat = $this->dlext_main->full_index(0, 0, 0, $this->dlext_constants::DL_AUTH_CHECK_MOD);
-
-		if (empty($access_cat) || !$dl_mod_link_show)
-		{
-			return;
-		}
-
-		$cat		= $this->request->variable('cat', 0);
-		$cat_id		= $this->request->variable('cat_id', 0);
-
-		$mcp_cat	= ($cat_id) ? $cat_id : $cat;
-
-		$this->template->assign_vars([
-			'U_DL_MCP_MANAGE'		=> $this->helper->route('oxpus_dlext_mcp_manage'),
-			'U_DL_MCP_EDIT'			=> $this->helper->route('oxpus_dlext_mcp_edit'),
-			'U_DL_MCP_APPROVE'		=> $this->helper->route('oxpus_dlext_mcp_approve'),
-			'U_DL_MCP_BROKEN'		=> $this->helper->route('oxpus_dlext_mcp_broken'),
-			'U_DL_MCP_CAPPROVE'		=> $this->helper->route('oxpus_dlext_mcp_capprove'),
-
-			'U_MCP'					=> ($mcp_cat && $this->dlext_auth->user_auth($mcp_cat, 'auth_mod')) ? $this->helper->route('oxpus_dlext_mcp_manage', ['view' => 'toolbox', 'cat_id' => $mcp_cat]) : $this->helper->route('oxpus_dlext_mcp_manage'),
-		]);
 	}
 }

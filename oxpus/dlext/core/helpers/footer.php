@@ -442,11 +442,49 @@ class footer implements footer_interface
 			}
 		}
 
+		// Overwrite the mcp link with the extension module
+		$this->_dl_mcp_link();
+
 		// Display the navigation
 		if ($this->nav_mode)
 		{
 			$this->dlext_navigation->set_parameter($this->nav_mode, $this->cat_id, $this->df_id);
 			$this->dlext_navigation->handle();
 		}
+	}
+
+	private function _dl_mcp_link()
+	{
+		$access_cat = $this->dlext_main->full_index(0, 0, 0, $this->dlext_constants::DL_AUTH_CHECK_MOD);
+
+		if (empty($access_cat))
+		{
+			return;
+		}
+
+		$cat		= $this->request->variable('cat', 0);
+		$cat_id		= $this->request->variable('cat_id', 0);
+
+		$mcp_cat	= ($cat_id) ? $cat_id : $cat;
+		$u_dl_mcp	= '';
+
+		if ($mcp_cat && $this->dlext_auth->user_auth($mcp_cat, 'auth_mod'))
+		{
+			$u_dl_mcp = $this->helper->route('oxpus_dlext_mcp_manage', ['view' => 'toolbox', 'cat_id' => $mcp_cat]);
+		}
+		else
+		{
+			$u_dl_mcp = $this->helper->route('oxpus_dlext_mcp_manage');
+		}
+
+		$this->template->assign_vars([
+			'U_DL_MCP_MANAGE'		=> $this->helper->route('oxpus_dlext_mcp_manage'),
+			'U_DL_MCP_EDIT'			=> $this->helper->route('oxpus_dlext_mcp_edit'),
+			'U_DL_MCP_APPROVE'		=> $this->helper->route('oxpus_dlext_mcp_approve'),
+			'U_DL_MCP_BROKEN'		=> $this->helper->route('oxpus_dlext_mcp_broken'),
+			'U_DL_MCP_CAPPROVE'		=> $this->helper->route('oxpus_dlext_mcp_capprove'),
+
+			'U_MCP'					=> $u_dl_mcp,
+		]);
 	}
 }
