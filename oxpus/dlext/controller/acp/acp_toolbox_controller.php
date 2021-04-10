@@ -629,7 +629,7 @@ class acp_toolbox_controller implements acp_toolbox_interface
 					->core_path($browse_dir)
 					->find(false);
 
-				foreach ($files as $file => $path)
+				foreach ($files as $file => $file_path)
 				{
 					$file_name	= basename($file);
 					$dirname	= dirname($file) . '/';
@@ -639,7 +639,6 @@ class acp_toolbox_controller implements acp_toolbox_interface
 					if ($file_name != 'index.html' && $file_name != 'index.htm' && $check_path)
 					{
 						$file_desc		= (isset($real_file_title[$file_name])) ? $real_file_title[$file_name] : $file_name;
-						$file_path		= $path;
 						$real_file_name = (isset($real_file_array[$file_name])) ? $real_file_array[$file_name] : $file_name;
 						$files_url		= $this->u_action . '&amp;action=dl&amp;description=' . $file_desc . '&amp;file_name=' . $file_name . '&amp;path=' . $file;
 						$filey[]		= $real_file_name . '|~|<a href="' . $files_url . '">' . $real_file_name . '</a>';

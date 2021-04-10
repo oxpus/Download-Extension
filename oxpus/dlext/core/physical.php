@@ -108,7 +108,7 @@ class physical implements physical_interface
 		$dirs = $this->finder
 			->set_extensions([])
 			->core_path($download_dir)
-			->find(false);
+			->find(false, true);
 
 		foreach ($dirs as $dir => $path)
 		{
