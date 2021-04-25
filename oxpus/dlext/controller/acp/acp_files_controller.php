@@ -341,7 +341,7 @@ class acp_files_controller implements acp_files_interface
 					'oxpus.dlext.notification.type.comments',
 				], $df_id);
 
-				$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_DEL_FILE', $this->dlext_constants::DL_FALSE, [$dl_desc]);
+				$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_DEL_FILE', false, [$dl_desc]);
 
 				// Purge the files cache
 				$this->cache->destroy('_dlext_cat_counts');
@@ -411,7 +411,7 @@ class acp_files_controller implements acp_files_interface
 
 			$this->db->sql_freeresult($result);
 
-			$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_FILE_MOVE', $this->dlext_constants::DL_FALSE, [$dl_desc]);
+			$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_FILE_MOVE', false, [$dl_desc]);
 
 			$action = '';
 		}
@@ -441,7 +441,7 @@ class acp_files_controller implements acp_files_interface
 
 			$this->db->sql_freeresult($result);
 
-			$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_FILES_SORT', $this->dlext_constants::DL_FALSE, [$cat_name]);
+			$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_FILES_SORT', false, [$cat_name]);
 
 			$action = '';
 		}

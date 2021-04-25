@@ -113,7 +113,7 @@ class acp_ext_blacklist_controller implements acp_ext_blacklist_interface
 					// Purge the blacklist cache
 					$this->cache->destroy('_dlext_black');
 
-					$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_EXT_ADD', $this->dlext_constants::DL_FALSE, [$extension]);
+					$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_EXT_ADD', false, [$extension]);
 				}
 			}
 
@@ -140,7 +140,7 @@ class acp_ext_blacklist_controller implements acp_ext_blacklist_interface
 					// Purge the blacklist cache
 					$this->cache->destroy('_dlext_black');
 
-					$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_EXT_DEL', $this->dlext_constants::DL_FALSE, [implode(', ', $sql_ext_in)]);
+					$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_EXT_DEL', false, [implode(', ', $sql_ext_in)]);
 				}
 
 				$message = ((count($extension_ary) == 1) ? $this->language->lang('DL_EXTENSION_REMOVED') : $this->language->lang('DL_EXTENSIONS_REMOVED')) . adm_back_link($this->u_action);

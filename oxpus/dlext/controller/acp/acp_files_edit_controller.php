@@ -1284,7 +1284,7 @@ class acp_files_edit_controller implements acp_files_edit_interface
 				$log_method = 'DL_LOG_FILE_ADD';
 			}
 
-			$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, $log_method, $this->dlext_constants::DL_FALSE, [$description]);
+			$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, $log_method, false, [$description]);
 
 			// Purge the files cache
 			$this->cache->destroy('_dlext_cat_counts');

@@ -106,7 +106,7 @@ class acp_banlist_controller implements acp_banlist_interface
 					'username'		=> $username,
 					'guests'		=> $guests]) . ' WHERE ban_id = ' . (int) $ban_id;
 
-				$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_BAN_EDIT', $this->dlext_constants::DL_FALSE, [$this->user->data['user_id'] . ' ~ ' . $username, $user_ip, $guests]);
+				$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_BAN_EDIT', false, [$this->user->data['user_id'] . ' ~ ' . $username, $user_ip, $guests]);
 			}
 			else
 			{
@@ -116,7 +116,7 @@ class acp_banlist_controller implements acp_banlist_interface
 					'username'		=> $username,
 					'guests'		=> $guests]);
 
-				$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_BAN_ADD', $this->dlext_constants::DL_FALSE, [$user_id . ' ~ ' . $username, $user_ip, $guests]);
+				$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_BAN_ADD', false, [$user_id . ' ~ ' . $username, $user_ip, $guests]);
 			}
 
 			$this->db->sql_query($sql);
@@ -142,7 +142,7 @@ class acp_banlist_controller implements acp_banlist_interface
 						WHERE ' . $this->db->sql_in_set('ban_id', $sql_ext_in);
 					$this->db->sql_query($sql);
 
-					$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_BAN_DEL', $this->dlext_constants::DL_FALSE, [implode(', ', $sql_ext_in)]);
+					$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_BAN_DEL', false, [implode(', ', $sql_ext_in)]);
 
 					$message = $this->language->lang('DL_BANLIST_UPDATED') . adm_back_link($this->u_action);
 

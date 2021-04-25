@@ -235,7 +235,7 @@ class acp_fields_controller implements acp_fields_interface
 
 					$this->db->sql_transaction('commit');
 
-					$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_FIELD_REMOVED', $this->dlext_constants::DL_FALSE, [$field_ident]);
+					$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_FIELD_REMOVED', false, [$field_ident]);
 					trigger_error($this->language->lang('DL_FIELD_REMOVED') . adm_back_link($this->u_action));
 				}
 				else
@@ -281,7 +281,7 @@ class acp_fields_controller implements acp_fields_interface
 				$field_ident = (string) $this->db->sql_fetchfield('field_ident');
 				$this->db->sql_freeresult($result);
 
-				$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_FIELD_ACTIVATE', $this->dlext_constants::DL_FALSE, [$field_ident]);
+				$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_FIELD_ACTIVATE', false, [$field_ident]);
 				trigger_error($this->language->lang('DL_FIELD_ACTIVATED') . adm_back_link($this->u_action));
 
 			break;
@@ -306,7 +306,7 @@ class acp_fields_controller implements acp_fields_interface
 				$field_ident = (string) $this->db->sql_fetchfield('field_ident');
 				$this->db->sql_freeresult($result);
 
-				$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_FIELD_DEACT', $this->dlext_constants::DL_FALSE, [$field_ident]);
+				$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_FIELD_DEACT', false, [$field_ident]);
 				trigger_error($this->language->lang('DL_FIELD_DEACTIVATED') . adm_back_link($this->u_action));
 
 			break;
@@ -1317,12 +1317,12 @@ class acp_fields_controller implements acp_fields_interface
 
 		if ($action == 'edit')
 		{
-			$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_FIELD_EDIT', $this->dlext_constants::DL_FALSE, [$cp->vars['field_ident'] . ':' . $cp->vars['lang_name']]);
+			$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_FIELD_EDIT', false, [$cp->vars['field_ident'] . ':' . $cp->vars['lang_name']]);
 			trigger_error($this->language->lang('DL_FIELD_CHANGED') . adm_back_link($this->u_action));
 		}
 		else
 		{
-			$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_FIELD_CREATE', $this->dlext_constants::DL_FALSE, [substr($field_ident, 3) . ':' . $cp->vars['lang_name']]);
+			$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_FIELD_CREATE', false, [substr($field_ident, 3) . ':' . $cp->vars['lang_name']]);
 			trigger_error($this->language->lang('DL_FIELD_ADDED') . adm_back_link($this->u_action));
 		}
 	}

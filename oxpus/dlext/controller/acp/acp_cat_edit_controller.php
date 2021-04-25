@@ -702,7 +702,7 @@ class acp_cat_edit_controller implements acp_cat_edit_interface
 
 				$message = $this->language->lang('DL_CATEGORY_UPDATED');
 
-				$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_CAT_EDIT', $this->dlext_constants::DL_FALSE, [$cat_name]);
+				$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_CAT_EDIT', false, [$cat_name]);
 			}
 			else
 			{
@@ -710,7 +710,7 @@ class acp_cat_edit_controller implements acp_cat_edit_interface
 
 				$message = $this->language->lang('DL_CATEGORY_ADDED');
 
-				$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_CAT_ADD', $this->dlext_constants::DL_FALSE, [$cat_name]);
+				$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_CAT_ADD', false, [$cat_name]);
 			}
 
 			$this->db->sql_query($sql);
@@ -794,7 +794,7 @@ class acp_cat_edit_controller implements acp_cat_edit_interface
 
 					$this->db->sql_freeresult($result);
 
-					$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_CAT_PERM_COPY', $this->dlext_constants::DL_FALSE, [$source_cat, $dest_cat]);
+					$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_CAT_PERM_COPY', false, [$source_cat, $dest_cat]);
 				}
 			}
 

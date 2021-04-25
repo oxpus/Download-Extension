@@ -148,7 +148,7 @@ class acp_permissions_controller implements acp_permissions_interface
 						'auth_cpost'	=> $this->dlext_constants::DL_PERM_ADMIN]) . ' WHERE ' . $this->db->sql_in_set('id', $cat_ids);
 					$this->db->sql_query($sql);
 
-					$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_CAT_PERM_DROP', $this->dlext_constants::DL_FALSE, [$cat_list]);
+					$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_CAT_PERM_DROP', false, [$cat_list]);
 				}
 				else
 				{
@@ -462,7 +462,7 @@ class acp_permissions_controller implements acp_permissions_interface
 						'auth_cpost'	=> $auth_cpost]) . ' WHERE id = ' . (int) $s_presel_cats[$i];
 					$this->db->sql_query($sql);
 
-					$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_CAT_PERM_ALL', $this->dlext_constants::DL_FALSE, [$cat_name, $log_auth_view, $log_auth_dl, $log_auth_up, $log_auth_mod, $log_auth_cread, $log_auth_cpost]);
+					$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_CAT_PERM_ALL', false, [$cat_name, $log_auth_view, $log_auth_dl, $log_auth_up, $log_auth_mod, $log_auth_cread, $log_auth_cpost]);
 				}
 			}
 			else
@@ -498,7 +498,7 @@ class acp_permissions_controller implements acp_permissions_interface
 						$this->db->sql_freeresult($result);
 						$group_name = ($row['group_type'] == GROUP_SPECIAL) ? '<strong>' . $this->language->lang('G_' . $row['group_name']) . '</strong>' : $row['group_name'];
 
-						$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_CAT_PERM_GRP', $this->dlext_constants::DL_FALSE, [$cat_name, $group_name, $log_auth_view, $log_auth_dl, $log_auth_up, $log_auth_mod]);
+						$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_CAT_PERM_GRP', false, [$cat_name, $group_name, $log_auth_view, $log_auth_dl, $log_auth_up, $log_auth_mod]);
 					}
 				}
 			}

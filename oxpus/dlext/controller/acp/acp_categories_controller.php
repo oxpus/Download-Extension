@@ -344,7 +344,7 @@ class acp_categories_controller implements acp_categories_interface
 					WHERE cat_id = ' . (int) $cat_id;
 				$this->db->sql_query($sql);
 
-				$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_CAT_DEL', $this->dlext_constants::DL_FALSE, [$log_cat_name]);
+				$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_CAT_DEL', false, [$log_cat_name]);
 
 				// Purge the categories cache
 				$this->cache->destroy('_dlext_cats');
@@ -408,7 +408,7 @@ class acp_categories_controller implements acp_categories_interface
 
 				$this->db->sql_query($sql);
 
-				$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_DEL_CAT_STATS', $this->dlext_constants::DL_FALSE, [$log_cat_name]);
+				$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_DEL_CAT_STATS', false, [$log_cat_name]);
 
 				redirect($this->u_action);
 			}
@@ -472,7 +472,7 @@ class acp_categories_controller implements acp_categories_interface
 					], $dl_ids);
 				}
 
-				$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_DEL_CAT_COM', $this->dlext_constants::DL_FALSE, [$log_cat_name]);
+				$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_DEL_CAT_COM', false, [$log_cat_name]);
 
 				redirect($this->u_action);
 			}
@@ -538,7 +538,7 @@ class acp_categories_controller implements acp_categories_interface
 
 			$this->db->sql_freeresult($result);
 
-			$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_CAT_MOVE', $this->dlext_constants::DL_FALSE, [$log_cat_name]);
+			$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_CAT_MOVE', false, [$log_cat_name]);
 
 			// Purge the categories cache
 			$this->cache->destroy('_dlext_cats');

@@ -239,7 +239,7 @@ class acp_toolbox_controller implements acp_toolbox_interface
 
 					$this->cache->destroy('_dlext_file_p');
 
-					$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_FILE_DROP', $this->dlext_constants::DL_FALSE, [$files_name[$i]]);
+					$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_FILE_DROP', false, [$files_name[$i]]);
 				}
 			}
 			else
@@ -265,7 +265,7 @@ class acp_toolbox_controller implements acp_toolbox_interface
 
 					$this->cache->destroy('_dlext_file_p');
 
-					$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_FILE_ADD', $this->dlext_constants::DL_FALSE, [$files_name[$i]]);
+					$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_FILE_ADD', false, [$files_name[$i]]);
 				}
 			}
 
@@ -445,7 +445,7 @@ class acp_toolbox_controller implements acp_toolbox_interface
 					{
 						$this->filesystem->remove($this->dlext_constants->get_value('files_dir') . '/downloads/' . $path . $files[$i]);
 
-						$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_FILE_DROP', $this->dlext_constants::DL_FALSE, [$files[$i]]);
+						$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_FILE_DROP', false, [$files[$i]]);
 					}
 				}
 			}
@@ -455,7 +455,7 @@ class acp_toolbox_controller implements acp_toolbox_interface
 				{
 					$this->filesystem->rename($this->dlext_constants->get_value('files_dir') . '/downloads/' . $path . $files[$i], $file_command . $files[$i]);
 
-					$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_FILE_MOVE', $this->dlext_constants::DL_FALSE, [$files[$i]]);
+					$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_FILE_MOVE', false, [$files[$i]]);
 				}
 			}
 
@@ -479,7 +479,7 @@ class acp_toolbox_controller implements acp_toolbox_interface
 
 			$this->filesystem->mkdir($this->dlext_constants->get_value('files_dir') . '/downloads/' . $file_path . $dir_name . '/');
 
-			$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_FOLDER_CREATE', $this->dlext_constants::DL_FALSE, [$path . '/' . $dir_name]);
+			$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_FOLDER_CREATE', false, [$path . '/' . $dir_name]);
 		}
 
 		if ($action == 'dirdelete')
@@ -495,7 +495,7 @@ class acp_toolbox_controller implements acp_toolbox_interface
 			{
 				$this->filesystem->remove($this->dlext_constants->get_value('files_dir') . '/downloads/' . $path);
 
-				$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_FOLDER_DROP', $this->dlext_constants::DL_FALSE, [$path]);
+				$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_FOLDER_DROP', false, [$path]);
 			}
 
 			$action = '';

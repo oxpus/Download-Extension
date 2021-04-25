@@ -138,13 +138,13 @@ class acp_traffic_controller implements acp_traffic_interface
 						{
 							$user_traffic += $traffic_bytes;
 
-							$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_USER_TR_ADD', $this->dlext_constants::DL_FALSE, [$username, $user_traffic, $traffic_range]);
+							$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_USER_TR_ADD', false, [$username, $user_traffic, $traffic_range]);
 						}
 						else
 						{
 							$user_traffic = $traffic_bytes;
 
-							$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_USER_TR_SET', $this->dlext_constants::DL_FALSE, [$username, $user_traffic, $traffic_range]);
+							$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_USER_TR_SET', false, [$username, $user_traffic, $traffic_range]);
 						}
 
 						$sql = 'UPDATE ' . USERS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', [
@@ -182,7 +182,7 @@ class acp_traffic_controller implements acp_traffic_interface
 
 							$this->db->sql_freeresult($result);
 
-							$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_ALL_TR_ADD', $this->dlext_constants::DL_FALSE, [$all_traffic, $traffic_range]);
+							$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_ALL_TR_ADD', false, [$all_traffic, $traffic_range]);
 						}
 						if ($func == 'set')
 						{
@@ -190,7 +190,7 @@ class acp_traffic_controller implements acp_traffic_interface
 								'user_traffic' => $traffic_bytes]) . ' WHERE user_id <> ' . ANONYMOUS;
 							$this->db->sql_query($sql);
 
-							$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_ALL_TR_SET', $this->dlext_constants::DL_FALSE, [$all_traffic, $traffic_range]);
+							$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_ALL_TR_SET', false, [$all_traffic, $traffic_range]);
 						}
 
 						$message = $this->language->lang('DL_USER_AUTO_TRAFFIC_USER') . adm_back_link($this->u_action);
@@ -244,11 +244,11 @@ class acp_traffic_controller implements acp_traffic_interface
 
 						if ($func == 'add')
 						{
-							$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_GRP_TR_ADD', $this->dlext_constants::DL_FALSE, [$group_name, $group_traffic, $traffic_range]);
+							$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_GRP_TR_ADD', false, [$group_name, $group_traffic, $traffic_range]);
 						}
 						else
 						{
-							$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_GRP_TR_SET', $this->dlext_constants::DL_FALSE, [$group_name, $group_traffic, $traffic_range]);
+							$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_GRP_TR_SET', false, [$group_name, $group_traffic, $traffic_range]);
 						}
 
 						$message = $this->language->lang('DL_USER_AUTO_TRAFFIC_USER') . adm_back_link($this->u_action);
@@ -275,7 +275,7 @@ class acp_traffic_controller implements acp_traffic_interface
 								'group_dl_auto_traffic' => $traffic]) . ' WHERE group_id = ' . (int) $group_id;
 						$this->db->sql_query($sql);
 
-						$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_AUTO_TR_GRP', $this->dlext_constants::DL_FALSE, [$group_name, $group_traffic_ary[$group_id], $data_group_range[$group_id]]);
+						$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_AUTO_TR_GRP', false, [$group_name, $group_traffic_ary[$group_id], $data_group_range[$group_id]]);
 					}
 
 					$this->db->sql_freeresult($result);
@@ -286,7 +286,7 @@ class acp_traffic_controller implements acp_traffic_interface
 
 					$this->cache->purge('config');
 
-					$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_AUTO_TR_USER', $this->dlext_constants::DL_FALSE, [$user_auto_traffic, $data_user_range]);
+					$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_AUTO_TR_USER', false, [$user_auto_traffic, $data_user_range]);
 
 					$message = $this->language->lang('DL_USER_AUTO_TRAFFIC_USER') . adm_back_link($this->u_action);
 
