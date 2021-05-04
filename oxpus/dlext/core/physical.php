@@ -259,7 +259,7 @@ class physical implements physical_interface
 
 		if (empty($this->user->browser) || ((strpos(strtolower($this->user->browser), 'msie') !== false) && !phpbb_is_greater_ie_version($this->user->browser, 7)))
 		{
-			header('Content-Disposition: attachment; ' . header_filename(htmlspecialchars_decode($dl_file_data['real_filename'])));
+			header('Content-Disposition: attachment; ' . header_filename(htmlspecialchars_decode($dl_file_data['real_filename'], ENT_COMPAT)));
 			if (empty($this->user->browser) || (strpos(strtolower($this->user->browser), 'msie 6.0') !== false))
 			{
 				header('Expires: ' . gmdate('D, d M Y H:i:s', time()) . ' GMT');
@@ -267,7 +267,7 @@ class physical implements physical_interface
 		}
 		else
 		{
-			header('Content-Disposition: ' . ((strpos($dl_file_data['mimetype'], 'image') === 0) ? 'inline' : 'attachment') . '; ' . header_filename(htmlspecialchars_decode($dl_file_data['real_filename'])));
+			header('Content-Disposition: ' . ((strpos($dl_file_data['mimetype'], 'image') === 0) ? 'inline' : 'attachment') . '; ' . header_filename(htmlspecialchars_decode($dl_file_data['real_filename'], ENT_COMPAT)));
 			if (phpbb_is_greater_ie_version($this->user->browser, 7) && (strpos($dl_file_data['mimetype'], 'image') !== 0))
 			{
 				header('X-Download-Options: noopen');

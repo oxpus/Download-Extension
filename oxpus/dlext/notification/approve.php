@@ -161,9 +161,9 @@ class approve extends \phpbb\notification\type\base
 	public function get_email_template_variables()
 	{
 		return [
-			'CATEGORY'		=> strip_tags(htmlspecialchars_decode($this->get_data('cat_name'))),
-			'DOWNLOAD'		=> strip_tags(htmlspecialchars_decode($this->get_data('description'))),
-			'DESCRIPTION'	=> strip_tags(htmlspecialchars_decode($this->get_data('long_desc'))),
+			'CATEGORY'		=> strip_tags(htmlspecialchars_decode($this->get_data('cat_name'), ENT_COMPAT)),
+			'DOWNLOAD'		=> strip_tags(htmlspecialchars_decode($this->get_data('description'), ENT_COMPAT)),
+			'DESCRIPTION'	=> strip_tags(htmlspecialchars_decode($this->get_data('long_desc'), ENT_COMPAT)),
 			'U_APPROVE'		=> generate_board_url(true) . $this->helper->route('oxpus_dlext_mcp_approve'),
 		];
 	}

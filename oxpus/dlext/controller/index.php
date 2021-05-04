@@ -616,7 +616,7 @@ class index
 				if ((int) $this->config['dl_limit_desc_on_index'] && utf8_strlen($long_desc) > (int) $this->config['dl_limit_desc_on_index'])
 				{
 					$long_desc = truncate_string($long_desc, (int) $this->config['dl_limit_desc_on_index'], $this->dlext_constants::DL_MAX_STRING_LENGTH, $this->dlext_constants::DL_FALSE, '[...]');
-					$long_desc = htmlspecialchars_decode(str_replace(['<br>', '<br />'], "\n", $long_desc));
+					$long_desc = htmlspecialchars_decode(str_replace(['<br>', '<br />'], "\n", $long_desc), ENT_COMPAT);
 				}
 
 				if (!$dl_files[$i]['username'])

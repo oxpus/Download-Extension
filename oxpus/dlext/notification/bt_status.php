@@ -145,9 +145,9 @@ class bt_status extends \phpbb\notification\type\base
 	public function get_email_template_variables()
 	{
 		return [
-			'REPORT_TITLE'	=> strip_tags(htmlspecialchars_decode($this->get_data('report_title'))),
-			'STATUS'		=> strip_tags(htmlspecialchars_decode($this->language->lang('DL_REPORT_STATUS_' . $this->get_data('report_status')))),
-			'STATUS_TEXT'	=> strip_tags(htmlspecialchars_decode($this->get_data('status_text'))),
+			'REPORT_TITLE'	=> strip_tags(htmlspecialchars_decode($this->get_data('report_title'), ENT_COMPAT)),
+			'STATUS'		=> strip_tags(htmlspecialchars_decode($this->language->lang('DL_REPORT_STATUS_' . $this->get_data('report_status'), ENT_COMPAT))),
+			'STATUS_TEXT'	=> strip_tags(htmlspecialchars_decode($this->get_data('status_text'), ENT_COMPAT)),
 			'U_BUG_REPORT'	=> generate_board_url(true) . $this->helper->route('oxpus_dlext_tracker_main', ['fav_id' => $this->get_data('fav_id')], false),
 		];
 	}
