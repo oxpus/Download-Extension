@@ -840,6 +840,7 @@ class upload
 			{
 				$this->template->assign_block_vars('search_cat_select', [
 					'DL_CAT_ID'		=> $select_categories[$key]['cat_id'],
+					'DL_SELECTED'	=> $select_categories[$key]['selected'],
 					'DL_SEPERATOR'	=> $select_categories[$key]['seperator'],
 					'DL_CAT_NAME'	=> $select_categories[$key]['cat_name'],
 				]);
