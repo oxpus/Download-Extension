@@ -93,7 +93,7 @@ class auth implements auth_interface
 	{
 		if (!empty($this->dl_index))
 		{
-			foreach ($this->dl_index as $key => $value)
+			foreach (array_keys($this->dl_index) as $key)
 			{
 				// check the default cat permissions
 				if (isset($this->dl_index[$key]['auth_view']) && ($this->dl_index[$key]['auth_view'] == 1 || ($this->dl_index[$key]['auth_view'] == 2 && $this->user->data['is_registered'])))
@@ -221,7 +221,7 @@ class auth implements auth_interface
 			break;
 
 			case $this->dlext_constants::DL_PERM_MOD:
-				foreach ($this->dl_index as $key => $value)
+				foreach (array_keys($this->dl_index) as $key)
 				{
 					if ($this->user_auth($this->dl_index[$key]['id'], 'auth_mod'))
 					{
@@ -387,7 +387,7 @@ class auth implements auth_interface
 			return $bug_tracker;
 		}
 
-		foreach ($this->dl_index as $cat_id => $value)
+		foreach (array_keys($this->dl_index) as $cat_id)
 		{
 			if (isset($this->dl_index[$cat_id]['bug_tracker']) && $this->dl_index[$cat_id]['bug_tracker'])
 			{

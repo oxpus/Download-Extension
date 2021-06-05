@@ -110,7 +110,7 @@ class physical implements physical_interface
 			->core_path($download_dir)
 			->find(false, true);
 
-		foreach ($dirs as $dir => $path)
+		foreach (array_keys($dirs) as $dir)
 		{
 			$folders[] = [
 				'path'		=> $this->root_path . $dir,
@@ -132,7 +132,7 @@ class physical implements physical_interface
 			->core_path($download_dir)
 			->find(false);
 
-			foreach ($files as $file => $path)
+			foreach (array_keys($files) as $file)
 			{
 				if (basename($file) != 'index.html')
 				{
@@ -189,7 +189,7 @@ class physical implements physical_interface
 			->core_path($file_base)
 			->find(false, true);
 
-		foreach ($dirs as $dir => $value)
+		foreach (array_keys($dirs) as $dir)
 		{
 			$separator = '';
 

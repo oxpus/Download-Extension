@@ -483,7 +483,7 @@ class topic implements topic_interface
 		}
 		else if ($topic_drop_mode == 'close' && !empty($dl_ids))
 		{
-			foreach ($dl_ids as $key => $value)
+			foreach (array_keys($dl_ids) as $key)
 			{
 				$this->gen_dl_topic('edit', $dl_ids[$key], 'close');
 			}

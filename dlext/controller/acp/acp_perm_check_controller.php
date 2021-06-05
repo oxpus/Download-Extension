@@ -127,7 +127,7 @@ class acp_perm_check_controller implements acp_perm_check_interface
 				$cat_perm_ary   = [];
 				$dl_index       = $this->dlext_main->full_index();
 
-				foreach ($dl_index as $cat_id => $value)
+				foreach (array_keys($dl_index) as $cat_id)
 				{
 					$cat_perm_ary[$cat_id]['cat_name']		= $dl_index[$cat_id]['cat_name'];
 					$cat_perm_ary[$cat_id]['auth_view']		= $this->dlext_auth->user_auth($cat_id, 'auth_view');
@@ -160,7 +160,7 @@ class acp_perm_check_controller implements acp_perm_check_interface
 					'U_DL_BACK'					=> $this->u_action,
 				]);
 
-				foreach ($cat_perm_ary as $cat_id => $data_ary)
+				foreach ($cat_perm_ary as $data_ary)
 				{
 					$this->template->assign_block_vars('dl_cat_row', [
 						'DL_CAT_NAME'  => $data_ary['cat_name'],

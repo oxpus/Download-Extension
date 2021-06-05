@@ -543,7 +543,7 @@ class acp_files_controller implements acp_files_interface
 
 			if (!empty($categories) && is_array($categories))
 			{
-				foreach ($categories as $key => $value)
+				foreach (array_keys($categories) as $key)
 				{
 					$this->template->assign_block_vars('cat_select_row', [
 						'DL_CAT_ID'			=> $categories[$key]['cat_id'],

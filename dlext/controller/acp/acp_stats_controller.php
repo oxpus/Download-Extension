@@ -137,7 +137,7 @@ class acp_stats_controller implements acp_stats_interface
 			{
 				$dl_id = [];
 
-				foreach ($del_id as $key => $value)
+				foreach ($del_id as $value)
 				{
 					$dl_id[] = (int) $value;
 				}

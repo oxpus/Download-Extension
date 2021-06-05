@@ -582,7 +582,7 @@ class details
 
 				natsort($ver_key_ary);
 				$ver_key_ary = array_reverse($ver_key_ary);
-				foreach ($ver_key_ary as $key => $value)
+				foreach ($ver_key_ary as $value)
 				{
 					$this->template->assign_block_vars('dl_ver_cell', $version_array[$value]);
 				}
@@ -592,7 +592,7 @@ class details
 
 			natsort($hash_ary);
 			$hash_ary = array_unique(array_reverse($hash_ary));
-			foreach ($hash_ary as $key => $value)
+			foreach ($hash_ary as $value)
 			{
 				$hash_table[$value] = $hash_table_tmp[$value];
 			}

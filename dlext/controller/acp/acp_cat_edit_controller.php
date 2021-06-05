@@ -278,7 +278,7 @@ class acp_cat_edit_controller implements acp_cat_edit_interface
 
 			if (!empty($t_path_select) && is_array($t_path_select))
 			{
-				foreach ($t_path_select as $key => $value)
+				foreach (array_keys($t_path_select) as $key)
 				{
 					$this->template->assign_block_vars('dl_cat_path_select', [
 						'DL_VALUE' 		=> $t_path_select[$key]['cat_path'],
@@ -334,7 +334,7 @@ class acp_cat_edit_controller implements acp_cat_edit_interface
 
 				$counter = 0;
 
-				foreach ($forum_select_tmp as $key => $value)
+				foreach ($forum_select_tmp as $value)
 				{
 					switch ($value['forum_type'])
 					{
@@ -503,10 +503,10 @@ class acp_cat_edit_controller implements acp_cat_edit_interface
 
 			if (!empty($s_cat_parent) && is_array($s_cat_parent))
 			{
-				foreach ($s_cat_parent as $key => $value)
+				foreach (array_keys($s_cat_parent) as $key)
 				{
 					$this->template->assign_block_vars('select_cat_parent', [
-						'DL_CAT_ID'		=> $s_cat_parent[$key]['cat_id'],
+						'DL_CAT_ID'			=> $s_cat_parent[$key]['cat_id'],
 						'DL_SELECTED'		=> $s_cat_parent[$key]['selected'],
 						'DL_SEPERATOR'		=> $s_cat_parent[$key]['seperator'],
 						'DL_CAT_NAME'		=> $s_cat_parent[$key]['cat_name'],
@@ -516,10 +516,10 @@ class acp_cat_edit_controller implements acp_cat_edit_interface
 
 			if (!empty($perms_copy_from) && is_array($perms_copy_from))
 			{
-				foreach ($perms_copy_from as $key => $value)
+				foreach (array_keys($perms_copy_from) as $key)
 				{
 					$this->template->assign_block_vars('select_cat_perm_copy', [
-						'DL_CAT_ID'		=> $perms_copy_from[$key]['cat_id'],
+						'DL_CAT_ID'			=> $perms_copy_from[$key]['cat_id'],
 						'DL_SELECTED'		=> $perms_copy_from[$key]['selected'],
 						'DL_SEPERATOR'		=> $perms_copy_from[$key]['seperator'],
 						'DL_CAT_NAME'		=> $perms_copy_from[$key]['cat_name'],

@@ -432,15 +432,15 @@ class custom_profile
 					'DL_' . strtoupper($ident) . '_VALUE'	=> $value,
 					'DL_' . strtoupper($ident) . '_TYPE'	=> $ident_ary['data']['field_type'],
 					'DL_' . strtoupper($ident) . '_NAME'	=> $ident_ary['data']['lang_name'],
-					'DL_' . strtoupper($ident) . '_EXPLAIN'=> $ident_ary['data']['lang_explain'],
+					'DL_' . strtoupper($ident) . '_EXPLAIN' => $ident_ary['data']['lang_explain'],
 
 					'S_DL_' . strtoupper($ident)			=> true
 				];
 
 				$tpl_fields['blockrow'][] = [
 					'DL_FIELD_VALUE'	=> $value,
-					'DL_FIELD_TYPE'	=> $ident_ary['data']['field_type'],
-					'DL_FIELD_NAME'	=> $ident_ary['data']['lang_name'],
+					'DL_FIELD_TYPE'		=> $ident_ary['data']['field_type'],
+					'DL_FIELD_NAME'		=> $ident_ary['data']['lang_name'],
 					'DL_FIELD_EXPLAIN'	=> $ident_ary['data']['lang_explain'],
 
 					'S_DL_' . strtoupper($ident)		=> true
@@ -798,7 +798,7 @@ class custom_profile
 		$template->set_filenames(['cp_body' => '@oxpus_dlext/helpers/dl_custom_fields.html']);
 
 		// empty previously filled blockvars
-		foreach ($this->profile_types as $field_case => $field_type)
+		foreach ($this->profile_types as $field_type)
 		{
 			$template->destroy_block_vars($field_type);
 		}
@@ -820,7 +820,7 @@ class custom_profile
 
 		$sql_not_in = [];
 
-		foreach ($cp_data as $key => $null)
+		foreach (array_keys($cp_data) as $key)
 		{
 			$sql_not_in[] = (strncmp($key, 'pf_', 3) === 0) ? substr($key, 3) : $key;
 		}

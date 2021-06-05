@@ -836,7 +836,7 @@ class upload
 
 		if (!empty($select_categories) && is_array($select_categories))
 		{
-			foreach ($select_categories as $key => $value)
+			foreach (array_keys($select_categories) as $key)
 			{
 				$this->template->assign_block_vars('search_cat_select', [
 					'DL_CAT_ID'		=> $select_categories[$key]['cat_id'],

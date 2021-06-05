@@ -299,7 +299,7 @@ class version
 
 			$dropped_files = [0];
 
-			foreach ($del_files as $key => $value)
+			foreach ($del_files as $value)
 			{
 				$sql = 'SELECT file_type, real_name FROM ' . $this->dlext_table_dl_ver_files . '
 					WHERE ver_file_id = ' . (int) $value;

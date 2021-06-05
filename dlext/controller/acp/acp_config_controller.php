@@ -471,7 +471,7 @@ class acp_config_controller implements acp_config_interface
 		validate_config_vars($display_vars['vars'], $cfg_array, $error);
 
 		// We go through the display_vars to make sure no one is trying to set variables he/she is not allowed to...
-		foreach ($display_vars['vars'] as $config_name => $null)
+		foreach (array_keys($display_vars['vars']) as $config_name)
 		{
 			if ($config_name == 'dl_file_hash_algo')
 			{
@@ -794,7 +794,7 @@ class acp_config_controller implements acp_config_interface
 		$forum_select_tmp = get_forum_list('f_list', $this->dlext_constants::DL_FALSE);
 		$select = '';
 
-		foreach ($forum_select_tmp as $key => $value)
+		foreach ($forum_select_tmp as $value)
 		{
 			switch ($value['forum_type'])
 			{
@@ -876,7 +876,7 @@ class acp_config_controller implements acp_config_interface
 
 			if (!empty($rss_cats) && is_array($rss_cats))
 			{
-				foreach ($rss_cats as $key => $value)
+				foreach (array_keys($rss_cats) as $key)
 				{
 					$s_select .= '<option value="' . $rss_cats[$key]['value'] . '"';
 

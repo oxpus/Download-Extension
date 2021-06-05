@@ -247,7 +247,7 @@ class constants
 			else if ($this->config['dl_traffics_overall'] == self::DL_TRAFFICS_ON_GROUPS)
 			{
 				// enable the overall traffics for all selected user groups
-				foreach ($user_group_ids as $key => $value)
+				foreach (array_keys($user_group_ids) as $key)
 				{
 					if (in_array($user_group_ids[$key], $dl_overall_traffics_groups))
 					{
@@ -261,7 +261,7 @@ class constants
 				$this->dl_overall_traffics = self::DL_TRUE;
 
 				// disable the overall traffics for all selected user groups
-				foreach ($user_group_ids as $key => $value)
+				foreach (array_keys($user_group_ids) as $key)
 				{
 					if (in_array($user_group_ids[$key], $dl_overall_traffics_groups))
 					{
@@ -279,7 +279,7 @@ class constants
 			else if ($this->config['dl_traffics_users'] == self::DL_TRAFFICS_ON_GROUPS)
 			{
 				// enable the user traffics for all selected user groups
-				foreach ($user_group_ids as $key => $value)
+				foreach (array_keys($user_group_ids) as $key)
 				{
 					if (in_array($user_group_ids[$key], $dl_users_traffics_groups))
 					{
@@ -293,7 +293,7 @@ class constants
 				$this->dl_users_traffics = self::DL_TRUE;
 
 				// disable the user traffics for all selected user groups
-				foreach ($user_group_ids as $key => $value)
+				foreach (array_keys($user_group_ids) as $key)
 				{
 					if (in_array($user_group_ids[$key], $dl_users_traffics_groups))
 					{

@@ -1131,7 +1131,7 @@ class acp_fields_controller implements acp_fields_interface
 
 		if (is_array($cp->vars['l_lang_name']) && !empty($cp->vars['l_lang_name']))
 		{
-			foreach ($cp->vars['l_lang_name'] as $lang_id => $data)
+			foreach (array_keys($cp->vars['l_lang_name']) as $lang_id)
 			{
 				if (($cp->vars['lang_name'] != '' && $cp->vars['l_lang_name'][$lang_id] == '')
 					|| ($cp->vars['lang_explain'] != '' && $cp->vars['l_lang_explain'][$lang_id] == '')
@@ -1153,7 +1153,7 @@ class acp_fields_controller implements acp_fields_interface
 				}
 			}
 
-			foreach ($empty_lang as $lang_id => $NULL)
+			foreach (array_keys($empty_lang) as $lang_id)
 			{
 				$sql = 'DELETE FROM ' . $this->dlext_table_dl_lang . '
 					WHERE field_id = ' . (int) $field_id . '
@@ -1256,7 +1256,7 @@ class acp_fields_controller implements acp_fields_interface
 				}
 			}
 
-			foreach ($empty_lang as $lang_id => $NULL)
+			foreach (array_keys($empty_lang) as $lang_id)
 			{
 				$sql = 'DELETE FROM ' . $this->dlext_table_dl_fields_lang . '
 					WHERE field_id = ' . (int) $field_id . '

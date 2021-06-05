@@ -92,7 +92,7 @@ class extra implements extra_interface
 			return;
 		}
 
-		foreach ($this->dl_index as $cat_id => $value)
+		foreach (array_keys($this->dl_index) as $cat_id)
 		{
 			if (isset($this->dl_index[$cat_id]['parent']) && $this->dl_index[$cat_id]['parent'] == $parent)
 			{
@@ -148,7 +148,7 @@ class extra implements extra_interface
 			return;
 		}
 
-		foreach ($this->dl_index as $cat_id => $value)
+		foreach (array_keys($this->dl_index) as $cat_id)
 		{
 			if (isset($this->dl_index[$cat_id]['parent']) && $this->dl_index[$cat_id]['parent'] == $parent)
 			{
@@ -191,7 +191,7 @@ class extra implements extra_interface
 			return;
 		}
 
-		foreach ($this->dl_index as $cat_id => $value)
+		foreach (array_keys($this->dl_index) as $cat_id)
 		{
 			if (isset($this->dl_index[$cat_id]['parent']) && $this->dl_index[$cat_id]['parent'] == $parent)
 			{

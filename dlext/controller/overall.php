@@ -212,7 +212,7 @@ class overall
 			$total_files = 0;
 			$access_cats = [];
 
-			foreach ($index as $cat_id => $value)
+			foreach (array_keys($index) as $cat_id)
 			{
 				if (!empty($index[$cat_id]['total']))
 				{
@@ -361,7 +361,7 @@ class overall
 
 						if ($rating_img_data != $this->dlext_constants::DL_FALSE)
 						{
-							foreach ($rating_img_data['stars'] as $key => $data)
+							foreach (array_keys($rating_img_data['stars']) as $key)
 							{
 								$this->template->assign_block_vars('downloads.rating_img', [
 									'DL_RATE_STAR' 	=> $rating_img_data['stars'][$key]['icon'],

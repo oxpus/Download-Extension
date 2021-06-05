@@ -356,10 +356,10 @@ class acp_files_edit_controller implements acp_files_edit_interface
 
 			if (!empty($s_select_cat) && is_array($s_select_cat))
 			{
-				foreach ($s_select_cat as $key => $value)
+				foreach (array_keys($s_select_cat) as $key)
 				{
 					$this->template->assign_block_vars('cats_row', [
-						'DL_CAT_ID'		=> $s_select_cat[$key]['cat_id'],
+						'DL_CAT_ID'			=> $s_select_cat[$key]['cat_id'],
 						'DL_SEPERATOR'		=> $s_select_cat[$key]['seperator'],
 						'DL_SELECTED'		=> $s_select_cat[$key]['selected'],
 						'DL_CAT_NAME'		=> $s_select_cat[$key]['cat_name'],

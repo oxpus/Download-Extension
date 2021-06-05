@@ -144,7 +144,7 @@ class ucp_privacy_controller implements ucp_privacy_interface
 
 				$file_stream = $fields . "\n";
 
-				foreach ($output_row as $key => $data)
+				foreach ($output_row as $data)
 				{
 					$file_stream .= implode(', ', $data) . "\n";
 				}

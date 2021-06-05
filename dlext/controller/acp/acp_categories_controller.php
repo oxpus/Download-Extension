@@ -380,7 +380,7 @@ class acp_categories_controller implements acp_categories_interface
 
 				if (!empty($select_cat_target) && is_array($select_cat_target))
 				{
-					foreach ($select_cat_target as $key => $value)
+					foreach (array_keys($select_cat_target) as $key)
 					{
 						$this->template->assign_block_vars('target_cat_select', [
 							'DL_CAT_ID'			=> $select_cat_target[$key]['cat_id'],

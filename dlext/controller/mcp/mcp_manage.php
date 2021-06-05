@@ -549,7 +549,7 @@ class mcp_manage
 
 							$i = 0;
 
-							foreach ($dlo_id as $key => $value)
+							foreach ($dlo_id as $value)
 							{
 								$s_hidden_fields['dlo_id[' . $i . ']'] = $value;
 
@@ -723,7 +723,7 @@ class mcp_manage
 
 				if (!empty($s_cat_select_move) && is_array($s_cat_select_move))
 				{
-					foreach ($s_cat_select_move as $key => $value)
+					foreach (array_keys($s_cat_select_move) as $key)
 					{
 						$this->template->assign_block_vars('mcp_cat_move', [
 							'DL_CAT_ID'			=> $s_cat_select_move[$key]['cat_id'],
@@ -748,7 +748,7 @@ class mcp_manage
 
 			if (!empty($s_cat_select) && is_array($s_cat_select))
 			{
-				foreach ($s_cat_select as $key => $value)
+				foreach (array_keys($s_cat_select) as $key)
 				{
 					$this->template->assign_block_vars('mcp_cat_select', [
 						'DL_CAT_ID'			=> $s_cat_select[$key]['cat_id'],

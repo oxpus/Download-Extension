@@ -710,7 +710,7 @@ class acp_permissions_controller implements acp_permissions_interface
 
 		if (!empty($cat_select) && is_array($cat_select))
 		{
-			foreach ($cat_select as $key => $value)
+			foreach (array_keys($cat_select) as $key)
 			{
 				$this->template->assign_block_vars('cat_select', [
 					'DL_VALUE'		=> $cat_select[$key]['value'],

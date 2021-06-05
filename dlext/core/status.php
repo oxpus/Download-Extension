@@ -92,7 +92,7 @@ class status implements status_interface
 			return [];
 		}
 
-		foreach ($this->dl_index as $cat_id => $value)
+		foreach (array_keys($this->dl_index) as $cat_id)
 		{
 			if ($cat_id == $parent && !$flag)
 			{

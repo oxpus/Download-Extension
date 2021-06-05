@@ -190,7 +190,7 @@ class main implements main_interface
 		$sublevel = [];
 		$i = 0;
 
-		foreach ($this->dl_index as $cat_id => $value)
+		foreach (array_keys($this->dl_index) as $cat_id)
 		{
 			if (((isset($this->dl_index[$cat_id]['auth_view']) && $this->dl_index[$cat_id]['auth_view']) || (isset($this->dl_auth[$cat_id]['auth_view']) && $this->dl_auth[$cat_id]['auth_view']) || $this->user_admin) && (isset($this->dl_index[$cat_id]['parent']) && $this->dl_index[$cat_id]['parent'] == $parent))
 			{
@@ -221,7 +221,7 @@ class main implements main_interface
 			return $sublevel_count;
 		}
 
-		foreach ($this->dl_index as $cat_id => $value)
+		foreach (array_keys($this->dl_index) as $cat_id)
 		{
 			if (isset($this->dl_index[$cat_id]['parent']) && $this->dl_index[$cat_id]['parent'] == $parent && (isset($this->dl_index[$cat_id]['auth_view']) || isset($this->dl_auth[$cat_id]['auth_view']) || $this->user_admin))
 			{
@@ -242,7 +242,7 @@ class main implements main_interface
 			return $sublevel;
 		}
 
-		foreach ($this->dl_index as $cat_id => $value)
+		foreach (array_keys($this->dl_index) as $cat_id)
 		{
 			if ((isset($this->dl_index[$cat_id]['auth_view']) || isset($this->dl_auth[$cat_id]['auth_view']) || $this->user_admin) && (isset($this->dl_index[$cat_id]['parent']) && $this->dl_index[$cat_id]['parent'] == $parent))
 			{
@@ -255,7 +255,7 @@ class main implements main_interface
 
 	public function find_latest_dl($last_data, $parent, $main_cat, $last_dl_time)
 	{
-		foreach ($last_data as $cat_id => $value)
+		foreach (array_keys($last_data) as $cat_id)
 		{
 			if ($last_data[$cat_id]['parent'] == $parent || $main_cat == $cat_id)
 			{

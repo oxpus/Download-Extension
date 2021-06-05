@@ -1109,7 +1109,7 @@ class mcp_edit
 
 			if (!empty($select_new_cat) && is_array($select_new_cat))
 			{
-				foreach ($select_new_cat as $key => $value)
+				foreach (array_keys($select_new_cat) as $key)
 				{
 					$this->template->assign_block_vars('search_cat_select', [
 						'DL_CAT_ID'		=> $select_new_cat[$key]['cat_id'],

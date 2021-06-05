@@ -265,7 +265,7 @@ class footer implements footer_interface
 
 				if (!empty($dl_file_p))
 				{
-					foreach ($dl_file_p as $key => $value)
+					foreach (array_keys($dl_file_p) as $key)
 					{
 						$total_cur_clicks += $dl_file_p[$key]['k'];
 					}

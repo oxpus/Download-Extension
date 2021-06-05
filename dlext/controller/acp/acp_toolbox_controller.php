@@ -342,7 +342,7 @@ class acp_toolbox_controller implements acp_toolbox_interface
 
 			if ($del_real_thumbs)
 			{
-				foreach ($thumbs as $key => $value)
+				foreach (array_keys($thumbs) as $key)
 				{
 					if ($thumbs[$key])
 					{
@@ -363,7 +363,7 @@ class acp_toolbox_controller implements acp_toolbox_interface
 				->core_path($thumbs_path)
 				->find(false);
 
-			foreach ($files as $file => $path)
+			foreach (array_keys($files) as $file)
 			{
 				$check_file = basename($file);
 
@@ -610,7 +610,7 @@ class acp_toolbox_controller implements acp_toolbox_interface
 
 						$count_sub_files = 0;
 
-						foreach ($subfiles as $subfile => $subpath)
+						foreach (array_keys($subfiles) as $subfile)
 						{
 							$subfile = basename($subfile);
 
@@ -629,7 +629,7 @@ class acp_toolbox_controller implements acp_toolbox_interface
 					->core_path($browse_dir)
 					->find(false);
 
-				foreach ($files as $file => $file_path)
+				foreach (array_keys($files) as $file)
 				{
 					$file_name	= basename($file);
 					$dirname	= dirname($file) . '/';
@@ -752,7 +752,7 @@ class acp_toolbox_controller implements acp_toolbox_interface
 
 					if (!empty($s_folder_tree) && is_array($s_folder_tree))
 					{
-						foreach ($s_folder_tree as $key => $value)
+						foreach (array_keys($s_folder_tree) as $key)
 						{
 							$this->template->assign_block_vars('folder_tree_select', [
 								'DL_PATH'	=> $s_folder_tree[$key]['path'],
