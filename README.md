@@ -5,7 +5,7 @@ Offers files for download based on an extensive rule set.
 
 Based on phpBB 3.2.x / 3.3.x
 Original by Hotschi
-Latest release 8.2.3
+Latest release 8.2.4
 (c) 2002 - 2021 OXPUS networks
 
 
