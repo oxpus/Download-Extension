@@ -540,7 +540,7 @@ class load
 			*/
 			if ($dl_file['extern'])
 			{
-				$file_url = strtolower($dl_file['file_name']);
+				$file_url = $dl_file['file_name'];
 
 				$file_protocol_prefix = '';
 
