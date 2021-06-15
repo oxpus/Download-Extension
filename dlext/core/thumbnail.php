@@ -10,6 +10,8 @@
 
 namespace oxpus\dlext\core;
 
+use Symfony\Component\HttpFoundation\Response;
+
 class thumbnail implements thumbnail_interface
 {
 	/* phpbb objects */
@@ -51,7 +53,7 @@ class thumbnail implements thumbnail_interface
 		$thumbnail	= base64_decode($thumbnail);
 		$file_ext	= str_replace('.', '', trim(strrchr(strtolower($thumbnail), '.')));
 
-		if (!$this->filesystem->exists($thumbnail))
+		if (!$this->filesystem->exists($thumbnail) and strpos($thumbnail, $this->dlext_constants->get_value('files_dir') . '/thumbs/') === 0)
 		{
 			return 'NOT_EXISTS';
 		}
@@ -118,7 +120,7 @@ class thumbnail implements thumbnail_interface
 		imagedestroy($newimage);
 		unset($image);
 
-		return 'OK';
+		return new Response(json_encode(['status' => 'OK']));
 	}
 
 	public function _get_image($pic_path, $file_ext)

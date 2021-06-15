@@ -244,7 +244,6 @@ class cache implements cache_interface
 		$auth_cat		= [];
 		$group_perm_ids	= [];
 		$auth_perm		= [];
-		$dl_auth_perm	= [];
 
 		if (($dl_auth_perm = $this->cache->get('_dlext_auth')) === false)
 		{
@@ -296,7 +295,6 @@ class cache implements cache_interface
 	public function obtain_dl_access_groups($auth_cat, $user_id, $auth_perm, $group_perm_ids = [])
 	{
 		$cat_auth_array	= [];
-		$dl_auth_groups	= [];
 
 		if (($dl_auth_groups = $this->cache->get('_dlext_auth_groups')) === false)
 		{
@@ -362,8 +360,6 @@ class cache implements cache_interface
 	*/
 	public function obtain_dl_file_p()
 	{
-		$dl_file_p = [];
-
 		if (($dl_file_p = $this->cache->get('_dlext_file_p')) === false)
 		{
 			$sql = 'SELECT id as i, cat as c, file_size as s, extern as e, free as f, file_traffic as t, klicks as k 

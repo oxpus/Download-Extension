@@ -1,16 +1,16 @@
 Subject: Nouveau commentaire
 
-Bonjour {USERNAME},
+Bonjour {{ USERNAME }},
 
-Vous recevez cet e-mail car un nouveau commentaire du téléchargement "{DOWNLOAD}" de la catégorie "{CATEGORY}" sur "{SITENAME}" doit-être validé.
+Vous recevez cet e-mail car un nouveau commentaire du téléchargement "{{ DOWNLOAD }}" de la catégorie "{{ CATEGORY }}" sur "{{ SITENAME }}" doit-être validé.
 
 Si vous voulez valider ce nouveau commentaire, cliquez sur le lien suivant :
 
-{U_APPROVE}
+{{ U_APPROVE }}
 
 Vous pouvez voir ce commentaire, en cliquant sur le lien suivant :
 
-{U_DOWNLOAD}
+{{ U_DOWNLOAD }}
 
 
-{EMAIL_SIG}
+{{ EMAIL_SIG }}

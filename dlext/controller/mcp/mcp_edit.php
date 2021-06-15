@@ -41,6 +41,7 @@ class mcp_edit
 	protected $dlext_physical;
 	protected $dlext_topic;
 	protected $dlext_constants;
+	protected $dlext_footer;
 
 	protected $dlext_table_dl_comments;
 	protected $dlext_table_dl_favorites;
@@ -77,6 +78,7 @@ class mcp_edit
 	* @param \oxpus\dlext\core\physical				$dlext_physical
 	* @param \oxpus\dlext\core\topic				$dlext_topic
 	* @param \oxpus\dlext\core\helpers\constants	$dlext_constants
+	* @param \oxpus\dlext\core\helpers\footer		$dlext_footer
 	* @param string									$dlext_table_dl_comments
 	* @param string									$dlext_table_dl_favorites
 	* @param string									$dlext_table_dl_stats
@@ -110,6 +112,7 @@ class mcp_edit
 		\oxpus\dlext\core\physical $dlext_physical,
 		\oxpus\dlext\core\topic $dlext_topic,
 		\oxpus\dlext\core\helpers\constants $dlext_constants,
+		\oxpus\dlext\core\helpers\footer $dlext_footer,
 		$dlext_table_dl_comments,
 		$dlext_table_dl_favorites,
 		$dlext_table_dl_stats,
@@ -154,6 +157,7 @@ class mcp_edit
 		$this->dlext_physical			= $dlext_physical;
 		$this->dlext_topic				= $dlext_topic;
 		$this->dlext_constants			= $dlext_constants;
+		$this->dlext_footer				= $dlext_footer;
 	}
 
 	public function handle()
@@ -218,7 +222,10 @@ class mcp_edit
 		add_form_key('dl_modcp');
 
 		// Initiate custom fields
-		include($this->ext_path . 'includes/fields.' . $this->php_ext);
+		if (!class_exists('custom_profile'))
+		{
+			include($this->ext_path . 'includes/fields.' . $this->php_ext);
+		}
 
 		$cp = new \oxpus\dlext\includes\custom_profile();
 
@@ -512,7 +519,7 @@ class mcp_edit
 						{
 							if ($index[$cat_id]['stats_prune'])
 							{
-								$stat_prune = $this->dlext_main->dl_prune_stats($cat_id, $index[$cat_id]['stats_prune']);
+								$this->dlext_main->dl_prune_stats($cat_id, $index[$cat_id]['stats_prune']);
 							}
 
 							$sql = 'INSERT INTO ' . $this->dlext_table_dl_stats . ' ' . $this->db->sql_build_array('INSERT', [
@@ -587,7 +594,7 @@ class mcp_edit
 				}
 				else
 				{
-					$allow_thumbs_upload = $this->dlext_constants::DL_TRUE;
+					$allow_thumbs_upload = $this->dlext_constants::DL_FALSE;
 				}
 
 				$thumb_form_name = 'thumb_name';
@@ -706,7 +713,7 @@ class mcp_edit
 					{
 						if ($file_new && $real_file_old)
 						{
-							$this->filesystem->remove($this->dlext_constants->get_value('files_dir') . '/downloads/' . $dl_path . $real_file_old);
+							$this->filesystem->remove($this->dlext_constants->get_value('files_dir') . '/downloads/' . $index[$cat_id]['cat_path'] . $real_file_old);
 						}
 
 						if ($file_version)
@@ -1044,7 +1051,6 @@ class mcp_edit
 		$description			= $dl_file['description'];
 		$file_traffic			= $dl_file['file_traffic'];
 		$file_size				= $dl_file['file_size'];
-		$cat					= $dl_file['cat'];
 		$long_desc				= $dl_file['long_desc'];
 		$hacklist				= $dl_file['hacklist'];
 		$hack_author			= $dl_file['hack_author'];
@@ -1057,7 +1063,7 @@ class mcp_edit
 		$todo					= $dl_file['todo'];
 		$warning				= $dl_file['warning'];
 		$mod_desc				= $dl_file['mod_desc'];
-		$mod_list				= ($dl_file['mod_list']) ? 'checked="checked"' : '';
+		$mod_list				= ($dl_file['mod_list']) ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE;
 
 		$mod_desc_uid			= $dl_file['mod_desc_uid'];
 		$mod_desc_flags			= $dl_file['mod_desc_flags'];
@@ -1350,7 +1356,7 @@ class mcp_edit
 		$s_hacklist = [];
 		$s_hacklist[] = ['value' => $this->dlext_constants::DL_HACKLIST_NO,		'lang'	=> $this->language->lang('NO')];
 		$s_hacklist[] = ['value' => $this->dlext_constants::DL_HACKLIST_YES,	'lang'	=> $this->language->lang('YES')];
-		$s_hacklist[] = ['value' => $this->dlext_constants::DL_HACKLIST_EXTRA,	'lang'	=> $this->language->lang('DL_MOD_LIST')];
+		$s_hacklist[] = ['value' => $this->dlext_constants::DL_HACKLIST_EXTRA,	'lang'	=> $this->language->lang('DL_MOD_LIST_SHORT')];
 
 		for ($i = 0; $i < count($s_hacklist); ++$i)
 		{
@@ -1383,6 +1389,12 @@ class mcp_edit
 		$cp->generate_profile_fields($this->user->get_iso_lang_id());
 
 		$this->template->assign_var('S_DL_VERSION_ON', $this->dlext_constants::DL_TRUE);
+
+		/*
+		* include the mod footer
+		*/
+		$this->dlext_footer->set_parameter('mcp');
+		$this->dlext_footer->handle();
 
 		return $this->helper->render('@oxpus_dlext/mcp/dl_mcp_edit.html', $this->language->lang('MCP'));
 	}

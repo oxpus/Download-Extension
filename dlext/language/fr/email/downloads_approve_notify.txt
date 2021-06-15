@@ -1,18 +1,18 @@
 Subject: Nouveau téléchargement
 
-Bonjour {USERNAME},
+Bonjour {{ USERNAME }},
 
-Vous recevez cet e-mail car un nouveau téléchargement de la catégorie "{CATEGORY}" sur "{SITENAME}" doit-être validé :
+Vous recevez cet e-mail car un nouveau téléchargement de la catégorie "{{ CATEGORY }}" sur "{{ SITENAME }}" doit-être validé :
 
 ---------------------------
-{DOWNLOAD}
-{DESCRIPTION}
+{{ DOWNLOAD }}
+{{ DESCRIPTION }}
 ---------------------------
 
 Si vous voulez valider ce téléchargement, cliquez sur le lien suivant :
 
-{U_APPROVE}
+{{ U_APPROVE }}
 
 Rappel : si vous ne voulez plus être notifié des nouveaux téléchargements, modifiez les paramètres de votre profil.
 
-{EMAIL_SIG}
+{{ EMAIL_SIG }}

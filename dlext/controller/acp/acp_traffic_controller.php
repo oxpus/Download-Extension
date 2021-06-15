@@ -102,7 +102,6 @@ class acp_traffic_controller implements acp_traffic_interface
 		$group_traffic		= $this->request->variable('group_traffic', 0);
 		$username			= $this->request->variable('username', '', $this->dlext_constants::DL_TRUE);
 		$group_id			= $this->request->variable('g', 0);
-		$user_id			= $this->request->variable('user_id', 0);
 
 		if ($submit)
 		{
@@ -340,7 +339,6 @@ class acp_traffic_controller implements acp_traffic_interface
 		}
 
 		$traffic_ary		= $this->dlext_format->get_traffic_display_value($this->config['dl_user_dl_auto_traffic']);
-		$user_traffic		= $traffic_ary['traffic_value'];
 
 		$select_datasize[] = ['value' => $this->dlext_constants::DL_FILE_RANGE_BYTE, 	'lang' => $this->language->lang('DL_BYTES_LONG')];
 		$select_datasize[] = ['value' => $this->dlext_constants::DL_FILE_RANGE_KBYTE, 	'lang' => $this->language->lang('DL_KB')];
@@ -368,6 +366,7 @@ class acp_traffic_controller implements acp_traffic_interface
 			'S_DL_PROFILE_ACTION_USER'	=> $this->u_action . '&amp;action=single',
 			'S_DL_PROFILE_ACTION_GROUP'	=> $this->u_action . '&amp;action=group',
 			'S_DL_CONFIG_ACTION'		=> $this->u_action . '&amp;action=auto',
+			'S_DL_TRAFFIC_TABS'			=> $this->dlext_constants::DL_TRUE,
 
 			'U_DL_FIND_USERNAME'		=> $u_user_select,
 		]);

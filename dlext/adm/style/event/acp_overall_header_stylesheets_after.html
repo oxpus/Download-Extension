@@ -1,2 +1,6 @@
 {% INCLUDECSS '@oxpus_dlext/dl_adm.css' %}
-{% INCLUDEJS '@oxpus_dlext/dl_adm.js' %}
+{% INCLUDEJS ''~ EXT_DL_PATH ~'assets/javascript/dl_help.js' %}
+{% INCLUDEJS ''~ EXT_DL_PATH ~'assets/javascript/dl_adm_footer.js' %}
+{% if S_DL_TRAFFIC_TABS %}
+{% INCLUDEJS ''~ EXT_DL_PATH ~'assets/javascript/dl_traffic_tabs.js' %}
+{% endif %}

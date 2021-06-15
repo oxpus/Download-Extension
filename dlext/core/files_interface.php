@@ -47,6 +47,17 @@ interface files_interface
 	public function all_files($cat_id, $sort_ary, $extra_where, $df_id, $modcp, $fields, $limit = 0, $limit_start = 0);
 
 	/**
+	 * Display sorting fields and prepare sql sorting values
+	 *
+	 * @param string $sort_by initial sorting fields
+	 * @param string $order initial sort order
+	 * @param string $sql_sort_by contains sql sorting fields
+	 * @param string $sql_order contains sql sorting order
+	 * @access public
+	*/
+	public function dl_sorting($sort_by, $order, &$sql_sort_by = '', &$sql_order = '');
+
+	/**
 	 * Check the given fields to be valid and to secure the sql statement
 	 *
 	 * @param string $table The name of the table to select from

@@ -36,6 +36,7 @@ class mcp_manage
 	protected $dlext_topic;
 	protected $dlext_status;
 	protected $dlext_constants;
+	protected $dlext_footer;
 
 	protected $dlext_table_dl_comments;
 	protected $dlext_table_dl_favorites;
@@ -73,6 +74,7 @@ class mcp_manage
 	* @param \oxpus\dlext\core\topic				$dlext_topic
 	* @param \oxpus\dlext\core\status				$dlext_status
 	* @param \oxpus\dlext\core\helpers\constants	$dlext_constants
+	* @param \oxpus\dlext\core\helpers\footer		$dlext_footer
 	* @param string									$dlext_table_dl_comments
 	* @param string									$dlext_table_dl_favorites
 	* @param string									$dlext_table_dl_fields_data
@@ -107,6 +109,7 @@ class mcp_manage
 		\oxpus\dlext\core\topic $dlext_topic,
 		\oxpus\dlext\core\status $dlext_status,
 		\oxpus\dlext\core\helpers\constants $dlext_constants,
+		\oxpus\dlext\core\helpers\footer $dlext_footer,
 		$dlext_table_dl_comments,
 		$dlext_table_dl_favorites,
 		$dlext_table_dl_fields_data,
@@ -154,6 +157,7 @@ class mcp_manage
 		$this->dlext_topic				= $dlext_topic;
 		$this->dlext_status				= $dlext_status;
 		$this->dlext_constants			= $dlext_constants;
+		$this->dlext_footer				= $dlext_footer;
 	}
 
 	public function handle()
@@ -704,7 +708,7 @@ class mcp_manage
 
 					$this->template->assign_vars([
 						'DL_PAGE_NUMBER'	=> $this->pagination->on_page($total_downloads, $per_page, $start),
-						'DL_TOTAL_DL'		=> $this->language->lang('DL_VIEW_DOWNLOADS', $total_downloads),
+						'DL_TOTAL_DL'		=> $this->language->lang('DL_VIEW_DOWNLOADS_NUM', $total_downloads),
 					]);
 				}
 
@@ -816,6 +820,12 @@ class mcp_manage
 			'U_DL_MCP_MANAGE_OVERVIEW'	=> $this->helper->route('oxpus_dlext_mcp_manage'),
 			'U_DL_MCP_MANAGE_TOOLBOX'	=> $this->helper->route('oxpus_dlext_mcp_manage', ['view' => 'toolbox']),
 		]);
+
+		/*
+		* include the mod footer
+		*/
+		$this->dlext_footer->set_parameter('mcp');
+		$this->dlext_footer->handle();
 
 		return $this->helper->render('@oxpus_dlext/mcp/dl_mcp_manage.html', $this->language->lang('MCP'));
 	}

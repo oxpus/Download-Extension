@@ -1,16 +1,16 @@
-Subject: Nuevo Estado para el Reporte de Error en {SITENAME}
+Subject: Nuevo Estado para el Reporte de Error en {{ SITENAME }}
 
-Hola {USERNAME},
+Hola {{ USERNAME }},
 
-Recibe este email porque el estado de su reporte de error "{REPORT_TITLE}" en "{SITENAME}" ha cambiado.
-Nuevo Estado: {STATUS}.
+Recibe este email porque el estado de su reporte de error "{{ REPORT_TITLE }}" en "{{ SITENAME }}" ha cambiado.
+Nuevo Estado: {{ STATUS }}.
 
-{STATUS_TEXT}
+{{ STATUS_TEXT }}
 
 Para más detalles sobre este reporte siga este enlace:
 
-{U_BUG_REPORT}
+{{ U_BUG_REPORT }}
 
 ----------------------------
 
-{EMAIL_SIG}
+{{ EMAIL_SIG }}

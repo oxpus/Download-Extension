@@ -30,7 +30,7 @@
 		<td><input type="text" size="5" maxlength="8" name="user_id" value="{{ DL_USER_ID }}" /></td>
 		<td><input type="text" size="15" maxlength="15" name="user_ip" value="{{ DL_USER_IP }}" /></td>
 		<td><input type="text" size="25" maxlength="25" name="username" value="{{ DL_USERNAME }}" /></td>
-		<td><input type="checkbox" class="radio switch" name="guests" value="1" {{ DL_CHECKED }} id="guests" /><label class="switch" for="guests">&nbsp;</label></td>
+		<td><input type="checkbox" class="radio switch" name="guests" value="1" {% if DL_CHECKED %}checked{% endif %} id="guests" /><label class="switch" for="guests">&nbsp;</label></td>
 	</tr>
 	</tbody>
 	</table>
@@ -77,7 +77,7 @@
 	</table>
 
 	<p class="dl-text-right">
-		<a href="#" onclick="marklist('banlist', 'ban_id', true); return false;">{{ lang('MARK_ALL') }}</a> :: <a href="#" onclick="marklist('banlist', 'ban_id', false); return false;">{{ lang('UNMARK_ALL') }}</a>
+		<a href="#" class="dl-marklist" data-form="banlist" data-field="ban_id">{{ lang('MARK_ALL') }}</a> :: <a href="#" class="dl-unmarklist" data-form="banlist" data-field="ban_id">{{ lang('UNMARK_ALL') }}</a>
 	</p>
 
 </fieldset>

@@ -37,7 +37,7 @@
 </table>
 
 <fieldset class="quick">
-	<span class="small"><a href="#" onclick="marklist('extension', 'extension', true); return false;">{{ lang('MARK_ALL') }}</a> :: <a href="#" onclick="marklist('extension', 'extension', false); return false;">{{ lang('UNMARK_ALL') }}</a></span>
+	<span class="small"><a href="#" class="dl-marklist" data-form="extension" data-field="extension">{{ lang('MARK_ALL') }}</a> :: <a href="#" class="dl-unmarklist" data-form="extension" data-field="extension">{{ lang('UNMARK_ALL') }}</a></span>
 	<br />
 	<input type="submit" name="submit" class="button1" value="{{ lang('DL_DELETE') }}" /><br />
 	<input type="hidden" name="action" value="delete" />

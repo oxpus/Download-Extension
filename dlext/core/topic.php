@@ -23,8 +23,6 @@ class topic implements topic_interface
 	protected $language;
 
 	/* extension owned objects */
-	protected $dl_index;
-
 	protected $dlext_auth;
 	protected $dlext_format;
 	protected $dlext_constants;
@@ -77,12 +75,12 @@ class topic implements topic_interface
 		$this->dlext_constants	= $dlext_constants;
 
 		$this->dlext_table_downloads	= $dlext_table_downloads;
-
-		$this->dl_index			= $this->dlext_auth->dl_index();
 	}
 
 	public function gen_dl_topic($mode, $dl_id, $topic_drop_mode = '')
 	{
+		$dl_index = $this->dlext_auth->dl_index();
+
 		if (!$this->config['dl_enable_dl_topic'] || !$dl_id || !in_array($mode, ['post','edit']))
 		{
 			return;
@@ -139,14 +137,14 @@ class topic implements topic_interface
 
 		if ($this->config['dl_topic_title_catname'])
 		{
-			$dl_title .= ' (' . $this->dl_index[$cat_id]['cat_name_nav'] . ')';
+			$dl_title .= ' (' . $dl_index[$cat_id]['cat_name_nav'] . ')';
 		}
 
 		$topic_text_add = "\n[b]" . $this->language->lang('DL_NAME') . ":[/b] " . $description;
 
 		if ($this->config['dl_topic_post_catname'])
 		{
-			$topic_text_add .= "\n[b]" . $this->language->lang('DL_CAT_NAME') . ":[/b] " . $this->dl_index[$cat_id]['cat_name_nav'];
+			$topic_text_add .= "\n[b]" . $this->language->lang('DL_CAT_NAME') . ":[/b] " . $dl_index[$cat_id]['cat_name_nav'];
 		}
 
 		$sql = 'SELECT username, user_colour
@@ -190,15 +188,15 @@ class topic implements topic_interface
 
 		if ($this->config['dl_topic_forum'] == $this->dlext_constants::DL_NONE)
 		{
-			$topic_forum	= $this->dl_index[$cat_id]['dl_topic_forum'];
-			$topic_text		= $this->dl_index[$cat_id]['dl_topic_text'];
-			$topic_type		= $this->dl_index[$cat_id]['dl_topic_type'];
+			$topic_forum	= $dl_index[$cat_id]['dl_topic_forum'];
+			$topic_text		= $dl_index[$cat_id]['dl_topic_text'];
+			$topic_type		= $dl_index[$cat_id]['dl_topic_type'];
 
-			if ($this->dl_index[$cat_id]['topic_more_details'] == $this->dlext_constants::DL_TOPIC_MORE_DETAILS_UNDER)
+			if ($dl_index[$cat_id]['topic_more_details'] == $this->dlext_constants::DL_TOPIC_MORE_DETAILS_UNDER)
 			{
 				$topic_text .= "\n" . $topic_text_add;
 			}
-			else if ($this->dl_index[$cat_id]['topic_more_details'] == $this->dlext_constants::DL_TOPIC_MORE_DETAILS_OVER)
+			else if ($dl_index[$cat_id]['topic_more_details'] == $this->dlext_constants::DL_TOPIC_MORE_DETAILS_OVER)
 			{
 				$topic_text = $topic_text_add . "\n\n" . $topic_text;
 			}
@@ -226,7 +224,7 @@ class topic implements topic_interface
 
 		$reset_perms = $this->dlext_constants::DL_FALSE;
 
-		if (!$this->config['dl_diff_topic_user'] || ($this->config['dl_diff_topic_user'] == $this->dlext_constants::DL_TOPIC_USER_CAT && !$this->dl_index[$cat_id]['diff_topic_user']))
+		if (!$this->config['dl_diff_topic_user'] || ($this->config['dl_diff_topic_user'] == $this->dlext_constants::DL_TOPIC_USER_CAT && !$dl_index[$cat_id]['diff_topic_user']))
 		{
 			$sql_tmp = 'SELECT user_id
 						FROM ' . USERS_TABLE . '
@@ -266,17 +264,17 @@ class topic implements topic_interface
 
 			$this->db->sql_freeresult($result_tmp);
 		}
-		else if ($this->config['dl_diff_topic_user'] == $this->dlext_constants::DL_TOPIC_USER_CAT && $this->dl_index[$cat_id]['diff_topic_user'])
+		else if ($this->config['dl_diff_topic_user'] == $this->dlext_constants::DL_TOPIC_USER_CAT && $dl_index[$cat_id]['diff_topic_user'])
 		{
 			$sql_tmp = 'SELECT user_id
 						FROM ' . USERS_TABLE . '
-						WHERE user_id = ' . (int) $this->dl_index[$cat_id]['topic_user'];
+						WHERE user_id = ' . (int) $dl_index[$cat_id]['topic_user'];
 			$result_tmp = $this->db->sql_query($sql_tmp);
 
 			if ($this->db->sql_affectedrows())
 			{
 				//Get category topic_user permissions
-				$dl_topic_user_id = $this->dl_index[$cat_id]['topic_user'];
+				$dl_topic_user_id = $dl_index[$cat_id]['topic_user'];
 				$reset_perms = $this->dlext_constants::DL_TRUE;
 			}
 			else
@@ -311,7 +309,6 @@ class topic implements topic_interface
 		}
 
 		$poll = [];
-		$forum_data = [];
 		$post_data = [];
 
 		if ($mode == 'post')

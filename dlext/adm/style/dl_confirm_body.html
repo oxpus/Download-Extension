@@ -22,7 +22,7 @@
 	<dl>
 		<dt><label>{{ lang('DL_TOPIC_DROP_MODE') }}</label></dt>
 		<dd>
-			<input type="radio" class="checkbox" name="topic_drop_mode" id="tdmd" value="drop" checked="checked" /> <label for="tdmd">{{ lang('DL_TOPIC_DROP_MODE_DELETE') }}</label>
+			<input type="radio" class="checkbox" name="topic_drop_mode" id="tdmd" value="drop" checked /> <label for="tdmd">{{ lang('DL_TOPIC_DROP_MODE_DELETE') }}</label>
 			<input type="radio" class="checkbox" name="topic_drop_mode" id="tdmc" value="close" /> <label for="tdmc">{{ lang('DL_TOPIC_DROP_MODE_CLOSE') }}</label>
 		</dd>
 	</dl>
@@ -36,7 +36,7 @@
 		<dd>
 			<select name="new_cat_id">
 				<option value="{{ DL_DELETE_CAT }}">{{ lang('DL_DELETE_CAT_ONLY') }}</option>
-				<option value="{{ DL_DELETE_ALL }}" selected="selected">{{ lang('DL_DELETE_CAT_AND_FILES') }}</option>
+				<option value="{{ DL_DELETE_ALL }}" selected>{{ lang('DL_DELETE_CAT_AND_FILES') }}</option>
 				<option value="---">----------------------------------------</option>
 				{% for target_cat_select in loops.target_cat_select %}
 				<option value="{{ target_cat_select.DL_CAT_ID }}">{{ target_cat_select.DL_SEPERATOR }}{{ target_cat_select.DL_CAT_NAME }}</option>

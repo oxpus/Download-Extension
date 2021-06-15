@@ -1,18 +1,18 @@
 Subject: Nueva Descarga
 
-Hola {USERNAME},
+Hola {{ USERNAME }},
 
-Recibe este correo electrónico debido a una descarga nueva o editada en "{SITENAME}" en la categoría "{CATEGORY}" que debe ser aprobada:
+Recibe este correo electrónico debido a una descarga nueva o editada en "{{ SITENAME }}" en la categoría "{{ CATEGORY }}" que debe ser aprobada:
 
 ---------------------------
-{DOWNLOAD}
-{DESCRIPTION}
+{{ DOWNLOAD }}
+{{ DESCRIPTION }}
 ---------------------------
 
 Si quiere aprobar esta descarga, haga clic en el siguiente enlace:
 
-{U_APPROVE}
+{{ U_APPROVE }}
 
 Recuerde que siempre puede elegir no ser notificado sobre descargas nuevas o editadas cambiando la configuración apropiada en su perfil del usuario.
 
-{EMAIL_SIG}
+{{ EMAIL_SIG }}

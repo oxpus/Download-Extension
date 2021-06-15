@@ -55,7 +55,7 @@
 
 	<p class="dl-text-right">
 		<span class="small">
-			<a href="#" onclick="marklist('dl_stats', 'del_id', true); return false;">{{ lang('MARK_ALL') }}</a> :: <a href="#" onclick="marklist('dl_stats', 'del_id', false); return false;">{{ lang('UNMARK_ALL') }}</a>
+			<a href="#" class="dl-marklist" data-form="dl_stats" data-field="del_id">{{ lang('MARK_ALL') }}</a> :: <a href="#" class="dl-unmarklist" data-form="dl_stats" data-field="del_id">{{ lang('UNMARK_ALL') }}</a>
 		</span>
 	</p>
 
@@ -65,7 +65,7 @@
 
 		<dl>
 			<dt><label>{{ lang('DELETE_MARKED') }}</label></dt>
-			<dd><input type="radio" class="permissions-checkbox" name="del_stat" value="0" checked="checked" /></dd>
+			<dd><input type="radio" class="permissions-checkbox" name="del_stat" value="0" checked /></dd>
 		</dl>
 		<dl>
 			<dt><label>{{ lang('DL_GUEST_STAT_DELETE') }}</label></dt>
@@ -142,7 +142,7 @@
 		<dl>
 			<dt><label>{{ lang('DL_GUEST_STATS_ADMIN') }}</label></dt>
 			<dd>
-				<input type="checkbox" class="radio switch" id="show_guests" name="show_guests" value="1"{% if S_DL_SHOW_GUESTS %} checked="checked"{% endif %} />
+				<input type="checkbox" class="radio switch" id="show_guests" name="show_guests" value="1"{% if S_DL_SHOW_GUESTS %} checked{% endif %} />
 				<label class="switch" for="show_guests"></label>
 			</dd>
 		</dl>

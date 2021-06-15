@@ -57,15 +57,12 @@ class status implements status_interface
 		$this->dlext_cache 		= $dlext_cache;
 		$this->dlext_main 		= $dlext_main;
 		$this->dlext_constants 	= $dlext_constants;
-
-		$this->dl_file_p		= $this->dlext_cache->obtain_dl_file_p();
-		$this->dl_file_icon		= $this->dlext_cache->obtain_dl_files(intval($this->config['dl_new_time']), intval($this->config['dl_edit_time']));
-		$this->dl_auth			= $this->dlext_auth->dl_auth();
-		$this->dl_index			= $this->dlext_auth->dl_index();
 	}
 
 	public function mini_status_file($parent, $file_id, $rss = false)
 	{
+		$this->dl_file_icon = $this->dlext_cache->obtain_dl_files(intval($this->config['dl_new_time']), intval($this->config['dl_edit_time']));
+
 		if (isset($this->dl_file_icon['new'][$parent][$file_id]) && $this->dl_file_icon['new'][$parent][$file_id] == $this->dlext_constants::DL_TRUE)
 		{
 			$mini_icon_img = ($rss) ? $this->language->lang('DL_FILE_NEW') : 'new';
@@ -84,6 +81,13 @@ class status implements status_interface
 
 	public function mini_status_cat($cur, $parent, $flag = 0)
 	{
+		if (empty($this->dl_index))
+		{
+			$this->dl_file_icon		= $this->dlext_cache->obtain_dl_files(intval($this->config['dl_new_time']), intval($this->config['dl_edit_time']));
+			$this->dl_auth			= $this->dlext_auth->dl_auth();
+			$this->dl_index			= $this->dlext_auth->dl_index();
+		}
+
 		$mini_status_icon[$cur]['new'] = 0;
 		$mini_status_icon[$cur]['edit'] = 0;
 
@@ -148,6 +152,12 @@ class status implements status_interface
 	*/
 	public function status($df_id)
 	{
+		if (empty($this->dl_file_p))
+		{
+			$this->dl_file_p		= $this->dlext_cache->obtain_dl_file_p();
+			$this->dl_file_icon		= $this->dlext_cache->obtain_dl_files(intval($this->config['dl_new_time']), intval($this->config['dl_edit_time']));
+		}
+
 		if (!isset($this->dl_file_p[$df_id]['c']) || $this->dlext_constants->get_value('user_banned'))
 		{
 			return [

@@ -114,12 +114,12 @@ class index
 		$this->dlext_status				= $dlext_status;
 		$this->dlext_constants			= $dlext_constants;
 		$this->dlext_footer				= $dlext_footer;
-
-		$this->dlext_main->dl_handle_active();
 	}
 
 	public function handle()
 	{
+		$this->dlext_main->dl_handle_active();
+
 		$cat		= $this->request->variable('cat', 0);
 		$cat_id		= $this->request->variable('cat_id', 0);
 		$cat_df_id	= $this->request->variable('cat_df_id', 0);
@@ -157,89 +157,9 @@ class index
 
 		$index = ($cat) ? $this->dlext_main->index($cat) : $this->dlext_main->index();
 
-		/*
-		* init sorting the downloads
-		*/
-		if ($this->config['dl_sort_preform'])
-		{
-			$sort_by = 0;
-			$order = 'ASC';
-		}
-		else
-		{
-			$sort_by = (!$sort_by) ? $this->user->data['user_dl_sort_fix'] : $sort_by;
-			$order = (!$order) ? (($this->user->data['user_dl_sort_dir']) ? 'DESC' : 'ASC') : $order;
-		}
-
-		switch ($sort_by)
-		{
-			case $this->dlext_constants::DL_SORT_DESCRIPTION:
-				$sql_sort_by = 'description';
-				break;
-			case $this->dlext_constants::DL_SORT_FILE_NAME:
-				$sql_sort_by = 'file_name';
-				break;
-			case $this->dlext_constants::DL_SORT_CLICKS:
-				$sql_sort_by = 'klicks';
-				break;
-			case $this->dlext_constants::DL_SORT_FREE:
-				$sql_sort_by = 'free';
-				break;
-			case $this->dlext_constants::DL_SORT_EXTERN:
-				$sql_sort_by = 'extern';
-				break;
-			case $this->dlext_constants::DL_SORT_FILE_SIZE:
-				$sql_sort_by = 'file_size';
-				break;
-			case $this->dlext_constants::DL_SORT_LAST_TIME:
-				$sql_sort_by = 'change_time';
-				break;
-			case $this->dlext_constants::DL_SORT_RATING:
-				$sql_sort_by = 'rating';
-				break;
-			default:
-				$sql_sort_by = 'sort';
-		}
-
-		$sql_order = ($order == 'DESC') ? 'DESC' : 'ASC';
-
-		if (!$this->config['dl_sort_preform'] && $this->user->data['user_dl_sort_opt'])
-		{
-			$this->template->assign_var('S_DL_SORT_OPTIONS', $this->dlext_constants::DL_TRUE);
-
-			$selected_0 = ($sort_by == $this->dlext_constants::DL_SORT_DEFAULT) ? ' selected="selected"' : '';
-			$selected_1 = ($sort_by == $this->dlext_constants::DL_SORT_DESCRIPTION) ? ' selected="selected"' : '';
-			$selected_2 = ($sort_by == $this->dlext_constants::DL_SORT_FILE_NAME) ? ' selected="selected"' : '';
-			$selected_3 = ($sort_by == $this->dlext_constants::DL_SORT_CLICKS) ? ' selected="selected"' : '';
-			$selected_4 = ($sort_by == $this->dlext_constants::DL_SORT_FREE) ? ' selected="selected"' : '';
-			$selected_5 = ($sort_by == $this->dlext_constants::DL_SORT_EXTERN) ? ' selected="selected"' : '';
-			$selected_6 = ($sort_by == $this->dlext_constants::DL_SORT_FILE_SIZE) ? ' selected="selected"' : '';
-			$selected_7 = ($sort_by == $this->dlext_constants::DL_SORT_LAST_TIME) ? ' selected="selected"' : '';
-			$selected_8 = ($sort_by == $this->dlext_constants::DL_SORT_RATING) ? ' selected="selected"' : '';
-
-			$selected_sort_0 = ($order == 'ASC') ? ' selected="selected"' : '';
-			$selected_sort_1 = ($order == 'DESC') ? ' selected="selected"' : '';
-
-			$this->template->assign_vars([
-				'DL_SELECTED_0'		=> $selected_0,
-				'DL_SELECTED_1'		=> $selected_1,
-				'DL_SELECTED_2'		=> $selected_2,
-				'DL_SELECTED_3'		=> $selected_3,
-				'DL_SELECTED_4'		=> $selected_4,
-				'DL_SELECTED_5'		=> $selected_5,
-				'DL_SELECTED_6'		=> $selected_6,
-				'DL_SELECTED_7'		=> $selected_7,
-				'DL_SELECTED_8'		=> $selected_8,
-
-				'DL_SELECTED_SORT_0'	=> $selected_sort_0,
-				'DL_SELECTED_SORT_1'	=> $selected_sort_1,
-			]);
-		}
-		else
-		{
-			$s_sort_by = '';
-			$s_order = '';
-		}
+		$sql_sort_by = '';
+		$sql_order = '';
+		$this->dlext_files->dl_sorting($sort_by, $order, $sql_sort_by, $sql_order);
 
 		/*
 		* Hide subcategories if wanted by the user
@@ -318,7 +238,6 @@ class index
 		{
 			foreach (array_keys($index) as $cat_id)
 			{
-				$parent_id = (isset($index[$cat_id]['parent'])) ? $index[$cat_id]['parent'] : 0;
 				$cat_name = (isset($index[$cat_id]['cat_name'])) ? $index[$cat_id]['cat_name'] : '';
 				$cat_desc = (isset($index[$cat_id]['description'])) ? $index[$cat_id]['description'] : '';
 				$cat_view = (isset($index[$cat_id]['nav_path'])) ? $index[$cat_id]['nav_path'] : '';
@@ -496,7 +415,7 @@ class index
 
 				$this->template->assign_vars([
 					'DL_PAGE_NUMBER'	=> $this->pagination->on_page($total_downloads, $this->config['dl_links_per_page'], $start),
-					'DL_TOTAL_DL'		=> $this->language->lang('DL_VIEW_DOWNLOADS', $total_downloads),
+					'DL_TOTAL_DL'		=> $this->language->lang('DL_VIEW_DOWNLOADS_NUM', $total_downloads),
 				]);
 			}
 
@@ -780,6 +699,7 @@ class index
 
 			'S_DL_ENABLE_DESC_HIDE'	=> (isset($this->config['dl_index_desc_hide']) && $this->config['dl_index_desc_hide']) ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE,
 			'S_DL_ENABLE_RATE'		=> (isset($this->config['dl_enable_rate']) && $this->config['dl_enable_rate']) ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE,
+			'S_DL_FORM_ACTION'		=> ($cat) ? $this->helper->route('oxpus_dlext_index', ['cat' => $cat]) : $this->helper->route('oxpus_dlext_index'),
 
 			'U_DOWNLOADS'	=> ($cat) ? $this->helper->route('oxpus_dlext_index', ['cat' => $cat]) : $this->helper->route('oxpus_dlext_index'),
 			'U_DL_SEARCH'	=> (!empty($index) || $cat) ? $this->helper->route('oxpus_dlext_search') : '',

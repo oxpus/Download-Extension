@@ -24,13 +24,13 @@ oxpus_dlext_index:
     defaults: { _controller: oxpus.dlext.index:handle }
 oxpus_dlext_latest:
     path: /dlext/latest
-    defaults: { _controller: oxpus.dlext.latest:handle }
+    defaults: { _controller: oxpus.dlext.overall:latest }
 oxpus_dlext_load:
     path: /dlext/load
     defaults: { _controller: oxpus.dlext.load:handle }
 oxpus_dlext_overall:
     path: /dlext/overall
-    defaults: { _controller: oxpus.dlext.overall:handle }
+    defaults: { _controller: oxpus.dlext.overall:overview }
 oxpus_dlext_rate:
     path: /dlext/rate
     defaults: { _controller: oxpus.dlext.rate:handle }

@@ -86,12 +86,12 @@ class stats
 		$this->dlext_main				= $dlext_main;
 		$this->dlext_footer				= $dlext_footer;
 		$this->dlext_constants			= $dlext_constants;
-
-		$this->dlext_main->dl_handle_active();
 	}
 
 	public function handle()
 	{
+		$this->dlext_main->dl_handle_active();
+
 		$cat		= $this->request->variable('cat', 0);
 		$index 		= ($cat) ? $this->dlext_main->index($cat) : $this->dlext_main->index();
 

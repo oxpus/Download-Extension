@@ -20,7 +20,7 @@ class view
 	protected $template;
 	protected $user;
 	protected $language;
-	protected $notifications;
+	protected $notification;
 	protected $pagination;
 
 	/* extension owned objects */
@@ -94,15 +94,12 @@ class view
 		$this->dlext_main				= $dlext_main;
 		$this->dlext_footer				= $dlext_footer;
 		$this->dlext_constants			= $dlext_constants;
-
-		$this->dlext_main->dl_handle_active();
 	}
 
 	public function handle()
 	{
-		/*
-		* open the bug tracker, if choosen and possible
-		*/
+		$this->dlext_main->dl_handle_active();
+
 		if ($this->user->data['is_registered'])
 		{
 			$cancel		= $this->request->variable('cancel', '');

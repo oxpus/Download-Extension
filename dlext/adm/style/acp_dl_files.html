@@ -21,15 +21,15 @@
 	<dl>
 		<dt>
 			<label>
-				<select name="cat_id" onchange="forms['cat_id'].submit();">
+				<select name="cat_id" class="dl-change-select" data-button="dl-cat-select-button">
 					<option value="{{ DL_PERM_NONE }}">{{ lang('DL_CHOOSE_CATEGORY') }}</option>
 					<option value="{{ DL_PERM_NONE }}">----------</option>
 						{% for cat_select_row in loops.cat_select_row %}
-						<option value="{{ cat_select_row.DL_CAT_ID }}"{% if cat_select_row.DL_SELECTED %} selected="selected"{% endif %}>{{ cat_select_row.DL_SEPERATOR }}{{ cat_select_row.DL_CAT_NAME }}</option>
+						<option value="{{ cat_select_row.DL_CAT_ID }}"{% if cat_select_row.DL_SELECTED %} selected{% endif %}>{{ cat_select_row.DL_SEPERATOR }}{{ cat_select_row.DL_CAT_NAME }}</option>
 						{% endfor %}
 					</select>
 			</label>
-			<input type="submit" value="{{ lang('GO') }}" class="button1" />{% if S_DL_LIST_DOWNLOADS %}&nbsp;<span>{{ DL_COUNT }}</span>{% endif %}</dt>
+			<input type="submit" value="{{ lang('GO') }}" class="button1" id="dl-cat-select-button" />{% if S_DL_LIST_DOWNLOADS %}&nbsp;<span>{{ DL_COUNT }}</span>{% endif %}</dt>
 		<dd>{% if S_DL_LIST_DOWNLOADS %}<a href="{{ U_DL_DOWNLOAD_ORDER_ALL }}">{{ lang('DL_SORT_BY') }}</a>{% else %}<span>{{ lang('DL_EMPTY_CATEGORY') }}</span>{% endif %}</dd>
 	</dl>
 

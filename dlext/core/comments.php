@@ -23,7 +23,7 @@ class comments implements comments_interface
 	protected $user;
 	protected $language;
 	protected $dispatcher;
-	protected $notifications;
+	protected $notification;
 	protected $pagination;
 
 	/* extension owned objects */
@@ -310,34 +310,14 @@ class comments implements comments_interface
 				{
 					case $this->dlext_constants::DL_PERM_ALL:
 					case $this->dlext_constants::DL_PERM_USER:
-						if (!empty($fav_user))
-						{
-							$send_notify = $this->dlext_constants::DL_TRUE;
-							$processing_user = $fav_user;
-						}
-						else
-						{
-							$send_notify = $this->dlext_constants::DL_FALSE;
-						}
+						$processing_user = $fav_user;
+						$send_notify = $this->dlext_constants::DL_TRUE;
 					break;
 
 					case $this->dlext_constants::DL_PERM_MOD:
 						$processing_user = $this->dlext_auth->dl_auth_users($cat_id, 'auth_mod');
-
-						if (!empty($processing_user))
-						{
-							$send_notify = $this->dlext_constants::DL_TRUE;
-						}
-
-						if (!empty($fav_user))
-						{
-							$processing_user = array_merge($fav_user, $processing_user);
-							$send_notify = $this->dlext_constants::DL_TRUE;
-						}
-						else
-						{
-							$send_notify = $this->dlext_constants::DL_FALSE;
-						}
+						$processing_user = array_merge($fav_user, $processing_user);
+						$send_notify = $this->dlext_constants::DL_TRUE;
 					break;
 
 					default:

@@ -13,7 +13,6 @@ namespace oxpus\dlext\core\helpers;
 class constants
 {
 	/* extension constants */
-	const DL_AUTH_CHECK_ALL = 0;
 	const DL_AUTH_CHECK_MOD = 2;
 	const DL_AUTH_CHECK_UPLOAD = 3;
 	const DL_AUTH_CHECK_VIEW = 1;
@@ -42,11 +41,9 @@ class constants
 	const DL_FILE_RANGE_GBYTE = 'GB';
 	const DL_FILE_RANGE_KBYTE = 'KB';
 	const DL_FILE_RANGE_MBYTE = 'MB';
-	const DL_FILE_SIZE_BYTE = 1;
 	const DL_FILE_SIZE_GBYTE = 1073741824;
 	const DL_FILE_SIZE_KBYTE = 1024;
 	const DL_FILE_SIZE_MBYTE = 1048576;
-	const DL_FILE_TYPE_FILE = 0;
 	const DL_FILE_TYPE_IMAGE = 1;
 
 	const DL_FOOTER_STATS_ADMIN_ONLY = 3;
@@ -73,7 +70,6 @@ class constants
 
 	const DL_PERM_ADMIN = 3;
 	const DL_PERM_ALL = 0;
-	const DL_PERM_DROP_ALL = 3;
 	const DL_PERM_DROP_CATS = 2;
 	const DL_PERM_EDIT = 0;
 	const DL_PERM_GENERAL_ALL = 1;
@@ -107,7 +103,6 @@ class constants
 	const DL_RSS_DESC_LENGTH_SHORT = 2;
 
 	const DL_SEARCH_TYPE_ALL = 0;
-	const DL_SEARCH_TYPE_SINGLE = 1;
 
 	const DL_SORT_ACP = 1;
 	const DL_SORT_ASC = 0;
@@ -146,7 +141,6 @@ class constants
 	const DL_TRAFFICS_ON_ALL = 1;
 	const DL_TRAFFICS_ON_GROUPS = 2;
 
-	const DL_VERSION_ADD_NEW = 0;
 	const DL_VERSION_ADD_OLD = 1;
 	const DL_VERSION_DELETE = 3;
 	const DL_VERSION_REPLACE = 2;
@@ -373,14 +367,7 @@ class constants
 		switch ($value)
 		{
 			case 'files_dir':
-				if (isset($this->config['upload_path']))
-				{
-					$core_upload_path = $this->config['upload_path'];
-				}
-				else if (isset($this->config['storage\attachment\config\path']))
-				{
-					$core_upload_path = $this->config['storage\attachment\config\path'];
-				}
+				$core_upload_path = $this->config['upload_path'];
 
 				if ($raw)
 				{

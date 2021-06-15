@@ -312,14 +312,14 @@ class acp_cat_edit_controller implements acp_cat_edit_interface
 				$data_range_select	= $this->dlext_constants::DL_FILE_RANGE_KBYTE;
 			}
 
-			$approve			= ($must_approve) ? 'checked="checked"' : '';
-			$allow_mod_desc		= ($allow_mod_desc) ? 'checked="checked"' : '';
-			$stats				= ($statistics) ? 'checked="checked"' : '';
-			$comments			= ($comments) ? 'checked="checked"' : '';
-			$allow_thumbs		= ($allow_thumbs) ? 'checked="checked"' : '';
-			$approve_comments	= ($approve_comments) ? 'checked="checked"' : '';
-			$bug_tracker		= ($bug_tracker) ? 'checked="checked"' : '';
-			$show_file_hash		= ($show_file_hash) ? 'checked="checked"' : '';
+			$approve			= ($must_approve) ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE;
+			$allow_mod_desc		= ($allow_mod_desc) ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE;
+			$stats				= ($statistics) ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE;
+			$comments			= ($comments) ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE;
+			$allow_thumbs		= ($allow_thumbs) ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE;
+			$approve_comments	= ($approve_comments) ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE;
+			$bug_tracker		= ($bug_tracker) ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE;
+			$show_file_hash		= ($show_file_hash) ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE;
 
 			$this->language->add_lang('posting');
 

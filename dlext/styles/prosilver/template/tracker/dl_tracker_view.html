@@ -86,7 +86,7 @@
 			<div>
 				<select name="bt_filter">
 					{% for dl_report_filter in loops.dl_report_filter %}
-					<option value="{{ dl_report_filter.DL_VALUE }}"{% if dl_report_filter.DL_VALUE eq S_DL_SELECT_FILTER %} selected="selected"{% endif %}>{{ dl_report_filter.DL_LANG }}{% if dl_report_filter.DL_COUNT %} ({{ dl_report_filter.DL_COUNT }}){% endif %}</option>
+					<option value="{{ dl_report_filter.DL_VALUE }}"{% if dl_report_filter.DL_VALUE eq S_DL_SELECT_FILTER %} selected{% endif %}>{{ dl_report_filter.DL_LANG }}{% if dl_report_filter.DL_COUNT %} ({{ dl_report_filter.DL_COUNT }}){% endif %}</option>
 					{% endfor %}
 				</select>
 				<input type="submit" name="submit" value="{{ lang('DL_FILTER') }}" class="button1" />

@@ -13,7 +13,7 @@ namespace oxpus\dlext\controller;
 class unbroken
 {
 	/* phpbb objects */
-	protected $notifications;
+	protected $notification;
 	protected $db;
 	protected $helper;
 	protected $request;

@@ -1,18 +1,18 @@
 Subject: Descarga Actualizada
 
-Hola {USERNAME},
+Hola {{ USERNAME }},
 
-Ha recibido este email porque la siguiente descarga en "{SITENAME}" en la categoría "{CATEGORY}" ha sido actualizada:
+Ha recibido este email porque la siguiente descarga en "{{ SITENAME }}" en la categoría "{{ CATEGORY }}" ha sido actualizada:
 
 ---------------------------
-{DOWNLOAD}
-{DESCRIPTION}
+{{ DOWNLOAD }}
+{{ DESCRIPTION }}
 ---------------------------
 
 Si quiere echar un vistazo a esta descarga, haga clic en el siguiente enlace:
 
-{U_CATEGORY}
+{{ U_CATEGORY }}
 
 Recuerde que siempre puede elegir no ser notificado sobre las descargas actualizadas quitando las notificaciones en su perfil del usuario.
 
-{EMAIL_SIG}
+{{ EMAIL_SIG }}

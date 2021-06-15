@@ -94,12 +94,12 @@ class search
 		$this->dlext_status				= $dlext_status;
 		$this->dlext_footer				= $dlext_footer;
 		$this->dlext_constants			= $dlext_constants;
-
-		$this->dlext_main->dl_handle_active();
 	}
 
 	public function handle()
 	{
+		$this->dlext_main->dl_handle_active();
+
 		$cat		= $this->request->variable('cat', 0);
 		$start		= $this->request->variable('start', 0);
 
@@ -169,7 +169,7 @@ class search
 				case 'warning':
 				case 'todo':
 				case 'req':
-					$sql_fields = "d.$search_in_fields";
+					$sql_fields = 'd.' . $this->db->sql_escape($search_in_fields);
 					break;
 				default:
 					trigger_error($this->language->lang('DL_NO_PERMISSION'));
@@ -251,7 +251,7 @@ class search
 
 				$this->template->assign_vars([
 					'DL_PAGE_NUMBER'	=> $this->pagination->on_page($search_counter, $this->config['dl_links_per_page'], $start),
-					'DL_TOTAL_DL'		=> $this->language->lang('DL_VIEW_DOWNLOADS', $search_counter),
+					'DL_TOTAL_DL'		=> $this->language->lang('DL_VIEW_DOWNLOADS_NUM', $search_counter),
 				]);
 			}
 
@@ -272,7 +272,7 @@ class search
 				];
 
 				$sql_array['WHERE'] = 'd.cat = c.id AND ' . $this->db->sql_in_set('d.id', $search_ids);
-				$sql_array['ORDER_BY'] = ' c.cat_name, d.sort ' . (string) $sort_dir;
+				$sql_array['ORDER_BY'] = ' c.cat_name, d.sort ' . (string) $this->db->sql_escape($sort_dir);
 
 				$sql = $this->db->sql_build_query('SELECT', $sql_array);
 
@@ -447,7 +447,7 @@ class search
 
 				$this->template->assign_vars([
 					'DL_PAGE_NUMBER'	=> $this->pagination->on_page($total_found_dl, $this->config['dl_links_per_page'], $start),
-					'DL_TOTAL_DL'		=> $this->language->lang('DL_VIEW_DOWNLOADS', $total_found_dl),
+					'DL_TOTAL_DL'		=> $this->language->lang('DL_VIEW_DOWNLOADS_NUM', $total_found_dl),
 				]);
 			}
 
@@ -480,7 +480,7 @@ class search
 				];
 
 				$sql_array['WHERE'] = 'd.cat = c.id AND d.approve = 1 AND ' . $this->db->sql_in_set('d.id', $search_ids);
-				$sql_array['ORDER_BY'] = ' c.cat_name, d.sort ' . (string) $sort_dir;
+				$sql_array['ORDER_BY'] = ' c.cat_name, d.sort ' . (string) $this->db->sql_escape($sort_dir);
 
 				$sql = $this->db->sql_build_query('SELECT', $sql_array);
 

@@ -24,7 +24,7 @@ class details
 	protected $user;
 	protected $language;
 	protected $dispatcher;
-	protected $notifications;
+	protected $notification;
 	protected $captcha;
 	protected $filesystem;
 
@@ -32,6 +32,7 @@ class details
 	protected $ext_path;
 
 	protected $dlext_auth;
+	protected $dlext_comments;
 	protected $dlext_files;
 	protected $dlext_format;
 	protected $dlext_main;
@@ -146,12 +147,12 @@ class details
 		$this->dlext_status				= $dlext_status;
 		$this->dlext_constants			= $dlext_constants;
 		$this->dlext_footer				= $dlext_footer;
-
-		$this->dlext_main->dl_handle_active();
 	}
 
 	public function handle()
 	{
+		$this->dlext_main->dl_handle_active();
+
 		$index = $this->dlext_main->full_index();
 
 		$file_version	= $this->request->variable('file_version', 0);
@@ -247,8 +248,6 @@ class details
 		}
 
 		$mini_icon		= $this->dlext_status->mini_status_file($cat_id, $df_id);
-
-		$hack_version	= '&nbsp;'.$dl_files['hack_version'];
 
 		$cat_auth		= $this->dlext_auth->dl_cat_auth($cat_id);
 
@@ -450,7 +449,6 @@ class details
 		* fetch last comment, if exists
 		*/
 		$s_comments_tab = $this->dlext_constants::DL_FALSE;
-		$allow_manage = $this->dlext_constants::DL_FALSE;
 
 		if ($index[$cat_id]['comments'] && $this->dlext_auth->cat_auth_comment_read($cat_id))
 		{
@@ -686,12 +684,13 @@ class details
 		$s_mod_desc = $this->dlext_constants::DL_FALSE;
 		$s_mod_warning = $this->dlext_constants::DL_FALSE;
 		$s_mod_require = $this->dlext_constants::DL_FALSE;
+		$s_mod_list_on = $this->dlext_constants::DL_FALSE;
 
 		if ($dl_files['mod_list'])
 		{
 			if ($index[$cat_id]['allow_mod_desc'])
 			{
-				$this->template->assign_var('S_DL_MOD_LIST', $this->dlext_constants::DL_TRUE);
+				$s_mod_list_on = $this->dlext_constants::DL_TRUE;
 
 				if ($mod_test)
 				{
@@ -1070,6 +1069,10 @@ class details
 				$s_real_filetime = $this->dlext_constants::DL_TRUE;
 			}
 		}
+		else
+		{
+			$file_time = 0;
+		}
 
 		/*
 		* Like to rate? Do it!
@@ -1138,15 +1141,6 @@ class details
 			}
 		}
 
-		if ($this->filesystem->exists($this->dlext_constants->get_value('files_dir') . '/downloads/' . $index[$cat_id]['cat_path'] . $real_file))
-		{
-			$file_time = @filemtime($this->dlext_constants->get_value('files_dir') . '/downloads/' . $index[$cat_id]['cat_path'] . $real_file);
-		}
-		else
-		{
-			$file_time = 0;
-		}
-
 		/*
 		* Build rating imageset
 		*/
@@ -1160,7 +1154,6 @@ class details
 			'DL_MOD_LIST_CLOSE'			=> $this->language->lang('DL_MOD_LIST_CLOSE'),
 			'DL_MOD_FILE_HASH_OPEN'		=> $this->language->lang('DL_MOD_FILE_HASH_OPEN'),
 			'DL_MOD_FILE_HASH_CLOSE'	=> $this->language->lang('DL_MOD_FILE_HASH_CLOSE'),
-			'DL_HASH_TAB'				=> $hash_tab,
 			'DL_FAVORITE'				=> $l_favorite,
 			'DL_FAVORITE_COLOR'			=> $c_favorite,
 			'DL_EDIT_IMG'				=> $this->language->lang('DL_EDIT_FILE'),
@@ -1245,16 +1238,20 @@ class details
 		* Custom Download Fields
 		* Taken from memberlist.php phpBB 3.0.7-PL1
 		*/
-		include($this->ext_path . 'includes/fields.' . $this->php_ext);
+		if (!class_exists('custom_profile'))
+		{
+			include($this->ext_path . 'includes/fields.' . $this->php_ext);
+		}
 
 		$cp = new \oxpus\dlext\includes\custom_profile();
 
 		$dl_fields = $cp->generate_profile_fields_template('grab', $file_id);
 		$dl_fields = (isset($dl_fields[$file_id])) ? $cp->generate_profile_fields_template('show', $this->dlext_constants::DL_FALSE, $dl_fields[$file_id]) : [];
+		$s_dl_fields = $this->dlext_constants::DL_FALSE;
 
 		if (!empty($dl_fields['row']))
 		{
-			$this->template->assign_var('S_DL_FIELDS', $this->dlext_constants::DL_TRUE);
+			$s_dl_fields = $this->dlext_constants::DL_TRUE;
 			$this->template->assign_vars($dl_fields['row']);
 
 			if (!empty($dl_fields['blockrow']))
@@ -1286,6 +1283,8 @@ class details
 			0 => $this->language->lang('DL_DETAIL'),
 			1 => ($ver_tab) ? $this->language->lang('DL_VERSIONS') : '',
 			2 => ($s_comments_tab) ? $this->language->lang('DL_COMMENTS') : '',
+			3 => ($s_mod_list_on || $s_mod_todo || $s_dl_fields) ? $this->language->lang('DL_MOD_LIST_SHORT') : '',
+			4 => ($hash_tab) ? $this->language->lang('DL_MOD_FILE_HASH_TABLE') : '',
 		];
 
 		for ($i = 0; $i < count($detail_cat_names); ++$i)
@@ -1299,6 +1298,11 @@ class details
 				]);
 			}
 		}
+
+		$this->template->assign_vars([
+			'S_DL_DETAIL_EXTRA_TAB'	=> ($s_mod_list_on  || $s_mod_todo || $s_dl_fields) ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE,
+			'S_DL_DETAIL_HASH_TAB'	=> ($hash_tab) ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE,
+		]);
 
 		/**
 		* Find similar downloads

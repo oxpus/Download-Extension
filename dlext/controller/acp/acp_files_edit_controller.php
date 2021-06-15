@@ -71,7 +71,7 @@ class acp_files_edit_controller implements acp_files_edit_interface
 	 * @param \phpbb\log\log_interface 				$log
 	 * @param \phpbb\user							$user
 	 * @param \phpbb\event\dispatcher_interface		$dispatcher
-	 * @param \phpbb\notification\manater			$notification
+	 * @param \phpbb\notification\manager			$notification
 	 * @param \phpbb\files\factory					$files_factory
 	 * @param \phpbb\filesystem\filesystem			$filesystem
 	 * @param \oxpus\dlext\core\auth				$dlext_auth
@@ -192,7 +192,10 @@ class acp_files_edit_controller implements acp_files_edit_interface
 			$action = '';
 		}
 
-		include($this->ext_path . 'includes/fields.' . $this->phpEx);
+		if (!class_exists('custom_profile'))
+		{
+			include($this->ext_path . 'includes/fields.' . $this->phpEx);
+		}
 
 		$cp = new \oxpus\dlext\includes\custom_profile();
 
@@ -222,7 +225,7 @@ class acp_files_edit_controller implements acp_files_edit_interface
 				$todo					= (isset($dl_file['todo'])) ? $dl_file['todo'] : '';
 				$warning				= (isset($dl_file['warning'])) ? $dl_file['warning'] : '';
 				$mod_desc				= (isset($dl_file['mod_desc'])) ? $dl_file['mod_desc'] : '';
-				$mod_list				= (isset($dl_file['mod_list']) && $dl_file['mod_list'] != 0) ? 'checked="checked"' : '';
+				$mod_list				= (isset($dl_file['mod_list']) && $dl_file['mod_list'] != 0) ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE;
 				$dl_free				= (isset($dl_file['free'])) ? $dl_file['free'] : 0;
 				$approve				= (isset($dl_file['approve'])) ? $dl_file['approve'] : 0;
 
@@ -523,7 +526,7 @@ class acp_files_edit_controller implements acp_files_edit_interface
 			$s_hacklist = [];
 			$s_hacklist[] = ['value' => $this->dlext_constants::DL_HACKLIST_NO,		'lang'	=> $this->language->lang('NO')];
 			$s_hacklist[] = ['value' => $this->dlext_constants::DL_HACKLIST_YES,	'lang'	=> $this->language->lang('YES')];
-			$s_hacklist[] = ['value' => $this->dlext_constants::DL_HACKLIST_EXTRA,	'lang'	=> $this->language->lang('DL_MOD_LIST')];
+			$s_hacklist[] = ['value' => $this->dlext_constants::DL_HACKLIST_EXTRA,	'lang'	=> $this->language->lang('DL_MOD_LIST_SHORT')];
 
 			for ($i = 0; $i < count($s_hacklist); ++$i)
 			{
@@ -650,7 +653,6 @@ class acp_files_edit_controller implements acp_files_edit_interface
 				$new_version		= $this->dlext_constants::DL_FALSE;
 
 				$allow_bbcode		= ($this->config['allow_bbcode']) ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE;
-				$allow_urls			= $this->dlext_constants::DL_TRUE;
 				$allow_smilies		= ($this->config['allow_smilies']) ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE;
 				$desc_uid			= $desc_bitfield = $mod_desc_uid = $mod_desc_bitfield = $long_desc_uid = $long_desc_bitfield = $warn_uid = $warn_bitfield = $todo_uid = $todo_bitfield = '';
 				$desc_flags			= $mod_desc_flags = $long_desc_flags = $warn_flags = $todo_flags = 0;
@@ -740,7 +742,6 @@ class acp_files_edit_controller implements acp_files_edit_interface
 				// validate custom profile fields
 				$error = [];
 				$cp_data = [];
-				$cp_error = [];
 				$cp->submit_cp_field($this->user->get_iso_lang_id(), $cp_data, $error);
 
 				// Stop here, if custom fields are invalid!
@@ -914,9 +915,9 @@ class acp_files_edit_controller implements acp_files_edit_interface
 						$real_old_file = $this->db->sql_fetchfield('ver_real_file');
 						$this->db->sql_freeresult($result);
 
-						if ($dl_path && $real_old_file)
+						if ($file_path && $real_old_file)
 						{
-							$this->filesystem->remove($this->dlext_constants->get_value('files_dir') . '/downloads/' . $dl_path . $real_old_file);
+							$this->filesystem->remove($this->dlext_constants->get_value('files_dir') . '/downloads/' . $file_path . $real_old_file);
 						}
 
 						$sql = 'UPDATE ' . $this->dlext_table_dl_versions . ' SET ' . $this->db->sql_build_array('UPDATE', [

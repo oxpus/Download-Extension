@@ -22,7 +22,7 @@ class main
 	protected $template;
 	protected $user;
 	protected $language;
-	protected $notifications;
+	protected $notification;
 
 	/* extension owned objects */
 	protected $dlext_auth;
@@ -99,15 +99,12 @@ class main
 		$this->dlext_main				= $dlext_main;
 		$this->dlext_footer				= $dlext_footer;
 		$this->dlext_constants			= $dlext_constants;
-
-		$this->dlext_main->dl_handle_active();
 	}
 
 	public function handle()
 	{
-		/*
-		* open the bug tracker, if choosen and possible
-		*/
+		$this->dlext_main->dl_handle_active();
+
 		if ($this->user->data['is_registered'])
 		{
 			$cancel		= $this->request->variable('cancel', '');
@@ -211,15 +208,8 @@ class main
 				*/
 				$bug_access_cats	= $this->dlext_main->full_index(0, 0, 0, $this->dlext_constants::DL_AUTH_CHECK_VIEW);
 
-				$report_title		= $this->request->variable('report_title', '', $this->dlext_constants::DL_TRUE);
-				$report_text		= $this->request->variable('message', '', $this->dlext_constants::DL_TRUE);
-				$report_file_ver	= $this->request->variable('report_file_ver', '', $this->dlext_constants::DL_TRUE);
-				$report_php			= $this->request->variable('report_php', '', $this->dlext_constants::DL_TRUE);
-				$report_db			= $this->request->variable('report_db', '', $this->dlext_constants::DL_TRUE);
-				$report_forum		= $this->request->variable('report_forum', '', $this->dlext_constants::DL_TRUE);
 				$new_user_id		= $this->request->variable('user_assign', 0);
 
-				$error_txt = [];
 				$error = $this->dlext_constants::DL_FALSE;
 
 				if ($action == 'status' || $action == 'assign')
@@ -313,7 +303,6 @@ class main
 					$row = $this->db->sql_fetchrow($result);
 
 					$report_title	= $row['report_title'];
-					$cat_id			= $row['cat'];
 
 					$this->db->sql_freeresult($result);
 
@@ -661,15 +650,11 @@ class main
 					}
 
 					$df_id		= 0;
-					$action		= '';
 				}
 
-				if ($this->user->data['is_registered'])
+				if ($this->user->data['is_registered'] && $df_id)
 				{
-					if ($df_id)
-					{
-						$this->template->assign_var('S_DL_HIDDEN_FIELD', build_hidden_fields(['df_id' => $df_id]));
-					}
+					$this->template->assign_var('S_DL_HIDDEN_FIELD', build_hidden_fields(['df_id' => $df_id]));
 				}
 
 				/*

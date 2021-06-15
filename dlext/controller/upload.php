@@ -26,7 +26,7 @@ class upload
 	protected $config_text;
 	protected $dispatcher;
 	protected $cache;
-	protected $notifications;
+	protected $notification;
 	protected $files_factory;
 	protected $filesystem;
 
@@ -134,12 +134,12 @@ class upload
 		$this->dlext_topic				= $dlext_topic;
 		$this->dlext_constants			= $dlext_constants;
 		$this->dlext_footer				= $dlext_footer;
-
-		$this->dlext_main->dl_handle_active();
 	}
 
 	public function handle()
 	{
+		$this->dlext_main->dl_handle_active();
+
 		$submit		= $this->request->variable('submit', '');
 		$df_id		= $this->request->variable('df_id', 0);
 		$cat_id		= $this->request->variable('cat_id', 0);
@@ -161,7 +161,10 @@ class upload
 		}
 
 		// Initiate custom fields
-		include($this->ext_path . 'includes/fields.' . $this->php_ext);
+		if (!class_exists('custom_profile'))
+		{
+			include($this->ext_path . 'includes/fields.' . $this->php_ext);
+		}
 
 		$cp = new \oxpus\dlext\includes\custom_profile();
 
@@ -417,7 +420,7 @@ class upload
 			// validate custom profile fields
 			$error = [];
 			$cp_data = [];
-			$cp_error = [];
+
 			$cp->submit_cp_field($this->user->get_iso_lang_id(), $cp_data, $error);
 
 			// Stop here, if custom fields are invalid!
@@ -814,7 +817,7 @@ class upload
 			'DL_EXT_BLACKLIST'			=> $blacklist_explain,
 
 			'DL_TRAFFIC'				=> 0,
-			'DL_APPROVE'				=> 'checked="checked"',
+			'DL_APPROVE'				=> $this->dlext_constants::DL_TRUE,
 			'DL_FILE_EXT_SIZE'			=> $file_size,
 
 			'DL_HACKLIST_BG'			=> (isset($hacklist_on) && $hacklist_on) ? ' bg2' : '',
@@ -891,7 +894,7 @@ class upload
 		$s_hacklist = [];
 		$s_hacklist[] = ['value' => $this->dlext_constants::DL_HACKLIST_NO,		'lang'	=> $this->language->lang('NO')];
 		$s_hacklist[] = ['value' => $this->dlext_constants::DL_HACKLIST_YES,	'lang'	=> $this->language->lang('YES')];
-		$s_hacklist[] = ['value' => $this->dlext_constants::DL_HACKLIST_EXTRA,	'lang'	=> $this->language->lang('DL_MOD_LIST')];
+		$s_hacklist[] = ['value' => $this->dlext_constants::DL_HACKLIST_EXTRA,	'lang'	=> $this->language->lang('DL_MOD_LIST_SHORT')];
 
 		for ($i = 0; $i < count($s_hacklist); ++$i)
 		{

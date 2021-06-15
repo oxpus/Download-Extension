@@ -137,8 +137,6 @@ class listener implements EventSubscriberInterface
 		$this->dlext_main				= $dlext_main;
 		$this->dlext_privacy			= $dlext_privacy;
 		$this->dlext_constants			= $dlext_constants;
-
-		$this->dlext_constants->init();
 	}
 
 	static public function getSubscribedEvents()
@@ -180,36 +178,12 @@ class listener implements EventSubscriberInterface
 
 	public function core_page_header()
 	{
+		$this->dlext_constants->init();
+
 		$dl_mod_link_show = $this->dlext_main->dl_handle_active($this->dlext_constants::DL_FALSE);
-
-		$main_js_file_style = $this->ext_path . 'styles/' . rawurlencode($this->user->style['style_path'] . '/template/dl_main.js');
-		$main_js_file_all = $this->ext_path . 'styles/all/template/dl_main.js';
-
-		if ($this->filesystem->exists($main_js_file_style))
-		{
-			$dlext_main_js = $main_js_file_style;
-		}
-		else
-		{
-			$dlext_main_js = $main_js_file_all;
-		}
-
-		$rate_js_file_style = $this->ext_path . 'styles/' . rawurlencode($this->user->style['style_path'] . '/template/dl_rate.js');
-		$rate_js_file_all = $this->ext_path . 'styles/all/template/dl_rate.js';
-
-		if ($this->filesystem->exists($rate_js_file_style))
-		{
-			$dlext_rate_js = $rate_js_file_style;
-		}
-		else
-		{
-			$dlext_rate_js = $rate_js_file_all;
-		}
 
 		$this->template->assign_vars([
 			'EXT_DL_PATH'		=> $this->ext_path,
-			'EXT_DL_RATE_FILE'	=> $dlext_rate_js,
-			'EXT_DL_MAIN_FILE'	=> $dlext_main_js,
 			'U_DL_HELP_POPUP'	=> $this->helper->route('oxpus_dlext_help'),
 		]);
 
@@ -755,7 +729,7 @@ class listener implements EventSubscriberInterface
 		$key		= $event['key'];
 		$tpl		= $event['tpl'];
 		$name		= 'config[' . $key . ']';
-		$checked	= ($new_ary[$key]) ? 'checked="checked"' : '';
+		$checked	= ($new_ary[$key]) ? 'checked' : '';
 
 		if ($tpl_type[0] == 'switch')
 		{
@@ -776,12 +750,11 @@ class listener implements EventSubscriberInterface
 
 	public function core_adm_page_footer()
 	{
-		if ($this->extension_manager->is_enabled('oxpus/dlext'))
-		{
-			$this->template->assign_vars([
-				'DL_MOD_RELEASE'	=> $this->language->lang('DL_MOD_VERSION', $this->config['dl_ext_version']),
-				'U_DL_HELP_POPUP'	=> $this->helper->route('oxpus_dlext_help'),
-			]);
-		}
+		$this->dlext_constants->init();
+
+		$this->template->assign_vars([
+			'EXT_DL_PATH'		=> $this->ext_path,
+			'U_DL_HELP_POPUP'	=> $this->helper->route('oxpus_dlext_help'),
+		]);
 	}
 }

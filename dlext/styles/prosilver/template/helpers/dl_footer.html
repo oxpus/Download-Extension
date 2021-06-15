@@ -13,8 +13,8 @@
 <div class="panel bg3">
 
 {% if S_DL_FOOTER_LEGEND %}
-<div class="jumpbox button legend-footer" id="legend-footer"><i class="icon fa-map-signs fa-fw" aria-hidden="true"></i> <span>{{ lang('LEGEND') }}</span></div>
-<div id="legend" class="footer-box"><a class="icon dl-close-footer" onclick="javascript:show_area('legend', false);"></a>
+<div class="jumpbox button legend-footer" id="dl-legend-footer"><i class="icon fa-map-signs fa-fw" aria-hidden="true"></i> <span>{{ lang('LEGEND') }}</span></div>
+<div id="dl-legend" class="footer-box"><a class="icon dl-close-footer" data-area="legend"></a>
 <h3>{{ lang('LEGEND') }}</h3>
 <dl>
 	<dt>
@@ -32,8 +32,8 @@
 {% endif %}
 
 {% if S_DL_FOOTER_STATS %}
-<div class="jumpbox button stats-footer" id="stats-footer"><i class="icon fa-pie-chart fa-fw" aria-hidden="true"></i> <span>{{ lang('DL_FOOTER') }}</span></div>
-<div id="footer" class="footer-box"><a class="icon dl-close-footer" onclick="javascript:show_area('footer', false);"></a>
+<div class="jumpbox button stats-footer" id="dl-stats-footer"><i class="icon fa-pie-chart fa-fw" aria-hidden="true"></i> <span>{{ lang('DL_FOOTER') }}</span></div>
+<div id="dl-footer" class="footer-box"><a class="icon dl-close-footer" data-area="footer"></a>
 <div class="small">
 	{% if L_DL_CAN_DOWNLOAD_AGAIN %}{{ lang('CAN_DOWNLOAD_AGAIN') }}<br />{% endif %}
 	{% if DL_ACCOUNT_TRAFFIC %}{{ DL_ACCOUNT_TRAFFIC }}<br />{% endif %}

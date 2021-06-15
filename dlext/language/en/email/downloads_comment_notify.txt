@@ -1,18 +1,18 @@
 Subject: New Download Comment
 
-Hello {USERNAME},
+Hello {{ USERNAME }},
 
-You have received this email because there is a new download comment on "{SITENAME}" for one of your subscribed downloads:
+You have received this email because there is a new download comment on "{{ SITENAME }}" for one of your subscribed downloads:
 
 ---------------------------
-Category {CATEGORY}
-Download {DOWNLOAD}
+Category {{ CATEGORY }}
+Download {{ DOWNLOAD }}
 ---------------------------
 
 If you want to take a look on this comment click the following link:
 
-{U_DOWNLOAD}
+{{ U_DOWNLOAD }}
 
 Remember that you can always choose not to be notified about new comments by changing the appropriate setting in your user profile.
 
-{EMAIL_SIG}
+{{ EMAIL_SIG }}

@@ -110,16 +110,15 @@ class version
 		$this->dlext_status				= $dlext_status;
 		$this->dlext_constants			= $dlext_constants;
 		$this->dlext_footer				= $dlext_footer;
-
-		$this->dlext_main->dl_handle_active();
 	}
 
 	public function handle()
 	{
+		$this->dlext_main->dl_handle_active();
+
 		$submit		= $this->request->variable('submit', '');
 		$cancel		= $this->request->variable('cancel', '');
 		$action		= $this->request->variable('action', '');
-		$df_id		= $this->request->variable('df_id', 0);
 		$modcp		= $this->request->variable('modcp', 0);
 
 		$index		= $this->dlext_main->full_index();
@@ -592,7 +591,7 @@ class version
 				'DL_DESCRIPTION'		=> $description,
 				'DL_MINI_IMG'			=> $mini_icon,
 				'DL_FILE_STATUS'		=> $file_status,
-				'DL_VER_ACTIVE'			=> ($ver_data['ver_active']) ? 'checked="checked"' : '',
+				'DL_VER_ACTIVE'			=> ($ver_data['ver_active']) ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE,
 				'DL_VER_TEXT'			=> $ver_data['ver_text'],
 				'DL_VER_VERSION'		=> $ver_data['ver_version'],
 

@@ -38,7 +38,7 @@
 					<dt><label>{{ lang('DL_CAT_NAME') }}</label></dt>
 					<dd class="time">
 						<select name="search_cat" size="10">
-							<option value="{{ S_DL_CATEGORY_OPTIONS }}" selected="selected">{{ lang('DL_ALL') }}</option>
+							<option value="{{ S_DL_CATEGORY_OPTIONS }}" selected>{{ lang('DL_ALL') }}</option>
 							{% for search_cat_select in loops.search_cat_select %}
 							<option value="{{ search_cat_select.DL_CAT_ID }}">{{ search_cat_select.DL_SEPERATOR }}{{ search_cat_select.DL_CAT_NAME }}</option>
 							{% endfor %}
@@ -59,15 +59,15 @@
 					<dt><label>{{ lang('DL_ORDER') }}</label></dt>
 					<dd class="time">
 						<select name="sort_dir">
-							<option value="ASC"{% if S_DL_SORT_ORDER eq 'ASC' %} selected="selected"{% endif %}>{{ lang('ASCENDING') }}</option>
-							<option value="DESC"{% if S_DL_SORT_ORDER eq 'DESC' %} selected="selected"{% endif %}>{{ lang('DESCENDING') }}</option>
+							<option value="ASC"{% if S_DL_SORT_ORDER eq 'ASC' %} selected{% endif %}>{{ lang('ASCENDING') }}</option>
+							<option value="DESC"{% if S_DL_SORT_ORDER eq 'DESC' %} selected{% endif %}>{{ lang('DESCENDING') }}</option>
 						</select>
 					</dd>
 				</dl>
 				<dl>
 					<dt><label>{{ lang('DL_SEARCH_TYPE') }}</label></dt>
 					<dd class="time">
-						<label><input type="radio" name="search_type" value="0" checked="checked" /> {{ lang('DL_SEARCH_TYPE_ALL') }}</label><br />
+						<label><input type="radio" name="search_type" value="0" checked /> {{ lang('DL_SEARCH_TYPE_ALL') }}</label><br />
 						<label><input type="radio" name="search_type" value="1" /> {{ lang('DL_SEARCH_TYPE_SINGLE') }}</label>
 					</dd>
 				</dl>

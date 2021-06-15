@@ -351,7 +351,7 @@ class acp_config_controller implements acp_config_interface
 
 					if (in_array($group_id, $traffics_overall_group_ids) && $this->config['dl_traffics_overall'] > 1)
 					{
-						$s_groups_overall_select .= '<option value="' . $group_id . '" selected="selected"' . $group_sep . '>' . $group_name . '</option>';
+						$s_groups_overall_select .= '<option value="' . $group_id . '" selected' . $group_sep . '>' . $group_name . '</option>';
 					}
 					else
 					{
@@ -360,7 +360,7 @@ class acp_config_controller implements acp_config_interface
 
 					if (in_array($group_id, $traffics_users_group_ids) && $this->config['dl_traffics_users'] > $this->dlext_constants::DL_TRAFFICS_ON_ALL)
 					{
-						$s_groups_users_select .= '<option value="' . $group_id . '" selected="selected"' . $group_sep . '>' . $group_name . '</option>';
+						$s_groups_users_select .= '<option value="' . $group_id . '" selected' . $group_sep . '>' . $group_name . '</option>';
 					}
 					else
 					{
@@ -626,12 +626,12 @@ class acp_config_controller implements acp_config_interface
 			$this->cache->destroy('config');
 
 			// Purge the extension cache
-			$this->cache->destroy('_dlext_auth.');
-			$this->cache->destroy('_dlext_auth_groups.');
-			$this->cache->destroy('_dlext_black.');
-			$this->cache->destroy('_dlext_cat_counts.');
-			$this->cache->destroy('_dlext_cats.');
-			$this->cache->destroy('_dlext_file_preset.');
+			$this->cache->destroy('_dlext_auth');
+			$this->cache->destroy('_dlext_auth_groups');
+			$this->cache->destroy('_dlext_black');
+			$this->cache->destroy('_dlext_cat_counts');
+			$this->cache->destroy('_dlext_cats');
+			$this->cache->destroy('_dlext_file_preset');
 
 			$message = $this->language->lang('DL_CONFIG_UPDATED') . adm_back_link($this->u_action . '&amp;view=' . $view);
 			trigger_error($message);
@@ -659,7 +659,7 @@ class acp_config_controller implements acp_config_interface
 		{
 			if ($view == $acl_cat_names[$i][1])
 			{
-				$mode_select .= '<option value="' . $acl_cat_names[$i][1] . '" selected="selected">' . $acl_cat_names[$i][0] . '</option>';
+				$mode_select .= '<option value="' . $acl_cat_names[$i][1] . '" selected>' . $acl_cat_names[$i][0] . '</option>';
 			}
 			else
 			{
@@ -744,8 +744,6 @@ class acp_config_controller implements acp_config_interface
 	*/
 	public function mod_disable($value)
 	{
-		$user = $this->user;
-
 		$radio_ary = [1 => 'DL_OFF_NOW', 0 => 'DL_OFF_TIME'];
 
 		return h_radio('config[dl_off_now_time]', $radio_ary, $value, 'dl_off_now_time');
@@ -753,8 +751,6 @@ class acp_config_controller implements acp_config_interface
 
 	public function rss_perm($value)
 	{
-		$user = $this->user;
-
 		$radio_ary = [1 => 'DL_RSS_USER', 0 => 'DL_RSS_GUESTS'];
 
 		return h_radio('config[dl_rss_perms]', $radio_ary, $value, 'dl_rss_perms');
@@ -762,8 +758,6 @@ class acp_config_controller implements acp_config_interface
 
 	public function rss_select($value)
 	{
-		$user = $this->user;
-
 		$radio_ary = [1 => 'DL_RSS_SELECT_LAST', 0 => 'DL_RSS_SELECT_RANDOM'];
 
 		return h_radio('config[dl_rss_select]', $radio_ary, $value, 'dl_rss_select');
@@ -775,7 +769,7 @@ class acp_config_controller implements acp_config_interface
 		$s_select .= '<option value="' . $this->dlext_constants::DL_CAT_EDIT_ADMIN_ONLY . '">' . $this->language->lang('DL_CAT_EDIT_LINK_1') . '</option>';
 		$s_select .= '<option value="' . $this->dlext_constants::DL_CAT_EDIT_ADMIN_MOD . '">' . $this->language->lang('DL_CAT_EDIT_LINK_2') . '</option>';
 		$s_select .= '<option value="' . $this->dlext_constants::DL_CAT_EDIT_ADMIN_MOD_OWN . '">' . $this->language->lang('DL_CAT_EDIT_LINK_3') . '</option>';
-		$s_select = str_replace('value="' . $value . '">', 'value="' . $value . '" selected="selected">', $s_select);
+		$s_select = str_replace('value="' . $value . '">', 'value="' . $value . '" selected>', $s_select);
 
 		return $s_select;
 	}
@@ -784,7 +778,7 @@ class acp_config_controller implements acp_config_interface
 	{
 		$s_select = '<option value="' . $this->dlext_constants::DL_FILE_HASH_MD5 . '">' . $this->language->lang('DL_FILE_HASH_MD5') . '</option>';
 		$s_select .= '<option value="' . $this->dlext_constants::DL_FILE_HASH_SHA . '">' . $this->language->lang('DL_FILE_HASH_SHA1') . '</option>';
-		$s_select = str_replace('value="' . $value . '">', 'value="' . $value . '" selected="selected">', $s_select);
+		$s_select = str_replace('value="' . $value . '">', 'value="' . $value . '" selected>', $s_select);
 
 		return $s_select;
 	}
@@ -812,7 +806,7 @@ class acp_config_controller implements acp_config_interface
 		}
 
 		$select = '<option value="' . $this->dlext_constants::DL_NONE . '">' . $this->language->lang('DL_TOPIC_FORUM_C') . '</option><option value="0">' . $this->language->lang('DEACTIVATE') . '</option>' . $select . '</optgroup>';
-		$select = str_replace('value="' . $dl_topic_forum . '">', 'value="' . $dl_topic_forum . '" selected="selected">', $select);
+		$select = str_replace('value="' . $dl_topic_forum . '">', 'value="' . $dl_topic_forum . '" selected>', $select);
 
 		return $select;
 	}
@@ -825,7 +819,7 @@ class acp_config_controller implements acp_config_interface
 		$s_select .= '<option value="' . $this->dlext_constants::DL_CAPTCHA_PERM_MODS . '">' . $this->language->lang('DL_CAPTCHA_PERM_3') . '</option>';
 		$s_select .= '<option value="' . $this->dlext_constants::DL_CAPTCHA_PERM_ADMINS . '">' . $this->language->lang('DL_CAPTCHA_PERM_4') . '</option>';
 		$s_select .= '<option value="' . $this->dlext_constants::DL_CAPTCHA_PERM_ALL . '">' . $this->language->lang('DL_CAPTCHA_PERM_5') . '</option>';
-		$s_select = str_replace('value="' . $value . '">', 'value="' . $value . '" selected="selected">', $s_select);
+		$s_select = str_replace('value="' . $value . '">', 'value="' . $value . '" selected>', $s_select);
 
 		return $s_select;
 	}
@@ -834,7 +828,7 @@ class acp_config_controller implements acp_config_interface
 	{
 		$s_select = '<option value="' . $this->dlext_constants::DL_HOTLINK_DETAILS . '">' . $this->language->lang('DL_HOTLINK_ACTION_ONE') . '</option>';
 		$s_select .= '<option value="' . $this->dlext_constants::DL_HOTLINK_MESSAGE . '">' . $this->language->lang('DL_HOTLINK_ACTION_TWO') . '</option>';
-		$s_select = str_replace('value="' . $value . '">', 'value="' . $value . '" selected="selected">', $s_select);
+		$s_select = str_replace('value="' . $value . '">', 'value="' . $value . '" selected>', $s_select);
 
 		return $s_select;
 	}
@@ -844,7 +838,7 @@ class acp_config_controller implements acp_config_interface
 		$s_select = '<option value="' . $this->dlext_constants::DL_REPORT_OFF . '">' . $this->language->lang('NO') . '</option>';
 		$s_select .= '<option value="' . $this->dlext_constants::DL_REPORT_ALL . '">' . $this->language->lang('YES') . '</option>';
 		$s_select .= '<option value="' . $this->dlext_constants::DL_REPORT_REG_USER . '">' . $this->language->lang('DL_OFF_GUESTS') . '</option>';
-		$s_select = str_replace('value="' . $value . '">', 'value="' . $value . '" selected="selected">', $s_select);
+		$s_select = str_replace('value="' . $value . '">', 'value="' . $value . '" selected>', $s_select);
 
 		return $s_select;
 	}
@@ -857,7 +851,7 @@ class acp_config_controller implements acp_config_interface
 		$s_select .= '<option value="' . $this->dlext_constants::DL_CAPTCHA_PERM_MODS . '">' . $this->language->lang('DL_CAPTCHA_PERM_3') . '</option>';
 		$s_select .= '<option value="' . $this->dlext_constants::DL_CAPTCHA_PERM_ADMINS . '">' . $this->language->lang('DL_CAPTCHA_PERM_4') . '</option>';
 		$s_select .= '<option value="' . $this->dlext_constants::DL_CAPTCHA_PERM_ALL . '">' . $this->language->lang('DL_CAPTCHA_PERM_5') . '</option>';
-		$s_select = str_replace('value="' . $value . '">', 'value="' . $value . '" selected="selected">', $s_select);
+		$s_select = str_replace('value="' . $value . '">', 'value="' . $value . '" selected>', $s_select);
 
 		return $s_select;
 	}
@@ -882,7 +876,7 @@ class acp_config_controller implements acp_config_interface
 
 					if ($rss_cats[$key]['selected'])
 					{
-						$s_select .= ' selected="selected"';
+						$s_select .= ' selected';
 					}
 
 					$s_select .= '>' . $rss_cats[$key]['name'] . '</option>';
@@ -900,7 +894,7 @@ class acp_config_controller implements acp_config_interface
 		$s_select = '<option value="' . $this->dlext_constants::DL_RSS_DESC_LENGTH_NONE . '">' . $this->language->lang('DL_RSS_DESC_LENGTH_NONE') . '</option>';
 		$s_select .= '<option value="' . $this->dlext_constants::DL_RSS_DESC_LENGTH_FULL . '">' . $this->language->lang('DL_RSS_DESC_LENGTH_FULL') . '</option>';
 		$s_select .= '<option value="' . $this->dlext_constants::DL_RSS_DESC_LENGTH_SHORT . '">' . $this->language->lang('DL_RSS_DESC_LENGTH_SHORT') . '</option>';
-		$s_select = str_replace('value="' . $value . '">', 'value="' . $value . '" selected="selected">', $s_select);
+		$s_select = str_replace('value="' . $value . '">', 'value="' . $value . '" selected>', $s_select);
 
 		return $s_select;
 	}
@@ -910,7 +904,7 @@ class acp_config_controller implements acp_config_interface
 		$s_select = '<option value="' . $this->dlext_constants::DL_RSS_ACTION_R_DLX . '">' . $this->language->lang('DL_RSS_ACTION_R_DLX') . '</option>';
 		$s_select .= '<option value="' . $this->dlext_constants::DL_RSS_ACTION_R_IDX . '">' . $this->language->lang('DL_RSS_ACTION_R_IDX') . '</option>';
 		$s_select .= '<option value="' . $this->dlext_constants::DL_RSS_ACTION_D_TXT . '">' . $this->language->lang('DL_RSS_ACTION_D_TXT') . '</option>';
-		$s_select = str_replace('value="' . $value . '">', 'value="' . $value . '" selected="selected">', $s_select);
+		$s_select = str_replace('value="' . $value . '">', 'value="' . $value . '" selected>', $s_select);
 
 		return $s_select;
 	}
@@ -934,7 +928,7 @@ class acp_config_controller implements acp_config_interface
 		}
 		$s_select .= '</select>';
 
-		$s_select = str_replace('value="' . $range_select . '">', 'value="' . $range_select . '" selected="selected">', $s_select);
+		$s_select = str_replace('value="' . $range_select . '">', 'value="' . $range_select . '" selected>', $s_select);
 
 		$remain_text_out = '';
 
@@ -977,7 +971,7 @@ class acp_config_controller implements acp_config_interface
 	{
 		$s_select = '<option value="' . $this->dlext_constants::DL_SORT_ACP . '">' . $this->language->lang('DL_SORT_ACP') . '</option>';
 		$s_select .= '<option value="' . $this->dlext_constants::DL_SORT_USER . '">' . $this->language->lang('DL_SORT_USER') . '</option>';
-		$s_select = str_replace('value="' . $value . '">', 'value="' . $value . '" selected="selected">', $s_select);
+		$s_select = str_replace('value="' . $value . '">', 'value="' . $value . '" selected>', $s_select);
 
 		return $s_select;
 	}
@@ -989,7 +983,7 @@ class acp_config_controller implements acp_config_interface
 		$s_select .= '<option value="' . $this->dlext_constants::DL_PERM_USER . '">' . $this->language->lang('DL_STAT_PERM_USER') . '</option>';
 		$s_select .= '<option value="' . $this->dlext_constants::DL_PERM_MOD . '">' . $this->language->lang('DL_STAT_PERM_MOD') . '</option>';
 		$s_select .= '<option value="' . $this->dlext_constants::DL_PERM_ADMIN . '">' . $this->language->lang('DL_STAT_PERM_ADMIN') . '</option>';
-		$s_select = str_replace('value="' . $value . '">', 'value="' . $value . '" selected="selected">', $s_select);
+		$s_select = str_replace('value="' . $value . '">', 'value="' . $value . '" selected>', $s_select);
 
 		return $s_select;
 	}
@@ -999,7 +993,7 @@ class acp_config_controller implements acp_config_interface
 		$s_select = '<option value="' . $this->dlext_constants::DL_TOPIC_NO_MORE_DETAILS . '">' . $this->language->lang('DL_TOPIC_NO_MORE_DETAILS') . '</option>';
 		$s_select .= '<option value="' . $this->dlext_constants::DL_TOPIC_MORE_DETAILS_UNDER . '">' . $this->language->lang('DL_TOPIC_MORE_DETAILS_UNDER') . '</option>';
 		$s_select .= '<option value="' . $this->dlext_constants::DL_TOPIC_MORE_DETAILS_OVER . '">' . $this->language->lang('DL_TOPIC_MORE_DETAILS_OVER') . '</option>';
-		$s_select = str_replace('value="' . $value . '">', 'value="' . $value . '" selected="selected">', $s_select);
+		$s_select = str_replace('value="' . $value . '">', 'value="' . $value . '" selected>', $s_select);
 
 		return $s_select;
 	}
@@ -1009,7 +1003,7 @@ class acp_config_controller implements acp_config_interface
 		$s_select = '<option value="' . $this->dlext_constants::DL_TOPIC_USER_SELF . '">' . $this->language->lang('DL_TOPIC_USER_SELF') . '</option>';
 		$s_select .= '<option value="' . $this->dlext_constants::DL_TOPIC_USER_OTHER . '">' . $this->language->lang('DL_TOPIC_USER_OTHER') . '</option>';
 		$s_select .= '<option value="' . $this->dlext_constants::DL_TOPIC_USER_CAT . '">' . $this->language->lang('DL_TOPIC_USER_CAT') . '</option>';
-		$s_select = str_replace('value="' . $value . '">', 'value="' . $value . '" selected="selected">', $s_select);
+		$s_select = str_replace('value="' . $value . '">', 'value="' . $value . '" selected>', $s_select);
 
 		return $s_select;
 	}
@@ -1023,7 +1017,7 @@ class acp_config_controller implements acp_config_interface
 			$s_select .= '<option value="' . $this->dlext_constants::DL_TRAFFICS_OFF_GROUPS . '">' . $this->language->lang('DL_TRAFFICS_OFF_GROUPS') . '</option>';
 		}
 		$s_select .= '<option value="' . $this->dlext_constants::DL_TRAFFICS_OFF_ALL . '">' . $this->language->lang('DL_TRAFFICS_OFF_ALL') . '</option>';
-		$s_select = str_replace('value="' . $value . '">', 'value="' . $value . '" selected="selected">', $s_select);
+		$s_select = str_replace('value="' . $value . '">', 'value="' . $value . '" selected>', $s_select);
 
 		return $s_select;
 	}
@@ -1045,7 +1039,7 @@ class acp_config_controller implements acp_config_interface
 		$s_select .= '<option value="' . $this->dlext_constants::DL_FOOTER_STATS_ALL . '">' . $this->language->lang('DL_EXT_STATS_2') . '</option>';
 		$s_select .= '<option value="' . $this->dlext_constants::DL_FOOTER_STATS_ADMIN_ONLY . '">' . $this->language->lang('DL_EXT_STATS_3') . '</option>';
 		$s_select .= '<option value="' . $this->dlext_constants::DL_FOOTER_STATS_FOUNDER_ONLY . '">' . $this->language->lang('DL_EXT_STATS_4') . '</option>';
-		$s_select = str_replace('value="' . $value . '">', 'value="' . $value . '" selected="selected">', $s_select);
+		$s_select = str_replace('value="' . $value . '">', 'value="' . $value . '" selected>', $s_select);
 
 		return $s_select;
 	}
@@ -1056,7 +1050,7 @@ class acp_config_controller implements acp_config_interface
 		$s_select .= '<option value="' . POST_STICKY . '">' . $this->language->lang('POST_STICKY') . '</option>';
 		$s_select .= '<option value="' . POST_ANNOUNCE . '">' . $this->language->lang('POST_ANNOUNCEMENT') . '</option>';
 		$s_select .= '<option value="' . POST_GLOBAL . '">' . $this->language->lang('POST_GLOBAL') . '</option>';
-		$s_select = str_replace('value="' . $value . '">', 'value="' . $value . '" selected="selected">', $s_select);
+		$s_select = str_replace('value="' . $value . '">', 'value="' . $value . '" selected>', $s_select);
 
 		return $s_select;
 	}
@@ -1064,7 +1058,7 @@ class acp_config_controller implements acp_config_interface
 	public function select_dl_user($value, $config)
 	{
 		$input_field = '<input class="text medium" type="text" id="' . $config . '" name="config[' . $config . ']" value="' . $value . '" />';
-		$input_field .= '&nbsp;[ <a href="' . append_sid($this->root_path . 'memberlist.' . $this->phpEx, 'mode=searchuser&amp;form=acp_dl_config&amp;field=' . $config . '&amp;select_single=1') . '" onclick="find_username(this.href); return false;">' . $this->language->lang('FIND_USERNAME') . '</a> ]';
+		$input_field .= '&nbsp;[ <a href="#" class="dl-finduser" data-href="' . append_sid($this->root_path . 'memberlist.' . $this->phpEx, 'mode=searchuser&amp;form=acp_dl_config&amp;field=' . $config . '&amp;select_single=1') . '">' . $this->language->lang('FIND_USERNAME') . '</a> ]';
 
 		return $input_field;
 	}
@@ -1084,7 +1078,7 @@ class acp_config_controller implements acp_config_interface
 		$s_select .= '<option value="OFTlB">' . $this->language->lang('DL_NAV_LINK_OFTlB') . '</option>';	// overall_footer_teamlink_before
 		$s_select .= '<option value="OFTzA">' . $this->language->lang('DL_NAV_LINK_OFTzA') . '</option>';	// overall_footer_timezone_after
 		$s_select .= '<option value="OFTzB">' . $this->language->lang('DL_NAV_LINK_OFTzB') . '</option>';	// overall_footer_timezone_before
-		$s_select = str_replace('value="' . $value . '">', 'value="' . $value . '" selected="selected">', $s_select);
+		$s_select = str_replace('value="' . $value . '">', 'value="' . $value . '" selected>', $s_select);
 
 		return $s_select;
 	}
@@ -1094,7 +1088,7 @@ class acp_config_controller implements acp_config_interface
 		$s_select = '<option value="' . $this->dlext_constants::DL_LATEST_TYPE_OFF . '">' . $this->language->lang('DL_LATEST_TYPE_OFF') . '</option>';
 		$s_select .= '<option value="' . $this->dlext_constants::DL_LATEST_TYPE_DEFAULT . '">' . $this->language->lang('DL_LATEST_TYPE_DEFAULT') . '</option>';
 		$s_select .= '<option value="' . $this->dlext_constants::DL_LATEST_TYPE_COMPLETE . '">' . $this->language->lang('DL_LATEST_TYPE_COMPLETE') . '</option>';
-		$s_select = str_replace('value="' . $value . '">', 'value="' . $value . '" selected="selected">', $s_select);
+		$s_select = str_replace('value="' . $value . '">', 'value="' . $value . '" selected>', $s_select);
 
 		return $s_select;
 	}

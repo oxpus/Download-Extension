@@ -71,6 +71,10 @@ services:
         public: true
         arguments:
             - '@dbal.conn'
+            - '@config'
+            - '@user'
+            - '@template'
+            - '@oxpus.dlext.helpers.constants'
             - '%oxpus.dlext.tables.downloads%'
     oxpus.dlext.core.format:
         class: oxpus\dlext\core\format

@@ -16,6 +16,7 @@ services:
             - '@oxpus.dlext.core.main'
             - '@oxpus.dlext.core.topic'
             - '@oxpus.dlext.helpers.constants'
+            - '@oxpus.dlext.helpers.footer'
             - '%oxpus.dlext.tables.downloads%'
     oxpus.dlext.mcp_broken:
         class: oxpus\dlext\controller\mcp\mcp_broken
@@ -32,6 +33,7 @@ services:
             - '@oxpus.dlext.core.auth'
             - '@oxpus.dlext.core.main'
             - '@oxpus.dlext.helpers.constants'
+            - '@oxpus.dlext.helpers.footer'
             - '%oxpus.dlext.tables.downloads%'
     oxpus.dlext.mcp_capprove:
         class: oxpus\dlext\controller\mcp\mcp_capprove
@@ -49,9 +51,10 @@ services:
             - '@language'
             - '@oxpus.dlext.core.auth'
             - '@oxpus.dlext.core.main'
+            - '@oxpus.dlext.helpers.constants'
+            - '@oxpus.dlext.helpers.footer'
             - '%oxpus.dlext.tables.dl_comments%'
             - '%oxpus.dlext.tables.downloads%'
-            - '@oxpus.dlext.helpers.constants'
     oxpus.dlext.mcp_edit:
         class: oxpus\dlext\controller\mcp\mcp_edit
         public: true
@@ -80,6 +83,7 @@ services:
             - '@oxpus.dlext.core.physical'
             - '@oxpus.dlext.core.topic'
             - '@oxpus.dlext.helpers.constants'
+            - '@oxpus.dlext.helpers.footer'
             - '%oxpus.dlext.tables.dl_comments%'
             - '%oxpus.dlext.tables.dl_favorites%'
             - '%oxpus.dlext.tables.dl_stats%'
@@ -112,6 +116,7 @@ services:
             - '@oxpus.dlext.core.topic'
             - '@oxpus.dlext.core.status'
             - '@oxpus.dlext.helpers.constants'
+            - '@oxpus.dlext.helpers.footer'
             - '%oxpus.dlext.tables.dl_comments%'
             - '%oxpus.dlext.tables.dl_favorites%'
             - '%oxpus.dlext.tables.dl_fields_data%'

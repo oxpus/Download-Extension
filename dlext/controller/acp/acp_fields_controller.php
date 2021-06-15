@@ -32,6 +32,7 @@ class acp_fields_controller implements acp_fields_interface
 	protected $language;
 	protected $request;
 	protected $template;
+	protected $edit_lang_id;
 
 	/* extension owned objects */
 	protected $u_action;
@@ -101,8 +102,6 @@ class acp_fields_controller implements acp_fields_interface
 		$this->dlext_table_dl_fields_data	= $dlext_table_dl_fields_data;
 		$this->dlext_table_dl_fields_lang	= $dlext_table_dl_fields_lang;
 		$this->dlext_table_dl_lang			= $dlext_table_dl_lang;
-
-		$this->ext_path					= $this->extension_manager->get_extension_path('oxpus/dlext', $dlext_constants::DL_TRUE);
 	}
 
 	public function set_action($u_action)
@@ -112,14 +111,31 @@ class acp_fields_controller implements acp_fields_interface
 
 	public function handle()
 	{
+		$this->ext_path		= $this->extension_manager->get_extension_path('oxpus/dlext', $this->dlext_constants::DL_TRUE);
+
 		$action				= $this->request->variable('action', '');
 		$cancel				= $this->request->variable('cancel', '');
 		$mode				= $this->request->variable('mode', 'overview');
 
-		include($this->root_path . 'includes/functions_posting.' . $this->phpEx);
-		include($this->root_path . 'includes/functions_user.' . $this->phpEx);
-		include($this->ext_path . 'includes/fields.' . $this->phpEx);
-		include($this->ext_path . 'includes/fields_admin.' . $this->phpEx);
+		if (!function_exists('generate_smilies'))
+		{
+			include($this->root_path . 'includes/functions_posting.' . $this->phpEx);
+		}
+
+		if (!function_exists('user_get_id_name'))
+		{
+			include($this->root_path . 'includes/functions_user.' . $this->phpEx);
+		}
+
+		if (!class_exists('custom_profile'))
+		{
+			include($this->ext_path . 'includes/fields.' . $this->phpEx);
+		}
+
+		if (!class_exists('custom_profile_admin'))
+		{
+			include($this->ext_path . 'includes/fields_admin.' . $this->phpEx);
+		}
 
 		$this->user->add_lang(['ucp', 'acp/profile']);
 
@@ -571,7 +587,6 @@ class acp_fields_controller implements acp_fields_interface
 						ORDER BY option_id ASC';
 					$result = $this->db->sql_query($sql);
 
-					$l_lang_options = [];
 					while ($row = $this->db->sql_fetchrow($result))
 					{
 						$l_lang_options[$row['lang_id']][$row['option_id']] = $row['lang_value'];
@@ -585,7 +600,6 @@ class acp_fields_controller implements acp_fields_interface
 						ORDER BY lang_id ASC';
 					$result = $this->db->sql_query($sql);
 
-					$l_lang_name = $l_lang_explain = $l_lang_default_value = [];
 					while ($row = $this->db->sql_fetchrow($result))
 					{
 						$l_lang_name[$row['lang_id']] = $row['lang_name'];

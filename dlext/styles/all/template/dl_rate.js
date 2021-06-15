@@ -50,7 +50,7 @@ function AJAXDLFinishRate(data) {
 	for (var i = 0; i < obj.count.max; i++) {
 
 		if (obj.stars[i]['ajax'] > 0) {
-			rate_img = rate_img + '<a href="#" onclick="AJAXDLVote(' + obj.count.dlId + ', ' + obj.stars[i]['ajax'] + '); return false;" class="dl-rating-img">';
+			rate_img = rate_img + '<a href="#" class="dl-rating-img dl-rate-add" data-dfid="' + obj.count.dlId + '" data-points="' + obj.stars[i]['ajax'] + '">';
 		}
 
 		if (obj.stars[i]['icon'] == 'yes') {
@@ -66,7 +66,7 @@ function AJAXDLFinishRate(data) {
 	}
 
 	if (obj.count.undo == 1) {
-		rate_img = rate_img + ' <a href="#" onclick="AJAXDLUnvote(' + obj.count.dlId + '); return false;" class="dl-rating-img"><i class="icon fa-times-circle fa-fw dl-red"></i></a>';
+		rate_img = rate_img + ' <a href="#" class="dl-rating-img dl-rate-del" data-dfid="' + obj.count.dlId + '"><i class="icon fa-times-circle fa-fw dl-red"></i></a>';
 	}
 
 	if (obj.count.count != '-') {
@@ -80,4 +80,25 @@ function AJAXDLFinishRate(data) {
 	$("#rating_" + obj.count.dlId).html(rate_img);
 	$("#rating_" + obj.count.dlId).attr('show', true);
 	$("#rating_" + obj.count.dlId).attr('readonly', false);
+
+	assignRateFunction();
 }
+
+function assignRateFunction() {
+	$('.dl-rate-add').click(function () {
+		var df_id = $(this).data('dfid');
+		var points = $(this).data('points');
+	
+		AJAXDLVote(df_id, points);
+	});
+
+	$('.dl-rate-del').click(function () {
+		var df_id = $(this).data('dfid');
+	
+		AJAXDLUnvote(df_id);
+	});
+}
+
+$(document).ready(function () {
+	assignRateFunction();
+});

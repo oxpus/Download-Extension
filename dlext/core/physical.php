@@ -118,7 +118,7 @@ class physical implements physical_interface
 			];
 		}
 
-		return $folders;
+		return (!empty($folders)) ? $folders : $this->dlext_constants::DL_FALSE;
 	}
 
 	public function read_dl_sizes($download_dir = '')

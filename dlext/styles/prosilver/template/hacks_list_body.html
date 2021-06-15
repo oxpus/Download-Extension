@@ -45,25 +45,25 @@
 	</div>
 </div>
 
-<form action="{{ S_DL_FORM_ACTION }}" method="post">
+<form action="{{ S_DL_FORM_ACTION }}" method="post" name="hacklist">
 
 <fieldset class="display-options">
 	<label>{{ lang('SORT_BY') }}</label>
 		<label>
-			<select name="sort_by" onchange="forms['hacklist'].submit()">
-			<option value="0"{{ DL_SELECTED_0 }}>{{ lang('DL_DEFAULT_SORT') }}</option>
-			<option value="1"{{ DL_SELECTED_1 }}>{{ lang('DL_FILE_DESCRIPTION') }}</option>
-			<option value="2"{{ DL_SELECTED_2 }}>{{ lang('DL_HACK_AUTOR') }}</option>
+			<select name="sort_by" class="dl-change-select" data-button="dl-select-button">
+				<option value="0"{% if S_DL_SELECTED_DEFAULT %} selected{% endif %}>{{ lang('DL_DEFAULT_SORT') }}</option>
+				<option value="1"{% if S_DL_SELECTED_DESCRIPTION %} selected{% endif %}>{{ lang('DL_FILE_DESCRIPTION') }}</option>
+				<option value="2"{% if S_DL_SELECTED_AUTHOR %} selected{% endif %}>{{ lang('DL_HACK_AUTOR') }}</option>
 			</select>
 		</label>
 		<label>{{ lang('DL_ORDER') }}</label>
 		<label>
-			<select name="order" onchange="forms['hacklist'].submit()">
-			<option value="ASC"{{ DL_SELECTED_SORT_0 }}>{{ lang('ASCENDING') }}</option>
-			<option value="DESC"{{ DL_SELECTED_SORT_1 }}>{{ lang('DESCENDING') }}</option>
+			<select name="order" class="dl-change-select" data-button="dl-select-button">
+				<option value="ASC"{% if S_DL_SELECTED_SORT_ASC %} selected{% endif %}>{{ lang('ASCENDING') }}</option>
+				<option value="DESC"{% if S_DL_SELECTED_SORT_DESC %} selected{% endif %}>{{ lang('DESCENDING') }}</option>
 			</select>
 		</label>
-	<label><input type="submit" class="button2" value="{{ lang('GO') }}" /></label>
+	<label><input type="submit" class="button2" id="dl-select-button" value="{{ lang('GO') }}" /></label>
 </fieldset>
 
 </form>

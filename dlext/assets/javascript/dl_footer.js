@@ -6,40 +6,7 @@
 *
 */
 
-var seperator = '?';
-if (ajax_path.indexOf('?') > 0) {
-	seperator = '&';
-}
-
-$('.help').click(function () {
-    var help_key = $(this).attr('key');
-    var param = $(this).attr('param');
-    var url_param = '';
-
-    if (param != null) {
-        url_param = '&value=' + param;
-	}
-
-    $.ajax({
-        url: ajax_path + seperator + 'help_key=' + help_key + url_param,
-        type: "GET",
-        success: function (data) { AJAXDLHelpDisplay(data); }
-    });
-});
-
-function AJAXDLHelpDisplay(data) {
-	var obj = $.parseJSON(data);
-    $("#dl_help_title").html(obj.title);
-    $("#dl_help_option").html(obj.option);
-    $("#dl_help_string").html(obj.string);
-
-    $("#dl_help_popup").fadeIn("fast");
-    $("#dl_help_bg").css("opacity", "0.7");
-    $("#dl_help_bg").fadeIn("fast");
-
-}
-
-function show_area(area, status)
+function dl_footer_show_area(area, status)
 {
 	if (status == true)
 	{
@@ -55,35 +22,68 @@ function show_area(area, status)
 }
 
 $(document).ready(function () {
-
-	$('#legend-footer').click(function (ev) {
-		show_area('legend', true);
+	$('#dl-legend-footer').click(function (ev) {
+		dl_footer_show_area('dl-legend', true);
 		ev.stopPropagation();
 	});
 
-	$('#stats-footer').click(function (ev) {
-		show_area('footer', true);
+	$('#dl-stats-footer').click(function (ev) {
+		dl_footer_show_area('dl-footer', true);
 		ev.stopPropagation();
 	});
 
-	$(".dl_help_close").click(function () {
-		$("#dl_help_popup").fadeOut("fast");
-		$("#dl_help_bg").fadeOut("fast");
+	$('.dl-close-footer').click(function () {
+		var dl_footer_area = $(this).data('area');
+		$('#' + dl_footer_area).fadeOut("fast");
 	});
+
+	$('.dl-marklist').click(function () {
+		var webform = $(this).data('form');
+		var webfield = $(this).data('field');
+	
+		marklist(webform, webfield, true);
+	});
+	
+	$('.dl-unmarklist').click(function () {
+		var webform = $(this).data('form');
+		var webfield = $(this).data('field');
+	
+		marklist(webform, webfield, false);
+	});
+
+	$('.dl-finduser').click(function () {
+        var user_href = $(this).data('href');
+
+        find_username(user_href);
+    });
+
+	$('.dl-smiley-insert').click(function () {
+        var smiley = $(this).data('smiley');
+
+        insert_text(smiley, true);
+    });
+
+	$('.dl-smiley-popup').click(function () {
+        var url = $(this).data('url');
+
+        window.open(url, '_blank', 'height=200,resizable=yes,scrollbars=yes,width=400');
+    });
+
+    $('.dl-change-select').change(function () {
+        var button = $(this).data('button');
+
+        $('#' + button).click();
+    });
 });
 
-$(window).click(function(ev){
-	if ($(ev.target).attr('id') != "#legend") {
-		show_area('legend', false);
+$(window).click(function(ev) {
+	if ($(ev.target).attr('id') != "#dl-legend") {
+		dl_footer_show_area('dl-legend', false);
 		ev.stopPropagation();
 	}
-	if ($(ev.target).attr('id') != "#footer") {
-		show_area('footer', false);
-		ev.stopPropagation();
-	}
-	if ($(ev.target).attr('id') != "#dl_help_popup") {
-		$("#dl_help_popup").fadeOut("fast");
-		$("#dl_help_bg").fadeOut("fast");
+
+	if ($(ev.target).attr('id') != "#dl-footer") {
+		dl_footer_show_area('dl-footer', false);
 		ev.stopPropagation();
 	}
 });

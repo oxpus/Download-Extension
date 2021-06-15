@@ -84,6 +84,16 @@ class release_8_0_0 extends \phpbb\db\migration\migration
 
 	public function revert_schema()
 	{
-		return [];
+		return [
+			'add_tables' => [
+				$this->table_prefix . 'dl_rem_traf' => [
+					'COLUMNS'		=> [
+						'config_name'	=> ['VCHAR', ''],
+						'config_value'	=> ['VCHAR', ''],
+					],
+					'PRIMARY_KEY'	=> 'config_name'
+				],
+			],
+		];
 	}
 }

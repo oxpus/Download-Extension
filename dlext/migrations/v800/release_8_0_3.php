@@ -52,9 +52,4 @@ class release_8_0_3 extends \phpbb\db\migration\migration
 			],
 		];
 	}
-
-	public function revert_schema()
-	{
-		return [];
-	}
 }

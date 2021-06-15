@@ -110,6 +110,10 @@ class acp_perm_check_controller implements acp_perm_check_interface
 					$$key = $value;
 				}
 
+				// First fetch ALL category permissions
+				$cat_perm_ary   = [];
+				$dl_index       = $this->dlext_main->full_index();
+
 				// Check for selected user and reinit the download classes to get the right content
 				$reset_user_data = $this->dlext_constants::DL_FALSE;
 				if ($user_id != $this->user->data['user_id'])
@@ -122,10 +126,6 @@ class acp_perm_check_controller implements acp_perm_check_interface
 					$this->auth->acl($this->user->data);
 					$reset_user_data = $this->dlext_constants::DL_TRUE;
 				}
-
-				// Fetch category permissions
-				$cat_perm_ary   = [];
-				$dl_index       = $this->dlext_main->full_index();
 
 				foreach (array_keys($dl_index) as $cat_id)
 				{

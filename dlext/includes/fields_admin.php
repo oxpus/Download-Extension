@@ -36,7 +36,7 @@ class custom_profile_admin extends custom_profile
 		$validate_options = '';
 		foreach ($validate_ary as $lang => $value)
 		{
-			$selected = ($this->vars['field_validation'] == $value) ? ' selected="selected"' : '';
+			$selected = ($this->vars['field_validation'] == $value) ? ' selected' : '';
 			$validate_options .= '<option value="' . $value . '"' . $selected . '>' . $language->lang($lang) . '</option>';
 		}
 
@@ -117,7 +117,7 @@ class custom_profile_admin extends custom_profile
 		];
 
 		$options = [
-			0 => ['TITLE' => $language->lang('FIELD_TYPE'), 'EXPLAIN' => $language->lang('BOOL_TYPE_EXPLAIN'), 'FIELD' => '<label><input type="radio" class="radio" name="field_length" value="1"' . (($this->vars['field_length'] == 1) ? ' checked="checked"' : '') . ' onchange="document.getElementById(\'add_profile_field\').submit();" /> ' . $language->lang('RADIO_BUTTONS') . '</label><label><input type="radio" class="radio" name="field_length" value="2"' . (($this->vars['field_length'] == 2) ? ' checked="checked"' : '') . ' onchange="document.getElementById(\'add_profile_field\').submit();" /> ' . $language->lang('CHECKBOX') . '</label>'],
+			0 => ['TITLE' => $language->lang('FIELD_TYPE'), 'EXPLAIN' => $language->lang('BOOL_TYPE_EXPLAIN'), 'FIELD' => '<label><input type="radio" class="radio" name="field_length" value="1"' . (($this->vars['field_length'] == 1) ? ' checked' : '') . ' onchange="document.getElementById(\'add_profile_field\').submit();" /> ' . $language->lang('RADIO_BUTTONS') . '</label><label><input type="radio" class="radio" name="field_length" value="2"' . (($this->vars['field_length'] == 2) ? ' checked' : '') . ' onchange="document.getElementById(\'add_profile_field\').submit();" /> ' . $language->lang('CHECKBOX') . '</label>'],
 			1 => ['TITLE' => $language->lang('DEFAULT_VALUE'), 'FIELD' => $this->process_field_row('preview', $profile_row)],
 		];
 
@@ -190,7 +190,7 @@ class custom_profile_admin extends custom_profile
 
 		$options = [
 			0 => ['TITLE' => $language->lang('DEFAULT_VALUE'),	'FIELD' => $this->process_field_row('preview', $profile_row)],
-			1 => ['TITLE' => $language->lang('ALWAYS_TODAY'),	'FIELD' => '<label><input type="radio" class="radio" name="always_now" value="1"' . (($s_checked) ? ' checked="checked"' : '') . ' onchange="document.getElementById(\'add_profile_field\').submit();" /> ' . $language->lang('YES') . '</label><label><input type="radio" class="radio" name="always_now" value="0"' . ((!$s_checked) ? ' checked="checked"' : '') . ' onchange="document.getElementById(\'add_profile_field\').submit();" /> ' . $language->lang('NO') . '</label>'],
+			1 => ['TITLE' => $language->lang('ALWAYS_TODAY'),	'FIELD' => '<label><input type="radio" class="radio" name="always_now" value="1"' . (($s_checked) ? ' checked' : '') . ' onchange="document.getElementById(\'add_profile_field\').submit();" /> ' . $language->lang('YES') . '</label><label><input type="radio" class="radio" name="always_now" value="0"' . ((!$s_checked) ? ' checked' : '') . ' onchange="document.getElementById(\'add_profile_field\').submit();" /> ' . $language->lang('NO') . '</label>'],
 		];
 
 		return $options;

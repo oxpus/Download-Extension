@@ -90,12 +90,12 @@ class todo
 		$this->dlext_main				= $dlext_main;
 		$this->dlext_footer				= $dlext_footer;
 		$this->dlext_constants			= $dlext_constants;
-
-		$this->dlext_main->dl_handle_active();
 	}
 
 	public function handle()
 	{
+		$this->dlext_main->dl_handle_active();
+
 		$cat			= $this->request->variable('cat', 0);
 		$submit			= $this->request->variable('submit', '');
 		$cancel			= $this->request->variable('cancel', '');
@@ -194,7 +194,7 @@ class todo
 				$todo_flags		= $dl_file['todo_flags'];
 
 				$text_ary		= generate_text_for_edit($description, $desc_uid, $desc_flags);
-				$description	= $text_ary['text'];
+				$hack_version	= $text_ary['text'] . ' ' . $hack_version;
 
 				$text_ary		= generate_text_for_edit($todo, $todo_uid, $todo_flags);
 				$todo			= $text_ary['text'];

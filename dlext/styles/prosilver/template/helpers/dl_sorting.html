@@ -1,0 +1,34 @@
+{% if S_DL_SORT_OPTIONS %}
+<form action="{{ S_DL_FORM_ACTION }}" method="post" name="dl_mod">
+
+<fieldset>
+
+<p class="dl-text-center">
+	{{ lang('SORT_BY') }}
+	&nbsp;
+	<select name="sort_by" class="dl-change-select" data-button="dl-select-button">
+		<option value="0"{% if S_DL_SELECTED_DEFEAULT %} selected{% endif %}>{{ lang('DL_DEFAULT_SORT') }}</option>
+		<option value="1"{% if S_DL_SELECTED_DESCRIPTION %} selected{% endif %}>{{ lang('DL_FILE_DESCRIPTION') }}</option>
+		<option value="2"{% if S_DL_SELECTED_FILENAME %} selected{% endif %}>{{ lang('DL_FILE_NAME') }}</option>
+		<option value="3"{% if S_DL_SELECTED_CLICKS %} selected{% endif %}>{{ lang('DL_KLICKS') }}</option>
+		<option value="4"{% if S_DL_SELECTED_FREE %} selected{% endif %}>{{ lang('DL_FREE') }}</option>
+		<option value="5"{% if S_DL_SELECTED_EXTERN %} selected{% endif %}>{{ lang('DL_EXTERN') }}</option>
+		<option value="6"{% if S_DL_SELECTED_FILESIZE %} selected{% endif %}>{{ lang('DL_FILE_SIZE') }}</option>
+		<option value="7"{% if S_DL_SELECTED_LASTTIME %} selected{% endif %}>{{ lang('LAST_UPDATED') }}</option>
+		<option value="8"{% if S_DL_SELECTED_RATING %} selected{% endif %}>{{ lang('DL_RATING') }}</option>
+	</select>
+	&nbsp;&nbsp;&nbsp;
+	{{ lang('DL_ORDER') }}
+	&nbsp;
+	<select name="order" class="dl-change-select" data-button="dl-select-button">
+		<option value="ASC"{% if S_DL_SELECTED_SORT_ASC %} selected{% endif %}>{{ lang('ASCENDING') }}</option>
+		<option value="DESC"{% if S_DL_SELECTED_SORT_DESC %} selected{% endif %}>{{ lang('DESCENDING') }}</option>
+	</select>
+		&nbsp;
+	<input type="submit" class="button2" id="dl-select-button" value="{{ lang('GO') }}" />
+</p>
+
+</fieldset>
+
+</form>
+{% endif %}

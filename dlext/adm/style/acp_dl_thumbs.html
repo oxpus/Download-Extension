@@ -19,7 +19,7 @@
 	{% endfor %}
 
 	<p class="quick">
-		<span class="small"><a href="#" onclick="marklist('thumbnails', 'thumb', true); return false;">{{ lang('MARK_ALL') }}</a> :: <a href="#" onclick="marklist('thumbnails', 'thumb', false); return false;">{{ lang('UNMARK_ALL') }}</a></span>
+		<span class="small"><a href="#" class="dl-marklist" data-form="thumbnails" data-field="thumb">{{ lang('MARK_ALL') }}</a> :: <a href="#" class="dl-unmarklist" data-form="thumbnails" data-field="thumb">{{ lang('UNMARK_ALL') }}</a></span>
 	</p>
 
 	<p class="submit-buttons">

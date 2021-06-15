@@ -74,14 +74,17 @@ class main implements main_interface
 		$this->dlext_constants	= $dlext_constants;
 
 		$this->dlext_table_dl_stats	= $dlext_table_dl_stats;
-
-		$this->dl_auth			= $this->dlext_auth->dl_auth();
-		$this->dl_index			= $this->dlext_auth->dl_index();
-		$this->user_admin		= $this->dlext_auth->user_admin();
 	}
 
 	public function full_index($only_cat = 0, $parent = 0, $level = 0, $auth_level = 0, &$tree_dl = [])
 	{
+		if (empty($this->dl_auth))
+		{
+			$this->dl_auth			= $this->dlext_auth->dl_auth();
+			$this->dl_index			= $this->dlext_auth->dl_index();
+			$this->user_admin		= $this->dlext_auth->user_admin();
+		}
+
 		if (empty($this->dl_index))
 		{
 			return [];
@@ -159,6 +162,13 @@ class main implements main_interface
 
 	public function index($parent = 0)
 	{
+		if (empty($this->dl_auth))
+		{
+			$this->dl_auth			= $this->dlext_auth->dl_auth();
+			$this->dl_index			= $this->dlext_auth->dl_index();
+			$this->user_admin		= $this->dlext_auth->user_admin();
+		}
+
 		$tree_dl = [];
 
 		if (empty($this->dl_index))
@@ -182,6 +192,13 @@ class main implements main_interface
 
 	public function get_sublevel($parent = 0)
 	{
+		if (empty($this->dl_auth))
+		{
+			$this->dl_auth			= $this->dlext_auth->dl_auth();
+			$this->dl_index			= $this->dlext_auth->dl_index();
+			$this->user_admin		= $this->dlext_auth->user_admin();
+		}
+
 		if (empty($this->dl_index))
 		{
 			return [];
@@ -214,6 +231,13 @@ class main implements main_interface
 
 	public function get_sublevel_count($parent = 0)
 	{
+		if (empty($this->dl_auth))
+		{
+			$this->dl_auth			= $this->dlext_auth->dl_auth();
+			$this->dl_index			= $this->dlext_auth->dl_index();
+			$this->user_admin		= $this->dlext_auth->user_admin();
+		}
+
 		$sublevel_count = 0;
 
 		if (empty($this->dl_index))
@@ -235,6 +259,13 @@ class main implements main_interface
 
 	public function count_sublevel($parent)
 	{
+		if (empty($this->dl_auth))
+		{
+			$this->dl_auth			= $this->dlext_auth->dl_auth();
+			$this->dl_index			= $this->dlext_auth->dl_index();
+			$this->user_admin		= $this->dlext_auth->user_admin();
+		}
+
 		$sublevel = 0;
 
 		if (empty($this->dl_index))
@@ -255,6 +286,13 @@ class main implements main_interface
 
 	public function find_latest_dl($last_data, $parent, $main_cat, $last_dl_time)
 	{
+		if (empty($this->dl_auth))
+		{
+			$this->dl_auth			= $this->dlext_auth->dl_auth();
+			$this->dl_index			= $this->dlext_auth->dl_index();
+			$this->user_admin		= $this->dlext_auth->user_admin();
+		}
+
 		foreach (array_keys($last_data) as $cat_id)
 		{
 			if ($last_data[$cat_id]['parent'] == $parent || $main_cat == $cat_id)

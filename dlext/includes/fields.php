@@ -673,22 +673,22 @@ class custom_profile
 			}
 		}
 
-		$profile_row['s_day_options'] = '<option value="0"' . ((!$day) ? ' selected="selected"' : '') . '>--</option>';
+		$profile_row['s_day_options'] = '<option value="0"' . ((!$day) ? ' selected' : '') . '>--</option>';
 		for ($i = 1; $i < 32; ++$i)
 		{
-			$profile_row['s_day_options'] .= '<option value="' . $i . '"' . (($i == $day) ? ' selected="selected"' : '') . ">$i</option>";
+			$profile_row['s_day_options'] .= '<option value="' . $i . '"' . (($i == $day) ? ' selected' : '') . ">$i</option>";
 		}
 
-		$profile_row['s_month_options'] = '<option value="0"' . ((!$month) ? ' selected="selected"' : '') . '>--</option>';
+		$profile_row['s_month_options'] = '<option value="0"' . ((!$month) ? ' selected' : '') . '>--</option>';
 		for ($i = 1; $i < 13; ++$i)
 		{
-			$profile_row['s_month_options'] .= '<option value="' . $i . '"' . (($i == $month) ? ' selected="selected"' : '') . ">$i</option>";
+			$profile_row['s_month_options'] .= '<option value="' . $i . '"' . (($i == $month) ? ' selected' : '') . ">$i</option>";
 		}
 
-		$profile_row['s_year_options'] = '<option value="0"' . ((!$year) ? ' selected="selected"' : '') . '>--</option>';
+		$profile_row['s_year_options'] = '<option value="0"' . ((!$year) ? ' selected' : '') . '>--</option>';
 		for ($i = $now['year'] - 100; $i <= $now['year'] + 100; ++$i)
 		{
-			$profile_row['s_year_options'] .= '<option value="' . $i . '"' . (($i == $year) ? ' selected="selected"' : '') . ">$i</option>";
+			$profile_row['s_year_options'] .= '<option value="' . $i . '"' . (($i == $year) ? ' selected' : '') . ">$i</option>";
 		}
 		unset($now);
 
@@ -719,7 +719,7 @@ class custom_profile
 			{
 				$template->assign_block_vars('bool.options', [
 					'OPTION_ID'	=> $option_id,
-					'CHECKED'	=> ($value == $option_id) ? ' checked="checked"' : '',
+					'CHECKED'	=> ($value == $option_id) ? ' checked' : '',
 					'VALUE'		=> $option_value,
 				]);
 			}
@@ -777,7 +777,7 @@ class custom_profile
 		{
 			$template->assign_block_vars('dropdown.options', [
 				'OPTION_ID'	=> $option_id,
-				'SELECTED'	=> ($value == $option_id) ? ' selected="selected"' : '',
+				'SELECTED'	=> ($value == $option_id) ? ' selected' : '',
 				'VALUE'		=> $option_value,
 			]);
 		}

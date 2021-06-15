@@ -173,6 +173,10 @@ class navigation implements navigation_interface
 					$nav_string['name'][] = $this->language->lang('DL_MOD_TODO');
 					$nav_string['link'][] = $this->helper->route('oxpus_dlext_todo');
 				break;
+				case 'mcp':
+					$nav_string['name'][] = $this->language->lang('DL_MODCP_MANAGE');
+					$nav_string['link'][] = $this->helper->route('oxpus_dlext_mcp_manage');
+				break;
 			}
 
 			for ($i = 0; $i < count($nav_string['name']); ++$i)

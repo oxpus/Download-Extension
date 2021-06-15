@@ -1,18 +1,18 @@
 Subject: Neuer Download
 
-Hallo {USERNAME},
+Hallo {{ USERNAME }},
 
-du bekommst diese Email, weil es auf "{SITENAME}" einen neuen bzw. geänderten Download in der Kategorie "{CATEGORY}" gibt, der freigegeben werden muss:
+du bekommst diese Email, weil es auf "{{ SITENAME }}" einen neuen bzw. geänderten Download in der Kategorie "{{ CATEGORY }}" gibt, der freigegeben werden muss:
 
 ---------------------------
-{DOWNLOAD}
-{DESCRIPTION}
+{{ DOWNLOAD }}
+{{ DESCRIPTION }}
 ---------------------------
 
 Wenn du diesen Download freigeben willst, dann klicke auf folgenden Link:
 
-{U_APPROVE}
+{{ U_APPROVE }}
 
 Wenn du zukünftig keine Benachrichtigungen hierüber erhalten willst, dann kannst du die Einstellungen in deinem Benutzerprofil ändern.
 
-{EMAIL_SIG}
+{{ EMAIL_SIG }}

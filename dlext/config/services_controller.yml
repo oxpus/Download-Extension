@@ -123,27 +123,6 @@ services:
             - '%oxpus.dlext.tables.dl_ratings%'
             - '%oxpus.dlext.tables.downloads%'
             - '%oxpus.dlext.tables.dl_cat%'
-    oxpus.dlext.latest:
-        class: oxpus\dlext\controller\latest
-        public: true
-        arguments:
-            - '@dbal.conn'
-            - '@config'
-            - '@controller.helper'
-            - '@request'
-            - '@template'
-            - '@user'
-            - '@language'
-            - '@dispatcher'
-            - '@pagination'
-            - '@oxpus.dlext.core.auth'
-            - '@oxpus.dlext.core.files'
-            - '@oxpus.dlext.core.format'
-            - '@oxpus.dlext.core.main'
-            - '@oxpus.dlext.core.status'
-            - '@oxpus.dlext.helpers.footer'
-            - '@oxpus.dlext.helpers.constants'
-            - '%oxpus.dlext.tables.dl_ratings%'
     oxpus.dlext.load:
         class: oxpus\dlext\controller\load
         public: true

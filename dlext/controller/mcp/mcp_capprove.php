@@ -28,6 +28,7 @@ class mcp_capprove
 	protected $dlext_auth;
 	protected $dlext_main;
 	protected $dlext_constants;
+	protected $dlext_footer;
 
 	protected $dlext_table_dl_comments;
 	protected $dlext_table_downloads;
@@ -47,6 +48,8 @@ class mcp_capprove
 	* @param \phpbb\language\language				$language
 	* @param \oxpus\dlext\core\auth					$dlext_auth
 	* @param \oxpus\dlext\core\main					$dlext_main
+	* @param \oxpus\dlext\core\helpers\constants	$dlext_constants
+	* @param \oxpus\dlext\core\helpers\footer		$dlext_footer
 	* @param string									$dlext_table_dl_comments
 	* @param string									$dlext_table_downloads
 	* @param string									$dlext_constants
@@ -64,9 +67,10 @@ class mcp_capprove
 		\phpbb\language\language $language,
 		\oxpus\dlext\core\auth $dlext_auth,
 		\oxpus\dlext\core\main $dlext_main,
+		\oxpus\dlext\core\helpers\constants $dlext_constants,
+		\oxpus\dlext\core\helpers\footer $dlext_footer,
 		$dlext_table_dl_comments,
-		$dlext_table_downloads,
-		$dlext_constants
+		$dlext_table_downloads
 	)
 	{
 		$this->root_path				= $root_path;
@@ -86,6 +90,7 @@ class mcp_capprove
 		$this->dlext_auth				= $dlext_auth;
 		$this->dlext_main				= $dlext_main;
 		$this->dlext_constants			= $dlext_constants;
+		$this->dlext_footer				= $dlext_footer;
 	}
 
 	public function handle()
@@ -229,7 +234,7 @@ class mcp_capprove
 
 			$this->template->assign_vars([
 				'DL_PAGE_NUMBER'	=> $this->pagination->on_page($total_approve, $this->config['dl_links_per_page'], $start),
-				'DL_TOTAL_DL'		=> $this->language->lang('DL_VIEW_DOWNLOADS', $total_approve),
+				'DL_TOTAL_DL'		=> $this->language->lang('DL_VIEW_DOWNLOADS_NUM', $total_approve),
 			]);
 		}
 
@@ -237,6 +242,12 @@ class mcp_capprove
 			'S_DL_MODCP_ACTION'		=> $this->helper->route('oxpus_dlext_mcp_capprove'),
 			'S_DL_HIDDEN_FIELDS'	=> build_hidden_fields($s_hidden_fields),
 		]);
+
+		/*
+		* include the mod footer
+		*/
+		$this->dlext_footer->set_parameter('mcp');
+		$this->dlext_footer->handle();
 
 		return $this->helper->render('@oxpus_dlext/mcp/dl_mcp_capprove.html', $this->language->lang('MCP'));
 	}

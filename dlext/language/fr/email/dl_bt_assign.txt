@@ -1,12 +1,12 @@
-Subject: Rapport de bugs sur « {SITENAME} »
+Subject: Rapport de bugs sur « {{ SITENAME }} »
 
-Bonjour {USERNAME},
+Bonjour {{ USERNAME }},
 
-Vous recevez cet e-mail car un rapport de bugs sur "{SITENAME}" a été envoyé pour être analysé.
+Vous recevez cet e-mail car un rapport de bugs sur "{{ SITENAME }}" a été envoyé pour être analysé.
 Pour plus de détails, suivez ce lien :
 
-{U_BUG_REPORT}
+{{ U_BUG_REPORT }}
 
 ----------------------------
 
-{EMAIL_SIG}
+{{ EMAIL_SIG }}

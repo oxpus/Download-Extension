@@ -1,12 +1,12 @@
-Subject: Asignado Reporte de Error en {SITENAME}
+Subject: Asignado Reporte de Error en {{ SITENAME }}
 
-Hola {USERNAME},
+Hola {{ USERNAME }},
 
-Recibe este email debido a que un reporte de error en "{SITENAME}" le fue asignado para trabajar en él.
+Recibe este email debido a que un reporte de error en "{{ SITENAME }}" le fue asignado para trabajar en él.
 Para más detalles sobre este reporte siga este enlace:
 
-{U_BUG_REPORT}
+{{ U_BUG_REPORT }}
 
 ----------------------------
 
-{EMAIL_SIG}
+{{ EMAIL_SIG }}

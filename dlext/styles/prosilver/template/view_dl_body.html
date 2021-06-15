@@ -49,7 +49,7 @@
 <div class="action-bar bar-top">
 
 	{% for dl_category in loops.dl_category %}
-	<a id="tab_{{ dl_category.DL_CAT_ID }}" onclick="swapOptions('{{ dl_category.DL_CAT_ID }}', '{{ DL_MOD_LIST }}', '{{ DL_MOD_LIST_CLOSE }}', 'plus', 'dl-red-icon', '{{ DL_MOD_FILE_HASH_OPEN }}', '{{ DL_MOD_FILE_HASH_CLOSE }}', 'slack', 'dl-red-icon');" class="button{% if S_DL_OPEN_PANEL == dl_category.DL_CAT_ID %} dl-tab-icon{% endif %}">
+	<a id="tab_{{ dl_category.DL_CAT_ID }}" class="button{% if S_DL_OPEN_PANEL == dl_category.DL_CAT_ID %} dl-tab-icon{% endif %} dl-detail-area" data-cat="{{ dl_category.DL_CAT_ID }}" data-open1="{{ DL_MOD_LIST }}" data-close1="{{ DL_MOD_LIST_CLOSE }}" data-icon1="plus" data-colour1="dl-red-icon" data-open2="{{ DL_MOD_FILE_HASH_OPEN }}" data-close2="{{ DL_MOD_FILE_HASH_CLOSE }}" data-icon2="slack" data-colour2="dl-red-icon">
 		<span>{{ dl_category.DL_CAT_NAME }}</span>
 		{% if dl_category.DL_COMMENTS_COUNT and dl_category.DL_CAT_ID eq '2' %}
 		<i class="dl-bubble">{{ dl_category.DL_COMMENTS_COUNT }}</i>
@@ -68,22 +68,6 @@
 		<div class="postbody dl-width-100">
 
 			<div class="post-buttons">
-
-				{% if S_DL_MOD_LIST or S_DL_MOD_TODO or S_DL_FIELDS %}
-				<span id="extra_page_open">
-					<a href="#" onclick="pageToggle('extra_page', true, '{{ DL_MOD_LIST }}', '{{ DL_MOD_LIST_CLOSE }}', 'plus', 'dl-red-icon')" class="button icon-button" title="{{ lang('DL_MOD_LIST') }}">
-						<i class="icon fa-plus fa-fw" aria-hidden="true"></i><span class="sr-only">{{ lang('DL_MOD_LIST') }}</span>
-					</a>
-				</span>
-				{% endif %}
-
-				{% if DL_HASH_TAB %}
-				<span id="hash_page_open">
-					<a href="#" onclick="pageToggle('hash_page', true, '{{ DL_MOD_FILE_HASH_OPEN }}', '{{ DL_MOD_FILE_HASH_CLOSE }}', 'slack', 'dl-red-icon')" class="button icon-button" title="{{ lang('DL_MOD_FILE_HASH_OPEN') }}">
-						<i class="icon fa-slack fa-fw" aria-hidden="true"></i><span class="sr-only">{{ lang('DL_MOD_FILE_HASH_OPEN') }}</span>
-					</a>
-				</span>
-				{% endif %}
 
 				{% if S_DL_EDIT_THUMBS %}
 				<a href="{{ U_DL_EDIT_THUMBS }}" class="button icon-button" title="{{ lang('DL_EDIT_THUMBS') }}">
@@ -193,12 +177,12 @@
 					<div id="rating_{{ DL_DF_ID }}" class="dl-rating-image">
 						{% if DL_RATE_TITLE %}<span class="dl-rating" title="{{ DL_RATE_TITLE}}">{% endif %}
 						{% for dl_rating_img in loops.dl_rating_img %}
-						{% if dl_rating_img.DL_RATE_AJAX %}<a href="#" onclick="AJAXDLVote('{{ DL_DF_ID }}', '{{ dl_rating_img.DL_RATE_AJAX }}'); return false;" class="dl-rating-img">{% endif %}
+						{% if dl_rating_img.DL_RATE_AJAX %}<a href="#" class="dl-rating-img dl-rate-add" data-dfid="{{ DL_DF_ID }}" data-points="{{ dl_rating_img.DL_RATE_AJAX }}">{% endif %}
 						{% if dl_rating_img.DL_RATE_STAR eq 'yes' %}<i class="icon fa-star fa-fw dl-green"></i>{% endif %}
 						{% if dl_rating_img.DL_RATE_STAR eq 'no' %}<i class="icon fa-star-o fa-fw dl-yellow"></i>{% endif %}
 						{% if dl_rating_img.DL_RATE_AJAX %}</a>{% endif %}
 						{% endfor %}
-						{% if DL_RATE_UNDO %}<a href="#" onclick="AJAXDLUnvote('{{ DL_DF_ID }}'); return false;" class="dl-rating-img"><i class="icon fa-times-circle fa-fw dl-red"></i></a>{% endif %}
+						{% if DL_RATE_UNDO %}<a href="#" class="dl-rating-img dl-rate-del" data-dfid="{{ DL_DF_ID }}"><i class="icon fa-times-circle fa-fw dl-red"></i></a>{% endif %}
 						{% if DL_RATE_COUNT != '-' %}<span class="dl-rating-count">{{ DL_RATE_COUNT }}</span>{% endif %}
 						{% if DL_RATE_TITLE %}</span>{% endif %}
 					</div>
@@ -217,52 +201,6 @@
 	<div class="notice dl-text-center">{{ DL_ADD_USER }} {{ DL_CHANGE_USER }}&nbsp;&bull;{{ DL_LAST_TIME }}</div>
 
 </div>
-
-{% if S_DL_MOD_LIST or S_DL_MOD_TODO or S_DL_FIELDS %}
-<div class="panel dlext3 noshow" id="extra_page">
-	<div class="tablewrap">
-
-		{% if DL_MOD_WARNING %}
-		<div class="rules"><strong>{{ lang('DL_MOD_WARNING') }}</strong><br />{{ DL_MOD_WARNING }}</div>
-		{% endif %}
-
-		{% if DL_MOD_TEST %}
-		<br />
-		<h3>{{ lang('DL_MOD_TEST') }}</h3>
-		<p>{{ DL_MOD_TEST }}</p>
-		{% endif %}
-
-		{% if DL_MOD_REQUIRE %}
-		<br />
-		<h3>{{ lang('DL_MOD_REQUIRE') }}</h3>
-		<p>{{ DL_MOD_REQUIRE }}</p>
-		{% endif %}
-
-		{% if S_DL_MOD_TODO %}
-		<br />
-		<h3>{{ lang('DL_MOD_TODO') }}</h3>
-		<p>{{ DL_MOD_TODO }}</p>
-		{% endif %}
-
-		{% if DL_MOD_DESC %}
-		<br />
-		<h3>{{ lang('DL_MOD_DESC') }}</h3>
-		<p>{{ DL_MOD_DESC }}</p>
-		{% endif %}
-
-		{% if S_DL_FIELDS %}
-		<br />
-		{% for dl_custom_fields in loops.dl_custom_fields %}
-		<h3>{{ dl_custom_fields.DL_FIELD_NAME }}{{ lang('COLON') }}</h3>
-		<p>{{ dl_custom_fields.DL_FIELD_VALUE }}</p>
-		<br />
-		{% endfor %}
-		{% endif %}
-
-	</div>
-
-</div>
-{% endif %}
 
 {% for dl_thumbnail in loops.dl_thumbnail %}
 {% if dl_thumbnail.S_FIRST_ROW %}
@@ -346,9 +284,9 @@
 				<div id="smiley-box" class="smiley-box">
 					<strong>{{ lang('SMILIES') }}</strong><br />
 					{% for smiley in loops.smiley %}
-						<a href="#" onclick="insert_text('{{ smiley.A_SMILEY_CODE }}', true); return false;"><img src="{{ smiley.SMILEY_IMG }}" width="{{ smiley.SMILEY_WIDTH }}" height="{{ smiley.SMILEY_HEIGHT }}" alt="{{ smiley.SMILEY_CODE }}" title="{{ smiley.SMILEY_DESC }}" /></a>
+						<a href="#" class="dl-smiley-insert" data-smiley="{{ smiley.A_SMILEY_CODE }}"><img src="{{ smiley.SMILEY_IMG }}" width="{{ smiley.SMILEY_WIDTH }}" height="{{ smiley.SMILEY_HEIGHT }}" alt="{{ smiley.SMILEY_CODE }}" title="{{ smiley.SMILEY_DESC }}" /></a>
 					{% endfor %}
-					<br /><a href="{{ U_MORE_SMILIES }}" onclick="window.open('{{ U_MORE_SMILIES }}', '_blank', 'HEIGHT=200,resizable=yes,scrollbars=yes,WIDTH=400'); return false;">{{ lang('MORE_SMILIES') }}</a>
+					<br /><a href="#" class="dl-smiley-popup" data-url="{{ U_DL_MORE_SMILIES }}">{{ lang('MORE_SMILIES') }}</a>
 				</div>
 				{% endif %}
 				<br />
@@ -423,10 +361,54 @@
 </div>
 {% endif %}
 
-<div class="clearfix"></div>
+{% if S_DL_DETAIL_EXTRA_TAB %}
+<div class="panel dlext3{% if S_DL_OPEN_PANEL <> 3 %} noshow{% endif %}" id="options3">
+	<div class="tablewrap">
 
-{% if DL_HASH_TAB %}
-<div class="panel dlext3 noshow" id="hash_page">
+		{% if DL_MOD_WARNING %}
+		<div class="rules"><strong>{{ lang('DL_MOD_WARNING') }}</strong><br />{{ DL_MOD_WARNING }}</div>
+		{% endif %}
+
+		{% if DL_MOD_TEST %}
+		<br />
+		<h3>{{ lang('DL_MOD_TEST') }}</h3>
+		<p>{{ DL_MOD_TEST }}</p>
+		{% endif %}
+
+		{% if DL_MOD_REQUIRE %}
+		<br />
+		<h3>{{ lang('DL_MOD_REQUIRE') }}</h3>
+		<p>{{ DL_MOD_REQUIRE }}</p>
+		{% endif %}
+
+		{% if S_DL_MOD_TODO %}
+		<br />
+		<h3>{{ lang('DL_MOD_TODO') }}</h3>
+		<p>{{ DL_MOD_TODO }}</p>
+		{% endif %}
+
+		{% if DL_MOD_DESC %}
+		<br />
+		<h3>{{ lang('DL_MOD_DESC') }}</h3>
+		<p>{{ DL_MOD_DESC }}</p>
+		{% endif %}
+
+		{% if S_DL_FIELDS %}
+		<br />
+		{% for dl_custom_fields in loops.dl_custom_fields %}
+		<h3>{{ dl_custom_fields.DL_FIELD_NAME }}{{ lang('COLON') }}</h3>
+		<p>{{ dl_custom_fields.DL_FIELD_VALUE }}</p>
+		<br />
+		{% endfor %}
+		{% endif %}
+
+	</div>
+
+</div>
+{% endif %}
+
+{% if S_DL_DETAIL_HASH_TAB %}
+<div class="panel dlext3{% if S_DL_OPEN_PANEL <> 4 %} noshow{% endif %}" id="options4">
 
 	<h3>{{ lang('DL_MOD_FILE_HASH_TABLE') }}</h3>
 
@@ -444,6 +426,8 @@
 
 </div>
 {% endif %}
+
+<div class="clearfix"></div>
 
 {% if S_DL_BUTTON %}
 <br />
@@ -467,14 +451,14 @@
 				<input type="hidden" name="file_version" value="0" />
 				{% else %}
 				<select name="file_version">
-					<option value="0" selected="selected">{{ lang('DL_VERSION_CURRENT') }}</option>
+					<option value="0" selected>{{ lang('DL_VERSION_CURRENT') }}</option>
 					{% for dl_version_select in loops.dl_version_select %}
 					<option value="{{ dl_version_select.DL_VALUE }}">{{ dl_version_select.DL_KEY }}</option>
 					{% endfor %}
 				</select>
 				{% endif %}
 				<br />
-				<input type="submit" name="submit" id="submit" onclick="hideDlButton();" class="downloadbtn" value="{{ lang('DL_DOWNLOAD') }}" />
+				<input type="submit" name="submit" id="submit" class="downloadbtn" value="{{ lang('DL_DOWNLOAD') }}" />
 				{{ S_DL_HIDDEN }}{{ S_FORM_TOKEN_DOWNLOAD }}
 			</div>
 			{% if S_DL_TRAFFICFREE_DL %}<div class="small dl-text-center dl-red">{{ lang('DL_CAN_DOWNLOAD_TRAFFIC') }}</div>{% endif %}
@@ -482,7 +466,9 @@
 	</ul>
 
 	</form>
+
 </div>
+<div id="dl_hint" class="noshow dl-right dl-big dl-red">Downloading...</div>
 {% else %}
 <div class="rules">
 	<div class="inner">

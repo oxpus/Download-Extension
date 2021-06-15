@@ -1,17 +1,5 @@
 {% INCLUDE 'ucp_header.html' %}
 
-{% if S_FAV_BLOCK %}
-<script type="text/javascript">
-function select_switch(status)
-{
-	for (i = 0; i < document.forms.user_dl_config.length; i++)
-	{
-		document.forms.user_dl_config.elements[i].checked = status;
-	}
-}
-</script>
-{% endif %}
-
 <h2>{{ DL_MOD_RELEASE }}</h2>
 
 <form action="{{ S_DL_FORM_ACTION }}" method="post" id="user_dl_config">
@@ -30,16 +18,16 @@ function select_switch(status)
 			<dd>
 				<select name="user_dl_sort_fix">
 				{% for dl_sort_fields in loops.dl_sort_fields %}
-					<option value="{{ dl_sort_fields.DL_KEY }}"{% if dl_sort_fields.DL_KEY eq S_DL_SORT_USER_OPT %} selected="selected" {% endif %}>{{dl_sort_fields.DL_VALUE }}</option>
+					<option value="{{ dl_sort_fields.DL_KEY }}"{% if dl_sort_fields.DL_KEY eq S_DL_SORT_USER_OPT %} selected {% endif %}>{{dl_sort_fields.DL_VALUE }}</option>
 				{% endfor %}
 				</select>
 				&nbsp;
 				<select name="user_dl_sort_dir">
 				{% for dl_sort_order in loops.dl_sort_order %}
-					<option value="{{ dl_sort_order.DL_KEY }}"{% if dl_sort_order.DL_KEY eq S_DL_SORT_USER_DIR %} selected="selected" {% endif %}>{{dl_sort_order.DL_VALUE }}</option>
+					<option value="{{ dl_sort_order.DL_KEY }}"{% if dl_sort_order.DL_KEY eq S_DL_SORT_USER_DIR %} selected {% endif %}>{{dl_sort_order.DL_VALUE }}</option>
 				{% endfor %}
 				</select>
-				&nbsp;<label><input type="checkbox" class="permissions-checkbox" name="user_dl_sort_opt" value="1"{% if S_DL_SORT_USER_EXT eq 1 %} checked="checked"{% endif %} />&nbsp;{{ lang('DL_SORT_USER_EXT') }}</label>
+				&nbsp;<label><input type="checkbox" class="permissions-checkbox" name="user_dl_sort_opt" value="1"{% if S_DL_SORT_USER_EXT eq 1 %} checked{% endif %} />&nbsp;{{ lang('DL_SORT_USER_EXT') }}</label>
 			</dd>
 		</dl>
 
@@ -57,8 +45,8 @@ function select_switch(status)
 		<dl>
 			<dt><label>{{ lang('DL_SUB_ON_INDEX') }}</label></dt>
 			<dd>
-				<label><input type="radio" class="radio" name="user_dl_sub_on_index" value="1"{% if S_DL_SUB_ON_INDEX eq 1 %} checked="checked"{% endif %} />&nbsp;{{ lang('YES') }}</label>
-				<label><input type="radio" class="radio" name="user_dl_sub_on_index" value="0"{% if S_DL_SUB_ON_INDEX eq 0 %} checked="checked"{% endif %} />&nbsp;{{ lang('NO') }}</label>
+				<label><input type="radio" class="radio" name="user_dl_sub_on_index" value="1"{% if S_DL_SUB_ON_INDEX eq 1 %} checked{% endif %} />&nbsp;{{ lang('YES') }}</label>
+				<label><input type="radio" class="radio" name="user_dl_sub_on_index" value="0"{% if S_DL_SUB_ON_INDEX eq 0 %} checked{% endif %} />&nbsp;{{ lang('NO') }}</label>
 			</dd>
 		</dl>
 
@@ -104,7 +92,7 @@ function select_switch(status)
 </div>
 
 <div class="dl-right">
-	<a href="#" onclick="marklist('user_dl_config', 'fav_id', true); return false;">{{ lang('MARK_ALL') }}</a> :: <a href="#" onclick="marklist('user_dl_config', 'fav_id', false); return false;">{{ lang('UNMARK_ALL') }}</a>
+	<a href="#" class="dl-marklist" data-form="user_dl_config" data-field="fav_id">{{ lang('MARK_ALL') }}</a> :: <a href="#" class="dl-unmarklist" data-form="user_dl_config" data-field="fav_id">{{ lang('UNMARK_ALL') }}</a>
 </div>
 {% endif %}
 

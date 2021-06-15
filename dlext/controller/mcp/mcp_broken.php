@@ -26,6 +26,7 @@ class mcp_broken
 	protected $dlext_auth;
 	protected $dlext_main;
 	protected $dlext_constants;
+	protected $dlext_footer;
 
 	protected $dlext_table_downloads;
 
@@ -43,6 +44,7 @@ class mcp_broken
 	* @param \oxpus\dlext\core\auth					$dlext_auth
 	* @param \oxpus\dlext\core\main					$dlext_main
 	* @param \oxpus\dlext\core\helpers\constants	$dlext_constants
+	* @param \oxpus\dlext\core\helpers\footer		$dlext_footer
 	* @param string									$dlext_table_downloads
 	*/
 	public function __construct(
@@ -57,6 +59,7 @@ class mcp_broken
 		\oxpus\dlext\core\auth $dlext_auth,
 		\oxpus\dlext\core\main $dlext_main,
 		\oxpus\dlext\core\helpers\constants $dlext_constants,
+		\oxpus\dlext\core\helpers\footer $dlext_footer,
 		$dlext_table_downloads
 	)
 	{
@@ -74,6 +77,7 @@ class mcp_broken
 		$this->dlext_auth				= $dlext_auth;
 		$this->dlext_main				= $dlext_main;
 		$this->dlext_constants			= $dlext_constants;
+		$this->dlext_footer				= $dlext_footer;
 	}
 
 	public function handle()
@@ -175,7 +179,7 @@ class mcp_broken
 
 			$this->template->assign_vars([
 				'DL_AGE_NUMBER'	=> $this->pagination->on_page($total_broken, $this->config['dl_links_per_page'], $start),
-				'DL_TOTAL_DL'	=> $this->language->lang('DL_VIEW_DOWNLOADS', $total_broken),
+				'DL_TOTAL_DL'	=> $this->language->lang('DL_VIEW_DOWNLOADS_NUM', $total_broken),
 			]);
 		}
 
@@ -183,6 +187,12 @@ class mcp_broken
 			'S_DL_MODCP_ACTION'		=> $this->helper->route('oxpus_dlext_mcp_broken'),
 			'S_DL_HIDDEN_FIELDS'	=> build_hidden_fields($s_hidden_fields),
 		]);
+
+		/*
+		* include the mod footer
+		*/
+		$this->dlext_footer->set_parameter('mcp');
+		$this->dlext_footer->handle();
 
 		return $this->helper->render('@oxpus_dlext/mcp/dl_mcp_broken.html', $this->language->lang('MCP'));
 	}

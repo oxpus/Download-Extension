@@ -30,7 +30,7 @@ class release_8_1_0rc1 extends \phpbb\db\migration\migration
 			// Set the current version
 			['config.update', ['dl_ext_version', $this->dl_ext_version]],
 
-			// Add new confif option
+			// Add new confif optiona
 			['config.remove', ['dl_disable_popup']],
 		];
 	}
@@ -50,10 +50,5 @@ class release_8_1_0rc1 extends \phpbb\db\migration\migration
 				],
 			],
 		];
-	}
-
-	public function revert_schema()
-	{
-		return [];
 	}
 }

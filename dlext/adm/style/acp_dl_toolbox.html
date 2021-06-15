@@ -64,7 +64,7 @@
 
 {% if S_DL_UNASSIGNED_FILES %}
 <div class="dl-right">
-	<span class="small"><a href="#" onclick="marklist('create_dir', 'files', true); return false;">{{ lang('MARK_ALL') }}</a> :: <a href="#" onclick="marklist('create_dir', 'files', false); return false;">{{ lang('UNMARK_ALL') }}</a></span>
+	<span class="small"><a href="#" class="dl-marklist" data-form="create_dir" data-field="files">{{ lang('MARK_ALL') }}</a> :: <a href="#" class="dl-unmarklist" data-form="create_dir" data-field="files">{{ lang('UNMARK_ALL') }}</a></span>
 </div>
 <br class="clear" />
 {% endif %}

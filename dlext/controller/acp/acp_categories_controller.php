@@ -24,7 +24,7 @@ class acp_categories_controller implements acp_categories_interface
 	protected $request;
 	protected $template;
 	protected $cache;
-	protected $notifications;
+	protected $notification;
 	protected $filesystem;
 
 	/* extension owned objects */
@@ -128,14 +128,10 @@ class acp_categories_controller implements acp_categories_interface
 		$cancel				= $this->request->variable('cancel', '');
 		$idx_type			= $this->request->variable('type', 'c');
 		$move				= $this->request->variable('move', '');
-		$path				= $this->request->variable('path', '');
-		$save_cat			= $this->request->variable('save_cat', '');
 		$cat_id				= $this->request->variable('cat_id', 0);
 		$new_cat_id			= $this->request->variable('new_cat_id', 0);
 		$cat_parent			= $this->request->variable('parent', 0);
 		$cat_name			= $this->request->variable('cat_name', '', $this->dlext_constants::DL_TRUE);
-		$cat_icon			= $this->request->variable('cat_icon', '', $this->dlext_constants::DL_TRUE);
-		$comments			= $this->request->variable('comments', 0);
 
 		if ($cancel)
 		{
@@ -157,16 +153,6 @@ class acp_categories_controller implements acp_categories_interface
 		{
 			$log_cat_name = $index[$cat_id]['cat_name'];
 		}
-
-		$error = $this->dlext_constants::DL_FALSE;
-		$error_msg = '';
-
-		if (!$path)
-		{
-			$path = '/';
-		}
-
-		$s_hidden_fields = [];
 
 		if ($action == 'delete' && $cat_id && !$this->dlext_main->get_sublevel_count($cat_id))
 		{
@@ -282,8 +268,6 @@ class acp_categories_controller implements acp_categories_interface
 							AND d.extern = 0';
 					$result = $this->db->sql_query($sql);
 
-					$dl_ids = [];
-
 					while ($row = $this->db->sql_fetchrow($result))
 					{
 						$df_id = $row['df_id'];
@@ -318,8 +302,6 @@ class acp_categories_controller implements acp_categories_interface
 						SET cat_id = ' . (int) $new_cat_id . '
 						WHERE cat_id = ' . (int) $cat_id;
 					$this->db->sql_query($sql);
-
-					$options['item_parent_id'] = $new_cat_id;
 				}
 				else
 				{

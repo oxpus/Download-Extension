@@ -1,18 +1,18 @@
 Subject: Neuer Download
 
-Hallo {USERNAME},
+Hallo {{ USERNAME }},
 
-du bekommst diese Email, weil es auf "{SITENAME}" einen neuen Download in der Kategorie "{CATEGORY}" gibt:
+du bekommst diese Email, weil es auf "{{ SITENAME }}" einen neuen Download in der Kategorie "{{ CATEGORY }}" gibt:
 
 ---------------------------
-{DOWNLOAD}
-{DESCRIPTION}
+{{ DOWNLOAD }}
+{{ DESCRIPTION }}
 ---------------------------
 
 Wenn du diesen Download ansehen willst, dann klicke auf folgenden Link:
 
-{U_CATEGORY}
+{{ U_CATEGORY }}
 
 Wenn du zukünftig keine Benachrichtigungen hierüber erhalten willst, dann kannst du die Einstellungen in deinem Benutzerprofil ändern.
 
-{EMAIL_SIG}
+{{ EMAIL_SIG }}

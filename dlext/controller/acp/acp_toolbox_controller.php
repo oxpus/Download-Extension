@@ -142,7 +142,10 @@ class acp_toolbox_controller implements acp_toolbox_interface
 				$description = $file_name;
 			}
 
-			include($this->root_path . 'includes/functions_download.' . $this->phpEx);
+			if (!function_exists('file_gc'))
+			{
+				include($this->root_path . 'includes/functions_download.' . $this->phpEx);
+			}
 
 			$file_path = $this->root_path;
 
@@ -195,17 +198,14 @@ class acp_toolbox_controller implements acp_toolbox_interface
 					}
 
 					$sql = 'SELECT id, cat FROM ' . $this->dlext_table_downloads . "
-						WHERE real_file = '" . $this->db->sql_escape($files_name[$i]) . "'
-							AND " . $this->db->sql_in_set('cat', $index, $this->dlext_constants::DL_TRUE);
+						WHERE real_file = '" . $this->db->sql_escape($files_name[$i]) . "'";
 					$result = $this->db->sql_query($sql);
 
 					$dl_ids = [];
-					$dl_cats = [];
 
 					while ($row = $this->db->sql_fetchrow($result))
 					{
 						$dl_ids[] = $row['id'];
-						$dl_cats[] = $row['cat'];
 					}
 
 					$this->db->sql_freeresult($result);
@@ -260,7 +260,7 @@ class acp_toolbox_controller implements acp_toolbox_interface
 					}
 
 					$sql = 'UPDATE ' . $this->dlext_table_downloads . ' SET ' . $this->db->sql_build_array('UPDATE', [
-						'cat' => $file_assign]) . ' WHERE ' . $this->db->sql_in_set('cat', $index, $this->dlext_constants::DL_TRUE) . " AND real_file = '" . $this->db->sql_escape($files_name[$i]) . "'";
+						'cat' => $file_assign]) . " WHERE real_file = '" . $this->db->sql_escape($files_name[$i]) . "'";
 					$this->db->sql_query($sql);
 
 					$this->cache->destroy('_dlext_file_p');
@@ -406,12 +406,12 @@ class acp_toolbox_controller implements acp_toolbox_interface
 
 					if (!in_array ($real_file, $dl_thumbs))
 					{
-						++$j;
-						$checkbox = $j;
+						$checkbox = $this->dlext_constants::DL_NONE;
 					}
 					else
 					{
-						$checkbox = '';
+						++$j;
+						$checkbox = $j;
 					}
 
 					$this->template->assign_block_vars('thumbnails', [
@@ -428,7 +428,6 @@ class acp_toolbox_controller implements acp_toolbox_interface
 			{
 				$action = '';
 				$path = '';
-				$path_temp = '';
 			}
 		}
 
@@ -460,7 +459,6 @@ class acp_toolbox_controller implements acp_toolbox_interface
 			}
 
 			$path = $path_temp;
-			$file_command = '';
 		}
 
 		if ($dir_name && $dircreate)
@@ -519,7 +517,6 @@ class acp_toolbox_controller implements acp_toolbox_interface
 			if ($action != 'unassigned')
 			{
 				$temp_url = '';
-				$temp_dir = [];
 				$dl_navi = [];
 
 				$dl_navi[] = ['link' => $this->u_action . '&amp;action=browse', 'name' => str_replace('/', ' / ', $this->dlext_constants->get_value('files_dir') . '/downloads')];
@@ -629,6 +626,8 @@ class acp_toolbox_controller implements acp_toolbox_interface
 					->core_path($browse_dir)
 					->find(false);
 
+				$unassigned_files = $this->dlext_constants:: DL_FALSE;
+
 				foreach (array_keys($files) as $file)
 				{
 					$file_name	= basename($file);
@@ -652,6 +651,7 @@ class acp_toolbox_controller implements acp_toolbox_interface
 						else
 						{
 							$exist[] = $this->dlext_constants::DL_FALSE;
+							$unassigned_files = $this->dlext_constants:: DL_TRUE;
 						}
 					}
 				}
@@ -669,6 +669,7 @@ class acp_toolbox_controller implements acp_toolbox_interface
 
 			$this->template->assign_vars([
 				'S_DL_MANAGE_ACTION'			=> $this->u_action . '&amp;path=' . $path,
+				'S_DL_UNASSIGNED_FILES'			=> $unassigned_files,
 
 				'U_DL_DOWNLOADS_CHECK_FILES'	=> $this->u_action . '&amp;action=check_file_sizes',
 				'U_DL_DOWNLOADS_CHECK_THUMB'	=> $this->u_action . '&amp;action=check_thumbnails',

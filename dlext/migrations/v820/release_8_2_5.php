@@ -10,9 +10,9 @@
 
 namespace oxpus\dlext\migrations\v820;
 
-class release_8_2_0 extends \phpbb\db\migration\migration
+class release_8_2_5 extends \phpbb\db\migration\migration
 {
-	var $dl_ext_version = '8.2.0';
+	var $dl_ext_version = '8.2.5';
 
 	public function effectively_installed()
 	{
@@ -21,7 +21,7 @@ class release_8_2_0 extends \phpbb\db\migration\migration
 
 	static public function depends_on()
 	{
-		return ['\oxpus\dlext\migrations\v810\release_8_1_10'];
+		return ['\oxpus\dlext\migrations\v820\release_8_2_4'];
 	}
 
 	public function update_data()
@@ -29,17 +29,6 @@ class release_8_2_0 extends \phpbb\db\migration\migration
 		return [
 			// Set the current version
 			['config.update', ['dl_ext_version', $this->dl_ext_version]],
-		];
-	}
-
-	public function update_schema()
-	{
-		return [
-			'change_columns' => [
-				$this->table_prefix . 'dl_hotlink' => [
-					'hotlink_id' => ['VCHAR:255', ''],
-				],
-			],
 		];
 	}
 }

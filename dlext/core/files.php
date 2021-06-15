@@ -14,22 +14,40 @@ class files implements files_interface
 {
 	/* phpbb objects */
 	protected $db;
+	protected $config;
+	protected $user;
+	protected $template;
 
 	/* extension owned objects */
+	protected $dlext_constants;
+
 	protected $dlext_table_downloads;
 
 	/**
 	* Constructor
 	*
 	* @param \phpbb\db\driver\driver_interface		$db
+	* @param \phpbb\config\config					$config
+	* @param \phpbb\user							$user
+	* @param \phpbb\template\template				$template
+	* @param \oxpus\dlext\core\helpers\constants	$dlext_constants
 	* @param string									$dlext_table_downloads
 	*/
 	public function __construct(
 		\phpbb\db\driver\driver_interface $db,
+		\phpbb\config\config $config,
+		\phpbb\user $user,
+		\phpbb\template\template $template,
+		\oxpus\dlext\core\helpers\constants $dlext_constants,
 		$dlext_table_downloads
 	)
 	{
 		$this->db 						= $db;
+		$this->config 					= $config;
+		$this->user 					= $user;
+		$this->template 				= $template;
+
+		$this->dlext_constants			= $dlext_constants;
 
 		$this->dlext_table_downloads	= $dlext_table_downloads;
 	}
@@ -153,6 +171,85 @@ class files implements files_interface
 		$this->db->sql_freeresult($result);
 
 		return ($df_id) ? ((isset($dl_files[0])) ? $dl_files[0] : []) : $dl_files;
+	}
+
+	public function dl_sorting($sort_by, $order, &$sql_sort_by = '', &$sql_order = '')
+	{
+		if ($this->config['dl_sort_preform'])
+		{
+			$sort_by = 0;
+			$order = 'ASC';
+		}
+		else
+		{
+			$sort_by = (!$sort_by) ? $this->user->data['user_dl_sort_fix'] : $sort_by;
+			$order = (!$order) ? (($this->user->data['user_dl_sort_dir']) ? 'DESC' : 'ASC') : $order;
+		}
+
+		switch ($sort_by)
+		{
+			case $this->dlext_constants::DL_SORT_DESCRIPTION:
+				$sql_sort_by = 'description';
+				break;
+			case $this->dlext_constants::DL_SORT_FILE_NAME:
+				$sql_sort_by = 'file_name';
+				break;
+			case $this->dlext_constants::DL_SORT_CLICKS:
+				$sql_sort_by = 'klicks';
+				break;
+			case $this->dlext_constants::DL_SORT_FREE:
+				$sql_sort_by = 'free';
+				break;
+			case $this->dlext_constants::DL_SORT_EXTERN:
+				$sql_sort_by = 'extern';
+				break;
+			case $this->dlext_constants::DL_SORT_FILE_SIZE:
+				$sql_sort_by = 'file_size';
+				break;
+			case $this->dlext_constants::DL_SORT_LAST_TIME:
+				$sql_sort_by = 'change_time';
+				break;
+			case $this->dlext_constants::DL_SORT_RATING:
+				$sql_sort_by = 'rating';
+				break;
+			default:
+				$sql_sort_by = 'sort';
+		}
+
+		$sql_order = ($order == 'DESC') ? 'DESC' : 'ASC';
+
+		if (!$this->config['dl_sort_preform'] && $this->user->data['user_dl_sort_opt'])
+		{
+			$this->template->assign_var('S_DL_SORT_OPTIONS', $this->dlext_constants::DL_TRUE);
+
+			$selected_default		= ($sort_by == $this->dlext_constants::DL_SORT_DEFAULT) ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE;
+			$selected_description	= ($sort_by == $this->dlext_constants::DL_SORT_DESCRIPTION) ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE;
+			$selected_filename		= ($sort_by == $this->dlext_constants::DL_SORT_FILE_NAME) ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE;
+			$selected_clicks		= ($sort_by == $this->dlext_constants::DL_SORT_CLICKS) ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE;
+			$selected_free			= ($sort_by == $this->dlext_constants::DL_SORT_FREE) ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE;
+			$selected_extern		= ($sort_by == $this->dlext_constants::DL_SORT_EXTERN) ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE;
+			$selected_filesize		= ($sort_by == $this->dlext_constants::DL_SORT_FILE_SIZE) ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE;
+			$selected_lasttime		= ($sort_by == $this->dlext_constants::DL_SORT_LAST_TIME) ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE;
+			$selected_rating		= ($sort_by == $this->dlext_constants::DL_SORT_RATING) ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE;
+
+			$selected_sort_asc		= ($order == 'ASC') ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE;
+			$selected_sort_desc		= ($order == 'DESC') ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE;
+
+			$this->template->assign_vars([
+				'S_DL_SELECTED_DEFEAULT'	=> $selected_default,
+				'S_DL_SELECTED_DESCRIPTION'	=> $selected_description,
+				'S_DL_SELECTED_FILENAME'	=> $selected_filename,
+				'S_DL_SELECTED_CLICKS'		=> $selected_clicks,
+				'S_DL_SELECTED_FREE'		=> $selected_free,
+				'S_DL_SELECTED_EXTERN'		=> $selected_extern,
+				'S_DL_SELECTED_FILESIZE'	=> $selected_filesize,
+				'S_DL_SELECTED_LASTTIME'	=> $selected_lasttime,
+				'S_DL_SELECTED_RATING'		=> $selected_rating,
+
+				'S_DL_SELECTED_SORT_ASC'	=> $selected_sort_asc,
+				'S_DL_SELECTED_SORT_DESC'	=> $selected_sort_desc,
+			]);
+		}
 	}
 
 	public function _dl_check_fields($table, $fields)

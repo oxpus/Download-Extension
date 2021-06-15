@@ -50,13 +50,13 @@
 	<div class="panel">
 		<div class="inner">
 			{{ lang('DL_GOTO_MCP') }}
-			<select name="cat_id" onchange="forms['mcp_cat_select'].submit();">
+			<select name="cat_id" class="dl-change-select" data-button="dl-mcp-cat">
 				<option value="{{ DL_CAT_NONE }}">{{ lang('DL_CAT_NAME') }}</option>
 				{% for mcp_cat_select in loops.mcp_cat_select %}
-				<option value="{{ mcp_cat_select.DL_CAT_ID }}"{% if mcp_cat_select.DL_SELECTED %} selected="selected"{% endif %}>{{ mcp_cat_select.DL_SEPERATOR }}{{ mcp_cat_select.DL_CAT_NAME }}</option>
+				<option value="{{ mcp_cat_select.DL_CAT_ID }}"{% if mcp_cat_select.DL_SELECTED %} selected{% endif %}>{{ mcp_cat_select.DL_SEPERATOR }}{{ mcp_cat_select.DL_CAT_NAME }}</option>
 				{% endfor %}
 			</select>
-			<input type="submit" value="{{ lang('GO') }}" class="button2" />
+			<input type="submit" value="{{ lang('GO') }}" id="dl-mcp-cat" class="button2" />
 		</div>
 	</div>
 </form>
@@ -103,7 +103,7 @@
 		<li class="rightside">
 			<span>
 				{% if S_SORT_ASC %}<a href="{{ U_DL_SORT_ASC }}">{{ DL_ABC }}</a> &bull; {% endif %}
-				<a href="#" onclick="marklist('select_user', 'dlo_id', true); return false;">{{ lang('MARK_ALL') }}</a> :: <a href="#" onclick="marklist('select_user', 'dlo_id', false); return false;">{{ lang('UNMARK_ALL') }}</a>
+				<a href="#" class="dl-marklist" data-form="select_user" data-field="dlo_id">{{ lang('MARK_ALL') }}</a> :: <a href="#" class="dl-unmarklist" data-form="select_user" data-field="dlo_id">{{ lang('UNMARK_ALL') }}</a>
 			</span>
 		</li>
 	</ul>
@@ -143,7 +143,7 @@
 				<select name="new_cat">
 					<option value="{{ DL_CAT_NONE }}">{{ lang('DL_CAT_NAME') }}</option>
 					{% for mcp_cat_move in loops.mcp_cat_move %}
-					<option value="{{ mcp_cat_move.DL_CAT_ID }}"{% if mcp_cat_move.DL_SELECTED %} selected="selected"{% endif %}>{{ mcp_cat_move.DL_SEPERATOR }}{{ mcp_cat_move.DL_CAT_NAME }}</option>
+					<option value="{{ mcp_cat_move.DL_CAT_ID }}"{% if mcp_cat_move.DL_SELECTED %} selected{% endif %}>{{ mcp_cat_move.DL_SEPERATOR }}{{ mcp_cat_move.DL_CAT_NAME }}</option>
 					{% endfor %}
 				</select>
 			</dd>
@@ -159,7 +159,7 @@
 			<dd>
 				<input type="text" name="username" id="username" value="" class="inputbox autowidth" size="20" />
 				{{ lang('DL_ASSIGN_CHANGED') }} <input type="checkbox" name="assign_changed" class="radio" id="assign_changed" value="1" /><br />
-				[ <a href="{{ U_DL_FIND_USERNAME }}" onclick="find_username(this.href); return false;">{{ lang('FIND_USERNAME') }}</a> ]
+				[ <a href="#" class="dl-finduser" data-href="{{ U_DL_FIND_USERNAME }}">{{ lang('FIND_USERNAME') }}</a> ]
 			</dd>
 		</dl>
 		{% endif %}

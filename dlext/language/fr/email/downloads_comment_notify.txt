@@ -1,18 +1,18 @@
 Subject: Nouveau commentaire d’un téléchargement
 
-Bonjour {USERNAME},
+Bonjour {{ USERNAME }},
 
-Vous recevez cet e-mail car il y a un nouveau commentaire sur un téléchargement que vous surveillez sur "{SITENAME}":
+Vous recevez cet e-mail car il y a un nouveau commentaire sur un téléchargement que vous surveillez sur "{{ SITENAME }}":
 
 ---------------------------
-Category {CATEGORY}
-Download {DOWNLOAD}
+Category {{ CATEGORY }}
+Download {{ DOWNLOAD }}
 ---------------------------
 
 Si vous voulez voir ce commentaire, cliquez sur le lien suivant :
 
-{U_DOWNLOAD}
+{{ U_DOWNLOAD }}
 
 Rappel : si vous ne voulez plus être notifié des nouveaux commentaires des téléchargements, modifiez les paramètres de votre profil.
 
-{EMAIL_SIG}
+{{ EMAIL_SIG }}

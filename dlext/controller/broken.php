@@ -20,7 +20,7 @@ class broken
 	protected $template;
 	protected $user;
 	protected $language;
-	protected $notifications;
+	protected $notification;
 	protected $captcha;
 
 	/* extension owned objects */
@@ -86,12 +86,12 @@ class broken
 		$this->dlext_status				= $dlext_status;
 		$this->dlext_constants			= $dlext_constants;
 		$this->dlext_footer				= $dlext_footer;
-
-		$this->dlext_main->dl_handle_active();
 	}
 
 	public function handle()
 	{
+		$this->dlext_main->dl_handle_active();
+
 		$cat		= $this->request->variable('cat', 0);
 		$submit		= $this->request->variable('submit', '');
 		$cancel		= $this->request->variable('cancel', '');

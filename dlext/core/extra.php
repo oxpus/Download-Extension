@@ -17,9 +17,6 @@ class extra implements extra_interface
 	protected $language;
 
 	/* extension owned objects */
-	protected $dl_auth;
-	protected $dl_index;
-
 	protected $dlext_auth;
 	protected $dlext_files;
 	protected $dlext_main;
@@ -52,9 +49,6 @@ class extra implements extra_interface
 		$this->dlext_files		= $dlext_files;
 		$this->dlext_main		= $dlext_main;
 		$this->dlext_constants	= $dlext_constants;
-
-		$this->dl_auth			= $this->dlext_auth->dl_auth();
-		$this->dl_index			= $this->dlext_auth->dl_index();
 	}
 
 	public function get_todo()
@@ -87,22 +81,25 @@ class extra implements extra_interface
 
 	public function dl_dropdown($parent = 0, $level = 0, $select_cat = 0, $perm = 'auth_view', $rem_cat = 0, &$catlist = [])
 	{
-		if (empty($this->dl_index))
+		$dl_index	= $this->dlext_auth->dl_index();
+		$dl_auth	= $this->dlext_auth->dl_auth();
+
+		if (empty($dl_index))
 		{
-			return;
+			return '';
 		}
 
-		foreach (array_keys($this->dl_index) as $cat_id)
+		foreach (array_keys($dl_index) as $cat_id)
 		{
-			if (isset($this->dl_index[$cat_id]['parent']) && $this->dl_index[$cat_id]['parent'] == $parent)
+			if (isset($dl_index[$cat_id]['parent']) && $dl_index[$cat_id]['parent'] == $parent)
 			{
-				if (isset($this->dl_index[$cat_id][$perm]) && $this->dl_index[$cat_id][$perm] || isset($this->dl_auth[$cat_id][$perm]) && $this->dl_auth[$cat_id][$perm] || $this->dlext_auth->user_admin())
+				if (isset($dl_index[$cat_id][$perm]) && $dl_index[$cat_id][$perm] || isset($dl_auth[$cat_id][$perm]) && $dl_auth[$cat_id][$perm] || $this->dlext_auth->user_admin())
 				{
-					$cat_name = $this->dl_index[$cat_id]['cat_name'];
+					$cat_name = $dl_index[$cat_id]['cat_name'];
 
 					$seperator = '';
 
-					if ($this->dl_index[$cat_id]['parent'] != 0)
+					if ($dl_index[$cat_id]['parent'] != 0)
 					{
 						for ($i = 0; $i < $level; ++$i)
 						{
@@ -143,20 +140,23 @@ class extra implements extra_interface
 
 	public function dl_jumpbox($parent = 0, $level = 0, $perm = 'auth_view', $rem_cat = 0, &$catlist = [])
 	{
-		if (empty($this->dl_index))
+		$dl_index	= $this->dlext_auth->dl_index();
+		$dl_auth	= $this->dlext_auth->dl_auth();
+
+		if (empty($dl_index))
 		{
-			return;
+			return '';
 		}
 
-		foreach (array_keys($this->dl_index) as $cat_id)
+		foreach (array_keys($dl_index) as $cat_id)
 		{
-			if (isset($this->dl_index[$cat_id]['parent']) && $this->dl_index[$cat_id]['parent'] == $parent)
+			if (isset($dl_index[$cat_id]['parent']) && $dl_index[$cat_id]['parent'] == $parent)
 			{
-				if (isset($this->dl_index[$cat_id][$perm]) && $this->dl_index[$cat_id][$perm] || isset($this->dl_auth[$cat_id][$perm]) && $this->dl_auth[$cat_id][$perm] || $this->dlext_auth->user_admin())
+				if (isset($dl_index[$cat_id][$perm]) && $dl_index[$cat_id][$perm] || isset($dl_auth[$cat_id][$perm]) && $dl_auth[$cat_id][$perm] || $this->dlext_auth->user_admin())
 				{
-					$catlist[$cat_id]['name'] = $this->dl_index[$cat_id]['cat_name'];
+					$catlist[$cat_id]['name'] = $dl_index[$cat_id]['cat_name'];
 
-					if ($this->dl_index[$cat_id]['parent'] != 0)
+					if ($dl_index[$cat_id]['parent'] != 0)
 					{
 						$catlist[$cat_id]['sub'] = $this->dlext_constants::DL_TRUE;
 					}
@@ -186,20 +186,22 @@ class extra implements extra_interface
 
 	public function dl_cat_select($parent = 0, $level = 0, $select_cat = [], &$catlist = [])
 	{
-		if (empty($this->dl_index))
+		$dl_index = $this->dlext_auth->dl_index();
+
+		if (empty($dl_index))
 		{
-			return;
+			return '';
 		}
 
-		foreach (array_keys($this->dl_index) as $cat_id)
+		foreach (array_keys($dl_index) as $cat_id)
 		{
-			if (isset($this->dl_index[$cat_id]['parent']) && $this->dl_index[$cat_id]['parent'] == $parent)
+			if (isset($dl_index[$cat_id]['parent']) && $dl_index[$cat_id]['parent'] == $parent)
 			{
-				$cat_name = $this->dl_index[$cat_id]['cat_name'];
+				$cat_name = $dl_index[$cat_id]['cat_name'];
 
 				$seperator = '';
 
-				if ($this->dl_index[$cat_id]['parent'] != 0)
+				if ($dl_index[$cat_id]['parent'] != 0)
 				{
 					for ($i = 1; $i < $level; ++$i)
 					{

@@ -68,7 +68,9 @@ class release_7_2_3 extends \phpbb\db\migration\migration
 	public function revert_schema()
 	{
 		return [
-			['config.remove', ['dl_topic_type']],
+			'drop_columns'	=> [
+				$this->table_prefix . 'downloads_cat' => ['dl_topic_type'],
+			],
 		];
 	}
 }

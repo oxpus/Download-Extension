@@ -72,9 +72,6 @@ class hacklist
 
 	public function handle()
 	{
-		/*
-		* init and get various values
-		*/
 		$sort_by	= $this->request->variable('sort_by', '');
 		$order		= $this->request->variable('order', '');
 		$start		= $this->request->variable('start', 0);
@@ -123,22 +120,22 @@ class hacklist
 			]);
 		}
 
-		$selected_0 = ($sort_by == 0) ? ' selected="selected"' : '';
-		$selected_1 = ($sort_by == 1) ? ' selected="selected"' : '';
-		$selected_2 = ($sort_by == 2) ? ' selected="selected"' : '';
+		$selected_default		= ($sort_by == $this->dlext_constants::DL_SORT_DEFAULT) ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE;
+		$selected_description	= ($sort_by == $this->dlext_constants::DL_HACKLIST_SORT_DESC) ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE;
+		$selected_author		= ($sort_by == $this->dlext_constants::DL_HACKLIST_SORT_AUTHOR) ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE;
 
-		$selected_sort_0 = ($order == 'ASC') ? ' selected="selected"' : '';
-		$selected_sort_1 = ($order == 'DESC') ? ' selected="selected"' : '';
+		$selected_sort_asc		= ($order == 'ASC') ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE;
+		$selected_sort_desc		= ($order == 'DESC') ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE;
 
 		$this->template->assign_vars([
-			'DL_SELECTED_0'		=> $selected_0,
-			'DL_SELECTED_1'		=> $selected_1,
-			'DL_SELECTED_2'		=> $selected_2,
+			'S_DL_SELECTED_DEFAULT'		=> $selected_default,
+			'S_DL_SELECTED_DESCRIPTION'	=> $selected_description,
+			'S_DL_SELECTED_AUTHOR'		=> $selected_author,
 
-			'DL_SELECTED_SORT_0'	=> $selected_sort_0,
-			'DL_SELECTED_SORT_1'	=> $selected_sort_1,
+			'S_DL_SELECTED_SORT_ASC'		=> $selected_sort_asc,
+			'S_DL_SELECTED_SORT_DESC'		=> $selected_sort_desc,
 
-			'S_DL_FORM_ACTION'		=> $this->helper->route('oxpus_dlext_hacklist'),
+			'S_DL_FORM_ACTION'			=> $this->helper->route('oxpus_dlext_hacklist'),
 		]);
 
 		if (!empty($dl_files))

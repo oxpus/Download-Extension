@@ -1,18 +1,18 @@
 Subject: Changed Download
 
-Hello {USERNAME},
+Hello {{ USERNAME }},
 
-You have received this email because the following download on "{SITENAME}" in the category "{CATEGORY}" has been changed:
+You have received this email because the following download on "{{ SITENAME }}" in the category "{{ CATEGORY }}" has been changed:
 
 ---------------------------
-{DOWNLOAD}
-{DESCRIPTION}
+{{ DOWNLOAD }}
+{{ DESCRIPTION }}
 ---------------------------
 
 If you want to take a look on this download click the following link:
 
-{U_CATEGORY}
+{{ U_CATEGORY }}
 
 Remember that you can always choose not to be notified about edited downloads by dropping the notifications in your user profile.
 
-{EMAIL_SIG}
+{{ EMAIL_SIG }}

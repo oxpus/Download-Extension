@@ -80,7 +80,7 @@
 				<div>
 					<select name="user_assign">
 						{% for assign_users in loops.assign_users %}
-							<option value="{{ assign_users.DL_USER_ID }}"{% if assign_users.DL_USER_ID eq S_DL_SELECT_ASSIGNED_USER %} selected="selected"{% endif %}>{{ assign_users.DL_USER_NAME }}</option>
+							<option value="{{ assign_users.DL_USER_ID }}"{% if assign_users.DL_USER_ID eq S_DL_SELECT_ASSIGNED_USER %} selected{% endif %}>{{ assign_users.DL_USER_NAME }}</option>
 						{% endfor %}
 					</select>
 					<input type="submit" name="submit" value="{{ lang('DL_BUG_REPORT_ASSIGN') }}" class="button2" />

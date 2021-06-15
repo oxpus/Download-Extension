@@ -12,7 +12,7 @@
 * adv = we are opening advanced permissions
 * view = called from view permissions
 */
-function swapOptions(cat, openString1, closeString1, icon1, iconColor1, openString2, closeString2, icon2, iconColor2)
+function dlSwapOptions(cat, openString1, closeString1, icon1, iconColour1, openString2, closeString2, icon2, iconColour2)
 {
 	var activeOption = activeCat;
 
@@ -25,10 +25,6 @@ function swapOptions(cat, openString1, closeString1, icon1, iconColor1, openStri
 	if (cat != 0)
 	{
 		$('#optionst').addClass('noshow');
-		$('#extra_page').fadeOut('fast');
-		$('#hash_page').fadeOut('fast');
-		$('#extra_page_open').html('<a href="#" onclick="pageToggle(\'extra_page\', true, \'' + openString1 + '\', \'' + closeString1 + '\', \'' + icon1 + '\', \'' + iconColor1 + '\')" class="button icon-button" title="' + openString1 + '"><i class="icon fa-' + icon1 + ' fa-fw" aria-hidden="true"></i> <span class="sr-only">' + openString1 + '</span></a>');
-		$('#hash_page_open').html('<a href="#" onclick="pageToggle(\'hash_page\', true, \'' + openString2 + '\', \'' + closeString2 + '\', \'' + icon2 + '\', \'' + iconColor2 + '\')" class="button icon-button" title="' + openString2 + '"><i class="icon fa-' + icon2 + ' fa-fw" aria-hidden="true"></i> <span class="sr-only">' + openString2 + '</span></a>');
 	}
 	else
 	{
@@ -44,21 +40,35 @@ function swapOptions(cat, openString1, closeString1, icon1, iconColor1, openStri
 	activeCat = cat;
 }
 
-function hideDlButton()
-{
-	$('#dl_mod_button').fadeOut('fast');
-}
+$(document).ready(function () {
+	$('.dl-detail-area').click(function () {
+		var dl_cat = $(this).data('cat');
+		var dl_open1 = $(this).data('open1');
+		var dl_close1 = $(this).data('close1');
+		var dl_icon1 = $(this).data('icon1');
+		var dl_colour1 = $(this).data('colour1');
+		var dl_open2 = $(this).data('open2');
+		var dl_close2 = $(this).data('close2');
+		var dl_icon2 = $(this).data('icon2');
+		var dl_colour2 = $(this).data('colour2');
+	
+		dlSwapOptions(dl_cat, dl_open1, dl_close1, dl_icon1, dl_colour1, dl_open2, dl_close2, dl_icon2, dl_colour2);
+	});
 
-function pageToggle(page, status, openString, closeString, icon, iconColor)
-{
-	if (status == true)
-	{
-		$('#' + page).fadeIn("slow");
-		$('#' + page + '_open').html('<a href="#" onclick="pageToggle(\'' + page + '\', false, \'' + openString + '\', \'' + closeString + '\', \'' + icon + '\', \'' + iconColor + '\')" class="button icon-button" title="' + closeString + '"><i class="icon fa-' + icon + ' fa-fw ' + iconColor + '" aria-hidden="true"></i> <span class="sr-only">' + closeString + '</span></a>');
-	}
-	else
-	{
-		$('#' + page).fadeOut("fast");
-		$('#' + page + '_open').html('<a href="#" onclick="pageToggle(\'' + page + '\', true, \'' + openString + '\', \'' + closeString + '\', \'' + icon + '\', \'' + iconColor + '\')" class="button icon-button" title="' + openString + '"><i class="icon fa-' + icon + ' fa-fw" aria-hidden="true"></i> <span class="sr-only">' + openString + '</span></a>');
-	}
-}
+	$('.downloadbtn').click(function () {
+		$('#dl_mod_button').fadeOut('fast', function () {
+			$('#dl_hint').removeClass('noshow');
+			setTimeout(function () {
+				$('#dl_hint').removeClass('dl-red');
+				$('#dl_hint').addClass('dl-blue');
+			}, 1000);
+			setTimeout(function () {
+				$('#dl_hint').removeClass('dl-blue');
+				$('#dl_hint').addClass('dl-green');
+			}, 2000);
+			setTimeout(function () {
+				$('#dl_hint').fadeOut('slow');
+			}, 3000);
+		});
+	});
+});

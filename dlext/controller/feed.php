@@ -72,12 +72,12 @@ class feed
 		$this->dlext_main		= $dlext_main;
 		$this->dlext_status		= $dlext_status;
 		$this->dlext_constants	= $dlext_constants;
-
-		$this->dlext_main->dl_handle_active();
 	}
 
 	public function handle()
 	{
+		$this->dlext_main->dl_handle_active();
+
 		// disable the feed until it is enabled and contains at least one entry
 		$display_feed = $this->dlext_constants::DL_FALSE;
 

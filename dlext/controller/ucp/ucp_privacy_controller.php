@@ -158,7 +158,10 @@ class ucp_privacy_controller implements ucp_privacy_interface
 					'filestream'		=> $this->dlext_constants::DL_TRUE,
 				];
 
-				include($this->root_path . 'includes/functions_download.' . $this->php_ext);
+				if (!class_exists('custom_profile'))
+				{
+					include($this->root_path . 'includes/functions_download.' . $this->php_ext);
+				}
 
 				$this->dlext_physical->send_file_to_browser($dl_file_data);
 			}

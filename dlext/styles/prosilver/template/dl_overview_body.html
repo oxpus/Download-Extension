@@ -1,13 +1,5 @@
 {% INCLUDE '@oxpus_dlext/helpers/dl_header.html' %}
 
-{% if S_DL_ENABLE_RATE %}
-<script type="text/javascript">
-var phpEx = '{{ DL_PHPEX }}';
-var dlAjaxUrl = '{{ U_DL_AJAX }}';
-</script>
-<script type="text/javascript" src="{{ EXT_DL_PATH }}assets/javascript/ajax_dl.js"></script>
-{% endif %}
-
 <h2 class="solo">{{ lang('DL_OVERVIEW_TITLE') }}</h2>
 
 	<div class="forabg">
@@ -48,12 +40,12 @@ var dlAjaxUrl = '{{ U_DL_AJAX }}';
 					<dd class="lastpost"><div id="rating_{{ downloads.DL_DF_ID }}" class="dl-rating-image">
 						{% if downloads.DL_RATE_TITLE %}<span class="dl-rating" title="{{ downloads.DL_RATE_TITLE}}">{% endif %}
 						{% for rating_img in downloads.rating_img %}
-						{% if rating_img.DL_RATE_AJAX %}<a href="#" onclick="AJAXDLVote('{{ downloads.DL_DF_ID }}', '{{ rating_img.DL_RATE_AJAX }}'); return false;" class="dl-rating-img">{% endif %}
+						{% if rating_img.DL_RATE_AJAX %}<a href="#" class="dl-rating-img dl-rate-add" data-dfid="{{ downloads.DL_DF_ID }}" data-points="{{ rating_img.DL_RATE_AJAX }}">{% endif %}
 						{% if rating_img.DL_RATE_STAR eq 'yes' %}<i class="icon fa-star fa-fw dl-green"></i>{% endif %}
 						{% if rating_img.DL_RATE_STAR eq 'no' %}<i class="icon fa-star-o fa-fw dl-yellow"></i>{% endif %}
 						{% if rating_img.DL_RATE_AJAX %}</a>{% endif %}
 						{% endfor %}
-						{% if downloads.DL_RATE_UNDO %}<a href="#" onclick="AJAXDLUnvote('{{ downloads.DL_DF_ID }}'); return false;"><i class="icon fa-times-circle fa-fw dl-red"></i></a>{% endif %}
+						{% if downloads.DL_RATE_UNDO %}<a href="#" class="dl-rating-img dl-rate-del" data-dfid="{{ downloads.DL_DF_ID }}"><i class="icon fa-times-circle fa-fw dl-red"></i></a>{% endif %}
 						{% if downloads.DL_RATE_COUNT != '-' %}<span class="dl-rating-count">{{ downloads.DL_RATE_COUNT }}</span>{% endif %}
 						{% if downloads.DL_RATE_TITLE %}</span>{% endif %}
 						</div>
@@ -78,40 +70,7 @@ var dlAjaxUrl = '{{ U_DL_AJAX }}';
 		</div>
 	{% endif %}
 
-	{% if S_DL_SORT_OPTIONS %}
-	<form action="{{ S_DL_FORM_ACTION }}" method="post" name="dl_mod">
-
-	<fieldset>
-
-	<p class="dl-text-center">
-		{{ lang('SORT_BY') }}
-		&nbsp;
-		<select name="sort_by" onchange="forms['dl_mod'].submit();">
-		<option value="0"{{ DL_SELECTED_0 }}>{{ lang('DL_DEFAULT_SORT') }}</option>
-		<option value="1"{{ DL_SELECTED_1 }}>{{ lang('DL_FILE_DESCRIPTION') }}</option>
-		<option value="2"{{ DL_SELECTED_2 }}>{{ lang('DL_FILE_NAME') }}</option>
-		<option value="3"{{ DL_SELECTED_3 }}>{{ lang('DL_KLICKS') }}</option>
-		<option value="4"{{ DL_SELECTED_4 }}>{{ lang('DL_FREE') }}</option>
-		<option value="5"{{ DL_SELECTED_5 }}>{{ lang('DL_EXTERN') }}</option>
-		<option value="6"{{ DL_SELECTED_6 }}>{{ lang('DL_FILE_SIZE') }}</option>
-		<option value="7"{{ DL_SELECTED_7 }}>{{ lang('LAST_UPDATED') }}</option>
-		<option value="8"{{ DL_SELECTED_8 }}>{{ lang('DL_RATING') }}</option>
-		</select>
-		&nbsp;&nbsp;&nbsp;
-		{{ lang('DL_ORDER') }}
-		&nbsp;
-		<select name="order" onchange="forms['dl_mod'].submit()">
-		<option value="ASC"{{ DL_SELECTED_SORT_0 }}>{{ lang('ASCENDING') }}</option>
-		<option value="DESC"{{ DL_SELECTED_SORT_1 }}>{{ lang('DESCENDING') }}</option>
-		</select>
-		&nbsp;
-		<input type="submit" class="button2" value="{{ lang('GO') }}" />
-	</p>
-
-	</fieldset>
-
-	</form>
-	{% endif %}
+	{% INCLUDE '@oxpus_dlext/helpers/dl_sorting.html' %}
 
 <br />
 

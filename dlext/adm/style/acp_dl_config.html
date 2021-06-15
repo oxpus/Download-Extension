@@ -16,7 +16,7 @@
 
 <form id="mode_select" method="post" action="{{ U_DL_MODE_SELECT }}">
 	<fieldset class="quick">
-		{{ lang('SELECT_FORM') }}{{ lang('COLON') }} <select name="view" onchange="if (this.options[this.selectedIndex].value != '') this.form.submit();">{{ S_DL_MODE_SELECT }}</select> <input class="button2" type="submit" value="{{ lang('GO') }}" />
+		{{ lang('SELECT_FORM') }}{{ lang('COLON') }} <select name="view" class="dl-change-select" data-button="config-mode">{{ S_DL_MODE_SELECT }}</select> <input class="button2" id="config-mode" type="submit" value="{{ lang('GO') }}" />
 		{{ S_FORM_TOKEN }}
 	</fieldset>
 </form>
@@ -35,7 +35,7 @@
 		<dl>
 			<dt><label for="{{ dl_options.DL_KEY }}">{{ dl_options.DL_TITLE }}{{ lang('COLON') }}</label>{% if dl_options.S_DL_EXPLAIN %}<br /><span>{{ dl_options.DL_TITLE_EXPLAIN }}</span>{% endif %}</dt>
 			<dd>
-				{% if dl_options.DL_HELP_KEY %}<a class="help" key="{{ dl_options.DL_HELP_KEY }}"><i class="icon fa-info-circle fa-fw dl-icon-yellow"></i></a>{% else %}&nbsp;{% endif %}&nbsp;&nbsp;{{ dl_options.DL_CONTENT }}
+				{% if dl_options.DL_HELP_KEY %}<a class="help" data-key="{{ dl_options.DL_HELP_KEY }}"><i class="icon fa-info-circle fa-fw dl-icon-yellow"></i></a>{% else %}&nbsp;{% endif %}&nbsp;&nbsp;{{ dl_options.DL_CONTENT }}
 				{% if dl_options.DL_PREVIEW %}<br /><br /><hr /><div class="small">{{ dl_options.DL_PREVIEW }}</div>{% endif %}
 			</dd>
 		</dl>

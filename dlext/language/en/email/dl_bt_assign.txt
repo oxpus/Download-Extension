@@ -1,12 +1,12 @@
-Subject: Assigned Bug Report on {SITENAME}
+Subject: Assigned Bug Report on {{ SITENAME }}
 
-Hello {USERNAME},
+Hello {{ USERNAME }},
 
-You receive this email because a bug report on "{SITENAME}" was assigned to you to work on it.
+You receive this email because a bug report on "{{ SITENAME }}" was assigned to you to work on it.
 For more details about this report follow up this link:
 
-{U_BUG_REPORT}
+{{ U_BUG_REPORT }}
 
 ----------------------------
 
-{EMAIL_SIG}
+{{ EMAIL_SIG }}

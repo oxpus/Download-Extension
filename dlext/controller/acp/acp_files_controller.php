@@ -273,7 +273,6 @@ class acp_files_controller implements acp_files_interface
 				}
 
 				$dl_desc	= $row['description'];
-				$dl_cat		= $row['cat'];
 
 				$sql = 'DELETE FROM ' . $this->dlext_table_downloads . '
 					WHERE id = ' . (int) $df_id;

@@ -24,7 +24,7 @@
 			{% else %}
 			<select name="cat_select[]" multiple="multiple" size="{{ S_DL_CATS_SELECT_SIZE }}" class="selectbox">
 				{% for cat_select in loops.cat_select %}
-				<option value="{{ cat_select.DL_VALUE }}"{% if cat_select.DL_SELECTED %} selected="selected"{% endif %}>{{ cat_select.DL_NAME }}</option>
+				<option value="{{ cat_select.DL_VALUE }}"{% if cat_select.DL_SELECTED %} selected{% endif %}>{{ cat_select.DL_NAME }}</option>
 				{% endfor %}
 			</select>
 			{% endif %}
@@ -111,11 +111,11 @@
 			{% if not S_DL_AUTH_ALL_USERS and not S_DL_AUTH_GROUPS %}
 			<select name="group_select[]" multiple="multiple" size="{{ S_DL_GROUPS_SELECT_SIZE }}" class="selectbox">
 				<optgroup label="{{ lang('DL_PERMISSIONS_ALL') }}">
-					<option value="{{ DL_NONE }}"{% if S_DL_GROUP_ALL %} selected="selected"{% endif %}>{{ lang('DL_ALL') }}</option>
+					<option value="{{ DL_NONE }}"{% if S_DL_GROUP_ALL %} selected{% endif %}>{{ lang('DL_ALL') }}</option>
 				</optgroup>
 				<optgroup label="{{ lang('USERGROUPS') }}">
 				{% for dl_perm_group_select in loops.dl_perm_group_select %}
-					<option value="{{ dl_perm_group_select.DL_VALUE }}"{% if dl_perm_group_select.DL_SPECIAL %} class="sep"{% endif %}{% if dl_perm_group_select.DL_SELECTED %} selected="selected"{% endif %}>{{ dl_perm_group_select.DL_NAME }}</option>
+					<option value="{{ dl_perm_group_select.DL_VALUE }}"{% if dl_perm_group_select.DL_SPECIAL %} class="sep"{% endif %}{% if dl_perm_group_select.DL_SELECTED %} selected{% endif %}>{{ dl_perm_group_select.DL_NAME }}</option>
 				{% endfor %}
 				</optgroup>
 			</select>
@@ -146,7 +146,7 @@
 		<td class="row4">
 			<select name="auth_view">
 				{% for dl_perm_all_default in loops.dl_perm_all_default %}
-				<option value="{{ dl_perm_all_default.DL_VALUE }}"{% if dl_perm_all_default.DL_VALUE eq S_DL_AUTH_VIEW %} selected="selected"{% endif %}>{{ dl_perm_all_default.DL_NAME }}</option>
+				<option value="{{ dl_perm_all_default.DL_VALUE }}"{% if dl_perm_all_default.DL_VALUE eq S_DL_AUTH_VIEW %} selected{% endif %}>{{ dl_perm_all_default.DL_NAME }}</option>
 				{% endfor %}
 			</select>
 		</td>
@@ -156,7 +156,7 @@
 		<td class="row3">
 			<select name="auth_dl">
 				{% for dl_perm_all_default in loops.dl_perm_all_default %}
-				<option value="{{ dl_perm_all_default.DL_VALUE }}"{% if dl_perm_all_default.DL_VALUE eq S_DL_AUTH_DL %} selected="selected"{% endif %}>{{ dl_perm_all_default.DL_NAME }}</option>
+				<option value="{{ dl_perm_all_default.DL_VALUE }}"{% if dl_perm_all_default.DL_VALUE eq S_DL_AUTH_DL %} selected{% endif %}>{{ dl_perm_all_default.DL_NAME }}</option>
 				{% endfor %}
 			</select>
 		</td>
@@ -166,7 +166,7 @@
 		<td class="row4">
 			<select name="auth_up">
 				{% for dl_perm_all_default in loops.dl_perm_all_default %}
-				<option value="{{ dl_perm_all_default.DL_VALUE }}"{% if dl_perm_all_default.DL_VALUE eq S_DL_AUTH_UP %} selected="selected"{% endif %}>{{ dl_perm_all_default.DL_NAME }}</option>
+				<option value="{{ dl_perm_all_default.DL_VALUE }}"{% if dl_perm_all_default.DL_VALUE eq S_DL_AUTH_UP %} selected{% endif %}>{{ dl_perm_all_default.DL_NAME }}</option>
 				{% endfor %}
 			</select>
 		</td>
@@ -176,7 +176,7 @@
 		<td class="row3">
 			<select name="auth_mod">
 				{% for dl_perm_all_default in loops.dl_perm_all_default %}
-				<option value="{{ dl_perm_all_default.DL_VALUE }}"{% if dl_perm_all_default.DL_VALUE eq S_DL_AUTH_MOD %} selected="selected"{% endif %}>{{ dl_perm_all_default.DL_NAME }}</option>
+				<option value="{{ dl_perm_all_default.DL_VALUE }}"{% if dl_perm_all_default.DL_VALUE eq S_DL_AUTH_MOD %} selected{% endif %}>{{ dl_perm_all_default.DL_NAME }}</option>
 				{% endfor %}
 			</select>
 		</td>
@@ -186,7 +186,7 @@
 		<td class="row4">
 			<select name="auth_cread">
 				{% for dl_perm_all_comments in loops.dl_perm_all_comments %}
-				<option value="{{ dl_perm_all_comments.DL_VALUE }}"{% if dl_perm_all_comments.DL_VALUE eq S_DL_AUTH_CREAD %} selected="selected"{% endif %}>{{ dl_perm_all_comments.DL_NAME }}</option>
+				<option value="{{ dl_perm_all_comments.DL_VALUE }}"{% if dl_perm_all_comments.DL_VALUE eq S_DL_AUTH_CREAD %} selected{% endif %}>{{ dl_perm_all_comments.DL_NAME }}</option>
 				{% endfor %}
 			</select>
 		</td>
@@ -196,7 +196,7 @@
 		<td class="row3">
 			<select name="auth_cpost">
 				{% for dl_perm_all_comments in loops.dl_perm_all_comments %}
-				<option value="{{ dl_perm_all_comments.DL_VALUE }}"{% if dl_perm_all_comments.DL_VALUE eq S_DL_AUTH_CPOST %} selected="selected"{% endif %}>{{ dl_perm_all_comments.DL_NAME }}</option>
+				<option value="{{ dl_perm_all_comments.DL_VALUE }}"{% if dl_perm_all_comments.DL_VALUE eq S_DL_AUTH_CPOST %} selected{% endif %}>{{ dl_perm_all_comments.DL_NAME }}</option>
 				{% endfor %}
 			</select>
 		</td>
@@ -231,23 +231,23 @@
 	<tbody>
 	<tr class="row4">
 		<td class="row4">{{ lang('DL_AUTH_VIEW') }}</td>
-		<td class="row4"><input type="radio" class="radio" name="auth_view" value="1"{% if DL_AUTH_VIEW eq 1 %} checked="checked"{% endif %} /></td>
-		<td class="row4"><input type="radio" class="radio" name="auth_view" value="0"{% if DL_AUTH_VIEW eq 0 %} checked="checked"{% endif %} /></td>
+		<td class="row4"><input type="radio" class="radio" name="auth_view" value="1"{% if DL_AUTH_VIEW eq 1 %} checked{% endif %} /></td>
+		<td class="row4"><input type="radio" class="radio" name="auth_view" value="0"{% if DL_AUTH_VIEW eq 0 %} checked{% endif %} /></td>
 	</tr>
 	<tr class="row3">
 		<td class="row3">{{ lang('DL_AUTH_DL') }}</td>
-		<td class="row3"><input type="radio" class="radio" name="auth_dl" value="1"{% if DL_AUTH_DL eq 1 %} checked="checked"{% endif %} /></td>
-		<td class="row3"><input type="radio" class="radio" name="auth_dl" value="0"{% if DL_AUTH_DL eq 0 %} checked="checked"{% endif %} /></td>
+		<td class="row3"><input type="radio" class="radio" name="auth_dl" value="1"{% if DL_AUTH_DL eq 1 %} checked{% endif %} /></td>
+		<td class="row3"><input type="radio" class="radio" name="auth_dl" value="0"{% if DL_AUTH_DL eq 0 %} checked{% endif %} /></td>
 	</tr>
 	<tr class="row4">
 		<td class="row4">{{ lang('DL_AUTH_UP') }}</td>
-		<td class="row4"><input type="radio" class="radio" name="auth_up" value="1"{% if DL_AUTH_UP eq 1 %} checked="checked"{% endif %} /></td>
-		<td class="row4"><input type="radio" class="radio" name="auth_up" value="0"{% if DL_AUTH_UP eq 0 %} checked="checked"{% endif %} /></td>
+		<td class="row4"><input type="radio" class="radio" name="auth_up" value="1"{% if DL_AUTH_UP eq 1 %} checked{% endif %} /></td>
+		<td class="row4"><input type="radio" class="radio" name="auth_up" value="0"{% if DL_AUTH_UP eq 0 %} checked{% endif %} /></td>
 	</tr>
 	<tr class="row3">
 		<td class="row3">{{ lang('DL_AUTH_MOD') }}</td>
-		<td class="row3"><input type="radio" class="radio" name="auth_mod" value="1"{% if DL_AUTH_MOD eq 1 %} checked="checked"{% endif %} /></td>
-		<td class="row3"><input type="radio" class="radio" name="auth_mod" value="0"{% if DL_AUTH_MOD eq 0 %} checked="checked"{% endif %} /></td>
+		<td class="row3"><input type="radio" class="radio" name="auth_mod" value="1"{% if DL_AUTH_MOD eq 1 %} checked{% endif %} /></td>
+		<td class="row3"><input type="radio" class="radio" name="auth_mod" value="0"{% if DL_AUTH_MOD eq 0 %} checked{% endif %} /></td>
 	</tr>
 	</tbody>
 	</table>
@@ -273,7 +273,7 @@
 	<dl>
 		<dt><label>{{ lang('DL_DROP_PERMISSIONS') }}</label></dt>
 		<dd>
-			<p><label><input type="radio" class="radio" name="view_perm" value="1" checked="checked" /> {{ lang('DL_VIEW_PERM') }}</label></p>
+			<p><label><input type="radio" class="radio" name="view_perm" value="1" checked /> {{ lang('DL_VIEW_PERM') }}</label></p>
 			<p><label><input type="radio" class="radio" name="view_perm" value="0" /> {{ lang('DL_PERM_DROP_NO') }}</label></p>
 			<p><label><input type="radio" class="radio" name="view_perm" value="2" /> {{ lang('DL_PERM_DROP_CATS') }}</label></p>
 			<p><label><input type="radio" class="radio" name="view_perm" value="3" /> {{ lang('DL_PERM_DROP_ALL') }}</label></p>

@@ -118,12 +118,12 @@ class load
 		$this->dlext_physical			= $dlext_physical;
 		$this->dlext_status				= $dlext_status;
 		$this->dlext_constants			= $dlext_constants;
-
-		$this->dlext_main->dl_handle_active();
 	}
 
 	public function handle()
 	{
+		$this->dlext_main->dl_handle_active();
+
 		$index = $this->dlext_main->full_index();
 
 		$file_version	= $this->request->variable('file_version', 0);
@@ -450,21 +450,21 @@ class load
 				if ($this->user->data['is_registered'])
 				{
 					$load_limit = $this->dlext_constants->get_value('overall_traffics');
-					$remain_traffic = 'dl_remain_traffic';
+					$used_traffic = 'dl_remain_traffic';
 				}
 				else
 				{
 					$load_limit = $this->dlext_constants->get_value('guests_traffics');
-					$remain_traffic = 'dl_remain_guest_traffic';
+					$used_traffic = 'dl_remain_guest_traffic';
 				}
 
 				if (!$dl_file['extern'] && !$this->config['dl_traffic_off'] && $this->dlext_constants->get_value('founder_traffics') == $this->dlext_constants::DL_FALSE)
 				{
 					if ($load_limit == $this->dlext_constants::DL_TRUE)
 					{
-						$new_remain = $this->config[$remain_traffic] + $dl_file['file_size'];
+						$new_used_traffic = $this->config[$used_traffic] + $dl_file['file_size'];
 
-						$this->config->set($remain_traffic, $new_remain);
+						$this->config->set($used_traffic, $new_used_traffic);
 					}
 
 					$cat_traffic = $index[$cat_id]['cat_traffic'];
@@ -544,9 +544,9 @@ class load
 
 				$file_protocol_prefix = '';
 
-				if (strpos($file_url, 'http') === false)
+				if (strpos(strtolower($file_url), 'http') === false)
 				{
-					$file_protocol_prefix = 'http://';
+					$file_protocol_prefix = '//';
 				}
 
 				header("HTTP/1.1 301 Moved Permanently");
@@ -561,7 +561,10 @@ class load
 
 				$this->language->add_lang('viewtopic');
 
-				include($this->root_path . 'includes/functions_download.' . $this->php_ext);
+				if (!function_exists('file_gc'))
+				{
+					include($this->root_path . 'includes/functions_download.' . $this->php_ext);
+				}
 
 				if ($dl_file['real_file'] && $this->filesystem->exists($dl_file_url . $dl_file['real_file']))
 				{

@@ -94,12 +94,12 @@ class thumbs
 		$this->dlext_status				= $dlext_status;
 		$this->dlext_constants			= $dlext_constants;
 		$this->dlext_footer				= $dlext_footer;
-
-		$this->dlext_main->dl_handle_active();
 	}
 
 	public function handle()
 	{
+		$this->dlext_main->dl_handle_active();
+
 		$index = $this->dlext_main->full_index();
 
 		$submit			= $this->request->variable('submit', '');
@@ -114,8 +114,6 @@ class thumbs
 
 		if (isset($index[$cat_id]['allow_thumbs']) && $index[$cat_id]['allow_thumbs'] && $this->config['dl_thumb_fsize'])
 		{
-			$cat_auth = $this->dlext_auth->dl_cat_auth($cat_id);
-
 			/*
 			* default entry point for download details
 			*/
@@ -134,12 +132,6 @@ class thumbs
 			/*
 			* prepare the download for displaying
 			*/
-			$long_desc			= $dl_files['long_desc'];
-			$long_desc_uid		= $dl_files['long_desc_uid'];
-			$long_desc_bitfield	= $dl_files['long_desc_bitfield'];
-			$long_desc_flags	= (isset($dl_files['long_desc_flags'])) ? $dl_files['long_desc_flags'] : 0;
-			$long_desc			= generate_text_for_display($long_desc, $long_desc_uid, $long_desc_bitfield, $long_desc_flags);
-
 			$file_status		= $check_status['file_status'];
 
 			$description		= $dl_files['description'];
@@ -157,8 +149,6 @@ class thumbs
 				WHERE dl_id = ' . (int) $df_id;
 			$result = $this->db->sql_query($sql);
 			$total_images = $this->db->sql_affectedrows();
-
-			$thumbs_ary = [];
 
 			if ($total_images)
 			{
