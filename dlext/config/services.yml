@@ -2,6 +2,7 @@ imports:
     - { resource: tables.yml }
     - { resource: services_acp.yml }
     - { resource: services_controller.yml }
+    - { resource: services_core_fields.yml }
     - { resource: services_core_helpers.yml }
     - { resource: services_core.yml }
     - { resource: services_mcp.yml }

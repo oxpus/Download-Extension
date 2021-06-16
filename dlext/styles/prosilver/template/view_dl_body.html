@@ -393,14 +393,14 @@
 		<p>{{ DL_MOD_DESC }}</p>
 		{% endif %}
 
-		{% if S_DL_FIELDS %}
-		<br />
 		{% for dl_custom_fields in loops.dl_custom_fields %}
+		{% if dl_custom_fields.S_FIRST_ROW %}
+		<br />
+		{% endif %}
 		<h3>{{ dl_custom_fields.DL_FIELD_NAME }}{{ lang('COLON') }}</h3>
 		<p>{{ dl_custom_fields.DL_FIELD_VALUE }}</p>
 		<br />
 		{% endfor %}
-		{% endif %}
 
 	</div>
 

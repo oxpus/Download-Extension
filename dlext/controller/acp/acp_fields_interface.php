@@ -37,25 +37,23 @@ interface acp_fields_interface
 	* Build all Language specific options
 	* Taken from acp_profile.php (c) by phpbb.com
 	 *
-	 * @param object $cp the current cp object
 	 * @param string $field_type defines the needed fieldtype
 	 * @param string $action mode for workflow
 	 * @return mixed prebuild input or display element
 	 * @access public
 	*/
-	public function build_language_options(&$cp, $field_type, $action = 'create');
+	public function build_language_options($field_type, $action = 'create');
 
 	/**
 	* Save Profile Field
 	* Taken from acp_profile.php (c) by phpbb.com
 	 *
-	 * @param object $cp the current cp object
 	 * @param string $field_type defines the needed fieldtype
 	 * @param string $action mode for workflow
 	 * @return void
 	 * @access public
 	*/
-	public function save_profile_field(&$cp, $field_type, $action = 'create');
+	public function save_profile_field($field_type, $action = 'create');
 
 	/**
 	* Update, then insert if not successfull

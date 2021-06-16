@@ -84,6 +84,7 @@ services:
             - '@oxpus.dlext.core.topic'
             - '@oxpus.dlext.helpers.constants'
             - '@oxpus.dlext.helpers.footer'
+            - '@oxpus.dlext.fields.fields'
             - '%oxpus.dlext.tables.dl_comments%'
             - '%oxpus.dlext.tables.dl_favorites%'
             - '%oxpus.dlext.tables.dl_stats%'

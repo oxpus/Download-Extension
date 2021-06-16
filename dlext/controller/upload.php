@@ -41,6 +41,7 @@ class upload
 	protected $dlext_topic;
 	protected $dlext_constants;
 	protected $dlext_footer;
+	protected $dlext_fields;
 
 	protected $dlext_table_dl_stats;
 	protected $dlext_table_downloads;
@@ -72,6 +73,7 @@ class upload
 	* @param \oxpus\dlext\core\topic				$dlext_topic
 	* @param \oxpus\dlext\core\helpers\constants	$dlext_constants
 	* @param \oxpus\dlext\core\helpers\footer		$dlext_footer
+	* @param \oxpus\dlext\core\fields\fields		$dlext_fields
 	* @param string									$dlext_table_dl_stats
 	* @param string									$dlext_table_downloads
 	*/
@@ -100,6 +102,7 @@ class upload
 		\oxpus\dlext\core\topic $dlext_topic,
 		\oxpus\dlext\core\helpers\constants $dlext_constants,
 		\oxpus\dlext\core\helpers\footer $dlext_footer,
+		\oxpus\dlext\core\fields\fields $dlext_fields,
 		$dlext_table_dl_stats,
 		$dlext_table_downloads
 	)
@@ -134,6 +137,7 @@ class upload
 		$this->dlext_topic				= $dlext_topic;
 		$this->dlext_constants			= $dlext_constants;
 		$this->dlext_footer				= $dlext_footer;
+		$this->dlext_fields				= $dlext_fields;
 	}
 
 	public function handle()
@@ -159,14 +163,6 @@ class upload
 		{
 			trigger_error('DL_NO_PERMISSION');
 		}
-
-		// Initiate custom fields
-		if (!class_exists('custom_profile'))
-		{
-			include($this->ext_path . 'includes/fields.' . $this->php_ext);
-		}
-
-		$cp = new \oxpus\dlext\includes\custom_profile();
 
 		if ($submit)
 		{
@@ -421,7 +417,7 @@ class upload
 			$error = [];
 			$cp_data = [];
 
-			$cp->submit_cp_field($this->user->get_iso_lang_id(), $cp_data, $error);
+			$this->dlext_fields->submit_cp_field($this->user->get_iso_lang_id(), $cp_data, $error);
 
 			// Stop here, if custom fields are invalid!
 			if (!empty($error))
@@ -570,7 +566,7 @@ class upload
 				extract($this->dispatcher->trigger_event('oxpus.dlext.upload_sql_insert_after', compact($vars)));
 
 				// Update Custom Fields
-				$cp->update_profile_field_data($next_id, $cp_data);
+				$this->dlext_fields->update_profile_field_data($next_id, $cp_data);
 
 				/**
 				 * Manipulate thumbnail data before storage
@@ -921,8 +917,8 @@ class upload
 		$this->template->assign_vars($template_ary);
 
 		// Init and display the custom fields with the existing data
-		$cp->get_profile_fields($df_id);
-		$cp->generate_profile_fields($this->user->get_iso_lang_id());
+		$this->dlext_fields->get_profile_fields($df_id);
+		$this->dlext_fields->generate_profile_fields($this->user->get_iso_lang_id());
 
 		/*
 		* include the mod footer

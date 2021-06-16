@@ -39,6 +39,7 @@ class details
 	protected $dlext_status;
 	protected $dlext_constants;
 	protected $dlext_footer;
+	protected $dlext_fields;
 
 	protected $dlext_table_dl_comments;
 	protected $dlext_table_dl_favorites;
@@ -74,6 +75,7 @@ class details
 	* @param \oxpus\dlext\core\status				$dlext_status
 	* @param \oxpus\dlext\core\helpers\constants	$dlext_constants
 	* @param \oxpus\dlext\core\helpers\footer		$dlext_footer
+	* @param \oxpus\dlext\core\fields\fields		$dlext_fields
 	* @param string									$dlext_table_dl_favorites
 	* @param string									$dlext_table_dl_hotlink
 	* @param string									$dlext_table_dl_images
@@ -105,6 +107,7 @@ class details
 		\oxpus\dlext\core\status $dlext_status,
 		\oxpus\dlext\core\helpers\constants $dlext_constants,
 		\oxpus\dlext\core\helpers\footer $dlext_footer,
+		\oxpus\dlext\core\fields\fields $dlext_fields,
 		$dlext_table_dl_favorites,
 		$dlext_table_dl_hotlink,
 		$dlext_table_dl_images,
@@ -147,6 +150,7 @@ class details
 		$this->dlext_status				= $dlext_status;
 		$this->dlext_constants			= $dlext_constants;
 		$this->dlext_footer				= $dlext_footer;
+		$this->dlext_fields				= $dlext_fields;
 	}
 
 	public function handle()
@@ -1234,19 +1238,8 @@ class details
 			}
 		}
 
-		/**
-		* Custom Download Fields
-		* Taken from memberlist.php phpBB 3.0.7-PL1
-		*/
-		if (!class_exists('custom_profile'))
-		{
-			include($this->ext_path . 'includes/fields.' . $this->php_ext);
-		}
-
-		$cp = new \oxpus\dlext\includes\custom_profile();
-
-		$dl_fields = $cp->generate_profile_fields_template('grab', $file_id);
-		$dl_fields = (isset($dl_fields[$file_id])) ? $cp->generate_profile_fields_template('show', $this->dlext_constants::DL_FALSE, $dl_fields[$file_id]) : [];
+		$dl_fields = $this->dlext_fields->generate_profile_fields_template('grab', $file_id);
+		$dl_fields = (isset($dl_fields[$file_id])) ? $this->dlext_fields->generate_profile_fields_template('show', $this->dlext_constants::DL_FALSE, $dl_fields[$file_id]) : [];
 		$s_dl_fields = $this->dlext_constants::DL_FALSE;
 
 		if (!empty($dl_fields['row']))

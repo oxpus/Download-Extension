@@ -1,0 +1,21 @@
+services:
+    oxpus.dlext.fields.admin:
+        class: oxpus\dlext\core\fields\admin
+        public: true
+        arguments:
+            - '@config'
+            - '@language'
+            - '@request'
+    oxpus.dlext.fields.fields:
+        class: oxpus\dlext\core\fields\fields
+        public: true
+        arguments:
+            - '@dbal.conn'
+            - '@language'
+            - '@request'
+            - '@template'
+            - '@user'
+            - '%oxpus.dlext.tables.dl_fields%'
+            - '%oxpus.dlext.tables.dl_fields_data%'
+            - '%oxpus.dlext.tables.dl_fields_lang%'
+            - '%oxpus.dlext.tables.dl_lang%'

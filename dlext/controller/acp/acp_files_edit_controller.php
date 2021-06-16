@@ -45,6 +45,7 @@ class acp_files_edit_controller implements acp_files_edit_interface
 	protected $dlext_main;
 	protected $dlext_topic;
 	protected $dlext_constants;
+	protected $dlext_fields;
 
 	protected $dlext_table_dl_comments;
 	protected $dlext_table_dl_favorites;
@@ -81,6 +82,7 @@ class acp_files_edit_controller implements acp_files_edit_interface
 	 * @param \oxpus\dlext\core\main				$dlext_main
 	 * @param \oxpus\dlext\core\topic				$dlext_topic
 	 * @param \oxpus\dlext\core\helpers\constants	$dlext_constants
+	 * @param \oxpus\dlext\core\fields\fields		$dlext_fields
 	 * @param string								$dlext_table_dl_comments
 	 * @param string								$dlext_table_dl_favorites
 	 * @param string								$dlext_table_dl_stats
@@ -114,6 +116,7 @@ class acp_files_edit_controller implements acp_files_edit_interface
 		\oxpus\dlext\core\main $dlext_main,
 		\oxpus\dlext\core\topic $dlext_topic,
 		\oxpus\dlext\core\helpers\constants $dlext_constants,
+		\oxpus\dlext\core\fields\fields $dlext_fields,
 		$dlext_table_dl_comments,
 		$dlext_table_dl_favorites,
 		$dlext_table_dl_stats,
@@ -158,6 +161,7 @@ class acp_files_edit_controller implements acp_files_edit_interface
 		$this->dlext_main				= $dlext_main;
 		$this->dlext_topic				= $dlext_topic;
 		$this->dlext_constants			= $dlext_constants;
+		$this->dlext_fields				= $dlext_fields;
 	}
 
 	public function set_action($u_action)
@@ -191,13 +195,6 @@ class acp_files_edit_controller implements acp_files_edit_interface
 		{
 			$action = '';
 		}
-
-		if (!class_exists('custom_profile'))
-		{
-			include($this->ext_path . 'includes/fields.' . $this->phpEx);
-		}
-
-		$cp = new \oxpus\dlext\includes\custom_profile();
 
 		if ($action == 'edit' || $action == 'add')
 		{
@@ -555,8 +552,8 @@ class acp_files_edit_controller implements acp_files_edit_interface
 			$this->template->assign_vars($template_ary);
 
 			// Init and display the custom fields with the existing data
-			$cp->get_profile_fields($df_id);
-			$cp->generate_profile_fields($this->user->get_iso_lang_id());
+			$this->dlext_fields->get_profile_fields($df_id);
+			$this->dlext_fields->generate_profile_fields($this->user->get_iso_lang_id());
 
 			$this->template->assign_var('S_DL_FILES_EDIT', $this->dlext_constants::DL_TRUE);
 		}
@@ -742,7 +739,7 @@ class acp_files_edit_controller implements acp_files_edit_interface
 				// validate custom profile fields
 				$error = [];
 				$cp_data = [];
-				$cp->submit_cp_field($this->user->get_iso_lang_id(), $cp_data, $error);
+				$this->dlext_fields->submit_cp_field($this->user->get_iso_lang_id(), $cp_data, $error);
 
 				// Stop here, if custom fields are invalid!
 				if (!empty($error))
@@ -1205,7 +1202,7 @@ class acp_files_edit_controller implements acp_files_edit_interface
 				}
 
 				// Update Custom Fields
-				$cp->update_profile_field_data($dl_t_id, $cp_data);
+				$this->dlext_fields->update_profile_field_data($dl_t_id, $cp_data);
 
 				if (!$this->config['dl_disable_email'] && !$send_notify && $approve)
 				{
