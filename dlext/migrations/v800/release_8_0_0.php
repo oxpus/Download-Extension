@@ -21,7 +21,7 @@ class release_8_0_0 extends \phpbb\db\migration\migration
 
 	static public function depends_on()
 	{
-		return ['\oxpus\dlext\migrations\v800\prepare_8_0_0'];
+		return ['\oxpus\dlext\migrations\basics\dl_commons'];
 	}
 
 	public function update_data()
@@ -30,6 +30,11 @@ class release_8_0_0 extends \phpbb\db\migration\migration
 			// Set the current version
 			['config.update', ['dl_ext_version', $this->dl_ext_version]],
 
+			['config.add', ['dl_remain_guest_traffic', '0']],
+			['config.add', ['dl_remain_traffic', '0']],
+			['config.add', ['dl_enable_blacklist', '0']],
+
+			['config.remove', ['dl_download_dir']],
 			['config.remove', ['dl_uconf_link_onoff']],
 
 			['module.remove', [
@@ -42,6 +47,7 @@ class release_8_0_0 extends \phpbb\db\migration\migration
 					'module_auth'       => 'ext_oxpus/dlext',
 				],
 			]],
+
 			['module.remove', [
 				'ucp',
 				'DOWNLOADS',
@@ -52,6 +58,7 @@ class release_8_0_0 extends \phpbb\db\migration\migration
 					'module_auth'       => 'ext_oxpus/dlext',
 				],
 			]],
+
 			['module.remove', [
 				'ucp',
 				'DOWNLOADS',
@@ -62,6 +69,7 @@ class release_8_0_0 extends \phpbb\db\migration\migration
 					'module_auth'       => 'ext_oxpus/dlext',
 				],
 			]],
+
 			['module.add', [
 				'ucp',
 				'DOWNLOADS',
@@ -70,6 +78,8 @@ class release_8_0_0 extends \phpbb\db\migration\migration
 					'modes'				=> ['ucp_config','ucp_privacy','ucp_favorite'],
 				],
 			]],
+	
+			['custom', [[$this, 'move_remain_traffic']]],
 		];
 	}
 
@@ -88,12 +98,27 @@ class release_8_0_0 extends \phpbb\db\migration\migration
 			'add_tables' => [
 				$this->table_prefix . 'dl_rem_traf' => [
 					'COLUMNS'		=> [
-						'config_name'	=> ['VCHAR', ''],
-						'config_value'	=> ['VCHAR', ''],
+						'config_name'	=> ['VCHAR', '0'],
+						'config_value'	=> ['VCHAR', '0'],
 					],
 					'PRIMARY_KEY'	=> 'config_name'
 				],
 			],
 		];
+	}
+
+	public function move_remain_traffic()
+	{
+		$this->db->sql_return_on_error(true);
+
+		$sql = 'SELECT * FROM ' . $this->table_prefix . 'dl_rem_traf';
+		$result = $this->db->sql_query($sql);
+		while ($row = $this->db->sql_fetchrow($result))
+		{
+			$this->config->set($row['config_name'], $row['config_value']);
+		}
+		$this->db->sql_freeresult($result);
+
+		$this->db->sql_return_on_error(false);
 	}
 }

@@ -37,7 +37,7 @@ class dl_perms extends \phpbb\db\migration\migration
 			['permission.add', ['a_dl_blacklist']],
 			['permission.add', ['a_dl_toolbox']],
 			['permission.add', ['a_dl_fields']],
-			['permission.add', ['a_dl_browser']],
+			['permission.add', ['a_dl_perm_check']],
 
 			// Join permissions to administrators
 			['permission.permission_set', ['ROLE_ADMIN_FULL', 'a_dl_overview']],
@@ -51,7 +51,7 @@ class dl_perms extends \phpbb\db\migration\migration
 			['permission.permission_set', ['ROLE_ADMIN_FULL', 'a_dl_blacklist']],
 			['permission.permission_set', ['ROLE_ADMIN_FULL', 'a_dl_toolbox']],
 			['permission.permission_set', ['ROLE_ADMIN_FULL', 'a_dl_fields']],
-			['permission.permission_set', ['ROLE_ADMIN_FULL', 'a_dl_browser']],
+			['permission.permission_set', ['ROLE_ADMIN_FULL', 'a_dl_perm_check']],
 
 			// Set the next config
 			['config.add', ['dl_use_ext_blacklist', '1']],

@@ -35,7 +35,7 @@ class dl_module extends \phpbb\db\migration\migration
 				'ACP_DOWNLOADS',
 				[
 					'module_basename'	=> '\oxpus\dlext\acp\main_module',
-					'modes'				=> ['overview','config','traffic','categories','files','permissions','stats','banlist','ext_blacklist','toolbox','fields','browser'],
+					'modes'				=> ['overview','config','traffic','categories','files','permissions','stats','banlist','ext_blacklist','toolbox','fields','browser','perm_check'],
 				],
 			]],
 			['module.add', [
@@ -48,7 +48,7 @@ class dl_module extends \phpbb\db\migration\migration
 				'DOWNLOADS',
 				[
 					'module_basename'	=> '\oxpus\dlext\ucp\main_module',
-					'modes'				=> ['config','favorite'],
+					'modes'				=> ['ucp_config','ucp_favorite','ucp_privacy'],
 				],
 			]],
 

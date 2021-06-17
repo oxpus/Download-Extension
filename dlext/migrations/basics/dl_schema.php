@@ -19,7 +19,7 @@ class dl_schema extends \phpbb\db\migration\migration
 
 	static public function depends_on()
 	{
-		return ['\phpbb\db\migration\data\v320\v320'];
+		return ['\phpbb\db\migration\data\v330\v330'];
 	}
 
 	public function update_data()
@@ -36,7 +36,7 @@ class dl_schema extends \phpbb\db\migration\migration
 			['config.add', ['dl_disable_email', '1']],
 			['config.add', ['dl_disable_popup', '0']],
 			['config.add', ['dl_disable_popup_notify', '0']],
-			['config.add', ['dl_download_dir', 'files/downloads/']],
+			['config.add', ['dl_download_dir', '1']],
 			['config.add', ['dl_download_vc', '1']],
 			['config.add', ['dl_drop_traffic_postdel', '0']],
 			['config.add', ['dl_edit_own_downloads', '1']],
@@ -48,13 +48,13 @@ class dl_schema extends \phpbb\db\migration\migration
 			['config.add', ['dl_ext_new_window', '0']],
 			['config.add', ['dl_file_hash_algo', 'md5']],
 			['config.add', ['dl_guest_stats_show', '1']],
+			['config.add', ['dl_global_guests', 1]],
 			['config.add', ['dl_hotlink_action', '1']],
 			['config.add', ['dl_icon_free_for_reg', '0']],
-			['config.add', ['dl_latest_comments', '1']],
+			['config.add', ['dl_index_desc_hide', '0']],
 			['config.add', ['dl_limit_desc_on_index', '0']],
 			['config.add', ['dl_links_per_page', '10']],
-			['config.add', ['dl_method', '2']],
-			['config.add', ['dl_method_quota', '2097152']],
+			['config.add', ['dl_mini_stats_ext', '0']],
 			['config.add', ['dl_newtopic_traffic', '524288']],
 			['config.add', ['dl_new_time', '3']],
 			['config.add', ['dl_off_from', '00:00']],
@@ -86,6 +86,8 @@ class dl_schema extends \phpbb\db\migration\migration
 			['config.add', ['dl_rss_off_text', 'Dieser Feed ist aktuell offline. / This feed is currently offline.']],
 			['config.add', ['dl_rss_perms', '1']],
 			['config.add', ['dl_rss_select', '0']],
+			['config.add', ['dl_set_add', '0']],
+			['config.add', ['dl_set_user', '0']],
 			['config.add', ['dl_shorten_extern_links', '10']],
 			['config.add', ['dl_show_footer_legend', '1']],
 			['config.add', ['dl_show_footer_stat', '1']],
@@ -105,6 +107,7 @@ class dl_schema extends \phpbb\db\migration\migration
 			['config.add', ['dl_topic_post_catname', '0']],
 			['config.add', ['dl_topic_text', '']],
 			['config.add', ['dl_topic_title_catname', '0']],
+			['config.add', ['dl_topic_type', POST_NORMAL]],
 			['config.add', ['dl_topic_user', '0']],
 			['config.add', ['dl_traffics_founder', '1']],
 			['config.add', ['dl_traffics_guests', '1']],
@@ -344,8 +347,26 @@ class dl_schema extends \phpbb\db\migration\migration
 						'ver_add_time'		=> ['TIMESTAMP', 0],
 						'ver_add_user'		=> ['UINT', 0],
 						'ver_change_user'	=> ['UINT', 0],
-					],
+						'ver_text'			=> ['MTEXT_UNI', ''],
+						'ver_uid'			=> ['CHAR:8', ''],
+						'ver_bitfield'		=> ['VCHAR', ''],
+						'ver_flags'			=> ['UINT:11', 0],
+						'ver_active'		=> ['BOOL', 0],
+						],
 					'PRIMARY_KEY'	=> 'ver_id'
+				],
+
+				$this->table_prefix . 'dl_ver_files' => [
+					'COLUMNS'		=> [
+						'ver_file_id'	=> ['UINT', null, 'auto_increment'],
+						'dl_id'			=> ['INT:11', 0],
+						'ver_id'		=> ['INT:11', 0],
+						'real_name'		=> ['VCHAR', ''],
+						'file_name'		=> ['VCHAR', ''],
+						'file_title'	=> ['VCHAR', ''],
+						'file_type'		=> ['BOOL', 0],	// 0 = files, 1 = images
+					],
+					'PRIMARY_KEY'	=> 'ver_file_id'
 				],
 
 				$this->table_prefix . 'downloads' => [
@@ -442,8 +463,11 @@ class dl_schema extends \phpbb\db\migration\migration
 						'diff_topic_user'		=> ['BOOL', 0],
 						'topic_user'			=> ['UINT:11', 0],
 						'topic_more_details'	=> ['BOOL', 1],
+						'dl_topic_type'			=> ['BOOL', POST_NORMAL],
 						'show_file_hash'		=> ['BOOL', 1],
-					],
+						'dl_set_add'			=> ['UINT:11', 0],
+						'dl_set_user'			=> ['UINT:11', 0],
+						],
 					'PRIMARY_KEY'	=> 'id'
 				],
 			],
@@ -494,6 +518,7 @@ class dl_schema extends \phpbb\db\migration\migration
 				$this->table_prefix . 'dl_rem_traf',
 				$this->table_prefix . 'dl_stats',
 				$this->table_prefix . 'dl_versions',
+				$this->table_prefix . 'dl_ver_files',
 				$this->table_prefix . 'downloads',
 				$this->table_prefix . 'downloads_cat',
 			],

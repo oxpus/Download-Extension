@@ -30,14 +30,14 @@ class main_info
 				'ucp_favorite'	=> [
 					'title' => 'DL_FAVORITE',	'auth' => 'ext_oxpus/dlext',	'cat' => ['DOWNLOADS']
 				],
-				'config'		=> [
+				'config'	=> [
 					'title' => 'DL_CONFIG',		'auth' => 'ext_oxpus/dlext',	'cat' => ['DOWNLOADS']
-				],
-				'favorite'		=> [
-					'title' => 'DL_FAVORITE',	'auth' => 'ext_oxpus/dlext',	'cat' => ['DOWNLOADS']
 				],
 				'dl_privacy'	=> [
 					'title' => 'DL_PRIVACY',	'auth' => 'ext_oxpus/dlext',	'cat' => ['DOWNLOADS']
+				],
+				'favorite'	=> [
+					'title' => 'DL_FAVORITE',	'auth' => 'ext_oxpus/dlext',	'cat' => ['DOWNLOADS']
 				],
 			],
 		];

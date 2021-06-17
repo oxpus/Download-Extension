@@ -12,7 +12,7 @@ namespace oxpus\dlext\migrations\v810;
 
 class release_8_1_0pl1 extends \phpbb\db\migration\migration
 {
-	var $dl_ext_version = '8.1.0PL1';
+	var $dl_ext_version = '8.1.0-PL1';
 
 	public function effectively_installed()
 	{
