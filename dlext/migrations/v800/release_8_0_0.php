@@ -78,7 +78,7 @@ class release_8_0_0 extends \phpbb\db\migration\migration
 					'modes'				=> ['ucp_config','ucp_privacy','ucp_favorite'],
 				],
 			]],
-	
+
 			['custom', [[$this, 'move_remain_traffic']]],
 		];
 	}
