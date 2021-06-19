@@ -324,11 +324,11 @@ class search
 						$long_desc = substr($long_desc, 0, (int) $this->config['dl_limit_desc_on_search']) . ' [...]';
 					}
 
-					$this->template->assign_block_vars('searchresults', [
+					$this->template->assign_block_vars('downloads', [
 						'DL_FILE_STATUS'	=> $file_status,
 						'DL_CAT_NAME'		=> $cat_name,
 						'DL_DESCRIPTION'	=> $description,
-						'DL_MINI_ICON'		=> $mini_icon,
+						'DL_MINI_IMG'		=> $mini_icon,
 						'DL_FILE_NAME'		=> $file_name,
 						'DL_LONG_DESC'		=> ($this->config['dl_desc_search']) ? $long_desc : '',
 						'DL_ADD_USER'		=> $add_user,
@@ -347,7 +347,7 @@ class search
 					 * @var int		file_id		download id
 					 * @since 8.1.0-RC2
 					 */
-					$block = 'searchresults';
+					$block = 'downloads';
 					$vars = array(
 						'block',
 						'file_id',
@@ -532,7 +532,7 @@ class search
 						$long_desc 			= htmlspecialchars_decode(str_replace(['<br>', '<br />'], "\n", $long_desc), ENT_COMPAT);
 					}
 
-					$this->template->assign_block_vars('searchresults', [
+					$this->template->assign_block_vars('downloads', [
 						'DL_FILE_STATUS'	=> $file_status,
 						'DL_CAT_NAME'		=> $cat_name,
 						'DL_DESCRIPTION'	=> $description,
@@ -555,7 +555,7 @@ class search
 					 * @var int		file_id		download id
 					 * @since 8.1.0-RC2
 					 */
-					$block = 'searchresults';
+					$block = 'downloads';
 					$vars = array(
 						'block',
 						'file_id',

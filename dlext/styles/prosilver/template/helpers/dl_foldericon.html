@@ -1,0 +1,12 @@
+{% if downloads.DL_MINI_IMG eq 'new' or subcats.DL_MINI_IMG eq 'new'%}
+<i class="icon fa-folder{% if downloads.DL_SUBLEVEL_SUB or subcats.DL_SUBLEVEL_SUB %}-open{% endif %} fa-fw dl-red dl-big" title="{{ lang('DL_NEW') }}"></i>
+{% endif %}
+{% if downloads.DL_MINI_IMG eq 'edit' or subcats.DL_MINI_IMG eq 'edit' %}
+<i class="icon fa-folder{% if downloads.DL_SUBLEVEL_SUB or subcats.DL_SUBLEVEL_SUB %}-open{% endif %} fa-fw dl-blue dl-big" title="{{ lang('DL_EDIT') }}"></i>
+{% endif %}
+{% if downloads.DL_MINI_IMG eq 'new_edit' or subcats.DL_MINI_IMG eq 'new_edit' %}
+<i class="icon fa-folder{% if downloads.DL_SUBLEVEL_SUB or subcats.DL_SUBLEVEL_SUB %}-open{% endif %} fa-fw dl-yellow dl-big" title="{{ lang('DL_NEW_EDIT') }}"></i>
+{% endif %}
+{% if downloads.DL_MINI_IMG eq 'default' or subcats.DL_MINI_IMG eq 'default' %}
+<i class="icon fa-folder{% if downloads.DL_SUBLEVEL_SUB or subcats.DL_SUBLEVEL_SUB %}-open{% endif %} fa-fw dl-big" title=""></i>
+{% endif %}

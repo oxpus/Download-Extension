@@ -1,0 +1,18 @@
+{% if downloads.DL_FILE_STATUS eq 'red' or DL_FILE_STATUS eq 'red' or downloads.DL_CAT_LAST_ICON eq 'red' or subcats.DL_CAT_LAST_ICON eq 'red' %}
+<i class="icon fa-ban fa-fw dl-red" title="{{ lang('DL_RED_EXPLAIN_PERM') }}"></i>
+{% endif %}
+{% if downloads.DL_FILE_STATUS eq 'yellow' or DL_FILE_STATUS eq 'yellow' or downloads.DL_CAT_LAST_ICON eq 'yellow' or subcats.DL_CAT_LAST_ICON eq 'yellow' %}
+<i class="icon fa-download fa-fw dl-yellow" title="{{ lang('DL_YELLOW_EXPLAIN') }}"></i>
+{% endif %}
+{% if downloads.DL_FILE_STATUS eq 'green' or DL_FILE_STATUS eq 'green' or downloads.DL_CAT_LAST_ICON eq 'green' or subcats.DL_CAT_LAST_ICON eq 'green' %}
+<i class="icon fa-download fa-fw dl-green" title="{{ lang('DL_GREEN_EXPLAIN') }}"></i>
+{% endif %}
+{% if downloads.DL_FILE_STATUS eq 'white' or DL_FILE_STATUS eq 'white' or downloads.DL_CAT_LAST_ICON eq 'white' or subcats.DL_CAT_LAST_ICON eq 'white' %}
+<i class="icon fa-download fa-fw dl-white" title="{{ lang('DL_WHITE_EXPLAIN') }}"></i>
+{% endif %}
+{% if downloads.DL_FILE_STATUS eq 'blue' or DL_FILE_STATUS eq 'blue' or downloads.DL_CAT_LAST_ICON eq 'blue' or subcats.DL_CAT_LAST_ICON eq 'blue' %}
+<i class="icon fa-info-circle fa-fw dl-blue" title="{{ lang('DL_BLUE_EXPLAIN_FOOT') }}"></i>
+{% endif %}
+{% if downloads.DL_FILE_STATUS eq 'grey' or DL_FILE_STATUS eq 'grey' or downloads.DL_CAT_LAST_ICON eq 'grey' or subcats.DL_CAT_LAST_ICON eq 'grey' %}
+<i class="icon fa-globe fa-fw dl-grey" title="{{ lang('DL_GREY_EXPLAIN') }}"></i>
+{% endif %}

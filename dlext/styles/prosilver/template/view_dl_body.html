@@ -9,15 +9,9 @@
 {% endif %}
 
 <h2 class="dl-left">
-	{% if DL_FILE_STATUS eq 'red' %}<i class="icon fa-ban fa-fw dl-red" title="{{ lang('DL_RED_EXPLAIN_PERM') }}"></i>{% endif %}
-	{% if DL_FILE_STATUS eq 'yellow' %}<i class="icon fa-download fa-fw dl-yellow" title="{{ lang('DL_YELLOW_EXPLAIN') }}"></i>{% endif %}
-	{% if DL_FILE_STATUS eq 'green' %}<i class="icon fa-download fa-fw dl-green" title="{{ lang('DL_GREEN_EXPLAIN') }}"></i>{% endif %}
-	{% if DL_FILE_STATUS eq 'white' %}<i class="icon fa-download fa-fw dl-white" title="{{ lang('DL_WHITE_EXPLAIN') }}"></i>{% endif %}
-	{% if DL_FILE_STATUS eq 'blue' %}<i class="icon fa-info-circle fa-fw dl-blue" title="{{ lang('DL_BLUE_EXPLAIN_FOOT') }}"></i>{% endif %}
-	{% if DL_FILE_STATUS eq 'grey' %}<i class="icon fa-globe fa-fw dl-grey" title="{{ lang('DL_GREY_EXPLAIN') }}"></i>{% endif %}
+	{% INCLUDE '@oxpus_dlext/helpers/dl_filestatus.html' %}
 	{{ DL_DESCRIPTION }} {{ DL_HACK_VERSION }} 
-	{% if DL_MINI_IMG eq 'new' %}<i class="icon fa-comment-o fa-fw dl-red" title="{{ lang('DL_FILE_NEW') }}"></i>{% endif %}
-	{% if DL_MINI_IMG eq 'edit' %}<i class="icon fa-edit fa-fw dl-blue" title="{{ lang('DL_FILE_EDIT') }}"></i>{% endif %}
+	{% INCLUDE '@oxpus_dlext/helpers/dl_miniimg.html' %}
 </h2>
 
 <br />
@@ -174,18 +168,9 @@
 			<dl>
 				<dt><label>{{ lang('DL_RATING') }}</label></dt>
 				<dd class="lastpost dl-cell-block">
-					<div id="rating_{{ DL_DF_ID }}" class="dl-rating-image">
-						{% if DL_RATE_TITLE %}<span class="dl-rating" title="{{ DL_RATE_TITLE}}">{% endif %}
-						{% for dl_rating_img in loops.dl_rating_img %}
-						{% if dl_rating_img.DL_RATE_AJAX %}<a href="#" class="dl-rating-img dl-rate-add" data-dfid="{{ DL_DF_ID }}" data-points="{{ dl_rating_img.DL_RATE_AJAX }}">{% endif %}
-						{% if dl_rating_img.DL_RATE_STAR eq 'yes' %}<i class="icon fa-star fa-fw dl-green"></i>{% endif %}
-						{% if dl_rating_img.DL_RATE_STAR eq 'no' %}<i class="icon fa-star-o fa-fw dl-yellow"></i>{% endif %}
-						{% if dl_rating_img.DL_RATE_AJAX %}</a>{% endif %}
-						{% endfor %}
-						{% if DL_RATE_UNDO %}<a href="#" class="dl-rating-img dl-rate-del" data-dfid="{{ DL_DF_ID }}"><i class="icon fa-times-circle fa-fw dl-red"></i></a>{% endif %}
-						{% if DL_RATE_COUNT != '-' %}<span class="dl-rating-count">{{ DL_RATE_COUNT }}</span>{% endif %}
-						{% if DL_RATE_TITLE %}</span>{% endif %}
-					</div>
+					{% for downloads in loops.downloads %}
+					{% INCLUDE '@oxpus_dlext/helpers/dl_rating.html' %}
+					{% endfor %}
 				</dd>
 			</dl>
 			{% endif %}

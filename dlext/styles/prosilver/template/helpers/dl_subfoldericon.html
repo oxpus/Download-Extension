@@ -1,0 +1,12 @@
+{% if sublevel_row.M_DL_SUBLEVEL eq 'new' %}
+<i class="icon fa-folder{% if sublevel_row.M_DL_SUBLEVEL_SUB %}-open{% endif %} fa-fw dl-red" title="{{ lang('DL_NEW') }}"></i>
+{% endif %}
+{% if sublevel_row.M_DL_SUBLEVEL eq 'edit' %}
+<i class="icon fa-folder{% if sublevel_row.M_DL_SUBLEVEL_SUB %}-open{% endif %} fa-fw dl-blue" title="{{ lang('DL_EDIT') }}"></i>
+{% endif %}
+{% if sublevel_row.M_DL_SUBLEVEL eq 'new_edit' %}
+<i class="icon fa-folder{% if sublevel_row.M_DL_SUBLEVEL_SUB %}-open{% endif %} fa-fw dl-yellow" title="{{ lang('DL_NEW_EDIT') }}"></i>
+{% endif %}
+{% if sublevel_row.M_DL_SUBLEVEL eq 'default' %}
+<i class="icon fa-folder{% if sublevel_row.M_DL_SUBLEVEL_SUB %}-open{% endif %} fa-fw" title=""></i>
+{% endif %}

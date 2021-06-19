@@ -1,16 +1,10 @@
 {% INCLUDE '@oxpus_dlext/helpers/dl_header.html' %}
 
 <h2>
-	{% if DL_FILE_STATUS eq 'red' %}<i class="icon fa-ban fa-fw dl-red" title="{{ lang('DL_RED_EXPLAIN_PERM') }}"></i>{% endif %}
-	{% if DL_FILE_STATUS eq 'yellow' %}<i class="icon fa-download fa-fw dl-yellow" title="{{ lang('DL_YELLOW_EXPLAIN') }}"></i>{% endif %}
-	{% if DL_FILE_STATUS eq 'green' %}<i class="icon fa-download fa-fw dl-green" title="{{ lang('DL_GREEN_EXPLAIN') }}"></i>{% endif %}
-	{% if DL_FILE_STATUS eq 'white' %}<i class="icon fa-download fa-fw dl-white" title="{{ lang('DL_WHITE_EXPLAIN') }}"></i>{% endif %}
-	{% if DL_FILE_STATUS eq 'blue' %}<i class="icon fa-info-circle fa-fw dl-blue" title="{{ lang('DL_BLUE_EXPLAIN_FOOT') }}"></i>{% endif %}
-	{% if DL_FILE_STATUS eq 'grey' %}<i class="icon fa-globe fa-fw dl-grey" title="{{ lang('DL_GREY_EXPLAIN') }}"></i>{% endif %}
+	{% INCLUDE '@oxpus_dlext/helpers/dl_filestatus.html' %}
 	<label>
 		{{ DL_DESCRIPTION }}{{ DL_HACK_VERSION }}
-		{% if DL_MINI_IMG eq 'new' %}<i class="icon fa-comment-o fa-fw dl-red" title="{{ lang('DL_FILE_NEW') }}"></i>{% endif %}
-		{% if DL_MINI_IMG eq 'edit' %}<i class="icon fa-edit fa-fw dl-blue" title="{{ lang('DL_FILE_EDIT') }}"></i>{% endif %}
+		{% INCLUDE '@oxpus_dlext/helpers/dl_miniimg.html' %}
 	</label>
 </h2>
 

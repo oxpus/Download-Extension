@@ -1178,7 +1178,6 @@ class details
 			'DL_CHANGE_USER'			=> ($change_user != '') ? $this->language->lang('DL_CHANGE_USER', $change_time, $change_user) : '',
 			'DL_REAL_FILETIME'			=> ($s_real_filetime) ? $this->user->format_date($file_time) : '',
 			'DL_REAL_FILETIME_RFC'		=> ($s_real_filetime) ? gmdate(DATE_RFC3339, $file_time) : '',
-			'DL_DF_ID'					=> $df_id,
 			'DL_PHPEX'					=> $this->php_ext,
 			'DL_BROKEN'					=> $broken,
 			'DL_MOD_TODO'				=> $mod_todo,
@@ -1190,9 +1189,6 @@ class details
 			'DL_HACK_AUTHOR_MAIL'		=> $hack_author_email,
 			'DL_HACK_AUTHOR_WEBSITE'	=> $hack_author_website,
 			'DL_HACK_DL_URL'			=> $hack_dl_url,
-			'DL_RATE_COUNT'				=> ($rating_img_data != $this->dlext_constants::DL_FALSE) ? $rating_img_data['count']['count'] : '',
-			'DL_RATE_UNDO'				=> ($rating_img_data != $this->dlext_constants::DL_FALSE) ? $rating_img_data['count']['undo'] : '',
-			'DL_RATE_TITLE'				=> ($rating_img_data != $this->dlext_constants::DL_FALSE) ? $rating_img_data['count']['title'] : '',
 
 			'S_DL_ACTION'			=> $this->helper->route('oxpus_dlext_details'),
 			'S_DL_ENABLE_RATE'		=> (isset($this->config['dl_enable_rate']) && $this->config['dl_enable_rate']) ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE,
@@ -1229,9 +1225,16 @@ class details
 
 		if ($rating_img_data != $this->dlext_constants::DL_FALSE)
 		{
+			$this->template->assign_block_vars('downloads', [
+				'DL_DF_ID'					=> $df_id,
+				'DL_RATE_COUNT'				=> $rating_img_data['count']['count'],
+				'DL_RATE_UNDO'				=> $rating_img_data['count']['undo'],
+				'DL_RATE_TITLE'				=> $rating_img_data['count']['title'],
+			]);
+
 			foreach ($rating_img_data['stars'] as $key => $data)
 			{
-				$this->template->assign_block_vars('dl_rating_img', [
+				$this->template->assign_block_vars('downloads.rating_img', [
 					'DL_RATE_STAR' 	=> $rating_img_data['stars'][$key]['icon'],
 					'DL_RATE_AJAX'	=> $rating_img_data['stars'][$key]['ajax'],
 				]);

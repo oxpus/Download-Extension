@@ -17,28 +17,22 @@
 		</ul>
 
 		<ul class="topiclist topics">
-		{% for searchresults in loops.searchresults %}
-			<li class="row{% if searchresults.S_ROW_COUNT is even %} bg1{% else %} bg2{% endif %}">
+		{% for downloads in loops.downloads %}
+			<li class="row{% if downloads.S_ROW_COUNT is even %} bg1{% else %} bg2{% endif %}">
 				<dl>
 					<dt>
 						<div class="list-inner">
-							{% if searchresults.DL_FILE_STATUS eq 'red' %}<i class="icon fa-ban fa-fw dl-red" title="{{ lang('DL_RED_EXPLAIN_PERM') }}"></i>{% endif %}
-							{% if searchresults.DL_FILE_STATUS eq 'yellow' %}<i class="icon fa-download fa-fw dl-yellow" title="{{ lang('DL_YELLOW_EXPLAIN') }}"></i>{% endif %}
-							{% if searchresults.DL_FILE_STATUS eq 'green' %}<i class="icon fa-download fa-fw dl-green" title="{{ lang('DL_GREEN_EXPLAIN') }}"></i>{% endif %}
-							{% if searchresults.DL_FILE_STATUS eq 'white' %}<i class="icon fa-download fa-fw dl-white" title="{{ lang('DL_WHITE_EXPLAIN') }}"></i>{% endif %}
-							{% if searchresults.DL_FILE_STATUS eq 'blue' %}<i class="icon fa-info-circle fa-fw dl-blue" title="{{ lang('DL_BLUE_EXPLAIN_FOOT') }}"></i>{% endif %}
-							{% if searchresults.DL_FILE_STATUS eq 'grey' %}<i class="icon fa-globe fa-fw dl-grey" title="{{ lang('DL_GREY_EXPLAIN') }}"></i>{% endif %}
-							<a href="{{ searchresults.U_DL_FILE_LINK }}" class="topictitle">{{ searchresults.DL_DESCRIPTION }}</a>
-							{% if searchresults.DL_MINI_ICON eq 'new' %}<i class="icon fa-comment-o fa-fw dl-red" title="{{ lang('DL_FILE_NEW') }}"></i>{% endif %}
-							{% if searchresults.DL_MINI_ICON eq 'edit' %}<i class="icon fa-edit fa-fw dl-blue" title="{{ lang('DL_FILE_EDIT') }}"></i>{% endif %}
+							{% INCLUDE '@oxpus_dlext/helpers/dl_filestatus.html' %}
+							<a href="{{ downloads.U_DL_FILE_LINK }}" class="topictitle">{{ downloads.DL_DESCRIPTION }}</a>
+							{% INCLUDE '@oxpus_dlext/helpers/dl_miniimg.html' %}
 							{% EVENT oxpus_dlext_search_result_download_title_append %}
-							<br />{{ lang('POST_BY_AUTHOR') }} {{ searchresults.DL_ADD_USER }} &raquo; <time datetime="{{ searchresults.DL_ADD_TIME_RFC }}">{{ searchresults.DL_ADD_TIME }}</time>
-							{% if searchresults.DL_LONG_DESC %}<hr />{{ searchresults.DL_LONG_DESC }}{% endif %}
+							<br />{{ lang('POST_BY_AUTHOR') }} {{ downloads.DL_ADD_USER }} &raquo; <time datetime="{{ downloads.DL_ADD_TIME_RFC }}">{{ downloads.DL_ADD_TIME }}</time>
+							{% if downloads.DL_LONG_DESC %}<hr />{{ downloads.DL_LONG_DESC }}{% endif %}
 						</div>
 					</dt>
 					<dd class="lastpost">
-						<div><strong>{{ lang('DL_CAT_NAME') }}{{ lang('COLON') }} </strong><a href="{{ searchresults.U_DL_CAT_LINK }}">{{ searchresults.DL_CAT_NAME }}</a></div>
-						<div>{{ searchresults.DL_FILE_NAME }}</div>
+						<div><strong>{{ lang('DL_CAT_NAME') }}{{ lang('COLON') }} </strong><a href="{{ downloads.U_DL_CAT_LINK }}">{{ downloads.DL_CAT_NAME }}</a></div>
+						<div>{{ downloads.DL_FILE_NAME }}</div>
 					</dd>
 				</dl>
 			</li>
