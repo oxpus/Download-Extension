@@ -419,4 +419,74 @@ class auth implements auth_interface
 
 		return $bug_tracker;
 	}
+
+	public function get_captcha_status($captcha_config, $cat_id)
+	{
+		$user_is_guest		= $this->dlext_constants::DL_FALSE;
+		$user_is_mod		= $this->dlext_constants::DL_FALSE;
+		$captcha_active		= $this->dlext_constants::DL_FALSE;
+		$user_is_admin		= $this->dlext_constants::DL_FALSE;
+		$user_is_founder	= $this->dlext_constants::DL_FALSE;
+
+		if (!$this->user->data['is_registered'])
+		{
+			$user_is_guest = $this->dlext_constants::DL_TRUE;
+		}
+		else
+		{
+			$cat_auth_tmp = $this->dl_cat_auth($cat_id);
+
+			if (($cat_auth_tmp['auth_mod'] || $this->user_admin()) && !$this->dlext_constants->get_value('user_banned'))
+			{
+				$user_is_mod = $this->dlext_constants::DL_TRUE;
+			}
+
+			if ($this->user_admin())
+			{
+				$user_is_admin = $this->dlext_constants::DL_TRUE;
+			}
+
+			if ($this->user->data['user_type'] == USER_FOUNDER)
+			{
+				$user_is_founder = $this->dlext_constants::DL_TRUE;
+			}
+		}
+
+		switch ($captcha_config)
+		{
+			case $this->dlext_constants::DL_CAPTCHA_PERM_OFF:
+				$captcha_active = $this->dlext_constants::DL_FALSE;
+			break;
+			case $this->dlext_constants::DL_CAPTCHA_PERM_GUESTS:
+				if (!$user_is_guest)
+				{
+					$captcha_active = $this->dlext_constants::DL_FALSE;
+				}
+			break;
+			case $this->dlext_constants::DL_CAPTCHA_PERM_USER:
+				if ($user_is_mod || $user_is_admin || $user_is_founder)
+				{
+					$captcha_active = $this->dlext_constants::DL_FALSE;
+				}
+			break;
+			case $this->dlext_constants::DL_CAPTCHA_PERM_MODS:
+				if ($user_is_admin || $user_is_founder)
+				{
+					$captcha_active = $this->dlext_constants::DL_FALSE;
+				}
+			break;
+			case $this->dlext_constants::DL_CAPTCHA_PERM_ADMINS:
+				if ($user_is_founder)
+				{
+					$captcha_active = $this->dlext_constants::DL_FALSE;
+				}
+			break;
+			case $this->dlext_constants::DL_CAPTCHA_PERM_ALL:
+			default:
+				$captcha_active = $this->dlext_constants::DL_TRUE;
+			break;
+		}
+
+		return $captcha_active;
+	}
 }

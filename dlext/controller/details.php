@@ -256,9 +256,10 @@ class details
 		$cat_auth		= $this->dlext_auth->dl_cat_auth($cat_id);
 
 		/*
-		* check the permissions
+		* Prepare all permissions for the current user
 		*/
 		$user_can_alltimes_load = $this->dlext_constants::DL_FALSE;
+		$user_is_mod = $this->dlext_constants::DL_FALSE;
 
 		if (($cat_auth['auth_mod'] || $this->dlext_auth->user_admin()) && !$this->dlext_constants->get_value('user_banned'))
 		{
@@ -266,71 +267,13 @@ class details
 			$user_can_alltimes_load = $this->dlext_constants::DL_TRUE;
 			$user_is_mod = $this->dlext_constants::DL_TRUE;
 		}
-		else
+
+		if (!$user_is_mod)
 		{
-			$modcp = 0;
-			$user_is_mod = $this->dlext_constants::DL_FALSE;
+			$modcp = $this->dlext_constants::DL_FALSE;
 		}
 
-		/*
-		* Prepare all permissions for the current user
-		*/
-		$captcha_active = $this->dlext_constants::DL_TRUE;
-		$user_is_guest = $this->dlext_constants::DL_FALSE;
-		$user_is_admin = $this->dlext_constants::DL_FALSE;
-		$user_is_founder = $this->dlext_constants::DL_FALSE;
-
-		if (!$this->user->data['is_registered'])
-		{
-			$user_is_guest = $this->dlext_constants::DL_TRUE;
-		}
-		else
-		{
-			if ($this->dlext_auth->user_admin())
-			{
-				$user_is_admin = $this->dlext_constants::DL_TRUE;
-			}
-
-			if ($this->user->data['user_type'] == USER_FOUNDER)
-			{
-				$user_is_founder = $this->dlext_constants::DL_TRUE;
-			}
-		}
-
-		switch ($this->config['dl_download_vc'])
-		{
-			case $this->dlext_constants::DL_CAPTCHA_PERM_OFF:
-				$captcha_active = $this->dlext_constants::DL_FALSE;
-			break;
-
-			case $this->dlext_constants::DL_CAPTCHA_PERM_GUESTS:
-				if (!$user_is_guest)
-				{
-					$captcha_active = $this->dlext_constants::DL_FALSE;
-				}
-			break;
-
-			case $this->dlext_constants::DL_CAPTCHA_PERM_USER:
-				if ($user_is_mod || $user_is_admin || $user_is_founder)
-				{
-					$captcha_active = $this->dlext_constants::DL_FALSE;
-				}
-			break;
-
-			case $this->dlext_constants::DL_CAPTCHA_PERM_MODS:
-				if ($user_is_admin || $user_is_founder)
-				{
-					$captcha_active = $this->dlext_constants::DL_FALSE;
-				}
-			break;
-
-			case $this->dlext_constants::DL_CAPTCHA_PERM_ADMINS:
-				if ($user_is_founder)
-				{
-					$captcha_active = $this->dlext_constants::DL_FALSE;
-				}
-			break;
-		}
+		$captcha_active = $this->dlext_auth->get_captcha_status($this->config['dl_download_vc'], $cat_id);
 
 		$this->language->add_lang('posting');
 
@@ -492,7 +435,7 @@ class details
 		$ver_tab = $this->dlext_constants::DL_FALSE;
 		$ver_can_edit = $this->dlext_constants::DL_FALSE;
 
-		if (($user_is_mod || $user_is_admin || $user_is_founder) || ($this->config['dl_edit_own_downloads'] && $dl_files['add_user'] == $this->user->data['user_id']))
+		if (($user_is_mod || $this->dlext_auth->user_admin() || $this->user->data['user_type'] == USER_FOUNDER) || ($this->config['dl_edit_own_downloads'] && $dl_files['add_user'] == $this->user->data['user_id']))
 		{
 			$ver_can_edit = $this->dlext_constants::DL_TRUE;
 		}

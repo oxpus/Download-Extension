@@ -115,4 +115,14 @@ interface auth_interface
 	 * @access public
 	 */
 	public function bug_tracker();
+
+	/**
+	 * Chech the permission to enable/disable the captcha
+	 *
+	 * @param string $captcha_config setting for captcha status from constants DL_CAPTCHA_PERM_...
+	 * @param int $cat_id category id for checks
+	 * @return bool true to use the captcha, false to disable it
+	 * @access public
+	 */
+	public function get_captcha_status($captcha_config, $cat_id);
 }
