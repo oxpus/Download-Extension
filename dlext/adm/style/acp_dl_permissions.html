@@ -24,7 +24,7 @@
 			{% else %}
 			<select name="cat_select[]" multiple="multiple" size="{{ S_DL_CATS_SELECT_SIZE }}" class="selectbox">
 				{% for cat_select in loops.cat_select %}
-				<option value="{{ cat_select.DL_VALUE }}"{% if cat_select.DL_SELECTED %} selected{% endif %}>{{ cat_select.DL_NAME }}</option>
+				<option value="{{ cat_select.DL_VALUE }}"{% if cat_select.DL_SELECTED %} selected{% endif %}>{{ cat_select.DL_SEPERATOR }}{{ cat_select.DL_NAME }}</option>
 				{% endfor %}
 			</select>
 			{% endif %}

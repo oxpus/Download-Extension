@@ -192,7 +192,7 @@ class auth implements auth_interface
 
 	public function user_auth($cat_id, $perm)
 	{
-		$dl_index = $this->dlext_cache->obtain_dl_cats();
+		$dl_index	= $this->dlext_cache->obtain_dl_cats();
 		$dl_auth	= $this->dl_auth();
 
 		if ((isset($dl_auth[$cat_id][$perm]) && $dl_auth[$cat_id][$perm]) || (isset($dl_index[$cat_id][$perm]) && $dl_index[$cat_id][$perm]) || $this->user_admin())
@@ -206,28 +206,58 @@ class auth implements auth_interface
 	public function stats_perm()
 	{
 		$dl_index = $this->dlext_cache->obtain_dl_cats();
-		$stats_view = $this->dlext_constants::DL_FALSE;
 
-		switch ($this->config['dl_stats_perm'])
+		return $this->_check_perm($dl_index, $this->config['dl_stats_perm']);
+	}
+
+	public function cat_auth_comment_read($cat_id)
+	{
+		$dl_index = $this->dlext_cache->obtain_dl_cats();
+
+		return $this->_check_perm($dl_index, $dl_index[$cat_id]['auth_cread'], $cat_id);
+	}
+
+	public function cat_auth_comment_post($cat_id)
+	{
+		$dl_index = $this->dlext_cache->obtain_dl_cats();
+
+		return $this->_check_perm($dl_index, $dl_index[$cat_id]['auth_cpost'], $cat_id);
+	}
+
+	private function _check_perm($dl_index, $perm_value, $cat_id = 0)
+	{
+		$dl_perm = $this->dlext_constants::DL_FALSE;
+
+		switch ($perm_value)
 		{
 			case $this->dlext_constants::DL_PERM_ALL:
-				$stats_view = $this->dlext_constants::DL_TRUE;
+				$dl_perm = $this->dlext_constants::DL_TRUE;
 			break;
 
 			case $this->dlext_constants::DL_PERM_USER:
 				if ($this->user->data['is_registered'])
 				{
-					$stats_view = $this->dlext_constants::DL_TRUE;
+					$dl_perm = $this->dlext_constants::DL_TRUE;
 				}
 			break;
 
 			case $this->dlext_constants::DL_PERM_MOD:
-				foreach (array_keys($dl_index) as $key)
+				if ($cat_id)
 				{
-					if ($this->user_auth($dl_index[$key]['id'], 'auth_mod'))
+					if ($this->user_auth($cat_id, 'auth_mod'))
 					{
-						$stats_view = $this->dlext_constants::DL_TRUE;
-						break;
+						$dl_perm = $this->dlext_constants::DL_TRUE;
+					}
+				}
+				else
+				{
+					foreach (array_keys($dl_index) as $key)
+					{
+						if ($this->user_auth($dl_index[$key]['id'], 'auth_mod'))
+						{
+							$dl_perm = $this->dlext_constants::DL_TRUE;
+							break;
+						}
 					}
 				}
 			break;
@@ -235,87 +265,12 @@ class auth implements auth_interface
 			case $this->dlext_constants::DL_PERM_ADMIN:
 				if ($this->user_admin())
 				{
-					$stats_view = $this->dlext_constants::DL_TRUE;
+					$dl_perm = $this->dlext_constants::DL_TRUE;
 				}
 			break;
 		}
 
-		return $stats_view;
-	}
-
-	public function cat_auth_comment_read($cat_id)
-	{
-		$dl_index = $this->dlext_cache->obtain_dl_cats();
-		$auth_cread = $this->dlext_constants::DL_FALSE;
-
-		switch ($dl_index[$cat_id]['auth_cread'])
-		{
-			case $this->dlext_constants::DL_PERM_ALL:
-				$auth_cread = $this->dlext_constants::DL_TRUE;
-				break;
-
-			case $this->dlext_constants::DL_PERM_USER:
-				if ($this->user->data['is_registered'])
-				{
-					$auth_cread = $this->dlext_constants::DL_TRUE;
-				}
-				break;
-
-			case $this->dlext_constants::DL_PERM_MOD:
-				if ($this->user_auth($cat_id, 'auth_mod'))
-				{
-					$auth_cread = $this->dlext_constants::DL_TRUE;
-				}
-				break;
-
-			case $this->dlext_constants::DL_PERM_ADMIN:
-				if ($this->user_admin())
-				{
-					$auth_cread = $this->dlext_constants::DL_TRUE;
-				}
-				break;
-		}
-
-		return $auth_cread;
-	}
-
-	public function cat_auth_comment_post($cat_id)
-	{
-		$dl_index = $this->dlext_cache->obtain_dl_cats();
-		$auth_cpost = $this->dlext_constants::DL_FALSE;
-
-		switch ($dl_index[$cat_id]['auth_cpost'])
-		{
-			case $this->dlext_constants::DL_PERM_ALL:
-				$auth_cpost = $this->dlext_constants::DL_TRUE;
-				break;
-
-			case $this->dlext_constants::DL_PERM_USER:
-				if ($this->user->data['is_registered'])
-				{
-					$auth_cpost = $this->dlext_constants::DL_TRUE;
-				}
-				break;
-
-			case $this->dlext_constants::DL_PERM_MOD:
-				if ($this->user_auth($cat_id, 'auth_mod'))
-				{
-					$auth_cpost = $this->dlext_constants::DL_TRUE;
-				}
-				break;
-
-			case $this->dlext_constants::DL_PERM_ADMIN:
-				if ($this->user_admin())
-				{
-					$auth_cpost = $this->dlext_constants::DL_TRUE;
-				}
-				break;
-
-			default:
-				$auth_cpost = $this->dlext_constants::DL_FALSE;
-		}
-
-		return $auth_cpost;
+		return $dl_perm;
 	}
 
 	public function dl_auth_users($cat_id, $perm)

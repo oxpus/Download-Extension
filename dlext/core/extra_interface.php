@@ -38,29 +38,6 @@ interface extra_interface
 	public function dl_dropdown($parent = 0, $level = 0, $select_cat = 0, $perm = 'auth_view', $rem_cat = 0);
 
 	/**
-	 * Build the download jumpbox for the download footer
-	 *
-	 * @param int $parent number of parent category
-	 * @param int $level current level, internal use only
-	 * @param int $perm fetch only categories for this user permission
-	 * @param int $rem_cat current category to preselect the option list
-	 * @param int &$catlist returns array with dropdown options
-	 * @access public
-	*/
-	public function dl_jumpbox($parent = 0, $level = 0, $perm = 'auth_view', $rem_cat = 0, &$catlist = []);
-
-	/**
-	 * Build the download multi election element for all categories
-	 *
-	 * @param int $parent number of parent category
-	 * @param int $level current level, internal use only
-	 * @param array $select_cat category ids to preselect them in the option list
-	 * @return string prebuild options for select element
-	 * @access public
-	*/
-	public function dl_cat_select($parent = 0, $level = 0, $select_cat = []);
-
-	/**
 	 * Switch user id to username and back
 	 *
 	 * @param int $user_id user_id to be converted to username

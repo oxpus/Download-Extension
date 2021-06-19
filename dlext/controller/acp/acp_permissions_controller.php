@@ -706,16 +706,17 @@ class acp_permissions_controller implements acp_permissions_interface
 			$cat_select_size = $this->dlext_constants::DL_SELECT_MAX_SIZE;
 		}
 
-		$cat_select = $this->dlext_extra->dl_cat_select(0, 0, $s_presel_cats);
+		$cat_select = $this->dlext_extra->dl_dropdown(0, 0, $s_presel_cats);
 
 		if (!empty($cat_select) && is_array($cat_select))
 		{
 			foreach (array_keys($cat_select) as $key)
 			{
 				$this->template->assign_block_vars('cat_select', [
-					'DL_VALUE'		=> $cat_select[$key]['value'],
+					'DL_VALUE'		=> $cat_select[$key]['cat_id'],
+					'DL_SEPERATOR'	=> $cat_select[$key]['seperator'],
 					'DL_SELECTED'	=> $cat_select[$key]['selected'],
-					'DL_NAME'		=> $cat_select[$key]['name'],
+					'DL_NAME'		=> $cat_select[$key]['cat_name'],
 				]);
 			}
 		}

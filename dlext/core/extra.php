@@ -101,12 +101,18 @@ class extra implements extra_interface
 
 					if ($dl_index[$cat_id]['parent'] != 0)
 					{
+						$catlist_sub = $this->dlext_constants::DL_TRUE;
+
 						for ($i = 0; $i < $level; ++$i)
 						{
 							$seperator .= $this->language->lang('DL_SEPERATOR_PREFIX');
 						}
 
 						$seperator .= $this->language->lang('DL_SEPERATOR_SUFFIX');
+					}
+					else
+					{
+						$catlist_sub = $this->dlext_constants::DL_FALSE;
 					}
 
 					if ($perm == 'auth_up' || $rem_cat)
@@ -115,13 +121,21 @@ class extra implements extra_interface
 					}
 					else
 					{
-						$selected = $this->dlext_constants::DL_FALSE;
+						if (is_array($select_cat))
+						{
+							$selected = (in_array($cat_id, $select_cat)) ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE;
+						}
+						else
+						{
+							$selected = $this->dlext_constants::DL_FALSE;
+						}
 					}
 
-					if ($rem_cat != $cat_id)
+					if ($rem_cat != $cat_id || $rem_cat == $this->dlext_constants::DL_FALSE)
 					{
-						$catlist[] = [
+						$catlist[$cat_id] = [
 							'cat_id'	=> $cat_id,
+							'sub'		=> $catlist_sub,
 							'selected'	=> $selected,
 							'seperator'	=> $seperator,
 							'cat_name'	=> $cat_name,
@@ -131,92 +145,6 @@ class extra implements extra_interface
 
 				++$level;
 				$this->dl_dropdown($cat_id, $level, $select_cat, $perm, $rem_cat, $catlist);
-				--$level;
-			}
-		}
-
-		return $catlist;
-	}
-
-	public function dl_jumpbox($parent = 0, $level = 0, $perm = 'auth_view', $rem_cat = 0, &$catlist = [])
-	{
-		$dl_index	= $this->dlext_auth->dl_index();
-		$dl_auth	= $this->dlext_auth->dl_auth();
-
-		if (empty($dl_index))
-		{
-			return '';
-		}
-
-		foreach (array_keys($dl_index) as $cat_id)
-		{
-			if (isset($dl_index[$cat_id]['parent']) && $dl_index[$cat_id]['parent'] == $parent)
-			{
-				if (isset($dl_index[$cat_id][$perm]) && $dl_index[$cat_id][$perm] || isset($dl_auth[$cat_id][$perm]) && $dl_auth[$cat_id][$perm] || $this->dlext_auth->user_admin())
-				{
-					$catlist[$cat_id]['name'] = $dl_index[$cat_id]['cat_name'];
-
-					if ($dl_index[$cat_id]['parent'] != 0)
-					{
-						$catlist[$cat_id]['sub'] = $this->dlext_constants::DL_TRUE;
-					}
-					else
-					{
-						$catlist[$cat_id]['sub'] = $this->dlext_constants::DL_FALSE;
-					}
-
-					$catlist[$cat_id]['level'] = '';
-
-					for ($i = 0; $i < $level; ++$i)
-					{
-						$catlist[$cat_id]['level'] .= $this->language->lang('DL_SEPERATOR_PREFIX');
-					}
-
-					$catlist[$cat_id]['level'] .= $this->language->lang('DL_SEPERATOR_SUFFIX');
-
-					++$level;
-					$this->dl_jumpbox($cat_id, $level, $perm, $rem_cat, $catlist);
-					--$level;
-				}
-			}
-		}
-
-		return $catlist;
-	}
-
-	public function dl_cat_select($parent = 0, $level = 0, $select_cat = [], &$catlist = [])
-	{
-		$dl_index = $this->dlext_auth->dl_index();
-
-		if (empty($dl_index))
-		{
-			return '';
-		}
-
-		foreach (array_keys($dl_index) as $cat_id)
-		{
-			if (isset($dl_index[$cat_id]['parent']) && $dl_index[$cat_id]['parent'] == $parent)
-			{
-				$cat_name = $dl_index[$cat_id]['cat_name'];
-
-				$seperator = '';
-
-				if ($dl_index[$cat_id]['parent'] != 0)
-				{
-					for ($i = 1; $i < $level; ++$i)
-					{
-						$seperator .= $this->language->lang('DL_SEPERATOR_PREFIX');
-					}
-
-					$seperator .= $this->language->lang('DL_SEPERATOR_SUFFIX');
-				}
-
-				$selected = (in_array($cat_id, $select_cat)) ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE;
-
-				$catlist[] = ['value' => $cat_id, 'selected' => $selected, 'name' => $seperator . $cat_name];
-
-				++$level;
-				$this->dl_cat_select($cat_id, $level, $select_cat, $catlist);
 				--$level;
 			}
 		}

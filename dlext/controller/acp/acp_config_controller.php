@@ -864,7 +864,7 @@ class acp_config_controller implements acp_config_interface
 
 		if ($value != $this->dlext_constants::DL_RSS_CATS_ALL)
 		{
-			$rss_cats = $this->dlext_extra->dl_cat_select(0, 0, array_map('intval', explode(',', $this->config['dl_rss_cats_select'])));
+			$rss_cats = $this->dlext_extra->dl_dropdown(0, 0, array_map('intval', explode(',', $this->config['dl_rss_cats_select'])));
 
 			$s_select .= '<br /><select name="dl_rss_cats_select[]" id="dl_rss_cats_select" multiple="multiple" size="10">';
 
@@ -872,14 +872,14 @@ class acp_config_controller implements acp_config_interface
 			{
 				foreach (array_keys($rss_cats) as $key)
 				{
-					$s_select .= '<option value="' . $rss_cats[$key]['value'] . '"';
+					$s_select .= '<option value="' . $rss_cats[$key]['cat_id'] . '"';
 
 					if ($rss_cats[$key]['selected'])
 					{
 						$s_select .= ' selected';
 					}
 
-					$s_select .= '>' . $rss_cats[$key]['name'] . '</option>';
+					$s_select .= '>' . $rss_cats[$key]['seperator'] . $rss_cats[$key]['cat_name'] . '</option>';
 				}
 			}
 

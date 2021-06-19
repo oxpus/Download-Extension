@@ -200,14 +200,14 @@ class footer implements footer_interface
 				$catlist	= [];
 				$cat		= $this->request->variable('cat', 0);
 
-				$this->dlext_extra->dl_jumpbox(0, 0, 'auth_view', $cat, $catlist);
+				$this->dlext_extra->dl_dropdown(0, 0, $cat, 'auth_view', $this->dlext_constants::DL_FALSE, $catlist, $this->dlext_constants::DL_FALSE);
 
 				foreach ($catlist as $cat_id => $data)
 				{
 					$this->template->assign_block_vars('dl_jumpbox', [
-						'DL_CAT_NAME'	=> $data['name'],
+						'DL_CAT_NAME'	=> $data['cat_name'],
 						'DL_CAT_SUB'	=> ($data['sub']) ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE,
-						'DL_CAT_LEVEL'	=> $data['level'],
+						'DL_CAT_LEVEL'	=> $data['seperator'],
 						'U_DL_CAT_LINK'	=> $this->helper->route('oxpus_dlext_index', ['cat' => $cat_id]),
 					]);
 				}
