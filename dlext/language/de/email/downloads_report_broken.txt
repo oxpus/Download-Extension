@@ -2,7 +2,7 @@ Subject: Defekter Download
 
 Hallo {{ USERNAME }},
 
-du bekommst diese Email, weil "{{ REPORTER }}" einen defekten Download auf "{{ SITENAME }}" gemeldet hat.
+du bekommst diese E-Mail, weil "{{ REPORTER }}" einen defekten Download auf "{{ SITENAME }}" gemeldet hat.
 Verwende den nachfolgenen Link, um der Meldung nachzugehen:
 
 ---------------------------

@@ -35,6 +35,7 @@ class upload
 
 	protected $dlext_auth;
 	protected $dlext_extra;
+	protected $dlext_files;
 	protected $dlext_format;
 	protected $dlext_main;
 	protected $dlext_physical;
@@ -67,6 +68,7 @@ class upload
 	* @param \phpbb\filesystem\filesystem			$filesystem
 	* @param \oxpus\dlext\core\auth					$dlext_auth
 	* @param \oxpus\dlext\core\extra				$dlext_extra
+	* @param \oxpus\dlext\core\files				$dlext_files
 	* @param \oxpus\dlext\core\format				$dlext_format
 	* @param \oxpus\dlext\core\main					$dlext_main
 	* @param \oxpus\dlext\core\physical				$dlext_physical
@@ -96,6 +98,7 @@ class upload
 		\phpbb\filesystem\filesystem $filesystem,
 		\oxpus\dlext\core\auth $dlext_auth,
 		\oxpus\dlext\core\extra $dlext_extra,
+		\oxpus\dlext\core\files $dlext_files,
 		\oxpus\dlext\core\format $dlext_format,
 		\oxpus\dlext\core\main $dlext_main,
 		\oxpus\dlext\core\physical $dlext_physical,
@@ -131,6 +134,7 @@ class upload
 
 		$this->dlext_auth				= $dlext_auth;
 		$this->dlext_extra				= $dlext_extra;
+		$this->dlext_files				= $dlext_files;
 		$this->dlext_format				= $dlext_format;
 		$this->dlext_main				= $dlext_main;
 		$this->dlext_physical			= $dlext_physical;
@@ -696,6 +700,11 @@ class upload
 					}
 				}
 
+				// Purge the files cache
+				$this->cache->destroy('_dlext_cat_counts');
+				$this->cache->destroy('_dlext_file_p');
+				$this->cache->destroy('_dlext_file_preset');
+
 				$approve_message = ($approve) ? '' : '<br />' . $this->language->lang('DL_MUST_BE_APPROVED');
 
 				$message = $this->language->lang('DL_DOWNLOAD_ADDED') . $thumb_message . $approve_message . '<br /><br />' . $this->language->lang('CLICK_RETURN_DOWNLOADS', '<a href="' . $this->helper->route('oxpus_dlext_index', ['cat' => $cat_id]) . '">', '</a>');
@@ -703,11 +712,6 @@ class upload
 				{
 					$message .= '<br /><br />' . $this->language->lang('DL_UPLOAD_ONE_MORE', '<a href="' . $this->helper->route('oxpus_dlext_upload', ['cat_id' => $cat_id]) . '">', '</a>');
 				}
-
-				// Purge the files cache
-				$this->cache->destroy('_dlext_cat_counts');
-				$this->cache->destroy('_dlext_file_p');
-				$this->cache->destroy('_dlext_file_preset');
 
 				meta_refresh(3, $this->helper->route('oxpus_dlext_index', ['cat' => $cat_id]));
 

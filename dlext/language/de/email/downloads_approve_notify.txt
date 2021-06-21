@@ -2,7 +2,7 @@ Subject: Neuer Download
 
 Hallo {{ USERNAME }},
 
-du bekommst diese Email, weil es auf "{{ SITENAME }}" einen neuen bzw. geänderten Download in der Kategorie "{{ CATEGORY }}" gibt, der freigegeben werden muss:
+du bekommst diese E-Mail, weil es auf "{{ SITENAME }}" einen neuen bzw. geänderten Download in der Kategorie "{{ CATEGORY }}" gibt, der freigegeben werden muss:
 
 ---------------------------
 {{ DOWNLOAD }}

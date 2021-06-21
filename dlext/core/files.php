@@ -252,7 +252,12 @@ class files implements files_interface
 		}
 	}
 
-	public function _dl_check_fields($table, $fields)
+	public function dl_submit_download($module, $mode, $df_id = 0)
+	{
+
+	}
+
+	private function _dl_check_fields($table, $fields)
 	{
 		$table_fields_data = $this->_dl_sql_allowed_fields($table);
 		$table_fields = $table_fields_data['fields'];
@@ -273,7 +278,7 @@ class files implements files_interface
 		return implode(', ', $fields_ary);
 	}
 
-	public function _dl_check_fields_ary($table, $fields_ary, $part = 'where')
+	private function _dl_check_fields_ary($table, $fields_ary, $part = 'where')
 	{
 		$table_fields_data = $this->_dl_sql_allowed_fields($table);
 		$table_fields = $table_fields_data['fields'];
@@ -378,7 +383,7 @@ class files implements files_interface
 		return implode (' ', $sql_ary);
 	}
 
-	public function _dl_sql_allowed_fields($table)
+	private function _dl_sql_allowed_fields($table)
 	{
 		$table_fields['downloads']['alias'] = 'd.';
 

@@ -2,7 +2,7 @@ Subject: Neuer Downloadkommentar
 
 Hallo {{ USERNAME }},
 
-du bekommst diese Email, weil es auf "{{ SITENAME }}" einen neuen bzw. geänderten Downloadkommentar für "{{ DOWNLOAD }}" in der Kategorie "{{ CATEGORY }}" gibt, der freigegeben werden muss.
+du bekommst diese E-Mail, weil es auf "{{ SITENAME }}" einen neuen bzw. geänderten Downloadkommentar für "{{ DOWNLOAD }}" in der Kategorie "{{ CATEGORY }}" gibt, der freigegeben werden muss.
 
 Wenn du diesen Kommentar freigeben willst, dann klicke auf folgenden Link:
 

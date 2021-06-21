@@ -58,32 +58,12 @@ interface files_interface
 	public function dl_sorting($sort_by, $order, &$sql_sort_by = '', &$sql_order = '');
 
 	/**
-	 * Check the given fields to be valid and to secure the sql statement
+	 * Save a new or edited download in the database and store uploaded files into predefined folders
 	 *
-	 * @param string $table The name of the table to select from
-	 * @param array $fields fieldnames for checking out
-	 * @return string fieldlist preformatted for select statement
+	 * @param string $module to decide between ACP and board functions
+	 * @param string $mode add a new or update a stored download
+	 * @param int $df_id download id to update the dataset and physical files
 	 * @access public
 	*/
-	public function _dl_check_fields($table, $fields);
-
-	/**
-	 * Check the given fields to be valid and to secure the sql statement
-	 *
-	 * @param string $table The name of the table to select from
-	 * @param array $fields_ary fieldname value pairs for checking out
-	 * @param string $part choose where|order to take place in the sql statement
-	 * @return string fieldlist preformatted for select statement
-	 * @access public
-	*/
-	public function _dl_check_fields_ary($table, $fields_ary, $part);
-
-	/**
-	 * Returns the valid field names of a given table
-	 *
-	 * @param string $table The name of the table to select from
-	 * @return array doible array with table alias/fields
-	 * @access public
-	*/
-	public function _dl_sql_allowed_fields($table);
+	public function dl_submit_download($module, $mode, $df_id = 0);
 }

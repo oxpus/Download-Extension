@@ -29,15 +29,15 @@
 	<fieldset>
 
 		<dl>
-			<dt><label class="dl-green">{{ lang('DL_VERSION_ADD_NEW') }}</label></dt>
+			<dt><label class="dl-text-adnew">{{ lang('DL_VERSION_ADD_NEW') }}</label></dt>
 			<dd><label><input type="radio" name="file_ver_opt" class="radio" value="0" /></label></dd>
 		</dl>
 		<dl>
-			<dt><label class="dl-blue">{{ lang('DL_VERSION_ADD_OLD') }}</label></dt>
+			<dt><label class="dl-text-adold">{{ lang('DL_VERSION_ADD_OLD') }}</label></dt>
 			<dd><label><input type="radio" name="file_ver_opt" class="radio" value="1" /></label></dd>
 		</dl>
 		<dl>
-			<dt><label class="dl-yellow">{{ lang('DL_VERSION_REPLACE') }}</label></dt>
+			<dt><label class="dl-text-vreplace">{{ lang('DL_VERSION_REPLACE') }}</label></dt>
 			<dd>
 				<input type="radio" name="file_ver_opt" class="radio" value="2" checked /> &raquo;
 				<select name="file_version">
@@ -76,7 +76,7 @@
 <div class="panel dl-edit-box-light">
 	<div class="inner">
 
-	<h3>{{ lang('DL_FILES_TITLE') }}</h3>
+	<h3>{{ lang('DL_DOWNLOAD') }}</h3>
 
 	{% if S_DL_UPLOAD_TRAFFIC %}
 	<div class="rules">
@@ -361,10 +361,14 @@
 {% endif %}
 {% endfor %}
 
-<fieldset>
+<div class="dl-edit-version panel dl-edit-box-light">
+	<div class="inner">
 
+	<h3>{{ lang('OPTIONS') }}</h3>
+
+	<fieldset>
 	{% if S_DL_MODCP %}
-	<dl class="navbar dl-edit-box-medium-green">
+	<dl class="navbar dl-edit-box-medium">
 		<dt>
 			<label>{{ lang('DL_APPROVE') }}</label>
 		</dt>
@@ -408,7 +412,10 @@
 	</dl>
 	{% endif %}
 
-</fieldset>
+	</fieldset>
+
+	</div>
+</div>
 
 <fieldset class="submit-buttons dl-right">
 	<input type="submit" name="submit" value="{{ lang('SUBMIT') }}" class="button{% if S_DL_MCP %}1{% else %} icon-button{% endif %}" />

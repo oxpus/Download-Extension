@@ -309,6 +309,7 @@ services:
             - '@filesystem'
             - '@oxpus.dlext.core.auth'
             - '@oxpus.dlext.core.extra'
+            - '@oxpus.dlext.core.files'
             - '@oxpus.dlext.core.format'
             - '@oxpus.dlext.core.main'
             - '@oxpus.dlext.core.physical'

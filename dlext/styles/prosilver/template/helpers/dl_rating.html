@@ -2,11 +2,11 @@
 	{% if downloads.DL_RATE_TITLE %}<span class="dl-rating" title="{{ downloads.DL_RATE_TITLE}}">{% endif %}
 	{% for rating_img in downloads.rating_img %}
 	{% if rating_img.DL_RATE_AJAX %}<a href="#" class="dl-rating-img dl-rate-add" data-dfid="{{ downloads.DL_DF_ID }}" data-points="{{ rating_img.DL_RATE_AJAX }}">{% endif %}
-	{% if rating_img.DL_RATE_STAR eq 'yes' %}<i class="iconify o-icon-src-fa o-icon dl-green"></i>{% endif %}
-	{% if rating_img.DL_RATE_STAR eq 'no' %}<i class="iconify o-icon-src-fa o-icon dl-yellow"></i>{% endif %}
+	{% if rating_img.DL_RATE_STAR eq 'yes' %}<i class="icon fa-star fa-fw dl-green"></i>{% endif %}
+	{% if rating_img.DL_RATE_STAR eq 'no' %}<i class="icon fa-star-o fa-fw dl-yellow"></i>{% endif %}
 	{% if rating_img.DL_RATE_AJAX %}</a>{% endif %}
 	{% endfor %}
-	{% if downloads.DL_RATE_UNDO %}<a href="#" class="dl-rating-img dl-rate-del" data-dfid="{{ downloads.DL_DF_ID }}"><i class="iconify fa-times-circle fa-fw dl-red"></i></a>{% endif %}
+	{% if downloads.DL_RATE_UNDO %}<a href="#" class="dl-rating-img dl-rate-del" data-dfid="{{ downloads.DL_DF_ID }}"><i class="icon fa-times-circle fa-fw dl-red"></i></a>{% endif %}
 	{% if downloads.DL_RATE_COUNT != '-' %}<span class="dl-rating-count">{{ downloads.DL_RATE_COUNT }}</span>{% endif %}
 	{% if downloads.DL_RATE_TITLE %}</span>{% endif %}
 </div>

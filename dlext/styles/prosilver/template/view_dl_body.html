@@ -151,12 +151,12 @@
 				<dt><label>{{ lang('DL_FILE_SIZE') }}</label></dt>
 				<dd class="lastpost dl-cell-block"><label>{{ DL_FILE_SIZE }}</label></dd>
 			</dl>
-
+			{% if U_TEAM and not S_IS_BOT %}
 			<dl>
 				<dt><label>{{ lang('DL_KLICKS') }} / {{ lang('DL_OVERALL_KLICKS') }}</label></dt>
 				<dd class="lastpost dl-cell-block"><label>{{ DL_FILE_KLICKS }} / {{ DL_FILE_OVERALL_KLICKS }}</label></dd>
 			</dl>
-
+			{% endif %}
 			{% if S_DL_HACKLIST and DL_HACK_DL_URL %}
 			<dl>
 				<dt><label>{{ lang('DL_HACK_DL_URL') }}</label></dt>
