@@ -391,7 +391,7 @@ class auth implements auth_interface
 		{
 			$cat_auth_tmp = $this->dl_cat_auth($cat_id);
 
-			if (($cat_auth_tmp['auth_mod'] || $this->user_admin()) && !$this->dlext_constants->get_value('user_banned'))
+			if ($cat_auth_tmp['auth_mod'] || $this->user_admin())
 			{
 				$user_is_mod = $this->dlext_constants::DL_TRUE;
 			}

@@ -1,6 +1,5 @@
 parameters:
     oxpus.dlext.tables.dl_auth: '%core.table_prefix%dl_auth'
-    oxpus.dlext.tables.dl_banlist: '%core.table_prefix%dl_banlist'
     oxpus.dlext.tables.dl_tracker: '%core.table_prefix%dl_bug_tracker'
     oxpus.dlext.tables.dl_bug_history: '%core.table_prefix%dl_bug_history'
     oxpus.dlext.tables.dl_cat: '%core.table_prefix%downloads_cat'

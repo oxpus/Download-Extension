@@ -36,7 +36,6 @@ $lang = array_merge($lang, [
 	'ACL_A_DL_FILES'		=> 'Can manage the downloads',
 	'ACL_A_DL_PERMISSIONS'	=> 'Can manage the permissions',
 	'ACL_A_DL_STATS'		=> 'Can view and manage the statistics',
-	'ACL_A_DL_BANLIST'		=> 'Can manage the banlist',
 	'ACL_A_DL_BLACKLIST'	=> 'Can manage the file extension blacklist',
 	'ACL_A_DL_TOOLBOX'		=> 'Can use the toolbox',
 	'ACL_A_DL_FIELDS'		=> 'Can manage user defined fields',

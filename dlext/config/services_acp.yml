@@ -1,16 +1,4 @@
 services:
-    oxpus.dlext.acp_banlist_controller:
-        class: oxpus\dlext\controller\acp\acp_banlist_controller
-        public: true
-        arguments:
-            - '@language'
-            - '@request'
-            - '@template'
-            - '@dbal.conn'
-            - '@log'
-            - '@user'
-            - '@oxpus.dlext.helpers.constants'
-            - '%oxpus.dlext.tables.dl_banlist%'
     oxpus.dlext.acp_cat_edit_controller:
         class: oxpus\dlext\controller\acp\acp_cat_edit_controller
         public: true

@@ -11,7 +11,7 @@
 namespace oxpus\dlext\core;
 
 /**
- * Interface for acp_banlist_controller
+ * Interface for auth_controller
  *
  */
 interface auth_interface

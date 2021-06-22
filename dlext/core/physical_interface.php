@@ -12,7 +12,7 @@
 namespace oxpus\dlext\core;
 
 /**
- * Interface for acp_banlist_controller
+ * Interface for physical_controller
  *
  */
 interface physical_interface

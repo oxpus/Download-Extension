@@ -12,6 +12,9 @@
 
 <h2>{{ lang('USERS') }}{{ lang('COLON') }} {{ DL_CHECK_USERNAME }}</h2>
 
+<br />
+<p><strong>{{ lang('DL_PC_ADMIN') }}{{ lang('COLON') }}</strong> {% if DL_USER_IS_ADMIN %}<strong class="dl-red">{{ lang('YES') }}</strong>{% else %}<span class="dl-green">{{ lang('NO') }}</span>{% endif %}</p>
+
 <table cellspacing="1">
 	<col class="col1" /><col class="col2" /><col class="col1" /><col class="col2" />
 <thead>
@@ -23,12 +26,6 @@
 </tr>
 </thead>
 <tbody>
-<tr>
-    <td>{{ lang('DL_PC_ADMIN') }}{{ lang('COLON') }}</td>
-    <td>{% if DL_USER_IS_ADMIN %}<strong class="dl-green">{{ lang('YES') }}</strong>{% else %}<span class="dl-red">{{ lang('NO') }}</span>{% endif %}</td>
-    <td>{{ lang('DL_PC_BANNED') }}{{ lang('COLON') }}</td>
-    <td>{% if DL_USER_IS_BANNED %}<strong class="dl-green">{{ lang('YES') }}</strong>{% else %}<span class="dl-red">{{ lang('NO') }}</span>{% endif %}</td>
-</tr>
 <tr>
     <td>{{ lang('DL_PC_VIEW_STATS') }}{{ lang('COLON') }}</td>
     <td>{% if DL_USER_CAN_VIEW_STATS %}<strong class="dl-green">{{ lang('YES') }}</strong>{% else %}<span class="dl-red">{{ lang('NO') }}</span>{% endif %}</td>

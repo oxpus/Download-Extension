@@ -150,7 +150,6 @@ class acp_perm_check_controller implements acp_perm_check_interface
 				// General user permissions
 				$this->template->assign_vars([
 					'DL_USER_IS_ADMIN'         => $this->dlext_auth->user_admin(),
-					'DL_USER_IS_BANNED'        => $this->dlext_constants->get_value('user_banned'),
 					'DL_USER_CAN_VIEW_STATS'   => $this->dlext_auth->stats_perm(),
 					'DL_USER_CAN_SEE_TRACKER'  => $this->dlext_auth->bug_tracker(),
 					'DL_USER_HAVE_TRAFFIC'     => $this->dlext_format->dl_size($this->user->data['user_traffic']),

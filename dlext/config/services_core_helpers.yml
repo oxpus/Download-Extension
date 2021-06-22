@@ -8,7 +8,6 @@ services:
             - '@user'
             - '@dbal.conn'
             - '@filesystem'
-            - '%oxpus.dlext.tables.dl_banlist%'
     oxpus.dlext.helpers.footer:
         class: oxpus\dlext\core\helpers\footer
         public: true

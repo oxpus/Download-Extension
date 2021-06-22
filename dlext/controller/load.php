@@ -215,7 +215,7 @@ class load
 		// Prepare the captcha permissions for the current user
 		$user_is_mod		= $this->dlext_constants::DL_FALSE;
 
-		if (($cat_auth['auth_mod'] || $this->dlext_auth->user_admin()) && !$this->dlext_constants->get_value('user_banned'))
+		if (($cat_auth['auth_mod'] || $this->dlext_auth->user_admin()))
 		{
 			$user_is_mod = $this->dlext_constants::DL_TRUE;
 		}

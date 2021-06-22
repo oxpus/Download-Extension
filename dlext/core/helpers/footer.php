@@ -323,13 +323,11 @@ class footer implements footer_interface
 				'U_DL_OVERALL_VIEW'			=> ($this->config['dl_overview_link_onoff']) ? $this->helper->route('oxpus_dlext_overall') : '',
 			]);
 
-			$s_separate_stats = $this->dlext_constants::DL_FALSE;
-
 			if ($this->config['dl_show_footer_stat'] && !$this->config['dl_traffic_off'])
 			{
 				$remain_traffic = $this->config['dl_overall_traffic'] - (int) $this->config['dl_remain_traffic'];
 
-				if ($this->user->data['is_registered'] && $this->dlext_constants->get_value('overall_traffics') == $this->dlext_constants::DL_TRUE)
+				if ($this->user->data['is_registered'] && $this->dlext_constants->get_value('overall_traffics'))
 				{
 					if ($remain_traffic <= 0)
 					{
@@ -343,8 +341,6 @@ class footer implements footer_interface
 						}
 
 						$this->template->assign_var('DL_NO_OVERALL_TRAFFIC', $text_no_more_remain_traffic);
-
-						$s_separate_stats = $this->dlext_constants::DL_TRUE;
 					}
 					else
 					{
@@ -356,14 +352,12 @@ class footer implements footer_interface
 						}
 
 						$this->template->assign_var('DL_REMAIN_TRAFFIC', $remain_text_out);
-
-						$s_separate_stats = $this->dlext_constants::DL_TRUE;
 					}
 				}
 
 				if ($this->user->data['is_registered'] && $this->dlext_constants->get_value('users_traffics'))
 				{
-					$user_traffic			= ($this->user->data['user_traffic'] > $remain_traffic && $this->dlext_constants->get_value('overall_traffics') == $this->dlext_constants::DL_TRUE) ? $remain_traffic : $this->user->data['user_traffic'];
+					$user_traffic			= ($this->user->data['user_traffic'] > $remain_traffic && $this->dlext_constants->get_value('overall_traffics')) ? $remain_traffic : $this->user->data['user_traffic'];
 					$user_traffic_out		= $this->dlext_format->dl_size($user_traffic, 2);
 					$user_account_traffic	= $this->language->lang('DL_ACCOUNT', $user_traffic_out);
 
@@ -373,8 +367,6 @@ class footer implements footer_interface
 					}
 
 					$this->template->assign_var('DL_ACCOUNT_TRAFFIC', ($this->user->data['user_id'] != ANONYMOUS) ? $user_account_traffic : '');
-
-					$s_separate_stats = $this->dlext_constants::DL_TRUE;
 				}
 
 				if ($this->user->data['user_type'] == USER_FOUNDER || $this->dlext_constants->get_value('guests_traffics'))
@@ -390,8 +382,6 @@ class footer implements footer_interface
 						}
 
 						$this->template->assign_var('DL_NO_OVERALL_GUEST_TRAFFIC', $text_no_overall_guest_traffic);
-
-						$s_separate_stats = $this->dlext_constants::DL_TRUE;
 					}
 					else
 					{
@@ -404,21 +394,8 @@ class footer implements footer_interface
 						}
 
 						$this->template->assign_var('DL_REMAIN_GUEST_TRAFFIC', $remain_guest_text_out);
-
-						$s_separate_stats = $this->dlext_constants::DL_TRUE;
 					}
 				}
-			}
-			else
-			{
-				$this->template->assign_var('S_DL_HIDE_FOOTER_DATA', $this->dlext_constants::DL_TRUE);
-			}
-
-			$this->template->assign_var('S_DL_SERARATE_STATS', $s_separate_stats);
-
-			if ($this->config['dl_traffic_off'])
-			{
-				$this->template->assign_var('S_DL_TRAFFIC_OFF', $this->dlext_constants::DL_TRUE);
 			}
 
 			if ($this->config['dl_show_footer_legend'])

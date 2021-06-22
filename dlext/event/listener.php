@@ -44,7 +44,6 @@ class listener implements EventSubscriberInterface
 
 	protected $dl_index;
 
-	protected $dlext_table_dl_banlist;
 	protected $dlext_table_dl_cat_traf;
 	protected $dlext_table_dl_comments;
 	protected $dlext_table_dl_favorites;
@@ -72,7 +71,6 @@ class listener implements EventSubscriberInterface
 	* @param \oxpus\dlext\core\main 				$dlext_main
 	* @param \oxpus\dlext\core\privacy 				$dlext_privacy
 	* @param \oxpus\dlext\core\helpers\constants 	$dlext_constants
-	* @param string									$dlext_table_dl_banlist
 	* @param string									$dlext_table_dl_cat_traf
 	* @param string									$dlext_table_dl_comments
 	* @param string									$dlext_table_dl_favorites
@@ -98,7 +96,6 @@ class listener implements EventSubscriberInterface
 		\oxpus\dlext\core\main $dlext_main,
 		\oxpus\dlext\core\privacy $dlext_privacy,
 		\oxpus\dlext\core\helpers\constants $dlext_constants,
-		$dlext_table_dl_banlist,
 		$dlext_table_dl_cat_traf,
 		$dlext_table_dl_comments,
 		$dlext_table_dl_favorites,
@@ -120,7 +117,6 @@ class listener implements EventSubscriberInterface
 		$this->cache					= $cache;
 		$this->filesystem				= $filesystem;
 
-		$this->dlext_table_dl_banlist		= $dlext_table_dl_banlist;
 		$this->dlext_table_dl_cat_traf		= $dlext_table_dl_cat_traf;
 		$this->dlext_table_dl_comments		= $dlext_table_dl_comments;
 		$this->dlext_table_dl_favorites		= $dlext_table_dl_favorites;
@@ -331,7 +327,7 @@ class listener implements EventSubscriberInterface
 
 	public function core_update_username($event)
 	{
-		$update_ary = [$this->dlext_table_dl_banlist, $this->dlext_table_dl_comments, $this->dlext_table_dl_stats];
+		$update_ary = [$this->dlext_table_dl_comments, $this->dlext_table_dl_stats];
 
 		foreach ($update_ary as $table)
 		{
@@ -469,7 +465,6 @@ class listener implements EventSubscriberInterface
 		$permission['a_dl_files']		= ['lang' => 'ACL_A_DL_FILES',			'cat' => 'downloads'];
 		$permission['a_dl_permissions']	= ['lang' => 'ACL_A_DL_PERMISSIONS',	'cat' => 'downloads'];
 		$permission['a_dl_stats']		= ['lang' => 'ACL_A_DL_STATS',			'cat' => 'downloads'];
-		$permission['a_dl_banlist']		= ['lang' => 'ACL_A_DL_BANLIST',		'cat' => 'downloads'];
 		$permission['a_dl_blacklist']	= ['lang' => 'ACL_A_DL_BLACKLIST',		'cat' => 'downloads'];
 		$permission['a_dl_toolbox']		= ['lang' => 'ACL_A_DL_TOOLBOX',		'cat' => 'downloads'];
 		$permission['a_dl_fields']		= ['lang' => 'ACL_A_DL_FIELDS',			'cat' => 'downloads'];

@@ -30,7 +30,6 @@ services:
             - '@oxpus.dlext.core.main'
             - '@oxpus.dlext.core.privacy'
             - '@oxpus.dlext.helpers.constants'
-            - '%oxpus.dlext.tables.dl_banlist%'
             - '%oxpus.dlext.tables.dl_cat_traf%'
             - '%oxpus.dlext.tables.dl_comments%'
             - '%oxpus.dlext.tables.dl_favorites%'

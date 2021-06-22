@@ -11,23 +11,22 @@ function dl_footer_show_area(area, status)
 	if (status == true)
 	{
 		$("#" + area).fadeIn("slow");
-		$("#dl_help_bg").css("opacity", "0.7");
-		$("#dl_help_bg").fadeIn("fast");
 	}
 	else
 	{
 		$("#" + area).fadeOut("fast");
-		$("#dl_help_bg").fadeOut("fast");
 	}
 }
 
 $(document).ready(function () {
 	$('#dl-legend-footer').click(function (ev) {
+		dl_footer_show_area('dl-footer', false);
 		dl_footer_show_area('dl-legend', true);
 		ev.stopPropagation();
 	});
 
 	$('#dl-stats-footer').click(function (ev) {
+		dl_footer_show_area('dl-legend', false);
 		dl_footer_show_area('dl-footer', true);
 		ev.stopPropagation();
 	});

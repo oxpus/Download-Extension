@@ -14,41 +14,99 @@
 
 {% if S_DL_FOOTER_LEGEND %}
 <div class="jumpbox button legend-footer" id="dl-legend-footer"><i class="icon fa-map-signs fa-fw" aria-hidden="true"></i> <span>{{ lang('LEGEND') }}</span></div>
-<div id="dl-legend" class="footer-box"><a class="icon dl-close-footer" data-area="legend"></a>
-<h3>{{ lang('LEGEND') }}</h3>
-<dl>
-	<dt>
-		<i class="icon fa-info-circle fa-fw dl-blue"></i> {{ lang('DL_BLUE_EXPLAIN_FOOT') }}<br />
-		<i class="icon fa-ban fa-fw dl-red"></i> {{ lang('DL_RED_EXPLAIN') }}<br />
-		<i class="icon fa-download fa-fw dl-green"></i> {{ lang('DL_GREEN_EXPLAIN') }}<br />
-		<i class="icon fa-download fa-fw dl-grey"></i> {{ lang('DL_GREY_EXPLAIN') }}<br />
-		<i class="icon fa-download fa-fw dl-yellow"></i> {{ lang('DL_YELLOW_EXPLAIN') }}<br />
-		<i class="icon fa-download fa-fw dl-white"></i> {{ lang('DL_WHITE_EXPLAIN') }}<br />
-		<i class="icon fa-comment-o fa-fw dl-red"></i> {{ lang('DL_NEW') }}<br />
-		<i class="icon fa-edit fa-fw dl-blue"></i> {{ lang('DL_EDIT') }}<br />
- 	</dt>
-</dl>
+<div id="dl-legend" class="dl-legend-box"><a class="icon dl-close-footer" data-area="legend"></a>
+
+	<h3>{{ lang('LEGEND') }}</h3>
+
+	<ul class="topiclist">
+		<li>
+			<dl>
+				<dt><i class="icon fa-info-circle fa-fw dl-blue"></i></dt>
+				<dd>{{ lang('DL_BLUE_EXPLAIN_FOOT') }}</dd>
+			</dl>
+		</li>
+		<li>
+			<dl>
+				<dt><i class="icon fa-ban fa-fw dl-red"></i></dt>
+				<dd>{{ lang('DL_RED_EXPLAIN') }}</dd>
+			</dl>
+		</li>
+		<li>
+			<dl>
+				<dt><i class="icon fa-download fa-fw dl-green"></i></dt>
+				<dd>{{ lang('DL_GREEN_EXPLAIN') }}</dd>
+			</dl>
+		</li>
+		<li>
+			<dl>
+				<dt><i class="icon fa-download fa-fw dl-grey"></i></dt>
+				<dd>{{ lang('DL_GREY_EXPLAIN') }}</dd>
+			</dl>
+		</li>
+		<li>
+			<dl>
+				<dt><i class="icon fa-download fa-fw dl-yellow"></i></dt>
+				<dd>{{ lang('DL_YELLOW_EXPLAIN') }}</dd>
+			</dl>
+		</li>
+		<li>
+			<dl>
+				<dt><i class="icon fa-download fa-fw dl-white"></i></dt>
+				<dd>{{ lang('DL_WHITE_EXPLAIN') }}</dd>
+			</dl>
+		</li>
+		<li>
+			<dl>
+				<dt><i class="icon fa-comment-o fa-fw dl-red"></i></dt>
+				<dd>{{ lang('DL_NEW') }}</dd>
+			</dl>
+		</li>
+		<li>
+			<dl>
+				<dt><i class="icon fa-edit fa-fw dl-blue"></i></dt>
+				<dd>{{ lang('DL_EDIT') }}</dd>
+			</dl>
+		</li>
+	</ul>
 </div>
 {% endif %}
 
 {% if S_DL_FOOTER_STATS %}
 <div class="jumpbox button stats-footer" id="dl-stats-footer"><i class="icon fa-pie-chart fa-fw" aria-hidden="true"></i> <span>{{ lang('DL_FOOTER') }}</span></div>
-<div id="dl-footer" class="footer-box"><a class="icon dl-close-footer" data-area="footer"></a>
-<div class="small">
-	{% if L_DL_CAN_DOWNLOAD_AGAIN %}{{ lang('CAN_DOWNLOAD_AGAIN') }}<br />{% endif %}
-	{% if DL_ACCOUNT_TRAFFIC %}{{ DL_ACCOUNT_TRAFFIC }}<br />{% endif %}
-	{% if DL_REMAIN_TRAFFIC %}{{ DL_REMAIN_TRAFFIC }}<br />{% endif %}
-	{% if DL_NO_OVERALL_TRAFFIC %}<strong class="dl-text-underline">{{ DL_NO_OVERALL_TRAFFIC }}</strong><br />{% endif %}
-	{% if DL_REMAIN_GUEST_TRAFFIC %}{{ DL_REMAIN_GUEST_TRAFFIC }}<br />{% endif %}
-	{% if DL_NO_OVERALL_GUEST_TRAFFIC %}<strong class="dl-text-underline">{{ DL_NO_OVERALL_GUEST_TRAFFIC }}</strong><br />{% endif %}
-	{% if not S_DL_HIDE_FOOTER_DATA and S_DL_SERARATE_STATS %}<br />{% endif %}
-	{% if DL_TOTAL_STAT %}{{ DL_TOTAL_STAT }}{% endif %}
-	{% if not S_DL_HIDE_FOOTER_DATA %}<br />{% endif %}
-    {% if DL_EXT_STATS_OVERALL_TRAFFIC %}{{ lang('DL_OVERALL_TRAFFIC') }}{{ lang('COLON') }} {{ DL_EXT_STATS_OVERALL_TRAFFIC }}<br />{% endif %}
-    {% if DL_EXT_STATS_OVERALL_GUESTS_TRAFFIC %}{{ lang('DL_OVERALL_GUEST_TRAFFIC') }}{{ lang('COLON') }} {{ DL_EXT_STATS_OVERALL_GUESTS_TRAFFIC }}<br />{% endif %}
-    {% if DL_EXT_STATS_MONTH_CLICKS %}{{ lang('DL_KLICKS') }}{{ lang('COLON') }} {{ DL_EXT_STATS_MONTH_CLICKS }}<br />{% endif %}
-  	{% if not S_DL_HIDE_FOOTER_DATA %}<br />{% endif %}
-</div>
+<div id="dl-footer" class="dl-footer-box"><a class="icon dl-close-footer" data-area="footer"></a>
+
+	<h3>{{ lang('DL_FOOTER') }}</h3>
+
+	{% if L_CAN_DOWNLOAD_AGAIN %}
+	<div class="small">{{ lang('CAN_DOWNLOAD_AGAIN') }}</div>
+	{% endif %}
+	{% if DL_ACCOUNT_TRAFFIC %}
+	<div class="small">{{ DL_ACCOUNT_TRAFFIC }}</div>
+	{% endif %}
+	{% if DL_REMAIN_TRAFFIC %}
+	<div class="small">{{ DL_REMAIN_TRAFFIC }}</div>
+	{% endif %}
+	{% if not DL_NO_OVERALL_TRAFFIC %}
+	<div class="small"><strong class="dl-text-underline">{{ DL_NO_OVERALL_TRAFFIC }}</strong></div>
+	{% endif %}
+	{% if DL_REMAIN_GUEST_TRAFFIC %}
+	<div class="small">{{ DL_REMAIN_GUEST_TRAFFIC }}</div>
+	{% endif %}
+	{% if DL_NO_OVERALL_GUEST_TRAFFIC %}
+	<div class="small"><strong class="dl-text-underline">{{ DL_NO_OVERALL_GUEST_TRAFFIC }}</strong></div>
+	{% endif %}
+	{% if DL_TOTAL_STAT %}
+	<div class="small">{{ DL_TOTAL_STAT }}</div>
+	{% endif %}
+    {% if DL_EXT_STATS_OVERALL_TRAFFIC %}
+	<div class="small">{{ lang('DL_OVERALL_TRAFFIC') }}{{ lang('COLON') }} {{ DL_EXT_STATS_OVERALL_TRAFFIC }}</div>
+	{% endif %}
+    {% if DL_EXT_STATS_OVERALL_GUESTS_TRAFFIC %}
+	<div class="small">{{ lang('DL_OVERALL_GUEST_TRAFFIC') }}{{ lang('COLON') }} {{ DL_EXT_STATS_OVERALL_GUESTS_TRAFFIC }}</div>
+	{% endif %}
+    {% if DL_EXT_STATS_MONTH_CLICKS %}
+	<div class="small">{{ lang('DL_KLICKS') }}{{ lang('COLON') }} {{ DL_EXT_STATS_MONTH_CLICKS }}</div>
+	{% endif %}
 </div>
 {% endif %}
 

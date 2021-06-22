@@ -35,21 +35,17 @@ function AJAXDLHelpDisplay(data) {
     $("#dl_help_string").html(obj.string);
 
     $("#dl_help_popup").fadeIn("fast");
-    $("#dl_help_bg").css("opacity", "0.7");
-    $("#dl_help_bg").fadeIn("fast");
 }
 
 $(document).ready(function () {
     $(".dl_help_close").click(function () {
         $("#dl_help_popup").fadeOut("fast");
-        $("#dl_help_bg").fadeOut("fast");
     });
 });
 
 $(window).click(function(ev){
 	if ($(ev.target).attr('id') != "#dl_help_popup") {
 		$("#dl_help_popup").fadeOut("fast");
-		$("#dl_help_bg").fadeOut("fast");
 		ev.stopPropagation();
 	}
 });

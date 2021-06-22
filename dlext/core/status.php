@@ -158,7 +158,7 @@ class status implements status_interface
 			$this->dl_file_icon		= $this->dlext_cache->obtain_dl_files(intval($this->config['dl_new_time']), intval($this->config['dl_edit_time']));
 		}
 
-		if (!isset($this->dl_file_p[$df_id]['c']) || $this->dlext_constants->get_value('user_banned'))
+		if (!isset($this->dl_file_p[$df_id]['c']))
 		{
 			return [
 				'file_auth' 	=> $this->dlext_constants::DL_FALSE,

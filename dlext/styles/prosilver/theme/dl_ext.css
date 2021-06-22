@@ -83,21 +83,6 @@
     display: none;
 }
 
-.footer-box
-{
-    display: none;
-    z-index: 5;
-    width: 40%;
-    position: fixed;
-    bottom: 20%;
-    left: 30%;
-    border: 1px solid #ccc;
-    background: none repeat scroll 0 0 #FFFFFF;
-    font-size: 12px;
-    color: #000000;
-    padding: 1em;
-}
-
 #dl_help_popup
 {
     display: none;
@@ -151,8 +136,8 @@ div.dl_help_close:hover, .dl-close-footer:hover
     overflow: hidden;
     text-decoration: none !important;
     background: transparent url("./images/alert_close.png") 0 0 no-repeat;
-    margin-top: -7px;
-    margin-right: -7px;
+    margin-top: -16px;
+    margin-right: -16px;
     cursor: pointer;
 }
 
@@ -596,13 +581,36 @@ table.zebra-list tr.dl-reported:nth-child(even) td
     vertical-align: middle !important;
 }
 
-@media only screen and (max-width: 1220px), only screen and (max-device-width: 1220px)
+.dl-legend-box,
+.dl-footer-box
 {
-    .footer-box
-    {
-        width: 95%;
-        margin-left: 2% auto;
-    }
+    display: none;
+    z-index: 1010;
+    width: 300px;
+    position: fixed;
+    bottom: 20%;
+    left: 50%;
+    margin-left: -150px;
+    border: 1px solid #262469;
+    background: none repeat scroll 0 0 #ccc;
+    font-size: 11px;
+    color: #000000;
+    padding: 1em;
+}
+
+.dl-legend-box h3
+{
+    color: #262469;
+}
+
+.dl-legend-box dd
+{
+    margin: -0.5em 0 0.5em 24px ;
+}
+
+.dl-footer-box div.small
+{
+    margin-bottom: 0.75em;
 }
 
 @media (max-width: 950px)
@@ -616,13 +624,5 @@ table.zebra-list tr.dl-reported:nth-child(even) td
     {
         clear: both;
         width: auto !important;
-    }
-}
-
-@media (max-width: 750px)
-{
-    .footer-box
-    {
-        top: 60%;
     }
 }

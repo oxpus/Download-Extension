@@ -261,7 +261,7 @@ class details
 		$user_can_alltimes_load = $this->dlext_constants::DL_FALSE;
 		$user_is_mod = $this->dlext_constants::DL_FALSE;
 
-		if (($cat_auth['auth_mod'] || $this->dlext_auth->user_admin()) && !$this->dlext_constants->get_value('user_banned'))
+		if (($cat_auth['auth_mod'] || $this->dlext_auth->user_admin()))
 		{
 			$modcp = ($modcp) ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE;
 			$user_can_alltimes_load = $this->dlext_constants::DL_TRUE;
@@ -1138,7 +1138,6 @@ class details
 			'S_DL_SHOW_TOPIC_LINK'	=> ($dl_files['dl_topic']) ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE,
 			'S_DL_DETAIL_JS'		=> $this->dlext_constants::DL_TRUE,
 			'S_DL_POPUPIMAGE'		=> $s_dl_popupimage,
-			'S_DL_USERBAN'			=> $this->dlext_constants->get_value('user_banned'),
 			'S_DL_CAT_RULE'			=> $s_cat_rule,
 			'S_DL_CAT_TRAFFIC'		=> $s_cat_traffic,
 			'S_DL_COMMENTS_TAB'		=> $s_comments_tab,
