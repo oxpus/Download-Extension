@@ -266,7 +266,6 @@ class constants
 						AND ug.user_pending <> 1';
 				$result = $this->db->sql_query($sql);
 
-
 				while ($row = $this->db->sql_fetchrow($result))
 				{
 					$user_group_ids[] = $row['group_id'];

@@ -30,6 +30,15 @@ class release_8_2_5 extends \phpbb\db\migration\migration
 			// Set the current version
 			['config.update', ['dl_ext_version', $this->dl_ext_version]],
 
+			['module.remove', [
+				'acp',
+				'ACP_DOWNLOADS',
+				[
+					'module_basename'	=> '\oxpus\dlext\acp\main_module',
+					'modes'				=> ['banlist'],
+				],
+			]],
+
 			['permission.remove', ['a_dl_banlist']],
 		];
 	}
