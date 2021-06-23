@@ -603,9 +603,16 @@ table.zebra-list tr.dl-reported:nth-child(even) td
     color: #262469;
 }
 
+.dl-legend-box dt
+{
+    max-width: 22px !important;
+}
+
 .dl-legend-box dd
 {
-    margin: -0.5em 0 0.5em 24px ;
+    margin: -0.5em 0 0.5em 24px;
+    border-left: none !important;
+    display: block !important;
 }
 
 .dl-footer-box div.small
@@ -624,5 +631,14 @@ table.zebra-list tr.dl-reported:nth-child(even) td
     {
         clear: both;
         width: auto !important;
+    }
+}
+
+@media (max-width: 700px)
+{
+    .dl-legend-box ul.topiclist dt,
+    .dl-legend-box ul.topiclist dd
+    {
+        margin-right: -24px !important;
     }
 }
