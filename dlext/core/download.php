@@ -556,11 +556,6 @@ class download implements download_interface
 
 		$thumb_form_name = 'thumb_name';
 
-		$vars = [
-			'thumb_form_name',
-			'allow_thumbs_upload',
-		];
-
 		if ($module == 'acp')
 		{
 			/**
@@ -571,6 +566,10 @@ class download implements download_interface
 				* @var bool	allow_thumbs_upload		enable/disable thumbnail upload
 				* @since 8.1.0-RC2
 			*/
+			$vars = [
+				'thumb_form_name',
+				'allow_thumbs_upload',
+			];
 			extract($this->dispatcher->trigger_event('oxpus.dlext.acp_edit_thumbnail_before', compact($vars)));
 		}
 		else if ($module == 'mcp')
@@ -583,6 +582,10 @@ class download implements download_interface
 				* @var bool	allow_thumbs_upload		enable/disable thumbnail upload
 				* @since 8.1.0-RC2
 			*/
+			$vars = [
+				'thumb_form_name',
+				'allow_thumbs_upload',
+			];
 			extract($this->dispatcher->trigger_event('oxpus.dlext.mcp_edit_thumbnail_before', compact($vars)));
 		}
 
@@ -852,11 +855,6 @@ class download implements download_interface
 			$this->db->sql_query($sql);
 			$next_id = $this->db->sql_nextid();
 
-			$vars = [
-				'next_id',
-				'sql_array',
-			];
-
 			if ($module == 'acp')
 			{
 				/**
@@ -867,6 +865,10 @@ class download implements download_interface
 				* @var array	sql_array		array of download's data for storage
 				* @since 8.1.0-RC2
 				*/
+				$vars = [
+					'next_id',
+					'sql_array',
+				];
 				extract($this->dispatcher->trigger_event('oxpus.dlext.acp_files_add_sql_insert_after', compact($vars)));
 			}
 			else if ($module == 'upload')
@@ -879,6 +881,10 @@ class download implements download_interface
 				* @var array	sql_array		array of download's data for storage
 				* @since 8.1.0-RC2
 				*/
+				$vars = [
+					'next_id',
+					'sql_array',
+				];
 				extract($this->dispatcher->trigger_event('oxpus.dlext.upload_sql_insert_after', compact($vars)));
 			}
 
