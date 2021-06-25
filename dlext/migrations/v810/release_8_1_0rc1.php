@@ -51,4 +51,21 @@ class release_8_1_0rc1 extends \phpbb\db\migration\migration
 			],
 		];
 	}
+
+	public function revert_schema()
+	{
+		return [
+			'add_columns'	=> [
+				$this->table_prefix . 'users' => [
+					'user_allow_new_download_email'	=> ['BOOL', 0],
+					'user_allow_new_download_popup'	=> ['BOOL', 1],
+					'user_allow_fav_download_email'	=> ['BOOL', 1],
+					'user_allow_fav_download_popup'	=> ['BOOL', 1],
+					'user_allow_fav_comment_email'	=> ['BOOL', 1],
+					'user_dl_note_type'				=> ['BOOL', 1],
+					'user_new_download'				=> ['BOOL', 0],
+				],
+			],
+		];
+	}
 }

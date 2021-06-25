@@ -52,4 +52,18 @@ class release_8_0_3 extends \phpbb\db\migration\migration
 			],
 		];
 	}
+
+	public function revert_schema()
+	{
+		return [
+			'add_columns'	=> [
+				$this->table_prefix . 'dl_banlist'	=> [
+					'user_agent'			=> ['VCHAR:50', ''],
+				],
+				$this->table_prefix . 'dl_stats'	=> [
+					'browser'			=> ['VCHAR:255', ''],
+				],
+			],
+		];
+	}
 }

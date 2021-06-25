@@ -42,4 +42,15 @@ class release_8_2_0 extends \phpbb\db\migration\migration
 			],
 		];
 	}
+
+	public function revert_schema()
+	{
+		return [
+			'change_columns' => [
+				$this->table_prefix . 'dl_hotlink' => [
+					'hotlink_id' => ['VCHAR:32', ''],
+				],
+			],
+		];
+	}
 }
