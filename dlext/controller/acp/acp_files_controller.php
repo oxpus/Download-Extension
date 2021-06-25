@@ -156,6 +156,7 @@ class acp_files_controller implements acp_files_interface
 		$cancel				= $this->request->variable('cancel', '');
 		$cat_id				= $this->request->variable('cat_id', 0);
 		$df_id				= $this->request->variable('df_id', 0);
+		$description		= $this->request->variable('description', '', $this->dlext_constants::DL_TRUE);
 
 		$dl_file = $this->dlext_files->all_files(0, [], [], $df_id, 1, ['*']);
 
@@ -325,7 +326,8 @@ class acp_files_controller implements acp_files_interface
 				 * @var int		dl_cat		download category ID
 				 * @since 8.1.0-RC2
 				 */
-				$vars = array(
+				$dl_cat = $cat_id;
+				 $vars = array(
 					'df_id',
 					'dl_cat',
 				);

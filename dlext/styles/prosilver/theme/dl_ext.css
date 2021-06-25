@@ -599,6 +599,7 @@ table.zebra-list tr.dl-reported:nth-child(even) td
 }
 
 .dl-legend-box h3
+.dl-footer-box h3
 {
     color: #262469;
 }
@@ -613,6 +614,7 @@ table.zebra-list tr.dl-reported:nth-child(even) td
     margin: -0.5em 0 0.5em 24px;
     border-left: none !important;
     display: block !important;
+    color: #000000;
 }
 
 .dl-footer-box div.small

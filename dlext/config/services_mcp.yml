@@ -76,6 +76,7 @@ services:
             - '@files.factory'
             - '@filesystem'
             - '@oxpus.dlext.core.auth'
+            - '@oxpus.dlext.core.download'
             - '@oxpus.dlext.core.extra'
             - '@oxpus.dlext.core.files'
             - '@oxpus.dlext.core.format'

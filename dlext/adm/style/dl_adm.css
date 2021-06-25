@@ -2,13 +2,13 @@
     display: none;
     z-index: 2;
     position: fixed;
-    width:450px;
-    top: 20%;
+    width: 300px;
+    top: 22%;
     left: 50%;
-    margin-left: -250px;
-    background: none repeat scroll 0 0 #ffffff;
-    border: 1px solid #cccccc;
-    font-size: 12px;
+    margin-left: -150px;
+    background: none repeat scroll 0 0 #CCCCCC;
+    border: 1px solid #262469;
+    font-size: 11px;
     color: #000000;
 }
 

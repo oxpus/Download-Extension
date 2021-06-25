@@ -252,11 +252,6 @@ class files implements files_interface
 		}
 	}
 
-	public function dl_submit_download($module, $mode, $df_id = 0)
-	{
-
-	}
-
 	private function _dl_check_fields($table, $fields)
 	{
 		$table_fields_data = $this->_dl_sql_allowed_fields($table);

@@ -1,3 +1,4 @@
+{% if EXT_DL_PATH %}
 {% INCLUDECSS '@oxpus_dlext/dl_ext.css' %}
 {% if S_DL_POPUPIMAGE %}{% INCLUDECSS ''~ EXT_DL_PATH ~'/vendor/prettyPhoto/css/prettyPhoto.css' %}{% endif %}
 <script>
@@ -16,3 +17,4 @@
 {% if S_DL_DETAIL_JS %}{% INCLUDEJS '@oxpus_dlext/dl_main.js' %}{% endif %}
 {% if S_DL_ENABLE_RATE %}{% INCLUDEJS '@oxpus_dlext/dl_rate.js' %}{% endif %}
 {% if S_TOTAL_IMAGES or S_DL_POPUPIMAGE or S_DL_CAPTCHA %}{% INCLUDEJS ''~ EXT_DL_PATH ~'assets/javascript/pretty.js' %}{% endif %}
+{% endif %}

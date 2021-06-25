@@ -56,14 +56,4 @@ interface files_interface
 	 * @access public
 	*/
 	public function dl_sorting($sort_by, $order, &$sql_sort_by = '', &$sql_order = '');
-
-	/**
-	 * Save a new or edited download in the database and store uploaded files into predefined folders
-	 *
-	 * @param string $module to decide between ACP and board functions
-	 * @param string $mode add a new or update a stored download
-	 * @param int $df_id download id to update the dataset and physical files
-	 * @access public
-	*/
-	public function dl_submit_download($module, $mode, $df_id = 0);
 }
