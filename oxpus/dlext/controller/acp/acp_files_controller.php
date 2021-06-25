@@ -318,19 +318,20 @@ class acp_files_controller implements acp_files_interface
 					WHERE dl_id = ' . (int) $df_id;
 				$this->db->sql_query($sql);
 
+				$dl_cat = $cat_id;
+
 				/**
 				 * Workflow after delete download
 				 *
 				 * @event oxpus.dlext.acp_files_delete_download_after
-				 * @var int		df_id		download ID
-				 * @var int		dl_cat		download category ID
+				 * @var int df_id		download ID
+				 * @var int dl_cat		download category ID
 				 * @since 8.1.0-RC2
 				 */
-				$dl_cat = $cat_id;
-				 $vars = array(
+				$vars = [
 					'df_id',
 					'dl_cat',
-				);
+				];
 				extract($this->dispatcher->trigger_event('oxpus.dlext.acp_files_delete_download_after', compact($vars)));
 
 				$this->notification->delete_notifications([

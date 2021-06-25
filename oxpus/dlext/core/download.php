@@ -946,7 +946,7 @@ class download implements download_interface
 			* @event oxpus.dlext.upload_sql_thumbnail_before
 			* @var string	foreign_thumb_message	message after manipulate thumbnail
 			* @var string	thumb_name				thumbnail name (empty to avoid overwrite foreign storage)
-			* @var int		next_id					download ID
+			* @var int		df_id					download ID
 			* @var array	sql_array				array of download's data for storage
 			* @since 8.1.0-RC2
 			*/
