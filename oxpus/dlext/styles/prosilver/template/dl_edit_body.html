@@ -1,6 +1,6 @@
 {% INCLUDE '@oxpus_dlext/helpers/dl_header.html' %}
 
-<h2 style="float: left;">{% if S_DL_ADD_DL %}{{ lang('DL_ADD_DOWNLOAD') }}{% else %}{{ lang('DL_EDIT_DOWNLOAD') }}{% endif %}</h2>
+<h2 style="float: left;">{{ DL_ACTION_MODE }}</h2>
 
 {% if U_DL_GO_BACK %}
 <fieldset class="submit-buttons dl-right">
@@ -100,7 +100,7 @@
 		<dt><label>{{ lang('DL_CAT_NAME') }}</label></dt>
 		<dd>
 			<a class="help" data-key="DL_CAT_NAME" title="{{ lang('INFORMATION') }}"><i class="icon fa-info-circle fa-fw dl-icon-yellow"></i></a>
-			<select name="{{ S_DL_CAT_ID_NAME }}">
+			<select name="cat_id">
 				{% for search_cat_select in loops.search_cat_select %}
 				<option value="{{ search_cat_select.DL_CAT_ID }}"{% if search_cat_select.DL_SELECTED %} selected{% endif %}>{{ search_cat_select.DL_SEPERATOR }}{{ search_cat_select.DL_CAT_NAME }}</option>
 				{% endfor %}
@@ -120,8 +120,6 @@
 
 	</div>
 </div>
-
-{% EVENT oxpus_dlext_download_edit_file_after %}
 
 <div class="panel dl-edit-box-light">
 	<div class="inner">
@@ -157,24 +155,38 @@
 			<input type="text" name="hack_version" size="10" maxlength="32" value="{{ DL_HACK_VERSION }}" class="inputbox autowidth" />
 		</dd>
 	</dl>
-	{% if S_DL_ALLOW_THUMBS %}
+	</fieldset>
+
+	</div>
+</div>
+
+{% EVENT oxpus_dlext_download_edit_file_after %}
+
+{% if S_DL_ALLOW_THUMBS %}
+<div class="panel dl-edit-box-light">
+	<div class="inner">
+
+	<fieldset>
+
 	<dl>
 		<dt><label>{{ lang('DL_THUMB') }}</label></dt>
 		<dd>
 			<a class="help" data-key="DL_THUMB" title="{{ lang('INFORMATION') }}"><i class="icon fa-info-circle fa-fw dl-icon-yellow"></i></a>
-			{% if S_DL_THUMBNAIL %}
-			<img src="{{ DL_THUMBNAIL }}" alt="{{ lang('DL_THUMB') }}" title="" class="dl-thumb-box" />
-			<label><input type="checkbox" class="permissions_checkbox" name="del_thumb" value="1" />&nbsp;{{ lang('DELETE') }}</label>
+			{% if S_DL_SHOW_THUMB %}
+			<img src="{{ ROOT_PATH }}{{ DL_THUMBNAIL }}" alt="{{ lang('DL_THUMB') }}" title="" class="dl-thumb-box" />
+			{% if S_DL_DEL_THUMB %}<br /><label><input type="checkbox" class="permissions_checkbox" name="del_thumb" value="1" />&nbsp;{{ lang('DELETE') }}</label>{% endif %}
 			{% endif %}
-			<br /><br /><input type="file" name="thumb_name" class="inputbox" size="46" /><br /><span class="small">{{ DL_THUMBNAIL_SECOND }}</span>
+			<br /><br />
+			<input type="file" name="thumb_name" class="inputbox" size="46" /><br />
+			<span class="small">{{ DL_THUMBNAIL_SECOND }}</span>
 		</dd>
 	</dl>
-	{% endif %}
 
 	</fieldset>
 
 	</div>
 </div>
+{% endif %}
 
 {% if S_DL_MODCP or S_DL_CHANGE_TIME or S_DL_POPUP_NOTIFY or S_DL_EMAIL_BLOCK %}
 <div class="panel dl-edit-box-light">
@@ -311,7 +323,6 @@
 		</dd>
 	</dl>
 	{% endif %}
-
 	{% if S_DL_TODO_LINK_ONOFF %}
 	<dl>
 		<dt><label>{{ lang('DL_MOD_TODO') }}</label></dt>
@@ -343,7 +354,10 @@
 	<dl>
 		<dt>
 			<label{% if download_fields.FIELD_ID %} for="{{ download_fields.FIELD_ID }}"{% endif %}>{{ download_fields.LANG_NAME }}{{ lang('COLON') }}{% if download_fields.S_REQUIRED %} *{% endif %}</label>
-			{% if download_fields.LANG_EXPLAIN %}<br /><span>{{ download_fields.LANG_EXPLAIN }}</span>{% endif %}
+			{% if download_fields.LANG_EXPLAIN %}
+			<br />
+			<span>{{ download_fields.LANG_EXPLAIN }}</span>
+			{% endif %}
 		</dt>
 		{% if download_fields.ERROR %}
 		<dd class="error">
@@ -367,7 +381,8 @@
 	<h3>{{ lang('OPTIONS') }}</h3>
 
 	<fieldset>
-	{% if S_DL_MODCP %}
+
+		{% if S_DL_MODCP %}
 	<dl class="navbar dl-edit-box-medium">
 		<dt>
 			<label>{{ lang('DL_APPROVE') }}</label>

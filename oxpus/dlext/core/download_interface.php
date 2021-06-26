@@ -32,7 +32,9 @@ interface download_interface
 	 *
 	 * @param string $module to decide between ACP and board functions
 	 * @param int $df_id download id to fetch the dataset
+	 * @param bool $own_edit permission to edit a download by a regular user
+	 * @param string $u_action return path on acp module
 	 * @access public
 	*/
-	public function dl_edit_download($module, $df_id = 0);
+	public function dl_edit_download($module, $df_id = 0, $own_edit = 0, $u_action = '');
 }

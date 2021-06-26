@@ -38,6 +38,7 @@
 					</ul>
 				</div>
 			</div>
-			<div id="cp-main" class="cp-main mcp-main panel-container">
-
+{% endif %}
+{% if DL_ACTION_MODE %}
+			<div id="cp-main" class="cp-main mcp-main panel-container{% if not S_DL_MCP %} dl-width-100{% endif %}">
 {% endif %}

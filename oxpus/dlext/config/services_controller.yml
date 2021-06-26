@@ -291,35 +291,15 @@ services:
         class: oxpus\dlext\controller\upload
         public: true
         arguments:
-            - '%core.root_path%'
-            - '%core.php_ext%'
-            - '@cache'
-            - '@ext.manager'
-            - '@dbal.conn'
             - '@config'
             - '@controller.helper'
             - '@request'
-            - '@template'
-            - '@user'
             - '@language'
-            - '@dispatcher'
-            - '@notification_manager'
-            - '@files.factory'
-            - '@config_text'
-            - '@filesystem'
             - '@oxpus.dlext.core.auth'
             - '@oxpus.dlext.core.download'
-            - '@oxpus.dlext.core.extra'
-            - '@oxpus.dlext.core.files'
-            - '@oxpus.dlext.core.format'
             - '@oxpus.dlext.core.main'
             - '@oxpus.dlext.core.physical'
-            - '@oxpus.dlext.core.topic'
-            - '@oxpus.dlext.helpers.constants'
             - '@oxpus.dlext.helpers.footer'
-            - '@oxpus.dlext.fields.fields'
-            - '%oxpus.dlext.tables.dl_stats%'
-            - '%oxpus.dlext.tables.downloads%'
     oxpus.dlext.version:
         class: oxpus\dlext\controller\version
         public: true

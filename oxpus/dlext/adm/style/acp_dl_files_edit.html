@@ -2,9 +2,9 @@
 
 <h1>{{ lang('DL_FILES_TITLE') }}</h1>
 
-{% if U_DL_BACK %}
+{% if U_DL_GO_BACK %}
 <p class="quick">
-	<a href="{{ U_DL_BACK }}">&laquo;{{ lang('BACK') }}</a>
+	<a href="{{ U_DL_GO_BACK }}">&laquo;{{ lang('BACK') }}</a>
 </p>
 {% endif %}
 
@@ -16,7 +16,7 @@
 
 <form action="{{ S_DL_DOWNLOADS_ACTION }}" method="post" id="cat_id" enctype="multipart/form-data">
 
-{% if S_DL_EDIT_VERSIONS %}
+{% if S_DL_VERSION_ON %}
 <fieldset class="dl-grey-bg">
 
 	<legend>{{ lang('DL_VERSION') }}</legend>
@@ -66,6 +66,12 @@
 </fieldset>
 {% endif %}
 
+{% if S_DL_UPLOAD_TRAFFIC %}
+<div class="error">
+	<div><strong>{{ lang('DL_UPLOAD_TRAFFIC') }}</strong></div>
+</div>
+{% endif %}
+
 <fieldset>
 
 	<legend>{{ DL_ACTION_MODE }}</legend>
@@ -83,8 +89,8 @@
 			<a class="help" data-key="DL_CAT_NAME"><i class="icon fa-info-circle fa-fw dl-icon-yellow"></i></a>
 			<select name="cat_id">
 				<option value="{{ S_DL_CATEGORY_OPTIONS }}" selected>{{ lang('DL_ALL') }}</option>
-				{% for cats_row in loops.cats_row %}
-				<option value="{{ cats_row.DL_CAT_ID }}"{% if cats_row.DL_SELECTED %} selected{% endif %}>{{ cats_row.DL_SEPERATOR }}{{ cats_row.DL_CAT_NAME }}</option>
+				{% for search_cat_select in loops.search_cat_select %}
+				<option value="{{ search_cat_select.DL_CAT_ID }}"{% if search_cat_select.DL_SELECTED %} selected{% endif %}>{{ search_cat_select.DL_SEPERATOR }}{{ search_cat_select.DL_CAT_NAME }}</option>
 				{% endfor %}
 			</select>
 		</dd>
@@ -128,7 +134,7 @@
 
 {% EVENT oxpus_dlext_acp_edit_file_after %}
 
-{% if S_DL_ALLOW_THUMB %}
+{% if S_DL_ALLOW_THUMBS %}
 <fieldset>
 
 	<dl>
@@ -138,7 +144,7 @@
 			{% if S_DL_SHOW_THUMB %}
 			<br /><img src="{{ DL_THUMBNAIL }}" alt="" title="" class="dl-thumb-max" />
 			{% if S_DL_DEL_THUMB %}<br /><label><input type="checkbox" class="radio" name="del_thumb" value="1" />&nbsp;{{ lang('DELETE') }}</label>{% endif %}
-			<br />
+			<br /><br />
 			{% endif %}
 			<input type="file" name="thumb_name" class="post" size="46" /><br />
 			<span class="small">{{ DL_THUMBNAIL_SECOND }}</span>
@@ -226,12 +232,12 @@
 </fieldset>
 {% endif %}
 
-{% if S_DL_USE_MOD_DESC or S_DL_TODO_LINK_ONOFF %}
+{% if S_DL_ALLOW_EDIT_MOD_DESC or S_DL_TODO_LINK_ONOFF %}
 <fieldset>
 
 	<legend>{{ lang('DL_MOD_LIST_SHORT') }}</legend>
 
-	{% if S_DL_USE_MOD_DESC %}
+	{% if S_DL_ALLOW_EDIT_MOD_DESC %}
 	<dl>
 		<dt><label>{{ lang('DL_MOD_LIST_SHORT') }}</label></dt>
 		<dd>
