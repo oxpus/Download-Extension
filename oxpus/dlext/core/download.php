@@ -1365,11 +1365,11 @@ class download implements download_interface
 					if ($dl_file['thumbnail'] && $this->filesystem->exists($thumbnail))
 					{
 						$this->template->assign_var('S_DL_DEL_THUMB', $this->dlext_constants::DL_TRUE);
-					}
 
-					if ($dl_file['thumbnail'] != $df_id . '_')
-					{
-						$this->template->assign_var('S_DL_SHOW_THUMB', $this->dlext_constants::DL_TRUE);
+						if ($dl_file['thumbnail'] != $df_id . '_')
+						{
+							$this->template->assign_var('S_DL_SHOW_THUMB', $this->dlext_constants::DL_TRUE);
+						}
 					}
 				}
 			}
