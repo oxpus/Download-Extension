@@ -83,6 +83,7 @@
 			<input type="text" name="description" size="40" maxlength="255" value="{{ DL_DESCRIPTION }}" />
 		</dd>
 	</dl>
+	{% if S_DL_CAT_CHOOSE %}
 	<dl>
 		<dt><label>{{ lang('DL_CHOOSE_CATEGORY') }}</label></dt>
 		<dd>
@@ -95,6 +96,7 @@
 			</select>
 		</dd>
 	</dl>
+	{% endif %}
 	<dl>
 		<dt><label>{{ lang('DL_FILE_DESCRIPTION') }}</label></dt>
 		<dd>

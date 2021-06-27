@@ -66,15 +66,11 @@ services:
             - '@template'
             - '@user'
             - '@language'
-            - '@filesystem'
             - '@oxpus.dlext.core.download'
             - '@oxpus.dlext.core.main'
             - '@oxpus.dlext.helpers.constants'
             - '@oxpus.dlext.helpers.footer'
-            - '%oxpus.dlext.tables.dl_ver_files%'
-            - '%oxpus.dlext.tables.dl_versions%'
             - '%oxpus.dlext.tables.downloads%'
-            - '%oxpus.dlext.tables.dl_cat%'
     oxpus.dlext.mcp_manage:
         class: oxpus\dlext\controller\mcp\mcp_manage
         public: true

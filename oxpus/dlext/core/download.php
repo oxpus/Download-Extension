@@ -31,7 +31,6 @@ class download implements download_interface
 
 	/* extension owned objects */
 	protected $u_action;
-	protected $ext_path;
 
 	protected $dlext_auth;
 	protected $dlext_extra;
@@ -43,11 +42,12 @@ class download implements download_interface
 	protected $dlext_constants;
 	protected $dlext_fields;
 
-	protected $dlext_table_dl_comments;
 	protected $dlext_table_dl_favorites;
 	protected $dlext_table_dl_stats;
+	protected $dlext_table_dl_ver_files;
 	protected $dlext_table_dl_versions;
 	protected $dlext_table_downloads;
+	protected $dlext_table_dl_cat;
 
 	/**
 	 * Constructor
@@ -76,11 +76,12 @@ class download implements download_interface
 	 * @param \oxpus\dlext\core\topic				$dlext_topic
 	 * @param \oxpus\dlext\core\helpers\constants	$dlext_constants
 	 * @param \oxpus\dlext\core\fields\fields		$dlext_fields
-	 * @param string								$dlext_table_dl_comments
 	 * @param string								$dlext_table_dl_favorites
 	 * @param string								$dlext_table_dl_stats
+	 * @param string								$dlext_table_dl_ver_files
 	 * @param string								$dlext_table_dl_versions
 	 * @param string								$dlext_table_downloads
+	 * @param string								$dlext_table_dl_cat
 	 */
 	public function __construct(
 		$root_path,
@@ -107,11 +108,12 @@ class download implements download_interface
 		\oxpus\dlext\core\topic $dlext_topic,
 		\oxpus\dlext\core\helpers\constants $dlext_constants,
 		\oxpus\dlext\core\fields\fields $dlext_fields,
-		$dlext_table_dl_comments,
 		$dlext_table_dl_favorites,
 		$dlext_table_dl_stats,
+		$dlext_table_dl_ver_files,
 		$dlext_table_dl_versions,
-		$dlext_table_downloads
+		$dlext_table_downloads,
+		$dlext_table_dl_cat
 	)
 	{
 		$this->root_path				= $root_path;
@@ -130,11 +132,12 @@ class download implements download_interface
 		$this->files_factory			= $files_factory;
 		$this->filesystem				= $filesystem;
 
-		$this->dlext_table_dl_comments		= $dlext_table_dl_comments;
 		$this->dlext_table_dl_favorites		= $dlext_table_dl_favorites;
 		$this->dlext_table_dl_stats			= $dlext_table_dl_stats;
+		$this->dlext_table_dl_ver_files		= $dlext_table_dl_ver_files;
 		$this->dlext_table_dl_versions		= $dlext_table_dl_versions;
 		$this->dlext_table_downloads		= $dlext_table_downloads;
+		$this->dlext_table_dl_cat			= $dlext_table_dl_cat;
 
 		$this->dlext_auth				= $dlext_auth;
 		$this->dlext_extra				= $dlext_extra;
@@ -171,7 +174,6 @@ class download implements download_interface
 
 		$description			= $this->request->variable('description', '', $this->dlext_constants::DL_TRUE);
 		$long_desc				= $this->request->variable('long_desc', '', $this->dlext_constants::DL_TRUE);
-
 		$file_name				= $this->request->variable('file_name', '', $this->dlext_constants::DL_TRUE);
 		$file_traffic			= $this->request->variable('file_traffic', 0);
 		$file_extern			= $this->request->variable('file_extern', 0);
@@ -179,17 +181,14 @@ class download implements download_interface
 		$file_free				= $this->request->variable('file_free', 0);
 		$file_version			= $this->request->variable('file_version', 0);
 		$file_option			= $this->request->variable('file_ver_opt', 0);
-
 		$hacklist				= $this->request->variable('hacklist', 0);
 		$hack_author			= $this->request->variable('hack_author', '', $this->dlext_constants::DL_TRUE);
 		$hack_author_email		= $this->request->variable('hack_author_email', '', $this->dlext_constants::DL_TRUE);
 		$hack_author_web		= $this->request->variable('hack_author_website', '', $this->dlext_constants::DL_TRUE);
 		$hack_dl_url			= $this->request->variable('hack_dl_url', '', $this->dlext_constants::DL_TRUE);
 		$hack_version			= $this->request->variable('hack_version', '', $this->dlext_constants::DL_TRUE);
-
 		$mod_desc				= $this->request->variable('mod_desc', '', $this->dlext_constants::DL_TRUE);
 		$mod_list				= $this->request->variable('mod_list', 0);
-
 		$require				= $this->request->variable('require', '', $this->dlext_constants::DL_TRUE);
 		$test					= $this->request->variable('test', '', $this->dlext_constants::DL_TRUE);
 		$todo					= $this->request->variable('todo', '', $this->dlext_constants::DL_TRUE);
@@ -198,7 +197,6 @@ class download implements download_interface
 		$change_time			= $this->request->variable('change_time', 0);
 		$click_reset			= $this->request->variable('click_reset', 0);
 		$send_notify			= $this->request->variable('send_notify', 0);
-
 		$approve				= $this->request->variable('approve', 0);
 		$del_thumb				= $this->request->variable('del_thumb', 0);
 		$action					= $this->request->variable('action', '');
@@ -526,7 +524,8 @@ class download implements download_interface
 			$allow_thumbs_upload = $this->dlext_constants::DL_TRUE;
 		}
 
-		$thumb_form_name = 'thumb_name';
+		$thumb_form_name	= 'thumb_name';
+		$thumb_name 		= '';
 
 		if ($module == 'acp')
 		{
@@ -579,8 +578,6 @@ class download implements download_interface
 			$upload_thumb_file = $this->request->file($thumb_form_name);
 			unset($upload_thumb_file['local_mode']);
 			$thumb_file = $upload_image->handle_upload('files.types.form', $thumb_form_name);
-
-			$thumb_name = '';
 
 			if (isset($upload_thumb_file['name']))
 			{
@@ -1007,34 +1004,6 @@ class download implements download_interface
 			}
 		}
 
-		if (!empty($dl_file) && $file_cat_old != $cat_id && !$file_extern && $df_id)
-		{
-			$old_path = $index[$file_cat_old]['cat_path'];
-			$new_path = $index[$cat_id]['cat_path'];
-
-			if ($new_path != $old_path)
-			{
-				$this->filesystem->rename($this->dlext_constants->get_value('files_dir') . '/downloads/' . $old_path . $real_file_old, $this->dlext_constants->get_value('files_dir') . '/downloads/' . $new_path . $real_file_new);
-
-				$sql = 'SELECT ver_real_file FROM ' . $this->dlext_table_dl_versions . '
-					WHERE dl_id = ' . (int) $df_id;
-				$result = $this->db->sql_query($sql);
-
-				while ($row = $this->db->sql_fetchrow($result))
-				{
-					$this->filesystem->rename($this->dlext_constants->get_value('files_dir') . '/downloads/' . $old_path . $row['ver_real_file'], $this->dlext_constants->get_value('files_dir') . '/downloads/' . $new_path . $row['ver_real_file']);
-				}
-
-				$this->db->sql_freeresult($result);
-			}
-
-			$sql = 'UPDATE ' . $this->dlext_table_dl_stats . ' SET ' . $this->db->sql_build_array('UPDATE', ['cat_id' => $cat_id]) . ' WHERE id = ' . (int) $df_id;
-			$this->db->sql_query($sql);
-
-			$sql = 'UPDATE ' . $this->dlext_table_dl_comments . ' SET ' . $this->db->sql_build_array('UPDATE', ['cat_id' => $cat_id]) . ' WHERE id = ' . (int) $df_id;
-			$this->db->sql_query($sql);
-		}
-
 		if ($index[$cat_id]['statistics'])
 		{
 			$this->dlext_main->dl_prune_stats($cat_id, $index[$cat_id]['stats_prune']);
@@ -1309,7 +1278,7 @@ class download implements download_interface
 			$file_extern_size_range	= $this->dlext_constants::DL_FILE_RANGE_BYTE;
 		}
 
-		if ($module != 'mcp')
+		if ($module == 'upload' || ($module == 'acp' && !$df_id))
 		{
 			$select_new_cat = $this->dlext_extra->dl_dropdown(0, 0, $cat_id, 'auth_up');
 
@@ -1400,7 +1369,7 @@ class download implements download_interface
 			$blacklist_explain = '<br />' . $this->language->lang('DL_FORBIDDEN_EXT_EXPLAIN', implode(', ', $ext_blacklist));
 		}
 
-		if ($module != 'upload')
+		if ($module != 'upload' && $df_id)
 		{
 			$sql = 'SELECT ver_id, ver_change_time, ver_version FROM ' . $this->dlext_table_dl_versions . '
 				WHERE dl_id = ' . (int) $df_id . '
@@ -1479,7 +1448,6 @@ class download implements download_interface
 		$template_ary = [
 			'DL_THUMBNAIL_SECOND'		=> $thumbnail_explain,
 			'DL_ACTION_MODE'			=> ($df_id) ? $this->language->lang('DL_EDIT_DOWNLOAD') : $this->language->lang('DL_ADD_DOWNLOAD'),
-
 			'DL_BLACKLIST_EXPLAIN'		=> $blacklist_explain,
 			'DL_CHECKEXTERN'			=> $dl_extern,
 			'DL_DESCRIPTION'			=> $description,
@@ -1488,20 +1456,17 @@ class download implements download_interface
 			'DL_APPROVE'				=> $approve,
 			'DL_FILE_NAME'				=> $file_name,
 			'DL_URL'					=> $file_name,
-
 			'DL_MOD_DESC'				=> $mod_desc,
 			'DL_MOD_LIST'				=> $mod_list,
 			'DL_MOD_REQUIRE'			=> $require,
 			'DL_MOD_TEST'				=> $mod_test,
 			'DL_MOD_TODO'				=> $todo,
 			'DL_MOD_WARNING'			=> $warning,
-
 			'DL_HACK_AUTHOR'			=> $hack_author,
 			'DL_HACK_AUTHOR_EMAIL'		=> $hack_author_email,
 			'DL_HACK_AUTHOR_WEBSITE'	=> $hack_author_web,
 			'DL_HACK_DL_URL'			=> $hack_dl_url,
 			'DL_HACK_VERSION'			=> $hack_version,
-
 			'DL_THUMBNAIL'				=> $thumbnail,
 			'DL_FILE_EXT_SIZE'			=> $file_extern_size_out,
 			'DL_FORMATED_HINT_TEXT'		=> $formated_hint_text,
@@ -1634,5 +1599,111 @@ class download implements download_interface
 		// Init and display the custom fields with the existing data
 		$this->dlext_fields->get_profile_fields($df_id);
 		$this->dlext_fields->generate_profile_fields($this->user->get_iso_lang_id());
+	}
+
+	public function dl_delete_version($module, $cat_id, $df_id, $u_action = '')
+	{
+		$del_file		= $this->request->variable('del_file', 0);
+		$file_ver_del	= $this->request->variable('file_ver_del', [0]);
+
+		if (empty($file_ver_del))
+		{
+			trigger_error($this->language->lang('DL_VER_DEL_ERROR'), E_USER_ERROR);
+		}
+
+		if (confirm_box($this->dlext_constants::DL_TRUE))
+		{
+			if ($del_file && count($file_ver_del))
+			{
+				$sql = 'SELECT path FROM ' . $this->dlext_table_dl_cat . '
+					WHERE id = ' . (int) $cat_id;
+				$result = $this->db->sql_query($sql);
+				$path = $this->db->sql_fetchfield('path');
+				$this->db->sql_freeresult($result);
+
+				$sql = 'SELECT ver_real_file FROM ' . $this->dlext_table_dl_versions . '
+					WHERE ' . $this->db->sql_in_set('ver_id', $file_ver_del);
+				$result = $this->db->sql_query($sql);
+
+				while ($row = $this->db->sql_fetchrow($result))
+				{
+					if ($path && $row['ver_real_file'])
+					{
+						$this->filesystem->remove($this->dlext_constants->get_value('files_dir') . '/downloads/' . $path . $row['ver_real_file']);
+					}
+				}
+
+				$this->db->sql_freeresult($result);
+
+				$sql = 'SELECT file_type, real_name FROM ' . $this->dlext_table_dl_ver_files . '
+					WHERE ' . $this->db->sql_in_set('ver_id', $file_ver_del);
+				$result = $this->db->sql_query($sql);
+
+				while ($row = $this->db->sql_fetchrow($result))
+				{
+					if ($row['real_name'])
+					{
+						switch ($row['file_type'])
+						{
+							case $this->dlext_constants::DL_FILE_TYPE_IMAGE:
+								$this->filesystem->remove($this->dlext_constants->get_value('files_dir') . '/version/images/' . $row['real_name']);
+							break;
+							default:
+								$this->filesystem->remove($this->dlext_constants->get_value('files_dir') . '/version/files/' . $row['real_name']);
+						}
+					}
+				}
+
+				$this->db->sql_freeresult($result);
+			}
+
+			$sql = 'DELETE FROM ' . $this->dlext_table_dl_versions . '
+				WHERE ' . $this->db->sql_in_set('ver_id', $file_ver_del);
+			$this->db->sql_query($sql);
+
+			$sql = 'DELETE FROM ' . $this->dlext_table_dl_ver_files . '
+				WHERE ' . $this->db->sql_in_set('ver_id', $file_ver_del);
+			$this->db->sql_query($sql);
+
+			if ($module == 'acp')
+			{
+				$redirect = $u_action . "&amp;cat_id=$cat_id";
+			}
+			else
+			{
+				$redirect = $this->helper->route('oxpus_dlext_details', ['df_id' => $df_id]);
+			}
+
+			redirect($redirect);
+		}
+		else
+		{
+			$this->template->assign_var('S_DL_DELETE_FILES_CONFIRM', $this->dlext_constants::DL_TRUE);
+
+			$s_hidden_fields = [
+				'view'			=> 'modcp',
+				'action'		=> 'save',
+				'cat_id'		=> $cat_id,
+				'df_id'			=> $df_id,
+				'submit'		=> 1,
+				'file_ver_opt'	=> 3,
+			];
+
+			for ($i = 0; $i < count($file_ver_del); ++$i)
+			{
+				$s_hidden_fields += ['file_ver_del[' . $i . ']' => $file_ver_del[$i]];
+			}
+
+			if ($module == 'acp')
+			{
+				$confirm_tpl = '@oxpus_dlext/dl_confirm_body.html';
+			}
+			else
+			{
+				$confirm_tpl = '@oxpus_dlext/helpers/dl_confirm_body.html';
+			}
+
+			confirm_box($this->dlext_constants::DL_FALSE, $this->language->lang('DL_CONFIRM_DEL_VERSIONS'), build_hidden_fields($s_hidden_fields), $confirm_tpl);
+		}
 	}
 }

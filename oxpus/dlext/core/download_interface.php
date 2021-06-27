@@ -37,4 +37,15 @@ interface download_interface
 	 * @access public
 	*/
 	public function dl_edit_download($module, $df_id = 0, $own_edit = 0, $u_action = '');
+
+	/**
+	 * Delete selected download version and attached files
+	 *
+	 * @param string $module to decide between ACP and board functions
+	 * @param int $cat_id download category id
+	 * @param int $df_id download id to update the dataset and physical files
+	 * @param string $u_action return path on acp module
+	 * @access public
+	*/
+	public function dl_delete_version($module, $cat_id, $df_id, $u_action = '');
 }

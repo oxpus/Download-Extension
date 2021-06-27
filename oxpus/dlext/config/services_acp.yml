@@ -143,14 +143,9 @@ services:
         arguments:
             - '@request'
             - '@template'
-            - '@dbal.conn'
-            - '@filesystem'
             - '@oxpus.dlext.core.download'
             - '@oxpus.dlext.core.main'
             - '@oxpus.dlext.helpers.constants'
-            - '%oxpus.dlext.tables.dl_ver_files%'
-            - '%oxpus.dlext.tables.dl_versions%'
-            - '%oxpus.dlext.tables.downloads%'
     oxpus.dlext.acp_overview_controller:
         class: oxpus\dlext\controller\acp\acp_overview_controller
         public: true

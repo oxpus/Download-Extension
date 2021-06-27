@@ -84,11 +84,12 @@ services:
             - '@oxpus.dlext.core.topic'
             - '@oxpus.dlext.helpers.constants'
             - '@oxpus.dlext.fields.fields'
-            - '%oxpus.dlext.tables.dl_comments%'
             - '%oxpus.dlext.tables.dl_favorites%'
             - '%oxpus.dlext.tables.dl_stats%'
+            - '%oxpus.dlext.tables.dl_ver_files%'
             - '%oxpus.dlext.tables.dl_versions%'
             - '%oxpus.dlext.tables.downloads%'
+            - '%oxpus.dlext.tables.dl_cat%'
     oxpus.dlext.core.extra:
         class: oxpus\dlext\core\extra
         public: true

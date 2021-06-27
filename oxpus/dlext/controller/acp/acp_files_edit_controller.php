@@ -18,8 +18,6 @@ class acp_files_edit_controller implements acp_files_edit_interface
 	/* phpbb objects */
 	protected $request;
 	protected $template;
-	protected $db;
-	protected $filesystem;
 
 	/* extension owned objects */
 	protected $u_action;
@@ -28,45 +26,25 @@ class acp_files_edit_controller implements acp_files_edit_interface
 	protected $dlext_main;
 	protected $dlext_constants;
 
-	protected $dlext_table_dl_ver_files;
-	protected $dlext_table_dl_versions;
-	protected $dlext_table_downloads;
-
 	/**
 	 * Constructor
 	 *
 	 * @param \phpbb\request\request 				$request
 	 * @param \phpbb\template\template				$template
-	 * @param \phpbb\db\driver\driver_interface		$db
-	 * @param \phpbb\filesystem\filesystem			$filesystem
 	 * @param \oxpus\dlext\core\download			$dlext_download
 	 * @param \oxpus\dlext\core\main				$dlext_main
 	 * @param \oxpus\dlext\core\helpers\constants	$dlext_constants
-	 * @param string								$dlext_table_dl_ver_files
-	 * @param string								$dlext_table_dl_versions
-	 * @param string								$dlext_table_downloads
 	 */
 	public function __construct(
 		\phpbb\request\request $request,
 		\phpbb\template\template $template,
-		\phpbb\db\driver\driver_interface $db,
-		\phpbb\filesystem\filesystem $filesystem,
 		\oxpus\dlext\core\download $dlext_download,
 		\oxpus\dlext\core\main $dlext_main,
-		\oxpus\dlext\core\helpers\constants $dlext_constants,
-		$dlext_table_dl_ver_files,
-		$dlext_table_dl_versions,
-		$dlext_table_dl_cat
+		\oxpus\dlext\core\helpers\constants $dlext_constants
 	)
 	{
-		$this->db						= $db;
 		$this->request					= $request;
 		$this->template					= $template;
-		$this->filesystem				= $filesystem;
-
-		$this->dlext_table_dl_ver_files		= $dlext_table_dl_ver_files;
-		$this->dlext_table_dl_versions		= $dlext_table_dl_versions;
-		$this->dlext_table_dl_cat			= $dlext_table_dl_cat;
 
 		$this->dlext_download			= $dlext_download;
 		$this->dlext_main				= $dlext_main;
@@ -108,84 +86,7 @@ class acp_files_edit_controller implements acp_files_edit_interface
 		{
 			if ($file_option == $this->dlext_constants::DL_VERSION_DELETE)
 			{
-				$del_file		= $this->request->variable('del_file', 0);
-				$file_ver_del	= $this->request->variable('file_ver_del', [0]);
-
-				if (confirm_box($this->dlext_constants::DL_TRUE))
-				{
-					if ($del_file && count($file_ver_del))
-					{
-						$sql = 'SELECT path FROM ' . $this->dlext_table_dl_cat . '
-							WHERE id = ' . (int) $cat_id;
-						$result = $this->db->sql_query($sql);
-						$path = $this->db->sql_fetchfield('path');
-						$this->db->sql_freeresult($result);
-
-						$sql = 'SELECT ver_real_file FROM ' . $this->dlext_table_dl_versions . '
-							WHERE ' . $this->db->sql_in_set('ver_id', $file_ver_del);
-						$result = $this->db->sql_query($sql);
-
-						while ($row = $this->db->sql_fetchrow($result))
-						{
-							if ($row['ver_real_file'])
-							{
-								$this->filesystem->remove($this->dlext_constants->get_value('files_dir') . '/downloads/' . $path . $row['ver_real_file']);
-							}
-						}
-
-						$this->db->sql_freeresult($result);
-
-						$sql = 'SELECT file_type, real_name FROM ' . $this->dlext_table_dl_ver_files . '
-							WHERE ' . $this->db->sql_in_set('ver_id', $file_ver_del);
-						$result = $this->db->sql_query($sql);
-
-						while ($row = $this->db->sql_fetchrow($result))
-						{
-							if ($row['real_name'])
-							{
-								switch ($row['file_type'])
-								{
-									case $this->dlext_constants::DL_FILE_TYPE_IMAGE:
-										$this->filesystem->remove($this->dlext_constants->get_value('files_dir') . '/version/images/' . $row['real_name']);
-									break;
-									default:
-										$this->filesystem->remove($this->dlext_constants->get_value('files_dir') . '/version/files/' . $row['real_name']);
-								}
-							}
-						}
-
-						$this->db->sql_freeresult($result);
-					}
-
-					$sql = 'DELETE FROM ' . $this->dlext_table_dl_versions . '
-						WHERE ' . $this->db->sql_in_set('ver_id', $file_ver_del);
-					$this->db->sql_query($sql);
-
-					$sql = 'DELETE FROM ' . $this->dlext_table_dl_ver_files . '
-						WHERE ' . $this->db->sql_in_set('ver_id', $file_ver_del);
-					$this->db->sql_query($sql);
-
-					redirect($this->u_action . "&amp;cat_id=$cat_id");
-				}
-				else
-				{
-					$this->template->assign_var('S_DL_DELETE_FILES_CONFIRM', $this->dlext_constants::DL_TRUE);
-
-					$s_hidden_fields = [
-						'view'			=> 'modcp',
-						'action'		=> 'save',
-						'cat_id'		=> $cat_id,
-						'df_id'			=> $df_id,
-						'file_ver_opt'	=> 3,
-					];
-
-					for ($i = 0; $i < count($file_ver_del); ++$i)
-					{
-						$s_hidden_fields += ['file_ver_del[' . $i . ']' => $file_ver_del[$i]];
-					}
-
-					confirm_box($this->dlext_constants::DL_FALSE, 'DL_CONFIRM_DEL_VERSIONS', build_hidden_fields($s_hidden_fields), '@oxpus_dlext/dl_confirm_body.html');
-				}
+				$this->dlext_download->dl_delete_version('acp', $cat_id, $df_id, $this->u_action);
 			}
 			else
 			{
