@@ -745,11 +745,16 @@ class listener implements EventSubscriberInterface
 
 	public function core_adm_page_footer()
 	{
-		$this->dlext_constants->init();
+		// It is necessary to check whether the extension is enabled,
+		// otherwise error messages will be displayed after deactivation
+		if ($this->extension_manager->is_enabled('oxpus/dlext'))
+		{
+			$this->dlext_constants->init();
 
-		$this->template->assign_vars([
-			'EXT_DL_PATH'		=> $this->ext_path,
-			'U_DL_HELP_POPUP'	=> $this->helper->route('oxpus_dlext_help'),
-		]);
+			$this->template->assign_vars([
+				'EXT_DL_PATH'		=> $this->ext_path,
+				'U_DL_HELP_POPUP'	=> $this->helper->route('oxpus_dlext_help'),
+			]);
+		}
 	}
 }
