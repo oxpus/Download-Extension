@@ -159,6 +159,11 @@ div.dl_help_close:hover {
     line-height: 1.2em;
 }
 
+.dl-text-underline
+{
+    text-decoration: underline;
+}
+
 /**
 * Switch
 */
