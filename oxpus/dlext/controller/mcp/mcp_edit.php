@@ -57,7 +57,7 @@ class mcp_edit
 		\oxpus\dlext\core\main $dlext_main,
 		\oxpus\dlext\core\helpers\constants $dlext_constants,
 		\oxpus\dlext\core\helpers\footer $dlext_footer,
-		$dlext_table_downloads,
+		$dlext_table_downloads
 	)
 	{
 		$this->db 						= $db;
