@@ -598,7 +598,7 @@ table.zebra-list tr.dl-reported:nth-child(even) td
     padding: 1em;
 }
 
-.dl-legend-box h3
+.dl-legend-box h3,
 .dl-footer-box h3
 {
     color: #262469;
