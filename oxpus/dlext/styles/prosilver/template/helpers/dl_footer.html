@@ -1,12 +1,4 @@
-{% if S_DL_MCP %}
-			</div>
-		</div>
-	</div>
-</div>
-
-{% else %}
-
-{% if DL_ACTION_MODE or S_DL_MCP %}
+{% if DL_ACTION_MODE %}
 </div>
 {% endif %}
 
@@ -160,7 +152,5 @@
 	{% if S_DL_TRANSLATION %}&bull;&nbsp;{{ lang('DL_TRANSLATION') }}{% endif %}
 	{% if U_DL_RSS_FEED %}&bull;&nbsp;<a href="{{ U_DL_RSS_FEED }}">{{ lang('DL_ACP_CONF_RSS') }}</a>{% endif %}
 </div>
-
-{% endif %}
 
 {% INCLUDE 'overall_footer.html' %}

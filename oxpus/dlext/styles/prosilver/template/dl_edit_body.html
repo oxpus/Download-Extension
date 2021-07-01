@@ -1,4 +1,8 @@
+{% if S_DL_MCP %}
+{% INCLUDE '@oxpus_dlext/helpers/dl_mcp_header.html' %}
+{% else %}
 {% INCLUDE '@oxpus_dlext/helpers/dl_header.html' %}
+{% endif %}
 
 <h2 style="float: left;">{{ DL_ACTION_MODE }}</h2>
 
@@ -445,4 +449,8 @@
 
 <br />
 
+{% if S_DL_MCP %}
+{% INCLUDE '@oxpus_dlext/helpers/dl_mcp_footer.html' %}
+{% else %}
 {% INCLUDE '@oxpus_dlext/helpers/dl_footer.html' %}
+{% endif %}
