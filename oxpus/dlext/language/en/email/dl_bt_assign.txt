@@ -2,8 +2,8 @@ Subject: Assigned Bug Report on {{ SITENAME }}
 
 Hello {{ USERNAME }},
 
-You receive this email because a bug report on "{{ SITENAME }}" was assigned to you to work on it.
-For more details about this report follow up this link:
+You are receiving this email because on "{{ SITENAME }}" you have been assigned a bug report to work on.
+For more details about this report please follow this link:
 
 {{ U_BUG_REPORT }}
 

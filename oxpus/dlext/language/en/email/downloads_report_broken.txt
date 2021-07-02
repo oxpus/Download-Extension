@@ -2,8 +2,8 @@ Subject: Broken Download
 
 Hello {{ USERNAME }},
 
-You have received this email because "{{ REPORTER }}" has reported a broken download on "{{ SITENAME }}".
-Use the following link to check this report:
+You are receiving this email because "{{ REPORTER }}" has reported a broken download on "{{ SITENAME }}".
+Please use the following link to check this report:
 
 ---------------------------
 {{ U_DOWNLOAD }}

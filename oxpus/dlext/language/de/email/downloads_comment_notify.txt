@@ -2,7 +2,7 @@ Subject: Neuer Download Kommentar
 
 Hallo {{ USERNAME }},
 
-du bekommst diese E-Mail, weil auf "{{ SITENAME }}" einen neuer Kommentar zu einem deiner favorisierten Downloads veröffentlicht wurde:
+du bekommst diese Nachricht, weil auf "{{ SITENAME }}" einen neuer Kommentar zu einem deiner favorisierten Downloads veröffentlicht wurde:
 
 ---------------------------
 Kategorie {{ CATEGORY }} 

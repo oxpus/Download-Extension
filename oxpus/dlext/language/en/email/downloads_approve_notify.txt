@@ -2,14 +2,14 @@ Subject: New Download
 
 Hello {{ USERNAME }},
 
-You receive this email because of a new or edited download on "{{ SITENAME }}" in the category "{{ CATEGORY }}" which must be approved:
+You are receiving this email because there is a new or edited download on "{{ SITENAME }}" in the category "{{ CATEGORY }}" which awaits approval:
 
 ---------------------------
 {{ DOWNLOAD }}
 {{ DESCRIPTION }}
 ---------------------------
 
-If you want to approve this download click the following link:
+If you want to approve this download please click the following link:
 
 {{ U_APPROVE }}
 

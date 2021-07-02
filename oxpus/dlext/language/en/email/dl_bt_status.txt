@@ -2,12 +2,12 @@ Subject: New Status for Bug Report on {{ SITENAME }}
 
 Hello {{ USERNAME }},
 
-You receive this email because the status for your bug report "{{ REPORT_TITLE }}" on "{{ SITENAME }}" was changed.
+You are receiving this email because the status of your bug report "{{ REPORT_TITLE }}" on "{{ SITENAME }}" has changed.
 New Status: {{ STATUS }}.
 
 {{ STATUS_TEXT }}
 
-For more details about this follow up this link:
+For more details please follow this link:
 
 {{ U_BUG_REPORT }}
 
