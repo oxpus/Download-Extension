@@ -212,7 +212,7 @@
 {% endfor %}
 
 {% if DL_VER_TAB %}
-<div class="panel dlext3{% if S_DL_OPEN_PANEL <> 1 %} noshow{% endif %}" id="options1">
+<div class="panel dlext{% if S_DL_OPEN_PANEL <> 1 %} noshow{% endif %}" id="options1">
 
 	{% for dl_ver_cell in loops.dl_ver_cell %}
 	{% if dl_ver_cell.S_ROW_COUNT is even %}
@@ -253,7 +253,7 @@
 {% endif %}
 
 {% if S_DL_COMMENTS_TAB %}
-<div class="panel dlext3{% if S_DL_OPEN_PANEL <> 2 %} noshow{% endif %}" id="options2">
+<div class="panel dlext{% if S_DL_OPEN_PANEL <> 2 %} noshow{% endif %}" id="options2">
 
 	{% if S_DL_POST_COMMENT %}
 	<h3>{{ lang('DL_COMMENT_WRITE') }}</h3>
@@ -347,7 +347,7 @@
 {% endif %}
 
 {% if S_DL_DETAIL_EXTRA_TAB %}
-<div class="panel dlext3{% if S_DL_OPEN_PANEL <> 3 %} noshow{% endif %}" id="options3">
+<div class="panel dlext{% if S_DL_OPEN_PANEL <> 3 %} noshow{% endif %}" id="options3">
 	<div class="tablewrap">
 
 		{% if DL_MOD_WARNING %}
@@ -393,7 +393,7 @@
 {% endif %}
 
 {% if S_DL_DETAIL_HASH_TAB %}
-<div class="panel dlext3{% if S_DL_OPEN_PANEL <> 4 %} noshow{% endif %}" id="options4">
+<div class="panel dlext{% if S_DL_OPEN_PANEL <> 4 %} noshow{% endif %}" id="options4">
 
 	<h3>{{ lang('DL_MOD_FILE_HASH_TABLE') }}</h3>
 

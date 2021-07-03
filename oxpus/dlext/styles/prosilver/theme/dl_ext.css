@@ -1,8 +1,4 @@
-.dlext
-{
-    border: 1px #555555 solid;
-}
-
+.dlext,
 .dlext2
 {
     border: 1px #555555 solid;
@@ -11,6 +7,7 @@
 .dlext3
 {
     border-left: double;
+    border-radius: 0px;
 }
 
 .dlext4
