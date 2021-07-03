@@ -10,12 +10,17 @@
 
 .dlext3
 {
-    border: 1px #aaaaaa solid;
+    border-left: double;
 }
 
 .dlext4
 {
     border: 1px #aaaaaa solid;
+}
+
+.search-result-lastpost
+{
+    padding: 0 4px;
 }
 
 .dl-report-panel
@@ -219,7 +224,9 @@ div.dl_help_close:hover, .dl-close-footer:hover
 
 .dl-big
 {
-    font-size: 2em;
+	font-size: 1.8em;
+	margin: 4px;
+	padding-left: 8px;
 }
 
 .dl-text-adnew
@@ -510,12 +517,6 @@ table.zebra-list tr.dl-reported:nth-child(even) td
     width: 100%;
 }
 
-.dl-option-row
-{
-    height: 1.5em;
-    vertical-align: middle;
-}
-
 .dl-comment-height
 {
     max-height: 100px;
@@ -537,6 +538,12 @@ table.zebra-list tr.dl-reported:nth-child(even) td
 .value
 {
     font-size: 1.1em;
+}
+
+.dl-option-row
+{
+    height: 3.0em;
+    vertical-align: middle;
 }
 
 .dl-detail-row
@@ -592,7 +599,7 @@ table.zebra-list tr.dl-reported:nth-child(even) td
     left: 50%;
     margin-left: -150px;
     border: 1px solid #262469;
-    background: none repeat scroll 0 0 #ccc;
+    background: none repeat scroll 0 0 #cccccc;
     font-size: 11px;
     color: #000000;
     padding: 1em;

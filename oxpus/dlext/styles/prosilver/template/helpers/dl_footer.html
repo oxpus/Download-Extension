@@ -6,10 +6,11 @@
 <br />
 
 {% if S_DL_FOOTER_LEGEND or S_DL_FOOTER_STATS or U_DL_LATEST_DOWNLOADS or U_DL_OVERALL_VIEW or S_DL_STATS_VIEW_ON or S_DL_TODO_LINK or S_DL_JUMPBOX %}
-<div class="panel bg3">
+<hr />
+<div class="left-box">
 
 {% if S_DL_FOOTER_LEGEND %}
-<div class="jumpbox button legend-footer" id="dl-legend-footer"><i class="icon fa-map-signs fa-fw" aria-hidden="true"></i> <span>{{ lang('LEGEND') }}</span></div>
+<div class="jumpbox button legend-footer" id="dl-legend-footer"><span>{{ lang('LEGEND') }}</span></div>
 <div id="dl-legend" class="dl-legend-box"><a class="icon dl-close-footer" data-area="legend"></a>
 
 	<h3>{{ lang('LEGEND') }}</h3>
@@ -68,7 +69,7 @@
 {% endif %}
 
 {% if S_DL_FOOTER_STATS %}
-<div class="jumpbox button stats-footer" id="dl-stats-footer"><i class="icon fa-pie-chart fa-fw" aria-hidden="true"></i> <span>{{ lang('DL_FOOTER') }}</span></div>
+<div class="jumpbox button stats-footer" id="dl-stats-footer"><span>{{ lang('DL_FOOTER') }}</span></div>
 <div id="dl-footer" class="dl-footer-box"><a class="icon dl-close-footer" data-area="footer"></a>
 
 	<h3>{{ lang('DL_FOOTER') }}</h3>
@@ -107,14 +108,18 @@
 {% endif %}
 
 {% if S_DL_FOOTER_NAV_ON %}
-{% if U_DL_LATEST_DOWNLOADS %}<a href="{{ U_DL_LATEST_DOWNLOADS }}" class="button icon-button"><i class="icon fa-plus-circle fa-fw" aria-hidden="true"></i> <span>{{ lang('DL_LATEST_DOWNLOADS') }}</span></a>&nbsp;{% endif %}
-{% if U_DL_OVERALL_VIEW %}<a href="{{ U_DL_OVERALL_VIEW }}" class="button icon-button"><i class="icon fa-globe fa-fw" aria-hidden="true"></i> <span>{{ lang('DL_OVERVIEW') }}</span></a>&nbsp;{% endif %}
-{% if S_DL_STATS_VIEW_ON %}<a href="{{ U_DL_STATS }}" class="button icon-button"><i class="icon fa-bar-chart fa-fw" aria-hidden="true"></i> <span>{{ lang('DL_STATS') }}</span></a>&nbsp;{% endif %}
-{% if S_DL_TODO_LINK %}<a href="{{ U_DL_TODOLIST }}" class="button icon-button"><i class="icon fa-clipboard fa-fw" aria-hidden="true"></i> <span>{{ lang('DL_MOD_TODO') }}</span></a>{% endif %}
+{% if U_DL_LATEST_DOWNLOADS %}<a href="{{ U_DL_LATEST_DOWNLOADS }}" class="button icon-button"><span>{{ lang('DL_LATEST_DOWNLOADS') }}</span></a>&nbsp;{% endif %}
+{% if U_DL_OVERALL_VIEW %}<a href="{{ U_DL_OVERALL_VIEW }}" class="button icon-button"><span>{{ lang('DL_OVERVIEW') }}</span></a>&nbsp;{% endif %}
+{% if S_DL_STATS_VIEW_ON %}<a href="{{ U_DL_STATS }}" class="button icon-button"><span>{{ lang('DL_STATS') }}</span></a>&nbsp;{% endif %}
+{% if S_DL_TODO_LINK %}<a href="{{ U_DL_TODOLIST }}" class="button icon-button"><span>{{ lang('DL_MOD_TODO') }}</span></a>&nbsp;{% endif %}
 {% endif %}
 
-{% if S_DL_JUMPBOX %}{% INCLUDE '@oxpus_dlext/helpers/dl_jumpbox.html' %}{% endif %}
+</div>
+{% endif %}
 
+{% if S_DL_JUMPBOX %}
+<div>
+{% INCLUDE '@oxpus_dlext/helpers/dl_jumpbox.html' %}
 </div>
 {% endif %}
 
@@ -146,6 +151,7 @@
 {% endif %}
 
 <div class="clear"></div>
+<hr />
 
 <div class="copyright">
 	<strong>{{ DL_MOD_RELEASE }}</strong>
