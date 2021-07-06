@@ -378,7 +378,7 @@ $lang = array_merge($lang, [
 	'DL_HOTLINK_ACTION_TWO'	=> 'Meldung anzeigen',
 	'DL_HOTLINK_PERMISSION'	=> 'Du bist nicht berechtigt, diese Datei mittels Link direkt herunterzuladen!',
 
-	'DL_ICON_FREE_FOR_REG'	=> 'Zeige Gästen das weisse Download Icon',
+	'DL_ICON_FREE_FOR_REG'	=> 'Zeige Gästen das weiße Download Icon',
 	'DL_IMAGES'				=> 'Bilder',
 	'DL_INDEX_DESC_HIDE'	=> 'Verstecke Kategoriebeschreibungen',
 	'DL_INFO'				=> 'Info',
@@ -763,7 +763,7 @@ $lang = array_merge($lang, [
 	'DL_VERSION_CHECK'				=> 'Extension Version Check',
 	'DL_VERSION_CURRENT'			=> 'Aktuelle Datei',
 	'DL_VERSION_DELETE'				=> 'Nachfolgend ausgewählte Versionen löschen',
-	'DL_VERSION_DELETE_EXPLAIN'		=> 'Achtung: Wenn du Versionen löscht, werden alle weiteren durchgeführten Änderungen zu diesen Download verworfen und nicht gespeichert!',
+	'DL_VERSION_DELETE_EXPLAIN'		=> 'Achtung: Wenn du Versionen löschst, werden alle weiteren durchgeführten Änderungen zu diesen Download verworfen und nicht gespeichert!',
 	'DL_VERSION_REPLACE'			=> 'Ersetze folgende Version durch neue Datei',
 	'DL_VERSION_REPLACE_EXPLAIN'	=> 'Es erfolgt nur eine Aktualisierung des Downloads, wenn keine neue Datei hochgeladen wird.',
 	'DL_VERSIONS'					=> 'Versionen',
