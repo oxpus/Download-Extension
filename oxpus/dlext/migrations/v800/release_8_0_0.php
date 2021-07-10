@@ -28,7 +28,7 @@ class release_8_0_0 extends \phpbb\db\migration\migration
 	{
 		return [
 			// Set the current version
-			['config.update', ['dl_ext_version', $this->dl_ext_version]],
+			['config.add', ['dl_ext_version', $this->dl_ext_version]],
 
 			['config.add', ['dl_remain_guest_traffic', '0']],
 			['config.add', ['dl_remain_traffic', '0']],
