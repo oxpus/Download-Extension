@@ -1,24 +1,24 @@
 <?php
 
 /**
-*
-* @package phpBB Extension - Oxpus Downloads
-* @copyright (c) 2002-2021 OXPUS - www.oxpus.net
-* @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
-*
-*/
+ *
+ * @package   phpBB Extension - Oxpus Downloads
+ * @copyright 2002-2021 OXPUS - www.oxpus.net
+ * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
+ *
+ */
 
 namespace oxpus\dlext\controller\acp;
 
 /**
-* @package acp
-*/
+ * @package acp
+ */
 class acp_traffic_controller implements acp_traffic_interface
 {
 	/* phpbb objects */
 	protected $db;
 	protected $user;
-	protected $phpEx;
+	protected $phpex;
 	protected $root_path;
 	protected $log;
 	protected $cache;
@@ -28,7 +28,7 @@ class acp_traffic_controller implements acp_traffic_interface
 	protected $template;
 
 	/* extension owned objects */
-	protected $u_action;
+	public $u_action;
 
 	protected $dlext_format;
 	protected $dlext_constants;
@@ -37,7 +37,7 @@ class acp_traffic_controller implements acp_traffic_interface
 	 * Constructor
 	 *
 	 * @param string								$root_path
-	 * @param string								$phpEx
+	 * @param string								$phpex
 	 * @param \phpbb\config\config					$config
 	 * @param \phpbb\language\language				$language
 	 * @param \phpbb\request\request 				$request
@@ -51,7 +51,7 @@ class acp_traffic_controller implements acp_traffic_interface
 	 */
 	public function __construct(
 		$root_path,
-		$phpEx,
+		$phpex,
 		\phpbb\config\config $config,
 		\phpbb\language\language $language,
 		\phpbb\request\request $request,
@@ -65,7 +65,7 @@ class acp_traffic_controller implements acp_traffic_interface
 	)
 	{
 		$this->root_path				= $root_path;
-		$this->phpEx					= $phpEx;
+		$this->phpEx					= $phpex;
 		$this->db						= $db;
 		$this->log						= $log;
 		$this->cache					= $cache;
@@ -147,7 +147,8 @@ class acp_traffic_controller implements acp_traffic_interface
 						}
 
 						$sql = 'UPDATE ' . USERS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', [
-							'user_traffic' => $user_traffic]) . ' WHERE user_id = ' . (int) $user_id;
+							'user_traffic' => $user_traffic
+						]) . ' WHERE user_id = ' . (int) $user_id;
 						$this->db->sql_query($sql);
 
 						$message = $this->language->lang('DL_USER_AUTO_TRAFFIC_USER') . adm_back_link($this->u_action);
@@ -155,7 +156,7 @@ class acp_traffic_controller implements acp_traffic_interface
 						trigger_error($message);
 					}
 
-				break;
+					break;
 
 				case 'all':
 
@@ -175,7 +176,8 @@ class acp_traffic_controller implements acp_traffic_interface
 								$user_traffic = $row['user_traffic'] + $traffic_bytes;
 
 								$sql = 'UPDATE ' . USERS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', [
-									'user_traffic' => $user_traffic]) . ' WHERE user_id = ' . (int) $user_id;
+									'user_traffic' => $user_traffic
+								]) . ' WHERE user_id = ' . (int) $user_id;
 								$this->db->sql_query($sql);
 							}
 
@@ -186,7 +188,8 @@ class acp_traffic_controller implements acp_traffic_interface
 						if ($func == 'set')
 						{
 							$sql = 'UPDATE ' . USERS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', [
-								'user_traffic' => $traffic_bytes]) . ' WHERE user_id <> ' . ANONYMOUS;
+								'user_traffic' => $traffic_bytes
+							]) . ' WHERE user_id <> ' . ANONYMOUS;
 							$this->db->sql_query($sql);
 
 							$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_ALL_TR_SET', false, [$all_traffic, $traffic_range]);
@@ -197,7 +200,7 @@ class acp_traffic_controller implements acp_traffic_interface
 						trigger_error($message);
 					}
 
-				break;
+					break;
 
 				case 'group':
 
@@ -235,7 +238,8 @@ class acp_traffic_controller implements acp_traffic_interface
 							}
 
 							$sql = 'UPDATE ' . USERS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', [
-								'user_traffic' => $user_traffic]) . ' WHERE user_id = ' . (int) $user_id;
+								'user_traffic' => $user_traffic
+							]) . ' WHERE user_id = ' . (int) $user_id;
 							$this->db->sql_query($sql);
 						}
 
@@ -255,7 +259,7 @@ class acp_traffic_controller implements acp_traffic_interface
 						trigger_error($message);
 					}
 
-				break;
+					break;
 
 				case 'auto':
 
@@ -271,7 +275,8 @@ class acp_traffic_controller implements acp_traffic_interface
 						$traffic = $this->dlext_format->get_traffic_save_value($group_traffic_ary[$group_id], $data_group_range[$group_id]);
 
 						$sql = 'UPDATE ' . GROUPS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', [
-								'group_dl_auto_traffic' => $traffic]) . ' WHERE group_id = ' . (int) $group_id;
+							'group_dl_auto_traffic' => $traffic
+						]) . ' WHERE group_id = ' . (int) $group_id;
 						$this->db->sql_query($sql);
 
 						$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_AUTO_TR_GRP', false, [$group_name, $group_traffic_ary[$group_id], $data_group_range[$group_id]]);
@@ -291,7 +296,7 @@ class acp_traffic_controller implements acp_traffic_interface
 
 					trigger_error($message);
 
-				break;
+					break;
 			}
 		}
 

@@ -1,18 +1,18 @@
 <?php
 
 /**
-*
-* @package phpBB Extension - Oxpus Downloads
-* @copyright (c) 2002-2021 OXPUS - www.oxpus.net
-* @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
-*
-*/
+ *
+ * @package   phpBB Extension - Oxpus Downloads
+ * @copyright 2002-2021 OXPUS - www.oxpus.net
+ * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
+ *
+ */
 
 namespace oxpus\dlext\controller\acp;
 
 /**
-* @package acp
-*/
+ * @package acp
+ */
 class acp_overview_controller implements acp_overview_interface
 {
 	/* phpbb objects */
@@ -24,7 +24,7 @@ class acp_overview_controller implements acp_overview_interface
 	protected $cache;
 
 	/* extension owned objects */
-	protected $u_action;
+	public $u_action;
 
 	protected $dlext_counter;
 	protected $dlext_format;
@@ -180,8 +180,8 @@ class acp_overview_controller implements acp_overview_interface
 		*/
 		$total_size = $this->dlext_physical->read_dl_sizes();
 		$total_tsize = $this->dlext_physical->read_dl_sizes($this->dlext_constants->get_value('files_dir', $this->dlext_constants::DL_TRUE) . '/thumbs/');
-		$total_vfsize = $this->dlext_physical->read_dl_sizes($this->dlext_constants->get_value('files_dir', $this->dlext_constants::DL_TRUE). '/version/files/');
-		$total_vtsize = $this->dlext_physical->read_dl_sizes($this->dlext_constants->get_value('files_dir', $this->dlext_constants::DL_TRUE). '/version/images/');
+		$total_vfsize = $this->dlext_physical->read_dl_sizes($this->dlext_constants->get_value('files_dir', $this->dlext_constants::DL_TRUE) . '/version/files/');
+		$total_vtsize = $this->dlext_physical->read_dl_sizes($this->dlext_constants->get_value('files_dir', $this->dlext_constants::DL_TRUE) . '/version/images/');
 		$total_dl = $this->dlext_main->get_sublevel_count();
 		$total_extern = $this->dlext_counter->count_external_files();
 

@@ -1,12 +1,12 @@
 <?php
 
 /**
-*
-* @package phpBB Extension - Oxpus Downloads
-* @copyright (c) 2021-2021 OXPUS - www.oxpus.net
-* @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
-*
-*/
+ *
+ * @package   phpBB Extension - Oxpus Downloads
+ * @copyright (c) 2021-2021 OXPUS - www.oxpus.net
+ * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
+ *
+ */
 
 namespace oxpus\dlext\controller\tracker;
 
@@ -37,27 +37,27 @@ class main
 	protected $dlext_table_dl_cat;
 
 	/**
-	* Constructor
-	*
-	* @param string									$root_path
-	* @param string									$php_ext
-	* @param \phpbb\db\driver\driver_interface		$db
-	* @param \phpbb\controller\helper				$helper
-	* @param \phpbb\request\request 				$request
-	* @param \phpbb\template\template				$template
-	* @param \phpbb\user							$user
-	* @param \phpbb\language\language				$language
-	* @param \phpbb\notification\manager			$notification
-	* @param \oxpus\dlext\core\auth					$dlext_auth
-	* @param \oxpus\dlext\core\main					$dlext_main
-	* @param \oxpus\dlext\core\helpers\footer		$dlext_footer
-	* @param \oxpus\dlext\core\helpers\constants	$dlext_constants
-	* @param string									$dlext_table_dl_auth
-	* @param string									$dlext_table_dl_bug_history
-	* @param string									$dlext_table_dl_tracker
-	* @param string									$dlext_table_downloads
-	* @param string									$dlext_table_dl_cat
-	*/
+	 * Constructor
+	 *
+	 * @param string								$root_path
+	 * @param string								$php_ext
+	 * @param \phpbb\db\driver\driver_interface		$db
+	 * @param \phpbb\controller\helper				$helper
+	 * @param \phpbb\request\request 				$request
+	 * @param \phpbb\template\template				$template
+	 * @param \phpbb\user							$user
+	 * @param \phpbb\language\language				$language
+	 * @param \phpbb\notification\manager			$notification
+	 * @param \oxpus\dlext\core\auth				$dlext_auth
+	 * @param \oxpus\dlext\core\main				$dlext_main
+	 * @param \oxpus\dlext\core\helpers\footer		$dlext_footer
+	 * @param \oxpus\dlext\core\helpers\constants	$dlext_constants
+	 * @param string								$dlext_table_dl_auth
+	 * @param string								$dlext_table_dl_bug_history
+	 * @param string								$dlext_table_dl_tracker
+	 * @param string								$dlext_table_downloads
+	 * @param string								$dlext_table_dl_cat
+	 */
 	public function __construct(
 		$root_path,
 		$php_ext,
@@ -266,12 +266,14 @@ class main
 						'report_id'			=> $fav_id,
 						'report_his_type'	=> 'status',
 						'report_his_date'	=> time(),
-						'report_his_value'	=> $new_status . ':' . $this->user->data['username'] . ':' . $new_status_text]);
+						'report_his_value'	=> $new_status . ':' . $this->user->data['username'] . ':' . $new_status_text
+					]);
 					$this->db->sql_query($sql);
 
 					$sql = 'UPDATE ' . $this->dlext_table_dl_tracker . ' SET ' . $this->db->sql_build_array('UPDATE', [
 						'report_status'			=> $new_status,
-						'report_status_date'	=> time()]) . ' WHERE report_id = ' . (int) $fav_id;
+						'report_status_date'	=> time()
+					]) . ' WHERE report_id = ' . (int) $fav_id;
 					$this->db->sql_query($sql);
 
 					// Send email to report author about new status if it will not be the current one
@@ -320,12 +322,14 @@ class main
 						'report_id'			=> $fav_id,
 						'report_his_type'	=> 'assign',
 						'report_his_date'	=> time(),
-						'report_his_value'	=> $new_user_id . ':' . $report_user]);
+						'report_his_value'	=> $new_user_id . ':' . $report_user
+					]);
 					$this->db->sql_query($sql);
 
 					$sql = 'UPDATE ' . $this->dlext_table_dl_tracker . ' SET ' . $this->db->sql_build_array('UPDATE', [
 						'report_assign_id'		=> $new_user_id,
-						'report_assign_date'	=> time()]) . ' WHERE report_id = ' . (int) $fav_id;
+						'report_assign_date'	=> time()
+					]) . ' WHERE report_id = ' . (int) $fav_id;
 					$this->db->sql_query($sql);
 
 					// Send notification to new assigned user if it will not be the current one
@@ -348,8 +352,6 @@ class main
 				*/
 				if (!$error && $action == 'detail' && $fav_id)
 				{
-					unset($sql_array);
-
 					$sql_array = [
 						'SELECT'	=> 'b.*, d.description AS report_file, u1.username AS report_author, u1.user_colour AS report_colour, u2.username AS report_assign, u2.user_colour AS report_assign_col',
 						'FROM'		=> [$this->dlext_table_dl_tracker => 'b']
@@ -408,7 +410,8 @@ class main
 							'report_id'			=> $report_id,
 							'report_his_type'	=> 'status',
 							'report_his_date'	=> time(),
-							'report_his_value'	=> '1:' . $this->user->data['username']]);
+							'report_his_value'	=> '1:' . $this->user->data['username']
+						]);
 						$this->db->sql_query($sql);
 
 						$report_status = 1;
@@ -416,7 +419,8 @@ class main
 
 						$sql = 'UPDATE ' . $this->dlext_table_dl_tracker . ' SET ' . $this->db->sql_build_array('UPDATE', [
 							'report_status'			=> $report_status,
-							'report_status_date'	=> $report_status_date]) . ' WHERE report_id = ' . (int) $report_id;
+							'report_status_date'	=> $report_status_date
+						]) . ' WHERE report_id = ' . (int) $report_id;
 						$this->db->sql_query($sql);
 					}
 
@@ -498,7 +502,7 @@ class main
 
 								$output_status = intval($output_data[0]);
 								$output_text = $this->language->lang('DL_REPORT_STATUS_' . $output_status) . ' -> ' . $output_data[1];
-								$output_text .= (isset($output_data[2])) ? '</span><hr /><span>' . str_replace("\n", "<br />", $output_data[2]) : '';
+								$output_text .= (isset($output_data[2])) ? '</span><hr /><span>' . str_replace("\n", '<br />', $output_data[2]) : '';
 							}
 
 							$this->template->assign_block_vars('history_row', [
@@ -576,12 +580,12 @@ class main
 								$s_select_status[] = ['value' => $this->dlext_constants::DL_REPORT_STATUS_PENDING, 'lang' => $this->language->lang('DL_REPORT_STATUS_3')];
 								$s_select_status[] = ['value' => $this->dlext_constants::DL_REPORT_STATUS_FINISHED, 'lang' => $this->language->lang('DL_REPORT_STATUS_4')];
 								$s_select_status[] = ['value' => $this->dlext_constants::DL_REPORT_STATUS_DECLINED, 'lang' => $this->language->lang('DL_REPORT_STATUS_5')];
-							break;
+								break;
 							case $this->dlext_constants::DL_REPORT_STATUS_FINISHED:
 							case $this->dlext_constants::DL_REPORT_STATUS_DECLINED:
 								$s_select_status[] = ['value' => $this->dlext_constants::DL_REPORT_STATUS_PROGRESS, 'lang' => $this->language->lang('DL_REPORT_STATUS_2')];
 								$s_select_status[] = ['value' => $this->dlext_constants::DL_REPORT_STATUS_PENDING, 'lang' => $this->language->lang('DL_REPORT_STATUS_3')];
-							break;
+								break;
 						}
 
 						if (!empty($s_select_status))

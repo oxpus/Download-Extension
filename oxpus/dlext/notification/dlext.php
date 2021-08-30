@@ -1,40 +1,40 @@
 <?php
 
 /**
-*
-* @package phpBB Extension - Oxpus Downloads
-* @copyright (c) 2002-2021 OXPUS - www.oxpus.net
-* @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
-*
-*/
+ *
+ * @package   phpBB Extension - Oxpus Downloads
+ * @copyright 2002-2021 OXPUS - www.oxpus.net
+ * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
+ *
+ */
 
 namespace oxpus\dlext\notification;
 
 /**
-* Download Extension notifications class
-* This class handles notifications for new downloads
-*
-* @package notifications
-*/
+ * Download Extension notifications class
+ * This class handles notifications for new downloads
+ *
+ * @package notifications
+ */
 class dlext extends \phpbb\notification\type\base
 {
 	/**
-	* Get notification type name
-	*
-	* @return string
-	*/
+	 * Get notification type name
+	 *
+	 * @return string
+	 */
 	public function get_type()
 	{
 		return 'oxpus.dlext.notification.type.dlext';
 	}
 
 	/**
-	* Notification option data (for outputting to the user)
-	*
-	* @var bool|array False if the service should use it's default data
-	* 					Array of data (including keys 'id', 'lang', and 'group')
-	*/
-	static public $notification_option = [
+	 * Notification option data (for outputting to the user)
+	 *
+	 * @var bool|array False if the service should use it's default data
+	 * 					Array of data (including keys 'id', 'lang', and 'group')
+	 */
+	public static $notification_option = [
 		'lang'	=> 'DL_NOTIFY_TYPE_NEW',
 		'group'	=> 'DL_NOTIFICATIONS',
 	];
@@ -56,45 +56,46 @@ class dlext extends \phpbb\notification\type\base
 	}
 
 	/**
-	* Is this type available to the current user (defines whether or not it will be shown in the UCP Edit notification options)
-	*
-	* @return bool True/False whether or not this is available to the user
-	*/
+	 * Is this type available to the current user (defines whether or not it will be shown in the UCP Edit notification options)
+	 *
+	 * @return bool True/False whether or not this is available to the user
+	 */
 	public function is_available()
 	{
 		return true;
 	}
 
 	/**
-	* Get the id of the notification
-	*
-	* @param array $data The data for the updated rules
-	* @return int Id of the notification
-	*/
-	static public function get_item_id($data)
+	 * Get the id of the notification
+	 *
+	 * @param array $data The data for the updated rules
+	 * @return int Id of the notification
+	 */
+	public static function get_item_id($data)
 	{
 		return $data['df_id'];
 	}
 
 	/**
-	* Get the id of the parent
-	*
-	* @param array $data The data for the updated rules
-	* @return int Id of the parent
-	*/
-	static public function get_item_parent_id($data)
+	 * Get the id of the parent
+	 *
+	 * @param array $data The data for the updated rules
+	 * @return int Id of the parent
+	 */
+	public static function get_item_parent_id($data)
 	{
 		// No parent
+		unset($data);
 		return 0;
 	}
 
 	/**
-	* Find the users who will receive notifications
-	*
-	* @param array $data The type specific data for the updated rules
-	* @param array $options Options for finding users for notification
-	* @return array
-	*/
+	 * Find the users who will receive notifications
+	 *
+	 * @param array $data The type specific data for the updated rules
+	 * @param array $options Options for finding users for notification
+	 * @return array
+	 */
 	public function find_users_for_notification($data, $options = [])
 	{
 		$this->user_loader->load_users($data['user_ids']);
@@ -103,17 +104,17 @@ class dlext extends \phpbb\notification\type\base
 
 
 	/**
-	* Get the user's avatar
-	*/
+	 * Get the user's avatar
+	 */
 	public function get_avatar()
 	{
 		return 0;
 	}
 	/**
-	* Get the HTML formatted title of this notification
-	*
-	* @return string
-	*/
+	 * Get the HTML formatted title of this notification
+	 *
+	 * @return string
+	 */
 	public function get_title()
 	{
 		return $this->language->lang('DL_NOTIFY_NEW', $this->get_data('description'));
@@ -130,19 +131,19 @@ class dlext extends \phpbb\notification\type\base
 	}
 
 	/**
-	* Get email template
-	*
-	* @return string|bool
-	*/
+	 * Get email template
+	 *
+	 * @return string|bool
+	 */
 	public function get_email_template()
 	{
 		return '@oxpus_dlext/downloads_new_notify';
 	}
 	/**
-	* Get email template variables
-	*
-	* @return array
-	*/
+	 * Get email template variables
+	 *
+	 * @return array
+	 */
 	public function get_email_template_variables()
 	{
 		return [
@@ -154,10 +155,10 @@ class dlext extends \phpbb\notification\type\base
 	}
 
 	/**
-	* Get the url to this item
-	*
-	* @return string URL
-	*/
+	 * Get the url to this item
+	 *
+	 * @return string URL
+	 */
 	public function get_url()
 	{
 		return $this->helper->route('oxpus_dlext_index', ['cat_df_id' => $this->get_data('df_id')]);
@@ -174,13 +175,13 @@ class dlext extends \phpbb\notification\type\base
 	}
 
 	/**
-	* Function for preparing the data for insertion in an SQL query
-	* (The service handles insertion)
-	*
-	* @param array $data The data for the new download
-	* @param array $pre_create_data Data from pre_create_insert_array()
-	*
-	*/
+	 * Function for preparing the data for insertion in an SQL query
+	 * (The service handles insertion)
+	 *
+	 * @param array $data The data for the new download
+	 * @param array $pre_create_data Data from pre_create_insert_array()
+	 *
+	 */
 	public function create_insert_array($data, $pre_create_data = [])
 	{
 		$this->set_data('user_ids', $data['user_ids']);

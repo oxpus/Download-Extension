@@ -1,30 +1,30 @@
 <?php
 
 /**
-*
-* @package phpBB3
-* @version $Id$
-* @copyright (c) 2005 phpBB Group
-* @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
-*
-* taken and modified for
-* @package phpBB Extension - Oxpus Downloads
-* @copyright (c) 2002-2021 OXPUS - www.oxpus.net
-* @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
-*
-*/
+ *
+ * @package phpBB3
+ * @version $Id$
+ * @copyright (c) 2005 phpBB Group
+ * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
+ *
+ * taken and modified for
+ * @package   phpBB Extension - Oxpus Downloads
+ * @copyright 2002-2021 OXPUS - www.oxpus.net
+ * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
+ *
+ */
 
 namespace oxpus\dlext\controller\acp;
 
 /**
-* @package acp
-*/
+ * @package acp
+ */
 class acp_fields_controller implements acp_fields_interface
 {
 	/* phpbb objects */
 	protected $db;
 	protected $user;
-	protected $phpEx;
+	protected $phpex;
 	protected $root_path;
 	protected $extension_manager;
 	protected $log;
@@ -35,7 +35,7 @@ class acp_fields_controller implements acp_fields_interface
 	protected $edit_lang_id;
 
 	/* extension owned objects */
-	protected $u_action;
+	public $u_action;
 	protected $ext_path;
 
 	protected $lang_defs;
@@ -53,7 +53,7 @@ class acp_fields_controller implements acp_fields_interface
 	 * Constructor
 	 *
 	 * @param string								$root_path
-	 * @param string								$phpEx
+	 * @param string								$phpex
 	 * @param \phpbb\config\config					$config
 	 * @param \phpbb\language\language				$language
 	 * @param \phpbb\request\request 				$request
@@ -72,7 +72,7 @@ class acp_fields_controller implements acp_fields_interface
 	 */
 	public function __construct(
 		$root_path,
-		$phpEx,
+		$phpex,
 		\phpbb\config\config $config,
 		\phpbb\language\language $language,
 		\phpbb\request\request $request,
@@ -91,7 +91,7 @@ class acp_fields_controller implements acp_fields_interface
 	)
 	{
 		$this->root_path				= $root_path;
-		$this->phpEx					= $phpEx;
+		$this->phpEx					= $phpex;
 		$this->extension_manager		= $extension_manager;
 		$this->db						= $db;
 		$this->log						= $log;
@@ -261,7 +261,7 @@ class acp_fields_controller implements acp_fields_interface
 					]), '@oxpus_dlext/dl_confirm_body.html');
 				}
 
-			break;
+				break;
 
 			case 'activate':
 				$field_id = $this->request->variable('field_id', 0);
@@ -298,7 +298,7 @@ class acp_fields_controller implements acp_fields_interface
 				$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_FIELD_ACTIVATE', false, [$field_ident]);
 				trigger_error($this->language->lang('DL_FIELD_ACTIVATED') . adm_back_link($this->u_action));
 
-			break;
+				break;
 
 			case 'deactivate':
 				$field_id = $this->request->variable('field_id', 0);
@@ -323,7 +323,7 @@ class acp_fields_controller implements acp_fields_interface
 				$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_FIELD_DEACT', false, [$field_ident]);
 				trigger_error($this->language->lang('DL_FIELD_DEACTIVATED') . adm_back_link($this->u_action));
 
-			break;
+				break;
 
 			case 'move_up':
 			case 'move_down':
@@ -345,7 +345,7 @@ class acp_fields_controller implements acp_fields_interface
 					WHERE ' . $this->db->sql_in_set('field_order', $field_order_ary);
 				$this->db->sql_query($sql);
 
-			break;
+				break;
 
 			case 'create':
 			case 'edit':
@@ -434,7 +434,7 @@ class acp_fields_controller implements acp_fields_interface
 						'field_required'	=> 0,
 						'lang_name'			=> $this->request->variable('field_ident', '', $this->dlext_constants::DL_TRUE),
 						'lang_explain'		=> '',
-						'lang_default_value'=> '',
+						'lang_default_value' => '',
 					]);
 
 					$s_hidden_fields = ['field_type' => $field_type];
@@ -544,7 +544,9 @@ class acp_fields_controller implements acp_fields_interface
 							$this->dlext_fields_admin->vars['field_default_value_day'] = $now['mday'];
 							$this->dlext_fields_admin->vars['field_default_value_month'] = $now['mon'];
 							$this->dlext_fields_admin->vars['field_default_value_year'] = $now['year'];
-							$var = $_POST['field_default_value'] = 'now';
+							$var = 'now';
+							$this->request->overwrite('field_default_value', $var, \phpbb\request\request_interface::POST);
+							$this->request->overwrite('field_default_value', $var, \phpbb\request\request_interface::REQUEST);
 						}
 						else
 						{
@@ -554,8 +556,10 @@ class acp_fields_controller implements acp_fields_interface
 								$this->dlext_fields_admin->vars['field_default_value_day'] = $reg_def_day;
 								$this->dlext_fields_admin->vars['field_default_value_month'] = $this->request->variable('field_default_value_month', 0);
 								$this->dlext_fields_admin->vars['field_default_value_year'] = $this->request->variable('field_default_value_year', 0);
-								$var = $_POST['field_default_value'] = sprintf('%2d-%2d-%4d', $this->dlext_fields_admin->vars['field_default_value_day'], $this->dlext_fields_admin->vars['field_default_value_month'], $this->dlext_fields_admin->vars['field_default_value_year']);
-							}
+								$var = sprintf('%2d-%2d-%4d', $this->dlext_fields_admin->vars['field_default_value_day'], $this->dlext_fields_admin->vars['field_default_value_month'], $this->dlext_fields_admin->vars['field_default_value_year']);
+								$this->request->overwrite('field_default_value', $var, \phpbb\request\request_interface::POST);
+								$this->request->overwrite('field_default_value', $var, \phpbb\request\request_interface::REQUEST);
+								}
 							else
 							{
 								list($this->dlext_fields_admin->vars['field_default_value_day'], $this->dlext_fields_admin->vars['field_default_value_month'], $this->dlext_fields_admin->vars['field_default_value_year']) = explode('-', $var);
@@ -628,7 +632,6 @@ class acp_fields_controller implements acp_fields_interface
 						{
 							$this->dlext_fields_admin->vars[$key][$lang_id] = explode("\n", $options);
 						}
-
 					}
 				}
 
@@ -781,7 +784,7 @@ class acp_fields_controller implements acp_fields_interface
 				// Now go through the steps
 				switch ($step)
 				{
-					// Create basic options - only small differences between field types
+						// Create basic options - only small differences between field types
 					case 1:
 
 						// Build common create options
@@ -837,7 +840,7 @@ class acp_fields_controller implements acp_fields_interface
 							]);
 						}
 
-					break;
+						break;
 
 					case 2:
 
@@ -855,9 +858,9 @@ class acp_fields_controller implements acp_fields_interface
 							$this->template->assign_block_vars('dl_option', $option_ary);
 						}
 
-					break;
+						break;
 
-					// Define remaining language variables
+						// Define remaining language variables
 					case 3:
 
 						$this->template->assign_var('S_DL_STEP_THREE', $this->dlext_constants::DL_TRUE);
@@ -879,14 +882,14 @@ class acp_fields_controller implements acp_fields_interface
 							}
 						}
 
-					break;
+						break;
 				}
 
 				$s_hidden_fields += ['step' => $step];
 
 				$this->template->assign_vars(['S_DL_HIDDEN_FIELDS'	=> build_hidden_fields($s_hidden_fields)]);
 
-			break;
+				break;
 		}
 
 		$sql = 'SELECT *
@@ -944,9 +947,9 @@ class acp_fields_controller implements acp_fields_interface
 	}
 
 	/**
-	* Build all Language specific options
-	* Taken from acp_profile.php (c) by phpbb.com
-	*/
+	 * Build all Language specific options
+	 * Taken from acp_profile.php (c) by phpbb.com
+	 */
 	public function build_language_options($field_type, $action = 'create')
 	{
 		$default_lang_id = (!empty($this->edit_lang_id)) ? $this->edit_lang_id : $this->lang_defs['iso'][$this->config['default_lang']];
@@ -975,11 +978,11 @@ class acp_fields_controller implements acp_fields_interface
 		{
 			case FIELD_BOOL:
 				$options['lang_options'] = 'two_options';
-			break;
+				break;
 
 			case FIELD_DROPDOWN:
 				$options['lang_options'] = 'optionfield';
-			break;
+				break;
 
 			case FIELD_TEXT:
 			case FIELD_STRING:
@@ -987,7 +990,7 @@ class acp_fields_controller implements acp_fields_interface
 				{
 					$options['lang_default_value'] = ($field_type == FIELD_STRING) ? 'string' : 'text';
 				}
-			break;
+				break;
 		}
 
 		$lang_options = [];
@@ -1026,7 +1029,7 @@ class acp_fields_controller implements acp_fields_interface
 											<dd><input class="medium" name="l_' . $field . '[' . $lang_id . '][]" value="' . ((isset($value[$lang_id][0])) ? $value[$lang_id][0] : $var[0]) . '" /> ' . $this->language->lang('FIRST_OPTION') . '</dd>
 											<dd><input class="medium" name="l_' . $field . '[' . $lang_id . '][]" value="' . ((isset($value[$lang_id][1])) ? $value[$lang_id][1] : $var[1]) . '" /> ' . $this->language->lang('SECOND_OPTION') . '</dd>'
 							];
-						break;
+							break;
 
 						case 'optionfield':
 							$value = ((isset($value[$lang_id])) ? ((is_array($value[$lang_id])) ?  implode("\n", $value[$lang_id]) : $value[$lang_id]) : implode("\n", $var));
@@ -1034,7 +1037,7 @@ class acp_fields_controller implements acp_fields_interface
 								'TITLE'		=> $this->language->lang('CP_' . strtoupper($field)),
 								'FIELD'		=> '<dd><textarea name="l_' . $field . '[' . $lang_id . ']" rows="7" cols="80">' . $value . '</textarea></dd>'
 							];
-						break;
+							break;
 					}
 
 					if ($this->language->lang('CP_' . strtoupper($field) . '_EXPLAIN'))
@@ -1063,9 +1066,9 @@ class acp_fields_controller implements acp_fields_interface
 	}
 
 	/**
-	* Save Profile Field
-	* Taken from acp_profile.php (c) by phpbb.com
-	*/
+	 * Save Profile Field
+	 * Taken from acp_profile.php (c) by phpbb.com
+	 */
 	public function save_profile_field($field_type, $action = 'create')
 	{
 		$field_id = $this->request->variable('field_id', 0);
@@ -1150,7 +1153,8 @@ class acp_fields_controller implements acp_fields_interface
 			{
 				if (($this->dlext_fields_admin->vars['lang_name'] != '' && $this->dlext_fields_admin->vars['l_lang_name'][$lang_id] == '')
 					|| ($this->dlext_fields_admin->vars['lang_explain'] != '' && $this->dlext_fields_admin->vars['l_lang_explain'][$lang_id] == '')
-					|| ($this->dlext_fields_admin->vars['lang_default_value'] != '' && $this->dlext_fields_admin->vars['l_lang_default_value'][$lang_id] == ''))
+					|| ($this->dlext_fields_admin->vars['lang_default_value'] != '' && $this->dlext_fields_admin->vars['l_lang_default_value'][$lang_id] == '')
+				)
 				{
 					$empty_lang[$lang_id] = $this->dlext_constants::DL_TRUE;
 					break;
@@ -1343,9 +1347,9 @@ class acp_fields_controller implements acp_fields_interface
 	}
 
 	/**
-	* Update, then insert if not successfull
-	* Taken from acp_profile.php (c) by phpbb.com
-	*/
+	 * Update, then insert if not successfull
+	 * Taken from acp_profile.php (c) by phpbb.com
+	 */
 	public function update_insert($table, $sql_ary, $where_fields)
 	{
 		$where_sql = [];
@@ -1390,9 +1394,9 @@ class acp_fields_controller implements acp_fields_interface
 	}
 
 	/**
-	* Return sql statement for adding a new field ident (profile field) to the profile fields data table
-	* Taken from acp_profile.php (c) by phpbb.com
-	*/
+	 * Return sql statement for adding a new field ident (profile field) to the profile fields data table
+	 * Taken from acp_profile.php (c) by phpbb.com
+	 */
 	public function add_field_ident($field_ident, $field_type)
 	{
 		$sql = '';
@@ -1409,30 +1413,30 @@ class acp_fields_controller implements acp_fields_interface
 				{
 					case FIELD_STRING:
 						$sql .= ' VARCHAR(255) ';
-					break;
+						break;
 
 					case FIELD_DATE:
 						$sql .= 'VARCHAR(10) ';
-					break;
+						break;
 
 					case FIELD_TEXT:
-						$sql .= "TEXT";
-					break;
+						$sql .= 'TEXT';
+						break;
 
 					case FIELD_BOOL:
 						$sql .= 'TINYINT(2) ';
-					break;
+						break;
 
 					case FIELD_DROPDOWN:
 						$sql .= 'MEDIUMINT(8) ';
-					break;
+						break;
 
 					case FIELD_INT:
 						$sql .= 'BIGINT(20) ';
-					break;
+						break;
 				}
 
-			break;
+				break;
 
 			case 'sqlite':
 			case 'sqlite3':
@@ -1441,33 +1445,33 @@ class acp_fields_controller implements acp_fields_interface
 				{
 					case FIELD_STRING:
 						$type = ' VARCHAR(255) ';
-					break;
+						break;
 
 					case FIELD_DATE:
 						$type = 'VARCHAR(10) ';
-					break;
+						break;
 
 					case FIELD_TEXT:
-						$type = "TEXT(65535)";
-					break;
+						$type = 'TEXT(65535)';
+						break;
 
 					case FIELD_BOOL:
 						$type = 'TINYINT(2) ';
-					break;
+						break;
 
 					case FIELD_DROPDOWN:
 						$type = 'MEDIUMINT(8) ';
-					break;
+						break;
 
 					case FIELD_INT:
 						$type = 'BIGINT(20) ';
-					break;
+						break;
 				}
 
 				// We are defining the biggest common value, because of the possibility to edit the min/max values of each field.
 				$sql = 'ALTER TABLE ' . $this->dlext_table_dl_fields_data . " ADD $field_ident [$type]";
 
-			break;
+				break;
 
 			case 'mssql':
 			case 'mssql_odbc':
@@ -1480,27 +1484,27 @@ class acp_fields_controller implements acp_fields_interface
 				{
 					case FIELD_STRING:
 						$sql .= ' [VARCHAR] (255) ';
-					break;
+						break;
 
 					case FIELD_DATE:
 						$sql .= '[VARCHAR] (10) ';
-					break;
+						break;
 
 					case FIELD_TEXT:
-						$sql .= "[TEXT]";
-					break;
+						$sql .= '[TEXT]';
+						break;
 
 					case FIELD_BOOL:
 					case FIELD_DROPDOWN:
 						$sql .= '[INT] ';
-					break;
+						break;
 
 					case FIELD_INT:
 						$sql .= '[FLOAT] ';
-					break;
+						break;
 				}
 
-			break;
+				break;
 
 			case 'postgres':
 
@@ -1511,30 +1515,30 @@ class acp_fields_controller implements acp_fields_interface
 				{
 					case FIELD_STRING:
 						$sql .= ' VARCHAR(255) ';
-					break;
+						break;
 
 					case FIELD_DATE:
 						$sql .= 'VARCHAR(10) ';
-					break;
+						break;
 
 					case FIELD_TEXT:
-						$sql .= "TEXT";
-					break;
+						$sql .= 'TEXT';
+						break;
 
 					case FIELD_BOOL:
 						$sql .= 'INT2 ';
-					break;
+						break;
 
 					case FIELD_DROPDOWN:
 						$sql .= 'INT4 ';
-					break;
+						break;
 
 					case FIELD_INT:
 						$sql .= 'INT8 ';
-					break;
+						break;
 				}
 
-			break;
+				break;
 
 			case 'oracle':
 
@@ -1545,30 +1549,30 @@ class acp_fields_controller implements acp_fields_interface
 				{
 					case FIELD_STRING:
 						$sql .= ' VARCHAR2(255) ';
-					break;
+						break;
 
 					case FIELD_DATE:
 						$sql .= 'VARCHAR2(10) ';
-					break;
+						break;
 
 					case FIELD_TEXT:
-						$sql .= "CLOB";
-					break;
+						$sql .= 'CLOB';
+						break;
 
 					case FIELD_BOOL:
 						$sql .= 'NUMBER(2) ';
-					break;
+						break;
 
 					case FIELD_DROPDOWN:
 						$sql .= 'NUMBER(8) ';
-					break;
+						break;
 
 					case FIELD_INT:
 						$sql .= 'NUMBER(20) ';
-					break;
+						break;
 				}
 
-			break;
+				break;
 		}
 
 		return $sql;

@@ -1,23 +1,23 @@
 <?php
 
 /**
-*
-* @package phpBB Extension - Oxpus Downloads
-* @copyright (c) 2002-2021 OXPUS - www.oxpus.net
-* @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
-*
-*/
+ *
+ * @package   phpBB Extension - Oxpus Downloads
+ * @copyright 2002-2021 OXPUS - www.oxpus.net
+ * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
+ *
+ */
 
 namespace oxpus\dlext\ucp;
 
 /**
-* @package ucp
-*/
+ * @package ucp
+ */
 class main_module
 {
-	var $u_action;
+	public $u_action;
 
-	function main($id, $mode)
+	public function main($id, $mode)
 	{
 		global $phpbb_container;
 
@@ -30,13 +30,13 @@ class main_module
 		{
 			case 'config':
 				$this->page_title = 'DL_CONFIG';
-			break;
+				break;
 			case 'favorite':
 				$this->page_title = 'DL_FAVORITE';
-			break;
+				break;
 			case 'dl_privacy':
 				$this->page_title = 'DL_PRIVACY';
-			break;
+				break;
 		}
 
 		// Mount the right ucp container

@@ -1,12 +1,12 @@
 <?php
 
 /**
-*
-* @package phpBB Extension - Oxpus Downloads
-* @copyright (c) 2002-2021 OXPUS - www.oxpus.net
-* @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
-*
-*/
+ *
+ * @package   phpBB Extension - Oxpus Downloads
+ * @copyright 2002-2021 OXPUS - www.oxpus.net
+ * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
+ *
+ */
 
 namespace oxpus\dlext\controller;
 
@@ -29,21 +29,21 @@ class feed
 	protected $dlext_constants;
 
 	/**
-	* Constructor
-	*
-	* @param string									$root_path
-	* @param string									$php_ext
-	* @param \phpbb\db\driver\driver_interface		$db
-	* @param \phpbb\config\config					$config
-	* @param \phpbb\controller\helper				$helper
-	* @param \phpbb\template\template				$template
-	* @param \phpbb\user							$user
-	* @param \phpbb\language\language				$language
-	* @param \oxpus\dlext\core\files				$dlext_files
-	* @param \oxpus\dlext\core\main					$dlext_main
-	* @param \oxpus\dlext\core\status				$dlext_status
-	* @param \oxpus\dlext\core\helpers\constants	$dlext_constants
-	*/
+	 * Constructor
+	 *
+	 * @param string								$root_path
+	 * @param string								$php_ext
+	 * @param \phpbb\db\driver\driver_interface		$db
+	 * @param \phpbb\config\config					$config
+	 * @param \phpbb\controller\helper				$helper
+	 * @param \phpbb\template\template				$template
+	 * @param \phpbb\user							$user
+	 * @param \phpbb\language\language				$language
+	 * @param \oxpus\dlext\core\files				$dlext_files
+	 * @param \oxpus\dlext\core\main				$dlext_main
+	 * @param \oxpus\dlext\core\status				$dlext_status
+	 * @param \oxpus\dlext\core\helpers\constants	$dlext_constants
+	 */
 	public function __construct(
 		$root_path,
 		$php_ext,
@@ -121,11 +121,11 @@ class feed
 				{
 					case $this->dlext_constants::DL_RSS_CATS_SELECTED:
 						$where_cats += ['cat' => ['AND', 'IN', $this->db->sql_in_set('cat', $rss_cats_ary)]];
-					break;
+						break;
 
 					case $this->dlext_constants::DL_RSS_CATS_OTHER:
 						$where_cats += ['cat' => ['AND', 'NOT IN', $this->db->sql_in_set('cat', $rss_cats_ary, $this->dlext_constants::DL_TRUE)]];
-					break;
+						break;
 				}
 
 				$sort_by = ($this->config['dl_rss_select']) ? 'rand()' : 'change_time';
@@ -143,7 +143,7 @@ class feed
 
 				$rss = $this->dlext_constants::DL_TRUE;
 
-				$dl_files = $this->dlext_files->all_files(0, $sort_ary , $where_cats, 0, 0, $fields, $this->config['dl_rss_number']);
+				$dl_files = $this->dlext_files->all_files(0, $sort_ary, $where_cats, 0, 0, $fields, $this->config['dl_rss_number']);
 
 				if (!empty($dl_files))
 				{
@@ -226,11 +226,11 @@ class feed
 			{
 				case $this->dlext_constants::DL_RSS_ACTION_R_DLX:
 					redirect($this->helper->route('oxpus_dlext_index'));
-				break;
+					break;
 
 				case $this->dlext_constants::DL_RSS_ACTION_R_IDX:
 					redirect(append_sid($this->root_path . 'index.' . $this->php_ext));
-				break;
+					break;
 
 				default:
 					trigger_error($this->config['dl_rss_off_text']);

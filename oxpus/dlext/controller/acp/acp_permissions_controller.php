@@ -1,18 +1,18 @@
 <?php
 
 /**
-*
-* @package phpBB Extension - Oxpus Downloads
-* @copyright (c) 2002-2021 OXPUS - www.oxpus.net
-* @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
-*
-*/
+ *
+ * @package   phpBB Extension - Oxpus Downloads
+ * @copyright 2002-2021 OXPUS - www.oxpus.net
+ * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
+ *
+ */
 
 namespace oxpus\dlext\controller\acp;
 
 /**
-* @package acp
-*/
+ * @package acp
+ */
 class acp_permissions_controller implements acp_permissions_interface
 {
 	/* phpbb objects */
@@ -25,7 +25,7 @@ class acp_permissions_controller implements acp_permissions_interface
 	protected $cache;
 
 	/* extension owned objects */
-	protected $u_action;
+	public $u_action;
 
 	protected $dlext_extra;
 	protected $dlext_main;
@@ -145,7 +145,8 @@ class acp_permissions_controller implements acp_permissions_interface
 						'auth_up'		=> $this->dlext_constants::DL_PERM_GENERAL_ALL,
 						'auth_mod'		=> $this->dlext_constants::DL_PERM_GENERAL_ALL,
 						'auth_cread'	=> $this->dlext_constants::DL_PERM_ADMIN,
-						'auth_cpost'	=> $this->dlext_constants::DL_PERM_ADMIN]) . ' WHERE ' . $this->db->sql_in_set('id', $cat_ids);
+						'auth_cpost'	=> $this->dlext_constants::DL_PERM_ADMIN
+					]) . ' WHERE ' . $this->db->sql_in_set('id', $cat_ids);
 					$this->db->sql_query($sql);
 
 					$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_CAT_PERM_DROP', false, [$cat_list]);
@@ -161,7 +162,8 @@ class acp_permissions_controller implements acp_permissions_interface
 						'auth_up'		=> $this->dlext_constants::DL_PERM_GENERAL_ALL,
 						'auth_mod'		=> $this->dlext_constants::DL_PERM_GENERAL_ALL,
 						'auth_cread'	=> $this->dlext_constants::DL_PERM_ADMIN,
-						'auth_cpost'	=> $this->dlext_constants::DL_PERM_ADMIN]);
+						'auth_cpost'	=> $this->dlext_constants::DL_PERM_ADMIN
+					]);
 					$this->db->sql_query($sql);
 
 					$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_CAT_PERM_ALL');
@@ -231,42 +233,42 @@ class acp_permissions_controller implements acp_permissions_interface
 						{
 							case $this->dlext_constants::DL_PERM_ALL:
 								$l_auth_cread = $this->language->lang('DL_STAT_PERM_ALL');
-							break;
+								break;
 							case $this->dlext_constants::DL_PERM_USER:
 								$l_auth_cread = $this->language->lang('DL_STAT_PERM_USER');
-							break;
+								break;
 							case $this->dlext_constants::DL_PERM_MOD:
 								$l_auth_cread = $this->language->lang('DL_STAT_PERM_MOD');
-							break;
+								break;
 							case $this->dlext_constants::DL_PERM_ADMIN:
 								$l_auth_cread = $this->language->lang('DL_STAT_PERM_ADMIN');
-							break;
+								break;
 						}
 
 						switch ($index[$cat_id]['auth_cpost'])
 						{
 							case $this->dlext_constants::DL_PERM_ALL:
 								$l_auth_cpost = $this->language->lang('DL_STAT_PERM_ALL');
-							break;
+								break;
 							case $this->dlext_constants::DL_PERM_USER:
 								$l_auth_cpost = $this->language->lang('DL_STAT_PERM_USER');
-							break;
+								break;
 							case $this->dlext_constants::DL_PERM_MOD:
 								$l_auth_cpost = $this->language->lang('DL_STAT_PERM_MOD');
-							break;
+								break;
 							case $this->dlext_constants::DL_PERM_ADMIN:
 								$l_auth_cpost = $this->language->lang('DL_STAT_PERM_ADMIN');
-							break;
+								break;
 						}
 
 						switch ($index[$cat_id]['auth_view_real'])
 						{
 							case $this->dlext_constants::DL_PERM_GENERAL_ALL:
 								$l_auth_view = $this->language->lang('DL_PERM_ALL');
-							break;
+								break;
 							case $this->dlext_constants::DL_PERM_GENERAL_REG_USER:
 								$l_auth_view = $this->language->lang('DL_PERM_REG');
-							break;
+								break;
 							default:
 								$l_auth_view = $this->language->lang('DL_PERM_GRG');
 						}
@@ -275,10 +277,10 @@ class acp_permissions_controller implements acp_permissions_interface
 						{
 							case $this->dlext_constants::DL_PERM_GENERAL_ALL:
 								$l_auth_dl = $this->language->lang('DL_PERM_ALL');
-							break;
+								break;
 							case $this->dlext_constants::DL_PERM_GENERAL_REG_USER:
 								$l_auth_dl = $this->language->lang('DL_PERM_REG');
-							break;
+								break;
 							default:
 								$l_auth_dl = $this->language->lang('DL_PERM_GRG');
 						}
@@ -287,10 +289,10 @@ class acp_permissions_controller implements acp_permissions_interface
 						{
 							case $this->dlext_constants::DL_PERM_GENERAL_ALL:
 								$l_auth_up = $this->language->lang('DL_PERM_ALL');
-							break;
+								break;
 							case $this->dlext_constants::DL_PERM_GENERAL_REG_USER:
 								$l_auth_up = $this->language->lang('DL_PERM_REG');
-							break;
+								break;
 							default:
 								$l_auth_up = $this->language->lang('DL_PERM_GRG');
 						}
@@ -299,10 +301,10 @@ class acp_permissions_controller implements acp_permissions_interface
 						{
 							case $this->dlext_constants::DL_PERM_GENERAL_ALL:
 								$l_auth_mod = $this->language->lang('DL_PERM_ALL');
-							break;
+								break;
 							case $this->dlext_constants::DL_PERM_GENERAL_REG_USER:
 								$l_auth_mod = $this->language->lang('DL_PERM_REG');
-							break;
+								break;
 							default:
 								$l_auth_mod = $this->language->lang('DL_PERM_GRG');
 						}
@@ -361,86 +363,86 @@ class acp_permissions_controller implements acp_permissions_interface
 			{
 				case $this->dlext_constants::DL_PERM_GENERAL_ALL:
 					$log_auth_view = $this->language->lang('DL_PERM_ALL');
-				break;
+					break;
 				case $this->dlext_constants::DL_PERM_GENERAL_REG_USER:
 					$log_auth_view = $this->language->lang('DL_PERM_REG');
-				break;
+					break;
 				default:
 					$log_auth_view = $this->language->lang('DL_PERM_GRG');
-				break;
+					break;
 			}
 
 			switch ($auth_dl)
 			{
 				case $this->dlext_constants::DL_PERM_GENERAL_ALL:
 					$log_auth_dl = $this->language->lang('DL_PERM_ALL');
-				break;
+					break;
 				case $this->dlext_constants::DL_PERM_GENERAL_REG_USER:
 					$log_auth_dl = $this->language->lang('DL_PERM_REG');
-				break;
+					break;
 				default:
 					$log_auth_dl = $this->language->lang('DL_PERM_GRG');
-				break;
+					break;
 			}
 
 			switch ($auth_up)
 			{
 				case $this->dlext_constants::DL_PERM_GENERAL_ALL:
 					$log_auth_up = $this->language->lang('DL_PERM_ALL');
-				break;
+					break;
 				case $this->dlext_constants::DL_PERM_GENERAL_REG_USER:
 					$log_auth_up = $this->language->lang('DL_PERM_REG');
-				break;
+					break;
 				default:
 					$log_auth_up = $this->language->lang('DL_PERM_GRG');
-				break;
+					break;
 			}
 
 			switch ($auth_mod)
 			{
 				case $this->dlext_constants::DL_PERM_GENERAL_ALL:
 					$log_auth_mod = $this->language->lang('DL_PERM_ALL');
-				break;
+					break;
 				case $this->dlext_constants::DL_PERM_GENERAL_REG_USER:
 					$log_auth_mod = $this->language->lang('DL_PERM_REG');
-				break;
+					break;
 				default:
 					$log_auth_mod = $this->language->lang('DL_PERM_GRG');
-				break;
+					break;
 			}
 
 			switch ($auth_cread)
 			{
 				case $this->dlext_constants::DL_PERM_USER:
 					$log_auth_cread = $this->language->lang('DL_STAT_PERM_USER');
-				break;
+					break;
 				case $this->dlext_constants::DL_PERM_MOD:
 					$log_auth_cread = $this->language->lang('DL_STAT_PERM_MOD');
-				break;
+					break;
 				case $this->dlext_constants::DL_PERM_ADMIN:
 					$log_auth_cread = $this->language->lang('DL_STAT_PERM_ADMIN');
-				break;
+					break;
 				default:
 					$log_auth_cread = $this->language->lang('DL_STAT_PERM_ALL');
 					$auth_cread = 0;
-				break;
+					break;
 			}
 
 			switch ($auth_cpost)
 			{
 				case $this->dlext_constants::DL_PERM_USER:
 					$log_auth_cpost = $this->language->lang('DL_STAT_PERM_USER');
-				break;
+					break;
 				case $this->dlext_constants::DL_PERM_MOD:
 					$log_auth_cpost = $this->language->lang('DL_STAT_PERM_MOD');
-				break;
+					break;
 				case $this->dlext_constants::DL_PERM_ADMIN:
 					$log_auth_cpost = $this->language->lang('DL_STAT_PERM_ADMIN');
-				break;
+					break;
 				default:
 					$log_auth_cpost = $this->language->lang('DL_STAT_PERM_ALL');
 					$auth_cpost = 0;
-				break;
+					break;
 			}
 
 			if (isset($s_presel_groups[0]) && $s_presel_groups[0] == $this->dlext_constants::DL_NONE)
@@ -459,7 +461,8 @@ class acp_permissions_controller implements acp_permissions_interface
 						'auth_up'		=> $auth_up,
 						'auth_mod'		=> $auth_mod,
 						'auth_cread'	=> $auth_cread,
-						'auth_cpost'	=> $auth_cpost]) . ' WHERE id = ' . (int) $s_presel_cats[$i];
+						'auth_cpost'	=> $auth_cpost
+					]) . ' WHERE id = ' . (int) $s_presel_cats[$i];
 					$this->db->sql_query($sql);
 
 					$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_CAT_PERM_ALL', false, [$cat_name, $log_auth_view, $log_auth_dl, $log_auth_up, $log_auth_mod, $log_auth_cread, $log_auth_cpost]);
@@ -488,7 +491,8 @@ class acp_permissions_controller implements acp_permissions_interface
 							'auth_view'	=> $auth_view,
 							'auth_dl'	=> $auth_dl,
 							'auth_up'	=> $auth_up,
-							'auth_mod'	=> $auth_mod]);
+							'auth_mod'	=> $auth_mod
+						]);
 						$this->db->sql_query($sql);
 
 						$sql = 'SELECT group_type, group_name FROM ' . GROUPS_TABLE . '
@@ -640,11 +644,11 @@ class acp_permissions_controller implements acp_permissions_interface
 							}
 
 							$s_auth_all = [];
-							$s_auth_all[] = ['value' => $this->dlext_constants::DL_PERM_GENERAL_NONE, 	'lang' =>$this->language->lang('SELECT_OPTION')];
-							$s_auth_all[] = ['value' => $this->dlext_constants::DL_PERM_ALL, 			'lang' =>$this->language->lang('DL_STAT_PERM_ALL')];
-							$s_auth_all[] = ['value' => $this->dlext_constants::DL_PERM_USER, 			'lang' =>$this->language->lang('DL_STAT_PERM_USER')];
-							$s_auth_all[] = ['value' => $this->dlext_constants::DL_PERM_MOD, 			'lang' =>$this->language->lang('DL_STAT_PERM_MOD')];
-							$s_auth_all[] = ['value' => $this->dlext_constants::DL_PERM_ADMIN, 			'lang' =>$this->language->lang('DL_STAT_PERM_ADMIN')];
+							$s_auth_all[] = ['value' => $this->dlext_constants::DL_PERM_GENERAL_NONE, 	'lang' => $this->language->lang('SELECT_OPTION')];
+							$s_auth_all[] = ['value' => $this->dlext_constants::DL_PERM_ALL, 			'lang' => $this->language->lang('DL_STAT_PERM_ALL')];
+							$s_auth_all[] = ['value' => $this->dlext_constants::DL_PERM_USER, 			'lang' => $this->language->lang('DL_STAT_PERM_USER')];
+							$s_auth_all[] = ['value' => $this->dlext_constants::DL_PERM_MOD, 			'lang' => $this->language->lang('DL_STAT_PERM_MOD')];
+							$s_auth_all[] = ['value' => $this->dlext_constants::DL_PERM_ADMIN, 			'lang' => $this->language->lang('DL_STAT_PERM_ADMIN')];
 
 							for ($i = 0; $i < count($s_auth_all); ++$i)
 							{

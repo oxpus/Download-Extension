@@ -1,12 +1,12 @@
 <?php
 
 /**
-*
-* @package phpBB Extension - Oxpus Downloads
-* @copyright (c) 2002-2021 OXPUS - www.oxpus.net
-* @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
-*
-*/
+ *
+ * @package   phpBB Extension - Oxpus Downloads
+ * @copyright 2002-2021 OXPUS - www.oxpus.net
+ * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
+ *
+ */
 
 namespace oxpus\dlext\core;
 
@@ -27,7 +27,7 @@ interface files_interface
 	 * @param string $sql_fields fields which data are needed
 	 * @return array all download data we asked for
 	 * @access public
-	*/
+	 */
 	public function files($cat_id, $sql_sort_by, $sql_order, $start, $limit, $sql_fields = '*');
 
 	/**
@@ -43,7 +43,7 @@ interface files_interface
 	 * @param int $limit_start start row in the data rowset to select from, 0 will disable the limit
 	 * @return array all download data we asked for
 	 * @access public
-	*/
+	 */
 	public function all_files($cat_id, $sort_ary, $extra_where, $df_id, $modcp, $fields, $limit = 0, $limit_start = 0);
 
 	/**
@@ -54,6 +54,6 @@ interface files_interface
 	 * @param string $sql_sort_by contains sql sorting fields
 	 * @param string $sql_order contains sql sorting order
 	 * @access public
-	*/
+	 */
 	public function dl_sorting($sort_by, $order, &$sql_sort_by = '', &$sql_order = '');
 }

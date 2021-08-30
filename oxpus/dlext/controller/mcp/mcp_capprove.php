@@ -1,12 +1,12 @@
 <?php
 
 /**
-*
-* @package phpBB Extension - Oxpus Downloads
-* @copyright (c) 2002-2021 OXPUS - www.oxpus.net
-* @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
-*
-*/
+ *
+ * @package   phpBB Extension - Oxpus Downloads
+ * @copyright 2002-2021 OXPUS - www.oxpus.net
+ * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
+ *
+ */
 
 namespace oxpus\dlext\controller\mcp;
 
@@ -34,26 +34,26 @@ class mcp_capprove
 	protected $dlext_table_downloads;
 
 	/**
-	* Constructor
-	*
-	* @param string									$root_path
-	* @param string									$php_ext
-	* @param \phpbb\notification\manager 			$notification
-	* @param \phpbb\pagination						$pagination
-	* @param \phpbb\db\driver\driver_interface		$db
-	* @param \phpbb\config\config					$config
-	* @param \phpbb\controller\helper				$helper
-	* @param \phpbb\request\request 				$request
-	* @param \phpbb\template\template				$template
-	* @param \phpbb\language\language				$language
-	* @param \oxpus\dlext\core\auth					$dlext_auth
-	* @param \oxpus\dlext\core\main					$dlext_main
-	* @param \oxpus\dlext\core\helpers\constants	$dlext_constants
-	* @param \oxpus\dlext\core\helpers\footer		$dlext_footer
-	* @param string									$dlext_table_dl_comments
-	* @param string									$dlext_table_downloads
-	* @param string									$dlext_constants
-	*/
+	 * Constructor
+	 *
+	 * @param string								$root_path
+	 * @param string								$php_ext
+	 * @param \phpbb\notification\manager 			$notification
+	 * @param \phpbb\pagination						$pagination
+	 * @param \phpbb\db\driver\driver_interface		$db
+	 * @param \phpbb\config\config					$config
+	 * @param \phpbb\controller\helper				$helper
+	 * @param \phpbb\request\request 				$request
+	 * @param \phpbb\template\template				$template
+	 * @param \phpbb\language\language				$language
+	 * @param \oxpus\dlext\core\auth				$dlext_auth
+	 * @param \oxpus\dlext\core\main				$dlext_main
+	 * @param \oxpus\dlext\core\helpers\constants	$dlext_constants
+	 * @param \oxpus\dlext\core\helpers\footer		$dlext_footer
+	 * @param string								$dlext_table_dl_comments
+	 * @param string								$dlext_table_downloads
+	 * @param string								$dlext_constants
+	 */
 	public function __construct(
 		$root_path,
 		$php_ext,
@@ -119,8 +119,6 @@ class mcp_capprove
 
 		$action = ($delete) ? 'delete' : $action;
 
-		unset($dl_index);
-
 		add_form_key('dl_modcp');
 
 		if ($action == 'delete')
@@ -153,7 +151,8 @@ class mcp_capprove
 			}
 
 			$sql = 'UPDATE ' . $this->dlext_table_dl_comments . ' SET ' . $this->db->sql_build_array('UPDATE', [
-				'approve' => $this->dlext_constants::DL_TRUE]) . ' WHERE ' . $this->db->sql_in_set('dl_id', $dlo_id);
+				'approve' => $this->dlext_constants::DL_TRUE
+			]) . ' WHERE ' . $this->db->sql_in_set('dl_id', $dlo_id);
 			$this->db->sql_query($sql);
 
 			$this->notification->delete_notifications('oxpus.dlext.notification.type.capprove', $dlo_id);

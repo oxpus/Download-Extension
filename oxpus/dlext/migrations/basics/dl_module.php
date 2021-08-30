@@ -1,12 +1,12 @@
 <?php
 
 /**
-*
-* @package phpBB Extension - Oxpus Downloads
-* @copyright (c) 2002-2021 OXPUS - www.oxpus.net
-* @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
-*
-*/
+ *
+ * @package   phpBB Extension - Oxpus Downloads
+ * @copyright 2002-2021 OXPUS - www.oxpus.net
+ * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
+ *
+ */
 
 namespace oxpus\dlext\migrations\basics;
 
@@ -17,7 +17,7 @@ class dl_module extends \phpbb\db\migration\migration
 		return isset($this->config['dl_use_hacklist']);
 	}
 
-	static public function depends_on()
+	public static function depends_on()
 	{
 		return ['\oxpus\dlext\migrations\basics\dl_schema'];
 	}
@@ -35,7 +35,7 @@ class dl_module extends \phpbb\db\migration\migration
 				'ACP_DOWNLOADS',
 				[
 					'module_basename'	=> '\oxpus\dlext\acp\main_module',
-					'modes'				=> ['overview','config','traffic','categories','files','permissions','stats','banlist','ext_blacklist','toolbox','fields','browser','perm_check'],
+					'modes'				=> ['overview', 'config', 'traffic', 'categories', 'files', 'permissions', 'stats', 'banlist', 'ext_blacklist', 'toolbox', 'fields', 'browser', 'perm_check'],
 				],
 			]],
 			['module.add', [
@@ -48,7 +48,7 @@ class dl_module extends \phpbb\db\migration\migration
 				'DOWNLOADS',
 				[
 					'module_basename'	=> '\oxpus\dlext\ucp\main_module',
-					'modes'				=> ['ucp_config','ucp_favorite','ucp_privacy'],
+					'modes'				=> ['ucp_config', 'ucp_favorite', 'ucp_privacy'],
 				],
 			]],
 

@@ -1,12 +1,12 @@
 <?php
 
 /**
-*
-* @package phpBB Extension - Oxpus Downloads
-* @copyright (c) 2002-2021 OXPUS - www.oxpus.net
-* @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
-*
-*/
+ *
+ * @package   phpBB Extension - Oxpus Downloads
+ * @copyright 2002-2021 OXPUS - www.oxpus.net
+ * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
+ *
+ */
 
 namespace oxpus\dlext\core;
 
@@ -24,7 +24,7 @@ interface download_interface
 	 * @param bool $own_edit true returns the download details, false returns to the mcp
 	 * @param string $u_action return path on acp module
 	 * @access public
-	*/
+	 */
 	public function dl_submit_download($module, $df_id = 0, $own_edit = 0, $u_action = '');
 
 	/**
@@ -35,7 +35,7 @@ interface download_interface
 	 * @param bool $own_edit permission to edit a download by a regular user
 	 * @param string $u_action return path on acp module
 	 * @access public
-	*/
+	 */
 	public function dl_edit_download($module, $df_id = 0, $own_edit = 0, $u_action = '');
 
 	/**
@@ -46,6 +46,6 @@ interface download_interface
 	 * @param int $df_id download id to update the dataset and physical files
 	 * @param string $u_action return path on acp module
 	 * @access public
-	*/
+	 */
 	public function dl_delete_version($module, $cat_id, $df_id, $u_action = '');
 }

@@ -1,12 +1,12 @@
 <?php
 
 /**
-*
-* @package phpBB Extension - Oxpus Downloads
-* @copyright (c) 2002-2021 OXPUS - www.oxpus.net
-* @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
-*
-*/
+ *
+ * @package   phpBB Extension - Oxpus Downloads
+ * @copyright 2002-2021 OXPUS - www.oxpus.net
+ * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
+ *
+ */
 
 namespace oxpus\dlext\core;
 
@@ -24,7 +24,7 @@ interface topic_interface
 	 * @param string $topic_drop_mode needed to close topics on deleted downloads
 	 * @return void
 	 * @access public
-	*/
+	 */
 	public function gen_dl_topic($mode, $dl_id, $topic_drop_mode = '');
 
 	/**
@@ -35,7 +35,7 @@ interface topic_interface
 	 * @param array $dl_ids download ids which should be deleted
 	 * @return void
 	 * @access public
-	*/
+	 */
 	public function delete_dl_topic($topic_ids, $topic_drop_mode = 'drop', $dl_ids = []);
 
 	/**
@@ -48,6 +48,6 @@ interface topic_interface
 	 * param array $bkup_data backup array form the original user
 	 * return array new or original user data
 	 * @access public
-	*/
+	 */
 	public function _change_auth($user_id, $mode = 'replace', $bkup_data = false);
 }

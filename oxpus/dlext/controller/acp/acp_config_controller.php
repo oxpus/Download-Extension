@@ -1,24 +1,24 @@
 <?php
 
 /**
-*
-* @package phpBB Extension - Oxpus Downloads
-* @copyright (c) 2002-2021 OXPUS - www.oxpus.net
-* @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
-*
-*/
+ *
+ * @package   phpBB Extension - Oxpus Downloads
+ * @copyright 2002-2021 OXPUS - www.oxpus.net
+ * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
+ *
+ */
 
 namespace oxpus\dlext\controller\acp;
 
 /**
-* @package acp
-*/
+ * @package acp
+ */
 class acp_config_controller implements acp_config_interface
 {
 	/* phpbb objects */
 	protected $db;
 	protected $user;
-	protected $phpEx;
+	protected $phpex;
 	protected $root_path;
 	protected $log;
 	protected $config;
@@ -29,7 +29,7 @@ class acp_config_controller implements acp_config_interface
 	protected $cache;
 
 	/* extension owned objects */
-	protected $u_action;
+	public $u_action;
 	protected $ext_path;
 
 	protected $dlext_extra;
@@ -45,7 +45,7 @@ class acp_config_controller implements acp_config_interface
 	 * Constructor
 	 *
 	 * @param string								$root_path
-	 * @param string								$phpEx
+	 * @param string								$phpex
 	 * @param \phpbb\config\config					$config
 	 * @param \phpbb\config\db_text					$config_text
 	 * @param \phpbb\language\language				$language
@@ -65,7 +65,7 @@ class acp_config_controller implements acp_config_interface
 	 */
 	public function __construct(
 		$root_path,
-		$phpEx,
+		$phpex,
 		\phpbb\config\config $config,
 		\phpbb\config\db_text $config_text,
 		\phpbb\language\language $language,
@@ -85,7 +85,7 @@ class acp_config_controller implements acp_config_interface
 	)
 	{
 		$this->root_path				= $root_path;
-		$this->phpEx					= $phpEx;
+		$this->phpEx					= $phpex;
 		$this->db						= $db;
 		$this->log						= $log;
 		$this->user						= $user;
@@ -165,7 +165,7 @@ class acp_config_controller implements acp_config_interface
 						'dl_set_user'		=> ['lang' => 'DL_TOPIC_USER_OTHER',	'validate' => 'string',	'type' => 'custom',			'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_SET_ADD',				'function' => [$this, 'select_dl_user'], 	'params' => ['{CONFIG_VALUE}', 'dl_set_user']],
 					]
 				];
-			break;
+				break;
 			case 'view':
 				$display_vars = [
 					'title'	=> 'DL_ACP_CONF_VIEW',
@@ -239,7 +239,7 @@ class acp_config_controller implements acp_config_interface
 					$s_hidden_fields = ['dl_similar_limit' => 0, 'dl_similar_dl' => 0];
 				}
 
-			break;
+				break;
 			case 'protect':
 				$display_vars = [
 					'title'	=> 'DL_ACP_CONF_PROTECT',
@@ -273,7 +273,7 @@ class acp_config_controller implements acp_config_interface
 						'dl_hotlink_action'		=> ['lang' => 'DL_HOTLINK_ACTION',		'validate' => 'int',	'type' => 'select',			'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_HOTLINK_ACTION',			'function' => [$this, 'select_hotlink_action'],	'params' => ['{CONFIG_VALUE}']],
 					]
 				];
-			break;
+				break;
 			case 'limit':
 				$display_vars = [
 					'title'	=> 'DL_ACP_CONF_LIMIT',
@@ -330,7 +330,7 @@ class acp_config_controller implements acp_config_interface
 
 				$this->db->sql_freeresult($result);
 
-			break;
+				break;
 			case 'traffic':
 				$sql = 'SELECT group_id, group_name, group_type FROM ' . GROUPS_TABLE . '
 						WHERE ' . $this->db->sql_in_set('group_name', ['GUESTS', 'BOTS'], $this->dlext_constants::DL_TRUE) . '
@@ -407,7 +407,7 @@ class acp_config_controller implements acp_config_interface
 						'dl_upload_traffic_count'	=> ['lang' => 'DL_UPLOAD_TRAFFIC_COUNT',			'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_UPLOAD_TRAFFIC_COUNT'],
 					]
 				];
-			break;
+				break;
 			case 'message':
 				$display_vars = [
 					'title'	=> 'DL_ACP_CONF_MESSAGE',
@@ -422,7 +422,7 @@ class acp_config_controller implements acp_config_interface
 						'dl_file_edit_hint'			=> ['lang' => 'DL_FILE_EDIT_HINT',			'validate' => 'string',	'type' => 'custom',			'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_FILE_EDIT_HINT',		'preview' => $formated_hint_text,	'function' => [$this, 'textarea_input'],		'params' => ['{CONFIG_VALUE}', 'dl_file_edit_hint', 75, 5]],
 					]
 				];
-			break;
+				break;
 			case 'topic':
 				$display_vars = [
 					'title'	=> 'DL_ACP_CONF_TOPIC',
@@ -440,7 +440,7 @@ class acp_config_controller implements acp_config_interface
 						'dl_topic_type'				=> ['lang' => 'POST_TOPIC_AS',				'validate' => 'bool',	'type' => 'select',			'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_TOPIC_TYPE', 			'function' => [$this, 'select_topic_type'],		'params' => ['{CONFIG_VALUE}']],
 					]
 				];
-			break;
+				break;
 			case 'rss':
 				$display_vars = [
 					'title'	=> 'DL_ACP_CONF_RSS',
@@ -459,7 +459,7 @@ class acp_config_controller implements acp_config_interface
 						'dl_rss_desc_shorten'	=> ['lang' => 'DL_RSS_DESC_LENGTH_SHORTEN',		'validate' => 'int',	'type' => 'text:5:5',		'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_RSS_DESC_LENGTH_SHORTEN'],
 					]
 				];
-			break;
+				break;
 		}
 
 		$this->new_config = $this->config;
@@ -478,10 +478,12 @@ class acp_config_controller implements acp_config_interface
 				if ($submit && $this->config[$config_name] != $cfg_array[$config_name])
 				{
 					$sql = 'UPDATE ' . $this->dlext_table_downloads . ' SET ' . $this->db->sql_build_array('UPDATE', [
-						'file_hash' => '']);
+						'file_hash' => ''
+					]);
 					$this->db->sql_query($sql);
 					$sql = 'UPDATE ' . $this->dlext_table_dl_versions . ' SET ' . $this->db->sql_build_array('UPDATE', [
-						'ver_file_hash' => '']);
+						'ver_file_hash' => ''
+					]);
 					$this->db->sql_query($sql);
 				}
 			}
@@ -798,10 +800,10 @@ class acp_config_controller implements acp_config_interface
 						$select .= '</optgroup>';
 					}
 					$select .= '<optgroup label="' . $value['forum_name'] . '">';
-				break;
+					break;
 				case FORUM_POST:
 					$select .= '<option value="' . $value['forum_id'] . '">' . $value['forum_name'] . '</option>';
-				break;
+					break;
 			}
 		}
 
@@ -858,9 +860,9 @@ class acp_config_controller implements acp_config_interface
 
 	public function select_rss_cats($value)
 	{
-		$s_select = '<label><input type="radio" name="config[dl_rss_cats]" id="dl_rss_cats" class="radio" value="' . $this->dlext_constants::DL_RSS_CATS_ALL . '" ' . (($value == $this->dlext_constants::DL_RSS_CATS_ALL) ? 'checked="checked"' : '' ) . ' />' . $this->language->lang('DL_RSS_CATS_ALL') . '</label>&nbsp;';
-		$s_select .= '<label><input type="radio" name="config[dl_rss_cats]" class="radio" value="' . $this->dlext_constants::DL_RSS_CATS_SELECTED . '" ' . (($value == $this->dlext_constants::DL_RSS_CATS_SELECTED) ? 'checked="checked"' : '' ) . ' />' . $this->language->lang('DL_RSS_CATS_SELECTED') . '</label>&nbsp;';
-		$s_select .= '<label><input type="radio" name="config[dl_rss_cats]" class="radio" value="' . $this->dlext_constants::DL_RSS_CATS_OTHER . '" ' . (($value == $this->dlext_constants::DL_RSS_CATS_OTHER) ? 'checked="checked"' : '' ) . ' />' . $this->language->lang('DL_RSS_CATS_NOT_SELECTED') . '</label>&nbsp;';
+		$s_select = '<label><input type="radio" name="config[dl_rss_cats]" id="dl_rss_cats" class="radio" value="' . $this->dlext_constants::DL_RSS_CATS_ALL . '" ' . (($value == $this->dlext_constants::DL_RSS_CATS_ALL) ? 'checked="checked"' : '') . ' />' . $this->language->lang('DL_RSS_CATS_ALL') . '</label>&nbsp;';
+		$s_select .= '<label><input type="radio" name="config[dl_rss_cats]" class="radio" value="' . $this->dlext_constants::DL_RSS_CATS_SELECTED . '" ' . (($value == $this->dlext_constants::DL_RSS_CATS_SELECTED) ? 'checked="checked"' : '') . ' />' . $this->language->lang('DL_RSS_CATS_SELECTED') . '</label>&nbsp;';
+		$s_select .= '<label><input type="radio" name="config[dl_rss_cats]" class="radio" value="' . $this->dlext_constants::DL_RSS_CATS_OTHER . '" ' . (($value == $this->dlext_constants::DL_RSS_CATS_OTHER) ? 'checked="checked"' : '') . ' />' . $this->language->lang('DL_RSS_CATS_NOT_SELECTED') . '</label>&nbsp;';
 
 		if ($value != $this->dlext_constants::DL_RSS_CATS_ALL)
 		{
@@ -945,7 +947,7 @@ class acp_config_controller implements acp_config_interface
 					$remain_traffic_out = $remain_traffic_tmp['size_out'];
 					$x_rem = $remain_traffic_tmp['range'];
 					$remain_text_out = $remain_traffic_text . $remain_traffic_out . $x_rem;
-				break;
+					break;
 				case 'dl_overall_guest_traffic':
 					$remain_traffic_text = $this->language->lang('DL_REMAIN_OVERALL_GUEST_TRAFFIC');
 					$remain_traffic = $this->config['dl_overall_guest_traffic'] - (int) $this->config['dl_remain_guest_traffic'];
@@ -955,10 +957,10 @@ class acp_config_controller implements acp_config_interface
 					$remain_traffic_out = $remain_traffic_tmp['size_out'];
 					$x_rem = $remain_traffic_tmp['range'];
 					$remain_text_out = $remain_traffic_text . $remain_traffic_out . $x_rem;
-				break;
+					break;
 				case 'dl_physical_quota':
 					$remain_text_out = $this->language->lang('DL_PHYSICAL_QUOTA_EXPLAIN', $this->dlext_format->dl_size($this->dlext_physical->read_dl_sizes(), 2));
-				break;
+					break;
 			}
 
 			$remain_text_out = '<br /><span>&nbsp;' . $remain_text_out . '</span>';

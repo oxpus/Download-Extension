@@ -1,12 +1,12 @@
 <?php
 
 /**
-*
-* @package phpBB Extension - Oxpus Downloads
-* @copyright (c) 2002-2021 OXPUS - www.oxpus.net
-* @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
-*
-*/
+ *
+ * @package   phpBB Extension - Oxpus Downloads
+ * @copyright 2002-2021 OXPUS - www.oxpus.net
+ * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
+ *
+ */
 
 namespace oxpus\dlext\controller;
 
@@ -19,11 +19,11 @@ class help
 	protected $request;
 
 	/**
-	* Constructor
-	*
-	* @param \phpbb\language\language 		$language
-	* @param \phpbb\request\request 		$request
-	*/
+	 * Constructor
+	 *
+	 * @param \phpbb\language\language 		$language
+	 * @param \phpbb\request\request 		$request
+	 */
 	public function __construct(
 		\phpbb\language\language $language,
 		\phpbb\request\request $request

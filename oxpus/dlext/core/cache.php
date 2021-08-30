@@ -1,12 +1,12 @@
 <?php
 
 /**
-*
-* @package phpBB Extension - Oxpus Downloads
-* @copyright (c) 2002-2021 OXPUS - www.oxpus.net
-* @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
-*
-*/
+ *
+ * @package   phpBB Extension - Oxpus Downloads
+ * @copyright 2002-2021 OXPUS - www.oxpus.net
+ * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
+ *
+ */
 
 namespace oxpus\dlext\core;
 
@@ -26,17 +26,17 @@ class cache implements cache_interface
 	protected $dlext_table_dl_cat;
 
 	/**
-	* Constructor
-	*
-	* @param \phpbb\cache\service					$cache
-	* @param \phpbb\db\driver\driver_interface		$db
-	* @param \oxpus\dlext\core\helpers\constants	$dlext_constants
-	* @param string									$dlext_table_dl_auth
-	* @param string									$dlext_table_dl_cat_traf
-	* @param string									$dlext_table_dl_ext_blacklist
-	* @param string									$dlext_table_downloads
-	* @param string									$dlext_table_dl_cat
-	*/
+	 * Constructor
+	 *
+	 * @param \phpbb\cache\service					$cache
+	 * @param \phpbb\db\driver\driver_interface		$db
+	 * @param \oxpus\dlext\core\helpers\constants	$dlext_constants
+	 * @param string								$dlext_table_dl_auth
+	 * @param string								$dlext_table_dl_cat_traf
+	 * @param string								$dlext_table_dl_ext_blacklist
+	 * @param string								$dlext_table_downloads
+	 * @param string								$dlext_table_dl_cat
+	 */
 	public function __construct(
 		\phpbb\cache\service $cache,
 		\phpbb\db\driver\driver_interface $db,
@@ -62,7 +62,7 @@ class cache implements cache_interface
 
 	/**
 	 * Download Extension Category Cache
-	*/
+	 */
 	public function obtain_dl_cats()
 	{
 		if (($dl_index = $this->cache->get('_dlext_cats')) === false)
@@ -105,7 +105,7 @@ class cache implements cache_interface
 
 	/**
 	 * Download Extension Blacklist Cache
-	*/
+	 */
 	public function obtain_dl_blacklist()
 	{
 		if (($dl_black = $this->cache->get('_dlext_black')) === false)
@@ -116,7 +116,7 @@ class cache implements cache_interface
 
 			$dl_black = [];
 
-			while ( $row = $this->db->sql_fetchrow($result) )
+			while ($row = $this->db->sql_fetchrow($result))
 			{
 				$dl_black[] = $row['extention'];
 			}
@@ -131,7 +131,7 @@ class cache implements cache_interface
 
 	/**
 	 * Download Extension Cat Filecount Cache
-	*/
+	 */
 	public function obtain_dl_cat_counts()
 	{
 		if (($dl_cat_counts = $this->cache->get('_dlext_cat_counts')) === false)
@@ -157,7 +157,7 @@ class cache implements cache_interface
 
 	/**
 	 * Download Extension Files Cache
-	*/
+	 */
 	public function obtain_dl_files($dl_new_time, $dl_edit_time)
 	{
 		if (!$dl_new_time && !$dl_edit_time)
@@ -238,7 +238,7 @@ class cache implements cache_interface
 
 	/**
 	 * Download Extension Auth Cache
-	*/
+	 */
 	public function obtain_dl_auth()
 	{
 		$auth_cat		= [];
@@ -291,7 +291,7 @@ class cache implements cache_interface
 
 	/**
 	 * Download Extension Auth Group Settings Cache
-	*/
+	 */
 	public function obtain_dl_access_groups($auth_cat, $user_id, $auth_perm, $group_perm_ids = [])
 	{
 		$cat_auth_array	= [];
@@ -357,7 +357,7 @@ class cache implements cache_interface
 
 	/**
 	 * Download Extension File preload
-	*/
+	 */
 	public function obtain_dl_file_p()
 	{
 		if (($dl_file_p = $this->cache->get('_dlext_file_p')) === false)

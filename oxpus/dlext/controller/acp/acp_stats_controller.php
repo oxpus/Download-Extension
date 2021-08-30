@@ -1,18 +1,18 @@
 <?php
 
 /**
-*
-* @package phpBB Extension - Oxpus Downloads
-* @copyright (c) 2002-2021 OXPUS - www.oxpus.net
-* @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
-*
-*/
+ *
+ * @package   phpBB Extension - Oxpus Downloads
+ * @copyright 2002-2021 OXPUS - www.oxpus.net
+ * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
+ *
+ */
 
 namespace oxpus\dlext\controller\acp;
 
 /**
-* @package acp
-*/
+ * @package acp
+ */
 class acp_stats_controller implements acp_stats_interface
 {
 	/* phpbb objects */
@@ -27,7 +27,7 @@ class acp_stats_controller implements acp_stats_interface
 	protected $pagination;
 
 	/* extension owned objects */
-	protected $u_action;
+	public $u_action;
 
 	protected $dlext_format;
 	protected $dlext_constants;
@@ -154,19 +154,19 @@ class acp_stats_controller implements acp_stats_interface
 		{
 			case 'cat':
 				$sql_order_by = 'cat_name ' . $sql_order_dir . ', time_stamp DESC';
-			break;
+				break;
 			case 'id':
 				$sql_order_by = 'description ' . $sql_order_dir . ', time_stamp DESC';
-			break;
+				break;
 			case 'size':
 				$sql_order_by = 'traffic ' . $sql_order_dir . ', time_stamp DESC';
-			break;
+				break;
 			case 'ip':
 				$sql_order_by = 'user_ip ' . $sql_order_dir . ', time_stamp DESC';
-			break;
+				break;
 			case 'time':
 				$sql_order_by = 'time_stamp ' . $sql_order_dir;
-			break;
+				break;
 			default:
 				$sql_order_by = 'username ' . $sql_order_dir . ', time_stamp DESC';
 		}
@@ -176,15 +176,15 @@ class acp_stats_controller implements acp_stats_interface
 			case 'cat':
 				$search_filter_by = 'cat_name';
 				$filter_by = 'cat';
-			break;
+				break;
 			case 'id':
 				$search_filter_by = 'description';
 				$filter_by = 'id';
-			break;
+				break;
 			case 'username':
 				$search_filter_by = 'username';
 				$filter_by = 'username';
-			break;
+				break;
 			default:
 				$search_filter_by = $filter_by = '';
 		}
@@ -284,10 +284,10 @@ class acp_stats_controller implements acp_stats_interface
 				{
 					case $this->dlext_constants::DL_STATS_FILE_UPLOAD:
 						$direction = $this->language->lang('DL_UPLOAD_FILE');
-					break;
+						break;
 					case $this->dlext_constants::DL_STATS_FILE_EDIT:
 						$direction = $this->language->lang('DL_STAT_EDIT');
-					break;
+						break;
 					default:
 						$direction = $this->language->lang('DL_DOWNLOAD');
 				}

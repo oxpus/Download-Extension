@@ -1,24 +1,24 @@
 <?php
 
 /**
-*
-* @package phpBB Extension - Oxpus Downloads
-* @copyright (c) 2002-2021 OXPUS - www.oxpus.net
-* @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
-*
-*/
+ *
+ * @package   phpBB Extension - Oxpus Downloads
+ * @copyright 2002-2021 OXPUS - www.oxpus.net
+ * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
+ *
+ */
 
 namespace oxpus\dlext\controller\acp;
 
 /**
-* @package acp
-*/
+ * @package acp
+ */
 class acp_cat_edit_controller implements acp_cat_edit_interface
 {
 	/* phpbb objects */
 	protected $db;
 	protected $user;
-	protected $phpEx;
+	protected $phpex;
 	protected $root_path;
 	protected $log;
 	protected $config;
@@ -29,7 +29,7 @@ class acp_cat_edit_controller implements acp_cat_edit_interface
 	protected $filesystem;
 
 	/* extension owned objects */
-	protected $u_action;
+	public $u_action;
 
 	protected $dlext_extra;
 	protected $dlext_format;
@@ -47,7 +47,7 @@ class acp_cat_edit_controller implements acp_cat_edit_interface
 	 * Constructor
 	 *
 	 * @param string								$root_path
-	 * @param string								$phpEx
+	 * @param string								$phpex
 	 * @param \phpbb\cache\service					$cache
 	 * @param \phpbb\config\config					$config
 	 * @param \phpbb\language\language				$language
@@ -70,7 +70,7 @@ class acp_cat_edit_controller implements acp_cat_edit_interface
 	 */
 	public function __construct(
 		$root_path,
-		$phpEx,
+		$phpex,
 		\phpbb\cache\service $cache,
 		\phpbb\config\config $config,
 		\phpbb\language\language $language,
@@ -93,7 +93,7 @@ class acp_cat_edit_controller implements acp_cat_edit_interface
 	)
 	{
 		$this->root_path				= $root_path;
-		$this->phpEx					= $phpEx;
+		$this->phpEx					= $phpex;
 		$this->cache					= $cache;
 		$this->db						= $db;
 		$this->log						= $log;
@@ -350,14 +350,14 @@ class acp_cat_edit_controller implements acp_cat_edit_interface
 								'DL_TYPE'	=> 'optgrp',
 								'DL_VALUE'	=> $value['forum_name'],
 							]);
-						break;
+							break;
 						case FORUM_POST:
 							$this->template->assign_block_vars('s_forum_select', [
 								'DL_TYPE'	=> 'option',
 								'DL_KEY'	=> $value['forum_id'],
 								'DL_VALUE'	=> $value['forum_name'],
 							]);
-						break;
+							break;
 					}
 
 					++$counter;
@@ -534,7 +534,7 @@ class acp_cat_edit_controller implements acp_cat_edit_interface
 				trigger_error('FORM_INVALID', E_USER_WARNING);
 			}
 
-			if (strpos(strtolower($cat_icon), "http"))
+			if (strpos(strtolower($cat_icon), 'http'))
 			{
 				$cat_icon = '';
 			}
@@ -762,7 +762,8 @@ class acp_cat_edit_controller implements acp_cat_edit_interface
 						'auth_up'		=> $auth_up,
 						'auth_mod'		=> $auth_mod,
 						'auth_cread'	=> $auth_cread,
-						'auth_cpost'	=> $auth_cpost]) . ' WHERE id = ' . (int) $cat_id;
+						'auth_cpost'	=> $auth_cpost
+					]) . ' WHERE id = ' . (int) $cat_id;
 					$this->db->sql_query($sql);
 
 					// And now copy all permissions for usergroups
@@ -788,7 +789,8 @@ class acp_cat_edit_controller implements acp_cat_edit_interface
 							'auth_view'	=> $auth_view,
 							'auth_dl'	=> $auth_dl,
 							'auth_up'	=> $auth_up,
-							'auth_mod'	=> $auth_mod]);
+							'auth_mod'	=> $auth_mod
+						]);
 						$this->db->sql_query($sql);
 					}
 

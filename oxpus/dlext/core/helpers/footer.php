@@ -1,12 +1,12 @@
 <?php
 
 /**
-*
-* @package phpBB Extension - Oxpus Downloads
-* @copyright (c) 2002-2021 OXPUS - www.oxpus.net
-* @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
-*
-*/
+ *
+ * @package   phpBB Extension - Oxpus Downloads
+ * @copyright 2002-2021 OXPUS - www.oxpus.net
+ * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
+ *
+ */
 
 namespace oxpus\dlext\core\helpers;
 
@@ -38,25 +38,25 @@ class footer implements footer_interface
 	protected $dlext_navigation;
 
 	/**
-	* Constructor
-	*
-	* @param \phpbb\language\language				$language
-	* @param \phpbb\template\template				$template
-	* @param \phpbb\controller\helper				$helper
-	* @param \phpbb\config\config					$config
-	* @param \phpbb\user							$user
-	* @param \phpbb\request\request 				$request
-	* @param \oxpus\dlext\core\auth					$dlext_auth
-	* @param \oxpus\dlext\core\cache				$dlext_cache
-	* @param \oxpus\dlext\core\counter				$dlext_counter
-	* @param \oxpus\dlext\core\extra				$dlext_extra
-	* @param \oxpus\dlext\core\files				$dlext_files
-	* @param \oxpus\dlext\core\format				$dlext_format
-	* @param \oxpus\dlext\core\main					$dlext_main
-	* @param \oxpus\dlext\core\physical				$dlext_physical
-	* @param \oxpus\dlext\core\helpers\constants	$dlext_constants
-	* @param \oxpus\dlext\core\helpers\navigation	$dlext_navigation
-	*/
+	 * Constructor
+	 *
+	 * @param \phpbb\language\language				$language
+	 * @param \phpbb\template\template				$template
+	 * @param \phpbb\controller\helper				$helper
+	 * @param \phpbb\config\config					$config
+	 * @param \phpbb\user							$user
+	 * @param \phpbb\request\request 				$request
+	 * @param \oxpus\dlext\core\auth				$dlext_auth
+	 * @param \oxpus\dlext\core\cache				$dlext_cache
+	 * @param \oxpus\dlext\core\counter				$dlext_counter
+	 * @param \oxpus\dlext\core\extra				$dlext_extra
+	 * @param \oxpus\dlext\core\files				$dlext_files
+	 * @param \oxpus\dlext\core\format				$dlext_format
+	 * @param \oxpus\dlext\core\main				$dlext_main
+	 * @param \oxpus\dlext\core\physical			$dlext_physical
+	 * @param \oxpus\dlext\core\helpers\constants	$dlext_constants
+	 * @param \oxpus\dlext\core\helpers\navigation	$dlext_navigation
+	 */
 	public function __construct(
 		\phpbb\language\language $language,
 		\phpbb\template\template $template,
@@ -234,25 +234,25 @@ class footer implements footer_interface
 			{
 				case $this->dlext_constants::DL_FOOTER_STATS_GUESTS_USER:
 					$ext_stats_enable = $this->dlext_constants::DL_TRUE;
-				break;
+					break;
 				case $this->dlext_constants::DL_FOOTER_STATS_ALL:
 					if ($this->user->data['is_registered'])
 					{
 						$ext_stats_enable = $this->dlext_constants::DL_TRUE;
 					}
-				break;
+					break;
 				case $this->dlext_constants::DL_FOOTER_STATS_ADMIN_ONLY:
 					if ($this->dlext_auth->user_admin())
 					{
 						$ext_stats_enable = $this->dlext_constants::DL_TRUE;
 					}
-				break;
+					break;
 				case $this->dlext_constants::DL_FOOTER_STATS_FOUNDER_ONLY:
 					if ($this->user->data['user_type'] == USER_FOUNDER)
 					{
 						$ext_stats_enable = $this->dlext_constants::DL_TRUE;
 					}
-				break;
+					break;
 			}
 
 			if ($ext_stats_enable)

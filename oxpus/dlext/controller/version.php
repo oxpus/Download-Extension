@@ -1,12 +1,12 @@
 <?php
 
 /**
-*
-* @package phpBB Extension - Oxpus Downloads
-* @copyright (c) 2002-2021 OXPUS - www.oxpus.net
-* @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
-*
-*/
+ *
+ * @package   phpBB Extension - Oxpus Downloads
+ * @copyright 2002-2021 OXPUS - www.oxpus.net
+ * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
+ *
+ */
 
 namespace oxpus\dlext\controller;
 
@@ -39,30 +39,30 @@ class version
 	protected $dlext_table_dl_versions;
 
 	/**
-	* Constructor
-	*
-	* @param string									$root_path
-	* @param string									$php_ext
-	* @param \phpbb\db\driver\driver_interface		$db
-	* @param \phpbb\config\config					$config
-	* @param \phpbb\controller\helper				$helper
-	* @param \phpbb\request\request 				$request
-	* @param \phpbb\template\template				$template
-	* @param \phpbb\user							$user
-	* @param \phpbb\language\language				$language
-	* @param \phpbb\files\factory					$files_factory
-	* @param \phpbb\filesystem\filesystem			$filesystem
-	* @param \oxpus\dlext\core\auth					$dlext_auth
-	* @param \oxpus\dlext\core\files				$dlext_files
-	* @param \oxpus\dlext\core\format				$dlext_format
-	* @param \oxpus\dlext\core\main					$dlext_main
-	* @param \oxpus\dlext\core\physical				$dlext_physical
-	* @param \oxpus\dlext\core\status				$dlext_status
-	* @param \oxpus\dlext\core\helpers\constants	$dlext_constants
-	* @param \oxpus\dlext\core\helpers\footer		$dlext_footer
-	* @param string									$dlext_table_dl_ver_files
-	* @param string									$dlext_table_dl_versions
-	*/
+	 * Constructor
+	 *
+	 * @param string								$root_path
+	 * @param string								$php_ext
+	 * @param \phpbb\db\driver\driver_interface		$db
+	 * @param \phpbb\config\config					$config
+	 * @param \phpbb\controller\helper				$helper
+	 * @param \phpbb\request\request 				$request
+	 * @param \phpbb\template\template				$template
+	 * @param \phpbb\user							$user
+	 * @param \phpbb\language\language				$language
+	 * @param \phpbb\files\factory					$files_factory
+	 * @param \phpbb\filesystem\filesystem			$filesystem
+	 * @param \oxpus\dlext\core\auth				$dlext_auth
+	 * @param \oxpus\dlext\core\files				$dlext_files
+	 * @param \oxpus\dlext\core\format				$dlext_format
+	 * @param \oxpus\dlext\core\main				$dlext_main
+	 * @param \oxpus\dlext\core\physical			$dlext_physical
+	 * @param \oxpus\dlext\core\status				$dlext_status
+	 * @param \oxpus\dlext\core\helpers\constants	$dlext_constants
+	 * @param \oxpus\dlext\core\helpers\footer		$dlext_footer
+	 * @param string								$dlext_table_dl_ver_files
+	 * @param string								$dlext_table_dl_versions
+	 */
 	public function __construct(
 		$root_path,
 		$php_ext,
@@ -265,7 +265,7 @@ class version
 					'physical_file'		=> $dl_file_url . $row_ver['real_name'],
 					'real_filename'		=> $row_ver['file_name'],
 					'mimetype'			=> 'application/octetstream',
-					'filesize'			=> sprintf("%u", filesize($dl_file_url . $row_ver['real_name'])),
+					'filesize'			=> sprintf('%u', filesize($dl_file_url . $row_ver['real_name'])),
 					'filetime'			=> filemtime($dl_file_url . $row_ver['real_name']),
 				];
 
@@ -312,7 +312,7 @@ class version
 						{
 							case $this->dlext_constants::DL_FILE_TYPE_IMAGE:
 								$this->filesystem->remove($this->dlext_constants->get_value('files_dir') . '/version/images/' . $row['real_name']);
-							break;
+								break;
 							default:
 								$this->filesystem->remove($this->dlext_constants->get_value('files_dir') . '/version/files/' . $row['real_name']);
 						}
@@ -370,8 +370,7 @@ class version
 				do
 				{
 					$file_name = $df_id . '_' . $ver_id . '_' . ($this->dlext_format->encrypt($ver_file_name) . '.' . $extension);
-				}
-				while ($this->filesystem->exists($this->dlext_constants->get_value('files_dir') . '/version/files/' . $file_name));
+				} while ($this->filesystem->exists($this->dlext_constants->get_value('files_dir') . '/version/files/' . $file_name));
 
 				$file['name'] = $file_name;
 				$dest_folder = str_replace($this->root_path, '', substr($this->dlext_constants->get_value('files_dir') . '/version/files/', 0, -1));
@@ -432,7 +431,7 @@ class version
 					trigger_error($this->language->lang('DL_UPLOAD_ERROR'), E_USER_ERROR);
 				}
 
-				if ($pic_width > $this->config['dl_thumb_xsize'] || $pic_height > $this->config['dl_thumb_ysize'] || (sprintf("%u", filesize($ver_image_temp) > $this->config['dl_thumb_fsize'])))
+				if ($pic_width > $this->config['dl_thumb_xsize'] || $pic_height > $this->config['dl_thumb_ysize'] || (sprintf('%u', filesize($ver_image_temp) > $this->config['dl_thumb_fsize'])))
 				{
 					$ver_image->remove();
 					trigger_error($this->language->lang('DL_THUMB_TO_BIG'), E_USER_ERROR);
@@ -441,8 +440,7 @@ class version
 				do
 				{
 					$img_name = $df_id . '_' . $ver_id . '_' . ($this->dlext_format->encrypt($ver_image_name)) . '.' . $extension;
-				}
-				while ($this->filesystem->exists($this->dlext_constants->get_value('files_dir') . '/version/images/' . $img_name));
+				} while ($this->filesystem->exists($this->dlext_constants->get_value('files_dir') . '/version/images/' . $img_name));
 
 				$file['name'] = $img_name;
 				$dest_folder = str_replace($this->root_path, '', substr($this->dlext_constants->get_value('files_dir') . '/version/images/', 0, -1));
@@ -531,7 +529,7 @@ class version
 						$image			= $this->helper->route('oxpus_dlext_thumbnail', ['pic' => $pic_path, 'disp_art' => $this->dlext_constants::DL_FALSE]);
 						$tpl_block		= 'images';
 						$images_exists	= $this->dlext_constants::DL_TRUE;
-					break;
+						break;
 					default:
 						$file_path		= $row['real_name'];
 						$tpl_block		= 'files';
@@ -636,10 +634,10 @@ class version
 				case $this->dlext_constants::DL_FILE_TYPE_IMAGE:
 					$tpl_block		= 'images';
 					$images_exists	= $this->dlext_constants::DL_TRUE;
-					$pic_path		= base64_encode($this->dlext_constants->get_value('files_dir') . '/version/images/' . str_replace(" ", "%20", $row['real_name']));
+					$pic_path		= base64_encode($this->dlext_constants->get_value('files_dir') . '/version/images/' . str_replace(' ', '%20', $row['real_name']));
 					$file_path		= $this->helper->route('oxpus_dlext_thumbnail', ['pic' => $pic_path, 'disp_art' => $this->dlext_constants::DL_TRUE]);
 					$image			= $this->helper->route('oxpus_dlext_thumbnail', ['pic' => $pic_path, 'disp_art' => $this->dlext_constants::DL_FALSE]);
-				break;
+					break;
 				default:
 					$load_link_ary = [
 						'action'		=> 'dl',

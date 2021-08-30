@@ -1,12 +1,12 @@
 <?php
 
 /**
-*
-* @package phpBB Extension - Oxpus Downloads
-* @copyright (c) 2002-2021 OXPUS - www.oxpus.net
-* @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
-*
-*/
+ *
+ * @package   phpBB Extension - Oxpus Downloads
+ * @copyright 2002-2021 OXPUS - www.oxpus.net
+ * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
+ *
+ */
 
 namespace oxpus\dlext\controller\mcp;
 
@@ -33,24 +33,24 @@ class mcp_approve
 	protected $dlext_table_downloads;
 
 	/**
-	* Constructor
-	*
-	* @param \phpbb\notification\manager 			$notification
-	* @param \phpbb\pagination						$pagination
-	* @param \phpbb\db\driver\driver_interface		$db
-	* @param \phpbb\config\config					$config
-	* @param \phpbb\controller\helper				$helper
-	* @param \phpbb\request\request 				$request
-	* @param \phpbb\template\template				$template
-	* @param \phpbb\language\language				$language
-	* @param \phpbb\cache\service					$cache
-	* @param \oxpus\dlext\core\auth					$dlext_auth
-	* @param \oxpus\dlext\core\main					$dlext_main
-	* @param \oxpus\dlext\core\topic				$dlext_topic
-	* @param \oxpus\dlext\core\helpers\constants	$dlext_constants
-	* @param \oxpus\dlext\core\helpers\footer		$dlext_footer
-	* @param string									$dlext_table_downloads
-	*/
+	 * Constructor
+	 *
+	 * @param \phpbb\notification\manager 			$notification
+	 * @param \phpbb\pagination						$pagination
+	 * @param \phpbb\db\driver\driver_interface		$db
+	 * @param \phpbb\config\config					$config
+	 * @param \phpbb\controller\helper				$helper
+	 * @param \phpbb\request\request 				$request
+	 * @param \phpbb\template\template				$template
+	 * @param \phpbb\language\language				$language
+	 * @param \phpbb\cache\service					$cache
+	 * @param \oxpus\dlext\core\auth				$dlext_auth
+	 * @param \oxpus\dlext\core\main				$dlext_main
+	 * @param \oxpus\dlext\core\topic				$dlext_topic
+	 * @param \oxpus\dlext\core\helpers\constants	$dlext_constants
+	 * @param \oxpus\dlext\core\helpers\footer		$dlext_footer
+	 * @param string								$dlext_table_downloads
+	 */
 	public function __construct(
 		\phpbb\notification\manager $notification,
 		\phpbb\pagination $pagination,
@@ -120,7 +120,8 @@ class mcp_approve
 			}
 
 			$sql = 'UPDATE ' . $this->dlext_table_downloads . ' SET ' . $this->db->sql_build_array('UPDATE', [
-				'approve' => $this->dlext_constants::DL_TRUE]) . ' WHERE ' . $this->db->sql_in_set('id', $dlo_id);
+				'approve' => $this->dlext_constants::DL_TRUE
+			]) . ' WHERE ' . $this->db->sql_in_set('id', $dlo_id);
 			$this->db->sql_query($sql);
 
 			for ($i = 0; $i < count($dlo_id); ++$i)

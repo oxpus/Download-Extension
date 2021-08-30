@@ -1,11 +1,10 @@
 /**
-*
-* @package phpBB Extension - Oxpus Downloads
-* @copyright (c) 2015-2021 OXPUS - www.oxpus.net
-* @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
-*
-*/
-
+ *
+ * @package   phpBB Extension - Oxpus Downloads
+ * @copyright (c) 2015-2021 OXPUS - www.oxpus.net
+ * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
+ *
+ */
 function dl_footer_show_area(area, status)
 {
 	if (status == true)
@@ -39,40 +38,40 @@ $(document).ready(function () {
 	$('.dl-marklist').click(function () {
 		var webform = $(this).data('form');
 		var webfield = $(this).data('field');
-	
+
 		marklist(webform, webfield, true);
 	});
-	
+
 	$('.dl-unmarklist').click(function () {
 		var webform = $(this).data('form');
 		var webfield = $(this).data('field');
-	
+
 		marklist(webform, webfield, false);
 	});
 
 	$('.dl-finduser').click(function () {
-        var user_href = $(this).data('href');
+		var user_href = $(this).data('href');
 
-        find_username(user_href);
-    });
+		find_username(user_href);
+	});
 
 	$('.dl-smiley-insert').click(function () {
-        var smiley = $(this).data('smiley');
+		var smiley = $(this).data('smiley');
 
-        insert_text(smiley, true);
-    });
+		insert_text(smiley, true);
+	});
 
 	$('.dl-smiley-popup').click(function () {
-        var url = $(this).data('url');
+		var url = $(this).data('url');
 
-        window.open(url, '_blank', 'height=200,resizable=yes,scrollbars=yes,width=400');
-    });
+		window.open(url, '_blank', 'height=200,resizable=yes,scrollbars=yes,width=400');
+	});
 
-    $('.dl-change-select').change(function () {
-        var button = $(this).data('button');
+	$('.dl-change-select').change(function () {
+		var button = $(this).data('button');
 
-        $('#' + button).click();
-    });
+		$('#' + button).click();
+	});
 });
 
 $(window).click(function(ev) {

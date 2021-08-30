@@ -1,12 +1,12 @@
 <?php
 
 /**
-*
-* @package phpBB Extension - Oxpus Downloads
-* @copyright (c) 2002-2021 OXPUS - www.oxpus.net
-* @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
-*
-*/
+ *
+ * @package   phpBB Extension - Oxpus Downloads
+ * @copyright 2002-2021 OXPUS - www.oxpus.net
+ * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
+ *
+ */
 
 namespace oxpus\dlext\controller\mcp;
 
@@ -51,42 +51,42 @@ class mcp_manage
 	protected $dlext_table_dl_cat;
 
 	/**
-	* Constructor
-	*
-	* @param string									$root_path
-	* @param string									$php_ext
-	* @param \phpbb\cache\service					$cache
-	* @param \phpbb\notification\manager 			$notification
-	* @param \phpbb\pagination						$pagination
-	* @param \phpbb\db\driver\driver_interface		$db
-	* @param \phpbb\config\config					$config
-	* @param \phpbb\controller\helper				$helper
-	* @param \phpbb\request\request 				$request
-	* @param \phpbb\template\template				$template
-	* @param \phpbb\language\language				$language
-	* @param \phpbb\event\dispatcher_interface		$dispatcher
-	* @param \phpbb\filesystem\filesystem			$filesystem
-	* @param \oxpus\dlext\core\auth					$dlext_auth
-	* @param \oxpus\dlext\core\counter				$dlext_counter
-	* @param \oxpus\dlext\core\extra				$dlext_extra
-	* @param \oxpus\dlext\core\files				$dlext_files
-	* @param \oxpus\dlext\core\main					$dlext_main
-	* @param \oxpus\dlext\core\topic				$dlext_topic
-	* @param \oxpus\dlext\core\status				$dlext_status
-	* @param \oxpus\dlext\core\helpers\constants	$dlext_constants
-	* @param \oxpus\dlext\core\helpers\footer		$dlext_footer
-	* @param string									$dlext_table_dl_comments
-	* @param string									$dlext_table_dl_favorites
-	* @param string									$dlext_table_dl_fields_data
-	* @param string									$dlext_table_dl_images
-	* @param string									$dlext_table_dl_notraf
-	* @param string									$dlext_table_dl_ratings
-	* @param string									$dlext_table_dl_stats
-	* @param string									$dlext_table_dl_ver_files
-	* @param string									$dlext_table_dl_versions
-	* @param string									$dlext_table_downloads
-	* @param string									$dlext_table_dl_cat
-	*/
+	 * Constructor
+	 *
+	 * @param string								$root_path
+	 * @param string								$php_ext
+	 * @param \phpbb\cache\service					$cache
+	 * @param \phpbb\notification\manager 			$notification
+	 * @param \phpbb\pagination						$pagination
+	 * @param \phpbb\db\driver\driver_interface		$db
+	 * @param \phpbb\config\config					$config
+	 * @param \phpbb\controller\helper				$helper
+	 * @param \phpbb\request\request 				$request
+	 * @param \phpbb\template\template				$template
+	 * @param \phpbb\language\language				$language
+	 * @param \phpbb\event\dispatcher_interface		$dispatcher
+	 * @param \phpbb\filesystem\filesystem			$filesystem
+	 * @param \oxpus\dlext\core\auth				$dlext_auth
+	 * @param \oxpus\dlext\core\counter				$dlext_counter
+	 * @param \oxpus\dlext\core\extra				$dlext_extra
+	 * @param \oxpus\dlext\core\files				$dlext_files
+	 * @param \oxpus\dlext\core\main				$dlext_main
+	 * @param \oxpus\dlext\core\topic				$dlext_topic
+	 * @param \oxpus\dlext\core\status				$dlext_status
+	 * @param \oxpus\dlext\core\helpers\constants	$dlext_constants
+	 * @param \oxpus\dlext\core\helpers\footer		$dlext_footer
+	 * @param string								$dlext_table_dl_comments
+	 * @param string								$dlext_table_dl_favorites
+	 * @param string								$dlext_table_dl_fields_data
+	 * @param string								$dlext_table_dl_images
+	 * @param string								$dlext_table_dl_notraf
+	 * @param string								$dlext_table_dl_ratings
+	 * @param string								$dlext_table_dl_stats
+	 * @param string								$dlext_table_dl_ver_files
+	 * @param string								$dlext_table_dl_versions
+	 * @param string								$dlext_table_downloads
+	 * @param string								$dlext_table_dl_cat
+	 */
 	public function __construct(
 		$root_path,
 		$php_ext,
@@ -261,15 +261,18 @@ class mcp_manage
 						}
 
 						$sql = 'UPDATE ' . $this->dlext_table_downloads . ' SET ' . $this->db->sql_build_array('UPDATE', [
-							'cat' => $new_cat]) . ' WHERE ' . $this->db->sql_in_set('id', $dlo_id) . ' AND cat = ' . (int) $cat_id;
+							'cat' => $new_cat
+						]) . ' WHERE ' . $this->db->sql_in_set('id', $dlo_id) . ' AND cat = ' . (int) $cat_id;
 						$this->db->sql_query($sql);
 
-						$sql = "UPDATE " . $this->dlext_table_dl_stats . ' SET ' . $this->db->sql_build_array('UPDATE', [
-							'cat_id' => $new_cat]) . ' WHERE ' . $this->db->sql_in_set('id', $dlo_id) . ' AND cat_id = ' . (int) $cat_id;
+						$sql = 'UPDATE ' . $this->dlext_table_dl_stats . ' SET ' . $this->db->sql_build_array('UPDATE', [
+							'cat_id' => $new_cat
+						]) . ' WHERE ' . $this->db->sql_in_set('id', $dlo_id) . ' AND cat_id = ' . (int) $cat_id;
 						$this->db->sql_query($sql);
 
-						$sql = "UPDATE " . $this->dlext_table_dl_comments . ' SET ' . $this->db->sql_build_array('UPDATE', [
-							'cat_id' => $new_cat]) . ' WHERE ' . $this->db->sql_in_set('id', $dlo_id) . ' AND cat_id = ' . (int) $cat_id;
+						$sql = 'UPDATE ' . $this->dlext_table_dl_comments . ' SET ' . $this->db->sql_build_array('UPDATE', [
+							'cat_id' => $new_cat
+						]) . ' WHERE ' . $this->db->sql_in_set('id', $dlo_id) . ' AND cat_id = ' . (int) $cat_id;
 						$this->db->sql_query($sql);
 
 						// Purge the files cache
@@ -299,7 +302,8 @@ class mcp_manage
 							$long_desc		= $row['long_desc'];
 
 							$sql_update = 'UPDATE ' . $this->dlext_table_downloads . ' SET ' . $this->db->sql_build_array('UPDATE', [
-								'approve' => 0]) . ' WHERE id = ' . (int) $df_id;
+								'approve' => 0
+							]) . ' WHERE id = ' . (int) $df_id;
 							$this->db->sql_query($sql_update);
 
 							$notification_data = [
@@ -336,13 +340,15 @@ class mcp_manage
 						if ($user_id)
 						{
 							$sql = 'UPDATE ' . $this->dlext_table_downloads . ' SET ' . $this->db->sql_build_array('UPDATE', [
-								'add_user' => $user_id]) . ' WHERE ' . $this->db->sql_in_set('id', $dlo_id);
+								'add_user' => $user_id
+							]) . ' WHERE ' . $this->db->sql_in_set('id', $dlo_id);
 							$this->db->sql_query($sql);
 
 							if ($achanged)
 							{
 								$sql = 'UPDATE ' . $this->dlext_table_downloads . ' SET ' . $this->db->sql_build_array('UPDATE', [
-									'change_user' => $user_id]) . ' WHERE ' . $this->db->sql_in_set('id', $dlo_id);
+									'change_user' => $user_id
+								]) . ' WHERE ' . $this->db->sql_in_set('id', $dlo_id);
 								$this->db->sql_query($sql);
 							}
 						}
@@ -428,7 +434,7 @@ class mcp_manage
 										{
 											case $this->dlext_constants::DL_FILE_TYPE_IMAGE:
 												$this->filesystem->remove($this->dlext_constants->get_value('files_dir') . '/version/images/' . $row_real['real_name']);
-											break;
+												break;
 											default:
 												$this->filesystem->remove($this->dlext_constants->get_value('files_dir') . '/version/files/' . $row_real['real_name']);
 										}
@@ -523,6 +529,8 @@ class mcp_manage
 						);
 						extract($this->dispatcher->trigger_event('oxpus.dlext.mcp_manage_delete_downloads_after', compact($vars)));
 
+						$dlo_id = $dl_ids;
+
 						$this->notification->delete_notifications([
 							'oxpus.dlext.notification.type.approve',
 							'oxpus.dlext.notification.type.broken',
@@ -599,7 +607,8 @@ class mcp_manage
 						}
 
 						$sql = 'UPDATE ' . $this->dlext_table_downloads . ' SET ' . $this->db->sql_build_array('UPDATE', [
-							'sort' => $sql_move]) . ' WHERE id = ' . (int) $df_id;
+							'sort' => $sql_move
+						]) . ' WHERE id = ' . (int) $df_id;
 						$this->db->sql_query($sql);
 
 						$sql = 'SELECT id FROM ' . $this->dlext_table_downloads . '
@@ -613,7 +622,8 @@ class mcp_manage
 					while ($row = $this->db->sql_fetchrow($result))
 					{
 						$sql_sort = 'UPDATE ' . $this->dlext_table_downloads . ' SET ' . $this->db->sql_build_array('UPDATE', [
-							'sort' => $i]) . ' WHERE id = ' . (int) $row['id'];
+							'sort' => $i
+						]) . ' WHERE id = ' . (int) $row['id'];
 						$this->db->sql_query($sql_sort);
 						$i += $this->dlext_constants::DL_SORT_RANGE;
 					}
@@ -739,7 +749,8 @@ class mcp_manage
 				}
 			}
 
-			$s_cat_select = $this->dlext_extra->dl_dropdown(0, 0, $cat_id, 'auth_mod', $this->dlext_constants::DL_NONE);
+			$s_cat_select = [];
+			$this->dlext_extra->dl_dropdown(0, 0, $cat_id, 'auth_mod', $this->dlext_constants::DL_NONE, $s_cat_select);
 
 			$this->template->assign_vars([
 				'DL_CAT_NONE'			=> $this->dlext_constants::DL_NONE,

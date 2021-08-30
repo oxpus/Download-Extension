@@ -1,12 +1,12 @@
 <?php
 
 /**
-*
-* @package phpBB Extension - Oxpus Downloads
-* @copyright (c) 2002-2021 OXPUS - www.oxpus.net
-* @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
-*
-*/
+ *
+ * @package   phpBB Extension - Oxpus Downloads
+ * @copyright 2002-2021 OXPUS - www.oxpus.net
+ * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
+ *
+ */
 
 namespace oxpus\dlext\core;
 
@@ -21,7 +21,7 @@ interface extra_interface
 	 *
 	 * @return array the complete todo data to be displayed
 	 * @access public
-	*/
+	 */
 	public function get_todo();
 
 	/**
@@ -34,7 +34,7 @@ interface extra_interface
 	 * @param int $rem_cat current category to preselect the option list
 	 * @return string prebuild options for select element
 	 * @access public
-	*/
+	 */
 	public function dl_dropdown($parent = 0, $level = 0, $select_cat = 0, $perm = 'auth_view', $rem_cat = 0);
 
 	/**
@@ -45,6 +45,6 @@ interface extra_interface
 	 * @param bool $update true for change an username into user_id
 	 * @return mixed user id or username based on the entered data
 	 * @access public
-	*/
+	 */
 	public function dl_user_switch($user_id = 0, $username = '', $update = false);
 }

@@ -1,12 +1,12 @@
 <?php
 
 /**
-*
-* @package phpBB Extension - Oxpus Downloads
-* @copyright (c) 2002-2021 OXPUS - www.oxpus.net
-* @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
-*
-*/
+ *
+ * @package   phpBB Extension - Oxpus Downloads
+ * @copyright 2002-2021 OXPUS - www.oxpus.net
+ * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
+ *
+ */
 
 namespace oxpus\dlext\core;
 
@@ -23,16 +23,16 @@ class extra implements extra_interface
 	protected $dlext_constants;
 
 	/**
-	* Constructor
-	*
-	* @param \phpbb\db\driver\driver_interface		$db
-	* @param \phpbb\language\language				$language
-	* @param \oxpus\dlext\core\auth					$dlext_auth
-	* @param \oxpus\dlext\core\files				$dlext_files
-	* @param \oxpus\dlext\core\main					$dlext_main
-	* @param \oxpus\dlext\core\helpers\constants	$dlext_constants
+	 * Constructor
+	 *
+	 * @param \phpbb\db\driver\driver_interface		$db
+	 * @param \phpbb\language\language				$language
+	 * @param \oxpus\dlext\core\auth				$dlext_auth
+	 * @param \oxpus\dlext\core\files				$dlext_files
+	 * @param \oxpus\dlext\core\main				$dlext_main
+	 * @param \oxpus\dlext\core\helpers\constants	$dlext_constants
 
-	*/
+	 */
 	public function __construct(
 		\phpbb\db\driver\driver_interface $db,
 		\phpbb\language\language $language,

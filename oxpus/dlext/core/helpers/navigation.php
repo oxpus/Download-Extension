@@ -1,12 +1,12 @@
 <?php
 
 /**
-*
-* @package phpBB Extension - Oxpus Downloads
-* @copyright (c) 2002-2021 OXPUS - www.oxpus.net
-* @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
-*
-*/
+ *
+ * @package   phpBB Extension - Oxpus Downloads
+ * @copyright 2002-2021 OXPUS - www.oxpus.net
+ * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
+ *
+ */
 
 namespace oxpus\dlext\core\helpers;
 
@@ -29,16 +29,16 @@ class navigation implements navigation_interface
 	protected $dlext_table_downloads;
 
 	/**
-	* Constructor
-	*
-	* @param \phpbb\language\language				$language
-	* @param \phpbb\template\template				$template
-	* @param \phpbb\controller\helper				$helper
-	* @param \phpbb\db\driver\driver_interface		$db
-	* @param \oxpus\dlext\core\auth					$dlext_auth
-	* @param \oxpus\dlext\core\nav					$dlext_nav
-	* @param string									$dlext_table_downloads
-	*/
+	 * Constructor
+	 *
+	 * @param \phpbb\language\language				$language
+	 * @param \phpbb\template\template				$template
+	 * @param \phpbb\controller\helper				$helper
+	 * @param \phpbb\db\driver\driver_interface		$db
+	 * @param \oxpus\dlext\core\auth				$dlext_auth
+	 * @param \oxpus\dlext\core\nav					$dlext_nav
+	 * @param string								$dlext_table_downloads
+	 */
 	public function __construct(
 		\phpbb\language\language $language,
 		\phpbb\template\template $template,
@@ -111,11 +111,11 @@ class navigation implements navigation_interface
 				case 'overall':
 					$nav_string['name'][] = $this->language->lang('DL_OVERVIEW');
 					$nav_string['link'][] = $this->helper->route('oxpus_dlext_overall');
-				break;
+					break;
 				case 'latest':
 					$nav_string['name'][] = $this->language->lang('DL_LATEST_DOWNLOADS');
 					$nav_string['link'][] = $this->helper->route('oxpus_dlext_latest');
-				break;
+					break;
 				case 'version':
 				case 'details':
 				case 'broken':
@@ -132,7 +132,7 @@ class navigation implements navigation_interface
 
 					$nav_string['name'][] = $description;
 					$nav_string['link'][] = $this->helper->route('oxpus_dlext_details', ['df_id' => $this->df_id]);
-				break;
+					break;
 				case 'thumbs':
 					$sql = 'SELECT description, desc_uid, desc_bitfield, desc_flags FROM ' . $this->dlext_table_downloads . '
 							WHERE id = ' . (int) $this->df_id;
@@ -148,35 +148,35 @@ class navigation implements navigation_interface
 					$nav_string['link'][] = $this->helper->route('oxpus_dlext_details', ['df_id' => $this->df_id]);
 					$nav_string['name'][] = $this->language->lang('DL_EDIT_THUMBS');
 					$nav_string['link'][] = $this->helper->route('oxpus_dlext_thumbs', ['df_id' => $this->df_id, 'cat_id' => $this->cat_id]);
-				break;
+					break;
 				case 'upload':
 					$nav_string['name'][] = $this->language->lang('DL_UPLOAD');
 					$nav_string['link'][] = $this->helper->route('oxpus_dlext_upload', ['cat_id' => $this->cat_id]);
-				break;
+					break;
 				case 'tracker':
 					$nav_string['name'][] = $this->language->lang('DL_BUG_TRACKER');
 					$nav_string['link'][] = $this->helper->route('oxpus_dlext_tracker_view', ['df_id' => $this->df_id]);
-				break;
+					break;
 				case 'stats':
 					$nav_string['name'][] = $this->language->lang('DL_STATS');
 					$nav_string['link'][] = $this->helper->route('oxpus_dlext_stats');
-				break;
+					break;
 				case 'search':
 					$nav_string['name'][] = $this->language->lang('SEARCH');
 					$nav_string['link'][] = $this->helper->route('oxpus_dlext_search');
-				break;
+					break;
 				case 'hacks':
 					$nav_string['name'][] = $this->language->lang('DL_HACKS_LIST');
 					$nav_string['link'][] = $this->helper->route('oxpus_dlext_hacklist');
-				break;
+					break;
 				case 'todo':
 					$nav_string['name'][] = $this->language->lang('DL_MOD_TODO');
 					$nav_string['link'][] = $this->helper->route('oxpus_dlext_todo');
-				break;
+					break;
 				case 'mcp':
 					$nav_string['name'][] = $this->language->lang('DL_MODCP_MANAGE');
 					$nav_string['link'][] = $this->helper->route('oxpus_dlext_mcp_manage');
-				break;
+					break;
 			}
 
 			for ($i = 0; $i < count($nav_string['name']); ++$i)
@@ -185,11 +185,6 @@ class navigation implements navigation_interface
 					'FORUM_NAME'	=> $nav_string['name'][$i],
 					'U_VIEW_FORUM'	=> $nav_string['link'][$i],
 				]);
-			}
-
-			if (isset($index_cat_name))
-			{
-				$this->template->assign_var('INDEX_CAT_TITLE', $index_cat_name);
 			}
 		}
 	}

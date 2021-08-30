@@ -1,12 +1,12 @@
 <?php
 
 /**
-*
-* @package phpBB Extension - Oxpus Downloads
-* @copyright (c) 2002-2021 OXPUS - www.oxpus.net
-* @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
-*
-*/
+ *
+ * @package   phpBB Extension - Oxpus Downloads
+ * @copyright 2002-2021 OXPUS - www.oxpus.net
+ * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
+ *
+ */
 
 namespace oxpus\dlext\core;
 
@@ -30,7 +30,7 @@ class download implements download_interface
 	protected $filesystem;
 
 	/* extension owned objects */
-	protected $u_action;
+	public $u_action;
 
 	protected $dlext_auth;
 	protected $dlext_extra;
@@ -156,10 +156,10 @@ class download implements download_interface
 		{
 			case 'acp':
 				$form_check = 'dl_adm_edit';
-			break;
+				break;
 			case 'mcp':
 				$form_check = 'dl_modcp';
-			break;
+				break;
 			default:
 				$form_check = 'dl_upload';
 		}
@@ -342,7 +342,7 @@ class download implements download_interface
 
 			if (!$file_extern && $file_name)
 			{
-				$file_size = sprintf("%u", filesize($this->dlext_constants->get_value('files_dir') . '/downloads/' . $file_path . $new_real_file));
+				$file_size = sprintf('%u', filesize($this->dlext_constants->get_value('files_dir') . '/downloads/' . $file_path . $new_real_file));
 
 				if (!$file_size)
 				{
@@ -371,7 +371,6 @@ class download implements download_interface
 				$upload_file = $upload->handle_upload('files.types.form', $form_name);
 
 				$file_size = $file['size'];
-				$file_temp = $file['tmp_name'];
 				$file_name = $file['name'];
 
 				if ($this->config['dl_enable_blacklist'])
@@ -530,13 +529,13 @@ class download implements download_interface
 		if ($module == 'acp')
 		{
 			/**
-				* Manipulate thumbnail upload
-				*
-				* @event oxpus.dlext.acp_edit_thumbnail_before
-				* @var string thumb_form_name		thumbnail upload form field
-				* @var bool	allow_thumbs_upload		enable/disable thumbnail upload
-				* @since 8.1.0-RC2
-			*/
+			 * Manipulate thumbnail upload
+			 *
+			 * @event oxpus.dlext.acp_edit_thumbnail_before
+			 * @var string thumb_form_name		thumbnail upload form field
+			 * @var bool	allow_thumbs_upload		enable/disable thumbnail upload
+			 * @since 8.1.0-RC2
+			 */
 			$vars = [
 				'thumb_form_name',
 				'allow_thumbs_upload',
@@ -546,13 +545,13 @@ class download implements download_interface
 		else if ($module == 'mcp')
 		{
 			/**
-				* Manipulate thumbnail upload
-				*
-				* @event oxpus.dlext.mcp_edit_thumbnail_before
-				* @var string thumb_form_name		thumbnail upload form field
-				* @var bool	allow_thumbs_upload		enable/disable thumbnail upload
-				* @since 8.1.0-RC2
-			*/
+			 * Manipulate thumbnail upload
+			 *
+			 * @event oxpus.dlext.mcp_edit_thumbnail_before
+			 * @var string thumb_form_name		thumbnail upload form field
+			 * @var bool	allow_thumbs_upload		enable/disable thumbnail upload
+			 * @since 8.1.0-RC2
+			 */
 			$vars = [
 				'thumb_form_name',
 				'allow_thumbs_upload',
@@ -563,7 +562,7 @@ class download implements download_interface
 		if ($allow_thumbs_upload)
 		{
 			$min_pic_width = $this->dlext_constants::DL_PIC_MIN_SIZE;
-			$allowed_imagetypes = ['gif','png','jpg'];
+			$allowed_imagetypes = ['gif', 'png', 'jpg'];
 
 			$upload_image = $this->files_factory->get('upload')
 				->set_allowed_extensions($allowed_imagetypes)
@@ -572,7 +571,8 @@ class download implements download_interface
 					$min_pic_width,
 					$min_pic_width,
 					$this->config['dl_thumb_xsize'],
-					$this->config['dl_thumb_ysize'])
+					$this->config['dl_thumb_ysize']
+				)
 				->set_disallowed_content((isset($this->config['mime_triggers']) ? explode('|', $this->config['mime_triggers']) : $this->dlext_constants::DL_FALSE));
 
 			$upload_thumb_file = $this->request->file($thumb_form_name);
@@ -603,7 +603,7 @@ class download implements download_interface
 					trigger_error($this->language->lang('DL_UPLOAD_ERROR'), E_USER_ERROR);
 				}
 
-				if ($pic_width > $this->config['dl_thumb_xsize'] || $pic_height > $this->config['dl_thumb_ysize'] || (sprintf("%u", filesize($thumb_temp)) > $this->config['dl_thumb_fsize']))
+				if ($pic_width > $this->config['dl_thumb_xsize'] || $pic_height > $this->config['dl_thumb_ysize'] || (sprintf('%u', filesize($thumb_temp)) > $this->config['dl_thumb_fsize']))
 				{
 					$thumb_file->remove();
 					trigger_error($this->language->lang('DL_THUMB_TO_BIG'), E_USER_ERROR);
@@ -652,7 +652,7 @@ class download implements download_interface
 
 					$sql = 'UPDATE ' . $this->dlext_table_dl_versions . ' SET ' . $this->db->sql_build_array('UPDATE', [
 						'ver_file_name'		=> ($file_new) ? $file_name : $row['ver_file_name'],
-						'ver_real_file'		=> ($file_new) ? $real_file_new : $row['ver_real_file'],
+						'ver_real_file'		=> ($file_new) ? $new_real_file : $row['ver_real_file'],
 						'ver_file_hash'		=> ($file_new) ? $file_hash : $row['ver_file_hash'],
 						'ver_file_size'		=> ($file_new) ? $file_size : $row['ver_file_size'],
 						'ver_change_time'	=> time(),
@@ -754,13 +754,13 @@ class download implements download_interface
 			if ($module == 'acp')
 			{
 				/**
-				* Save additional data for the download
-				*
-				* @event oxpus.dlext.acp_files_edit_sql_insert_before
-				* @var int		df_id			download ID
-				* @var array	sql_array		array of download's data for storage
-				* @since 8.1.0-RC2
-				*/
+				 * Save additional data for the download
+				 *
+				 * @event oxpus.dlext.acp_files_edit_sql_insert_before
+				 * @var int		df_id			download ID
+				 * @var array	sql_array		array of download's data for storage
+				 * @since 8.1.0-RC2
+				 */
 				$vars = [
 					'df_id',
 					'sql_array',
@@ -770,13 +770,13 @@ class download implements download_interface
 			else if ($module == 'mcp')
 			{
 				/**
-				* Save additional data for the download
-				*
-				* @event oxpus.dlext.mcp_edit_sql_insert_before
-				* @var int		df_id			download ID
-				* @var array	sql_array		array of download's data for storage
-				* @since 8.1.0-RC2
-				*/
+				 * Save additional data for the download
+				 *
+				 * @event oxpus.dlext.mcp_edit_sql_insert_before
+				 * @var int		df_id			download ID
+				 * @var array	sql_array		array of download's data for storage
+				 * @since 8.1.0-RC2
+				 */
 				$vars = [
 					'df_id',
 					'sql_array',
@@ -801,12 +801,12 @@ class download implements download_interface
 			if ($module == 'upload')
 			{
 				/**
-				* Save additional data for the download
-				*
-				* @event oxpus.dlext.upload_sql_insert_before
-				* @var string	sql_array		array of download's data for storage
-				* @since 8.1.0-RC2
-				*/
+				 * Save additional data for the download
+				 *
+				 * @event oxpus.dlext.upload_sql_insert_before
+				 * @var string	sql_array		array of download's data for storage
+				 * @since 8.1.0-RC2
+				 */
 				$vars = [
 					'sql_array',
 				];
@@ -820,13 +820,13 @@ class download implements download_interface
 			if ($module == 'acp')
 			{
 				/**
-				* Save additional data for the download
-				*
-				* @event oxpus.dlext.acp_files_add_sql_insert_after
-				* @var int		next_id			download ID
-				* @var array	sql_array		array of download's data for storage
-				* @since 8.1.0-RC2
-				*/
+				 * Save additional data for the download
+				 *
+				 * @event oxpus.dlext.acp_files_add_sql_insert_after
+				 * @var int		next_id			download ID
+				 * @var array	sql_array		array of download's data for storage
+				 * @since 8.1.0-RC2
+				 */
 				$vars = [
 					'next_id',
 					'sql_array',
@@ -836,13 +836,13 @@ class download implements download_interface
 			else if ($module == 'upload')
 			{
 				/**
-				* Save additional data for the download
-				*
-				* @event oxpus.dlext.upload_sql_insert_after
-				* @var int		next_id			download ID
-				* @var array	sql_array		array of download's data for storage
-				* @since 8.1.0-RC2
-				*/
+				 * Save additional data for the download
+				 *
+				 * @event oxpus.dlext.upload_sql_insert_after
+				 * @var int		next_id			download ID
+				 * @var array	sql_array		array of download's data for storage
+				 * @since 8.1.0-RC2
+				 */
 				$vars = [
 					'next_id',
 					'sql_array',
@@ -862,16 +862,16 @@ class download implements download_interface
 		if ($module == 'acp')
 		{
 			/**
-			* Manipulate thumbnail data before storage
-			*
-			* @event oxpus.dlext.acp_files_sql_thumbnail_before
-			* @var string	foreign_thumb_message	message after manipulate thumbnail
-			* @var bool		thumb_error				thumbnail error (true to break here)
-			* @var string	thumb_name				thumbnail name (true to avoid overwrite foreign storage)
-			* @var int		df_id					download ID
-			* @var array	sql_array				array of download's data for storage
-			* @since 8.1.0-RC2
-			*/
+			 * Manipulate thumbnail data before storage
+			 *
+			 * @event oxpus.dlext.acp_files_sql_thumbnail_before
+			 * @var string	foreign_thumb_message	message after manipulate thumbnail
+			 * @var bool		thumb_error				thumbnail error (true to break here)
+			 * @var string	thumb_name				thumbnail name (true to avoid overwrite foreign storage)
+			 * @var int		df_id					download ID
+			 * @var array	sql_array				array of download's data for storage
+			 * @since 8.1.0-RC2
+			 */
 			$vars = [
 				'foreign_thumb_message',
 				'thumb_error',
@@ -884,15 +884,15 @@ class download implements download_interface
 		else if ($module == 'mcp')
 		{
 			/**
-			* Manipulate thumbnail data before storage
-			*
-			* @event oxpus.dlext.mcp_sql_thumbnail_before
-			* @var string	foreign_thumb_message	message after manipulate thumbnail
-			* @var string	thumb_name				thumbnail name (empty to avoid overwrite foreign storage)
-			* @var int		df_id					download ID
-			* @var array	sql_array				array of download's data for storage
-			* @since 8.1.0-RC2
-			*/
+			 * Manipulate thumbnail data before storage
+			 *
+			 * @event oxpus.dlext.mcp_sql_thumbnail_before
+			 * @var string	foreign_thumb_message	message after manipulate thumbnail
+			 * @var string	thumb_name				thumbnail name (empty to avoid overwrite foreign storage)
+			 * @var int		df_id					download ID
+			 * @var array	sql_array				array of download's data for storage
+			 * @since 8.1.0-RC2
+			 */
 			$vars = [
 				'foreign_thumb_message',
 				'thumb_name',
@@ -904,15 +904,15 @@ class download implements download_interface
 		else if ($module == 'upload')
 		{
 			/**
-			* Manipulate thumbnail data before storage
-			*
-			* @event oxpus.dlext.upload_sql_thumbnail_before
-			* @var string	foreign_thumb_message	message after manipulate thumbnail
-			* @var string	thumb_name				thumbnail name (empty to avoid overwrite foreign storage)
-			* @var int		df_id					download ID
-			* @var array	sql_array				array of download's data for storage
-			* @since 8.1.0-RC2
-			*/
+			 * Manipulate thumbnail data before storage
+			 *
+			 * @event oxpus.dlext.upload_sql_thumbnail_before
+			 * @var string	foreign_thumb_message	message after manipulate thumbnail
+			 * @var string	thumb_name				thumbnail name (empty to avoid overwrite foreign storage)
+			 * @var int		df_id					download ID
+			 * @var array	sql_array				array of download's data for storage
+			 * @since 8.1.0-RC2
+			 */
 			$vars = [
 				'foreign_thumb_message',
 				'thumb_name',
@@ -946,13 +946,15 @@ class download implements download_interface
 			$thumb_message = '<br />' . $this->language->lang('DL_THUMB_UPLOAD');
 
 			$sql = 'UPDATE ' . $this->dlext_table_downloads . ' SET ' . $this->db->sql_build_array('UPDATE', [
-				'thumbnail' => $thumb_upload_filename]) . ' WHERE id = ' . (int) $df_id;
+				'thumbnail' => $thumb_upload_filename
+			]) . ' WHERE id = ' . (int) $df_id;
 			$this->db->sql_query($sql);
 		}
 		else if ($del_thumb)
 		{
 			$sql = 'UPDATE ' . $this->dlext_table_downloads . ' SET ' . $this->db->sql_build_array('UPDATE', [
-				'thumbnail' => '']) . ' WHERE id = ' . (int) $df_id;
+				'thumbnail' => ''
+			]) . ' WHERE id = ' . (int) $df_id;
 			$this->db->sql_query($sql);
 
 			if (isset($dl_file['thumbnail']))
@@ -971,14 +973,14 @@ class download implements download_interface
 		if ($module == 'upload')
 		{
 			/**
-			* Manipulate thumbnail data after storage
-			*
-			* @event oxpus.dlext.upload_sql_thumbnail_after
-			* @var string	thumb_name		thumbnail name
-			* @var int		next_id			download ID
-			* @var array	sql_array		array of download's data for storage
-			* @since 8.1.0-RC2
-			*/
+			 * Manipulate thumbnail data after storage
+			 *
+			 * @event oxpus.dlext.upload_sql_thumbnail_after
+			 * @var string	thumb_name		thumbnail name
+			 * @var int		next_id			download ID
+			 * @var array	sql_array		array of download's data for storage
+			 * @since 8.1.0-RC2
+			 */
 			$vars = [
 				'thumb_name',
 				'next_id',
@@ -1117,7 +1119,7 @@ class download implements download_interface
 
 		if ($module == 'acp')
 		{
-			$message .= $thumb_message . "<br /><br />" . $this->language->lang('CLICK_RETURN_DOWNLOADADMIN', '<a href="' . $u_action . '&amp;cat_id=' . $cat_id . '">', '</a>') . $ver_message . adm_back_link($u_action);
+			$message .= $thumb_message . '<br /><br />' . $this->language->lang('CLICK_RETURN_DOWNLOADADMIN', '<a href="' . $u_action . '&amp;cat_id=' . $cat_id . '">', '</a>') . $ver_message . adm_back_link($u_action);
 		}
 		else if ($module == 'mcp')
 		{
@@ -1129,8 +1131,8 @@ class download implements download_interface
 			else
 			{
 				$meta_url		= $this->helper->route('oxpus_dlext_mcp_manage', ['view' => 'toolbox', 'cat_id' => $cat_id]);
-				$approve_string	= ($action == 'approve' || $approve) ? $this->language->lang('CLICK_RETURN_MODCP_APPROVE') : $this->language->lang('CLICK_RETURN_MODCP_MANAGE');
-				$message		= $this->language->lang('DL_DOWNLOAD_UPDATED') . $thumb_message . '<br /><br />' . sprintf($return_string, '<a href="' . $meta_url . '">', '</a>') . $ver_message;
+				$approve_string	= ($action == 'approve' || $approve) ? 'CLICK_RETURN_MODCP_APPROVE' : 'CLICK_RETURN_MODCP_MANAGE';
+				$message		= $this->language->lang('DL_DOWNLOAD_UPDATED') . $thumb_message . '<br /><br />' . $this->language->lang($approve_string, '<a href="' . $meta_url . '">', '</a>') . $ver_message;
 			}
 		}
 		else
@@ -1196,7 +1198,6 @@ class download implements download_interface
 			$mod_list				= ($dl_file['mod_list']) ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE;
 			$dl_free				= $dl_file['free'];
 			$approve				= $dl_file['approve'];
-			$file_size				= $dl_file['file_size'];
 
 			$mod_desc_uid			= $dl_file['mod_desc_uid'];
 			$mod_desc_flags			= $dl_file['mod_desc_flags'];
@@ -1431,12 +1432,12 @@ class download implements download_interface
 				$form_check		= 'dl_adm_edit';
 				$u_go_back		= $u_action . '&amp;cat_id=' . $cat_id;
 				$s_form_action	= $u_action;
-			break;
+				break;
 			case 'mcp':
 				$form_check		= 'dl_modcp';
 				$u_go_back		= $this->helper->route('oxpus_dlext_details', ['df_id' => $df_id]);
 				$s_form_action	= $this->helper->route('oxpus_dlext_mcp_edit');
-			break;
+				break;
 			default:
 				$form_check		= 'dl_upload';
 				$u_go_back		= '';
@@ -1647,7 +1648,7 @@ class download implements download_interface
 						{
 							case $this->dlext_constants::DL_FILE_TYPE_IMAGE:
 								$this->filesystem->remove($this->dlext_constants->get_value('files_dir') . '/version/images/' . $row['real_name']);
-							break;
+								break;
 							default:
 								$this->filesystem->remove($this->dlext_constants->get_value('files_dir') . '/version/files/' . $row['real_name']);
 						}

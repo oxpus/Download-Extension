@@ -1,28 +1,28 @@
 <?php
 
 /**
-*
-* @package phpBB3
-* @version $Id$
-* @copyright (c) 2005 phpBB Group
-* @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
-*
-* taken and modified for
-* @package phpBB Extension - Oxpus Downloads
-* @copyright (c) 2002-2021 OXPUS - www.oxpus.net
-* @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
-*
-*/
+ *
+ * @package phpBB3
+ * @version $Id$
+ * @copyright (c) 2005 phpBB Group
+ * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
+ *
+ * taken and modified for
+ * @package   phpBB Extension - Oxpus Downloads
+ * @copyright 2002-2021 OXPUS - www.oxpus.net
+ * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
+ *
+ */
 
 namespace oxpus\dlext\core\fields;
 
 /**
-* Custom Profile Fields ACP
-* @package phpBB3
-*/
+ * Custom Profile Fields ACP
+ * @package phpBB3
+ */
 class admin extends fields
 {
-	var $vars = [];
+	public $vars = [];
 
 	/* phpbb objects */
 	protected $config;
@@ -33,12 +33,12 @@ class admin extends fields
 	protected $default_lang_id;
 
 	/**
-	* Constructor
-	*
-	* @param \phpbb\config\config			$config
-	* @param \phpbb\language\language 		$language,
-	* @param \phpbb\request\request 		$request,
-	*/
+	 * Constructor
+	 *
+	 * @param \phpbb\config\config			$config
+	 * @param \phpbb\language\language 		$language
+	 * @param \phpbb\request\request 		$request
+	 */
 	public function __construct(
 		\phpbb\config\config $config,
 		\phpbb\language\language $language,
@@ -50,15 +50,15 @@ class admin extends fields
 		$this->request 		= $request;
 	}
 
-	function set_lang_defs($lang_defs)
+	public function set_lang_defs($lang_defs)
 	{
 		$this->default_lang_id = $lang_defs['iso'][$this->config['default_lang']];
 	}
 
 	/**
-	* Return possible validation options
-	*/
-	function validate_options()
+	 * Return possible validation options
+	 */
+	public function validate_options()
 	{
 		$validate_ary = ['CHARS_ANY' => '.*', 'NUMBERS_ONLY' => '[0-9]+', 'ALPHA_ONLY' => '[\w]+', 'ALPHA_SPACERS' => '[\w_\+\. \-\[\]]+'];
 
@@ -73,9 +73,9 @@ class admin extends fields
 	}
 
 	/**
-	* Get string options for second step in ACP
-	*/
-	function get_string_options()
+	 * Get string options for second step in ACP
+	 */
+	public function get_string_options()
 	{
 		$options = [
 			0 => ['TITLE' => $this->language->lang('FIELD_LENGTH'),		'FIELD' => '<input type="text" name="field_length" size="5" value="' . $this->vars['field_length'] . '" />'],
@@ -88,9 +88,9 @@ class admin extends fields
 	}
 
 	/**
-	* Get text options for second step in ACP
-	*/
-	function get_text_options()
+	 * Get text options for second step in ACP
+	 */
+	public function get_text_options()
 	{
 		$options = [
 			0 => ['TITLE' => $this->language->lang('FIELD_LENGTH'),		'FIELD' => '<input name="rows" size="5" value="' . $this->vars['rows'] . '" /> ' . $this->language->lang('ROWS') . '</dd><dd><input name="columns" size="5" value="' . $this->vars['columns'] . '" /> ' . $this->language->lang('COLUMNS') . ' <input type="hidden" name="field_length" value="' . $this->vars['field_length'] . '" />'],
@@ -103,9 +103,9 @@ class admin extends fields
 	}
 
 	/**
-	* Get int options for second step in ACP
-	*/
-	function get_int_options()
+	 * Get int options for second step in ACP
+	 */
+	public function get_int_options()
 	{
 		$options = [
 			0 => ['TITLE' => $this->language->lang('FIELD_LENGTH'),		'FIELD' => '<input type="text" name="field_length" size="5" value="' . $this->vars['field_length'] . '" />'],
@@ -118,9 +118,9 @@ class admin extends fields
 	}
 
 	/**
-	* Get bool options for second step in ACP
-	*/
-	function get_bool_options()
+	 * Get bool options for second step in ACP
+	 */
+	public function get_bool_options()
 	{
 		$profile_row = [
 			'var_name'				=> 'field_default_value',
@@ -144,9 +144,9 @@ class admin extends fields
 	}
 
 	/**
-	* Get dropdown options for second step in ACP
-	*/
-	function get_dropdown_options()
+	 * Get dropdown options for second step in ACP
+	 */
+	public function get_dropdown_options()
 	{
 		$profile_row[0] = [
 			'var_name'				=> 'field_default_value',
@@ -174,9 +174,9 @@ class admin extends fields
 	}
 
 	/**
-	* Get date options for second step in ACP
-	*/
-	function get_date_options()
+	 * Get date options for second step in ACP
+	 */
+	public function get_date_options()
 	{
 		$profile_row = [
 			'var_name'				=> 'field_default_value',

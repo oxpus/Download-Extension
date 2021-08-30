@@ -1,12 +1,12 @@
 <?php
 
 /**
-*
-* @package phpBB Extension - Oxpus Downloads
-* @copyright (c) 2002-2021 OXPUS - www.oxpus.net
-* @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
-*
-*/
+ *
+ * @package   phpBB Extension - Oxpus Downloads
+ * @copyright 2002-2021 OXPUS - www.oxpus.net
+ * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
+ *
+ */
 
 namespace oxpus\dlext\core;
 
@@ -30,21 +30,21 @@ class topic implements topic_interface
 	protected $dlext_table_downloads;
 
 	/**
-	* Constructor
-	*
-	* @param string									$root_path
-	* @param string									$php_ext
-	* @param \phpbb\language\language				$language
-	* @param \phpbb\user							$user
-	* @param \phpbb\auth\auth						$auth
-	* @param \phpbb\config\config					$config
-	* @param \phpbb\db\driver\driver_interface		$db
-	* @param \phpbb\controller\helper				$helper
-	* @param \oxpus\dlext\core\auth 				$dlext_auth
-	* @param \oxpus\dlext\core\format 				$dlext_format
-	* @param \oxpus\dlext\core\helpers\constants	$dlext_constants
-	* @param string									$dlext_table_downloads
-	*/
+	 * Constructor
+	 *
+	 * @param string								$root_path
+	 * @param string								$php_ext
+	 * @param \phpbb\language\language				$language
+	 * @param \phpbb\user							$user
+	 * @param \phpbb\auth\auth						$auth
+	 * @param \phpbb\config\config					$config
+	 * @param \phpbb\db\driver\driver_interface		$db
+	 * @param \phpbb\controller\helper				$helper
+	 * @param \oxpus\dlext\core\auth 				$dlext_auth
+	 * @param \oxpus\dlext\core\format 				$dlext_format
+	 * @param \oxpus\dlext\core\helpers\constants	$dlext_constants
+	 * @param string								$dlext_table_downloads
+	 */
 	public function __construct(
 		$root_path,
 		$php_ext,
@@ -81,7 +81,7 @@ class topic implements topic_interface
 	{
 		$dl_index = $this->dlext_auth->dl_index();
 
-		if (!$this->config['dl_enable_dl_topic'] || !$dl_id || !in_array($mode, ['post','edit']))
+		if (!$this->config['dl_enable_dl_topic'] || !$dl_id || !in_array($mode, ['post', 'edit']))
 		{
 			return;
 		}
@@ -140,11 +140,11 @@ class topic implements topic_interface
 			$dl_title .= ' (' . $dl_index[$cat_id]['cat_name_nav'] . ')';
 		}
 
-		$topic_text_add = "\n[b]" . $this->language->lang('DL_NAME') . ":[/b] " . $description;
+		$topic_text_add = "\n[b]" . $this->language->lang('DL_NAME') . ':[/b] ' . $description;
 
 		if ($this->config['dl_topic_post_catname'])
 		{
-			$topic_text_add .= "\n[b]" . $this->language->lang('DL_CAT_NAME') . ":[/b] " . $dl_index[$cat_id]['cat_name_nav'];
+			$topic_text_add .= "\n[b]" . $this->language->lang('DL_CAT_NAME') . ':[/b] ' . $dl_index[$cat_id]['cat_name_nav'];
 		}
 
 		$sql = 'SELECT username, user_colour
@@ -179,12 +179,12 @@ class topic implements topic_interface
 			$author_link = '[url=' . $author_url . ']' . $username . '[/url]';
 		}
 
-		$topic_text_add .= "\n[b]" . $this->language->lang('DL_HACK_AUTOR') . ":[/b] " . $author_link;
+		$topic_text_add .= "\n[b]" . $this->language->lang('DL_HACK_AUTOR') . ':[/b] ' . $author_link;
 
-		$topic_text_add .= ($long_desc) ? "\n[b]" . $this->language->lang('DL_FILE_DESCRIPTION') . ":[/b] " . html_entity_decode($long_desc) : '';
-		$topic_text_add .= ($version) ? "\n\n[b]" . $this->language->lang('DL_HACK_VERSION') . ":[/b] " . $version : '';
-		$topic_text_add .= (!$topic_drop_mode) ? "\n[b]" . ((($extern) ? $this->language->lang('DL_EXTERN') : $this->language->lang('DL_FILE_NAME')) . ":[/b] " . $file_name) : '';
-		$topic_text_add .= (!$topic_drop_mode) ? (($extern) ? '' : "\n[b]" . $this->language->lang('DL_FILE_SIZE') . ":[/b] " . str_replace('&nbsp;', ' ', $this->dlext_format->dl_size($file_size))) : '';
+		$topic_text_add .= ($long_desc) ? "\n[b]" . $this->language->lang('DL_FILE_DESCRIPTION') . ':[/b] ' . html_entity_decode($long_desc) : '';
+		$topic_text_add .= ($version) ? "\n\n[b]" . $this->language->lang('DL_HACK_VERSION') . ':[/b] ' . $version : '';
+		$topic_text_add .= (!$topic_drop_mode) ? "\n[b]" . ((($extern) ? $this->language->lang('DL_EXTERN') : $this->language->lang('DL_FILE_NAME')) . ':[/b] ' . $file_name) : '';
+		$topic_text_add .= (!$topic_drop_mode) ? (($extern) ? '' : "\n[b]" . $this->language->lang('DL_FILE_SIZE') . ':[/b] ' . str_replace('&nbsp;', ' ', $this->dlext_format->dl_size($file_size))) : '';
 
 		if ($this->config['dl_topic_forum'] == $this->dlext_constants::DL_NONE)
 		{
@@ -429,7 +429,8 @@ class topic implements topic_interface
 			$topic_id = (int) $data['topic_id'];
 
 			$sql = 'UPDATE ' . $this->dlext_table_downloads . ' SET ' . $this->db->sql_build_array('UPDATE', [
-				'dl_topic' => $topic_id]) . ' WHERE id = ' . (int) $dl_id;
+				'dl_topic' => $topic_id
+			]) . ' WHERE id = ' . (int) $dl_id;
 			$this->db->sql_query($sql);
 		}
 		else
@@ -488,11 +489,11 @@ class topic implements topic_interface
 	}
 
 	/**
-	* _change_auth
-	* Added by Mickroz for changing permissions
-	* code by poppertom69 & RMcGirr83
-	* private - not for public use!
-	*/
+	 * _change_auth
+	 * Added by Mickroz for changing permissions
+	 * code by poppertom69 & RMcGirr83
+	 * private - not for public use!
+	 */
 	public function _change_auth($user_id, $mode = 'replace', $bkup_data = false)
 	{
 		switch ($mode)
@@ -517,16 +518,16 @@ class topic implements topic_interface
 
 				return $bkup_data;
 
-			break;
+				break;
 
-			// now we restore the users stuff
+				// now we restore the users stuff
 			case 'restore':
 
 				$this->user->data = $bkup_data['user_backup'];
 
 				unset($bkup_data);
 
-			break;
+				break;
 		}
 	}
 }

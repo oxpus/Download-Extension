@@ -1,24 +1,24 @@
 <?php
 
 /**
-*
-* @package phpBB Extension - Oxpus Downloads
-* @copyright (c) 2002-2021 OXPUS - www.oxpus.net
-* @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
-*
-*/
+ *
+ * @package   phpBB Extension - Oxpus Downloads
+ * @copyright 2002-2021 OXPUS - www.oxpus.net
+ * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
+ *
+ */
 
 namespace oxpus\dlext\controller\acp;
 
 /**
-* @package acp
-*/
+ * @package acp
+ */
 class acp_toolbox_controller implements acp_toolbox_interface
 {
 	/* phpbb objects */
 	protected $db;
 	protected $user;
-	protected $phpEx;
+	protected $phpex;
 	protected $root_path;
 	protected $extension_manager;
 	protected $log;
@@ -32,7 +32,7 @@ class acp_toolbox_controller implements acp_toolbox_interface
 	protected $finder;
 
 	/* extension owned objects */
-	protected $u_action;
+	public $u_action;
 
 	protected $dlext_format;
 	protected $dlext_physical;
@@ -47,7 +47,7 @@ class acp_toolbox_controller implements acp_toolbox_interface
 	 * Constructor
 	 *
 	 * @param string								$root_path
-	 * @param string								$phpEx
+	 * @param string								$phpex
 	 * @param \phpbb\cache\service					$cache
 	 * @param \phpbb\language\language				$language
 	 * @param \phpbb\request\request 				$request
@@ -69,7 +69,7 @@ class acp_toolbox_controller implements acp_toolbox_interface
 	 */
 	public function __construct(
 		$root_path,
-		$phpEx,
+		$phpex,
 		\phpbb\cache\service $cache,
 		\phpbb\language\language $language,
 		\phpbb\request\request $request,
@@ -91,7 +91,7 @@ class acp_toolbox_controller implements acp_toolbox_interface
 	)
 	{
 		$this->root_path				= $root_path;
-		$this->phpEx					= $phpEx;
+		$this->phpEx					= $phpex;
 		$this->cache					= $cache;
 		$this->extension_manager		= $extension_manager;
 		$this->db						= $db;
@@ -153,7 +153,7 @@ class acp_toolbox_controller implements acp_toolbox_interface
 				'physical_file'		=> $file_path . $path,
 				'real_filename'		=> $description,
 				'mimetype'			=> 'application/octetstream',
-				'filesize'			=> sprintf("%u", filesize($file_path . $path)),
+				'filesize'			=> sprintf('%u', filesize($file_path . $path)),
 				'filetime'			=> filemtime($file_path . $path),
 			];
 
@@ -182,15 +182,15 @@ class acp_toolbox_controller implements acp_toolbox_interface
 			for ($i = 0; $i < count($files); ++$i)
 			{
 				$temp = strpos($files[$i], '|');
-				$files_path[] = substr($files[$i],0,$temp);
-				$files_name[] = substr($files[$i],$temp+1);
+				$files_path[] = substr($files[$i], 0, $temp);
+				$files_name[] = substr($files[$i], $temp + 1);
 			}
 
 			if ($file_assign == 'del')
 			{
 				for ($i = 0; $i < count($files); ++$i)
 				{
-					$dl_dir = ($files_path[$i]) ? substr($this->dlext_constants->get_value('files_dir') . '/downloads/', 0, strlen($this->dlext_constants->get_value('files_dir') . '/downloads/')-1) : $this->dlext_constants->get_value('files_dir') . '/downloads/';
+					$dl_dir = ($files_path[$i]) ? substr($this->dlext_constants->get_value('files_dir') . '/downloads/', 0, strlen($this->dlext_constants->get_value('files_dir') . '/downloads/') - 1) : $this->dlext_constants->get_value('files_dir') . '/downloads/';
 
 					if ($files_path[$i] && $files_name[$i])
 					{
@@ -244,7 +244,7 @@ class acp_toolbox_controller implements acp_toolbox_interface
 			}
 			else
 			{
-				$dl_dir = substr($this->dlext_constants->get_value('files_dir') . '/downloads/', 0, strlen($this->dlext_constants->get_value('files_dir') . '/downloads/')-1);
+				$dl_dir = substr($this->dlext_constants->get_value('files_dir') . '/downloads/', 0, strlen($this->dlext_constants->get_value('files_dir') . '/downloads/') - 1);
 
 				for ($i = 0; $i < count($files); ++$i)
 				{
@@ -254,13 +254,14 @@ class acp_toolbox_controller implements acp_toolbox_interface
 					$cat_path = $this->db->sql_fetchfield('path');
 					$this->db->sql_freeresult($result);
 
-					if ($cat_path != substr($files_path[$i], 1).'/')
+					if ($cat_path != substr($files_path[$i], 1) . '/')
 					{
 						$this->filesystem->rename($dl_dir . $files_path[$i] . '/' . $files_name[$i], $this->dlext_constants->get_value('files_dir') . '/downloads/' . $cat_path . $files_name[$i]);
 					}
 
 					$sql = 'UPDATE ' . $this->dlext_table_downloads . ' SET ' . $this->db->sql_build_array('UPDATE', [
-						'cat' => $file_assign]) . " WHERE real_file = '" . $this->db->sql_escape($files_name[$i]) . "'";
+						'cat' => $file_assign
+					]) . " WHERE real_file = '" . $this->db->sql_escape($files_name[$i]) . "'";
 					$this->db->sql_query($sql);
 
 					$this->cache->destroy('_dlext_file_p');
@@ -282,7 +283,7 @@ class acp_toolbox_controller implements acp_toolbox_interface
 
 			$message = '';
 
-			while ( $row = $this->db->sql_fetchrow($result) )
+			while ($row = $this->db->sql_fetchrow($result))
 			{
 				$file_size	= $row['file_size'];
 				$file_desc	= $row['description'];
@@ -290,29 +291,30 @@ class acp_toolbox_controller implements acp_toolbox_interface
 				$file_path	= $row['path'];
 				$file_id	= $row['id'];
 
-				$check_file_size = sprintf("%u", @filesize($this->dlext_constants->get_value('files_dir') . '/downloads/' . $file_path . $real_file));
-				if ( $check_file_size == 0 || $check_file_size == '' )
+				$check_file_size = sprintf('%u', @filesize($this->dlext_constants->get_value('files_dir') . '/downloads/' . $file_path . $real_file));
+				if ($check_file_size == 0 || $check_file_size == '')
 				{
-					$message .= str_replace('/', ' / ', $file_path) . ((!$real_file) ? '('. $file_desc. ')' : $real_file) . '<br />';
+					$message .= str_replace('/', ' / ', $file_path) . ((!$real_file) ? '(' . $file_desc . ')' : $real_file) . '<br />';
 				}
 				else if ($check_file_size != $file_size)
 				{
 					$sql_new = 'UPDATE ' . $this->dlext_table_downloads . ' SET ' . $this->db->sql_build_array('UPDATE', [
-							'file_size' => $check_file_size]) . ' WHERE id = ' . (int) $file_id;
+						'file_size' => $check_file_size
+					]) . ' WHERE id = ' . (int) $file_id;
 					$result_new = $this->db->sql_query($sql_new);
 
 					$this->cache->destroy('_dlext_file_p');
 
 					if (!$result_new)
 					{
-						$message .= str_replace('/', ' / ', $file_path) . ((!$real_file) ? '('. $file_desc. ')' : $real_file) . '<br />';
+						$message .= str_replace('/', ' / ', $file_path) . ((!$real_file) ? '(' . $file_desc . ')' : $real_file) . '<br />';
 					}
 				}
 			}
 
 			$action = '';
 
-			if ( $message != '' )
+			if ($message != '')
 			{
 				$check_message = $this->language->lang('DL_CHECK_FILESIZES_RESULT_ERROR') . '<br /><br />' . $message;
 			}
@@ -370,7 +372,7 @@ class acp_toolbox_controller implements acp_toolbox_interface
 				if ($check_file != 'index.html' && $check_file != 'index.htm')
 				{
 					$real_thumbnails['file_name'][] = $check_file;
-					$real_thumbnails['file_size'][] = sprintf("%u", filesize($this->root_path . $file));
+					$real_thumbnails['file_size'][] = sprintf('%u', filesize($this->root_path . $file));
 				}
 			}
 
@@ -380,13 +382,13 @@ class acp_toolbox_controller implements acp_toolbox_interface
 				WHERE thumbnail <> ''";
 			$result = $this->db->sql_query($sql);
 
-			while ( $dl_thumbs[] = $this->db->sql_fetchfield('thumbnail') );
+			while ($dl_thumbs[] = $this->db->sql_fetchfield('thumbnail'));
 			$this->db->sql_freeresult($result);
 
 			$sql = 'SELECT img_name FROM ' . 	$this->dlext_table_dl_images;
 			$result = $this->db->sql_query($sql);
 
-			while ( $dl_thumbs[] = $this->db->sql_fetchfield('img_name') );
+			while ($dl_thumbs[] = $this->db->sql_fetchfield('img_name'));
 			$this->db->sql_freeresult($result);
 
 			if (!empty($real_thumbnails['file_name']) && count($real_thumbnails['file_name']))
@@ -404,7 +406,7 @@ class acp_toolbox_controller implements acp_toolbox_interface
 				{
 					$real_file = $real_thumbnails['file_name'][$i];
 
-					if (!in_array ($real_file, $dl_thumbs))
+					if (!in_array($real_file, $dl_thumbs))
 					{
 						$checkbox = $this->dlext_constants::DL_NONE;
 					}
@@ -498,7 +500,7 @@ class acp_toolbox_controller implements acp_toolbox_interface
 
 			$action = '';
 
-			$path = ($path != $file_name) ? substr($path, 0, strlen($path) - strlen($file_name)-1) : '';
+			$path = ($path != $file_name) ? substr($path, 0, strlen($path) - strlen($file_name) - 1) : '';
 		}
 
 		if ($action == 'browse' || $action == '' || $action == 'unassigned')
@@ -531,7 +533,7 @@ class acp_toolbox_controller implements acp_toolbox_interface
 					{
 						for ($i = 0; $i < count($temp_dir); ++$i)
 						{
-							$temp_url .= '/'.$temp_dir[$i];
+							$temp_url .= '/' . $temp_dir[$i];
 							$temp_path = preg_replace('#[/]*#', '', $temp_dir[$i]);
 
 							$dl_navi[] = ['link' => $this->u_action . '&amp;action=browse&amp;path=' . $temp_url, 'name' => $temp_path];
@@ -541,7 +543,7 @@ class acp_toolbox_controller implements acp_toolbox_interface
 					$sql = 'SELECT d.description, d.file_name, d.real_file FROM ' . $this->dlext_table_downloads . ' d, ' . $this->dlext_table_dl_cat . " c
 						WHERE d.cat = c.id
 							AND c.path = '" . $this->db->sql_escape(utf8_decode($path)) . "/'";
-							$result = $this->db->sql_query($sql);
+					$result = $this->db->sql_query($sql);
 					$total_files = $this->db->sql_affectedrows();
 
 					if ($total_files)
@@ -594,7 +596,7 @@ class acp_toolbox_controller implements acp_toolbox_interface
 					$dirname	= dirname($file) . '/';
 					$file_path	= $path . $new_path;
 
-					$check_path	= ($dirname == $browse_dir) ? $this->dlext_constants:: DL_TRUE : $this->dlext_constants:: DL_FALSE;
+					$check_path	= ($dirname == $browse_dir) ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE;
 
 					if ($check_path)
 					{
@@ -626,14 +628,14 @@ class acp_toolbox_controller implements acp_toolbox_interface
 					->core_path($browse_dir)
 					->find(false);
 
-				$unassigned_files = $this->dlext_constants:: DL_FALSE;
+				$unassigned_files = $this->dlext_constants::DL_FALSE;
 
 				foreach (array_keys($files) as $file)
 				{
 					$file_name	= basename($file);
 					$dirname	= dirname($file) . '/';
 
-					$check_path	= ($dirname == $browse_dir) ? $this->dlext_constants:: DL_TRUE : $this->dlext_constants:: DL_FALSE;
+					$check_path	= ($dirname == $browse_dir) ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE;
 
 					if ($file_name != 'index.html' && $file_name != 'index.htm' && $check_path)
 					{
@@ -642,7 +644,7 @@ class acp_toolbox_controller implements acp_toolbox_interface
 						$files_url		= $this->u_action . '&amp;action=dl&amp;description=' . $file_desc . '&amp;file_name=' . $file_name . '&amp;path=' . $file;
 						$filey[]		= $real_file_name . '|~|<a href="' . $files_url . '">' . $real_file_name . '</a>';
 						$filen[]		= $file_name;
-						$sizes[]		= sprintf("%u", filesize($this->root_path . $file));
+						$sizes[]		= sprintf('%u', filesize($this->root_path . $file));
 
 						if (in_array($file_name, $existing_files) && isset($real_file_title[$file_name]))
 						{
@@ -651,7 +653,7 @@ class acp_toolbox_controller implements acp_toolbox_interface
 						else
 						{
 							$exist[] = $this->dlext_constants::DL_FALSE;
-							$unassigned_files = $this->dlext_constants:: DL_TRUE;
+							$unassigned_files = $this->dlext_constants::DL_TRUE;
 						}
 					}
 				}
@@ -719,7 +721,7 @@ class acp_toolbox_controller implements acp_toolbox_interface
 				foreach ($filey as $i => $value)
 				{
 					$files_ary = explode('|~|', $value);
-					$file_size = ($action != 'unassigned') ? $sizes[$i] : sprintf("%u", filesize($this->root_path . $files_ary[1]));
+					$file_size = ($action != 'unassigned') ? $sizes[$i] : sprintf('%u', filesize($this->root_path . $files_ary[1]));
 
 					$file_size_tmp = $this->dlext_format->dl_size($file_size, 2, 'no');
 					$file_size_out = $file_size_tmp['size_out'];

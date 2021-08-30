@@ -1,21 +1,21 @@
 <?php
 
 /**
-*
-* @package phpBB Extension - Oxpus Downloads
-* @copyright (c) 2015-2021 OXPUS - www.oxpus.net
-* @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
-*
-*/
+ *
+ * @package   phpBB Extension - Oxpus Downloads
+ * @copyright (c) 2015-2021 OXPUS - www.oxpus.net
+ * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
+ *
+ */
 
 namespace oxpus\dlext\acp;
 
 /**
-* @package acp
-*/
+ * @package acp
+ */
 class main_info
 {
-	function module()
+	public function module()
 	{
 		return [
 			'filename'	=> '\oxpus\dlext\acp\main_module',

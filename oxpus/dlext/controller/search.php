@@ -1,12 +1,12 @@
 <?php
 
 /**
-*
-* @package phpBB Extension - Oxpus Downloads
-* @copyright (c) 2002-2021 OXPUS - www.oxpus.net
-* @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
-*
-*/
+ *
+ * @package   phpBB Extension - Oxpus Downloads
+ * @copyright 2002-2021 OXPUS - www.oxpus.net
+ * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
+ *
+ */
 
 namespace oxpus\dlext\controller;
 
@@ -35,26 +35,26 @@ class search
 	protected $dlext_table_dl_cat;
 
 	/**
-	* Constructor
-	*
-	* @param \phpbb\db\driver\driver_interface		$db
-	* @param \phpbb\config\config					$config
-	* @param \phpbb\controller\helper				$helper
-	* @param \phpbb\request\request 				$request
-	* @param \phpbb\template\template				$template
-	* @param \phpbb\user							$user
-	* @param \phpbb\language\language				$language
-	* @param \phpbb\event\dispatcher_interface		$dispatcher
-	* @param \phpbb\pagination						$pagination
-	* @param \oxpus\dlext\core\auth					$dlext_auth
-	* @param \oxpus\dlext\core\extra				$dlext_extra
-	* @param \oxpus\dlext\core\main					$dlext_main
-	* @param \oxpus\dlext\core\status				$dlext_status
-	* @param \oxpus\dlext\core\helpers\footer		$dlext_footer
-	* @param \oxpus\dlext\core\helpers\constants	$dlext_constants
-	* @param string									$dlext_table_downloads
-	* @param string									$dlext_table_dl_cat
-	*/
+	 * Constructor
+	 *
+	 * @param \phpbb\db\driver\driver_interface		$db
+	 * @param \phpbb\config\config					$config
+	 * @param \phpbb\controller\helper				$helper
+	 * @param \phpbb\request\request 				$request
+	 * @param \phpbb\template\template				$template
+	 * @param \phpbb\user							$user
+	 * @param \phpbb\language\language				$language
+	 * @param \phpbb\event\dispatcher_interface		$dispatcher
+	 * @param \phpbb\pagination						$pagination
+	 * @param \oxpus\dlext\core\auth				$dlext_auth
+	 * @param \oxpus\dlext\core\extra				$dlext_extra
+	 * @param \oxpus\dlext\core\main				$dlext_main
+	 * @param \oxpus\dlext\core\status				$dlext_status
+	 * @param \oxpus\dlext\core\helpers\footer		$dlext_footer
+	 * @param \oxpus\dlext\core\helpers\constants	$dlext_constants
+	 * @param string								$dlext_table_downloads
+	 * @param string								$dlext_table_dl_cat
+	 */
 	public function __construct(
 		\phpbb\db\driver\driver_interface $db,
 		\phpbb\config\config $config,
@@ -215,7 +215,7 @@ class search
 								$search_ids[] = $row['id'];
 								++$search_counter;
 							}
-						break;
+							break;
 
 						default:
 							$search_ids[] = $row['id'];
@@ -278,7 +278,7 @@ class search
 
 				$result = $this->db->sql_query_limit($sql, $this->config['dl_links_per_page'], $start);
 
-				while ( $row = $this->db->sql_fetchrow($result) )
+				while ($row = $this->db->sql_fetchrow($result))
 				{
 					$cat_id				= $row['cat'];
 					$file_id			= $row['id'];
@@ -320,7 +320,7 @@ class search
 
 					if ((int) $this->config['dl_limit_desc_on_search'] && strlen($long_desc) > (int) $this->config['dl_limit_desc_on_search'])
 					{
-						$long_desc = strip_tags($long_desc, '<br><br/>');
+						$long_desc = strip_tags($long_desc, '<br>');
 						$long_desc = substr($long_desc, 0, (int) $this->config['dl_limit_desc_on_search']) . ' [...]';
 					}
 
@@ -486,7 +486,7 @@ class search
 
 				$result = $this->db->sql_query_limit($sql, $this->config['dl_links_per_page'], $start);
 
-				while ( $row = $this->db->sql_fetchrow($result) )
+				while ($row = $this->db->sql_fetchrow($result))
 				{
 					$cat_id			= $row['cat'];
 					$file_id		= $row['id'];

@@ -1,12 +1,12 @@
 <?php
 
 /**
-*
-* @package phpBB Extension - Oxpus Downloads
-* @copyright (c) 2002-2021 OXPUS - www.oxpus.net
-* @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
-*
-*/
+ *
+ * @package   phpBB Extension - Oxpus Downloads
+ * @copyright 2002-2021 OXPUS - www.oxpus.net
+ * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
+ *
+ */
 
 namespace oxpus\dlext\core;
 
@@ -24,15 +24,15 @@ class files implements files_interface
 	protected $dlext_table_downloads;
 
 	/**
-	* Constructor
-	*
-	* @param \phpbb\db\driver\driver_interface		$db
-	* @param \phpbb\config\config					$config
-	* @param \phpbb\user							$user
-	* @param \phpbb\template\template				$template
-	* @param \oxpus\dlext\core\helpers\constants	$dlext_constants
-	* @param string									$dlext_table_downloads
-	*/
+	 * Constructor
+	 *
+	 * @param \phpbb\db\driver\driver_interface		$db
+	 * @param \phpbb\config\config					$config
+	 * @param \phpbb\user							$user
+	 * @param \phpbb\template\template				$template
+	 * @param \oxpus\dlext\core\helpers\constants	$dlext_constants
+	 * @param string								$dlext_table_downloads
+	 */
 	public function __construct(
 		\phpbb\db\driver\driver_interface $db,
 		\phpbb\config\config $config,
@@ -372,10 +372,10 @@ class files implements files_interface
 
 		if ($part == 'order')
 		{
-			return implode (', ', $sql_ary);
+			return implode(', ', $sql_ary);
 		}
 
-		return implode (' ', $sql_ary);
+		return implode(' ', $sql_ary);
 	}
 
 	private function _dl_sql_allowed_fields($table)

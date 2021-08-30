@@ -1,12 +1,12 @@
 <?php
 
 /**
-*
-* @package phpBB Extension - Oxpus Downloads
-* @copyright (c) 2002-2021 OXPUS - www.oxpus.net
-* @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
-*
-*/
+ *
+ * @package   phpBB Extension - Oxpus Downloads
+ * @copyright 2002-2021 OXPUS - www.oxpus.net
+ * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
+ *
+ */
 
 namespace oxpus\dlext\core;
 
@@ -22,14 +22,14 @@ class format implements format_interface
 	protected $dlext_constants;
 
 	/**
-	* Constructor
-	*
-	* @param \phpbb\config\config					$config
-	* @param \phpbb\user							$user
-	* @param \phpbb\language\language				$language
-	* @param \phpbb\request\request 				$request
-	* @param \oxpus\dlext\core\helpers\constants	$dlext_constants
-	*/
+	 * Constructor
+	 *
+	 * @param \phpbb\config\config					$config
+	 * @param \phpbb\user							$user
+	 * @param \phpbb\language\language				$language
+	 * @param \phpbb\request\request 				$request
+	 * @param \oxpus\dlext\core\helpers\constants	$dlext_constants
+	 */
 	public function __construct(
 		\phpbb\config\config $config,
 		\phpbb\user $user,
@@ -124,12 +124,12 @@ class format implements format_interface
 			if ($rate)
 			{
 				$return_ary['stars'][$i]['ajax'] = $j;
-				$return_ary['stars'][$i]['icon'] = ($j <= $rate_points ) ? 'yes' : 'no';
+				$return_ary['stars'][$i]['icon'] = ($j <= $rate_points) ? 'yes' : 'no';
 			}
 			else
 			{
 				$return_ary['stars'][$i]['ajax'] = 0;
-				$return_ary['stars'][$i]['icon'] = ($j <= $rate_points ) ? 'yes' : 'no';
+				$return_ary['stars'][$i]['icon'] = ($j <= $rate_points) ? 'yes' : 'no';
 			}
 		}
 
@@ -160,31 +160,31 @@ class format implements format_interface
 		{
 			case 'dl_thumb_fsize':
 				$quote = 'dl_f_quote';
-			break;
+				break;
 			case 'dl_physical_quota':
 				$quote = 'dl_x_quota';
-			break;
+				break;
 			case 'dl_overall_traffic':
 				$quote = 'dl_x_over';
-			break;
+				break;
 			case 'dl_overall_guest_traffic':
 				$quote = 'dl_x_g_over';
-			break;
+				break;
 			case 'dl_newtopic_traffic':
 				$quote = 'dl_x_new';
-			break;
+				break;
 			case 'dl_reply_traffic':
 				$quote = 'dl_x_reply';
-			break;
+				break;
 			case 'dl_method_quota':
 				$quote = 'dl_m_quote';
-			break;
+				break;
 			case 'dl_extern_size':
 				$quote = 'dl_e_quote';
-			break;
+				break;
 			case 'dl_file_traffic':
 				$quote = 'dl_t_quote';
-			break;
+				break;
 		}
 
 		$file_size_range = $this->request->variable($quote, '', $this->dlext_constants::DL_TRUE);
@@ -203,16 +203,16 @@ class format implements format_interface
 		{
 			case $this->dlext_constants::DL_FILE_RANGE_BYTE:
 				$traffic_bytes = $traffic_amount;
-			break;
+				break;
 			case $this->dlext_constants::DL_FILE_RANGE_KBYTE:
 				$traffic_bytes = floor($traffic_amount * $this->dlext_constants::DL_FILE_SIZE_KBYTE);
-			break;
+				break;
 			case $this->dlext_constants::DL_FILE_RANGE_MBYTE:
 				$traffic_bytes = floor($traffic_amount * $this->dlext_constants::DL_FILE_SIZE_MBYTE);
-			break;
+				break;
 			case $this->dlext_constants::DL_FILE_RANGE_GBYTE:
 				$traffic_bytes = floor($traffic_amount * $this->dlext_constants::DL_FILE_SIZE_GBYTE);
-			break;
+				break;
 			default:
 				$traffic_bytes = 0;
 		}

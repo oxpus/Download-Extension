@@ -1,12 +1,12 @@
 <?php
 
 /**
-*
-* @package phpBB Extension - Oxpus Downloads
-* @copyright (c) 2002-2021 OXPUS - www.oxpus.net
-* @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
-*
-*/
+ *
+ * @package   phpBB Extension - Oxpus Downloads
+ * @copyright 2002-2021 OXPUS - www.oxpus.net
+ * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
+ *
+ */
 
 namespace oxpus\dlext\controller;
 
@@ -34,25 +34,25 @@ class todo
 	protected $dlext_table_dl_cat;
 
 	/**
-	* Constructor
-	*
-	* @param string									$root_path
-	* @param string									$php_ext
-	* @param \phpbb\db\driver\driver_interface		$db
-	* @param \phpbb\config\config					$config
-	* @param \phpbb\controller\helper				$helper
-	* @param \phpbb\request\request 				$request
-	* @param \phpbb\template\template				$template
-	* @param \phpbb\user							$user
-	* @param \phpbb\language\language				$language
-	* @param \oxpus\dlext\core\extra				$dlext_extra
-	* @param \oxpus\dlext\core\files				$dlext_files
-	* @param \oxpus\dlext\core\main					$dlext_main
-	* @param \oxpus\dlext\core\helpers\footer		$dlext_footer
-	* @param \oxpus\dlext\core\helpers\constants	$dlext_constants
-	* @param string									$dlext_table_downloads
-	* @param string									$dlext_table_dl_cat
-	*/
+	 * Constructor
+	 *
+	 * @param string								$root_path
+	 * @param string								$php_ext
+	 * @param \phpbb\db\driver\driver_interface		$db
+	 * @param \phpbb\config\config					$config
+	 * @param \phpbb\controller\helper				$helper
+	 * @param \phpbb\request\request 				$request
+	 * @param \phpbb\template\template				$template
+	 * @param \phpbb\user							$user
+	 * @param \phpbb\language\language				$language
+	 * @param \oxpus\dlext\core\extra				$dlext_extra
+	 * @param \oxpus\dlext\core\files				$dlext_files
+	 * @param \oxpus\dlext\core\main				$dlext_main
+	 * @param \oxpus\dlext\core\helpers\footer		$dlext_footer
+	 * @param \oxpus\dlext\core\helpers\constants	$dlext_constants
+	 * @param string								$dlext_table_downloads
+	 * @param string								$dlext_table_dl_cat
+	 */
 	public function __construct(
 		$root_path,
 		$php_ext,
@@ -167,7 +167,8 @@ class todo
 						'todo'			=> $todo,
 						'todo_uid'		=> $todo_uid,
 						'todo_bitfield'	=> $todo_bitfield,
-						'todo_flags'	=> $todo_flags]) . ' WHERE id = ' . (int) $df_id . ' AND ' . $this->db->sql_in_set('cat', $todo_access_ids);
+						'todo_flags'	=> $todo_flags
+					]) . ' WHERE id = ' . (int) $df_id . ' AND ' . $this->db->sql_in_set('cat', $todo_access_ids);
 					$this->db->sql_query($sql);
 
 					$meta_url	= $this->helper->route('oxpus_dlext_todo');

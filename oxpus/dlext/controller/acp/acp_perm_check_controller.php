@@ -1,32 +1,32 @@
 <?php
 
 /**
-*
-* @package phpBB Extension - Oxpus Downloads
-* @copyright (c) 2002-2021 OXPUS - www.oxpus.net
-* @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
-*
-*/
+ *
+ * @package   phpBB Extension - Oxpus Downloads
+ * @copyright 2002-2021 OXPUS - www.oxpus.net
+ * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
+ *
+ */
 
 namespace oxpus\dlext\controller\acp;
 
 /**
-* @package acp
-*/
+ * @package acp
+ */
 class acp_perm_check_controller implements acp_perm_check_interface
 {
 	/* phpbb objects */
 	protected $db;
 	protected $user;
 	protected $auth;
-	protected $phpEx;
+	protected $phpex;
 	protected $root_path;
 	protected $config;
 	protected $request;
 	protected $template;
 
 	/* extension owned objects */
-	protected $u_action;
+	public $u_action;
 
 	protected $dlext_auth;
 	protected $dlext_format;
@@ -37,7 +37,7 @@ class acp_perm_check_controller implements acp_perm_check_interface
 	 * Constructor
 	 *
 	 * @param string								$root_path
-	 * @param string								$phpEx
+	 * @param string								$phpex
 	 * @param \phpbb\config\config					$config
 	 * @param \phpbb\request\request 				$request
 	 * @param \phpbb\template\template				$template
@@ -51,7 +51,7 @@ class acp_perm_check_controller implements acp_perm_check_interface
 	 */
 	public function __construct(
 		$root_path,
-		$phpEx,
+		$phpex,
 		\phpbb\config\config $config,
 		\phpbb\request\request $request,
 		\phpbb\template\template $template,
@@ -65,7 +65,7 @@ class acp_perm_check_controller implements acp_perm_check_interface
 	)
 	{
 		$this->root_path			= $root_path;
-		$this->phpEx				= $phpEx;
+		$this->phpEx				= $phpex;
 		$this->db					= $db;
 		$this->auth					= $auth;
 		$this->user					= $user;
@@ -153,7 +153,7 @@ class acp_perm_check_controller implements acp_perm_check_interface
 					'DL_USER_CAN_VIEW_STATS'   => $this->dlext_auth->stats_perm(),
 					'DL_USER_CAN_SEE_TRACKER'  => $this->dlext_auth->bug_tracker(),
 					'DL_USER_HAVE_TRAFFIC'     => $this->dlext_format->dl_size($this->user->data['user_traffic']),
-					'DL_USER_HAVE_POSTS'       => $this->user->data['user_posts'] . ' / ' .$this->config['dl_posts'],
+					'DL_USER_HAVE_POSTS'       => $this->user->data['user_posts'] . ' / ' . $this->config['dl_posts'],
 					'DL_CHECK_USERNAME'        => $this->user->data['username'],
 
 					'U_DL_BACK'					=> $this->u_action,

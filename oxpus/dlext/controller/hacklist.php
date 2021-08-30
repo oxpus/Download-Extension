@@ -1,12 +1,12 @@
 <?php
 
 /**
-*
-* @package phpBB Extension - Oxpus Downloads
-* @copyright (c) 2002-2021 OXPUS - www.oxpus.net
-* @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
-*
-*/
+ *
+ * @package   phpBB Extension - Oxpus Downloads
+ * @copyright 2002-2021 OXPUS - www.oxpus.net
+ * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
+ *
+ */
 
 namespace oxpus\dlext\controller;
 
@@ -28,20 +28,20 @@ class hacklist
 	protected $dlext_constants;
 
 	/**
-	* Constructor
-	*
-	* @param string									$root_path
-	* @param string									$php_ext
-	* @param \phpbb\request\request 				$request
-	* @param \phpbb\config\config					$config
-	* @param \phpbb\language\language				$language
-	* @param \phpbb\template\template				$template
-	* @param \phpbb\controller\helper				$helper
-	* @param \phpbb\pagination						$pagination
-	* @param \oxpus\dlext\core\hacklist				$dlext_hacklist
-	* @param \oxpus\dlext\core\helpers\footer		$dlext_footer
-	* @param \oxpus\dlext\core\helpers\constants	$dlext_constants
-	*/
+	 * Constructor
+	 *
+	 * @param string								$root_path
+	 * @param string								$php_ext
+	 * @param \phpbb\request\request 				$request
+	 * @param \phpbb\config\config					$config
+	 * @param \phpbb\language\language				$language
+	 * @param \phpbb\template\template				$template
+	 * @param \phpbb\controller\helper				$helper
+	 * @param \phpbb\pagination						$pagination
+	 * @param \oxpus\dlext\core\hacklist			$dlext_hacklist
+	 * @param \oxpus\dlext\core\helpers\footer		$dlext_footer
+	 * @param \oxpus\dlext\core\helpers\constants	$dlext_constants
+	 */
 	public function __construct(
 		$root_path,
 		$php_ext,
@@ -154,7 +154,7 @@ class hacklist
 					$hack_author			= ($dl_files[$i]['hack_author'] != '') ? $dl_files[$i]['hack_author'] : 'n/a';
 					$hack_author_email		= $dl_files[$i]['hack_author_email'];
 					$hack_author_website	= $dl_files[$i]['hack_author_website'];
-					$hack_version			= ($dl_files[$i]['hacklist'] != '') ? '&nbsp;'.$dl_files[$i]['hack_version'] : '';
+					$hack_version			= ($dl_files[$i]['hacklist'] != '') ? '&nbsp;' . $dl_files[$i]['hack_version'] : '';
 					$hack_dl_url			= $dl_files[$i]['hack_dl_url'];
 
 					$description			= $dl_files[$i]['long_desc'];

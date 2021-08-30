@@ -1,12 +1,12 @@
 <?php
 
 /**
-*
-* @package phpBB Extension - Oxpus Downloads
-* @copyright (c) 2002-2021 OXPUS - www.oxpus.net
-* @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
-*
-*/
+ *
+ * @package   phpBB Extension - Oxpus Downloads
+ * @copyright 2002-2021 OXPUS - www.oxpus.net
+ * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
+ *
+ */
 
 namespace oxpus\dlext\controller\ucp;
 
@@ -22,22 +22,22 @@ class ucp_config_controller implements ucp_config_interface
 	protected $dispatcher;
 
 	/* extension owmed objects */
-	protected $u_action;
+	public $u_action;
 
 	protected $dlext_constants;
 
 	/**
-	* Constructor
-	*
-	* @param \phpbb\request\request 				$request
-	* @param \phpbb\db\driver\driver_interface		$db
-	* @param \phpbb\user							$user
-	* @param \phpbb\language\language				$language
-	* @param \phpbb\config\config					$config
-	* @param \phpbb\template\template				$template
-	* @param \phpbb\event\dispatcher_interface		$dispatcher
-	* @param \oxpus\dlext\core\helpers\constants	$dlext_constants
-	*/
+	 * Constructor
+	 *
+	 * @param \phpbb\request\request 				$request
+	 * @param \phpbb\db\driver\driver_interface		$db
+	 * @param \phpbb\user							$user
+	 * @param \phpbb\language\language				$language
+	 * @param \phpbb\config\config					$config
+	 * @param \phpbb\template\template				$template
+	 * @param \phpbb\event\dispatcher_interface		$dispatcher
+	 * @param \oxpus\dlext\core\helpers\constants	$dlext_constants
+	 */
 	public function __construct(
 		\phpbb\request\request $request,
 		\phpbb\db\driver\driver_interface $db,

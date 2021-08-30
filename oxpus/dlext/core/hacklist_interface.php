@@ -1,12 +1,12 @@
 <?php
 
 /**
-*
-* @package phpBB Extension - Oxpus Downloads
-* @copyright (c) 2002-2021 OXPUS - www.oxpus.net
-* @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
-*
-*/
+ *
+ * @package   phpBB Extension - Oxpus Downloads
+ * @copyright 2002-2021 OXPUS - www.oxpus.net
+ * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
+ *
+ */
 
 namespace oxpus\dlext\core;
 
@@ -21,7 +21,7 @@ interface hacklist_interface
 	 *
 	 * @return array index with all accessable download categories
 	 * @access public
-	*/
+	 */
 	public function hacks_index();
 
 	/**
@@ -33,6 +33,6 @@ interface hacklist_interface
 	 * @param int $total limit value for a limited select, 0 returns just the number of downloads
 	 * @return mixed all download files data or if total = 0 just the number of downloads for pagination
 	 * @access public
-	*/
+	 */
 	public function all_files($sql_sort_by, $sql_order, $start = 0, $total = 0);
 }

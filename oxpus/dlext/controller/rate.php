@@ -1,12 +1,12 @@
 <?php
 
 /**
-*
-* @package phpBB Extension - Oxpus Downloads
-* @copyright (c) 2002-2021 OXPUS - www.oxpus.net
-* @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
-*
-*/
+ *
+ * @package   phpBB Extension - Oxpus Downloads
+ * @copyright 2002-2021 OXPUS - www.oxpus.net
+ * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
+ *
+ */
 
 namespace oxpus\dlext\controller;
 
@@ -28,17 +28,17 @@ class rate
 	protected $dlext_table_downloads;
 
 	/**
-	* Constructor
-	*
-	* @param \phpbb\db\driver\driver_interface		$db
-	* @param \phpbb\user							$user
-	* @param \phpbb\config\config					$config
-	* @param \phpbb\language\language 				$language
-	* @param \phpbb\request\request 				$request
-	* @param \oxpus\dlext\core\helpers\constants	$dlext_constants
-	* @param string									$dlext_table_dl_ratings
-	* @param string									$dlext_table_downloads
-	*/
+	 * Constructor
+	 *
+	 * @param \phpbb\db\driver\driver_interface		$db
+	 * @param \phpbb\user							$user
+	 * @param \phpbb\config\config					$config
+	 * @param \phpbb\language\language 				$language
+	 * @param \phpbb\request\request 				$request
+	 * @param \oxpus\dlext\core\helpers\constants	$dlext_constants
+	 * @param string								$dlext_table_dl_ratings
+	 * @param string								$dlext_table_downloads
+	 */
 	public function __construct(
 		\phpbb\db\driver\driver_interface $db,
 		\phpbb\user $user,
@@ -82,7 +82,8 @@ class rate
 				$sql = 'INSERT INTO ' . $this->dlext_table_dl_ratings . ' ' . $this->db->sql_build_array('INSERT', [
 					'rate_point'	=> $rate_point,
 					'user_id'		=> $this->user->data['user_id'],
-					'dl_id'			=> $dl_id]);
+					'dl_id'			=> $dl_id
+				]);
 
 				$user_has_rated = $this->dlext_constants::DL_TRUE;
 			}
@@ -115,7 +116,8 @@ class rate
 			$this->db->sql_freeresult($result);
 
 			$sql = 'UPDATE ' . $this->dlext_table_downloads . ' SET ' . $this->db->sql_build_array('UPDATE', [
-				'rating' => $new_rating]) . ' WHERE id = ' . (int) $dl_id;
+				'rating' => $new_rating
+			]) . ' WHERE id = ' . (int) $dl_id;
 			$this->db->sql_query($sql);
 
 			if ($new_rating)
@@ -138,12 +140,12 @@ class rate
 				if ($user_has_rated)
 				{
 					$return_ary['stars'][$i]['ajax'] = 0;
-					$return_ary['stars'][$i]['icon'] = ($j <= $rate_points ) ? 'yes' : 'no';
+					$return_ary['stars'][$i]['icon'] = ($j <= $rate_points) ? 'yes' : 'no';
 				}
 				else
 				{
 					$return_ary['stars'][$i]['ajax'] = $j;
-					$return_ary['stars'][$i]['icon'] = ($j <= $rate_points ) ? 'yes' : 'no';
+					$return_ary['stars'][$i]['icon'] = ($j <= $rate_points) ? 'yes' : 'no';
 				}
 			}
 

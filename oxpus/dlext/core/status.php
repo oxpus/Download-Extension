@@ -1,12 +1,12 @@
 <?php
 
 /**
-*
-* @package phpBB Extension - Oxpus Downloads
-* @copyright (c) 2002-2021 OXPUS - www.oxpus.net
-* @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
-*
-*/
+ *
+ * @package   phpBB Extension - Oxpus Downloads
+ * @copyright 2002-2021 OXPUS - www.oxpus.net
+ * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
+ *
+ */
 
 namespace oxpus\dlext\core;
 
@@ -29,16 +29,16 @@ class status implements status_interface
 	protected $dl_index;
 
 	/**
-	* Constructor
-	*
-	* @param \phpbb\language\language				$language
-	* @param \phpbb\config\config					$config
-	* @param \phpbb\user							$user
-	* @param \oxpus\dlext\core\auth					$dlext_auth
-	* @param \oxpus\dlext\core\cache				$dlext_cache
-	* @param \oxpus\dlext\core\main					$dlext_main
-	* @param \oxpus\dlext\core\helpers\constants	$dlext_constants
-	*/
+	 * Constructor
+	 *
+	 * @param \phpbb\language\language				$language
+	 * @param \phpbb\config\config					$config
+	 * @param \phpbb\user							$user
+	 * @param \oxpus\dlext\core\auth				$dlext_auth
+	 * @param \oxpus\dlext\core\cache				$dlext_cache
+	 * @param \oxpus\dlext\core\main				$dlext_main
+	 * @param \oxpus\dlext\core\helpers\constants	$dlext_constants
+	 */
 	public function __construct(
 		\phpbb\language\language $language,
 		\phpbb\config\config $config,
@@ -141,15 +141,15 @@ class status implements status_interface
 	}
 
 	/**
-	* file_auth	Downlaod permission
-	* file_name	File name
-	* file_link	File download link
-	* file_status	File icon indicator
-	*	return [
-	*		'file_auth' 	=> $this->dlext_constants::DL_FALSE|$this->dlext_constants::DL_true,
-	*		'file_status'	=> 'red|blue|grey|white|yellow|green',
-	*  ];
-	*/
+	 * file_auth	Downlaod permission
+	 * file_name	File name
+	 * file_link	File download link
+	 * file_status	File icon indicator
+	 *	return [
+	 *		'file_auth' 	=> $this->dlext_constants::DL_FALSE|$this->dlext_constants::DL_true,
+	 *		'file_status'	=> 'red|blue|grey|white|yellow|green',
+	 *  ];
+	 */
 	public function status($df_id)
 	{
 		if (empty($this->dl_file_p))

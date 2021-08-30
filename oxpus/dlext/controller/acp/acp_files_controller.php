@@ -1,18 +1,18 @@
 <?php
 
 /**
-*
-* @package phpBB Extension - Oxpus Downloads
-* @copyright (c) 2002-2021 OXPUS - www.oxpus.net
-* @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
-*
-*/
+ *
+ * @package   phpBB Extension - Oxpus Downloads
+ * @copyright 2002-2021 OXPUS - www.oxpus.net
+ * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
+ *
+ */
 
 namespace oxpus\dlext\controller\acp;
 
 /**
-* @package acp
-*/
+ * @package acp
+ */
 class acp_files_controller implements acp_files_interface
 {
 	/* phpbb objects */
@@ -29,7 +29,7 @@ class acp_files_controller implements acp_files_interface
 	protected $filesystem;
 
 	/* extension owned objects */
-	protected $u_action;
+	public $u_action;
 
 	protected $dlext_extra;
 	protected $dlext_files;
@@ -229,7 +229,7 @@ class acp_files_controller implements acp_files_interface
 							{
 								case $this->dlext_constants::DL_FILE_TYPE_IMAGE:
 									$this->filesystem->remove($this->dlext_constants->get_value('files_dir') . '/version/images/' . $row['real_name']);
-								break;
+									break;
 								default:
 									$this->filesystem->remove($this->dlext_constants->get_value('files_dir') . '/version/files/' . $row['real_name']);
 							}
@@ -318,8 +318,6 @@ class acp_files_controller implements acp_files_interface
 					WHERE dl_id = ' . (int) $df_id;
 				$this->db->sql_query($sql);
 
-				$dl_cat = $cat_id;
-
 				/**
 				 * Workflow after delete download
 				 *
@@ -349,7 +347,7 @@ class acp_files_controller implements acp_files_interface
 				$this->cache->destroy('_dlext_cat_counts');
 				$this->cache->destroy('_dlext_file_preset');
 
-				$message = $this->language->lang('DL_DOWNLOAD_REMOVED') . "<br /><br />" . $this->language->lang('CLICK_RETURN_DOWNLOADADMIN', '<a href="' . $this->u_action . '&amp;cat_id=' . $cat_id . '">', '</a>') . adm_back_link($this->u_action);
+				$message = $this->language->lang('DL_DOWNLOAD_REMOVED') . '<br /><br />' . $this->language->lang('CLICK_RETURN_DOWNLOADADMIN', '<a href="' . $this->u_action . '&amp;cat_id=' . $cat_id . '">', '</a>') . adm_back_link($this->u_action);
 
 				trigger_error($message);
 			}
@@ -392,7 +390,8 @@ class acp_files_controller implements acp_files_interface
 			}
 
 			$sql = 'UPDATE ' . $this->dlext_table_downloads . ' SET ' . $this->db->sql_build_array('UPDATE', [
-				'sort' => $dl_sort]) . ' WHERE id = ' . (int) $df_id;
+				'sort' => $dl_sort
+			]) . ' WHERE id = ' . (int) $df_id;
 			$this->db->sql_query($sql);
 
 			$sql = 'SELECT id FROM ' . $this->dlext_table_downloads . '
@@ -405,7 +404,8 @@ class acp_files_controller implements acp_files_interface
 			while ($row = $this->db->sql_fetchrow($result))
 			{
 				$sql = 'UPDATE ' . $this->dlext_table_downloads . ' SET ' . $this->db->sql_build_array('UPDATE', [
-					'sort' => $i]) . ' WHERE id = ' . (int) $row['id'];
+					'sort' => $i
+				]) . ' WHERE id = ' . (int) $row['id'];
 				$this->db->sql_query($sql);
 
 				$i += $this->dlext_constants::DL_SORT_RANGE;
@@ -435,7 +435,8 @@ class acp_files_controller implements acp_files_interface
 			while ($row = $this->db->sql_fetchrow($result))
 			{
 				$sql = 'UPDATE ' . $this->dlext_table_downloads . ' SET ' . $this->db->sql_build_array('UPDATE', [
-					'sort' => $i]) . ' WHERE id = ' . (int) $row['id'];
+					'sort' => $i
+				]) . ' WHERE id = ' . (int) $row['id'];
 				$this->db->sql_query($sql);
 
 				$i += $this->dlext_constants::DL_SORT_RANGE;
@@ -465,7 +466,7 @@ class acp_files_controller implements acp_files_interface
 				$file_id		= $row['id'];
 				$file_free		= $row['free'];
 				$file_extern	= $row['extern'];
-				$test			= ($row['test']) ? '['.$row['test'].']' : '';
+				$test			= ($row['test']) ? '[' . $row['test'] . ']' : '';
 				$cat_id			= $row['cat'];
 				$file_name		= ($file_extern) ? $this->language->lang('DL_EXTERN') : $this->language->lang('DL_DOWNLOAD') . ': ' . $row['file_name'] . '<br />{' . $row['real_file'] . '}';
 

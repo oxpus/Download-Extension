@@ -1,12 +1,12 @@
 <?php
 
 /**
-*
-* @package phpBB Extension - Oxpus Downloads
-* @copyright (c) 2002-2021 OXPUS - www.oxpus.net
-* @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
-*
-*/
+ *
+ * @package   phpBB Extension - Oxpus Downloads
+ * @copyright 2002-2021 OXPUS - www.oxpus.net
+ * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
+ *
+ */
 
 namespace oxpus\dlext;
 
@@ -34,11 +34,11 @@ class ext extends \phpbb\extension\base
 				$phpbb_notifications->enable_notifications('oxpus.dlext.notification.type.bt_status');
 
 				return 'notifications';
-			break;
+				break;
 
 			default:
 				return parent::enable_step($old_state);
-			break;
+				break;
 		}
 	}
 
@@ -58,11 +58,11 @@ class ext extends \phpbb\extension\base
 				$phpbb_notifications->disable_notifications('oxpus.dlext.notification.type.bt_status');
 
 				return 'notifications';
-			break;
+				break;
 
 			default:
 				return parent::disable_step($old_state);
-			break;
+				break;
 		}
 	}
 
@@ -89,11 +89,11 @@ class ext extends \phpbb\extension\base
 				}
 
 				return 'notifications';
-			break;
+				break;
 
 			default:
 				return parent::purge_step($old_state);
-			break;
+				break;
 		}
 	}
 }

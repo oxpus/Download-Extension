@@ -1,12 +1,12 @@
 <?php
 
 /**
-*
-* @package phpBB Extension - Oxpus Downloads
-* @copyright (c) 2002-2021 OXPUS - www.oxpus.net
-* @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
-*
-*/
+ *
+ * @package   phpBB Extension - Oxpus Downloads
+ * @copyright 2002-2021 OXPUS - www.oxpus.net
+ * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
+ *
+ */
 
 namespace oxpus\dlext\controller;
 
@@ -41,32 +41,32 @@ class load
 	protected $dlext_table_downloads;
 
 	/**
-	* Constructor
-	*
-	* @param string									$root_path
-	* @param string									$php_ext
-	* @param \phpbb\cache\service					$cache
-	* @param \phpbb\db\driver\driver_interface		$db
-	* @param \phpbb\config\config					$config
-	* @param \phpbb\controller\helper				$helper
-	* @param \phpbb\request\request 				$request
-	* @param \phpbb\user							$user
-	* @param \phpbb\language\language				$language
-	* @param \phpbb\event\dispatcher_interface		$dispatcher
-	* @param \phpbb\filesystem\filesystem			$filesystem
-	* @param \oxpus\dlext\core\auth					$dlext_auth
-	* @param \oxpus\dlext\core\files				$dlext_files
-	* @param \oxpus\dlext\core\main					$dlext_main
-	* @param \oxpus\dlext\core\physical				$dlext_physical
-	* @param \oxpus\dlext\core\status				$dlext_status
-	* @param \oxpus\dlext\core\helpers\constants	$dlext_constants
-	* @param string									$dlext_table_dl_cat_traf
-	* @param string									$dlext_table_dl_hotlink
-	* @param string									$dlext_table_dl_notraf
-	* @param string									$dlext_table_dl_stats
-	* @param string									$dlext_table_dl_versions
-	* @param string									$dlext_table_downloads
-	*/
+	 * Constructor
+	 *
+	 * @param string								$root_path
+	 * @param string								$php_ext
+	 * @param \phpbb\cache\service					$cache
+	 * @param \phpbb\db\driver\driver_interface		$db
+	 * @param \phpbb\config\config					$config
+	 * @param \phpbb\controller\helper				$helper
+	 * @param \phpbb\request\request 				$request
+	 * @param \phpbb\user							$user
+	 * @param \phpbb\language\language				$language
+	 * @param \phpbb\event\dispatcher_interface		$dispatcher
+	 * @param \phpbb\filesystem\filesystem			$filesystem
+	 * @param \oxpus\dlext\core\auth				$dlext_auth
+	 * @param \oxpus\dlext\core\files				$dlext_files
+	 * @param \oxpus\dlext\core\main				$dlext_main
+	 * @param \oxpus\dlext\core\physical			$dlext_physical
+	 * @param \oxpus\dlext\core\status				$dlext_status
+	 * @param \oxpus\dlext\core\helpers\constants	$dlext_constants
+	 * @param string								$dlext_table_dl_cat_traf
+	 * @param string								$dlext_table_dl_hotlink
+	 * @param string								$dlext_table_dl_notraf
+	 * @param string								$dlext_table_dl_stats
+	 * @param string								$dlext_table_dl_versions
+	 * @param string								$dlext_table_downloads
+	 */
 	public function __construct(
 		$root_path,
 		$php_ext,
@@ -351,7 +351,8 @@ class load
 					'klicks'			=> $dl_file['klicks'] + 1,
 					'overall_klicks'	=> $dl_file['overall_klicks'] + 1,
 					'last_time'			=> time(),
-					'down_user'			=> $this->user->data['user_id']]) . ' WHERE id = ' . (int) $df_id;
+					'down_user'			=> $this->user->data['user_id']
+				]) . ' WHERE id = ' . (int) $df_id;
 				$this->db->sql_query($sql);
 
 				$this->cache->destroy('_dlext_file_p');
@@ -380,14 +381,16 @@ class load
 						$this->user->data['user_traffic'] -= $dl_file['file_size'];
 
 						$sql = 'UPDATE ' . USERS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', [
-							'user_traffic' => $this->user->data['user_traffic']]) . ' WHERE user_id = ' . (int) $this->user->data['user_id'];
+							'user_traffic' => $this->user->data['user_traffic']
+						]) . ' WHERE user_id = ' . (int) $this->user->data['user_id'];
 						$this->db->sql_query($sql);
 
 						if ($this->config['dl_user_traffic_once'])
 						{
 							$sql = 'INSERT INTO ' . $this->dlext_table_dl_notraf . ' ' . $this->db->sql_build_array('INSERT', [
 								'user_id'	=> $this->user->data['user_id'],
-								'dl_id'		=> $dl_file['id']]);
+								'dl_id'		=> $dl_file['id']
+							]);
 							$this->db->sql_query($sql);
 						}
 					}
@@ -432,7 +435,8 @@ class load
 							$cat_traffic_use += $dl_file['file_size'];
 
 							$sql = 'UPDATE ' . $this->dlext_table_dl_cat_traf . ' SET ' . $this->db->sql_build_array('UPDATE', [
-								'cat_traffic_use' => $cat_traffic_use]) . ' WHERE cat_id = ' . (int) $cat_id;
+								'cat_traffic_use' => $cat_traffic_use
+							]) . ' WHERE cat_id = ' . (int) $cat_id;
 							$this->db->sql_query($sql);
 
 							$this->cache->destroy('_dlext_cats');
@@ -455,7 +459,8 @@ class load
 						'traffic'		=> $dl_file['file_size'],
 						'direction'		=> 0,
 						'user_ip'		=> $this->user->data['session_ip'],
-						'time_stamp'	=> time()]);
+						'time_stamp'	=> time()
+					]);
 					$this->db->sql_query($sql);
 				}
 			}
@@ -495,8 +500,8 @@ class load
 					$file_protocol_prefix = '//';
 				}
 
-				header("HTTP/1.1 301 Moved Permanently");
-				header("Location: " . $file_protocol_prefix . $file_url);
+				header('HTTP/1.1 301 Moved Permanently');
+				header('Location: ' . $file_protocol_prefix . $file_url);
 
 				garbage_collection();
 				exit_handler();
@@ -518,11 +523,11 @@ class load
 						'physical_file'		=> $dl_file_url . $dl_file['real_file'],
 						'real_filename'		=> $dl_file['file_name'],
 						'mimetype'			=> 'application/octetstream',
-						'filesize'			=> sprintf("%u", filesize($dl_file_url . $dl_file['real_file'])),
+						'filesize'			=> sprintf('%u', filesize($dl_file_url . $dl_file['real_file'])),
 						'filetime'			=> $dl_file['change_time'],
 					];
 
-						$this->dlext_physical->send_file_to_browser($dl_file_data);
+					$this->dlext_physical->send_file_to_browser($dl_file_data);
 				}
 				else
 				{

@@ -1,8 +1,8 @@
 /**
 *
-* @package phpBB Extension - Oxpus Downloads
+* @package   phpBB Extension - Oxpus Downloads
 * @copyright (c) 2015-2021 OXPUS - www.oxpus.net
-* @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
+* @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
 */
 
@@ -51,7 +51,7 @@ $(document).ready(function () {
 		var dl_close2 = $(this).data('close2');
 		var dl_icon2 = $(this).data('icon2');
 		var dl_colour2 = $(this).data('colour2');
-	
+
 		dlSwapOptions(dl_cat, dl_open1, dl_close1, dl_icon1, dl_colour1, dl_open2, dl_close2, dl_icon2, dl_colour2);
 	});
 

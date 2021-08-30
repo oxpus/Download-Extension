@@ -1,12 +1,12 @@
 <?php
 
 /**
-*
-* @package phpBB Extension - Oxpus Downloads
-* @copyright (c) 2002-2021 OXPUS - www.oxpus.net
-* @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
-*
-*/
+ *
+ * @package   phpBB Extension - Oxpus Downloads
+ * @copyright 2002-2021 OXPUS - www.oxpus.net
+ * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
+ *
+ */
 
 namespace oxpus\dlext\core;
 
@@ -21,7 +21,7 @@ interface counter_interface
 	 *
 	 * @return int number of broken downloads
 	 * @access public
-	*/
+	 */
 	public function count_dl_broken();
 
 	/**
@@ -29,7 +29,7 @@ interface counter_interface
 	 *
 	 * @return int number of unapproved downloads
 	 * @access public
-	*/
+	 */
 	public function count_dl_approve();
 
 	/**
@@ -37,7 +37,7 @@ interface counter_interface
 	 *
 	 * @return int number of unapproved download comments
 	 * @access public
-	*/
+	 */
 	public function count_comments_approve();
 
 	/**
@@ -45,6 +45,6 @@ interface counter_interface
 	 *
 	 * @return int number of external download
 	 * @access public
-	*/
+	 */
 	public function count_external_files();
 }

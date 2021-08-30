@@ -1,12 +1,12 @@
 <?php
 
 /**
-*
-* @package phpBB Extension - Oxpus Downloads
-* @copyright (c) 2002-2021 OXPUS - www.oxpus.net
-* @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
-*
-*/
+ *
+ * @package   phpBB Extension - Oxpus Downloads
+ * @copyright 2002-2021 OXPUS - www.oxpus.net
+ * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
+ *
+ */
 
 namespace oxpus\dlext\controller;
 
@@ -51,39 +51,39 @@ class details
 	protected $dlext_table_downloads;
 
 	/**
-	* Constructor
-	*
-	* @param string									$root_path
-	* @param string									$php_ext
-	* @param \phpbb\extension\manager				$extension_manager
-	* @param \phpbb\db\driver\driver_interface		$db
-	* @param \phpbb\config\config					$config
-	* @param \phpbb\controller\helper				$helper
-	* @param \phpbb\request\request 				$request
-	* @param \phpbb\template\template				$template
-	* @param \phpbb\user							$user
-	* @param \phpbb\language\language				$language
-	* @param \phpbb\event\dispatcher_interface		$dispatcher
-	* @param \phpbb\notification\manager			$notification
-	* @param \phpbb\captcha\factory					$captcha
-	* @param \phpbb\filesystem\filesystem			$filesystem
-	* @param \oxpus\dlext\core\auth					$dlext_auth
-	* @param \oxpus\dlext\core\comments				$dlext_comments
-	* @param \oxpus\dlext\core\files				$dlext_files
-	* @param \oxpus\dlext\core\format				$dlext_format
-	* @param \oxpus\dlext\core\main					$dlext_main
-	* @param \oxpus\dlext\core\status				$dlext_status
-	* @param \oxpus\dlext\core\helpers\constants	$dlext_constants
-	* @param \oxpus\dlext\core\helpers\footer		$dlext_footer
-	* @param \oxpus\dlext\core\fields\fields		$dlext_fields
-	* @param string									$dlext_table_dl_favorites
-	* @param string									$dlext_table_dl_hotlink
-	* @param string									$dlext_table_dl_images
-	* @param string									$dlext_table_dl_notraf
-	* @param string									$dlext_table_dl_ratings
-	* @param string									$dlext_table_dl_versions
-	* @param string									$dlext_table_downloads
-	*/
+	 * Constructor
+	 *
+	 * @param string								$root_path
+	 * @param string								$php_ext
+	 * @param \phpbb\extension\manager				$extension_manager
+	 * @param \phpbb\db\driver\driver_interface		$db
+	 * @param \phpbb\config\config					$config
+	 * @param \phpbb\controller\helper				$helper
+	 * @param \phpbb\request\request 				$request
+	 * @param \phpbb\template\template				$template
+	 * @param \phpbb\user							$user
+	 * @param \phpbb\language\language				$language
+	 * @param \phpbb\event\dispatcher_interface		$dispatcher
+	 * @param \phpbb\notification\manager			$notification
+	 * @param \phpbb\captcha\factory				$captcha
+	 * @param \phpbb\filesystem\filesystem			$filesystem
+	 * @param \oxpus\dlext\core\auth				$dlext_auth
+	 * @param \oxpus\dlext\core\comments			$dlext_comments
+	 * @param \oxpus\dlext\core\files				$dlext_files
+	 * @param \oxpus\dlext\core\format				$dlext_format
+	 * @param \oxpus\dlext\core\main				$dlext_main
+	 * @param \oxpus\dlext\core\status				$dlext_status
+	 * @param \oxpus\dlext\core\helpers\constants	$dlext_constants
+	 * @param \oxpus\dlext\core\helpers\footer		$dlext_footer
+	 * @param \oxpus\dlext\core\fields\fields		$dlext_fields
+	 * @param string								$dlext_table_dl_favorites
+	 * @param string								$dlext_table_dl_hotlink
+	 * @param string								$dlext_table_dl_images
+	 * @param string								$dlext_table_dl_notraf
+	 * @param string								$dlext_table_dl_ratings
+	 * @param string								$dlext_table_dl_versions
+	 * @param string								$dlext_table_downloads
+	 */
 	public function __construct(
 		$root_path,
 		$php_ext,
@@ -448,7 +448,8 @@ class details
 				{
 					$dl_files['file_hash'] = $this->dlext_format->encrypt($this->dlext_constants->get_value('files_dir') . '/downloads/' . $index[$cat_id]['cat_path'] . $dl_files['real_file'], 'file', $hash_method);
 					$sql = 'UPDATE ' . $this->dlext_table_downloads . ' SET ' . $this->db->sql_build_array('UPDATE', [
-						'file_hash' => $dl_files['file_hash']]) . ' WHERE id = ' . (int) $df_id;
+						'file_hash' => $dl_files['file_hash']
+					]) . ' WHERE id = ' . (int) $df_id;
 					$this->db->sql_query($sql);
 				}
 			}
@@ -483,7 +484,8 @@ class details
 						{
 							$ver_file_hash = $this->dlext_format->encrypt($this->dlext_constants->get_value('files_dir') . '/downloads/' . $index[$cat_id]['cat_path'] . $row['ver_real_file'], 'file', $hash_method);
 							$sql = 'UPDATE ' . $this->dlext_table_dl_versions . ' SET ' . $this->db->sql_build_array('UPDATE', [
-								'ver_file_hash' => $ver_file_hash]) . ' WHERE ver_id = ' . (int) $row['ver_id'];
+								'ver_file_hash' => $ver_file_hash
+							]) . ' WHERE ver_id = ' . (int) $row['ver_id'];
 							$this->db->sql_query($sql);
 						}
 					}
@@ -692,7 +694,7 @@ class details
 		*/
 		$s_trafficfree_dl = $this->dlext_constants::DL_FALSE;
 
-		if ($this->config['dl_user_traffic_once'] && !$file_load && !$dl_files['free'] && !$dl_files['extern'] && ($dl_files['file_size'] > $this->user->data['user_traffic'] ) && !$this->config['dl_traffic_off'] && $this->dlext_constants->get_value('users_traffics'))
+		if ($this->config['dl_user_traffic_once'] && !$file_load && !$dl_files['free'] && !$dl_files['extern'] && ($dl_files['file_size'] > $this->user->data['user_traffic']) && !$this->config['dl_traffic_off'] && $this->dlext_constants->get_value('users_traffics'))
 		{
 			$sql = 'SELECT * FROM ' . $this->dlext_table_dl_notraf . '
 				WHERE user_id = ' . (int) $this->user->data['user_id'] . '
@@ -723,7 +725,8 @@ class details
 					$sql = 'INSERT INTO ' . $this->dlext_table_dl_hotlink . ' ' . $this->db->sql_build_array('INSERT', [
 						'user_id'		=> $this->user->data['user_id'],
 						'session_id'	=> $this->user->data['session_id'],
-						'hotlink_id'	=> $hotlink_id]);
+						'hotlink_id'	=> $hotlink_id
+					]);
 					$this->db->sql_query($sql);
 				}
 				else
@@ -859,7 +862,8 @@ class details
 							'user_id'		=> $this->user->data['user_id'],
 							'session_id'	=> $this->user->data['session_id'],
 							'hotlink_id'	=> $code,
-							'code'			=> 'dlvc']);
+							'code'			=> 'dlvc'
+						]);
 						$this->db->sql_query($sql);
 					}
 
@@ -1243,8 +1247,8 @@ class details
 		]);
 
 		/**
-		* Find similar downloads
-		*/
+		 * Find similar downloads
+		 */
 		if ($this->config['dl_similar_dl'])
 		{
 			$search_matches = [];

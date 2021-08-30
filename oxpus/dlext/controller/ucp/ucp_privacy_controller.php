@@ -1,12 +1,12 @@
 <?php
 
 /**
-*
-* @package phpBB Extension - Oxpus Downloads
-* @copyright (c) 2002-2021 OXPUS - www.oxpus.net
-* @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
-*
-*/
+ *
+ * @package   phpBB Extension - Oxpus Downloads
+ * @copyright 2002-2021 OXPUS - www.oxpus.net
+ * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
+ *
+ */
 
 namespace oxpus\dlext\controller\ucp;
 
@@ -21,7 +21,7 @@ class ucp_privacy_controller implements ucp_privacy_interface
 	protected $db;
 
 	/* extension owned objects */
-	protected $u_action;
+	public $u_action;
 	protected $ext_path;
 
 	protected $dlext_physical;
@@ -32,20 +32,20 @@ class ucp_privacy_controller implements ucp_privacy_interface
 	protected $dlext_table_dl_stats;
 
 	/**
-	* Constructor
-	*
-	* @param string									$root_path
-	* @param string									$php_ext
-	* @param \phpbb\request\request 				$request
-	* @param \phpbb\template\template				$template
-	* @param \phpbb\user							$user
-	* @param \phpbb\db\driver\driver_interface		$db
-	* @param \oxpus\dlext\core\physical				$dlext_physical
-	* @param \oxpus\dlext\core\helpers\constants 	$dlext_constants
-	* @param string									$dlext_table_dl_tracker
-	* @param string									$dlext_table_dl_comments
-	* @param string									$dlext_table_dl_stats
-	*/
+	 * Constructor
+	 *
+	 * @param string								$root_path
+	 * @param string								$php_ext
+	 * @param \phpbb\request\request 				$request
+	 * @param \phpbb\template\template				$template
+	 * @param \phpbb\user							$user
+	 * @param \phpbb\db\driver\driver_interface		$db
+	 * @param \oxpus\dlext\core\physical			$dlext_physical
+	 * @param \oxpus\dlext\core\helpers\constants 	$dlext_constants
+	 * @param string								$dlext_table_dl_tracker
+	 * @param string								$dlext_table_dl_comments
+	 * @param string								$dlext_table_dl_stats
+	 */
 	public function __construct(
 		$root_path,
 		$php_ext,
@@ -97,19 +97,19 @@ class ucp_privacy_controller implements ucp_privacy_interface
 					$time_fields = ['report_date', 'report_status_date'];
 					$user_field = 'report_author_id';
 					$table = $this->dlext_table_dl_tracker;
-				break;
+					break;
 				case 'comments':
 					$fields = 'dl_id, username, comment_time, comment_edit_time, comment_text';
 					$time_fields = ['comment_time', 'comment_edit_time'];
 					$user_field = 'user_id';
 					$table = $this->dlext_table_dl_comments;
-				break;
+					break;
 				case 'stats':
 					$fields = 'dl_id, username, traffic, direction, user_ip, time_stamp';
 					$time_fields = ['time_stamp'];
 					$user_field = 'user_id';
 					$table = $this->dlext_table_dl_stats;
-				break;
+					break;
 				default:
 					$table = '';
 			}
@@ -134,7 +134,7 @@ class ucp_privacy_controller implements ucp_privacy_interface
 						}
 						else
 						{
-							$output_row[$counter][] .= "'" . str_replace("\n", "<br />", $value) . "'";
+							$output_row[$counter][] .= "'" . str_replace("\n", '<br />', $value) . "'";
 						}
 					}
 					++$counter;
@@ -153,7 +153,7 @@ class ucp_privacy_controller implements ucp_privacy_interface
 					'physical_file'		=> $file_stream,
 					'real_filename'		=> 'my_dl_' . $dl_privacy . '_data_' . date(DATE_RFC3339) . '.csv',
 					'mimetype'			=> 'application/octetstream',
-					'filesize'			=> sprintf("%u", strlen($file_stream)),
+					'filesize'			=> sprintf('%u', strlen($file_stream)),
 					'filetime'			=> time(),
 					'filestream'		=> $this->dlext_constants::DL_TRUE,
 				];

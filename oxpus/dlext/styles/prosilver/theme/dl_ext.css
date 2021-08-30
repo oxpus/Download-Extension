@@ -1,222 +1,222 @@
 .dlext,
 .dlext2
 {
-    border: 1px #555555 solid;
+	border: 1px #555555 solid;
 }
 
 .dlext3
 {
-    border-left: double;
-    border-radius: 0px;
+	border-left: double;
+	border-radius: 0px;
 }
 
 .dlext4
 {
-    border: 1px #aaaaaa solid;
+	border: 1px #aaaaaa solid;
 }
 
 .search-result-lastpost
 {
-    padding: 0 4px;
+	padding: 0 4px;
 }
 
 .dl-report-panel
 {
-    background: none;
+	background: none;
 }
 
 .dlbutton1
 {
-    float: left !important;
-    width: 40% !important;
-    text-align: center;
+	float: left !important;
+	width: 40% !important;
+	text-align: center;
 }
 
 .dlbutton2
 {
-    float: right !important;
-    width: 40% !important;
-    text-align: center;
+	float: right !important;
+	width: 40% !important;
+	text-align: center;
 }
 
 .downloadbtn
 {
-    background-color: #00aa00;
-    display: block;
-    font-size: 3em;
-    text-align: center;
-    margin: 10px auto;
-    padding: 10px;
-    border-left: none;
-    border-top: none;
-    border-right: 3px #fcfcfc solid;
-    border-bottom: 3px #fcfcfc solid;
-    border-radius: 10px;
-    color: #ffffff;
+	background-color: #00aa00;
+	display: block;
+	font-size: 3em;
+	text-align: center;
+	margin: 10px auto;
+	padding: 10px;
+	border-left: none;
+	border-top: none;
+	border-right: 3px #fcfcfc solid;
+	border-bottom: 3px #fcfcfc solid;
+	border-radius: 10px;
+	color: #ffffff;
 }
 
 .downloadbtn:hover
 {
-    background-color: #018A53;
-    border-left: 3px #fcfcfc solid;
-    border-top: 3px #fcfcfc solid;
-    border-right: none;
-    border-bottom: none;
+	background-color: #018A53;
+	border-left: 3px #fcfcfc solid;
+	border-top: 3px #fcfcfc solid;
+	border-right: none;
+	border-bottom: none;
 }
 
 .downloadbtn>i
 {
-    font-size: 1em;
+	font-size: 1em;
 }
 
 .dl-bubble
 {
-    padding: 3px;
-    border-radius: 12px;
-    color: #ffffff;
-    background-color: #aaaaaa;
-    font-size: 0.8em;
-    text-shadow: none;
-    font-style: normal;
+	padding: 3px;
+	border-radius: 12px;
+	color: #ffffff;
+	background-color: #aaaaaa;
+	font-size: 0.8em;
+	text-shadow: none;
+	font-style: normal;
 }
 
 .noshow
 {
-    display: none;
+	display: none;
 }
 
 #dl_help_popup
 {
-    display: none;
-    z-index: 1000;
-    position: fixed;
-    width: 300px;
-    top: 22%;
-    left: 50%;
-    margin-left: -150px;
-    background: none repeat scroll 0 0 #DEDEDE;
-    border: 1px solid #262469;
-    font-size: 11px;
-    color: #000000;
+	display: none;
+	z-index: 1000;
+	position: fixed;
+	width: 300px;
+	top: 22%;
+	left: 50%;
+	margin-left: -150px;
+	background: none repeat scroll 0 0 #DEDEDE;
+	border: 1px solid #262469;
+	font-size: 11px;
+	color: #000000;
 }
 
 a.help
 {
-    float: right;
+	float: right;
 }
 
 a.help:hover
 {
-    cursor: pointer;
+	cursor: pointer;
 }
 
 div.dl_help_close
 {
-    display: block;
-    float: right;
-    height: 16px;
-    width: 16px;
-    overflow: hidden;
-    text-decoration: none !important;
-    background: transparent url("./images/alert_close.png") 0 0 no-repeat;
-    margin-top: -7px;
-    margin-right: -7px;
-    cursor: pointer;
+	display: block;
+	float: right;
+	height: 16px;
+	width: 16px;
+	overflow: hidden;
+	text-decoration: none !important;
+	background: transparent url("./images/alert_close.png") 0 0 no-repeat;
+	margin-top: -7px;
+	margin-right: -7px;
+	cursor: pointer;
 }
 
 div.dl_help_close:hover, .dl-close-footer:hover
 {
-    background-position: 0 -16px;
+	background-position: 0 -16px;
 }
 
 .dl-close-footer
 {
-    display: block;
-    float: right;
-    height: 16px;
-    width: 16px;
-    overflow: hidden;
-    text-decoration: none !important;
-    background: transparent url("./images/alert_close.png") 0 0 no-repeat;
-    margin-top: -16px;
-    margin-right: -16px;
-    cursor: pointer;
+	display: block;
+	float: right;
+	height: 16px;
+	width: 16px;
+	overflow: hidden;
+	text-decoration: none !important;
+	background: transparent url("./images/alert_close.png") 0 0 no-repeat;
+	margin-top: -16px;
+	margin-right: -16px;
+	cursor: pointer;
 }
 
 #dl_help_content
 {
-    margin: 8px 14px;
+	margin: 8px 14px;
 }
 
 #dl_help_content h2
 {
-    color: #262469;
+	color: #262469;
 }
 
 #legend, #footer
 {
-    margin-bottom: 2%;
+	margin-bottom: 2%;
 }
 
 .dl-tab-icon
 {
-    color: #aa0000 !important;
-    background: none !important;
-    background-color: #eeeeee !important;
-    border: 1px #aa0000 solid;
-    text-shadow: none !important;
+	color: #aa0000 !important;
+	background: none !important;
+	background-color: #eeeeee !important;
+	border: 1px #aa0000 solid;
+	text-shadow: none !important;
 }
 
 .dl-tab-icon:hover
 {
-    border: 1px #0000aa solid;
+	border: 1px #0000aa solid;
 }
 
 .dl-red-icon
 {
-    color: #ff0000 !important;
+	color: #ff0000 !important;
 }
 
 .dl-green-icon
 {
-    color: #009900 !important;
+	color: #009900 !important;
 }
 
 .dl-red
 {
-    color: #ff0000;
+	color: #ff0000;
 }
 
 .dl-green
 {
-    color: #018A53;
+	color: #018A53;
 }
 
 .dl-blue
 {
-    color: #0060DF;
+	color: #0060DF;
 }
 
 .dl-yellow
 {
-    color: #aaaa00;
+	color: #aaaa00;
 }
 
 .dl-grey
 {
-    color: #666666;
+	color: #666666;
 }
 
 .dl-icon-yellow
 {
-    color: #000099;
-    text-shadow: 0 0 2px #aaaa00;
+	color: #000099;
+	text-shadow: 0 0 2px #aaaa00;
 }
 
 .dl-icon-yellow:hover
 {
-    color: #aa0000;
-    text-shadow: none;
+	color: #aa0000;
+	text-shadow: none;
 }
 
 .dl-big
@@ -228,423 +228,423 @@ div.dl_help_close:hover, .dl-close-footer:hover
 
 .dl-text-adnew
 {
-    padding: 1px 0px;
-    text-decoration: underline;
-    text-decoration-color: #018A53;
+	padding: 1px 0px;
+	text-decoration: underline;
+	text-decoration-color: #018A53;
 }
 
 .dl-text-adold
 {
-    padding: 1px 0px;
-    text-decoration: underline;
-    text-decoration-color: #0060DF;
+	padding: 1px 0px;
+	text-decoration: underline;
+	text-decoration-color: #0060DF;
 }
 
 .dl-text-vreplace
 {
-    padding: 1px 0px;
-    text-decoration: underline;
-    text-decoration-color: #FFCC00;
+	padding: 1px 0px;
+	text-decoration: underline;
+	text-decoration-color: #FFCC00;
 }
 
 .dl-text-bold
 {
-    font-weight: bold;
+	font-weight: bold;
 }
 
 .dl-text-top
 {
-    vertical-align: top;
+	vertical-align: top;
 }
 
 .dl-text-left
 {
-    text-align: left;
+	text-align: left;
 }
 
 .dl-text-center
 {
-    text-align: center;
+	text-align: center;
 }
 
 .dl-text-right
 {
-    text-align: right;
+	text-align: right;
 }
 
 .dl-text-underline
 {
-    text-decoration: underline;
+	text-decoration: underline;
 }
 
 .dl-text-big
 {
-    font-weight: bold;
-    font-size: 1.2em;
+	font-weight: bold;
+	font-size: 1.2em;
 }
 
 .dl-left
 {
-    float: left;
+	float: left;
 }
 
 .dl-right
 {
-    float: right;
+	float: right;
 }
 
 .dl-top
 {
-    vertical-align: top;
+	vertical-align: top;
 }
 
 .dl-margin-right-small
 {
-    margin-right: 5px;
+	margin-right: 5px;
 }
 
 .dl-edit-box-light
 {
-    background-color: transparent;
-    border: 1px #555555 solid;
+	background-color: transparent;
+	border: 1px #555555 solid;
 }
 
 .dl-edit-box-medium
 {
-    background-color: transparent;
-    background-image: none;
-    border-right: 1px #555555 solid !important;
-    border-bottom: 1px #555555 solid !important;
+	background-color: transparent;
+	background-image: none;
+	border-right: 1px #555555 solid !important;
+	border-bottom: 1px #555555 solid !important;
 }
 
 .dl-edit-box-big
 {
-    background-color: transparent;
-    border: 2px #555555 solid;
+	background-color: transparent;
+	border: 2px #555555 solid;
 }
 
 .dl-edit-hint
 {
-    background-color: transparent !important;
+	background-color: transparent !important;
 }
 
 .dl-edit-version
 {
-    background-color: transparent !important;
+	background-color: transparent !important;
 }
 
 .dl-thumb-box
 {
-    max-width: 150px;
-    max-height: 100px;
+	max-width: 150px;
+	max-height: 100px;
 }
 
 .dl-thumb-box-manage
 {
-    border-right: 1px #555555 solid;
-    border-bottom: 1px #555555 solid;
-    margin: 0.5em;
-    text-align: center;
-    box-shadow: 2px 2px #888888;
+	border-right: 1px #555555 solid;
+	border-bottom: 1px #555555 solid;
+	margin: 0.5em;
+	text-align: center;
+	box-shadow: 2px 2px #888888;
 }
 
 .dl-thumb-cell
 {
-    width: 150px;
-    height: 100px;
-    padding-left: 1em;
+	width: 150px;
+	height: 100px;
+	padding-left: 1em;
 }
 
 .dl-thumb-cell-button
 {
-    text-align: center;
-    margin-top: 2px;
-    margin-top: 0.5em;
-    margin-bottom: 0.5em;
+	text-align: center;
+	margin-top: 2px;
+	margin-top: 0.5em;
+	margin-bottom: 0.5em;
 }
 
 .dl-thumb-cell-button span
 {
-    font-size: 0;
+	font-size: 0;
 }
 
 .dl-footer-alert
 {
-    background-color: #ffaa44;
+	background-color: #ffaa44;
 }
 
 .dl-cell-block
 {
-    display: block !important;
+	display: block !important;
 }
 
 .dl-intent
 {
-    padding-left: 1em !important;
+	padding-left: 1em !important;
 }
 
 .dl-intent-right
 {
-    padding-right: 1em !important;
+	padding-right: 1em !important;
 }
 
 .panel>.inner>ul.topiclist>.dl-header>dl>dd.dl-cell-block
 {
-    font-weight: bold;
-    border-bottom: 10px solid transparent;
+	font-weight: bold;
+	border-bottom: 10px solid transparent;
 }
 
 .topiclist.dlext
 {
-    border: none;
-    background: none;
+	border: none;
+	background: none;
 }
 
 .topiclist.dlext>li.row
 {
-    border-top: none;
-    border-left: none;
-    border-right: none;
-    border-bottom: 1px #ffffff solid;
+	border-top: none;
+	border-left: none;
+	border-right: none;
+	border-bottom: 1px #ffffff solid;
 }
 
 table.zebra-list tr.dl-reported:nth-child(odd) td
 {
-    background-color: #ECD5D8 !important;
+	background-color: #ECD5D8 !important;
 }
 
 table.zebra-list tr.dl-reported:nth-child(even) td
 {
-    background-color: #ECD5D8 !important;
+	background-color: #ECD5D8 !important;
 }
 
 .dl-rating-image
 {
-    letter-spacing: -4px;
+	letter-spacing: -4px;
 }
 
 .dl-rating-count
 {
-    letter-spacing: normal;
+	letter-spacing: normal;
 }
 
 .dl-reported
 {
-    background-color: #ECD5D8 !important;
+	background-color: #ECD5D8 !important;
 }
 
 .dl-report-data
 {
-    float: left;
-    margin-right: 5em;
+	float: left;
+	margin-right: 5em;
 }
 
 .dl-width-5
 {
-    width: 5%;
+	width: 5%;
 }
 
 .dl-width-10
 {
-    width: 10%;
+	width: 10%;
 }
 
 .dl-width-15
 {
-    width: 15%;
+	width: 15%;
 }
 
 .dl-width-20
 {
-    width: 20%;
+	width: 20%;
 }
 
 .dl-width-25
 {
-    width: 25%;
+	width: 25%;
 }
 
 .dl-width-30
 {
-    width: 30%;
+	width: 30%;
 }
 
 .dl-width-40
 {
-    width: 40%;
+	width: 40%;
 }
 
 .dl-width-50
 {
-    width: 50%;
+	width: 50%;
 }
 
 .dl-width-75
 {
-    width: 75%;
+	width: 75%;
 }
 
 .dl-width-75-max
 {
-    max-width: 75%;
+	max-width: 75%;
 }
 
 .dl-width-80
 {
-    width: 80%;
+	width: 80%;
 }
 
 .dl-width-90
 {
-    width: 90%;
+	width: 90%;
 }
 
 .dl-width-95
 {
-    width: 95%;
+	width: 95%;
 }
 
 .dl-width-99
 {
-    width: 99%;
+	width: 99%;
 }
 
 .dl-width-100
 {
-    width: 100%;
+	width: 100%;
 }
 
 .dl-comment-height
 {
-    max-height: 100px;
+	max-height: 100px;
 }
 
 .title
 {
-    overflow: auto;
-    font-size: 1.2em;
-    font-weight: bold;
+	overflow: auto;
+	font-size: 1.2em;
+	font-weight: bold;
 }
 
 .message
 {
-    overflow: auto;
-    font-size: 1.1em;
+	overflow: auto;
+	font-size: 1.1em;
 }
 
 .value
 {
-    font-size: 1.1em;
+	font-size: 1.1em;
 }
 
 .dl-option-row
 {
-    height: 3.0em;
-    vertical-align: middle;
+	height: 3.0em;
+	vertical-align: middle;
 }
 
 .dl-detail-row
 {
-    list-style-type: none;
-    overflow: hidden;
+	list-style-type: none;
+	overflow: hidden;
 }
 
 .dl-version-row-end
 {
-    clear: both;
-    margin: 10px 0 10px 0;
-    border-bottom: 1px #aaaaaa solid;
+	clear: both;
+	margin: 10px 0 10px 0;
+	border-bottom: 1px #aaaaaa solid;
 }
 
 .dl-index-desc
 {
-    padding: 0.5em 0 0.5em 4em;
+	padding: 0.5em 0 0.5em 4em;
 }
 
 .dl-padding-left-1
 {
-    padding-left: 1em;
+	padding-left: 1em;
 }
 
 .dl-padding-left-3-5
 {
-    padding-left: 3.5em;
+	padding-left: 3.5em;
 }
 
 .dl-subfolder-small
 {
-    max-width: 10px;
-    max-height: 10px;
+	max-width: 10px;
+	max-height: 10px;
 }
 
 .dl-a-button
 {
-    line-height: 1.5;
-    padding-top: 1px !important;
-    padding-bottom: 1px !important;
-    vertical-align: middle !important;
+	line-height: 1.5;
+	padding-top: 1px !important;
+	padding-bottom: 1px !important;
+	vertical-align: middle !important;
 }
 
 .dl-legend-box,
 .dl-footer-box
 {
-    display: none;
-    z-index: 1010;
-    width: 300px;
-    position: fixed;
-    bottom: 20%;
-    left: 50%;
-    margin-left: -150px;
-    border: 1px solid #262469;
-    background: none repeat scroll 0 0 #cccccc;
-    font-size: 11px;
-    color: #000000;
-    padding: 1em;
+	display: none;
+	z-index: 1010;
+	width: 300px;
+	position: fixed;
+	bottom: 20%;
+	left: 50%;
+	margin-left: -150px;
+	border: 1px solid #262469;
+	background: none repeat scroll 0 0 #cccccc;
+	font-size: 11px;
+	color: #000000;
+	padding: 1em;
 }
 
 .dl-legend-box h3,
 .dl-footer-box h3
 {
-    color: #262469;
+	color: #262469;
 }
 
 .dl-legend-box dt
 {
-    max-width: 22px !important;
+	max-width: 22px !important;
 }
 
 .dl-legend-box dd
 {
-    margin: -0.5em 0 0.5em 24px;
-    border-left: none !important;
-    display: block !important;
-    color: #000000;
+	margin: -0.5em 0 0.5em 24px;
+	border-left: none !important;
+	display: block !important;
+	color: #000000;
 }
 
 .dl-footer-box div.small
 {
-    margin-bottom: 0.75em;
+	margin-bottom: 0.75em;
 }
 
 @media (max-width: 950px)
 {
-    .dlbutton1
-    {
-        clear: both;
-        width: auto !important;
-    }
-    .dlbutton2
-    {
-        clear: both;
-        width: auto !important;
-    }
+	.dlbutton1
+	{
+		clear: both;
+		width: auto !important;
+	}
+	.dlbutton2
+	{
+		clear: both;
+		width: auto !important;
+	}
 }
 
 @media (max-width: 700px)
 {
-    .dl-legend-box ul.topiclist dt,
-    .dl-legend-box ul.topiclist dd
-    {
-        margin-right: -24px !important;
-    }
+	.dl-legend-box ul.topiclist dt,
+	.dl-legend-box ul.topiclist dd
+	{
+		margin-right: -24px !important;
+	}
 }

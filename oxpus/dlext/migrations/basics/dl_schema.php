@@ -1,12 +1,12 @@
 <?php
 
 /**
-*
-* @package phpBB Extension - Oxpus Downloads
-* @copyright (c) 2002-2021 OXPUS - www.oxpus.net
-* @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
-*
-*/
+ *
+ * @package   phpBB Extension - Oxpus Downloads
+ * @copyright 2002-2021 OXPUS - www.oxpus.net
+ * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
+ *
+ */
 
 namespace oxpus\dlext\migrations\basics;
 
@@ -17,7 +17,7 @@ class dl_schema extends \phpbb\db\migration\migration
 		return isset($this->config['dl_active']);
 	}
 
-	static public function depends_on()
+	public static function depends_on()
 	{
 		return ['\phpbb\db\migration\data\v330\v330'];
 	}
@@ -352,7 +352,7 @@ class dl_schema extends \phpbb\db\migration\migration
 						'ver_bitfield'		=> ['VCHAR', ''],
 						'ver_flags'			=> ['UINT:11', 0],
 						'ver_active'		=> ['BOOL', 0],
-						],
+					],
 					'PRIMARY_KEY'	=> 'ver_id'
 				],
 
@@ -467,7 +467,7 @@ class dl_schema extends \phpbb\db\migration\migration
 						'show_file_hash'		=> ['BOOL', 1],
 						'dl_set_add'			=> ['UINT:11', 0],
 						'dl_set_user'			=> ['UINT:11', 0],
-						],
+					],
 					'PRIMARY_KEY'	=> 'id'
 				],
 			],

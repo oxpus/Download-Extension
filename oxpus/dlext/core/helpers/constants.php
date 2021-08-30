@@ -1,12 +1,12 @@
 <?php
 
 /**
-*
-* @package phpBB Extension - Oxpus Downloads
-* @copyright (c) 2002-2021 OXPUS - www.oxpus.net
-* @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
-*
-*/
+ *
+ * @package   phpBB Extension - Oxpus Downloads
+ * @copyright 2002-2021 OXPUS - www.oxpus.net
+ * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
+ *
+ */
 
 namespace oxpus\dlext\core\helpers;
 
@@ -170,14 +170,14 @@ class constants
 	protected $dl_users_traffics;
 
 	/**
-	* Constructor
-	*
-	* @param string									$root_path
-	* @param \phpbb\config\config					$config
-	* @param \phpbb\user							$user
-	* @param \phpbb\db\driver\driver_interface		$db
-	* @param \phpbb\filesystem\filesystem			$filesystem
-	*/
+	 * Constructor
+	 *
+	 * @param string								$root_path
+	 * @param \phpbb\config\config					$config
+	 * @param \phpbb\user							$user
+	 * @param \phpbb\db\driver\driver_interface		$db
+	 * @param \phpbb\filesystem\filesystem			$filesystem
+	 */
 	public function __construct(
 		$root_path,
 		\phpbb\config\config $config,
@@ -362,23 +362,23 @@ class constants
 				{
 					$return = $this->root_path . $core_upload_path . '/dlext';
 				}
-			break;
+				break;
 
 			case 'founder_traffics':
-				$return = ($this->config['dl_traffics_founder'] && $this->user->data['user_type'] == USER_FOUNDER) ? self::DL_TRUE :self::DL_FALSE;
-			break;
+				$return = ($this->config['dl_traffics_founder'] && $this->user->data['user_type'] == USER_FOUNDER) ? self::DL_TRUE : self::DL_FALSE;
+				break;
 
 			case 'guests_traffics':
 				$return = (!$this->config['dl_traffic_off'] && $this->config['dl_traffics_guests']) ? self::DL_TRUE : self::DL_FALSE;
-			break;
+				break;
 
 			case 'overall_traffics':
 				$return = $this->dl_overall_traffics;
-			break;
+				break;
 
 			case 'users_traffics':
 				$return = $this->dl_users_traffics;
-			break;
+				break;
 
 			default:
 				$return = '';

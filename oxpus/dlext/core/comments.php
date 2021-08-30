@@ -1,12 +1,12 @@
 <?php
 
 /**
-*
-* @package phpBB Extension - Oxpus Downloads
-* @copyright (c) 2021-2021 OXPUS - www.oxpus.net
-* @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
-*
-*/
+ *
+ * @package   phpBB Extension - Oxpus Downloads
+ * @copyright (c) 2021-2021 OXPUS - www.oxpus.net
+ * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
+ *
+ */
 
 namespace oxpus\dlext\core;
 
@@ -40,27 +40,27 @@ class comments implements comments_interface
 	protected $dlext_table_downloads;
 
 	/**
-	* Constructor
-	*
-	* @param string									$root_path
-	* @param string									$php_ext
-	* @param \phpbb\db\driver\driver_interface		$db
-	* @param \phpbb\config\config					$config
-	* @param \phpbb\controller\helper				$helper
-	* @param \phpbb\request\request 				$request
-	* @param \phpbb\template\template				$template
-	* @param \phpbb\user							$user
-	* @param \phpbb\language\language				$language
-	* @param \phpbb\event\dispatcher_interface		$dispatcher
-	* @param \phpbb\notification\manager			$notification
-	* @param \phpbb\pagination						$pagination
-	* @param \oxpus\dlext\core\auth					$dlext_auth
-	* @param \oxpus\dlext\core\main					$dlext_main
-	* @param \oxpus\dlext\core\helpers\constants	$dlext_constants
-	* @param string									$dlext_table_dl_comments
-	* @param string									$dlext_table_dl_favorites
-	* @param string									$dlext_table_downloads
-	*/
+	 * Constructor
+	 *
+	 * @param string								$root_path
+	 * @param string								$php_ext
+	 * @param \phpbb\db\driver\driver_interface		$db
+	 * @param \phpbb\config\config					$config
+	 * @param \phpbb\controller\helper				$helper
+	 * @param \phpbb\request\request 				$request
+	 * @param \phpbb\template\template				$template
+	 * @param \phpbb\user							$user
+	 * @param \phpbb\language\language				$language
+	 * @param \phpbb\event\dispatcher_interface		$dispatcher
+	 * @param \phpbb\notification\manager			$notification
+	 * @param \phpbb\pagination						$pagination
+	 * @param \oxpus\dlext\core\auth				$dlext_auth
+	 * @param \oxpus\dlext\core\main				$dlext_main
+	 * @param \oxpus\dlext\core\helpers\constants	$dlext_constants
+	 * @param string								$dlext_table_dl_comments
+	 * @param string								$dlext_table_dl_favorites
+	 * @param string								$dlext_table_downloads
+	 */
 	public function __construct(
 		$root_path,
 		$php_ext,
@@ -199,7 +199,8 @@ class comments implements comments_interface
 				'com_uid'			=> $com_uid,
 				'com_bitfield'		=> $com_bitfield,
 				'com_flags'			=> $com_flags,
-				'approve'			=> $approve]) . ' WHERE dl_id = ' . (int) $dl_id;
+				'approve'			=> $approve
+			]) . ' WHERE dl_id = ' . (int) $dl_id;
 			$this->db->sql_query($sql);
 
 			$comment_message = $this->language->lang('DL_COMMENT_UPDATED');
@@ -217,7 +218,8 @@ class comments implements comments_interface
 				'com_uid'			=> $com_uid,
 				'com_bitfield'		=> $com_bitfield,
 				'com_flags'			=> $com_flags,
-				'approve'			=> $approve]);
+				'approve'			=> $approve
+			]);
 			$this->db->sql_query($sql);
 
 			$dl_id = $this->db->sql_nextid();
@@ -312,13 +314,13 @@ class comments implements comments_interface
 					case $this->dlext_constants::DL_PERM_USER:
 						$processing_user = $fav_user;
 						$send_notify = $this->dlext_constants::DL_TRUE;
-					break;
+						break;
 
 					case $this->dlext_constants::DL_PERM_MOD:
 						$processing_user = $this->dlext_auth->dl_auth_users($cat_id, 'auth_mod');
 						$processing_user = array_merge($fav_user, $processing_user);
 						$send_notify = $this->dlext_constants::DL_TRUE;
-					break;
+						break;
 
 					default:
 						$send_notify = $this->dlext_constants::DL_FALSE;

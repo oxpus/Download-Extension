@@ -1,12 +1,12 @@
 <?php
 
 /**
-*
-* @package phpBB Extension - Oxpus Downloads
-* @copyright (c) 2002-2021 OXPUS - www.oxpus.net
-* @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
-*
-*/
+ *
+ * @package   phpBB Extension - Oxpus Downloads
+ * @copyright 2002-2021 OXPUS - www.oxpus.net
+ * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
+ *
+ */
 
 namespace oxpus\dlext\migrations\basics;
 
@@ -17,7 +17,7 @@ class dl_commons extends \phpbb\db\migration\migration
 		return isset($this->config['dl_cat_edit']);
 	}
 
-	static public function depends_on()
+	public static function depends_on()
 	{
 		return ['\oxpus\dlext\migrations\basics\dl_perms'];
 	}

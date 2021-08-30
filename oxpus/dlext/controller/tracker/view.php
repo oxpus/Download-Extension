@@ -1,12 +1,12 @@
 <?php
 
 /**
-*
-* @package phpBB Extension - Oxpus Downloads
-* @copyright (c) 2021-2021 OXPUS - www.oxpus.net
-* @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
-*
-*/
+ *
+ * @package   phpBB Extension - Oxpus Downloads
+ * @copyright (c) 2021-2021 OXPUS - www.oxpus.net
+ * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
+ *
+ */
 
 namespace oxpus\dlext\controller\tracker;
 
@@ -35,26 +35,26 @@ class view
 	protected $dlext_table_dl_cat;
 
 	/**
-	* Constructor
-	*
-	* @param \phpbb\db\driver\driver_interface		$db
-	* @param \phpbb\config\config					$config
-	* @param \phpbb\controller\helper				$helper
-	* @param \phpbb\request\request 				$request
-	* @param \phpbb\template\template				$template
-	* @param \phpbb\user							$user
-	* @param \phpbb\language\language				$language
-	* @param \phpbb\notification\manager			$notification
-	* @param \phpbb\pagination						$pagination
-	* @param \oxpus\dlext\core\auth					$dlext_auth
-	* @param \oxpus\dlext\core\main					$dlext_main
-	* @param \oxpus\dlext\core\helpers\footer		$dlext_footer
-	* @param \oxpus\dlext\core\helpers\constants	$dlext_constants
-	* @param string									$dlext_table_dl_bug_history
-	* @param string									$dlext_table_dl_tracker
-	* @param string									$dlext_table_downloads
-	* @param string									$dlext_table_dl_cat
-	*/
+	 * Constructor
+	 *
+	 * @param \phpbb\db\driver\driver_interface		$db
+	 * @param \phpbb\config\config					$config
+	 * @param \phpbb\controller\helper				$helper
+	 * @param \phpbb\request\request 				$request
+	 * @param \phpbb\template\template				$template
+	 * @param \phpbb\user							$user
+	 * @param \phpbb\language\language				$language
+	 * @param \phpbb\notification\manager			$notification
+	 * @param \phpbb\pagination						$pagination
+	 * @param \oxpus\dlext\core\auth				$dlext_auth
+	 * @param \oxpus\dlext\core\main				$dlext_main
+	 * @param \oxpus\dlext\core\helpers\footer		$dlext_footer
+	 * @param \oxpus\dlext\core\helpers\constants	$dlext_constants
+	 * @param string								$dlext_table_dl_bug_history
+	 * @param string								$dlext_table_dl_tracker
+	 * @param string								$dlext_table_downloads
+	 * @param string								$dlext_table_dl_cat
+	 */
 	public function __construct(
 		\phpbb\db\driver\driver_interface $db,
 		\phpbb\config\config $config,
@@ -250,8 +250,6 @@ class view
 					$bug_status_count[4] = 0;
 					$bug_status_count[5] = 0;
 
-					unset($sql_array);
-
 					$sql = 'SELECT b.report_status, COUNT(b.report_id) AS total FROM ' . $this->dlext_table_dl_tracker . ' b
 							LEFT JOIN ' . $this->dlext_table_downloads . ' d ON d.id = b.df_id
 						WHERE ' . $this->db->sql_in_set('d.cat', $bug_access_cats) . '
@@ -369,8 +367,6 @@ class view
 						{
 							$sql_where .= " AND b.df_id = $df_id ";
 						}
-
-						unset($sql_array);
 
 						$sql_array = [
 							'SELECT'	=> 'b.*, d.id, d.description AS report_file, u1.username AS report_author, u1.user_colour AS report_colour, u2.username AS report_assign, u2.user_colour AS assign_colour',

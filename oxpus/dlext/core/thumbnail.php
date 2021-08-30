@@ -1,12 +1,12 @@
 <?php
 
 /**
-*
-* @package phpBB Extension - Oxpus Downloads
-* @copyright (c) 2002-2021 OXPUS - www.oxpus.net
-* @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
-*
-*/
+ *
+ * @package   phpBB Extension - Oxpus Downloads
+ * @copyright 2002-2021 OXPUS - www.oxpus.net
+ * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
+ *
+ */
 
 namespace oxpus\dlext\core;
 
@@ -22,12 +22,12 @@ class thumbnail implements thumbnail_interface
 	protected $dlext_constants;
 
 	/**
-	* Constructor
-	*
-	* @param \phpbb\request\request 				$request
-	* @param \phpbb\filesystem\filesystem			$filesystem
-	* @param \oxpus\dlext\core\helpers\constants	$dlext_constants
-	*/
+	 * Constructor
+	 *
+	 * @param \phpbb\request\request 				$request
+	 * @param \phpbb\filesystem\filesystem			$filesystem
+	 * @param \oxpus\dlext\core\helpers\constants	$dlext_constants
+	 */
 	public function __construct(
 		\phpbb\request\request $request,
 		\phpbb\filesystem\filesystem $filesystem,

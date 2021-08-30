@@ -1,12 +1,12 @@
 <?php
 
 /**
-*
-* @package phpBB Extension - Oxpus Downloads
-* @copyright (c) 2021-2021 OXPUS - www.oxpus.net
-* @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
-*
-*/
+ *
+ * @package   phpBB Extension - Oxpus Downloads
+ * @copyright (c) 2021-2021 OXPUS - www.oxpus.net
+ * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
+ *
+ */
 
 namespace oxpus\dlext\controller\tracker;
 
@@ -37,27 +37,27 @@ class edit
 	protected $dlext_table_dl_cat;
 
 	/**
-	* Constructor
-	*
-	* @param string									$root_path
-	* @param string									$php_ext
-	* @param \phpbb\db\driver\driver_interface		$db
-	* @param \phpbb\config\config					$config
-	* @param \phpbb\controller\helper				$helper
-	* @param \phpbb\request\request 				$request
-	* @param \phpbb\template\template				$template
-	* @param \phpbb\user							$user
-	* @param \phpbb\language\language				$language
-	* @param \phpbb\notification\manager			$notification
-	* @param \oxpus\dlext\core\auth					$dlext_auth
-	* @param \oxpus\dlext\core\main					$dlext_main
-	* @param \oxpus\dlext\core\helpers\footer		$dlext_footer
-	* @param \oxpus\dlext\core\helpers\constants	$dlext_constants
-	* @param string									$dlext_table_dl_bug_history
-	* @param string									$dlext_table_dl_tracker
-	* @param string									$dlext_table_downloads
-	* @param string									$dlext_table_dl_cat
-	*/
+	 * Constructor
+	 *
+	 * @param string								$root_path
+	 * @param string								$php_ext
+	 * @param \phpbb\db\driver\driver_interface		$db
+	 * @param \phpbb\config\config					$config
+	 * @param \phpbb\controller\helper				$helper
+	 * @param \phpbb\request\request 				$request
+	 * @param \phpbb\template\template				$template
+	 * @param \phpbb\user							$user
+	 * @param \phpbb\language\language				$language
+	 * @param \phpbb\notification\manager			$notification
+	 * @param \oxpus\dlext\core\auth				$dlext_auth
+	 * @param \oxpus\dlext\core\main				$dlext_main
+	 * @param \oxpus\dlext\core\helpers\footer		$dlext_footer
+	 * @param \oxpus\dlext\core\helpers\constants	$dlext_constants
+	 * @param string								$dlext_table_dl_bug_history
+	 * @param string								$dlext_table_dl_tracker
+	 * @param string								$dlext_table_downloads
+	 * @param string								$dlext_table_dl_cat
+	 */
 	public function __construct(
 		$root_path,
 		$php_ext,
@@ -207,7 +207,7 @@ class edit
 				$allow_urls		= $this->dlext_constants::DL_TRUE;
 				$allow_smilies	= ($this->config['allow_smilies']) ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE;
 				$bug_uid		=
-				$bug_bitfield	= '';
+					$bug_bitfield	= '';
 				$bug_flags		= 0;
 
 				$error_txt = [];
@@ -300,7 +300,8 @@ class edit
 							'report_status_date'	=> time(),
 							'report_php'			=> $report_php,
 							'report_db'				=> $report_db,
-							'report_forum'			=> $report_forum]) . ' WHERE report_id = ' . (int) $fav_id;
+							'report_forum'			=> $report_forum
+						]) . ' WHERE report_id = ' . (int) $fav_id;
 						$this->db->sql_query($sql);
 					}
 					else
@@ -318,7 +319,8 @@ class edit
 							'report_status_date'	=> time(),
 							'report_php'			=> $report_php,
 							'report_db'				=> $report_db,
-							'report_forum'			=> $report_forum]);
+							'report_forum'			=> $report_forum
+						]);
 						$this->db->sql_query($sql);
 
 						$fav_id = $this->db->sql_nextid();
@@ -328,7 +330,8 @@ class edit
 							'report_id'			=> $fav_id,
 							'report_his_type'	=> 'status',
 							'report_his_date'	=>  time(),
-							'report_his_value'	=> '0:' . $this->user->data['username']]);
+							'report_his_value'	=> '0:' . $this->user->data['username']
+						]);
 						$this->db->sql_query($sql);
 					}
 

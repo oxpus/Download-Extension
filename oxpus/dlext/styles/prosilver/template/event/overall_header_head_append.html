@@ -1,6 +1,6 @@
 {% if EXT_DL_PATH %}
 {% INCLUDECSS '@oxpus_dlext/dl_ext.css' %}
-{% if S_DL_POPUPIMAGE %}{% INCLUDECSS ''~ EXT_DL_PATH ~'/vendor/prettyPhoto/css/prettyPhoto.css' %}{% endif %}
+{% if S_DL_POPUPIMAGE %}{% INCLUDECSS ''~ EXT_DL_PATH ~'3rdparty/prettyPhoto/css/prettyPhoto.css' %}{% endif %}
 <script>
 	var dl_help_path = '{{ U_DL_HELP_POPUP|e }}';
 {% if S_DL_ENABLE_RATE %}
@@ -11,7 +11,7 @@
 	var activeCat = '{{ S_DL_OPEN_PANEL|e }}';
 {% endif %}
 </script>
-{% if S_DL_POPUPIMAGE %}{% INCLUDEJS ''~ EXT_DL_PATH ~'vendor/prettyPhoto/js/jquery.prettyPhoto.js' %}{% endif %}
+{% if S_DL_POPUPIMAGE %}{% INCLUDEJS ''~ EXT_DL_PATH ~'3rdparty/prettyPhoto/js/jquery.prettyPhoto.js' %}{% endif %}
 {% INCLUDEJS ''~ EXT_DL_PATH ~'assets/javascript/dl_footer.js' %}
 {% INCLUDEJS ''~ EXT_DL_PATH ~'assets/javascript/dl_help.js' %}
 {% if S_DL_DETAIL_JS %}{% INCLUDEJS '@oxpus_dlext/dl_main.js' %}{% endif %}

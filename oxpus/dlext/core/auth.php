@@ -1,12 +1,12 @@
 <?php
 
 /**
-*
-* @package phpBB Extension - Oxpus Downloads
-* @copyright (c) 2002-2021 OXPUS - www.oxpus.net
-* @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
-*
-*/
+ *
+ * @package   phpBB Extension - Oxpus Downloads
+ * @copyright 2002-2021 OXPUS - www.oxpus.net
+ * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
+ *
+ */
 
 namespace oxpus\dlext\core;
 
@@ -29,18 +29,18 @@ class auth implements auth_interface
 	protected $dlext_table_dl_cat;
 
 	/**
-	* Constructor
-	*
-	* @param \phpbb\user							$user
-	* @param \phpbb\auth\auth						$auth
-	* @param \phpbb\config\config					$config
-	* @param \phpbb\db\driver\driver_interface		$db
-	* @param \oxpus\dlext\core\cache				$dlext_cache
-	* @param \oxpus\dlext\core\helpers\constants	$dlext_constants
-	* @param string									$dlext_table_dl_auth
-	* @param string									$dlext_table_downloads
-	* @param string									$dlext_table_dl_cat
-	*/
+	 * Constructor
+	 *
+	 * @param \phpbb\user							$user
+	 * @param \phpbb\auth\auth						$auth
+	 * @param \phpbb\config\config					$config
+	 * @param \phpbb\db\driver\driver_interface		$db
+	 * @param \oxpus\dlext\core\cache				$dlext_cache
+	 * @param \oxpus\dlext\core\helpers\constants	$dlext_constants
+	 * @param string								$dlext_table_dl_auth
+	 * @param string								$dlext_table_downloads
+	 * @param string								$dlext_table_dl_cat
+	 */
 	public function __construct(
 		\phpbb\user $user,
 		\phpbb\auth\auth $auth,
@@ -232,14 +232,14 @@ class auth implements auth_interface
 		{
 			case $this->dlext_constants::DL_PERM_ALL:
 				$dl_perm = $this->dlext_constants::DL_TRUE;
-			break;
+				break;
 
 			case $this->dlext_constants::DL_PERM_USER:
 				if ($this->user->data['is_registered'])
 				{
 					$dl_perm = $this->dlext_constants::DL_TRUE;
 				}
-			break;
+				break;
 
 			case $this->dlext_constants::DL_PERM_MOD:
 				if ($cat_id)
@@ -260,14 +260,14 @@ class auth implements auth_interface
 						}
 					}
 				}
-			break;
+				break;
 
 			case $this->dlext_constants::DL_PERM_ADMIN:
 				if ($this->user_admin())
 				{
 					$dl_perm = $this->dlext_constants::DL_TRUE;
 				}
-			break;
+				break;
 		}
 
 		return $dl_perm;
@@ -411,35 +411,35 @@ class auth implements auth_interface
 		{
 			case $this->dlext_constants::DL_CAPTCHA_PERM_OFF:
 				$captcha_active = $this->dlext_constants::DL_FALSE;
-			break;
+				break;
 			case $this->dlext_constants::DL_CAPTCHA_PERM_GUESTS:
 				if (!$user_is_guest)
 				{
 					$captcha_active = $this->dlext_constants::DL_FALSE;
 				}
-			break;
+				break;
 			case $this->dlext_constants::DL_CAPTCHA_PERM_USER:
 				if ($user_is_mod || $user_is_admin || $user_is_founder)
 				{
 					$captcha_active = $this->dlext_constants::DL_FALSE;
 				}
-			break;
+				break;
 			case $this->dlext_constants::DL_CAPTCHA_PERM_MODS:
 				if ($user_is_admin || $user_is_founder)
 				{
 					$captcha_active = $this->dlext_constants::DL_FALSE;
 				}
-			break;
+				break;
 			case $this->dlext_constants::DL_CAPTCHA_PERM_ADMINS:
 				if ($user_is_founder)
 				{
 					$captcha_active = $this->dlext_constants::DL_FALSE;
 				}
-			break;
+				break;
 			case $this->dlext_constants::DL_CAPTCHA_PERM_ALL:
 			default:
 				$captcha_active = $this->dlext_constants::DL_TRUE;
-			break;
+				break;
 		}
 
 		return $captcha_active;

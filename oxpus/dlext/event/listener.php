@@ -1,24 +1,24 @@
 <?php
 
 /**
-*
-* @package phpBB Extension - Oxpus Downloads
-* @copyright (c) 2002-2021 OXPUS - www.oxpus.net
-* @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
-*
-*/
+ *
+ * @package   phpBB Extension - Oxpus Downloads
+ * @copyright 2002-2021 OXPUS - www.oxpus.net
+ * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
+ *
+ */
 
 namespace oxpus\dlext\event;
 
 use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 
 /**
-* @ignore
-*/
+ * @ignore
+ */
 
 /**
-* Event listener
-*/
+ * Event listener
+ */
 class listener implements EventSubscriberInterface
 {
 	/* phpbb objects */
@@ -54,32 +54,32 @@ class listener implements EventSubscriberInterface
 	protected $dlext_table_dl_cat;
 
 	/**
-	* Constructor
-	*
-	* @param \phpbb\extension\manager				$extension_manager
-	* @param \phpbb\db\driver\driver_interface		$db
-	* @param \phpbb\config\config					$config
-	* @param \phpbb\controller\helper				$helper
-	* @param \phpbb\template\template				$template
-	* @param \phpbb\user							$user
-	* @param \phpbb\language\language				$language
-	* @param \phpbb\request\request 				$request
-	* @param \phpbb\cache\service					$cache
-	* @param \phpbb\filesystem\filesystem			$filesystem
-	* @param \oxpus\dlext\core\auth					$dlext_auth
-	* @param \oxpus\dlext\core\format 				$dlext_format
-	* @param \oxpus\dlext\core\main 				$dlext_main
-	* @param \oxpus\dlext\core\privacy 				$dlext_privacy
-	* @param \oxpus\dlext\core\helpers\constants 	$dlext_constants
-	* @param string									$dlext_table_dl_cat_traf
-	* @param string									$dlext_table_dl_comments
-	* @param string									$dlext_table_dl_favorites
-	* @param string									$dlext_table_dl_hotlink
-	* @param string									$dlext_table_dl_notraf
-	* @param string									$dlext_table_dl_stats
-	* @param string									$dlext_table_downloads
-	* @param string									$dlext_table_dl_cat
-	*/
+	 * Constructor
+	 *
+	 * @param \phpbb\extension\manager				$extension_manager
+	 * @param \phpbb\db\driver\driver_interface		$db
+	 * @param \phpbb\config\config					$config
+	 * @param \phpbb\controller\helper				$helper
+	 * @param \phpbb\template\template				$template
+	 * @param \phpbb\user							$user
+	 * @param \phpbb\language\language				$language
+	 * @param \phpbb\request\request 				$request
+	 * @param \phpbb\cache\service					$cache
+	 * @param \phpbb\filesystem\filesystem			$filesystem
+	 * @param \oxpus\dlext\core\auth				$dlext_auth
+	 * @param \oxpus\dlext\core\format 				$dlext_format
+	 * @param \oxpus\dlext\core\main 				$dlext_main
+	 * @param \oxpus\dlext\core\privacy 			$dlext_privacy
+	 * @param \oxpus\dlext\core\helpers\constants 	$dlext_constants
+	 * @param string								$dlext_table_dl_cat_traf
+	 * @param string								$dlext_table_dl_comments
+	 * @param string								$dlext_table_dl_favorites
+	 * @param string								$dlext_table_dl_hotlink
+	 * @param string								$dlext_table_dl_notraf
+	 * @param string								$dlext_table_dl_stats
+	 * @param string								$dlext_table_downloads
+	 * @param string								$dlext_table_dl_cat
+	 */
 	public function __construct(
 		\phpbb\extension\manager $extension_manager,
 		\phpbb\db\driver\driver_interface $db,
@@ -135,7 +135,7 @@ class listener implements EventSubscriberInterface
 		$this->dlext_constants			= $dlext_constants;
 	}
 
-	static public function getSubscribedEvents()
+	public static function getSubscribedEvents()
 	{
 		return [
 			// Board default events
@@ -536,13 +536,13 @@ class listener implements EventSubscriberInterface
 			{
 				case 'preview':
 					$link_title = '<a href="' . $part[2] . '">' . $title . '</a>';
-				break;
+					break;
 				case 'link_text':
 					$link_title = '<LINK_TEXT text="' . $title . '">' . $title . '</LINK_TEXT>';
-				break;
+					break;
 				case 'url':
 					$link_title = '<URL url="' .  $part[1] .  $part[2] .  $part[3]  . '">' . $title . '</URL>';
-				break;
+					break;
 				case 'postlink':
 					$link_title = '</s>' . $title . '<e>';
 			}
@@ -576,7 +576,8 @@ class listener implements EventSubscriberInterface
 				$this->config->set('dl_remain_guest_traffic', 0);
 
 				$sql = 'UPDATE ' . $this->dlext_table_dl_cat_traf . ' SET ' . $this->db->sql_build_array('UPDATE', [
-					'cat_traffic_use' => 0]);
+					'cat_traffic_use' => 0
+				]);
 				$this->db->sql_query($sql);
 
 				$this->config->set('dl_traffic_retime', $this->config['dl_traffic_retime']);
@@ -593,7 +594,8 @@ class listener implements EventSubscriberInterface
 			if ($auto_click_reset_month < $current_month)
 			{
 				$sql = 'UPDATE ' . $this->dlext_table_downloads . ' SET ' . $this->db->sql_build_array('UPDATE', [
-					'klicks' => 0]);
+					'klicks' => 0
+				]);
 				$this->db->sql_query($sql);
 
 				$this->cache->destroy('_dlext_file_p.');
@@ -625,7 +627,8 @@ class listener implements EventSubscriberInterface
 				{
 					$sql = 'UPDATE ' . USERS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', [
 						'user_traffic'			=> $new_user_traffic,
-						'user_dl_update_time'	=> time()]) . ' WHERE user_id = ' . (int) $this->user->data['user_id'];
+						'user_dl_update_time'	=> time()
+					]) . ' WHERE user_id = ' . (int) $this->user->data['user_id'];
 					$this->db->sql_query($sql);
 				}
 			}

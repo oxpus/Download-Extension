@@ -1,12 +1,12 @@
 <?php
 
 /**
-*
-* @package phpBB Extension - Oxpus Downloads
-* @copyright (c) 2002-2021 OXPUS - www.oxpus.net
-* @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
-*
-*/
+ *
+ * @package   phpBB Extension - Oxpus Downloads
+ * @copyright 2002-2021 OXPUS - www.oxpus.net
+ * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
+ *
+ */
 
 namespace oxpus\dlext\core;
 
@@ -21,7 +21,7 @@ interface thumbnail_interface
 	 *
 	 * @return void
 	 * @access public
-	*/
+	 */
 	public function handle();
 
 	/**
@@ -31,6 +31,6 @@ interface thumbnail_interface
 	 * @param string $file_ext delete or close topics
 	 * @return object $image
 	 * @access private
-	*/
+	 */
 	public function _get_image($pic_path, $file_ext);
 }

@@ -1,12 +1,12 @@
 <?php
 
 /**
-*
-* @package phpBB Extension - Oxpus Downloads
-* @copyright (c) 2002-2021 OXPUS - www.oxpus.net
-* @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
-*
-*/
+ *
+ * @package   phpBB Extension - Oxpus Downloads
+ * @copyright 2002-2021 OXPUS - www.oxpus.net
+ * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
+ *
+ */
 
 namespace oxpus\dlext\controller;
 
@@ -35,26 +35,26 @@ class overall
 	protected $dlext_table_dl_ratings;
 
 	/**
-	* Constructor
-	*
-	* @param \phpbb\db\driver\driver_interface		$db
-	* @param \phpbb\config\config					$config
-	* @param \phpbb\controller\helper				$helper
-	* @param \phpbb\request\request 				$request
-	* @param \phpbb\template\template				$template
-	* @param \phpbb\user							$user
-	* @param \phpbb\language\language				$language
-	* @param \phpbb\event\dispatcher_interface		$dispatcher
-	* @param \phpbb\pagination						$pagination
-	* @param \oxpus\dlext\core\auth					$dlext_auth
-	* @param \oxpus\dlext\core\files				$dlext_files
-	* @param \oxpus\dlext\core\format				$dlext_format
-	* @param \oxpus\dlext\core\main					$dlext_main
-	* @param \oxpus\dlext\core\status				$dlext_status
-	* @param \oxpus\dlext\core\helpers\footer		$dlext_footer
-	* @param \oxpus\dlext\core\helpers\constants	$dlext_constants
-	* @param string									$dlext_table_dl_ratings
-	*/
+	 * Constructor
+	 *
+	 * @param \phpbb\db\driver\driver_interface		$db
+	 * @param \phpbb\config\config					$config
+	 * @param \phpbb\controller\helper				$helper
+	 * @param \phpbb\request\request 				$request
+	 * @param \phpbb\template\template				$template
+	 * @param \phpbb\user							$user
+	 * @param \phpbb\language\language				$language
+	 * @param \phpbb\event\dispatcher_interface		$dispatcher
+	 * @param \phpbb\pagination						$pagination
+	 * @param \oxpus\dlext\core\auth				$dlext_auth
+	 * @param \oxpus\dlext\core\files				$dlext_files
+	 * @param \oxpus\dlext\core\format				$dlext_format
+	 * @param \oxpus\dlext\core\main				$dlext_main
+	 * @param \oxpus\dlext\core\status				$dlext_status
+	 * @param \oxpus\dlext\core\helpers\footer		$dlext_footer
+	 * @param \oxpus\dlext\core\helpers\constants	$dlext_constants
+	 * @param string								$dlext_table_dl_ratings
+	 */
 	public function __construct(
 		\phpbb\db\driver\driver_interface $db,
 		\phpbb\config\config $config,
@@ -246,14 +246,14 @@ class overall
 		}
 
 		/**
-			* Fetch additional data for the downloads
-			*
-			* @event oxpus.dlext.overall_fetch_download_data
-			* @var int		cat					download category ID
-			* @var array	sort_ary		order paired filename => direction
-			* @var array	latest_where	additional where conditions filename => condition|operator|value
-			* @since 8.1.0-RC2
-			*/
+		 * Fetch additional data for the downloads
+		 *
+		 * @event oxpus.dlext.overall_fetch_download_data
+		 * @var int		cat					download category ID
+		 * @var array	sort_ary		order paired filename => direction
+		 * @var array	latest_where	additional where conditions filename => condition|operator|value
+		 * @since 8.1.0-RC2
+		 */
 		$cat = 0;
 		$latest_where = '';
 		$vars = array(
@@ -269,6 +269,7 @@ class overall
 			{
 				$cat_id = $dl_files[$i]['cat'];
 				$cat_auth = $this->dlext_auth->dl_cat_auth($cat_id);
+
 				if (isset($cat_auth['auth_view']) && $cat_auth['auth_view'] || isset($index[$cat_id]['auth_view']) && $index[$cat_id]['auth_view'] || $this->dlext_auth->user_admin())
 				{
 					$cat_name		= $index[$cat_id]['cat_name_nav'];
@@ -286,7 +287,7 @@ class overall
 
 					$dl_link		= $this->helper->route('oxpus_dlext_details', ['df_id' => $file_id]);
 
-					$hack_version	= '&nbsp;'.$dl_files[$i]['hack_version'];
+					$hack_version	= '&nbsp;' . $dl_files[$i]['hack_version'];
 
 					$check_status	= $this->dlext_status->status($file_id);
 					$file_status	= $check_status['file_status'];
@@ -355,13 +356,13 @@ class overall
 					}
 
 					/**
-						* Fetch additional data for the downloads
-						*
-						* @event oxpus.dlext.overall_display_data_after
-						* @var string	block		template row key
-						* @var int		file_id		download id
-						* @since 8.1.0-RC2
-						*/
+					 * Fetch additional data for the downloads
+					 *
+					 * @event oxpus.dlext.overall_display_data_after
+					 * @var string	block		template row key
+					 * @var int		file_id		download id
+					 * @since 8.1.0-RC2
+					 */
 					$block = 'downloads';
 					$vars = array(
 						'block',

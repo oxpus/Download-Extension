@@ -82,7 +82,7 @@
 				{% if manage_row.DL_MINI_ICON eq 'new' %}<i class="icon fa-comment-o fa-fw dl-red" title="{{ lang('DL_FILE_NEW') }}"></i>{% endif %}
 				{% if manage_row.DL_MINI_ICON eq 'edit' %}<i class="icon fa-edit fa-fw dl-blue" title="{{ lang('DL_FILE_EDIT') }}"></i>{% endif %}
 			</td>
-			<td>{{ manage_row.DL_USERNAME }}</dd>
+			<td>{{ manage_row.DL_USERNAME }}</td>
 			<td class="center">
 				&nbsp;<input type="checkbox" class="permissions-checkbox" name="dlo_id[]" id="dlo_id_{{ manage_row.S_ROW_COUNT }}" value="{{ manage_row.DL_FILE_ID }}" />&nbsp;
 				{% if S_SORT_ASC %}

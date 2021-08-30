@@ -1,18 +1,18 @@
 <?php
 
 /**
-*
-* @package phpBB Extension - Oxpus Downloads
-* @copyright (c) 2002-2021 OXPUS - www.oxpus.net
-* @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
-*
-*/
+ *
+ * @package   phpBB Extension - Oxpus Downloads
+ * @copyright 2002-2021 OXPUS - www.oxpus.net
+ * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
+ *
+ */
 
 namespace oxpus\dlext\controller\acp;
 
 /**
-* @package acp
-*/
+ * @package acp
+ */
 class acp_ext_blacklist_controller implements acp_ext_blacklist_interface
 {
 	/* phpbb objects */
@@ -25,7 +25,7 @@ class acp_ext_blacklist_controller implements acp_ext_blacklist_interface
 	protected $cache;
 
 	/* extension owned objects */
-	protected $u_action;
+	public $u_action;
 	protected $ext_path;
 
 	protected $dlext_constants;
@@ -107,7 +107,8 @@ class acp_ext_blacklist_controller implements acp_ext_blacklist_interface
 				if (!$ext_exist)
 				{
 					$sql = 'INSERT INTO ' . $this->dlext_table_dl_ext_blacklist . ' ' . $this->db->sql_build_array('INSERT', [
-						'extention' => $extension]);
+						'extention' => $extension
+					]);
 					$this->db->sql_query($sql);
 
 					// Purge the blacklist cache

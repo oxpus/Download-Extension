@@ -1,36 +1,36 @@
 #dl_help_popup {
-    display: none;
-    z-index: 2;
-    position: fixed;
-    width: 300px;
-    top: 22%;
-    left: 50%;
-    margin-left: -150px;
-    background: none repeat scroll 0 0 #CCCCCC;
-    border: 1px solid #262469;
-    font-size: 11px;
-    color: #000000;
+	display: none;
+	z-index: 2;
+	position: fixed;
+	width: 300px;
+	top: 22%;
+	left: 50%;
+	margin-left: -150px;
+	background: none repeat scroll 0 0 #CCCCCC;
+	border: 1px solid #262469;
+	font-size: 11px;
+	color: #000000;
 }
 
 a.help {
-    float: right;
+	float: right;
 }
 
 a.help:hover {
-    text-decoration: none !important;
-    color: #aa0000;
-    cursor: pointer;
+	text-decoration: none !important;
+	color: #aa0000;
+	cursor: pointer;
 }
 
 div.dl_help_close {
-    position: relative;
-    height: 16px;
-    width: 16px;
-    left: 8px;
-    bottom: 8px;
-    background: url("./../images/alert_close.png") no-repeat scroll 0 0 transparent;
-    float: right;
-    cursor: pointer;
+	position: relative;
+	height: 16px;
+	width: 16px;
+	left: 8px;
+	bottom: 8px;
+	background: url("./../images/alert_close.png") no-repeat scroll 0 0 transparent;
+	float: right;
+	cursor: pointer;
 }
 
 div.dl_help_close:hover {
@@ -38,130 +38,130 @@ div.dl_help_close:hover {
 }
 
 #dl_help_content {
-    margin: 8px 14px;
+	margin: 8px 14px;
 }
 
 .dl-red {
-    color: #cc0000;
+	color: #cc0000;
 }
 
 .dl-green {
-    color: #009900;
+	color: #009900;
 }
 
 .dl-grey-bg {
-    background-color: #dddddd;
-    border: 2px #555555 solid;
+	background-color: #dddddd;
+	border: 2px #555555 solid;
 }
 
 .dl-red-bg {
-    background-color: #BC2A4D;
-    border: 2px #555555 solid;
-    padding: 5px;
-    color: #ffffff;
+	background-color: #BC2A4D;
+	border: 2px #555555 solid;
+	padding: 5px;
+	color: #ffffff;
 }
 
 .dl-grey-bg .hint {
-    color: #cc0000;
-    font-weight: bold;
+	color: #cc0000;
+	font-weight: bold;
 }
 
 .dl-folder-bg {
-    background-color: #eeeeee;
-    padding: 5px;
-    margin-top: -3px;
-    margin-right: 1em;
+	background-color: #eeeeee;
+	padding: 5px;
+	margin-top: -3px;
+	margin-right: 1em;
 }
 
 .dl-folder-bg>a {
-    display: block;
-    font-size: 1.1em;
-    font-weight: bold;
-    color: #aa0000;
+	display: block;
+	font-size: 1.1em;
+	font-weight: bold;
+	color: #aa0000;
 }
 
 .dl-left {
-    float: left;
+	float: left;
 }
 
 .dl-right {
-    float: right;
+	float: right;
 }
 
 .dl-text-left {
-    text-align: left;
+	text-align: left;
 }
 
 .dl-text-center {
-    text-align: center;
+	text-align: center;
 }
 
 .dl-text-right {
-    text-align: right;
+	text-align: right;
 }
 
 .dl-width-5 {
-    width: 5%;
+	width: 5%;
 }
 
 .dl-width-10 {
-    width: 10%;
+	width: 10%;
 }
 
 .dl-width-15 {
-    width: 15%;
+	width: 15%;
 }
 
 .dl-width-35 {
-    width: 35%;
+	width: 35%;
 }
 
 .dl-width-30 {
-    width: 30%;
+	width: 30%;
 }
 
 .dl-width-30p {
-    width: 30px;
+	width: 30px;
 }
 
 .dl-width-75 {
-    width: 75%;
+	width: 75%;
 }
 
 .dl-width-80 {
-    width: 80%;
+	width: 80%;
 }
 
 .dl-width-85 {
-    width: 85%;
+	width: 85%;
 }
 
 .dl-field-nav {
-    width: 80px;
-    text-align: right;
-    white-space: nowrap;
+	width: 80px;
+	text-align: right;
+	white-space: nowrap;
 }
 
 .dl-thumb-max {
-    max-width: 150px;
-    max-height: 100px
+	max-width: 150px;
+	max-height: 100px
 }
 
 .dl-noshow {
-    display: none;
+	display: none;
 }
 
 .dl-font-bold {
-    font-weight: bold;
+	font-weight: bold;
 }
 
 .dl-line-hight {
-    line-height: 1.2em;
+	line-height: 1.2em;
 }
 
 .dl-text-underline
 {
-    text-decoration: underline;
+	text-decoration: underline;
 }
 
 /**
@@ -177,11 +177,11 @@ label.switch {
 	cursor: pointer;
 	width: 35px;
 	height: 16px;
-    display: inline-block;
+	display: inline-block;
 	background: #aa0000;
 	border-radius: 100px;
 	position: relative;
-    margin-left: -1em;
+	margin-left: -1em;
 }
 
 label.switch:after {

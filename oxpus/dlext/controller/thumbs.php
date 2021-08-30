@@ -1,12 +1,12 @@
 <?php
 
 /**
-*
-* @package phpBB Extension - Oxpus Downloads
-* @copyright (c) 2002-2021 OXPUS - www.oxpus.net
-* @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
-*
-*/
+ *
+ * @package   phpBB Extension - Oxpus Downloads
+ * @copyright 2002-2021 OXPUS - www.oxpus.net
+ * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
+ *
+ */
 
 namespace oxpus\dlext\controller;
 
@@ -35,26 +35,26 @@ class thumbs
 	protected $dlext_table_dl_images;
 
 	/**
-	* Constructor
-	*
-	* @param string									$root_path
-	* @param \phpbb\db\driver\driver_interface		$db
-	* @param \phpbb\config\config					$config
-	* @param \phpbb\controller\helper				$helper
-	* @param \phpbb\request\request 				$request
-	* @param \phpbb\template\template				$template
-	* @param \phpbb\language\language				$language
-	* @param \phpbb\files\factory					$files_factory
-	* @param \phpbb\filesystem\filesystem			$filesystem
-	* @param \oxpus\dlext\core\auth					$dlext_auth
-	* @param \oxpus\dlext\core\files				$dlext_files
-	* @param \oxpus\dlext\core\format				$dlext_format
-	* @param \oxpus\dlext\core\main					$dlext_main
-	* @param \oxpus\dlext\core\status				$dlext_status
-	* @param \oxpus\dlext\core\helpers\constants	$dlext_constants
-	* @param \oxpus\dlext\core\helpers\footer		$dlext_footer
-	* @param string									$dlext_table_dl_images
-	*/
+	 * Constructor
+	 *
+	 * @param string								$root_path
+	 * @param \phpbb\db\driver\driver_interface		$db
+	 * @param \phpbb\config\config					$config
+	 * @param \phpbb\controller\helper				$helper
+	 * @param \phpbb\request\request 				$request
+	 * @param \phpbb\template\template				$template
+	 * @param \phpbb\language\language				$language
+	 * @param \phpbb\files\factory					$files_factory
+	 * @param \phpbb\filesystem\filesystem			$filesystem
+	 * @param \oxpus\dlext\core\auth				$dlext_auth
+	 * @param \oxpus\dlext\core\files				$dlext_files
+	 * @param \oxpus\dlext\core\format				$dlext_format
+	 * @param \oxpus\dlext\core\main				$dlext_main
+	 * @param \oxpus\dlext\core\status				$dlext_status
+	 * @param \oxpus\dlext\core\helpers\constants	$dlext_constants
+	 * @param \oxpus\dlext\core\helpers\footer		$dlext_footer
+	 * @param string								$dlext_table_dl_images
+	 */
 	public function __construct(
 		$root_path,
 		\phpbb\db\driver\driver_interface $db,
@@ -142,7 +142,7 @@ class thumbs
 
 			$mini_icon			= $this->dlext_status->mini_status_file($cat_id, $df_id);
 
-			$hack_version		= '&nbsp;'.$dl_files['hack_version'];
+			$hack_version		= '&nbsp;' . $dl_files['hack_version'];
 
 			// Check saved thumbs
 			$sql = 'SELECT * FROM ' . 	$this->dlext_table_dl_images . '
@@ -217,7 +217,7 @@ class thumbs
 				if ($this->config['dl_thumb_fsize'] && $index[$cat_id]['allow_thumbs'])
 				{
 					$min_pic_width = $this->dlext_constants::DL_PIC_MIN_SIZE;
-					$allowed_imagetypes = ['gif','png','jpg'];
+					$allowed_imagetypes = ['gif', 'png', 'jpg'];
 
 					$upload = $this->files_factory->get('upload')
 						->set_allowed_extensions($allowed_imagetypes)
@@ -226,7 +226,8 @@ class thumbs
 							$min_pic_width,
 							$min_pic_width,
 							$this->config['dl_thumb_xsize'],
-							$this->config['dl_thumb_ysize'])
+							$this->config['dl_thumb_ysize']
+						)
 						->set_disallowed_content((isset($this->config['mime_triggers']) ? explode('|', $this->config['mime_triggers']) : $this->dlext_constants::DL_FALSE));
 
 					$form_name = 'img_link';
@@ -258,7 +259,7 @@ class thumbs
 							trigger_error($this->language->lang('DL_UPLOAD_ERROR'), E_USER_ERROR);
 						}
 
-						if ($pic_width > $this->config['dl_thumb_xsize'] || $pic_height > $this->config['dl_thumb_ysize'] || (sprintf("%u", @filesize($thumb_temp) > $this->config['dl_thumb_fsize'])))
+						if ($pic_width > $this->config['dl_thumb_xsize'] || $pic_height > $this->config['dl_thumb_ysize'] || (sprintf('%u', @filesize($thumb_temp) > $this->config['dl_thumb_fsize'])))
 						{
 							$thumb_file->remove();
 							trigger_error($this->language->lang('DL_THUMB_TO_BIG'), E_USER_ERROR);

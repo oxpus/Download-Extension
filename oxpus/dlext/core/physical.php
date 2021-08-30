@@ -1,12 +1,12 @@
 <?php
 
 /**
-*
-* @package phpBB Extension - Oxpus Downloads
-* @copyright (c) 2002-2021 OXPUS - www.oxpus.net
-* @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
-*
-*/
+ *
+ * @package   phpBB Extension - Oxpus Downloads
+ * @copyright 2002-2021 OXPUS - www.oxpus.net
+ * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
+ *
+ */
 
 
 namespace oxpus\dlext\core;
@@ -31,20 +31,20 @@ class physical implements physical_interface
 	protected $dlext_table_downloads;
 
 	/**
-	* Constructor
-	*
-	* @param string 								$root_path
-	* @param \phpbb\language\language				$language
-	* @param \phpbb\db\driver\driver_interface		$db
-	* @param \phpbb\user							$user
-	* @param \phpbb\extension\manager				$extension_manager
-	* @param \phpbb\filesystem\filesystem			$filesystem
-	* @param \oxpus\dlext\core\files				$dlext_files
-	* @param \oxpus\dlext\core\format				$dlext_format
-	* @param \oxpus\dlext\core\helpers\constants	$dlext_constants
-	* @param string									$dlext_table_dl_versions
-	* @param string									$dlext_table_downloads
-	*/
+	 * Constructor
+	 *
+	 * @param string 								$root_path
+	 * @param \phpbb\language\language				$language
+	 * @param \phpbb\db\driver\driver_interface		$db
+	 * @param \phpbb\user							$user
+	 * @param \phpbb\extension\manager				$extension_manager
+	 * @param \phpbb\filesystem\filesystem			$filesystem
+	 * @param \oxpus\dlext\core\files				$dlext_files
+	 * @param \oxpus\dlext\core\format				$dlext_format
+	 * @param \oxpus\dlext\core\helpers\constants	$dlext_constants
+	 * @param string								$dlext_table_dl_versions
+	 * @param string								$dlext_table_downloads
+	 */
 	public function __construct(
 		$root_path,
 		\phpbb\language\language $language,
@@ -128,15 +128,15 @@ class physical implements physical_interface
 			$file_size = 0;
 
 			$files = $this->finder
-			->set_extensions([])
-			->core_path($download_dir)
-			->find(false);
+				->set_extensions([])
+				->core_path($download_dir)
+				->find(false);
 
 			foreach (array_keys($files) as $file)
 			{
 				if (basename($file) != 'index.html')
 				{
-					$file_size += sprintf("%u", filesize($this->root_path . $file));
+					$file_size += sprintf('%u', filesize($this->root_path . $file));
 				}
 			}
 		}
@@ -238,7 +238,7 @@ class physical implements physical_interface
 	 * Function taken from phpBB 3.3.3
 	 * original (c) phpBB Limited <https://www.phpbb.com>
 	 * modified by oxpus for download extension
-	*/
+	 */
 	public function send_file_to_browser($dl_file_data)
 	{
 		if (@ob_get_length())

@@ -1,12 +1,12 @@
 <?php
 
 /**
-*
-* @package phpBB Extension - Oxpus Downloads
-* @copyright (c) 2002-2021 OXPUS - www.oxpus.net
-* @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
-*
-*/
+ *
+ * @package   phpBB Extension - Oxpus Downloads
+ * @copyright 2002-2021 OXPUS - www.oxpus.net
+ * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
+ *
+ */
 
 namespace oxpus\dlext\controller;
 
@@ -22,14 +22,14 @@ class fav
 	protected $dlext_table_dl_favorites;
 
 	/**
-	* Constructor
-	*
-	* @param \phpbb\db\driver\driver_interface		$db
-	* @param \phpbb\controller\helper				$helper
-	* @param \phpbb\request\request 				$request
-	* @param \phpbb\user							$user
-	* @param string									$dlext_table_dl_favorites
-	*/
+	 * Constructor
+	 *
+	 * @param \phpbb\db\driver\driver_interface		$db
+	 * @param \phpbb\controller\helper				$helper
+	 * @param \phpbb\request\request 				$request
+	 * @param \phpbb\user							$user
+	 * @param string								$dlext_table_dl_favorites
+	 */
 	public function __construct(
 		\phpbb\db\driver\driver_interface $db,
 		\phpbb\controller\helper $helper,
@@ -68,7 +68,8 @@ class fav
 				$sql = 'INSERT INTO ' . $this->dlext_table_dl_favorites . ' ' . $this->db->sql_build_array('INSERT', [
 					'fav_dl_id'		=> $df_id,
 					'fav_dl_cat'	=> $cat_id,
-					'fav_user_id'	=> $this->user->data['user_id']]);
+					'fav_user_id'	=> $this->user->data['user_id']
+				]);
 				$this->db->sql_query($sql);
 			}
 

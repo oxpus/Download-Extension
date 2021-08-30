@@ -1,12 +1,12 @@
 <?php
 
 /**
-*
-* @package phpBB Extension - Oxpus Downloads
-* @copyright (c) 2002-2021 OXPUS - www.oxpus.net
-* @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
-*
-*/
+ *
+ * @package   phpBB Extension - Oxpus Downloads
+ * @copyright 2002-2021 OXPUS - www.oxpus.net
+ * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
+ *
+ */
 
 namespace oxpus\dlext\controller;
 
@@ -27,18 +27,18 @@ class upload
 	protected $dlext_fields;
 
 	/**
-	* Constructor
-	*
-	* @param \phpbb\config\config					$config
-	* @param \phpbb\controller\helper				$helper
-	* @param \phpbb\request\request 				$request
-	* @param \phpbb\language\language				$language
-	* @param \oxpus\dlext\core\auth					$dlext_auth
-	* @param \oxpus\dlext\core\download				$dlext_download
-	* @param \oxpus\dlext\core\main					$dlext_main
-	* @param \oxpus\dlext\core\physical				$dlext_physical
-	* @param \oxpus\dlext\core\helpers\footer		$dlext_footer
-	*/
+	 * Constructor
+	 *
+	 * @param \phpbb\config\config					$config
+	 * @param \phpbb\controller\helper				$helper
+	 * @param \phpbb\request\request 				$request
+	 * @param \phpbb\language\language				$language
+	 * @param \oxpus\dlext\core\auth				$dlext_auth
+	 * @param \oxpus\dlext\core\download			$dlext_download
+	 * @param \oxpus\dlext\core\main				$dlext_main
+	 * @param \oxpus\dlext\core\physical			$dlext_physical
+	 * @param \oxpus\dlext\core\helpers\footer		$dlext_footer
+	 */
 	public function __construct(
 		\phpbb\config\config $config,
 		\phpbb\controller\helper $helper,

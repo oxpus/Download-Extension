@@ -1,12 +1,12 @@
 <?php
 
 /**
-*
-* @package phpBB Extension - Oxpus Downloads
-* @copyright (c) 2002-2021 OXPUS - www.oxpus.net
-* @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
-*
-*/
+ *
+ * @package   phpBB Extension - Oxpus Downloads
+ * @copyright 2002-2021 OXPUS - www.oxpus.net
+ * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
+ *
+ */
 
 namespace oxpus\dlext\core;
 
@@ -24,7 +24,7 @@ interface format_interface
 	 * @param string $out_type return 'combine'd string or array with seperated values
 	 * @return mixed string with amount and indicator or array with both values
 	 * @access public
-	*/
+	 */
 	public function dl_size($input_value, $rnd = 2, $out_type = 'combine');
 
 	/**
@@ -35,7 +35,7 @@ interface format_interface
 	 * @param int $df_id download id used when the user can rate
 	 * @return mixed rating images or html a element for rating
 	 * @access public
-	*/
+	 */
 	public function rating_img($rating_points, $rate = false, $df_id = 0);
 
 	/**
@@ -45,7 +45,7 @@ interface format_interface
 	 * @param int $config_value config value
 	 * @return int recalculated config value
 	 * @access public
-	*/
+	 */
 	public function resize_value($config_name, $config_value);
 
 	/**
@@ -55,7 +55,7 @@ interface format_interface
 	 * @param string $traffic_range indicator for value range e. g. KB or MB
 	 * @return int recalculated value in bytes for storage
 	 * @access public
-	*/
+	 */
 	public function get_traffic_save_value($traffic_amount, $traffic_range);
 
 	/**
@@ -64,7 +64,7 @@ interface format_interface
 	 * @param int $traffic_amount amount of stored traffic value
 	 * @return mixed recalculated amount into range value
 	 * @access public
-	*/
+	 */
 	public function get_traffic_display_value($traffic_amount);
 
 	/**
@@ -75,6 +75,6 @@ interface format_interface
 	 * @param string $method hash method, md5 as default if empty
 	 * @return string generated hash string
 	 * @access public
-	*/
+	 */
 	public function encrypt($value, $type = '', $method = '');
 }

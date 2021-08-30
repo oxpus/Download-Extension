@@ -1,18 +1,18 @@
 <?php
 
 /**
-*
-* @package phpBB Extension - Oxpus Downloads
-* @copyright (c) 2002-2021 OXPUS - www.oxpus.net
-* @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
-*
-*/
+ *
+ * @package   phpBB Extension - Oxpus Downloads
+ * @copyright 2002-2021 OXPUS - www.oxpus.net
+ * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
+ *
+ */
 
 namespace oxpus\dlext\controller\acp;
 
 /**
-* @package acp
-*/
+ * @package acp
+ */
 class acp_categories_controller implements acp_categories_interface
 {
 	/* phpbb objects */
@@ -28,7 +28,7 @@ class acp_categories_controller implements acp_categories_interface
 	protected $filesystem;
 
 	/* extension owned objects */
-	protected $u_action;
+	public $u_action;
 
 	protected $dlext_extra;
 	protected $dlext_main;
@@ -503,7 +503,7 @@ class acp_categories_controller implements acp_categories_interface
 			$par_cat = $index[$cat_id]['parent'];
 
 			$sql = 'SELECT id FROM ' . $this->dlext_table_dl_cat . '
-				WHERE parent = ' .(int) $par_cat . '
+				WHERE parent = ' . (int) $par_cat . '
 				ORDER BY sort';
 			$result = $this->db->sql_query($sql);
 
@@ -512,7 +512,8 @@ class acp_categories_controller implements acp_categories_interface
 			while ($row = $this->db->sql_fetchrow($result))
 			{
 				$sql_move = 'UPDATE ' . $this->dlext_table_dl_cat . ' SET ' . $this->db->sql_build_array('UPDATE', [
-					'sort' => $i]) . ' WHERE id = ' . (int) $row['id'];
+					'sort' => $i
+				]) . ' WHERE id = ' . (int) $row['id'];
 				$this->db->sql_query($sql_move);
 
 				$i += $this->dlext_constants::DL_SORT_RANGE;
@@ -542,7 +543,8 @@ class acp_categories_controller implements acp_categories_interface
 			while ($row = $this->db->sql_fetchrow($result))
 			{
 				$sql_move = 'UPDATE ' . $this->dlext_table_dl_cat . ' SET ' . $this->db->sql_build_array('UPDATE', [
-						'sort' => $i]) . ' WHERE id = ' . (int) $row['id'];
+					'sort' => $i
+				]) . ' WHERE id = ' . (int) $row['id'];
 				$this->db->sql_query($sql_move);
 
 				$i += $this->dlext_constants::DL_SORT_RANGE;

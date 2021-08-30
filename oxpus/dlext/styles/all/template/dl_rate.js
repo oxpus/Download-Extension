@@ -1,8 +1,8 @@
 /**
 *
-* @package phpBB Extension - Oxpus Downloads
+* @package   phpBB Extension - Oxpus Downloads
 * @copyright (c) 2015-2021 OXPUS - www.oxpus.net
-* @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
+* @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
 *
 */
 
@@ -88,13 +88,13 @@ function assignRateFunction() {
 	$('.dl-rate-add').click(function () {
 		var df_id = $(this).data('dfid');
 		var points = $(this).data('points');
-	
+
 		AJAXDLVote(df_id, points);
 	});
 
 	$('.dl-rate-del').click(function () {
 		var df_id = $(this).data('dfid');
-	
+
 		AJAXDLUnvote(df_id);
 	});
 }

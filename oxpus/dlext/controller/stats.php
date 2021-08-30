@@ -1,12 +1,12 @@
 <?php
 
 /**
-*
-* @package phpBB Extension - Oxpus Downloads
-* @copyright (c) 2002-2021 OXPUS - www.oxpus.net
-* @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
-*
-*/
+ *
+ * @package   phpBB Extension - Oxpus Downloads
+ * @copyright 2002-2021 OXPUS - www.oxpus.net
+ * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
+ *
+ */
 
 namespace oxpus\dlext\controller;
 
@@ -33,24 +33,24 @@ class stats
 	protected $dlext_table_dl_cat;
 
 	/**
-	* Constructor
-	*
-	* @param \phpbb\db\driver\driver_interface		$db
-	* @param \phpbb\config\config					$config
-	* @param \phpbb\controller\helper				$helper
-	* @param \phpbb\request\request 				$request
-	* @param \phpbb\template\template				$template
-	* @param \phpbb\user							$user
-	* @param \phpbb\language\language				$language
-	* @param \oxpus\dlext\core\auth					$dlext_auth
-	* @param \oxpus\dlext\core\format				$dlext_format
-	* @param \oxpus\dlext\core\main					$dlext_main
-	* @param \oxpus\dlext\core\helpers\footer		$dlext_footer
-	* @param \oxpus\dlext\core\helpers\constants	$dlext_constants
-	* @param string									$dlext_table_dl_stats,
-	* @param string									$dlext_table_downloads
-	* @param string									$dlext_table_dl_cat
-	*/
+	 * Constructor
+	 *
+	 * @param \phpbb\db\driver\driver_interface		$db
+	 * @param \phpbb\config\config					$config
+	 * @param \phpbb\controller\helper				$helper
+	 * @param \phpbb\request\request 				$request
+	 * @param \phpbb\template\template				$template
+	 * @param \phpbb\user							$user
+	 * @param \phpbb\language\language				$language
+	 * @param \oxpus\dlext\core\auth				$dlext_auth
+	 * @param \oxpus\dlext\core\format				$dlext_format
+	 * @param \oxpus\dlext\core\main				$dlext_main
+	 * @param \oxpus\dlext\core\helpers\footer		$dlext_footer
+	 * @param \oxpus\dlext\core\helpers\constants	$dlext_constants
+	 * @param string								$dlext_table_dl_stats,
+	 * @param string								$dlext_table_downloads
+	 * @param string								$dlext_table_dl_cat
+	 */
 	public function __construct(
 		\phpbb\db\driver\driver_interface $db,
 		\phpbb\config\config $config,
@@ -370,8 +370,6 @@ class stats
 				/*
 				* top ten download counts
 				*/
-				unset($sql_array);
-
 				$sql = 'SELECT COUNT(s.id) AS dl_counts, s.user_id, s.username, u.user_colour
 					FROM ' . $this->dlext_table_dl_stats . ' s
 					LEFT JOIN ' . USERS_TABLE . ' u ON u.user_id = s.user_id
@@ -410,8 +408,6 @@ class stats
 					/*
 					* top ten download traffic
 					*/
-					unset($sql_array);
-
 					$sql = 'SELECT SUM(s.traffic) AS dl_traffic, s.user_id, s.username, u.user_colour
 						FROM ' . $this->dlext_table_dl_stats . ' s
 						LEFT JOIN ' . USERS_TABLE . ' u ON u.user_id = s.user_id
@@ -450,8 +446,6 @@ class stats
 				/*
 				* top ten upload counts
 				*/
-				unset($sql_array);
-
 				$sql = 'SELECT COUNT(s.id) AS dl_counts, s.user_id, s.username, u.user_colour
 					FROM ' . $this->dlext_table_dl_stats . ' s
 					LEFT JOIN ' . USERS_TABLE . ' u ON u.user_id = s.user_id
@@ -489,8 +483,6 @@ class stats
 					/*
 					* top ten upload traffic
 					*/
-					unset($sql_array);
-
 					$sql = 'SELECT SUM(s.traffic) AS dl_traffic, s.user_id, s.username, u.user_colour
 						FROM ' . $this->dlext_table_dl_stats . ' s
 						LEFT JOIN ' . USERS_TABLE . ' u ON u.user_id = s.user_id

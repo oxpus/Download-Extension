@@ -1,12 +1,12 @@
 <?php
 
 /**
-*
-* @package phpBB Extension - Oxpus Downloads
-* @copyright (c) 2002-2021 OXPUS - www.oxpus.net
-* @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
-*
-*/
+ *
+ * @package   phpBB Extension - Oxpus Downloads
+ * @copyright 2002-2021 OXPUS - www.oxpus.net
+ * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
+ *
+ */
 
 
 namespace oxpus\dlext\core;
@@ -22,7 +22,7 @@ interface physical_interface
 	 *
 	 * @return array real filenames from downloads
 	 * @access public
-	*/
+	 */
 	public function read_exist_files();
 
 	/**
@@ -30,7 +30,7 @@ interface physical_interface
 	 *
 	 * @return string option list element
 	 * @access public
-	*/
+	 */
 	public function read_dl_dirs();
 
 	/**
@@ -39,7 +39,7 @@ interface physical_interface
 	 * @param string $download_dir the asked folder to be read out
 	 * @return int sumerized download file sizes
 	 * @access public
-	*/
+	 */
 	public function read_dl_sizes($download_dir = '');
 
 	/**
@@ -47,7 +47,7 @@ interface physical_interface
 	 *
 	 * @return string combined amount of maximum upload file size limit by PHP itself
 	 * @access public
-	*/
+	 */
 	public function dl_max_upload_size();
 
 	/**
@@ -58,7 +58,7 @@ interface physical_interface
 	 * @param bool $check if set will return only dirlist
 	 * @return array folder tree with seperated values
 	 * @access public
-	*/
+	 */
 	public function get_file_base_tree($selected_path = '', $check = 0);
 
 	/**
@@ -67,6 +67,6 @@ interface physical_interface
 	 * @param array $dl_file_data data array with all informations about the download file
 	 * @return void
 	 * @access public
-	*/
+	 */
 	public function send_file_to_browser($dl_file_data);
 }

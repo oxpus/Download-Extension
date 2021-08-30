@@ -1,11 +1,10 @@
 /**
-*
-* @package phpBB Extension - Oxpus Downloads
-* @copyright (c) 2015-2021 OXPUS - www.oxpus.net
-* @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
-*
-*/
-
+ *
+ * @package   phpBB Extension - Oxpus Downloads
+ * @copyright (c) 2015-2021 OXPUS - www.oxpus.net
+ * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
+ *
+ */
 var dl_traffic_active_cat = '0';
 
 function dl_swap_cat_options(dl_traffic_cat) {
@@ -27,9 +26,9 @@ function dl_swap_cat_options(dl_traffic_cat) {
 }
 
 $(document).ready(function () {
-    $('.dl_traffic_tabs').click(function () {
-        var dl_traffic_tab = $(this).data('tab');
+	$('.dl_traffic_tabs').click(function () {
+		var dl_traffic_tab = $(this).data('tab');
 
-        dl_swap_cat_options(dl_traffic_tab);
-    });
+		dl_swap_cat_options(dl_traffic_tab);
+	});
 });

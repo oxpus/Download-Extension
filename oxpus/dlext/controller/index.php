@@ -1,12 +1,12 @@
 <?php
 
 /**
-*
-* @package phpBB Extension - Oxpus Downloads
-* @copyright (c) 2002-2021 OXPUS - www.oxpus.net
-* @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
-*
-*/
+ *
+ * @package   phpBB Extension - Oxpus Downloads
+ * @copyright 2002-2021 OXPUS - www.oxpus.net
+ * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
+ *
+ */
 
 namespace oxpus\dlext\controller;
 
@@ -40,31 +40,31 @@ class index
 	protected $dlext_table_dl_cat;
 
 	/**
-	* Constructor
-	*
-	* @param string									$root_path
-	* @param string									$php_ext
-	* @param \phpbb\pagination 						$pagination
-	* @param \phpbb\db\driver\driver_interface		$db
-	* @param \phpbb\config\config					$config
-	* @param \phpbb\controller\helper				$helper
-	* @param \phpbb\request\request 				$request
-	* @param \phpbb\template\template				$template
-	* @param \phpbb\user							$user
-	* @param \phpbb\language\language				$language
-	* @param \phpbb\event\dispatcher_interface		$dispatcher
-	* @param \oxpus\dlext\core\auth					$dlext_auth
-	* @param \oxpus\dlext\core\files				$dlext_files
-	* @param \oxpus\dlext\core\format				$dlext_format
-	* @param \oxpus\dlext\core\main					$dlext_main
-	* @param \oxpus\dlext\core\physical				$dlext_physical
-	* @param \oxpus\dlext\core\status				$dlext_status
-	* @param \oxpus\dlext\core\helpers\constants	$dlext_constants
-	* @param \oxpus\dlext\core\helpers\footer		$dlext_footer
-	* @param string									$dlext_table_dl_ratings
-	* @param string									$dlext_table_downloads
-	* @param string									$dlext_table_dl_cat
-	*/
+	 * Constructor
+	 *
+	 * @param string								$root_path
+	 * @param string								$php_ext
+	 * @param \phpbb\pagination 					$pagination
+	 * @param \phpbb\db\driver\driver_interface		$db
+	 * @param \phpbb\config\config					$config
+	 * @param \phpbb\controller\helper				$helper
+	 * @param \phpbb\request\request 				$request
+	 * @param \phpbb\template\template				$template
+	 * @param \phpbb\user							$user
+	 * @param \phpbb\language\language				$language
+	 * @param \phpbb\event\dispatcher_interface		$dispatcher
+	 * @param \oxpus\dlext\core\auth				$dlext_auth
+	 * @param \oxpus\dlext\core\files				$dlext_files
+	 * @param \oxpus\dlext\core\format				$dlext_format
+	 * @param \oxpus\dlext\core\main				$dlext_main
+	 * @param \oxpus\dlext\core\physical			$dlext_physical
+	 * @param \oxpus\dlext\core\status				$dlext_status
+	 * @param \oxpus\dlext\core\helpers\constants	$dlext_constants
+	 * @param \oxpus\dlext\core\helpers\footer		$dlext_footer
+	 * @param string								$dlext_table_dl_ratings
+	 * @param string								$dlext_table_downloads
+	 * @param string								$dlext_table_dl_cat
+	 */
 	public function __construct(
 		$root_path,
 		$php_ext,
@@ -192,7 +192,7 @@ class index
 			$ratings = [];
 			if ($this->config['dl_enable_rate'])
 			{
-				$sql = "SELECT dl_id, user_id FROM " . $this->dlext_table_dl_ratings;
+				$sql = 'SELECT dl_id, user_id FROM ' . $this->dlext_table_dl_ratings;
 				$result = $this->db->sql_query($sql);
 
 				while ($row = $this->db->sql_fetchrow($result))
@@ -348,7 +348,7 @@ class index
 
 				if ($cat_subs && $this->user->data['user_dl_sub_on_index'])
 				{
-					$this->template->assign_block_vars($block.'.sub', []);
+					$this->template->assign_block_vars($block . '.sub', []);
 
 					for ($j = 0; $j < count($cat_subs); ++$j)
 					{
@@ -375,7 +375,7 @@ class index
 							$mini_cat_icon = 'default';
 						}
 
-						$this->template->assign_block_vars($block.'.sub.sublevel_row', [
+						$this->template->assign_block_vars($block . '.sub.sublevel_row', [
 							'L_DL_SUBLEVEL'			=> $cat_sublevel['cat_name'][$j],
 							'DL_SUBLEVEL_COUNT'		=> $cat_sublevel['total'][$j] + $this->dlext_main->get_sublevel_count($sub_id),
 							'M_DL_SUBLEVEL'			=> $mini_cat_icon,
@@ -515,7 +515,7 @@ class index
 				$description = $dl_files[$i]['description'];
 				$file_url = $this->helper->route('oxpus_dlext_details', ['df_id' => $file_id]);
 
-				$hack_version = '&nbsp;'.$dl_files[$i]['hack_version'];
+				$hack_version = '&nbsp;' . $dl_files[$i]['hack_version'];
 
 				$long_desc_uid = $dl_files[$i]['long_desc_uid'];
 				$long_desc_bitfield = $dl_files[$i]['long_desc_bitfield'];
@@ -598,19 +598,19 @@ class index
 						{
 							$cat_edit_link = $this->dlext_constants::DL_TRUE;
 						}
-					break;
+						break;
 					case $this->dlext_constants::DL_CAT_EDIT_ADMIN_MOD:
 						if ($this->dlext_auth->user_admin() || $this->dlext_auth->user_auth($cat, 'auth_mod'))
 						{
 							$cat_edit_link = $this->dlext_constants::DL_TRUE;
 						}
-					break;
+						break;
 					case $this->dlext_constants::DL_CAT_EDIT_ADMIN_MOD_OWN:
 						if ($this->dlext_auth->user_admin() || $this->dlext_auth->user_auth($cat, 'auth_mod') || ($this->config['dl_edit_own_downloads'] && $dl_files[$i]['add_user'] == $this->user->data['user_id']))
 						{
 							$cat_edit_link = $this->dlext_constants::DL_TRUE;
 						}
-					break;
+						break;
 					default:
 						$cat_edit_link = $this->dlext_constants::DL_FALSE;
 				}

@@ -1,12 +1,12 @@
 <?php
 
 /**
-*
-* @package phpBB Extension - Oxpus Downloads
-* @copyright (c) 2002-2021 OXPUS - www.oxpus.net
-* @license http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
-*
-*/
+ *
+ * @package   phpBB Extension - Oxpus Downloads
+ * @copyright 2002-2021 OXPUS - www.oxpus.net
+ * @license   http://opensource.org/licenses/gpl-2.0.php GNU General Public License v2
+ *
+ */
 
 namespace oxpus\dlext\core;
 
@@ -19,11 +19,11 @@ class nav implements nav_interface
 	protected $dlext_auth;
 
 	/**
-	* Constructor
-	*
-	* @param \phpbb\language\language		$language
-	* @param \oxpus\dlext\core\auth			$dlext_auth
-	*/
+	 * Constructor
+	 *
+	 * @param \phpbb\language\language		$language
+	 * @param \oxpus\dlext\core\auth		$dlext_auth
+	 */
 	public function __construct(
 		\phpbb\language\language $language,
 		\oxpus\dlext\core\auth $dlext_auth
@@ -32,7 +32,6 @@ class nav implements nav_interface
 		$this->language		= $language;
 
 		$this->dlext_auth	= $dlext_auth;
-
 	}
 
 	public function nav($parent, &$tmp_nav = [])
