@@ -10,4 +10,4 @@ Latest release 8.2.5<br />
 
 
 **Attention:**<br />
-The download extension is incompatible with Tapatalk. There is no support for this!
+The download extension is incompatible with Tapatalk. There is no support for this!!
