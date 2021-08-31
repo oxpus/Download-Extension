@@ -62,7 +62,7 @@
 				<dd class="topics">{{ lang('DL_FILE_SIZE') }}</dd>
 				{% if U_TEAM and not S_IS_BOT %}<dd class="posts">{{ lang('DL_KLICKS') }}<br />{{ lang('DL_OVERALL_KLICKS') }}</dd>{% endif %}
 				{% for comment_header in loops.comment_header %}
-				<dd class="lastpost">{% if S_DL_ENABLE_RATE %}{{ lang('DL_RATING') }}{% else %}&nbsp;{% endif %}</dd>
+				<dd class="lastpost">{% if S_DL_ENABLE_RATE %}<span>{{ lang('DL_RATING') }}</span>{% else %}&nbsp;{% endif %}</dd>
 				{% endfor %}
 			</dl>
 		</li>
@@ -85,7 +85,8 @@
 				<dd class="topics">{{ downloads.DL_FILE_SIZE }}</dd>
 				{% if U_TEAM and not S_IS_BOT %}<dd class="posts"><div>{{ downloads.DL_FILE_KLICKS }} &bull; {{ downloads.DL_FILE_OVERALL_KLICKS }}</div></dd>{% endif %}
 				<dd class="lastpost">
-    				{% for comments in downloads.comments %}
+					<span>
+					{% for comments in downloads.comments %}
 					{% if downloads.U_DL_DIRECT_EDIT or comments.U_DL_COMMENT %}
 					<ul class="post-buttons">
 						{% if downloads.U_DL_DIRECT_EDIT %}
@@ -107,6 +108,7 @@
 					{% if S_DL_ENABLE_RATE %}
 					{% INCLUDE '@oxpus_dlext/helpers/dl_rating.html' %}
 					{% endif %}
+					</span>
 				</dd>
 			</dl>
 		</li>

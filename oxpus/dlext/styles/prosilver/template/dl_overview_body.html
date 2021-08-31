@@ -31,9 +31,7 @@
 					<dd class="topics">{{ downloads.DL_FILE_SIZE }}</dd>
 					<dd class="posts">{{ downloads.DL_FILE_KLICKS }} | {{ downloads.DL_FILE_OVERALL_KLICKS }}</dd>
 					{% if S_DL_ENABLE_RATE %}
-					<dd class="lastpost">
-						{% INCLUDE '@oxpus_dlext/helpers/dl_rating.html' %}
-					</dd>
+					<dd class="lastpost"><span>{% INCLUDE '@oxpus_dlext/helpers/dl_rating.html' %}</span></dd>
 					{% endif %}
 				</dl>
 			</li>

@@ -7,7 +7,7 @@
 			<dl>
 				<dt>{{ lang('DL_CAT_NAME') }} / {{ lang('DL_FILE_DESCRIPTION') }}</dt>
 				<dd class="posts">{{ lang('DL_CAT_FILES') }}</dd>
-				<dd class="lastpost">{{ lang('DL_LATEST_DOWNLOAD') }}</dd>
+				<dd class="lastpost"><span>{{ lang('DL_LATEST_DOWNLOAD') }}</span></dd>
 			</dl>
 		</li>
 	</ul>
@@ -40,7 +40,7 @@
 					{% for sub in subcats.sub %}
 					<br />
 					{% for sublevel_row in sub.sublevel_row %}
-					<div class="dl-padding-left-3-5">
+					<div class="dl-padding-left-5">
 						{% INCLUDE '@oxpus_dlext/helpers/dl_subfoldericon.html' %}
 						{% if sublevel_row.M_DL_SUBLEVEL_ICON %}
 						<img src="{{ sublevel_row.M_DL_SUBLEVEL_ICON }}" alt="" title="{{ sublevel_row.L_DL_SUBLEVEL }}" class="dl-subfolder-small" />
