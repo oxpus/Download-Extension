@@ -94,33 +94,35 @@ class thumbnail implements thumbnail_interface
 			{
 				$newimage = imagecreatetruecolor($thumb_width, $thumb_height);
 				imagecopyresampled($newimage, $image, 0, 0, 0, 0, $thumb_width, $thumb_height, $pic_width, $pic_height);
+
+				header('Content-type:image/jpg');
 				imagejpeg($newimage);
 			}
 			else
 			{
 				if ($file_ext == 'jpg')
 				{
+					header('Content-type:image/jpg');
 					imagejpeg($image);
 				}
 				else if ($file_ext == 'png')
 				{
+					header('Content-type:image/png');
 					imagepng($image);
 				}
 				else if ($file_ext == 'gif')
 				{
 					if (function_exists('imagecreatefromgif'))
 					{
+						header('Content-type:image/gif');
 						imagegif($image);
 					}
 				}
 			}
 		}
 
-		imagedestroy($image);
-		imagedestroy($newimage);
-		unset($image);
-
-		return new Response(json_encode(['status' => 'OK']));
+		garbage_collection();
+		exit_handler();
 	}
 
 	public function _get_image($pic_path, $file_ext)
