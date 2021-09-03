@@ -10,8 +10,6 @@
 
 namespace oxpus\dlext\core;
 
-use Symfony\Component\HttpFoundation\Response;
-
 class thumbnail implements thumbnail_interface
 {
 	/* phpbb objects */
