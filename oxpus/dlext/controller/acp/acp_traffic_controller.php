@@ -15,6 +15,8 @@ namespace oxpus\dlext\controller\acp;
  */
 class acp_traffic_controller implements acp_traffic_interface
 {
+	// phpcs:set VariableAnalysis.CodeAnalysis.VariableAnalysis validUndefinedVariableNames select_datasize
+
 	/* phpbb objects */
 	protected $db;
 	protected $user;
@@ -388,4 +390,6 @@ class acp_traffic_controller implements acp_traffic_interface
 			$this->template->assign_block_vars('category', ['DL_CAT_NAME' => $acl_cat_names[$i]]);
 		}
 	}
+
+	// phpcs:set VariableAnalysis.CodeAnalysis.VariableAnalysis validUndefinedVariableNames
 }

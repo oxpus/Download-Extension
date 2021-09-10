@@ -22,6 +22,8 @@ namespace oxpus\dlext\core\fields;
  */
 class admin extends fields
 {
+	// phpcs:set VariableAnalysis.CodeAnalysis.VariableAnalysis validUndefinedVariableNames profile_row
+
 	public $vars = [];
 
 	/* phpbb objects */
@@ -206,4 +208,6 @@ class admin extends fields
 
 		return $options;
 	}
+
+	// phpcs:set VariableAnalysis.CodeAnalysis.VariableAnalysis validUndefinedVariableNames
 }

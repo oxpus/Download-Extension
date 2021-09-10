@@ -12,6 +12,9 @@ namespace oxpus\dlext\controller;
 
 class search
 {
+	// phpcs:set VariableAnalysis.CodeAnalysis.VariableAnalysis validUndefinedVariableNames sql_array matching_userids
+	// phpcs:set VariableAnalysis.CodeAnalysis.VariableAnalysis validUnusedVariableNames block
+
 	/* phpbb objects */
 	protected $db;
 	protected $config;
@@ -613,4 +616,7 @@ class search
 		*/
 		return $this->helper->render($tpl_filename, $this->language->lang('DL_SEARCH_DOWNLOAD'));
 	}
+
+	// phpcs:set VariableAnalysis.CodeAnalysis.VariableAnalysis validUndefinedVariableNames
+	// phpcs:set VariableAnalysis.CodeAnalysis.VariableAnalysis validUnusedVariableNames
 }

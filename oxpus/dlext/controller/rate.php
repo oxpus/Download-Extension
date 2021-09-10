@@ -14,6 +14,8 @@ use Symfony\Component\HttpFoundation\Response;
 
 class rate
 {
+	// phpcs:set VariableAnalysis.CodeAnalysis.VariableAnalysis validUndefinedVariableNames return_ary
+
 	/* phpbb objects */
 	protected $db;
 	protected $user;
@@ -172,4 +174,6 @@ class rate
 
 		return new Response(json_encode([]));
 	}
+
+	// phpcs:set VariableAnalysis.CodeAnalysis.VariableAnalysis validUndefinedVariableNames
 }

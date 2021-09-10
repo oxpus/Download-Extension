@@ -15,6 +15,8 @@ namespace oxpus\dlext\controller\acp;
  */
 class acp_files_controller implements acp_files_interface
 {
+	// phpcs:set VariableAnalysis.CodeAnalysis.VariableAnalysis validUndefinedVariableNames del_t_id dl_t_ids
+
 	/* phpbb objects */
 	protected $db;
 	protected $user;
@@ -576,4 +578,6 @@ class acp_files_controller implements acp_files_interface
 			}
 		}
 	}
+
+	// phpcs:set VariableAnalysis.CodeAnalysis.VariableAnalysis validUndefinedVariableNames
 }

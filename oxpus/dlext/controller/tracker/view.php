@@ -12,6 +12,8 @@ namespace oxpus\dlext\controller\tracker;
 
 class view
 {
+	// phpcs:set VariableAnalysis.CodeAnalysis.VariableAnalysis validUndefinedVariableNames bug_status_count
+
 	/* phpbb objects */
 	protected $db;
 	protected $config;
@@ -530,4 +532,6 @@ class view
 
 		redirect($this->helper->route('oxpus_dlext_index'));
 	}
+
+	// phpcs:set VariableAnalysis.CodeAnalysis.VariableAnalysis validUndefinedVariableNames
 }

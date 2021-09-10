@@ -12,6 +12,8 @@ namespace oxpus\dlext\core;
 
 class files implements files_interface
 {
+	// phpcs:set VariableAnalysis.CodeAnalysis.VariableAnalysis validUndefinedVariableNames sql_array table_fields
+
 	/* phpbb objects */
 	protected $db;
 	protected $config;
@@ -441,4 +443,6 @@ class files implements files_interface
 
 		return $table_fields[$table];
 	}
+
+	// phpcs:set VariableAnalysis.CodeAnalysis.VariableAnalysis validUndefinedVariableNames
 }

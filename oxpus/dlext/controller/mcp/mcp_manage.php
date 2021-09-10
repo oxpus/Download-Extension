@@ -12,6 +12,8 @@ namespace oxpus\dlext\controller\mcp;
 
 class mcp_manage
 {
+	// phpcs:set VariableAnalysis.CodeAnalysis.VariableAnalysis validUndefinedVariableNames real_ver_file
+
 	/* phpbb objects */
 	protected $root_path;
 	protected $php_ext;
@@ -840,4 +842,6 @@ class mcp_manage
 
 		return $this->helper->render('@oxpus_dlext/mcp/dl_mcp_manage.html', $this->language->lang('MCP'));
 	}
+
+	// phpcs:set VariableAnalysis.CodeAnalysis.VariableAnalysis validUndefinedVariableNames
 }

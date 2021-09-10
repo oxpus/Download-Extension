@@ -21,6 +21,8 @@ namespace oxpus\dlext\controller\acp;
  */
 class acp_fields_controller implements acp_fields_interface
 {
+	// phpcs:set VariableAnalysis.CodeAnalysis.VariableAnalysis validUndefinedVariableNames field_order_ary l_lang_options l_lang_name l_lang_explain l_lang_default_value
+
 	/* phpbb objects */
 	protected $db;
 	protected $user;
@@ -1577,4 +1579,6 @@ class acp_fields_controller implements acp_fields_interface
 
 		return $sql;
 	}
+
+	// phpcs:set VariableAnalysis.CodeAnalysis.VariableAnalysis validUndefinedVariableNames
 }

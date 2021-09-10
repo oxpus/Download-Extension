@@ -12,6 +12,8 @@ namespace oxpus\dlext\core;
 
 class status implements status_interface
 {
+	// phpcs:set VariableAnalysis.CodeAnalysis.VariableAnalysis validUndefinedVariableNames mini_status_icon
+
 	/* phpbb objects */
 	protected $language;
 	protected $config;
@@ -304,4 +306,6 @@ class status implements status_interface
 			'file_status'	=> $file_status,
 		];
 	}
+
+	// phpcs:set VariableAnalysis.CodeAnalysis.VariableAnalysis validUndefinedVariableNames
 }

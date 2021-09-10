@@ -12,6 +12,8 @@ namespace oxpus\dlext\core;
 
 class download implements download_interface
 {
+	// phpcs:set VariableAnalysis.CodeAnalysis.VariableAnalysis validUndefinedVariableNames processing_user
+
 	/* phpbb objects */
 	protected $db;
 	protected $user;
@@ -1707,4 +1709,6 @@ class download implements download_interface
 			confirm_box($this->dlext_constants::DL_FALSE, $this->language->lang('DL_CONFIRM_DEL_VERSIONS'), build_hidden_fields($s_hidden_fields), $confirm_tpl);
 		}
 	}
+
+	// phpcs:set VariableAnalysis.CodeAnalysis.VariableAnalysis validUndefinedVariableNames
 }

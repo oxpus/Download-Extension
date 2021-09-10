@@ -15,6 +15,8 @@ namespace oxpus\dlext\controller\acp;
  */
 class acp_toolbox_controller implements acp_toolbox_interface
 {
+	// phpcs:set VariableAnalysis.CodeAnalysis.VariableAnalysis validUndefinedVariableNames files_name files_path real_thumbnails
+
 	/* phpbb objects */
 	protected $db;
 	protected $user;
@@ -774,4 +776,6 @@ class acp_toolbox_controller implements acp_toolbox_interface
 			}
 		}
 	}
+
+	// phpcs:set VariableAnalysis.CodeAnalysis.VariableAnalysis validUndefinedVariableNames
 }

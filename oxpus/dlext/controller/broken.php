@@ -12,6 +12,8 @@ namespace oxpus\dlext\controller;
 
 class broken
 {
+	// phpcs:set VariableAnalysis.CodeAnalysis.VariableAnalysis validUndefinedVariableNames error
+
 	/* phpbb objects */
 	protected $db;
 	protected $config;
@@ -263,4 +265,6 @@ class broken
 
 		redirect($this->helper->route('oxpus_dlext_details', ['df_id' => $df_id, 'cat_id' => $cat_id]));
 	}
+
+	// phpcs:set VariableAnalysis.CodeAnalysis.VariableAnalysis validUndefinedVariableNames
 }

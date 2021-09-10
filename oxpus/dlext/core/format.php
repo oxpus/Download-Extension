@@ -12,6 +12,8 @@ namespace oxpus\dlext\core;
 
 class format implements format_interface
 {
+	// phpcs:set VariableAnalysis.CodeAnalysis.VariableAnalysis validUndefinedVariableNames return_ary
+
 	/* phpbb objects */
 	protected $config;
 	protected $user;
@@ -277,4 +279,6 @@ class format implements format_interface
 		// Different return here for given encryption
 		return unique_id() . '_' . $method($value);
 	}
+
+	// phpcs:set VariableAnalysis.CodeAnalysis.VariableAnalysis validUndefinedVariableNames
 }

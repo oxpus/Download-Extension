@@ -15,6 +15,8 @@ namespace oxpus\dlext\controller\acp;
  */
 class acp_categories_controller implements acp_categories_interface
 {
+	// phpcs:set VariableAnalysis.CodeAnalysis.VariableAnalysis validUndefinedVariableNames real_ver_file
+
 	/* phpbb objects */
 	protected $db;
 	protected $user;
@@ -735,4 +737,6 @@ class acp_categories_controller implements acp_categories_interface
 			]);
 		}
 	}
+
+	// phpcs:set VariableAnalysis.CodeAnalysis.VariableAnalysis validUndefinedVariableNames
 }

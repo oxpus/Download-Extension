@@ -12,6 +12,8 @@ namespace oxpus\dlext\controller;
 
 class overall
 {
+	// phpcs:set VariableAnalysis.CodeAnalysis.VariableAnalysis validUnusedVariableNames cat block
+
 	/* phpbb objects */
 	protected $db;
 	protected $config;
@@ -381,4 +383,6 @@ class overall
 		$this->dlext_footer->set_parameter($mode, 0, 0, $index);
 		$this->dlext_footer->handle();
 	}
+
+	// phpcs:set VariableAnalysis.CodeAnalysis.VariableAnalysis validUnsedVariableNames
 }

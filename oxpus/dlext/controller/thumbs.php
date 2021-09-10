@@ -12,6 +12,8 @@ namespace oxpus\dlext\controller;
 
 class thumbs
 {
+	// phpcs:set VariableAnalysis.CodeAnalysis.VariableAnalysis validUndefinedVariableNames thumbs_ary
+
 	/* phpbb objects */
 	protected $root_path;
 	protected $db;
@@ -403,4 +405,6 @@ class thumbs
 
 		trigger_error('DL_NO_PERMISSION');
 	}
+
+	// phpcs:set VariableAnalysis.CodeAnalysis.VariableAnalysis validUndefinedVariableNames
 }

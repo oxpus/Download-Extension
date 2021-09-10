@@ -15,6 +15,8 @@ namespace oxpus\dlext\controller\acp;
  */
 class acp_permissions_controller implements acp_permissions_interface
 {
+	// phpcs:set VariableAnalysis.CodeAnalysis.VariableAnalysis validUndefinedVariableNames sql_array
+
 	/* phpbb objects */
 	protected $db;
 	protected $user;
@@ -738,4 +740,6 @@ class acp_permissions_controller implements acp_permissions_interface
 			'U_DL_BACK'					=> (!empty($s_presel_cats)) ? $this->u_action : '',
 		]);
 	}
+
+	// phpcs:set VariableAnalysis.CodeAnalysis.VariableAnalysis validUndefinedVariableNames
 }

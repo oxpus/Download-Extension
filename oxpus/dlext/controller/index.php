@@ -12,6 +12,8 @@ namespace oxpus\dlext\controller;
 
 class index
 {
+	// phpcs:set VariableAnalysis.CodeAnalysis.VariableAnalysis validUnusedVariableNames latest_where sort_ary
+
 	/* phpbb objects */
 	protected $root_path;
 	protected $php_ext;
@@ -717,4 +719,6 @@ class index
 		*/
 		return $this->helper->render($tpl_filename, $this->language->lang('DL_DOWNLOADS'));
 	}
+
+	// phpcs:set VariableAnalysis.CodeAnalysis.VariableAnalysis validUnusedVariableNames
 }

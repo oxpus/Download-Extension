@@ -12,6 +12,8 @@ namespace oxpus\dlext\controller\tracker;
 
 class main
 {
+	// phpcs:set VariableAnalysis.CodeAnalysis.VariableAnalysis validUndefinedVariableNames error_txt
+
 	/* phpbb objects */
 	protected $root_path;
 	protected $php_ext;
@@ -676,4 +678,6 @@ class main
 
 		redirect($this->helper->route('oxpus_dlext_index'));
 	}
+
+	// phpcs:set VariableAnalysis.CodeAnalysis.VariableAnalysis validUndefinedVariableNames
 }

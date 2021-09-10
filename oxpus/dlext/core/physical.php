@@ -13,6 +13,8 @@ namespace oxpus\dlext\core;
 
 class physical implements physical_interface
 {
+	// phpcs:set VariableAnalysis.CodeAnalysis.VariableAnalysis validUndefinedVariableNames folders tree
+
 	/* phpbb objects */
 	protected $root_path;
 	protected $language;
@@ -312,4 +314,6 @@ class physical implements physical_interface
 
 		exit_handler();
 	}
+
+	// phpcs:set VariableAnalysis.CodeAnalysis.VariableAnalysis validUndefinedVariableNames
 }
