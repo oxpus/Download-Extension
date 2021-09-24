@@ -12,8 +12,6 @@ namespace oxpus\dlext\core;
 
 class download implements download_interface
 {
-	// phpcs:set VariableAnalysis.CodeAnalysis.VariableAnalysis validUndefinedVariableNames processing_user
-
 	/* phpbb objects */
 	protected $db;
 	protected $user;
@@ -1034,6 +1032,8 @@ class download implements download_interface
 		{
 			if ($df_id)
 			{
+				$processing_user = [];
+
 				$sql = 'SELECT fav_user_id FROM ' . $this->dlext_table_dl_favorites . '
 						WHERE fav_dl_id = ' . (int) $df_id . '
 						AND ' . $this->db->sql_in_set('fav_user_id', $this->dlext_auth->dl_auth_users($cat_id, 'auth_view'));
@@ -1709,6 +1709,4 @@ class download implements download_interface
 			confirm_box($this->dlext_constants::DL_FALSE, $this->language->lang('DL_CONFIRM_DEL_VERSIONS'), build_hidden_fields($s_hidden_fields), $confirm_tpl);
 		}
 	}
-
-	// phpcs:set VariableAnalysis.CodeAnalysis.VariableAnalysis validUndefinedVariableNames
 }
