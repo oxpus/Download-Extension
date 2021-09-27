@@ -528,11 +528,19 @@ class search
 					$long_desc_flags	= $row['long_desc_flags'];
 					$long_desc			= censor_text($long_desc);
 
-					$long_desc			= generate_text_for_display($long_desc, $long_desc_uid, $long_desc_bitfield, $long_desc_flags);
-					if ((int) $this->config['dl_limit_desc_on_search'] && utf8_strlen($long_desc) > (int) $this->config['dl_limit_desc_on_search'])
+					$tmp_desc = $long_desc;
+					strip_bbcode($tmp_desc, $long_desc_uid);
+	
+					if ((int) $this->config['dl_limit_desc_on_search'] && utf8_strlen($tmp_desc) > (int) $this->config['dl_limit_desc_on_search'])
 					{
-						$long_desc			= truncate_string($long_desc, (int) $this->config['dl_limit_desc_on_search'], $this->dlext_constants::DL_MAX_STRING_LENGTH, $this->dlext_constants::DL_FALSE, '[...]');
-						$long_desc 			= htmlspecialchars_decode(str_replace(['<br>', '<br />'], "\n", $long_desc), ENT_COMPAT);
+						strip_bbcode($long_desc, $long_desc_uid);
+						$long_desc = truncate_string($long_desc, (int) $this->config['dl_limit_desc_on_search'], $this->dlext_constants::DL_MAX_STRING_LENGTH, $this->dlext_constants::DL_FALSE);
+						$long_desc = bbcode_nl2br($long_desc);
+						$long_desc .= ' [...]';
+					}
+					else
+					{
+						$long_desc = generate_text_for_display($long_desc, $long_desc_uid, $long_desc_bitfield, $long_desc_flags);
 					}
 
 					$this->template->assign_block_vars('downloads', [

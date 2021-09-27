@@ -533,11 +533,19 @@ class index
 				$long_desc = $dl_files[$i]['long_desc'];
 				$long_desc = censor_text($long_desc);
 
-				$long_desc = generate_text_for_display($long_desc, $long_desc_uid, $long_desc_bitfield, $long_desc_flags);
-				if ((int) $this->config['dl_limit_desc_on_index'] && utf8_strlen($long_desc) > (int) $this->config['dl_limit_desc_on_index'])
+				$tmp_desc = $long_desc;
+				strip_bbcode($tmp_desc, $long_desc_uid);
+
+				if ((int) $this->config['dl_limit_desc_on_index'] && utf8_strlen($tmp_desc) > (int) $this->config['dl_limit_desc_on_index'])
 				{
-					$long_desc = truncate_string($long_desc, (int) $this->config['dl_limit_desc_on_index'], $this->dlext_constants::DL_MAX_STRING_LENGTH, $this->dlext_constants::DL_FALSE, '[...]');
-					$long_desc = htmlspecialchars_decode(str_replace(['<br>', '<br />'], "\n", $long_desc), ENT_COMPAT);
+					strip_bbcode($long_desc, $long_desc_uid);
+					$long_desc = truncate_string($long_desc, (int) $this->config['dl_limit_desc_on_index'], $this->dlext_constants::DL_MAX_STRING_LENGTH, $this->dlext_constants::DL_FALSE);
+					$long_desc = bbcode_nl2br($long_desc);
+					$long_desc .= ' [...]';
+				}
+				else
+				{
+					$long_desc = generate_text_for_display($long_desc, $long_desc_uid, $long_desc_bitfield, $long_desc_flags);
 				}
 
 				if (!$dl_files[$i]['username'])
