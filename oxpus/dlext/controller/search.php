@@ -530,7 +530,7 @@ class search
 
 					$tmp_desc = $long_desc;
 					strip_bbcode($tmp_desc, $long_desc_uid);
-	
+
 					if ((int) $this->config['dl_limit_desc_on_search'] && utf8_strlen($tmp_desc) > (int) $this->config['dl_limit_desc_on_search'])
 					{
 						strip_bbcode($long_desc, $long_desc_uid);
