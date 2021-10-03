@@ -194,6 +194,19 @@ class acp_permissions_controller implements acp_permissions_interface
 			trigger_error($message);
 		}
 
+		$auth_perm_downloads = [
+			$this->dlext_constants::DL_PERM_GENERAL_ALL			=> 'DL_PERM_ALL',
+			$this->dlext_constants::DL_PERM_GENERAL_REG_USER	=> 'DL_PERM_REG',
+			'default'											=> 'DL_PERM_GRG',
+		];
+
+		$auth_perm_comments = [
+			$this->dlext_constants::DL_PERM_USER	=> 'DL_STAT_PERM_USER',
+			$this->dlext_constants::DL_PERM_MOD		=> 'DL_STAT_PERM_MOD',
+			$this->dlext_constants::DL_PERM_ADMIN	=> 'DL_STAT_PERM_ADMIN',
+			'default'								=> 'DL_STAT_PERM_ALL',
+		];
+
 		if ($view_perm == $this->dlext_constants::DL_PERM_VIEW)
 		{
 			if (!empty($s_presel_cats))
@@ -231,85 +244,13 @@ class acp_permissions_controller implements acp_permissions_interface
 					{
 						$cur_cat = $cat_id;
 
-						switch ($index[$cat_id]['auth_cread'])
-						{
-							case $this->dlext_constants::DL_PERM_ALL:
-								$l_auth_cread = $this->language->lang('DL_STAT_PERM_ALL');
-								break;
-							case $this->dlext_constants::DL_PERM_USER:
-								$l_auth_cread = $this->language->lang('DL_STAT_PERM_USER');
-								break;
-							case $this->dlext_constants::DL_PERM_MOD:
-								$l_auth_cread = $this->language->lang('DL_STAT_PERM_MOD');
-								break;
-							case $this->dlext_constants::DL_PERM_ADMIN:
-								$l_auth_cread = $this->language->lang('DL_STAT_PERM_ADMIN');
-								break;
-						}
+						$l_auth_view	= $auth_perm_downloads[$index[$cat_id]['auth_view_real']] ?? $auth_perm_downloads['default'];
+						$l_auth_dl		= $auth_perm_downloads[$index[$cat_id]['auth_dl_real']] ?? $auth_perm_downloads['default'];
+						$l_auth_up		= $auth_perm_downloads[$index[$cat_id]['auth_up_real']] ?? $auth_perm_downloads['default'];
+						$l_auth_mod		= $auth_perm_downloads[$index[$cat_id]['auth_mod_real']] ?? $auth_perm_downloads['default'];
 
-						switch ($index[$cat_id]['auth_cpost'])
-						{
-							case $this->dlext_constants::DL_PERM_ALL:
-								$l_auth_cpost = $this->language->lang('DL_STAT_PERM_ALL');
-								break;
-							case $this->dlext_constants::DL_PERM_USER:
-								$l_auth_cpost = $this->language->lang('DL_STAT_PERM_USER');
-								break;
-							case $this->dlext_constants::DL_PERM_MOD:
-								$l_auth_cpost = $this->language->lang('DL_STAT_PERM_MOD');
-								break;
-							case $this->dlext_constants::DL_PERM_ADMIN:
-								$l_auth_cpost = $this->language->lang('DL_STAT_PERM_ADMIN');
-								break;
-						}
-
-						switch ($index[$cat_id]['auth_view_real'])
-						{
-							case $this->dlext_constants::DL_PERM_GENERAL_ALL:
-								$l_auth_view = $this->language->lang('DL_PERM_ALL');
-								break;
-							case $this->dlext_constants::DL_PERM_GENERAL_REG_USER:
-								$l_auth_view = $this->language->lang('DL_PERM_REG');
-								break;
-							default:
-								$l_auth_view = $this->language->lang('DL_PERM_GRG');
-						}
-
-						switch ($index[$cat_id]['auth_dl_real'])
-						{
-							case $this->dlext_constants::DL_PERM_GENERAL_ALL:
-								$l_auth_dl = $this->language->lang('DL_PERM_ALL');
-								break;
-							case $this->dlext_constants::DL_PERM_GENERAL_REG_USER:
-								$l_auth_dl = $this->language->lang('DL_PERM_REG');
-								break;
-							default:
-								$l_auth_dl = $this->language->lang('DL_PERM_GRG');
-						}
-
-						switch ($index[$cat_id]['auth_up_real'])
-						{
-							case $this->dlext_constants::DL_PERM_GENERAL_ALL:
-								$l_auth_up = $this->language->lang('DL_PERM_ALL');
-								break;
-							case $this->dlext_constants::DL_PERM_GENERAL_REG_USER:
-								$l_auth_up = $this->language->lang('DL_PERM_REG');
-								break;
-							default:
-								$l_auth_up = $this->language->lang('DL_PERM_GRG');
-						}
-
-						switch ($index[$cat_id]['auth_mod_real'])
-						{
-							case $this->dlext_constants::DL_PERM_GENERAL_ALL:
-								$l_auth_mod = $this->language->lang('DL_PERM_ALL');
-								break;
-							case $this->dlext_constants::DL_PERM_GENERAL_REG_USER:
-								$l_auth_mod = $this->language->lang('DL_PERM_REG');
-								break;
-							default:
-								$l_auth_mod = $this->language->lang('DL_PERM_GRG');
-						}
+						$l_auth_cread	= $auth_perm_comments[$index[$cat_id]['auth_cread']] ?? $auth_perm_comments['default'];
+						$l_auth_cpost	= $auth_perm_comments[$index[$cat_id]['auth_cpost']] ?? $auth_perm_comments['default'];
 
 						$this->template->assign_block_vars('cat_perm_block', [
 							'DL_CAT_NAME'		=> $row['cat_name'],
@@ -361,91 +302,13 @@ class acp_permissions_controller implements acp_permissions_interface
 			$auth_up		= $this->request->variable('auth_up', $this->dlext_constants::DL_PERM_GENERAL_ALL);
 			$auth_view		= $this->request->variable('auth_view', $this->dlext_constants::DL_PERM_GENERAL_ALL);
 
-			switch ($auth_view)
-			{
-				case $this->dlext_constants::DL_PERM_GENERAL_ALL:
-					$log_auth_view = $this->language->lang('DL_PERM_ALL');
-					break;
-				case $this->dlext_constants::DL_PERM_GENERAL_REG_USER:
-					$log_auth_view = $this->language->lang('DL_PERM_REG');
-					break;
-				default:
-					$log_auth_view = $this->language->lang('DL_PERM_GRG');
-					break;
-			}
+			$log_auth_view	= $this->language->lang($auth_perm_downloads[$auth_view] ?? $auth_perm_downloads['default']);
+			$log_auth_dl	= $this->language->lang($auth_perm_downloads[$auth_dl] ?? $auth_perm_downloads['default']);
+			$log_auth_up	= $this->language->lang($auth_perm_downloads[$auth_up] ?? $auth_perm_downloads['default']);
+			$log_auth_mod	= $this->language->lang($auth_perm_downloads[$auth_mod] ?? $auth_perm_downloads['default']);
 
-			switch ($auth_dl)
-			{
-				case $this->dlext_constants::DL_PERM_GENERAL_ALL:
-					$log_auth_dl = $this->language->lang('DL_PERM_ALL');
-					break;
-				case $this->dlext_constants::DL_PERM_GENERAL_REG_USER:
-					$log_auth_dl = $this->language->lang('DL_PERM_REG');
-					break;
-				default:
-					$log_auth_dl = $this->language->lang('DL_PERM_GRG');
-					break;
-			}
-
-			switch ($auth_up)
-			{
-				case $this->dlext_constants::DL_PERM_GENERAL_ALL:
-					$log_auth_up = $this->language->lang('DL_PERM_ALL');
-					break;
-				case $this->dlext_constants::DL_PERM_GENERAL_REG_USER:
-					$log_auth_up = $this->language->lang('DL_PERM_REG');
-					break;
-				default:
-					$log_auth_up = $this->language->lang('DL_PERM_GRG');
-					break;
-			}
-
-			switch ($auth_mod)
-			{
-				case $this->dlext_constants::DL_PERM_GENERAL_ALL:
-					$log_auth_mod = $this->language->lang('DL_PERM_ALL');
-					break;
-				case $this->dlext_constants::DL_PERM_GENERAL_REG_USER:
-					$log_auth_mod = $this->language->lang('DL_PERM_REG');
-					break;
-				default:
-					$log_auth_mod = $this->language->lang('DL_PERM_GRG');
-					break;
-			}
-
-			switch ($auth_cread)
-			{
-				case $this->dlext_constants::DL_PERM_USER:
-					$log_auth_cread = $this->language->lang('DL_STAT_PERM_USER');
-					break;
-				case $this->dlext_constants::DL_PERM_MOD:
-					$log_auth_cread = $this->language->lang('DL_STAT_PERM_MOD');
-					break;
-				case $this->dlext_constants::DL_PERM_ADMIN:
-					$log_auth_cread = $this->language->lang('DL_STAT_PERM_ADMIN');
-					break;
-				default:
-					$log_auth_cread = $this->language->lang('DL_STAT_PERM_ALL');
-					$auth_cread = 0;
-					break;
-			}
-
-			switch ($auth_cpost)
-			{
-				case $this->dlext_constants::DL_PERM_USER:
-					$log_auth_cpost = $this->language->lang('DL_STAT_PERM_USER');
-					break;
-				case $this->dlext_constants::DL_PERM_MOD:
-					$log_auth_cpost = $this->language->lang('DL_STAT_PERM_MOD');
-					break;
-				case $this->dlext_constants::DL_PERM_ADMIN:
-					$log_auth_cpost = $this->language->lang('DL_STAT_PERM_ADMIN');
-					break;
-				default:
-					$log_auth_cpost = $this->language->lang('DL_STAT_PERM_ALL');
-					$auth_cpost = 0;
-					break;
-			}
+			$log_auth_cread	= $this->language->lang($auth_perm_comments[$auth_cread] ?? $auth_perm_comments['default']);
+			$log_auth_cpost	= $this->language->lang($auth_perm_comments[$auth_cpost] ?? $auth_perm_comments['default']);
 
 			if (isset($s_presel_groups[0]) && $s_presel_groups[0] == $this->dlext_constants::DL_NONE)
 			{
