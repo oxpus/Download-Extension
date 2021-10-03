@@ -302,6 +302,7 @@ class details
 			while ($row = $this->db->sql_fetchrow($result))
 			{
 				$thumbs_ary[$i] = $row;
+				$thumbs_ary[$i]['img_type'] = 'more';
 				++$i;
 			}
 		}
@@ -961,6 +962,7 @@ class details
 				$first_thumbs = [0 => [
 					'img_id'	=> 0,
 					'dl_id'		=> $df_id,
+					'img_type'	=> 'thumb',
 					'img_name'	=> $dl_files['thumbnail'],
 					'img_title'	=> $description,
 				]];
@@ -980,15 +982,20 @@ class details
 
 				foreach ($thumbs_ary as $key => $value)
 				{
-					$pic_path = $this->dlext_constants->get_value('files_dir') . '/thumbs/' . $thumbs_ary[$key]['img_name'];
-
-					if ($thumbs_ary[$key]['img_name'] && $this->filesystem->exists($pic_path))
+					if ($thumbs_ary[$key]['img_name'])
 					{
-						$pic_path = base64_encode($pic_path);
+						if ($thumbs_ary[$key]['img_type'] == 'thumb')
+						{
+							$pic_id = $thumbs_ary[$key]['dl_id'];
+						}
+						else
+						{
+							$pic_id = $thumbs_ary[$key]['img_id'];
+						}
 
 						$this->template->assign_block_vars('dl_thumbnail', [
-							'DL_THUMBNAIL_LINK'	=> $this->helper->route('oxpus_dlext_thumbnail', ['pic' => $pic_path, 'disp_art' => $this->dlext_constants::DL_FALSE]),
-							'DL_THUMBNAIL_PIC'	=> $this->helper->route('oxpus_dlext_thumbnail', ['pic' => $pic_path, 'disp_art' => $this->dlext_constants::DL_TRUE]),
+							'DL_THUMBNAIL_LINK'	=> $this->helper->route('oxpus_dlext_thumbnail', ['pic' => $pic_id, 'img_type' => $thumbs_ary[$key]['img_type'], 'disp_art' => $this->dlext_constants::DL_FALSE]),
+							'DL_THUMBNAIL_PIC'	=> $this->helper->route('oxpus_dlext_thumbnail', ['pic' => $pic_id, 'img_type' => $thumbs_ary[$key]['img_type'], 'disp_art' => $this->dlext_constants::DL_TRUE]),
 							'DL_THUMBNAIL_NAME'	=> $thumbs_ary[$key]['img_title'],
 						]);
 					}

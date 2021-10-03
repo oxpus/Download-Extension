@@ -179,7 +179,6 @@ class listener implements EventSubscriberInterface
 		$dl_mod_link_show = $this->dlext_main->dl_handle_active($this->dlext_constants::DL_FALSE);
 
 		$this->template->assign_vars([
-			'EXT_DL_PATH'		=> $this->ext_path,
 			'U_DL_HELP_POPUP'	=> $this->helper->route('oxpus_dlext_help'),
 		]);
 
@@ -755,7 +754,6 @@ class listener implements EventSubscriberInterface
 			$this->dlext_constants->init();
 
 			$this->template->assign_vars([
-				'EXT_DL_PATH'		=> $this->ext_path,
 				'U_DL_HELP_POPUP'	=> $this->helper->route('oxpus_dlext_help'),
 			]);
 		}

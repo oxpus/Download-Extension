@@ -13,45 +13,101 @@ namespace oxpus\dlext\core;
 class thumbnail implements thumbnail_interface
 {
 	/* phpbb objects */
+	protected $db;
 	protected $request;
 	protected $filesystem;
 
 	/* extension owned objects */
 	protected $dlext_constants;
+	protected $dlext_downloads_table;
+	protected $dlext_dlext_images_table;
+	protected $dlext_dlext_ver_files_table;
 
 	/**
 	 * Constructor
 	 *
+	 * @param \phpbb\db\driver\driver_interface		$db
 	 * @param \phpbb\request\request 				$request
 	 * @param \phpbb\filesystem\filesystem			$filesystem
 	 * @param \oxpus\dlext\core\helpers\constants	$dlext_constants
+	 * @param string								$dlext_downloads_table
+	 * @param string								$dlext_dlext_images_table
+	 * @param string								$dlext_dlext_ver_files_table
 	 */
 	public function __construct(
+		\phpbb\db\driver\driver_interface $db,
 		\phpbb\request\request $request,
 		\phpbb\filesystem\filesystem $filesystem,
-		\oxpus\dlext\core\helpers\constants $dlext_constants
+		\oxpus\dlext\core\helpers\constants $dlext_constants,
+		$dlext_downloads_table,
+		$dlext_dlext_images_table,
+		$dlext_dlext_ver_files_table
 	)
 	{
+		$this->db 				= $db;
 		$this->request 			= $request;
 		$this->filesystem		= $filesystem;
 
-		$this->dlext_constants	= $dlext_constants;
+		$this->dlext_constants				= $dlext_constants;
+		$this->dlext_downloads_table		= $dlext_downloads_table;
+		$this->dlext_dlext_images_table		= $dlext_dlext_images_table;
+		$this->dlext_dlext_ver_files_table	= $dlext_dlext_ver_files_table;
 	}
 
 	public function handle()
 	{
-		$thumbnail	= $this->request->variable('pic', '', $this->dlext_constants::DL_TRUE);
+		$pic_id		= $this->request->variable('pic', '', $this->dlext_constants::DL_TRUE);
+		$img_type	= $this->request->variable('img_type', '', $this->dlext_constants::DL_TRUE);
 		$disp_art	= $this->request->variable('disp_art', 0);
 
-		if (!$thumbnail)
+		if (!$pic_id || !$img_type)
 		{
 			return 'NO_THUMB';
 		}
 
-		$thumbnail	= base64_decode($thumbnail);
-		$file_ext	= str_replace('.', '', trim(strrchr(strtolower($thumbnail), '.')));
+		switch ($img_type)
+		{
+			case 'thumb':
+				$table		= $this->dlext_downloads_table;
+				$field		= 'thumbnail';
+				$data_id	= 'id';
+				$folder		= '/thumbs/';
+				break;
+			case 'more':
+				$table		= $this->dlext_dlext_images_table;
+				$field		= 'img_name';
+				$data_id	= 'img_id';
+				$folder		= '/thumbs/';
+				break;
+			case 'version':
+				$table		= $this->dlext_dlext_ver_files_table;
+				$field		= 'file_name';
+				$data_id	= 'ver_file_id';
+				$folder		= '/version/images/';
+				break;
+		}
 
-		if (!$this->filesystem->exists($thumbnail) and strpos($thumbnail, $this->dlext_constants->get_value('files_dir') . '/thumbs/') === 0)
+		if (!$table)
+		{
+			return 'NO_THUMB';
+		}
+
+		$sql = 'SELECT ' . $field . '
+				FROM ' . $table . '
+				WHERE ' . $data_id . ' = ' . (int) $pic_id;
+		$result = $this->db->sql_query($sql);
+		$real_filename = $this->db->sql_fetchfield($field);
+		$this->db->sql_freeresult($result);
+
+		if (!$real_filename)
+		{
+			return 'NO_THUMB';
+		}
+
+		$file_ext	= str_replace('.', '', trim(strrchr(strtolower($real_filename), '.')));
+		$thumbnail	= $this->dlext_constants->get_value('files_dir') . $folder . $real_filename;
+
+		if (!$this->filesystem->exists($thumbnail) && strpos($thumbnail, $this->dlext_constants->get_value('files_dir') . '/thumbs/') === 0)
 		{
 			return 'NOT_EXISTS';
 		}

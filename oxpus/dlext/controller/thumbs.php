@@ -364,11 +364,9 @@ class thumbs
 
 			while ($row = $this->db->sql_fetchrow($result))
 			{
-				$pic_path = base64_encode($this->dlext_constants->get_value('files_dir') . '/thumbs/' . $row['img_name']);
-
 				$this->template->assign_block_vars('dl_thumbnails', [
-					'DL_IMG_LINK'	=> $this->helper->route('oxpus_dlext_thumbnail', ['pic' => $pic_path, 'disp_art' => $this->dlext_constants::DL_FALSE]),
-					'DL_IMG_PIC'	=> $this->helper->route('oxpus_dlext_thumbnail', ['pic' => $pic_path, 'disp_art' => $this->dlext_constants::DL_TRUE]),
+					'DL_IMG_LINK'	=> $this->helper->route('oxpus_dlext_thumbnail', ['pic' => $row['img_id'], 'img_type' => 'more', 'disp_art' => $this->dlext_constants::DL_FALSE]),
+					'DL_IMG_PIC'	=> $this->helper->route('oxpus_dlext_thumbnail', ['pic' => $row['img_id'], 'img_type' => 'more', 'disp_art' => $this->dlext_constants::DL_TRUE]),
 					'DL_IMG_TITLE'	=> $row['img_title'],
 
 					'U_DL_DELETE'	=> $this->helper->route('oxpus_dlext_thumbs', ['action' => 'delete', 'cat_id' => $cat_id, 'df_id' => $df_id, 'img_id' => $row['img_id']]),

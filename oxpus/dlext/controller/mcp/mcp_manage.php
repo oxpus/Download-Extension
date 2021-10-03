@@ -787,40 +787,24 @@ class mcp_manage
 
 			if ($total_broken)
 			{
-				$broken_string = ($total_broken == 1) ? $this->language->lang('DL_BROKEN_OVERVIEW_ONE') : $this->language->lang('DL_BROKEN_OVERVIEW', $total_broken);
 				$broken_url = ($total_broken == 1) ? $this->helper->route('oxpus_dlext_details', ['df_id' => $broken_id]) : $this->helper->route('oxpus_dlext_mcp_broken');
-				$this->template->assign_vars([
-					'L_DL_BROKEN_DOWNLOADS' => $broken_string,
-					'U_DL_BROKEN_DOWNLOADS' => $broken_url,
-				]);
+				$this->template->assign_var('U_DL_BROKEN_DOWNLOADS', $broken_url);
 			}
 
 			/*
 			* check and create link if we must approve downloads
 			*/
-			$total_approve = $this->dlext_counter->count_dl_approve();
-
-			if ($total_approve)
+			if ($this->dlext_counter->count_dl_approve())
 			{
-				$approve_string = ($total_approve == 1) ? $this->language->lang('DL_APPROVE_OVERVIEW_ONE') : $this->language->lang('DL_APPROVE_OVERVIEW', $total_approve);
-				$this->template->assign_vars([
-					'L_DL_APPROVE_DOWNLOADS' => $approve_string,
-					'U_DL_APPROVE_DOWNLOADS' => $this->helper->route('oxpus_dlext_mcp_approve'),
-				]);
+				$this->template->assign_var('U_DL_APPROVE_DOWNLOADS', $this->helper->route('oxpus_dlext_mcp_approve'));
 			}
 
 			/*
 			* check and create link if we must approve comments
 			*/
-			$total_comment_approve = $this->dlext_counter->count_comments_approve();
-
-			if ($total_comment_approve)
+			if ($this->dlext_counter->count_comments_approve())
 			{
-				$approve_comment_string = ($total_comment_approve == 1) ? $this->language->lang('DL_APPROVE_OVERVIEW_ONE_COMMENT') : $this->language->lang('DL_APPROVE_OVERVIEW_COMMENTS', $total_comment_approve);
-				$this->template->assign_vars([
-					'L_DL_APPROVE_COMMENTS' => $approve_comment_string,
-					'U_DL_APPROVE_COMMENTS' => $this->helper->route('oxpus_dlext_mcp_capprove'),
-				]);
+				$this->template->assign_var('U_DL_APPROVE_COMMENTS', $this->helper->route('oxpus_dlext_mcp_capprove'));
 			}
 
 			$this->template->assign_vars([

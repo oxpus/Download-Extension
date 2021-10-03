@@ -185,9 +185,13 @@ services:
         class: oxpus\dlext\core\thumbnail
         public: true
         arguments:
+            - '@dbal.conn'
             - '@request'
             - '@filesystem'
             - '@oxpus.dlext.helpers.constants'
+            - '%oxpus.dlext.tables.downloads%'
+            - '%oxpus.dlext.tables.dl_images%'
+            - '%oxpus.dlext.tables.dl_ver_files%'
     oxpus.dlext.core.topic:
         class: oxpus\dlext\core\topic
         public: true

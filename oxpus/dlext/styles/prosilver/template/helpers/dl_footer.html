@@ -123,35 +123,31 @@
 </div>
 {% endif %}
 
+<div class="clear"></div>
+
 {% if U_DL_BROKEN_DOWNLOADS %}
-<br />
 <div class="panel dl-footer-alert">
 	<div class="inner">
-		<a href="{{ U_DL_BROKEN_DOWNLOADS }}" class="forumtitle">{{ L_DL_BROKEN_DOWNLOADS }}</a>
+		<a href="{{ U_DL_BROKEN_DOWNLOADS }}" class="forumtitle">{{ lang('DL_BROKEN_OVERVIEW') }}</a>
 	</div>
 </div>
 {% endif %}
 
 {% if U_DL_APPROVE_DOWNLOADS %}
-<br />
 <div class="panel dl-footer-alert">
 	<div class="inner">
-		<a href="{{ U_DL_APPROVE_DOWNLOADS }}" class="forumtitle">{{ L_DL_APPROVE_DOWNLOADS }}</a>
+		<a href="{{ U_DL_APPROVE_DOWNLOADS }}" class="forumtitle">{{ lang('DL_APPROVE_OVERVIEW') }}</a>
 	</div>
 </div>
 {% endif %}
 
 {% if U_DL_APPROVE_COMMENTS %}
-<br />
 <div class="panel dl-footer-alert">
 	<div class="inner">
-		<a href="{{ U_DL_APPROVE_COMMENTS }}" class="forumtitle">{{ L_DL_APPROVE_COMMENTS }}</a>
+		<a href="{{ U_DL_APPROVE_COMMENTS }}" class="forumtitle">{{ lang('DL_APPROVE_OVERVIEW_COMMENTS') }}</a>
 	</div>
 </div>
 {% endif %}
-
-<div class="clear"></div>
-<hr />
 
 <div class="copyright">
 	<strong>{{ DL_MOD_RELEASE }}</strong>

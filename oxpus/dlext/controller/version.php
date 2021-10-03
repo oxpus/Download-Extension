@@ -519,9 +519,8 @@ class version
 				switch ($row['file_type'])
 				{
 					case $this->dlext_constants::DL_FILE_TYPE_IMAGE:
-						$pic_path		= base64_encode($this->dlext_constants->get_value('files_dir') . '/version/images/' . $row['real_name']);
-						$file_path		= $this->helper->route('oxpus_dlext_thumbnail', ['pic' => $pic_path, 'disp_art' => $this->dlext_constants::DL_TRUE]);
-						$image			= $this->helper->route('oxpus_dlext_thumbnail', ['pic' => $pic_path, 'disp_art' => $this->dlext_constants::DL_FALSE]);
+						$file_path		= $this->helper->route('oxpus_dlext_thumbnail', ['pic' => $row['ver_file_id'], 'img_type' => 'version', 'disp_art' => $this->dlext_constants::DL_TRUE]);
+						$image			= $this->helper->route('oxpus_dlext_thumbnail', ['pic' => $row['ver_file_id'], 'img_type' => 'version', 'disp_art' => $this->dlext_constants::DL_FALSE]);
 						$tpl_block		= 'images';
 						$images_exists	= $this->dlext_constants::DL_TRUE;
 						break;
@@ -629,9 +628,8 @@ class version
 				case $this->dlext_constants::DL_FILE_TYPE_IMAGE:
 					$tpl_block		= 'images';
 					$images_exists	= $this->dlext_constants::DL_TRUE;
-					$pic_path		= base64_encode($this->dlext_constants->get_value('files_dir') . '/version/images/' . str_replace(' ', '%20', $row['real_name']));
-					$file_path		= $this->helper->route('oxpus_dlext_thumbnail', ['pic' => $pic_path, 'disp_art' => $this->dlext_constants::DL_TRUE]);
-					$image			= $this->helper->route('oxpus_dlext_thumbnail', ['pic' => $pic_path, 'disp_art' => $this->dlext_constants::DL_FALSE]);
+					$file_path		= $this->helper->route('oxpus_dlext_thumbnail', ['pic' => $row['ver_file_id'], 'img_type' => 'version', 'disp_art' => $this->dlext_constants::DL_TRUE]);
+					$image			= $this->helper->route('oxpus_dlext_thumbnail', ['pic' => $row['ver_file_id'], 'img_type' => 'version', 'disp_art' => $this->dlext_constants::DL_FALSE]);
 					break;
 				default:
 					$load_link_ary = [

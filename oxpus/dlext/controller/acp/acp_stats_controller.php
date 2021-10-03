@@ -120,33 +120,72 @@ class acp_stats_controller implements acp_stats_interface
 		{
 			if ($del_stat == $this->dlext_constants::DL_STATS_DEL_ALL)
 			{
-				$sql = 'DELETE FROM ' . $this->dlext_table_dl_stats;
-				$this->db->sql_query($sql);
+				if (confirm_box($this->dlext_constants::DL_TRUE))
+				{
+					$sql = 'DELETE FROM ' . $this->dlext_table_dl_stats;
+					$this->db->sql_query($sql);
 
-				$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_STATS_ALL');
+					$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_STATS_ALL');
+
+					redirect($this->u_action);
+				}
+				else
+				{
+					$s_hidden_fields = ['delete' => 1, 'del_stat' => $del_stat];
+					confirm_box($this->dlext_constants::DL_FALSE, 'DL_ACP_DROP_STATS', build_hidden_fields($s_hidden_fields));
+				}
 			}
 			else if ($del_stat == $this->dlext_constants::DL_STATS_DEL_GUESTS)
 			{
-				$sql = 'DELETE FROM ' . $this->dlext_table_dl_stats . '
-					WHERE user_id = ' . ANONYMOUS;
-				$this->db->sql_query($sql);
+				if (confirm_box($this->dlext_constants::DL_TRUE))
+				{
+					$sql = 'DELETE FROM ' . $this->dlext_table_dl_stats . '
+						WHERE user_id = ' . ANONYMOUS;
+					$this->db->sql_query($sql);
 
-				$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_STATS_ANONYM');
+					$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_STATS_ANONYM');
+
+					redirect($this->u_action);
+				}
+				else
+				{
+					$s_hidden_fields = ['delete' => 1, 'del_stat' => $del_stat];
+					confirm_box($this->dlext_constants::DL_FALSE, 'DL_ACP_DROP_STATS', build_hidden_fields($s_hidden_fields));
+				}
 			}
 			else if (is_array($del_id) && !empty($del_id))
 			{
-				$dl_id = [];
-
-				foreach ($del_id as $value)
+				if (confirm_box($this->dlext_constants::DL_TRUE))
 				{
-					$dl_id[] = (int) $value;
+					$dl_id = [];
+
+					foreach ($del_id as $value)
+					{
+						$dl_id[] = (int) $value;
+					}
+
+					$sql = 'DELETE FROM ' . $this->dlext_table_dl_stats . '
+						WHERE ' . $this->db->sql_in_set('dl_id', $dl_id);
+					$this->db->sql_query($sql);
+
+					$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_STATS_SOME');
+
+					redirect($this->u_action);
 				}
+				else
+				{
+					$s_hidden_fields = ['delete' => 1];
+					$i = 0;
 
-				$sql = 'DELETE FROM ' . $this->dlext_table_dl_stats . '
-					WHERE ' . $this->db->sql_in_set('dl_id', $dl_id);
-				$this->db->sql_query($sql);
+					foreach ($del_id as $value)
+					{
+						$s_hidden_fields['del_id[' . $i . ']'] = $value;
 
-				$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_STATS_SOME');
+						++$i;
+					}
+
+					confirm_box($this->dlext_constants::DL_FALSE, 'DL_ACP_DROP_STATS', build_hidden_fields($s_hidden_fields));
+				}
 			}
 		}
 

@@ -1,6 +1,5 @@
-{% if EXT_DL_PATH %}
 {% INCLUDECSS '@oxpus_dlext/dl_ext.css' %}
-{% if S_DL_POPUPIMAGE %}{% INCLUDECSS ''~ EXT_DL_PATH ~'assets/3rdparty/prettyPhoto/css/prettyPhoto.css' %}{% endif %}
+{% if S_DL_POPUPIMAGE %}{% INCLUDECSS '@oxpus_dlext/prettyPhoto/css/prettyPhoto.css' %}{% endif %}
 <script>
 	var dl_help_path = '{{ U_DL_HELP_POPUP|e('js') }}';
 {% if S_DL_ENABLE_RATE %}
@@ -11,10 +10,9 @@
 	var activeCat = '{{ S_DL_OPEN_PANEL|e('js') }}';
 {% endif %}
 </script>
-{% if S_DL_POPUPIMAGE %}{% INCLUDEJS ''~ EXT_DL_PATH ~'assets/3rdparty/prettyPhoto/js/jquery.prettyPhoto.js' %}{% endif %}
-{% INCLUDEJS ''~ EXT_DL_PATH ~'assets/javascript/dl_footer.js' %}
-{% INCLUDEJS ''~ EXT_DL_PATH ~'assets/javascript/dl_help.js' %}
-{% if S_DL_DETAIL_JS %}{% INCLUDEJS '@oxpus_dlext/dl_main.js' %}{% endif %}
-{% if S_DL_ENABLE_RATE %}{% INCLUDEJS '@oxpus_dlext/dl_rate.js' %}{% endif %}
-{% if S_TOTAL_IMAGES or S_DL_POPUPIMAGE or S_DL_CAPTCHA %}{% INCLUDEJS ''~ EXT_DL_PATH ~'assets/javascript/pretty.js' %}{% endif %}
-{% endif %}
+{% if S_DL_POPUPIMAGE %}{% INCLUDEJS '@oxpus_dlext/prettyPhoto/js/jquery.prettyPhoto.js' %}{% endif %}
+{% INCLUDEJS '@oxpus_dlext/js/dl_footer.js' %}
+{% INCLUDEJS '@oxpus_dlext/js/dl_help.js' %}
+{% if S_DL_DETAIL_JS %}{% INCLUDEJS '@oxpus_dlext/js/dl_main.js' %}{% endif %}
+{% if S_DL_ENABLE_RATE %}{% INCLUDEJS '@oxpus_dlext/js/dl_rate.js' %}{% endif %}
+{% if S_TOTAL_IMAGES or S_DL_POPUPIMAGE or S_DL_CAPTCHA %}{% INCLUDEJS '@oxpus_dlext/js/pretty.js' %}{% endif %}

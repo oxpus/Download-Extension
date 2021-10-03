@@ -8,7 +8,7 @@
 		<fieldset>
 			<h3>{{ lang('DL_MODCP_BROKEN') }}</h3>
 			{% if U_DL_BROKEN_DOWNLOADS %}
-			<a href="{{ U_DL_BROKEN_DOWNLOADS }}" class="forumtitle">{{ L_DL_BROKEN_DOWNLOADS }}</a>
+			<a href="{{ U_DL_BROKEN_DOWNLOADS }}" class="forumtitle">{{ lang('DL_BROKEN_OVERVIEW') }}</a>
 			{% else %}
 			{{ lang('DL_NO_LAST_TIME') }}
 			{% endif %}
@@ -20,7 +20,7 @@
 		<fieldset>
 			<h3>{{ lang('DL_MODCP_APPROVE') }}</h3>
 			{% if U_DL_APPROVE_DOWNLOADS %}
-			<a href="{{ U_DL_APPROVE_DOWNLOADS }}" class="forumtitle">{{ L_DL_APPROVE_DOWNLOADS }}</a>
+			<a href="{{ U_DL_APPROVE_DOWNLOADS }}" class="forumtitle">{{ lang('DL_APPROVE_OVERVIEW') }}</a>
 			{% else %}
 			{{ lang('DL_NO_APPROVE') }}
 			{% endif %}
@@ -32,7 +32,7 @@
 		<fieldset>
 			<h3>{{ lang('DL_MODCP_CAPPROVE') }}</h3>
 			{% if U_DL_APPROVE_COMMENTS %}
-			<a href="{{ U_DL_APPROVE_COMMENTS }}" class="forumtitle">{{ L_DL_APPROVE_COMMENTS }}</a>
+			<a href="{{ U_DL_APPROVE_COMMENTS }}" class="forumtitle">{{ lang('DL_APPROVE_OVERVIEW_COMMENTS') }}</a>
 			{% else %}
 			{{ lang('DL_NO_CAPPROVE') }}
 			{% endif %}
