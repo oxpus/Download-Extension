@@ -1,5 +1,5 @@
 {% INCLUDECSS '@oxpus_dlext/dl_ext.css' %}
-{% if S_DL_POPUPIMAGE %}{% INCLUDECSS '@oxpus_dlext/prettyPhoto/css/prettyPhoto.css' %}{% endif %}
+{% if S_DL_POPUPIMAGE %}{% INCLUDECSS '@oxpus_dlext/3rdparty/prettyPhoto/css/prettyPhoto.css' %}{% endif %}
 <script>
 	var dl_help_path = '{{ U_DL_HELP_POPUP|e('js') }}';
 {% if S_DL_ENABLE_RATE %}
@@ -10,7 +10,7 @@
 	var activeCat = '{{ S_DL_OPEN_PANEL|e('js') }}';
 {% endif %}
 </script>
-{% if S_DL_POPUPIMAGE %}{% INCLUDEJS '@oxpus_dlext/prettyPhoto/js/jquery.prettyPhoto.js' %}{% endif %}
+{% if S_DL_POPUPIMAGE %}{% INCLUDEJS '@oxpus_dlext/3rdparty/prettyPhoto/js/jquery.prettyPhoto.js' %}{% endif %}
 {% INCLUDEJS '@oxpus_dlext/js/dl_footer.js' %}
 {% INCLUDEJS '@oxpus_dlext/js/dl_help.js' %}
 {% if S_DL_DETAIL_JS %}{% INCLUDEJS '@oxpus_dlext/js/dl_main.js' %}{% endif %}
