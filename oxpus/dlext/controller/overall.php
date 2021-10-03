@@ -374,7 +374,7 @@ class overall
 				}
 			}
 
-			$this->template->assign_var('S_DL_ENABLE_RATE', (isset($this->config['dl_enable_rate']) && $this->config['dl_enable_rate']) ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE);
+			$this->template->assign_var('S_DL_ENABLE_RATE', $this->config['dl_enable_rate']);
 		}
 
 		/*

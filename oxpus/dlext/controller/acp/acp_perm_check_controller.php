@@ -105,11 +105,6 @@ class acp_perm_check_controller implements acp_perm_check_interface
 
 			if ($row)
 			{
-				foreach ($row as $key => $value)
-				{
-					$$key = $value;
-				}
-
 				// First fetch ALL category permissions
 				$cat_perm_ary   = [];
 				$dl_index       = $this->dlext_main->full_index();

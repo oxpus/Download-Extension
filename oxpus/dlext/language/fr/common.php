@@ -383,6 +383,7 @@ $lang = array_merge($lang, [
 	'DL_IMAGES'				=> 'Images',
 	'DL_INDEX_DESC_HIDE'	=> 'Masquer la description des catégories',
 	'DL_INFO'				=> 'Info',
+	'DL_IN_PROGRESS'	 	=> 'Télécharger ...',
 	'DL_IP'					=> 'Adresse IP',
 	'DL_IS_FREE'			=> 'Libre',
 	'DL_IS_FREE_REG'		=> 'Libre pour les utilisateurs enregistrés',
@@ -495,10 +496,10 @@ $lang = array_merge($lang, [
 	'DL_NAV_LINK_NHPLB'					=> 'En haut du menu déroulant du profil dans la barre de navigation de l’en-tête',
 	'DL_NAV_LINK_NHPLA'					=> 'En bas du menu déroulant du profil dans la barre de navigation de l’en-tête',
 	'DL_NAV_LINK_NHUPA'					=> 'À gauche de la zone de notification',
-	'DL_NAV_LINK_OFTzB'					=> 'Sur la barre de navigation dans le pied de page, après "Fuseau horaire"',
-	'DL_NAV_LINK_OFTzA'					=> 'Sur la barre de navigation dans le pied de page, avant "Fuseau horaire"',
-	'DL_NAV_LINK_OFTlB'					=> 'Après le lien d’équipe dans le pied de page',
-	'DL_NAV_LINK_OFTlA'					=> 'Avant le lien d’équipe dans le pied de page',
+	'DL_NAV_LINK_OFTZB'					=> 'Sur la barre de navigation dans le pied de page, après "Fuseau horaire"',
+	'DL_NAV_LINK_OFTZA'					=> 'Sur la barre de navigation dans le pied de page, avant "Fuseau horaire"',
+	'DL_NAV_LINK_OFTLB'					=> 'Après le lien d’équipe dans le pied de page',
+	'DL_NAV_LINK_OFTLA'					=> 'Avant le lien d’équipe dans le pied de page',
 	'DL_NAV_PATH_ACP'					=> '<strong> -> </strong>',
 	'DL_NAV_PATH_DEFAULT'				=> '&nbsp;&raquo;&nbsp;',
 	'DL_NEW'							=> 'Nouveau téléchargement',
@@ -801,8 +802,6 @@ $lang = array_merge($lang, [
 	'DL_FIELD_INVALID_DATE'		=> 'Le champ « %s » a une date invalide.',
 
 	'DL_MUST_SELECT_DOWNLOAD'	=> 'Choisissez un téléchargement.',
-
-	'DL_NUMBER_RECENT_DL_ON_PORTAL'	=> 'Nombre de téléchargements récents qui sont affichés sur le portail',
 
 	'DL_SINGLE_USER_TRAFFIC_TITLE'	=> 'Trafic pour un seul utilisateur',
 

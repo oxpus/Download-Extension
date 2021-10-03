@@ -63,8 +63,6 @@ class dl_commons extends \phpbb\db\migration\migration
 			['config_name' => 'dl_remain_traffic', 'config_value' => '0'],
 		];
 
-		$this->db->sql_return_on_error(true);
 		$this->db->sql_multi_insert($this->table_prefix . 'dl_rem_traf', $sql_insert);
-		$this->db->sql_return_on_error(false);
 	}
 }

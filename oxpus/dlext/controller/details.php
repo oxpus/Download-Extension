@@ -446,7 +446,7 @@ class details
 			{
 				if ($dl_files['real_file'] && $this->filesystem->exists($this->dlext_constants->get_value('files_dir') . '/downloads/' . $index[$cat_id]['cat_path'] . $dl_files['real_file']))
 				{
-					$dl_files['file_hash'] = $this->dlext_format->encrypt($this->dlext_constants->get_value('files_dir') . '/downloads/' . $index[$cat_id]['cat_path'] . $dl_files['real_file'], 'file', $hash_method);
+					$dl_files['file_hash'] = $this->dlext_format->dl_hash($this->dlext_constants->get_value('files_dir') . '/downloads/' . $index[$cat_id]['cat_path'] . $dl_files['real_file'], 'file', $hash_method);
 					$sql = 'UPDATE ' . $this->dlext_table_downloads . ' SET ' . $this->db->sql_build_array('UPDATE', [
 						'file_hash' => $dl_files['file_hash']
 					]) . ' WHERE id = ' . (int) $df_id;
@@ -482,7 +482,7 @@ class details
 					{
 						if ($row['ver_real_file'] && $this->filesystem->exists($this->dlext_constants->get_value('files_dir') . '/downloads/' . $index[$cat_id]['cat_path'] . $row['ver_real_file']))
 						{
-							$ver_file_hash = $this->dlext_format->encrypt($this->dlext_constants->get_value('files_dir') . '/downloads/' . $index[$cat_id]['cat_path'] . $row['ver_real_file'], 'file', $hash_method);
+							$ver_file_hash = $this->dlext_format->dl_hash($this->dlext_constants->get_value('files_dir') . '/downloads/' . $index[$cat_id]['cat_path'] . $row['ver_real_file'], 'file', $hash_method);
 							$sql = 'UPDATE ' . $this->dlext_table_dl_versions . ' SET ' . $this->db->sql_build_array('UPDATE', [
 								'ver_file_hash' => $ver_file_hash
 							]) . ' WHERE ver_id = ' . (int) $row['ver_id'];
@@ -720,7 +720,7 @@ class details
 			{
 				if ($this->config['dl_prevent_hotlink'])
 				{
-					$hotlink_id = $this->dlext_format->encrypt($this->user->data['user_id'] . time() . $df_id . $this->user->data['session_id']);
+					$hotlink_id = $this->dlext_format->dl_hash($this->user->data['user_id'] . time() . $df_id . $this->user->data['session_id']);
 
 					$sql = 'INSERT INTO ' . $this->dlext_table_dl_hotlink . ' ' . $this->db->sql_build_array('INSERT', [
 						'user_id'		=> $this->user->data['user_id'],

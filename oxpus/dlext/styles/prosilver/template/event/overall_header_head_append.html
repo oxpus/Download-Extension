@@ -2,13 +2,13 @@
 {% INCLUDECSS '@oxpus_dlext/dl_ext.css' %}
 {% if S_DL_POPUPIMAGE %}{% INCLUDECSS ''~ EXT_DL_PATH ~'assets/3rdparty/prettyPhoto/css/prettyPhoto.css' %}{% endif %}
 <script>
-	var dl_help_path = '{{ U_DL_HELP_POPUP|e }}';
+	var dl_help_path = '{{ U_DL_HELP_POPUP|e('js') }}';
 {% if S_DL_ENABLE_RATE %}
-	var phpEx = '{{ DL_PHPEX|e }}';
-	var dlAjaxUrl = '{{ U_DL_AJAX|e }}';
+	var phpEx = '{{ DL_PHPEX|e('js') }}';
+	var dlAjaxUrl = '{{ U_DL_AJAX|e('js') }}';
 {% endif %}
 {% if S_DL_DETAIL_JS %}
-	var activeCat = '{{ S_DL_OPEN_PANEL|e }}';
+	var activeCat = '{{ S_DL_OPEN_PANEL|e('js') }}';
 {% endif %}
 </script>
 {% if S_DL_POPUPIMAGE %}{% INCLUDEJS ''~ EXT_DL_PATH ~'assets/3rdparty/prettyPhoto/js/jquery.prettyPhoto.js' %}{% endif %}

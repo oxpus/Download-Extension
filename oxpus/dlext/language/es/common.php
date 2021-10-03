@@ -382,6 +382,7 @@ $lang = array_merge($lang, [
 	'DL_INDEX_DESC_HIDE'	=> 'Ocultar descripciones de categoría',
 	'DL_INFO'				=> 'Info',
 	'DL_IP'					=> 'Dirección IP',
+	'DL_IN_PROGRESS'	 	=> 'Descargar ...',
 	'DL_IS_FREE'			=> 'Libre',
 	'DL_IS_FREE_REG'		=> 'Libre para usuarios registrados',
 
@@ -493,10 +494,10 @@ $lang = array_merge($lang, [
 	'DL_NAV_LINK_NHPLB'					=> 'En la parte superior del menú desplegable de perfil en la barra de navegación del encabezado',
 	'DL_NAV_LINK_NHPLA'					=> 'En la parte inferior del menú desplegable de perfil en la barra de navegación del encabezado',
 	'DL_NAV_LINK_NHUPA'					=> 'A la izquierda del área de notificación',
-	'DL_NAV_LINK_OFTzB'					=> 'En la barra de navegación en el pie de página, después de "Zona horaria"',
-	'DL_NAV_LINK_OFTzA'					=> 'En la barra de navegación en el pie de página, antes de "Zona horaria"',
-	'DL_NAV_LINK_OFTlB'					=> 'Después del enlace del equipo en el pie de página',
-	'DL_NAV_LINK_OFTlA'					=> 'Antes del enlace del equipo en el pie de página',
+	'DL_NAV_LINK_OFTZB'					=> 'En la barra de navegación en el pie de página, después de "Zona horaria"',
+	'DL_NAV_LINK_OFTZA'					=> 'En la barra de navegación en el pie de página, antes de "Zona horaria"',
+	'DL_NAV_LINK_OFTLB'					=> 'Después del enlace del equipo en el pie de página',
+	'DL_NAV_LINK_OFTLA'					=> 'Antes del enlace del equipo en el pie de página',
 	'DL_NAV_PATH_ACP'					=> '<strong> -> </strong>',
 	'DL_NAV_PATH_DEFAULT'				=> '&nbsp;&raquo;&nbsp;',
 	'DL_NEW'							=> 'Nueva descarga',
@@ -799,8 +800,6 @@ $lang = array_merge($lang, [
 	'DL_FIELD_INVALID_DATE'		=> 'El campo “%s” has an invalid date.',
 
 	'DL_MUST_SELECT_DOWNLOAD'	=> 'Elija una descarga',
-
-	'DL_NUMBER_RECENT_DL_ON_PORTAL'	=> 'Número de descargas recientes que se muestran en el portal',
 
 	'DL_SINGLE_USER_TRAFFIC_TITLE'	=> 'Tráfico para un único usuario',
 

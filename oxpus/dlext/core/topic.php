@@ -375,7 +375,7 @@ class topic implements topic_interface
 		}
 
 		$message_parser->parse($bbcode_status, $url_status, $smilies_status, $img_status, $flash_status, $quote_status, $url_status);
-		$message_md5 = $this->dlext_format->encrypt($message_parser->message, 'post');
+		$message_md5 = $this->dlext_format->dl_hash($message_parser->message, 'post');
 
 		$data = [
 			'topic_title'				=> $topic_title,

@@ -153,6 +153,7 @@ services:
         public: true
         arguments:
             - '%core.root_path%'
+            - '%core.php_ext%'
             - '@language'
             - '@dbal.conn'
             - '@user'

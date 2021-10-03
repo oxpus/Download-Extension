@@ -20,7 +20,6 @@ class acp_toolbox_controller implements acp_toolbox_interface
 	/* phpbb objects */
 	protected $db;
 	protected $user;
-	protected $phpex;
 	protected $root_path;
 	protected $extension_manager;
 	protected $log;
@@ -49,7 +48,6 @@ class acp_toolbox_controller implements acp_toolbox_interface
 	 * Constructor
 	 *
 	 * @param string								$root_path
-	 * @param string								$phpex
 	 * @param \phpbb\cache\service					$cache
 	 * @param \phpbb\language\language				$language
 	 * @param \phpbb\request\request 				$request
@@ -71,7 +69,6 @@ class acp_toolbox_controller implements acp_toolbox_interface
 	 */
 	public function __construct(
 		$root_path,
-		$phpex,
 		\phpbb\cache\service $cache,
 		\phpbb\language\language $language,
 		\phpbb\request\request $request,
@@ -93,7 +90,6 @@ class acp_toolbox_controller implements acp_toolbox_interface
 	)
 	{
 		$this->root_path				= $root_path;
-		$this->phpEx					= $phpex;
 		$this->cache					= $cache;
 		$this->extension_manager		= $extension_manager;
 		$this->db						= $db;
@@ -142,11 +138,6 @@ class acp_toolbox_controller implements acp_toolbox_interface
 			if (!$description)
 			{
 				$description = $file_name;
-			}
-
-			if (!function_exists('file_gc'))
-			{
-				include($this->root_path . 'includes/functions_download.' . $this->phpEx);
 			}
 
 			$file_path = $this->root_path;

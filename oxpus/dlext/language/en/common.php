@@ -381,6 +381,7 @@ $lang = array_merge($lang, [
 	'DL_IMAGES'				=> 'Images',
 	'DL_INDEX_DESC_HIDE'	=> 'Hide category descriptions',
 	'DL_INFO'				=> 'Info',
+	'DL_IN_PROGRESS'	 	=> 'Downloading ...',
 	'DL_IP'					=> 'IP Address',
 	'DL_IS_FREE'			=> 'Free',
 	'DL_IS_FREE_REG'		=> 'Free for reg. users',
@@ -493,10 +494,10 @@ $lang = array_merge($lang, [
 	'DL_NAV_LINK_NHPLB'					=> 'At the beginning of the profile drop-down menu in the header navbar',
 	'DL_NAV_LINK_NHPLA'					=> 'At the end of the profile drop-down menu in the header navbar',
 	'DL_NAV_LINK_NHUPA'					=> 'To the left of the notification area',
-	'DL_NAV_LINK_OFTzB'					=> 'In the navbar in the page footer, after "Timezone"',
-	'DL_NAV_LINK_OFTzA'					=> 'In the navbar in the page footer, before "Timezone"',
-	'DL_NAV_LINK_OFTlB'					=> 'After the team-link in the footer',
-	'DL_NAV_LINK_OFTlA'					=> 'Before the team-link in the footer',
+	'DL_NAV_LINK_OFTZB'					=> 'In the navbar in the page footer, after "Timezone"',
+	'DL_NAV_LINK_OFTZA'					=> 'In the navbar in the page footer, before "Timezone"',
+	'DL_NAV_LINK_OFTLB'					=> 'After the team-link in the footer',
+	'DL_NAV_LINK_OFTLA'					=> 'Before the team-link in the footer',
 	'DL_NAV_PATH_ACP'					=> '<strong> -> </strong>',
 	'DL_NAV_PATH_DEFAULT'				=> '&nbsp;&raquo;&nbsp;',
 	'DL_NEW'							=> 'New download',
@@ -799,8 +800,6 @@ $lang = array_merge($lang, [
 	'DL_FIELD_INVALID_DATE'		=> 'The field “%s” has an invalid date.',
 
 	'DL_MUST_SELECT_DOWNLOAD'	=> 'Select a download.',
-
-	'DL_NUMBER_RECENT_DL_ON_PORTAL'	=> 'Number of recent downloads that are displayed on the portal',
 
 	'DL_SINGLE_USER_TRAFFIC_TITLE'	=> 'Traffic for a single user',
 

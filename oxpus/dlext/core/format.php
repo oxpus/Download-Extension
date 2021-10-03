@@ -248,7 +248,7 @@ class format implements format_interface
 		return ['traffic_value' => $traffic_value, 'traffic_range' => $traffic_range];
 	}
 
-	public function encrypt($value, $type = '', $method = '')
+	public function dl_hash($value, $type = '', $method = '')
 	{
 		if (!$method)
 		{
@@ -269,14 +269,12 @@ class format implements format_interface
 			return $function_hash($value);
 		}
 
-		// Return default hash for posts message
 		if ($type == 'post')
 		{
 			$function_hash = $this->dlext_constants::DL_FILE_HASH_PHPBB;
 			return $function_hash($value);
 		}
 
-		// Different return here for given encryption
 		return unique_id() . '_' . $method($value);
 	}
 

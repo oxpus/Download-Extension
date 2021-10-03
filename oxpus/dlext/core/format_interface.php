@@ -76,5 +76,5 @@ interface format_interface
 	 * @return string generated hash string
 	 * @access public
 	 */
-	public function encrypt($value, $type = '', $method = '');
+	public function dl_hash($value, $type = '', $method = '');
 }

@@ -272,7 +272,7 @@ class comments implements comments_interface
 
 		if (!$approve)
 		{
-			$processing_user = ($index[$cat_id]['auth_cread'] == 3) ? $this->dlext_constants::DL_FALSE : $this->dlext_auth->dl_auth_users($cat_id, 'auth_mod');
+			$processing_user = ($index[$cat_id]['auth_cread'] == $this->dlext_constants::DL_PERM_ADMIN) ? $this->dlext_constants::DL_FALSE : $this->dlext_auth->dl_auth_users($cat_id, 'auth_mod');
 
 			if (is_array($processing_user))
 			{

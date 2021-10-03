@@ -13,8 +13,6 @@ namespace oxpus\dlext\controller;
 class load
 {
 	/* phpbb objects */
-	protected $root_path;
-	protected $php_ext;
 	protected $db;
 	protected $config;
 	protected $helper;
@@ -43,8 +41,6 @@ class load
 	/**
 	 * Constructor
 	 *
-	 * @param string								$root_path
-	 * @param string								$php_ext
 	 * @param \phpbb\cache\service					$cache
 	 * @param \phpbb\db\driver\driver_interface		$db
 	 * @param \phpbb\config\config					$config
@@ -68,8 +64,6 @@ class load
 	 * @param string								$dlext_table_downloads
 	 */
 	public function __construct(
-		$root_path,
-		$php_ext,
 		\phpbb\cache\service $cache,
 		\phpbb\db\driver\driver_interface $db,
 		\phpbb\config\config $config,
@@ -93,8 +87,6 @@ class load
 		$dlext_table_downloads
 	)
 	{
-		$this->root_path				= $root_path;
-		$this->php_ext 					= $php_ext;
 		$this->cache					= $cache;
 		$this->db 						= $db;
 		$this->config 					= $config;
@@ -495,7 +487,7 @@ class load
 
 				$file_protocol_prefix = '';
 
-				if (strpos(strtolower($file_url), 'http') === false)
+				if (strpos(strtolower($file_url), 'http') !== 0)
 				{
 					$file_protocol_prefix = '//';
 				}
@@ -511,11 +503,6 @@ class load
 				$dl_file_url = $this->dlext_constants->get_value('files_dir') . '/downloads/' . $index[$cat_id]['cat_path'];
 
 				$this->language->add_lang('viewtopic');
-
-				if (!function_exists('file_gc'))
-				{
-					include($this->root_path . 'includes/functions_download.' . $this->php_ext);
-				}
 
 				if ($dl_file['real_file'] && $this->filesystem->exists($dl_file_url . $dl_file['real_file']))
 				{

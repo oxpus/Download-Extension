@@ -72,7 +72,6 @@ class hacklist
 
 	public function handle()
 	{
-		$sort_by	= $this->request->variable('sort_by', '');
 		$order		= $this->request->variable('order', '');
 		$start		= $this->request->variable('start', 0);
 		$sort_by	= $this->request->variable('sort_by', 0);

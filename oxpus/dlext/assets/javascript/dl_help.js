@@ -43,7 +43,7 @@ $(document).ready(function () {
 });
 
 $(window).click(function(ev){
-	if ($(ev.target).attr('id') != "#dl_help_popup") {
+	if ($(ev.target).attr('id') != "dl_help_popup") {
 		$("#dl_help_popup").fadeOut("fast");
 		ev.stopPropagation();
 	}

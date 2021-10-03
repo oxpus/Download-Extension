@@ -336,13 +336,16 @@ class acp_traffic_controller implements acp_traffic_interface
 
 		$this->db->sql_freeresult($result);
 
-		for ($i = 0; $i < count($s_select_groups); ++$i)
+		if (isset($s_select_groups))
 		{
-			$this->template->assign_block_vars('group_select', [
-				'DL_VALUE'		=> $s_select_groups[$i]['value'],
-				'DL_SPECIAL'	=> $s_select_groups[$i]['special'],
-				'DL_NAME'		=> $s_select_groups[$i]['name'],
-			]);
+			for ($i = 0; $i < count($s_select_groups); ++$i)
+			{
+				$this->template->assign_block_vars('group_select', [
+					'DL_VALUE'		=> $s_select_groups[$i]['value'],
+					'DL_SPECIAL'	=> $s_select_groups[$i]['special'],
+					'DL_NAME'		=> $s_select_groups[$i]['name'],
+				]);
+			}
 		}
 
 		$traffic_ary		= $this->dlext_format->get_traffic_display_value($this->config['dl_user_dl_auto_traffic']);

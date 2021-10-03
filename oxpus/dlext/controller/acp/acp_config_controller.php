@@ -313,23 +313,6 @@ class acp_config_controller implements acp_config_interface
 						'dl_rate_points'		=> ['lang' => 'DL_RATE_POINTS',				'validate' => 'int',	'type' => 'text:3:3',		'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_RATE_POINTS'],
 					]
 				];
-
-				$sql = 'SELECT ext_name
-						FROM ' . EXT_TABLE . '
-						WHERE ext_name ' . $this->db->sql_like_expression($this->db->get_any_char() . 'portal' . $this->db->get_any_char());
-				$result = $this->db->sql_query($sql);
-
-				if ($this->db->sql_affectedrows())
-				{
-					$display_vars['vars'] += [
-						'legend8'				=> '',
-
-						'dl_recent_downloads'	=> ['lang' => 'DL_NUMBER_RECENT_DL_ON_PORTAL',	'validate' => 'int',	'type' => 'text:3:4',	'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_NUMBER_RECENT_DL_ON_PORTAL'],
-					];
-				}
-
-				$this->db->sql_freeresult($result);
-
 				break;
 			case 'traffic':
 				$sql = 'SELECT group_id, group_name, group_type FROM ' . GROUPS_TABLE . '
@@ -1076,10 +1059,10 @@ class acp_config_controller implements acp_config_interface
 		$s_select .= '<option value="NHPLB">' . $this->language->lang('DL_NAV_LINK_NHPLB') . '</option>';	// navbar_header_profile_list_before
 		$s_select .= '<option value="NHPLA">' . $this->language->lang('DL_NAV_LINK_NHPLA') . '</option>';	// navbar_header_profile_list_after
 		$s_select .= '<option value="NHUPP">' . $this->language->lang('DL_NAV_LINK_NHUPP') . '</option>';	// navbar_header_user_profile_prepend
-		$s_select .= '<option value="OFTlA">' . $this->language->lang('DL_NAV_LINK_OFTlA') . '</option>';	// overall_footer_teamlink_after
-		$s_select .= '<option value="OFTlB">' . $this->language->lang('DL_NAV_LINK_OFTlB') . '</option>';	// overall_footer_teamlink_before
-		$s_select .= '<option value="OFTzA">' . $this->language->lang('DL_NAV_LINK_OFTzA') . '</option>';	// overall_footer_timezone_after
-		$s_select .= '<option value="OFTzB">' . $this->language->lang('DL_NAV_LINK_OFTzB') . '</option>';	// overall_footer_timezone_before
+		$s_select .= '<option value="OFTlA">' . $this->language->lang('DL_NAV_LINK_OFTLA') . '</option>';	// overall_footer_teamlink_after
+		$s_select .= '<option value="OFTlB">' . $this->language->lang('DL_NAV_LINK_OFTLB') . '</option>';	// overall_footer_teamlink_before
+		$s_select .= '<option value="OFTzA">' . $this->language->lang('DL_NAV_LINK_OFTZA') . '</option>';	// overall_footer_timezone_after
+		$s_select .= '<option value="OFTzB">' . $this->language->lang('DL_NAV_LINK_OFTZB') . '</option>';	// overall_footer_timezone_before
 		$s_select = str_replace('value="' . $value . '">', 'value="' . $value . '" selected>', $s_select);
 
 		return $s_select;

@@ -128,8 +128,6 @@ services:
         class: oxpus\dlext\controller\load
         public: true
         arguments:
-            - '%core.root_path%'
-            - '%core.php_ext%'
             - '@cache'
             - '@dbal.conn'
             - '@config'

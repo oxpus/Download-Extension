@@ -200,7 +200,7 @@ class footer implements footer_interface
 				$catlist	= [];
 				$cat		= $this->request->variable('cat', 0);
 
-				$this->dlext_extra->dl_dropdown(0, 0, $cat, 'auth_view', $this->dlext_constants::DL_FALSE, $catlist, $this->dlext_constants::DL_FALSE);
+				$this->dlext_extra->dl_dropdown(0, 0, $cat, 'auth_view', $this->dlext_constants::DL_FALSE, $catlist);
 
 				foreach ($catlist as $cat_id => $data)
 				{
@@ -443,7 +443,6 @@ class footer implements footer_interface
 		$cat_id		= $this->request->variable('cat_id', 0);
 
 		$mcp_cat	= ($cat_id) ? $cat_id : $cat;
-		$u_dl_mcp	= '';
 
 		if ($mcp_cat && $this->dlext_auth->user_auth($mcp_cat, 'auth_mod'))
 		{

@@ -347,7 +347,7 @@
 {% endif %}
 
 {% if S_DL_DETAIL_EXTRA_TAB %}
-<div class="panel dlext{% if S_DL_OPEN_PANEL <> 3 %} noshow{% endif %}" id="options3">
+<div class="panel dlext{% if S_DL_OPEN_PANEL != 3 %} noshow{% endif %}" id="options3">
 	<div class="tablewrap">
 
 		{% if DL_MOD_WARNING %}
@@ -453,7 +453,7 @@
 	</form>
 
 </div>
-<div id="dl_hint" class="noshow dl-right dl-big dl-red">Downloading...</div>
+<div id="dl_hint" class="noshow dl-right dl-big dl-red">{{ lang('DL_IN_PROGRESS') }}</div>
 {% else %}
 <div class="rules">
 	<div class="inner">

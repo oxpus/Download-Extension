@@ -252,11 +252,6 @@ class version
 
 			if ($row_ver['file_type'] == 0 && $row_ver['ver_id'] == $ver_id)
 			{
-				if (!function_exists('send_file_to_browser'))
-				{
-					include($this->root_path . 'includes/functions_download.' . $this->php_ext);
-				}
-
 				$this->language->add_lang('viewtopic');
 
 				$dl_file_url = $this->dlext_constants->get_value('files_dir') . '/version/files/';
@@ -369,7 +364,7 @@ class version
 			{
 				do
 				{
-					$file_name = $df_id . '_' . $ver_id . '_' . ($this->dlext_format->encrypt($ver_file_name) . '.' . $extension);
+					$file_name = $df_id . '_' . $ver_id . '_' . ($this->dlext_format->dl_hash($ver_file_name) . '.' . $extension);
 				} while ($this->filesystem->exists($this->dlext_constants->get_value('files_dir') . '/version/files/' . $file_name));
 
 				$file['name'] = $file_name;
@@ -439,7 +434,7 @@ class version
 
 				do
 				{
-					$img_name = $df_id . '_' . $ver_id . '_' . ($this->dlext_format->encrypt($ver_image_name)) . '.' . $extension;
+					$img_name = $df_id . '_' . $ver_id . '_' . ($this->dlext_format->dl_hash($ver_image_name)) . '.' . $extension;
 				} while ($this->filesystem->exists($this->dlext_constants->get_value('files_dir') . '/version/images/' . $img_name));
 
 				$file['name'] = $img_name;

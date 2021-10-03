@@ -31,8 +31,6 @@ services:
         class: oxpus\dlext\controller\ucp\ucp_privacy_controller
         public: true
         arguments:
-            - '%core.root_path%'
-            - '%core.php_ext%'
             - '@request'
             - '@template'
             - '@user'

@@ -156,9 +156,8 @@ class acp_files_controller implements acp_files_interface
 	{
 		$action				= $this->request->variable('action', '');
 		$cancel				= $this->request->variable('cancel', '');
-		$cat_id				= $this->request->variable('cat_id', 0);
+		$dl_cat				= $this->request->variable('cat_id', 0);
 		$df_id				= $this->request->variable('df_id', 0);
-		$description		= $this->request->variable('description', '', $this->dlext_constants::DL_TRUE);
 
 		$dl_file = $this->dlext_files->all_files(0, [], [], $df_id, 1, ['*']);
 
@@ -167,7 +166,7 @@ class acp_files_controller implements acp_files_interface
 			trigger_error($this->language->lang('DL_MUST_SELECT_DOWNLOAD'));
 		}
 
-		$index = $this->dlext_main->full_index($cat_id);
+		$index = $this->dlext_main->full_index($dl_cat);
 
 		if (empty($index))
 		{
@@ -200,7 +199,7 @@ class acp_files_controller implements acp_files_interface
 
 				if ($del_file)
 				{
-					$path = $index[$cat_id]['cat_path'];
+					$path = $index[$dl_cat]['cat_path'];
 					$file_name = $dl_file['real_file'];
 
 					if ($path && $file_name)
@@ -349,7 +348,7 @@ class acp_files_controller implements acp_files_interface
 				$this->cache->destroy('_dlext_cat_counts');
 				$this->cache->destroy('_dlext_file_preset');
 
-				$message = $this->language->lang('DL_DOWNLOAD_REMOVED') . '<br /><br />' . $this->language->lang('CLICK_RETURN_DOWNLOADADMIN', '<a href="' . $this->u_action . '&amp;cat_id=' . $cat_id . '">', '</a>') . adm_back_link($this->u_action);
+				$message = $this->language->lang('DL_DOWNLOAD_REMOVED') . '<br /><br />' . $this->language->lang('CLICK_RETURN_DOWNLOADADMIN', '<a href="' . $this->u_action . '&amp;cat_id=' . $dl_cat . '">', '</a>') . adm_back_link($this->u_action);
 
 				trigger_error($message);
 			}
@@ -361,7 +360,7 @@ class acp_files_controller implements acp_files_interface
 				$this->template->assign_var('S_DL_DELETE_TOPIC_CONFIRM', $this->dlext_constants::DL_TRUE);
 
 				$s_hidden_fields = [
-					'cat_id'	=> $cat_id,
+					'cat_id'	=> $dl_cat,
 					'df_id'		=> $df_id,
 					'action'	=> 'delete',
 				];
@@ -397,7 +396,7 @@ class acp_files_controller implements acp_files_interface
 			$this->db->sql_query($sql);
 
 			$sql = 'SELECT id FROM ' . $this->dlext_table_downloads . '
-				WHERE cat = ' . (int) $cat_id . '
+				WHERE cat = ' . (int) $dl_cat . '
 				ORDER BY sort ASC';
 			$result = $this->db->sql_query($sql);
 
@@ -422,13 +421,13 @@ class acp_files_controller implements acp_files_interface
 		else if ($action == 'downloads_order_all')
 		{
 			$sql = 'SELECT cat_name FROM ' . $this->dlext_table_dl_cat . '
-				WHERE id = ' . (int) $cat_id;
+				WHERE id = ' . (int) $dl_cat;
 			$result = $this->db->sql_query($sql);
 			$cat_name = $this->db->sql_fetchfield('cat_name');
 			$this->db->sql_freeresult($result);
 
 			$sql = 'SELECT id FROM ' . $this->dlext_table_downloads . '
-				WHERE cat = ' . (int) $cat_id . '
+				WHERE cat = ' . (int) $dl_cat . '
 				ORDER BY description ASC';
 			$result = $this->db->sql_query($sql);
 
@@ -455,7 +454,7 @@ class acp_files_controller implements acp_files_interface
 		{
 			$sql = 'SELECT hacklist, hack_version, file_name, real_file, description, desc_uid, desc_bitfield, desc_flags, id, free, extern, test, cat, klicks, overall_klicks, file_traffic, file_size, approve
 					FROM ' . $this->dlext_table_downloads . '
-				WHERE cat = ' . (int) $cat_id . '
+				WHERE cat = ' . (int) $dl_cat . '
 				ORDER BY sort';
 			$result = $this->db->sql_query($sql);
 			$total_files = $this->db->sql_affectedrows();
@@ -469,7 +468,7 @@ class acp_files_controller implements acp_files_interface
 				$file_free		= $row['free'];
 				$file_extern	= $row['extern'];
 				$test			= ($row['test']) ? '[' . $row['test'] . ']' : '';
-				$cat_id			= $row['cat'];
+				$dl_cat			= $row['cat'];
 				$file_name		= ($file_extern) ? $this->language->lang('DL_EXTERN') : $this->language->lang('DL_DOWNLOAD') . ': ' . $row['file_name'] . '<br />{' . $row['real_file'] . '}';
 
 				$desc_uid		= $row['desc_uid'];
@@ -518,10 +517,10 @@ class acp_files_controller implements acp_files_interface
 				$unapprove = ($row['approve']) ? '' : $this->language->lang('DL_UNAPPROVED');
 
 				$dl_edit	= $this->u_action . '&amp;action=edit&amp;df_id=' . $file_id;
-				$dl_delete	= $this->u_action . '&amp;action=delete&amp;df_id=' . $file_id . '&amp;cat_id=' . $cat_id;
+				$dl_delete	= $this->u_action . '&amp;action=delete&amp;df_id=' . $file_id . '&amp;cat_id=' . $dl_cat;
 
-				$dl_move_up		= $this->u_action . '&amp;action=downloads_order&amp;move=' . $this->dlext_constants::DL_MOVE_UP . '&amp;df_id=' . $file_id . '&amp;cat_id=' . $cat_id;
-				$dl_move_down	= $this->u_action . '&amp;action=downloads_order&amp;move=' . $this->dlext_constants::DL_MOVE_DOWN . '&amp;df_id=' . $file_id . '&amp;cat_id=' . $cat_id;
+				$dl_move_up		= $this->u_action . '&amp;action=downloads_order&amp;move=' . $this->dlext_constants::DL_MOVE_UP . '&amp;df_id=' . $file_id . '&amp;cat_id=' . $dl_cat;
+				$dl_move_down	= $this->u_action . '&amp;action=downloads_order&amp;move=' . $this->dlext_constants::DL_MOVE_DOWN . '&amp;df_id=' . $file_id . '&amp;cat_id=' . $dl_cat;
 
 				$this->template->assign_block_vars('downloads', [
 					'DL_DESCRIPTION'		=> $description,
@@ -544,7 +543,7 @@ class acp_files_controller implements acp_files_interface
 				]);
 			}
 
-			$categories = $this->dlext_extra->dl_dropdown(0, 0, $cat_id, 'auth_up');
+			$categories = $this->dlext_extra->dl_dropdown(0, 0, $dl_cat, 'auth_up');
 
 			if (!empty($categories) && is_array($categories))
 			{
@@ -559,16 +558,16 @@ class acp_files_controller implements acp_files_interface
 				}
 
 				$this->template->assign_vars([
-					'DL_CAT'					=> $cat_id,
+					'DL_CAT'					=> $dl_cat,
 					'DL_CATEGORIES'				=> $categories,
 					'DL_COUNT'					=> $total_files . '&nbsp;' . $this->language->lang('DL_DOWNLOADS'),
 					'DL_NONE'					=> $this->dlext_constants::DL_NONE,
 					'DL_PERM_NONE'				=> $this->dlext_constants::DL_PERM_GENERAL_NONE,
 
 					'S_DL_DOWNLOADS_ACTION'		=> $this->u_action,
-					'S_DL_HIDDEN_FIELDS'		=> build_hidden_fields(['cat_id' => $cat_id]),
+					'S_DL_HIDDEN_FIELDS'		=> build_hidden_fields(['cat_id' => $dl_cat]),
 
-					'U_DL_DOWNLOAD_ORDER_ALL'	=> $this->u_action . '&amp;action=downloads_order_all&amp;cat_id=' . $cat_id,
+					'U_DL_DOWNLOAD_ORDER_ALL'	=> $this->u_action . '&amp;action=downloads_order_all&amp;cat_id=' . $dl_cat,
 				]);
 
 				if ($total_files)

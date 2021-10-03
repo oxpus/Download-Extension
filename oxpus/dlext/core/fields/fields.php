@@ -393,12 +393,8 @@ class fields
 		{
 			$cp_data_sql['df_id'] = (int) $df_id;
 
-			$this->db->sql_return_on_error(true);
-
 			$sql = 'INSERT INTO ' . $this->dlext_table_dl_fields_data . ' ' . $this->db->sql_build_array('INSERT', $cp_data_sql);
 			$this->db->sql_query($sql);
-
-			$this->db->sql_return_on_error(false);
 		}
 	}
 
@@ -843,7 +839,7 @@ class fields
 
 		$sql = 'SELECT f.field_type, f.field_ident, f.field_default_value, l.lang_default_value
 			FROM ' . $this->dlext_table_dl_lang . ' l, ' . $this->dlext_table_dl_fields . ' f
-			WHERE l.lang_id = ' . (string) $this->user->get_iso_lang_id() . '
+			WHERE l.lang_id = ' . (int) $this->user->get_iso_lang_id() . '
 				' . ((!empty($sql_not_in)) ? ' AND ' . $this->db->sql_in_set('f.field_ident', $sql_not_in, true) : '') . '
 				AND l.field_id = f.field_id';
 		$result = $this->db->sql_query($sql);

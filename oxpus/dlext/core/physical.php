@@ -17,6 +17,7 @@ class physical implements physical_interface
 
 	/* phpbb objects */
 	protected $root_path;
+	protected $php_ext;
 	protected $language;
 	protected $db;
 	protected $user;
@@ -36,6 +37,7 @@ class physical implements physical_interface
 	 * Constructor
 	 *
 	 * @param string 								$root_path
+	 * @param string								$php_ext
 	 * @param \phpbb\language\language				$language
 	 * @param \phpbb\db\driver\driver_interface		$db
 	 * @param \phpbb\user							$user
@@ -49,6 +51,7 @@ class physical implements physical_interface
 	 */
 	public function __construct(
 		$root_path,
+		$php_ext,
 		\phpbb\language\language $language,
 		\phpbb\db\driver\driver_interface $db,
 		\phpbb\user $user,
@@ -62,6 +65,7 @@ class physical implements physical_interface
 	)
 	{
 		$this->root_path			= $root_path;
+		$this->php_ext				= $php_ext;
 		$this->db 					= $db;
 		$this->user 				= $user;
 		$this->language 			= $language;
@@ -243,6 +247,11 @@ class physical implements physical_interface
 	 */
 	public function send_file_to_browser($dl_file_data)
 	{
+		if (!function_exists('file_gc'))
+		{
+			include($this->root_path . 'includes/functions_download.' . $this->php_ext);
+		}
+
 		if (@ob_get_length())
 		{
 			@ob_end_clean();

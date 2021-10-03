@@ -332,7 +332,6 @@ $lang = array_merge($lang, [
 	'DL_FILE_EDIT_HINT'				=> 'Hinweis zur Bearbeitung von Downloads',
 	'DL_FILE_HASH_MD5'				=> 'MD5',
 	'DL_FILE_HASH_SHA1'				=> 'SHA1',
-	'DL_FILE_EDIT_HINT'				=> 'Hinweis zur Bearbeitung von Downloads',
 	'DL_FILE_NAME'					=> 'Datei',
 	'DL_FILE_NEW'					=> '* Neu *',
 	'DL_FILE_NOT_FOUND'				=> '<strong>Datei %s nicht gefunden!</strong><br />Stelle sicher, daß diese Datei im Ordner %s existiert!',
@@ -382,6 +381,7 @@ $lang = array_merge($lang, [
 	'DL_IMAGES'				=> 'Bilder',
 	'DL_INDEX_DESC_HIDE'	=> 'Verstecke Kategoriebeschreibungen',
 	'DL_INFO'				=> 'Info',
+	'DL_IN_PROGRESS'	 	=> 'Lade herunter ...',
 	'DL_IP'					=> 'IP Adresse',
 	'DL_IS_FREE'			=> 'frei',
 	'DL_IS_FREE_REG'		=> 'frei für reg. Benutzer',
@@ -397,7 +397,6 @@ $lang = array_merge($lang, [
 	'DL_LATEST_COMMENTS'		=> 'Zeige die letzten X Kommentare in den Download Details',
 	'DL_LATEST_DOWNLOAD'		=> 'Letzter Download',
 	'DL_LATEST_DOWNLOADS'		=> 'Letzte Downloads',
-	'DL_LATEST_TYPE_OFF'		=> 'Deaktiviert',
 	'DL_LATEST_TYPE_DEFAULT'	=> 'neue und geänderte Downloads',
 	'DL_LATEST_TYPE_COMPLETE'	=> 'alle Downloads',
 	'DL_LATEST_TYPE_OFF'		=> 'Deaktiviert',
@@ -495,10 +494,10 @@ $lang = array_merge($lang, [
 	'DL_NAV_LINK_NHPLB'					=> 'Am Anfang des Benutzerprofilmenüs',
 	'DL_NAV_LINK_NHPLA'					=> 'Am Ende des Benutzerprofilmenüs',
 	'DL_NAV_LINK_NHUPA'					=> 'Link neben den Benachrichtungen',
-	'DL_NAV_LINK_OFTzB'					=> 'In der Navigation im Seitenfuß nach der "Zeitzone"',
-	'DL_NAV_LINK_OFTzA'					=> 'In der Navigation im Seitenfuß vor der "Zeitzone"',
-	'DL_NAV_LINK_OFTlB'					=> 'In der Navigation im Seitenfuß nach dem Teamlink',
-	'DL_NAV_LINK_OFTlA'					=> 'In der Navigation im Seitenfuß vor dem Teamlink',
+	'DL_NAV_LINK_OFTZB'					=> 'In der Navigation im Seitenfuß nach der "Zeitzone"',
+	'DL_NAV_LINK_OFTZA'					=> 'In der Navigation im Seitenfuß vor der "Zeitzone"',
+	'DL_NAV_LINK_OFTLB'					=> 'In der Navigation im Seitenfuß nach dem Teamlink',
+	'DL_NAV_LINK_OFTLA'					=> 'In der Navigation im Seitenfuß vor dem Teamlink',
 	'DL_NAV_PATH_ACP'					=> '<strong> -> </strong>',
 	'DL_NAV_PATH_DEFAULT'				=> '&nbsp;&raquo;&nbsp;',
 	'DL_NEW'							=> 'Neuer Download',
@@ -801,8 +800,6 @@ $lang = array_merge($lang, [
 	'DL_FIELD_INVALID_DATE'		=> '„%s“ ist ein ungültiges Datum.',
 
 	'DL_MUST_SELECT_DOWNLOAD'	=> 'Wähle einen Download aus',
-
-	'DL_NUMBER_RECENT_DL_ON_PORTAL'	=> 'Anzahl der letzten Downloads auf dem Portal',
 
 	'DL_SINGLE_USER_TRAFFIC_TITLE'	=> 'Traffic für einen Benutzer',
 

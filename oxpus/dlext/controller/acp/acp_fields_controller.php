@@ -227,6 +227,8 @@ class acp_fields_controller implements acp_fields_interface
 
 					$this->db->sql_query('ALTER TABLE ' . $this->dlext_table_dl_fields_data . " DROP COLUMN pf_$field_ident");
 
+					$this->db->sql_transaction('commit');
+
 					$order = 0;
 
 					$sql = 'SELECT *
@@ -248,8 +250,6 @@ class acp_fields_controller implements acp_fields_interface
 					}
 
 					$this->db->sql_freeresult($result);
-
-					$this->db->sql_transaction('commit');
 
 					$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_FIELD_REMOVED', false, [$field_ident]);
 					trigger_error($this->language->lang('DL_FIELD_REMOVED') . adm_back_link($this->u_action));

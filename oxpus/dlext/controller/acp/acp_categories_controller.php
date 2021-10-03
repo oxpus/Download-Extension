@@ -595,6 +595,9 @@ class acp_categories_controller implements acp_categories_interface
 			$this->u_action_open	= $this->u_action . '&amp;parent=#CAT#&amp;type=' . $idx_type;
 			$this->u_action			.= '&amp;parent=' . $cat_parent . '&amp;type=' . $idx_type;
 
+			$u_delete_stats_all = '';
+			$u_delete_comments_all = '';
+
 			foreach (array_keys($index) as $key)
 			{
 				$cur_cat = $index[$key];
@@ -689,19 +692,11 @@ class acp_categories_controller implements acp_categories_interface
 					$u_delete_stats_all = $this->u_action . '&amp;action=delete_stats&amp;cat_id=' . $this->dlext_constants::DL_NONE;
 					$this->template->assign_var('S_DL_TOTAL_STATS', $this->dlext_constants::DL_TRUE);
 				}
-				else
-				{
-					$u_delete_stats_all = '';
-				}
 
 				if (count($comments_cats))
 				{
 					$u_delete_comments_all = $this->u_action . '&amp;action=delete_comments&amp;cat_id=' . $this->dlext_constants::DL_NONE;
 					$this->template->assign_var('S_DL_TOTAL_COMMENTS', $this->dlext_constants::DL_TRUE);
-				}
-				else
-				{
-					$u_delete_comments_all = '';
 				}
 			}
 

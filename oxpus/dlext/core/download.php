@@ -265,6 +265,7 @@ class download implements download_interface
 		$index		= $this->dlext_main->full_index($cat_id);
 		$cat_auth	= $this->dlext_auth->dl_cat_auth($cat_id);
 		$file_path	= $index[$cat_id]['cat_path'];
+		$file_new	= $this->dlext_constants::DL_FALSE;
 
 		if ($df_id)
 		{
@@ -291,7 +292,7 @@ class download implements download_interface
 				if ($file_name)
 				{
 					$extension = str_replace('.', '', trim(strrchr(strtolower($file_name), '.')));
-					$new_real_file = $this->dlext_format->encrypt($file_name) . '.' . $extension;
+					$new_real_file = $this->dlext_format->dl_hash($file_name) . '.' . $extension;
 
 					if ($file_option == $this->dlext_constants::DL_VERSION_REPLACE && !$file_version && $file_path_old && $real_file_old)
 					{
@@ -300,7 +301,7 @@ class download implements download_interface
 
 					while ($this->filesystem->exists($this->dlext_constants->get_value('files_dir') . '/downloads/' . $file_path_new . $new_real_file))
 					{
-						$new_real_file = $this->dlext_format->encrypt($file_name) . '.' . $extension;
+						$new_real_file = $this->dlext_format->dl_hash($file_name) . '.' . $extension;
 					}
 
 					$this->filesystem->rename($this->dlext_constants->get_value('files_dir') . '/downloads/' . $file_path_old . $file_name, $this->dlext_constants->get_value('files_dir') . '/downloads/' . $file_path_new . $new_real_file);
@@ -312,11 +313,11 @@ class download implements download_interface
 					if ($dl_file['file_name'] == $dl_file['real_file'])
 					{
 						$extension = str_replace('.', '', trim(strrchr(strtolower($dl_file['real_file']), '.')));
-						$new_real_file = $this->dlext_format->encrypt($dl_file['real_file']) . '.' . $extension;
+						$new_real_file = $this->dlext_format->dl_hash($dl_file['real_file']) . '.' . $extension;
 
 						while ($this->filesystem->exists($this->dlext_constants->get_value('files_dir') . '/downloads/' . $file_path_old . $new_real_file))
 						{
-							$new_real_file = $this->dlext_format->encrypt($dl_file['real_file']) . '.' . $extension;
+							$new_real_file = $this->dlext_format->dl_hash($dl_file['real_file']) . '.' . $extension;
 						}
 
 						$this->filesystem->rename($this->dlext_constants->get_value('files_dir') . '/downloads/' . $file_path_old . $real_file_old, $this->dlext_constants->get_value('files_dir') . '/downloads/' . $file_path_old . $new_real_file);
@@ -330,11 +331,11 @@ class download implements download_interface
 			else if (!$file_extern && $file_name)
 			{
 				$extension = str_replace('.', '', trim(strrchr(strtolower($file_name), '.')));
-				$new_real_file = $this->dlext_format->encrypt($file_name) . '.' . $extension;
+				$new_real_file = $this->dlext_format->dl_hash($file_name) . '.' . $extension;
 
 				while ($this->filesystem->exists($this->dlext_constants->get_value('files_dir') . '/downloads/' . $file_path . $new_real_file))
 				{
-					$new_real_file = $this->dlext_format->encrypt($file_name) . '.' . $extension;
+					$new_real_file = $this->dlext_format->dl_hash($file_name) . '.' . $extension;
 				}
 
 				$this->filesystem->rename($this->dlext_constants->get_value('files_dir') . '/downloads/' . $file_path . $file_name, $this->dlext_constants->get_value('files_dir') . '/downloads/' . $file_path . $new_real_file);
@@ -417,12 +418,12 @@ class download implements download_interface
 						$this->filesystem->remove($this->dlext_constants->get_value('files_dir') . '/downloads/' . $file_path . $real_file_old);
 					}
 
-					$new_real_file	= $this->dlext_format->encrypt($file_name) . '.' . $file_extension;
+					$new_real_file	= $this->dlext_format->dl_hash($file_name) . '.' . $file_extension;
 					$i				= 1;
 
 					while ($this->filesystem->exists($this->dlext_constants->get_value('files_dir') . '/downloads/' . $file_path . $new_real_file))
 					{
-						$new_real_file = $this->dlext_format->encrypt($i . $file_name) . '.' . $file_extension;
+						$new_real_file = $this->dlext_format->dl_hash($i . $file_name) . '.' . $file_extension;
 						++$i;
 					}
 				}
@@ -502,7 +503,7 @@ class download implements download_interface
 
 		if ($new_real_file)
 		{
-			$file_hash = $this->dlext_format->encrypt($this->dlext_constants->get_value('files_dir') . '/downloads/' . $file_path . $new_real_file, 'file', $this->config['dl_file_hash_algo']);
+			$file_hash = $this->dlext_format->dl_hash($this->dlext_constants->get_value('files_dir') . '/downloads/' . $file_path . $new_real_file, 'file', $this->config['dl_file_hash_algo']);
 		}
 
 		// validate custom profile fields
@@ -709,7 +710,7 @@ class download implements download_interface
 				'real_file'		=> $new_real_file,
 				'file_hash'		=> $file_hash,
 				'file_size'		=> ($file_size) ? $file_size : $dl_file['file_size'],
-				'hack_version'	=> ($hack_version) ? $hack_version : $dl_file['hack_version'],
+				'hack_version'	=> ($file_option == $this->dlext_constants::DL_VERSION_REPLACE) ? $hack_version : $dl_file['hack_version'],
 			];
 		}
 		else
@@ -1270,7 +1271,6 @@ class download implements download_interface
 			$mod_desc				= '';
 			$mod_list				= '';
 			$file_traffic_out		= 0;
-			$thumbnail				= '';
 			$file_extern_size_out	= 0;
 			$dl_free				= 0;
 			$hacklist				= 0;

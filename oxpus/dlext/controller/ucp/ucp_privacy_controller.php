@@ -13,8 +13,6 @@ namespace oxpus\dlext\controller\ucp;
 class ucp_privacy_controller implements ucp_privacy_interface
 {
 	/* phpbb objects */
-	protected $root_path;
-	protected $php_ext;
 	protected $request;
 	protected $template;
 	protected $user;
@@ -34,8 +32,6 @@ class ucp_privacy_controller implements ucp_privacy_interface
 	/**
 	 * Constructor
 	 *
-	 * @param string								$root_path
-	 * @param string								$php_ext
 	 * @param \phpbb\request\request 				$request
 	 * @param \phpbb\template\template				$template
 	 * @param \phpbb\user							$user
@@ -47,8 +43,6 @@ class ucp_privacy_controller implements ucp_privacy_interface
 	 * @param string								$dlext_table_dl_stats
 	 */
 	public function __construct(
-		$root_path,
-		$php_ext,
 		\phpbb\request\request $request,
 		\phpbb\template\template $template,
 		\phpbb\user $user,
@@ -60,8 +54,6 @@ class ucp_privacy_controller implements ucp_privacy_interface
 		$dlext_table_dl_stats
 	)
 	{
-		$this->root_path		= $root_path;
-		$this->php_ext 			= $php_ext;
 		$this->request			= $request;
 		$this->template 		= $template;
 		$this->user 			= $user;
@@ -157,11 +149,6 @@ class ucp_privacy_controller implements ucp_privacy_interface
 					'filetime'			=> time(),
 					'filestream'		=> $this->dlext_constants::DL_TRUE,
 				];
-
-				if (!class_exists('custom_profile'))
-				{
-					include($this->root_path . 'includes/functions_download.' . $this->php_ext);
-				}
 
 				$this->dlext_physical->send_file_to_browser($dl_file_data);
 			}
