@@ -207,7 +207,7 @@ class edit
 				$allow_urls		= $this->dlext_constants::DL_TRUE;
 				$allow_smilies	= ($this->config['allow_smilies']) ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE;
 				$bug_uid		=
-					$bug_bitfield	= '';
+				$bug_bitfield	= '';
 				$bug_flags		= 0;
 
 				$error_txt = [];
@@ -326,11 +326,13 @@ class edit
 						$fav_id = $this->db->sql_nextid();
 
 						$sql = 'INSERT INTO ' . $this->dlext_table_dl_bug_history . ' ' . $this->db->sql_build_array('INSERT', [
-							'df_id'				=> $df_id,
-							'report_id'			=> $fav_id,
-							'report_his_type'	=> 'status',
-							'report_his_date'	=>  time(),
-							'report_his_value'	=> '0:' . $this->user->data['username']
+							'df_id'					=> $df_id,
+							'report_id'				=> $fav_id,
+							'report_his_type'		=> 'status',
+							'report_his_date'		=>  time(),
+							'report_his_value'		=> '',
+							'report_his_status'		=> $this->dlext_constants::DL_REPORT_STATUS_NEW,
+							'report_his_user_id'	=> $this->user->data['user_id']
 						]);
 						$this->db->sql_query($sql);
 					}

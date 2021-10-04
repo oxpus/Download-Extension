@@ -264,11 +264,13 @@ class main
 					$this->db->sql_freeresult($result);
 
 					$sql = 'INSERT INTO ' . $this->dlext_table_dl_bug_history . ' ' . $this->db->sql_build_array('INSERT', [
-						'df_id'				=> $df_id,
-						'report_id'			=> $fav_id,
-						'report_his_type'	=> 'status',
-						'report_his_date'	=> time(),
-						'report_his_value'	=> $new_status . ':' . $this->user->data['username'] . ':' . $new_status_text
+						'df_id'					=> $df_id,
+						'report_id'				=> $fav_id,
+						'report_his_type'		=> 'status',
+						'report_his_date'		=> time(),
+						'report_his_status'		=> $new_status,
+						'report_his_value'		=> $new_status_text,
+						'report_his_user_id'	=> $this->user->data['user_id'],
 					]);
 					$this->db->sql_query($sql);
 
@@ -310,21 +312,14 @@ class main
 
 					$this->db->sql_freeresult($result);
 
-					$sql = 'SELECT username FROM ' . USERS_TABLE . '
-						WHERE user_id = ' . (int) $new_user_id;
-					$result = $this->db->sql_query($sql);
-					$row = $this->db->sql_fetchrow($result);
-
-					$report_user = $row['username'];
-
-					$this->db->sql_freeresult($result);
-
 					$sql = 'INSERT INTO ' . $this->dlext_table_dl_bug_history . ' ' . $this->db->sql_build_array('INSERT', [
-						'df_id'				=> $df_id,
-						'report_id'			=> $fav_id,
-						'report_his_type'	=> 'assign',
-						'report_his_date'	=> time(),
-						'report_his_value'	=> $new_user_id . ':' . $report_user
+						'df_id'					=> $df_id,
+						'report_id'				=> $fav_id,
+						'report_his_type'		=> 'assign',
+						'report_his_date'		=> time(),
+						'report_his_value'		=> '',
+						'report_his_status'		=> $this->dlext_constants::DL_REPORT_STATUS_NEW,
+						'report_his_user_id'	=> $new_user_id,
 					]);
 					$this->db->sql_query($sql);
 
@@ -408,11 +403,13 @@ class main
 					if (!$report_status && $allow_bug_mod)
 					{
 						$sql = 'INSERT INTO ' . $this->dlext_table_dl_bug_history . ' ' . $this->db->sql_build_array('INSERT', [
-							'df_id'				=> $report_file_id,
-							'report_id'			=> $report_id,
-							'report_his_type'	=> 'status',
-							'report_his_date'	=> time(),
-							'report_his_value'	=> '1:' . $this->user->data['username']
+							'df_id'					=> $report_file_id,
+							'report_id'				=> $report_id,
+							'report_his_type'		=> 'status',
+							'report_his_date'		=> time(),
+							'report_his_status'		=> $this->dlext_constants::DL_REPORT_STATUS_VIEWED,
+							'report_his_value'		=> '',
+							'report_his_user_id'	=> $this->user->data['user_id'],
 						]);
 						$this->db->sql_query($sql);
 
@@ -471,8 +468,9 @@ class main
 					]);
 
 					// Begin report history
-					$sql = 'SELECT * FROM ' . $this->dlext_table_dl_bug_history . '
+					$sql = 'SELECT *, username, user_colour FROM ' . $this->dlext_table_dl_bug_history . ', ' . USERS_TABLE . '
 						WHERE report_id = ' . (int) $fav_id . '
+							AND user_id = report_his_user_id
 						ORDER BY report_his_id DESC';
 					$result = $this->db->sql_query($sql);
 
@@ -484,8 +482,10 @@ class main
 
 						while ($row = $this->db->sql_fetchrow($result))
 						{
-							$report_his_type = $row['report_his_type'];
-							$report_his_value = $row['report_his_value'];
+							$report_his_type	= $row['report_his_type'];
+							$report_his_value	= $row['report_his_value'];
+							$report_his_user	= get_username_string('full', $row['report_his_user_id'], $row['username'], $row['user_colour']);
+							$report_his_status	= $row['report_his_status'];
 
 							$output_date		= $this->user->format_date($row['report_his_date']);
 							$output_date_rfc	= gmdate(DATE_RFC3339, $row['report_his_date']);
@@ -493,18 +493,12 @@ class main
 							if ($report_his_type == 'assign')
 							{
 								$output_value = $this->language->lang('DL_BUG_REPORT_ASSIGN');
-								$output_data = explode(':', $report_his_value);
-
-								$output_text = $this->language->lang('DL_BUG_REPORT_ASSIGNED') . ' -> ' . $output_data[1];
+								$output_text = $this->language->lang('DL_BUG_REPORT_ASSIGNED');
 							}
 							else if ($report_his_type == 'status')
 							{
 								$output_value = $this->language->lang('DL_BUG_REPORT_STATUS');
-								$output_data = explode(':', $report_his_value);
-
-								$output_status = intval($output_data[0]);
-								$output_text = $this->language->lang('DL_REPORT_STATUS_' . $output_status) . ' -> ' . $output_data[1];
-								$output_text .= (isset($output_data[2])) ? '</span><hr /><span>' . str_replace("\n", '<br />', $output_data[2]) : '';
+								$output_text = $this->language->lang('DL_REPORT_STATUS_' . $report_his_status);
 							}
 
 							$this->template->assign_block_vars('history_row', [
@@ -512,6 +506,8 @@ class main
 								'DL_DATE'		=> $output_date,
 								'DL_DATE_RFC'	=> $output_date_rfc,
 								'DL_TEXT'		=> $output_text,
+								'DL_TEXT_VALUE'	=> $report_his_value,
+								'DL_USER'		=> $report_his_user,
 							]);
 						}
 					}

@@ -143,7 +143,11 @@
 			<span class="small"><time datetime="{{ history_row.DL_DATE_RFC }}">{{ history_row.DL_DATE }}</time></span>
 		</td>
 		<td class="row bg2 dl-width-85 dl-text-top">
-			<span>{{ history_row.DL_TEXT }}</span>
+			<label>{{ history_row.DL_USER }}</label><span>{{ history_row.DL_TEXT }}</span>
+			{% if history_row.DL_TEXT_VALUE %}
+			<hr />
+			<span>{{ history_row.DL_TEXT_VALUE }}</span>
+			{% endif %}
 		</td>
 	</tr>
 	{% endfor %}
