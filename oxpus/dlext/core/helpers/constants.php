@@ -163,7 +163,9 @@ class constants
 	protected $config;
 	protected $user;
 	protected $db;
+	protected $cache;
 	protected $filesystem;
+	protected $extension_manager;
 
 	/* extension owned objects */
 	protected $dl_overall_traffics;
@@ -176,26 +178,45 @@ class constants
 	 * @param \phpbb\config\config					$config
 	 * @param \phpbb\user							$user
 	 * @param \phpbb\db\driver\driver_interface		$db
+	 * @param \phpbb\cache\service					$cache
 	 * @param \phpbb\filesystem\filesystem			$filesystem
+	 * @param \phpbb\extension\manager				$extension_manager
 	 */
 	public function __construct(
 		$root_path,
 		\phpbb\config\config $config,
 		\phpbb\user $user,
 		\phpbb\db\driver\driver_interface $db,
-		\phpbb\filesystem\filesystem $filesystem
+		\phpbb\cache\service $cache,
+		\phpbb\filesystem\filesystem $filesystem,
+		\phpbb\extension\manager $extension_manager
 	)
 	{
 		$this->root_path				= $root_path;
 		$this->config					= $config;
 		$this->user						= $user;
 		$this->db 						= $db;
+		$this->cache					= $cache;
 		$this->filesystem 				= $filesystem;
+		$this->extension_manager		= $extension_manager;
 	}
 
 	public function init()
 	{
+		$this->check_version();
 		$this->check_folders();
+	}
+
+	public function check_version()
+	{
+		$ext_path = $this->extension_manager->get_extension_path('oxpus/dlext', self::DL_TRUE);
+		$ext_metadata = json_decode(file_get_contents($ext_path . 'composer.json'), true);
+
+		if (version_compare($this->config['dl_ext_version'], $ext_metadata['version'], '<'))
+		{
+			$this->config->set('dl_ext_version', $ext_metadata['version']);
+			$this->cache->destroy('config');
+		}
 	}
 
 	public function _create_folder($path)

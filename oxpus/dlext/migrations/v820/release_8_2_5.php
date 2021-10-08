@@ -21,15 +21,12 @@ class release_8_2_5 extends \phpbb\db\migration\migration
 
 	public static function depends_on()
 	{
-		return ['\oxpus\dlext\migrations\v820\release_8_2_4'];
+		return ['\oxpus\dlext\migrations\v820\release_8_2_0'];
 	}
 
 	public function update_data()
 	{
 		return [
-			// Set the current version
-			['config.update', ['dl_ext_version', $this->dl_ext_version]],
-
 			['module.remove', [
 				'acp',
 				'ACP_DOWNLOADS',

@@ -7,7 +7,9 @@ services:
             - '@config'
             - '@user'
             - '@dbal.conn'
+            - '@cache'
             - '@filesystem'
+            - '@ext.manager'
     oxpus.dlext.helpers.footer:
         class: oxpus\dlext\core\helpers\footer
         public: true

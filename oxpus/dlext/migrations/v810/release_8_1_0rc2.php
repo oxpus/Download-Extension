@@ -27,9 +27,6 @@ class release_8_1_0rc2 extends \phpbb\db\migration\migration
 	public function update_data()
 	{
 		return [
-			// Set the current version
-			['config.update', ['dl_ext_version', $this->dl_ext_version]],
-
 			['config_text.add', ['dl_file_edit_hint', '']],
 			['config.add', ['dl_file_edit_hint_bbcode', '']],
 			['config.add', ['dl_file_edit_hint_bitfield', '']],
