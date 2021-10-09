@@ -27,7 +27,9 @@ class release_8_1_0rc1 extends \phpbb\db\migration\migration
 	public function update_data()
 	{
 		return [
-			// Add new confif optiona
+			// Set the current version
+			['config.update', ['dl_ext_version', $this->dl_ext_version]],
+
 			['config.remove', ['dl_disable_popup']],
 		];
 	}

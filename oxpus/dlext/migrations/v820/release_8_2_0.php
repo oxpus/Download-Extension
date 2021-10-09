@@ -24,6 +24,14 @@ class release_8_2_0 extends \phpbb\db\migration\migration
 		return ['\oxpus\dlext\migrations\v810\release_8_1_9'];
 	}
 
+	public function update_data()
+	{
+		return [
+			// Set the current version
+			['config.update', ['dl_ext_version', $this->dl_ext_version]],
+		];
+	}
+
 	public function update_schema()
 	{
 		return [
