@@ -243,23 +243,26 @@ class mcp_manage
 							$result = $this->db->sql_query($sql);
 							$row = $this->db->sql_fetchrow($result);
 
-							$old_path = $row['path'];
-							$real_file = $row['real_file'];
-
-							$this->db->sql_freeresult($result);
-
-							if ($new_path != $old_path)
+							if ($this->db->sql_affectedrows())
 							{
-								$this->filesystem->rename($this->dlext_constants->get_value('files_dir') . '/downloads/' . $old_path . $real_file, $this->dlext_constants->get_value('files_dir') . '/downloads/' . $new_path . $real_file);
+								$old_path = $row['path'];
+								$real_file = $row['real_file'];
 
-								if (isset($real_ver_file[$df_id]))
+								if ($new_path != $old_path)
 								{
-									for ($j = 0; $j < count($real_ver_file[$df_id]); ++$j)
+									$this->filesystem->rename($this->dlext_constants->get_value('files_dir') . '/downloads/' . $old_path . $real_file, $this->dlext_constants->get_value('files_dir') . '/downloads/' . $new_path . $real_file);
+
+									if (isset($real_ver_file[$df_id]))
 									{
-										$this->filesystem->rename($this->dlext_constants->get_value('files_dir') . '/downloads/' . $old_path . $real_ver_file[$df_id][$j], $this->dlext_constants->get_value('files_dir') . '/downloads/' . $new_path . $real_ver_file[$df_id][$j]);
+										for ($j = 0; $j < count($real_ver_file[$df_id]); ++$j)
+										{
+											$this->filesystem->rename($this->dlext_constants->get_value('files_dir') . '/downloads/' . $old_path . $real_ver_file[$df_id][$j], $this->dlext_constants->get_value('files_dir') . '/downloads/' . $new_path . $real_ver_file[$df_id][$j]);
+										}
 									}
 								}
 							}
+
+							$this->db->sql_freeresult($result);
 						}
 
 						$sql = 'UPDATE ' . $this->dlext_table_downloads . ' SET ' . $this->db->sql_build_array('UPDATE', [
