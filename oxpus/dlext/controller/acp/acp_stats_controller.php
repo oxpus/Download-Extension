@@ -30,6 +30,7 @@ class acp_stats_controller implements acp_stats_interface
 	public $u_action;
 
 	protected $dlext_format;
+	protected $dlext_main;
 	protected $dlext_constants;
 
 	protected $dlext_table_dl_stats;
@@ -49,6 +50,7 @@ class acp_stats_controller implements acp_stats_interface
 	 * @param \phpbb\log\log_interface 				$log
 	 * @param \phpbb\user							$user
 	 * @param \oxpus\dlext\core\format 				$dlext_format
+	 * @param \oxpus\dlext\core\main				$dlext_main
 	 * @param \oxpus\dlext\core\helpers\constants 	$dlext_constants
 	 * @param string								$dlext_table_dl_stats
 	 * @param string								$dlext_table_downloads
@@ -65,6 +67,7 @@ class acp_stats_controller implements acp_stats_interface
 		\phpbb\log\log_interface $log,
 		\phpbb\user $user,
 		\oxpus\dlext\core\format $dlext_format,
+		\oxpus\dlext\core\main $dlext_main,
 		\oxpus\dlext\core\helpers\constants $dlext_constants,
 		$dlext_table_dl_stats,
 		$dlext_table_downloads,
@@ -87,6 +90,7 @@ class acp_stats_controller implements acp_stats_interface
 		$this->dlext_table_dl_cat		= $dlext_table_dl_cat;
 
 		$this->dlext_format				= $dlext_format;
+		$this->dlext_main				= $dlext_main;
 		$this->dlext_constants			= $dlext_constants;
 	}
 
@@ -107,6 +111,16 @@ class acp_stats_controller implements acp_stats_interface
 		$del_stat			= $this->request->variable('del_stat', 0);
 		$show_guests		= $this->request->variable('show_guests', 0);
 		$start				= $this->request->variable('start', 0);
+
+		$index = $this->dlext_main->full_index();
+
+		if (empty($index))
+		{
+			$this->u_action = str_replace('mode=stats', 'mode=assistant', $this->u_action);
+			redirect($this->u_action);
+		}
+
+		unset($index);
 
 		if ($cancel)
 		{

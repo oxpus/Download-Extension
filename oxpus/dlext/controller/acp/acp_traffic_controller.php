@@ -33,6 +33,7 @@ class acp_traffic_controller implements acp_traffic_interface
 	public $u_action;
 
 	protected $dlext_format;
+	protected $dlext_main;
 	protected $dlext_constants;
 
 	/**
@@ -49,6 +50,7 @@ class acp_traffic_controller implements acp_traffic_interface
 	 * @param \phpbb\cache\service					$cache
 	 * @param \phpbb\user							$user
 	 * @param \oxpus\dlext\core\format				$dlext_format
+	 * @param \oxpus\dlext\core\main				$dlext_main
 	 * @param \oxpus\dlext\core\helpers\constants	$dlext_constants
 	 */
 	public function __construct(
@@ -63,6 +65,7 @@ class acp_traffic_controller implements acp_traffic_interface
 		\phpbb\cache\service $cache,
 		\phpbb\user $user,
 		\oxpus\dlext\core\format $dlext_format,
+		\oxpus\dlext\core\main $dlext_main,
 		\oxpus\dlext\core\helpers\constants $dlext_constants
 	)
 	{
@@ -79,6 +82,7 @@ class acp_traffic_controller implements acp_traffic_interface
 		$this->template					= $template;
 
 		$this->dlext_format				= $dlext_format;
+		$this->dlext_main				= $dlext_main;
 		$this->dlext_constants			= $dlext_constants;
 	}
 
@@ -104,6 +108,16 @@ class acp_traffic_controller implements acp_traffic_interface
 		$group_traffic		= $this->request->variable('group_traffic', 0);
 		$username			= $this->request->variable('username', '', $this->dlext_constants::DL_TRUE);
 		$group_id			= $this->request->variable('g', 0);
+
+		$index = $this->dlext_main->full_index();
+
+		if (empty($index))
+		{
+			$this->u_action = str_replace('mode=traffic', 'mode=assistant', $this->u_action);
+			redirect($this->u_action);
+		}
+
+		unset($index);
 
 		if ($submit)
 		{

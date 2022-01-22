@@ -1,4 +1,29 @@
 services:
+    oxpus.dlext.acp_assistant_controller:
+        class: oxpus\dlext\controller\acp\acp_assistant_controller
+        public: true
+        arguments:
+            - '%core.root_path%'
+            - '%core.php_ext%'
+            - '@cache'
+            - '@config'
+            - '@language'
+            - '@request'
+            - '@template'
+            - '@dbal.conn'
+            - '@log'
+            - '@user'
+            - '@filesystem'
+            - '@oxpus.dlext.core.extra'
+            - '@oxpus.dlext.core.format'
+            - '@oxpus.dlext.core.main'
+            - '@oxpus.dlext.core.physical'
+            - '@oxpus.dlext.helpers.constants'
+            - '%oxpus.dlext.tables.dl_auth%'
+            - '%oxpus.dlext.tables.dl_cat_traf%'
+            - '%oxpus.dlext.tables.dl_versions%'
+            - '%oxpus.dlext.tables.downloads%'
+            - '%oxpus.dlext.tables.dl_cat%'
     oxpus.dlext.acp_cat_edit_controller:
         class: oxpus\dlext\controller\acp\acp_cat_edit_controller
         public: true
@@ -82,6 +107,7 @@ services:
             - '@dbal.conn'
             - '@log'
             - '@user'
+            - '@oxpus.dlext.core.main'
             - '@oxpus.dlext.helpers.constants'
             - '%oxpus.dlext.tables.dl_ext_blacklist%'
     oxpus.dlext.acp_fields_controller:
@@ -100,6 +126,7 @@ services:
             - '@user'
             - '@oxpus.dlext.fields.fields'
             - '@oxpus.dlext.fields.admin'
+            - '@oxpus.dlext.core.main'
             - '@oxpus.dlext.helpers.constants'
             - '%oxpus.dlext.tables.dl_fields%'
             - '%oxpus.dlext.tables.dl_fields_data%'
@@ -211,6 +238,7 @@ services:
             - '@log'
             - '@user'
             - '@oxpus.dlext.core.format'
+            - '@oxpus.dlext.core.main'
             - '@oxpus.dlext.helpers.constants'
             - '%oxpus.dlext.tables.dl_stats%'
             - '%oxpus.dlext.tables.downloads%'
@@ -232,6 +260,7 @@ services:
             - '@notification_manager'
             - '@filesystem'
             - '@oxpus.dlext.core.format'
+            - '@oxpus.dlext.core.main'
             - '@oxpus.dlext.core.physical'
             - '@oxpus.dlext.helpers.constants'
             - '%oxpus.dlext.tables.dl_images%'
@@ -253,4 +282,5 @@ services:
             - '@cache'
             - '@user'
             - '@oxpus.dlext.core.format'
+            - '@oxpus.dlext.core.main'
             - '@oxpus.dlext.helpers.constants'

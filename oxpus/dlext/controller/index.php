@@ -514,39 +514,15 @@ class index
 				$file_id = $dl_files[$i]['id'];
 				$mini_file_icon = $this->dlext_status->mini_status_file($cat, $file_id);
 
-				$description = $dl_files[$i]['description'];
 				$file_url = $this->helper->route('oxpus_dlext_details', ['df_id' => $file_id]);
 
-				$hack_version = '&nbsp;' . $dl_files[$i]['hack_version'];
-
-				$long_desc_uid = $dl_files[$i]['long_desc_uid'];
-				$long_desc_bitfield = $dl_files[$i]['long_desc_bitfield'];
-				$long_desc_flags = (isset($dl_files[$i]['long_desc_flags'])) ? $dl_files[$i]['long_desc_flags'] : 0;
-
-				$desc_uid = $dl_files[$i]['desc_uid'];
-				$desc_bitfield = $dl_files[$i]['desc_bitfield'];
-				$desc_flags = (isset($dl_files[$i]['desc_flags'])) ? $dl_files[$i]['desc_flags'] : 0;
-
-				$description = censor_text($description);
-				$description = generate_text_for_display($description, $desc_uid, $desc_bitfield, $desc_flags);
-
-				$long_desc = $dl_files[$i]['long_desc'];
-				$long_desc = censor_text($long_desc);
-
-				$tmp_desc = $long_desc;
-				strip_bbcode($tmp_desc, $long_desc_uid);
-
-				if ((int) $this->config['dl_limit_desc_on_index'] && utf8_strlen($tmp_desc) > (int) $this->config['dl_limit_desc_on_index'])
-				{
-					strip_bbcode($long_desc, $long_desc_uid);
-					$long_desc = truncate_string($long_desc, (int) $this->config['dl_limit_desc_on_index'], $this->dlext_constants::DL_MAX_STRING_LENGTH, $this->dlext_constants::DL_FALSE);
-					$long_desc = bbcode_nl2br($long_desc);
-					$long_desc .= ' [...]';
-				}
-				else
-				{
-					$long_desc = generate_text_for_display($long_desc, $long_desc_uid, $long_desc_bitfield, $long_desc_flags);
-				}
+				$hack_version	= '&nbsp;' . $dl_files[$i]['hack_version'];
+				$desc_uid		= $dl_files[$i]['desc_uid'];
+				$desc_bitfield	= $dl_files[$i]['desc_bitfield'];
+				$desc_flags		= (isset($dl_files[$i]['desc_flags'])) ? $dl_files[$i]['desc_flags'] : 0;
+				$description	= censor_text($dl_files[$i]['description']);
+				$description	= generate_text_for_display($description, $desc_uid, $desc_bitfield, $desc_flags);
+				$long_desc		= $this->dlext_format->dl_shorten_string($dl_files[$i]['long_desc'], 'index', $dl_files[$i]['long_desc_uid'], $dl_files[$i]['long_desc_bitfield'], $dl_files[$i]['long_desc_flags']);
 
 				if (!$dl_files[$i]['username'])
 				{
@@ -556,6 +532,7 @@ class index
 				{
 					$add_user = get_username_string('full', $dl_files[$i]['add_user'], $dl_files[$i]['username'], $dl_files[$i]['user_colour']);
 				}
+
 				$add_time = $this->user->format_date($dl_files[$i]['add_time']);
 				$add_time_rfc = gmdate(DATE_RFC3339, $dl_files[$i]['add_time']);
 

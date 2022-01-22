@@ -36,6 +36,7 @@ class acp_toolbox_controller implements acp_toolbox_interface
 	public $u_action;
 
 	protected $dlext_format;
+	protected $dlext_main;
 	protected $dlext_physical;
 	protected $dlext_constants;
 
@@ -60,6 +61,7 @@ class acp_toolbox_controller implements acp_toolbox_interface
 	 * @param \phpbb\notification\manager			$notification
 	 * @param \phpbb\filesystem\filesystem			$filesystem
 	 * @param \oxpus\dlext\core\format				$dlext_format
+	 * @param \oxpus\dlext\core\main				$dlext_main
 	 * @param \oxpus\dlext\core\physical			$dlext_physical
 	 * @param \oxpus\dlext\core\helpers\constants	$dlext_constants
 	 * @param string								$dlext_table_dl_images
@@ -81,6 +83,7 @@ class acp_toolbox_controller implements acp_toolbox_interface
 		\phpbb\notification\manager $notification,
 		\phpbb\filesystem\filesystem $filesystem,
 		\oxpus\dlext\core\format $dlext_format,
+		\oxpus\dlext\core\main $dlext_main,
 		\oxpus\dlext\core\physical $dlext_physical,
 		\oxpus\dlext\core\helpers\constants $dlext_constants,
 		$dlext_table_dl_images,
@@ -110,6 +113,7 @@ class acp_toolbox_controller implements acp_toolbox_interface
 		$this->dlext_table_dl_cat		= $dlext_table_dl_cat;
 
 		$this->dlext_format				= $dlext_format;
+		$this->dlext_main				= $dlext_main;
 		$this->dlext_physical			= $dlext_physical;
 		$this->dlext_constants			= $dlext_constants;
 	}
@@ -132,6 +136,16 @@ class acp_toolbox_controller implements acp_toolbox_interface
 		$path				= $this->request->variable('path', '', $this->dlext_constants::DL_TRUE);
 		$submit				= $this->request->variable('submit', '');
 		$files				= $this->request->variable('files', [''], $this->dlext_constants::DL_TRUE);
+
+		$index = $this->dlext_main->full_index();
+
+		if (empty($index))
+		{
+			$this->u_action = str_replace('mode=toolbox', 'mode=assistant', $this->u_action);
+			redirect($this->u_action);
+		}
+
+		unset($index);
 
 		if ($action == 'dl' && $file_name && $path)
 		{

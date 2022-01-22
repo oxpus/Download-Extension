@@ -44,6 +44,7 @@ class acp_fields_controller implements acp_fields_interface
 
 	protected $dlext_fields;
 	protected $dlext_fields_admin;
+	protected $dlext_main;
 	protected $dlext_constants;
 
 	protected $dlext_table_dl_fields;
@@ -66,6 +67,7 @@ class acp_fields_controller implements acp_fields_interface
 	 * @param \phpbb\user							$user
 	 * @param \oxpus\dlext\core\fields\fields		$dlext_fields
 	 * @param \oxpus\dlext\core\fields\admin		$dlext_fields_admin
+	 * @param \oxpus\dlext\core\main				$dlext_main
 	 * @param \oxpus\dlext\core\helpers\constants	$dlext_constants
 	 * @param string								$dlext_table_dl_fields
 	 * @param string								$dlext_table_dl_fields_data
@@ -85,6 +87,7 @@ class acp_fields_controller implements acp_fields_interface
 		\phpbb\user $user,
 		\oxpus\dlext\core\fields\fields $dlext_fields,
 		\oxpus\dlext\core\fields\admin $dlext_fields_admin,
+		\oxpus\dlext\core\main $dlext_main,
 		\oxpus\dlext\core\helpers\constants $dlext_constants,
 		$dlext_table_dl_fields,
 		$dlext_table_dl_fields_data,
@@ -106,6 +109,7 @@ class acp_fields_controller implements acp_fields_interface
 
 		$this->dlext_fields				= $dlext_fields;
 		$this->dlext_fields_admin		= $dlext_fields_admin;
+		$this->dlext_main				= $dlext_main;
 		$this->dlext_constants			= $dlext_constants;
 
 		$this->dlext_table_dl_fields		= $dlext_table_dl_fields;
@@ -126,6 +130,16 @@ class acp_fields_controller implements acp_fields_interface
 		$action				= $this->request->variable('action', '');
 		$cancel				= $this->request->variable('cancel', '');
 		$mode				= $this->request->variable('mode', 'overview');
+
+		$index = $this->dlext_main->full_index();
+
+		if (empty($index))
+		{
+			$this->u_action = str_replace('mode=fields', 'mode=assistant', $this->u_action);
+			redirect($this->u_action);
+		}
+
+		unset($index);
 
 		if (!function_exists('generate_smilies'))
 		{

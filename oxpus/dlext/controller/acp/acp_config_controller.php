@@ -116,6 +116,12 @@ class acp_config_controller implements acp_config_interface
 		$submit				= $this->request->variable('submit', '');
 		$view				= $this->request->variable('view', 'general');
 
+		if (empty($this->dlext_extra->dl_dropdown(0, 0, 0)))
+		{
+			$this->u_action = str_replace('mode=config', 'mode=assistant', $this->u_action);
+			redirect($this->u_action);
+		}
+
 		if ($submit && !check_form_key('dl_adm_config'))
 		{
 			trigger_error('FORM_INVALID', E_USER_WARNING);

@@ -468,6 +468,7 @@ class listener implements EventSubscriberInterface
 		$permission['a_dl_toolbox']		= ['lang' => 'ACL_A_DL_TOOLBOX',		'cat' => 'downloads'];
 		$permission['a_dl_fields']		= ['lang' => 'ACL_A_DL_FIELDS',			'cat' => 'downloads'];
 		$permission['a_dl_perm_check']	= ['lang' => 'ACL_A_DL_PERM_CHECK',		'cat' => 'downloads'];
+		$permission['a_dl_assistant']	= ['lang' => 'ACL_A_DL_ASSISTANT',		'cat' => 'downloads'];
 		$event['permissions'] = $permission;
 	}
 

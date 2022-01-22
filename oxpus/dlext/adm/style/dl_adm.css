@@ -16,6 +16,11 @@ a.help {
 	float: right;
 }
 
+a.help i {
+	font-size: 1.5em;
+	color: #aa0000;
+}
+
 a.help:hover {
 	text-decoration: none !important;
 	color: #aa0000;
@@ -52,6 +57,10 @@ div.dl_help_close:hover {
 .dl-grey-bg {
 	background-color: #dddddd;
 	border: 2px #555555 solid;
+}
+
+.dl-grey-bg2 {
+	background-color: #dddddd;
 }
 
 .dl-red-bg {
@@ -162,6 +171,28 @@ div.dl_help_close:hover {
 .dl-text-underline
 {
 	text-decoration: underline;
+}
+
+.dl-assistantbtn
+{
+	background-color: #0000aa;
+	display: block;
+	font-size: 2em;
+	text-align: center;
+	margin: 5px auto;
+	padding: 5px;
+	border-left: none;
+	border-top: none;
+	border-right: 2px #fcfcfc solid;
+	border-bottom: 2px #fcfcfc solid;
+	border-radius: 5px;
+	color: #ffffff;
+}
+
+.dl-assistantbtn:hover
+{
+	background-color: #00aa00 !important;
+	cursor: pointer;
 }
 
 /**

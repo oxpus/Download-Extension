@@ -40,4 +40,5 @@ $lang = array_merge($lang, [
 	'ACL_A_DL_TOOLBOX'		=> 'Puede utilizar la caja de herramientas',
 	'ACL_A_DL_FIELDS'		=> 'Puede gestionar los campos definidos por el usuario',
 	'ACL_A_DL_PERM_CHECK'	=> 'Puede probar los permisos del usuario',
+	'ACL_A_DL_ASSISTANT'	=> 'Puede ejecutar el asistente de configuración',
 ]);

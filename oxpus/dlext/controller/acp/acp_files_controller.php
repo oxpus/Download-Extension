@@ -170,7 +170,8 @@ class acp_files_controller implements acp_files_interface
 
 		if (empty($index))
 		{
-			redirect($this->u_action . '&amp;mode=categories');
+			$this->u_action = str_replace('mode=files', 'mode=assistant', $this->u_action);
+			redirect($this->u_action);
 		}
 
 		if ($cancel)

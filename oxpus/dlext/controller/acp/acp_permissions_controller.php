@@ -107,7 +107,8 @@ class acp_permissions_controller implements acp_permissions_interface
 
 		if (empty($index))
 		{
-			redirect($this->u_action . '&amp;mode=categories');
+			$this->u_action = str_replace('mode=permissions', 'mode=assistant', $this->u_action);
+			redirect($this->u_action);
 		}
 
 		$cat_id = (isset($s_presel_cats[0])) ? $s_presel_cats[0] : [];

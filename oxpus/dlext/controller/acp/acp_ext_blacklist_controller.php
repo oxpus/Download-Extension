@@ -26,8 +26,8 @@ class acp_ext_blacklist_controller implements acp_ext_blacklist_interface
 
 	/* extension owned objects */
 	public $u_action;
-	protected $ext_path;
 
+	protected $dlext_main;
 	protected $dlext_constants;
 
 	protected $dlext_table_dl_ext_blacklist;
@@ -42,6 +42,7 @@ class acp_ext_blacklist_controller implements acp_ext_blacklist_interface
 	 * @param \phpbb\db\driver\driver_interface		$db
 	 * @param \phpbb\log\log_interface 				$log
 	 * @param \phpbb\user							$user
+	 * @param \oxpus\dlext\core\main				$dlext_main
 	 * @param \oxpus\dlext\core\helpers\constants	$dlext_constants
 	 * @param string								$dlext_table_dl_ext_blacklist
 	 */
@@ -53,6 +54,7 @@ class acp_ext_blacklist_controller implements acp_ext_blacklist_interface
 		\phpbb\db\driver\driver_interface $db,
 		\phpbb\log\log_interface $log,
 		\phpbb\user $user,
+		\oxpus\dlext\core\main $dlext_main,
 		\oxpus\dlext\core\helpers\constants $dlext_constants,
 		$dlext_table_dl_ext_blacklist
 	)
@@ -66,6 +68,7 @@ class acp_ext_blacklist_controller implements acp_ext_blacklist_interface
 		$this->request					= $request;
 		$this->template					= $template;
 
+		$this->dlext_main				= $dlext_main;
 		$this->dlext_constants			= $dlext_constants;
 
 		$this->dlext_table_dl_ext_blacklist	= $dlext_table_dl_ext_blacklist;
@@ -81,6 +84,16 @@ class acp_ext_blacklist_controller implements acp_ext_blacklist_interface
 		$action				= $this->request->variable('action', '');
 		$cancel				= $this->request->variable('cancel', '');
 		$extension_ary		= $this->request->variable('extension', [''], $this->dlext_constants::DL_TRUE);
+
+		$index = $this->dlext_main->full_index();
+
+		if (empty($index))
+		{
+			$this->u_action = str_replace('mode=ext_blacklist', 'mode=assistant', $this->u_action);
+			redirect($this->u_action);
+		}
+
+		unset($index);
 
 		if ($cancel)
 		{

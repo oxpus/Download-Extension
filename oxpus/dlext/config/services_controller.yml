@@ -76,6 +76,7 @@ services:
             - '@oxpus.dlext.core.files'
             - '@oxpus.dlext.core.main'
             - '@oxpus.dlext.core.status'
+            - '@oxpus.dlext.core.format'
             - '@oxpus.dlext.helpers.constants'
     oxpus.dlext.hacklist:
         class: oxpus\dlext\controller\hacklist
@@ -199,6 +200,7 @@ services:
             - '@oxpus.dlext.core.extra'
             - '@oxpus.dlext.core.main'
             - '@oxpus.dlext.core.status'
+            - '@oxpus.dlext.core.format'
             - '@oxpus.dlext.helpers.footer'
             - '@oxpus.dlext.helpers.constants'
             - '%oxpus.dlext.tables.downloads%'

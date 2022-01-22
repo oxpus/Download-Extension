@@ -148,7 +148,8 @@ class acp_categories_controller implements acp_categories_interface
 
 		if (empty($index) && $action != 'save_cat')
 		{
-			$action = 'add';
+			$this->u_action = str_replace('mode=categories', 'mode=assistant', $this->u_action);
+			redirect($this->u_action);
 		}
 
 		if (isset($index[$cat_id]['cat_name']))

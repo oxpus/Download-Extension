@@ -4,6 +4,17 @@
 
 <h1>{{ lang('DL_ACP_MANAGEMANT_PAGE') }}</h1>
 
+{% if U_DL_ASSISTANT %}
+
+<form id="dl_assistant" method="post" action="{{ U_DL_ASSISTANT }}">
+	<h2>{{ lang('DL_ASSISTANT_HINT') }}</h2>
+	<fieldset class="dl-grey-bg2">
+		<input class="dl-assistantbtn" type="submit" id="start_assistant" value="{{ lang('DL_ASSISTANT_LINK') }}" />
+	</fieldset>
+</form>
+
+{% else %}
+
 <p>{{ lang('DL_ACP_MANAGEMANT_PAGE_EXPLAIN') }}</p>
 
 {% if S_DL_ACP_MAIN_TYPE eq '3.2' %}{% INCLUDE '@oxpus_dlext/dl_overview_2.html' %}{% endif %}
@@ -40,5 +51,7 @@
 </fieldset>
 
 <div class="copyright">{{ DL_MOD_RELEASE }}</div>
+
+{% endif %}
 
 {% INCLUDE 'overall_footer.html' %}

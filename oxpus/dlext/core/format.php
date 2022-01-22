@@ -278,5 +278,74 @@ class format implements format_interface
 		return unique_id() . '_' . $method($value);
 	}
 
+	public function dl_shorten_string($text, $mode, $uid, $bitfield, $flags)
+	{
+		$shorten = $this->dlext_constants::DL_FALSE;
+
+		switch ($mode)
+		{
+			case 'feed':
+				switch ($this->config['dl_rss_desc_length'])
+				{
+					case $this->dlext_constants::DL_RSS_DESC_LENGTH_FULL:
+						$text = censor_text($text);
+						strip_bbcode($text, $uid);
+						$text = bbcode_nl2br($text);
+					break;
+					case $this->dlext_constants::DL_RSS_DESC_LENGTH_SHORT:
+						$shorten = $this->dlext_constants::DL_TRUE;
+						$text_length_config = 'dl_rss_desc_shorten';
+					break;
+					default:
+						$text = '';
+				}
+			break;
+			case 'index':
+			case 'search':
+				$shorten = $this->dlext_constants::DL_TRUE;
+				$text_length_config = 'dl_limit_desc_on_' . $mode;
+			break;
+		}
+
+		if ($mode == 'feed' && !$shorten)
+		{
+			return ($text) ? bbcode_nl2br($text) : '';
+		}
+
+		$text = censor_text($text);
+		$text_tmp = $text;
+		strip_bbcode($text_tmp, $uid);
+
+		if ($shorten)
+		{
+			$text_length = (int) $this->config[$text_length_config];
+
+			if ($text_length && utf8_strlen($text_tmp) > $text_length)
+			{
+				strip_bbcode($text, $uid);
+				$text = truncate_string($text, $text_length, $this->dlext_constants::DL_MAX_STRING_LENGTH, $this->dlext_constants::DL_FALSE);
+				$text = bbcode_nl2br($text);
+				$text = $this->language->lang('DL_SHORTEN_TEXT', $text);
+			}
+			else
+			{
+				$shorten = $this->dlext_constants::DL_FALSE;
+
+				if ($mode == 'feed')
+				{
+					strip_bbcode($text, $uid);
+					$text = bbcode_nl2br($text);
+				}
+			}
+		}
+
+		if (!$shorten)
+		{
+			$text = generate_text_for_display($text, $uid, $bitfield, $flags);
+		}
+
+		return $text;
+	}
+
 	// phpcs:set VariableAnalysis.CodeAnalysis.VariableAnalysis validUndefinedVariableNames
 }

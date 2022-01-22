@@ -31,6 +31,7 @@ class search
 	protected $dlext_extra;
 	protected $dlext_main;
 	protected $dlext_status;
+	protected $dlext_format;
 	protected $dlext_footer;
 	protected $dlext_constants;
 
@@ -53,6 +54,7 @@ class search
 	 * @param \oxpus\dlext\core\extra				$dlext_extra
 	 * @param \oxpus\dlext\core\main				$dlext_main
 	 * @param \oxpus\dlext\core\status				$dlext_status
+	 * @param \oxpus\dlext\core\format				$dlext_format
 	 * @param \oxpus\dlext\core\helpers\footer		$dlext_footer
 	 * @param \oxpus\dlext\core\helpers\constants	$dlext_constants
 	 * @param string								$dlext_table_downloads
@@ -72,6 +74,7 @@ class search
 		\oxpus\dlext\core\extra $dlext_extra,
 		\oxpus\dlext\core\main $dlext_main,
 		\oxpus\dlext\core\status $dlext_status,
+		\oxpus\dlext\core\format $dlext_format,
 		\oxpus\dlext\core\helpers\footer $dlext_footer,
 		\oxpus\dlext\core\helpers\constants $dlext_constants,
 		$dlext_table_downloads,
@@ -95,6 +98,7 @@ class search
 		$this->dlext_extra				= $dlext_extra;
 		$this->dlext_main				= $dlext_main;
 		$this->dlext_status				= $dlext_status;
+		$this->dlext_format				= $dlext_format;
 		$this->dlext_footer				= $dlext_footer;
 		$this->dlext_constants			= $dlext_constants;
 	}
@@ -313,19 +317,7 @@ class search
 					$desc_flags			= $row['desc_flags'];
 					$description		= censor_text($description);
 					$description		= generate_text_for_display($description, $desc_uid, $desc_bitfield, $desc_flags);
-
-					$long_desc			= $row['long_desc'];
-					$long_desc_uid		= $row['long_desc_uid'];
-					$long_desc_bitfield	= $row['long_desc_bitfield'];
-					$long_desc_flags	= $row['long_desc_flags'];
-					$long_desc			= censor_text($long_desc);
-					$long_desc			= generate_text_for_display($long_desc, $long_desc_uid, $long_desc_bitfield, $long_desc_flags);
-
-					if ((int) $this->config['dl_limit_desc_on_search'] && strlen($long_desc) > (int) $this->config['dl_limit_desc_on_search'])
-					{
-						$long_desc = strip_tags($long_desc, '<br>');
-						$long_desc = substr($long_desc, 0, (int) $this->config['dl_limit_desc_on_search']) . ' [...]';
-					}
+					$long_desc			= $this->dlext_format->dl_shorten_string($row['long_desc'], 'search', $row['long_desc_uid'], $row['long_desc_bitfield'], $row['long_desc_flags']);
 
 					$this->template->assign_block_vars('downloads', [
 						'DL_FILE_STATUS'	=> $file_status,
@@ -521,27 +513,7 @@ class search
 					$desc_flags		= $row['desc_flags'];
 					$description	= censor_text($description);
 					$description	= generate_text_for_display($description, $desc_uid, $desc_bitfield, $desc_flags);
-
-					$long_desc			= $row['long_desc'];
-					$long_desc_uid		= $row['long_desc_uid'];
-					$long_desc_bitfield	= $row['long_desc_bitfield'];
-					$long_desc_flags	= $row['long_desc_flags'];
-					$long_desc			= censor_text($long_desc);
-
-					$tmp_desc = $long_desc;
-					strip_bbcode($tmp_desc, $long_desc_uid);
-
-					if ((int) $this->config['dl_limit_desc_on_search'] && utf8_strlen($tmp_desc) > (int) $this->config['dl_limit_desc_on_search'])
-					{
-						strip_bbcode($long_desc, $long_desc_uid);
-						$long_desc = truncate_string($long_desc, (int) $this->config['dl_limit_desc_on_search'], $this->dlext_constants::DL_MAX_STRING_LENGTH, $this->dlext_constants::DL_FALSE);
-						$long_desc = bbcode_nl2br($long_desc);
-						$long_desc .= ' [...]';
-					}
-					else
-					{
-						$long_desc = generate_text_for_display($long_desc, $long_desc_uid, $long_desc_bitfield, $long_desc_flags);
-					}
+					$long_desc		= $this->dlext_format->dl_shorten_string($row['long_desc'], 'search', $row['long_desc_uid'], $row['long_desc_bitfield'], $row['long_desc_flags']);
 
 					$this->template->assign_block_vars('downloads', [
 						'DL_FILE_STATUS'	=> $file_status,

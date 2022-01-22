@@ -1,0 +1,198 @@
+{% INCLUDE 'overall_header.html' %}
+
+<h1>{{ lang('DL_ACP_MANAGEMANT_PAGE') }}</h1>
+
+<h2>{{ lang('DL_ACP_ASSISTANT') }}</h2>
+
+<p>{{ lang('DL_ASSISTANT_WELCOME') }}</p>
+
+<br />
+<p>{{ lang('DL_ASSISTANT_EXPLAIN') }}</p>
+
+{% if S_DL_ERROR %}
+	<div class="errorbox">
+		<h3>{{ lang('WARNING') }}</h3>
+		<p>{{ DL_ERROR_MSG }}</p>
+	</div>
+{% endif %}
+
+<form action="{{ S_DL_CATEGORY_ACTION }}" method="post" id="dl_edit_cat">
+
+<fieldset>
+
+	<dl>
+		<dt><label>{{ lang('DL_TRAFFIC_OFF') }}</label></dt>
+		<dd>
+			<a class="help nav" data-key="DL_TRAFFIC_OFF"><i class="icon fa-question-circle fa-fw"></i></a>&nbsp;
+			<input type="checkbox" class="radio switch" name="traffic_off" value="1" checked id="traffic_off" /><label class="switch" for="traffic_off">&nbsp;</label>
+		</dd>
+	</dl>
+
+</fieldset>
+
+<fieldset>
+
+	<dl>
+		<dt><label>{{ lang('DL_CAT_NAME') }}</label></dt>
+		<dd>
+			<a class="help nav" data-key="DL_CAT_NAME"><i class="icon fa-question-circle fa-fw"></i></a>&nbsp;
+			<input type="text" name="cat_name" size="40" maxlength="255" value="{{ DL_CAT_NAME }}" />
+		</dd>
+	</dl>
+	<dl>
+		<dt><label>{{ lang('DL_CAT_PARENT') }}</label></dt>
+		<dd>
+			<a class="help nav" data-key="DL_CAT_PARENT"><i class="icon fa-question-circle fa-fw"></i></a>&nbsp;
+			{% if DL_CAT_ROOT %}
+				<input type="hidden" name="parent" value="0" />&nbsp;&raquo;&nbsp;{{ lang('DL_CAT_INDEX') }}
+			{% else %}
+			<select name="parent">
+				<option value="0">&nbsp;&raquo;&nbsp;{{ lang('DL_CAT_INDEX') }}</option>
+				{% for select_cat_parent in loops.select_cat_parent %}
+				<option value="{{ select_cat_parent.DL_CAT_ID }}"{% if select_cat_parent.DL_SELECTED %} selected{% endif %}>{{ select_cat_parent.DL_SEPERATOR }}{% if select_cat_parent.DL_SEPERATOR %}{% endif %}{{ select_cat_parent.DL_CAT_NAME }}</option>
+				{% endfor %}
+			{% endif %}
+			</select>
+		</dd>
+	</dl>
+	<dl>
+		<dt><label>{{ lang('DL_CAT_PATH') }}</label></dt>
+		<dd>
+			<a class="help nav" data-key="DL_CAT_PATH"><i class="icon fa-question-circle fa-fw"></i></a>&nbsp;
+			{% if DL_CAT_PATH_NEW %}
+				{% if DL_CAT_PATH_ONE %}
+				<input type="hidden" name="path" value="{{ DL_PATH }}" />&nbsp;&raquo;&nbsp;{{ DL_PATH}}
+				{% else %}
+				<input type="text" name="path" size="40" maxlength="255" value="{{ DL_PATH }}" />
+				{% endif %}
+			{% else %}
+			<select name="path">
+				<option value="/">{{ lang('DL_CAT_PATH_SELECT') }}</option>
+				{% for dl_cat_path_select in loops.dl_cat_path_select %}
+				<option value="{{ dl_cat_path_select.DL_VALUE }}"{% if dl_cat_path_select.DL_SELECTED %} selected{% endif %}>{{ dl_cat_path_select.DL_NAME }}</option>
+				{% endfor %}
+			</select>
+			{% endif %}
+		</dd>
+	</dl>
+	<dl>
+		<dt><label>{{ lang('DL_CAT_DESCRIPTION') }}</label></dt>
+		<dd>
+			<a class="help nav" data-key="DL_CAT_DESCRIPTION"><i class="icon fa-question-circle fa-fw"></i></a>&nbsp;
+			<textarea name="description" rows="3" cols="40">{{ DL_DESCRIPTION }}</textarea>
+		</dd>
+	</dl>
+
+</fieldset>
+
+<fieldset>
+
+	<dl>
+		<dt><label>{{ lang('DL_MUST_APPROVE') }}</label></dt>
+		<dd>
+			<a class="help nav" data-key="DL_MUST_APPROVE"><i class="icon fa-question-circle fa-fw"></i></a>&nbsp;
+			<input type="checkbox" class="radio switch" name="must_approve" value="1" {% if DL_MUST_APPROVE %}checked{% endif %} id="must_approve" /><label class="switch" for="must_approve">&nbsp;</label>
+		</dd>
+	</dl>
+	<dl>
+		<dt><label>{{ lang('DL_STATISTICS') }}</label></dt>
+		<dd>
+			<a class="help nav" data-key="DL_STATISTICS"><i class="icon fa-question-circle fa-fw"></i></a>&nbsp;
+			<input type="checkbox" class="radio switch" name="statistics" value="1" {% if DL_STATS %}checked{% endif %} id="statistics"  /><label class="switch" for="statistics">&nbsp;</label>
+		</dd>
+	</dl>
+	<dl>
+		<dt><label>{{ lang('DL_COMMENTS') }}</label></dt>
+		<dd>
+			<a class="help nav" data-key="DL_COMMENTS"><i class="icon fa-question-circle fa-fw"></i></a>&nbsp;
+			<input type="checkbox" class="radio switch" name="comments" value="1" {% if DL_COMMENTS %}checked{% endif %}  id="comments" /><label class="switch" for="comments">&nbsp;</label>
+		</dd>
+	</dl>
+	<dl>
+		<dt><label>{{ lang('DL_APPROVE_COMMENTS') }}</label></dt>
+		<dd>
+			<a class="help nav" data-key="DL_APPROVE_COMMENTS"><i class="icon fa-question-circle fa-fw"></i></a>&nbsp;
+			<input type="checkbox" class="radio switch" name="approve_comments" value="1" {% if DL_APPROVE_COMMENTS %}checked{% endif %} id="approve_comments"  /><label class="switch" for="approve_comments">&nbsp;</label>
+		</dd>
+	</dl>
+
+</fieldset>
+
+<fieldset>
+
+	<legend>{{ lang('DL_PERMISSIONS_ALL') }}</legend>
+
+	<dl>
+		<dt><label>{{ lang('DL_AUTH_VIEW') }}</label></dt>
+		<dd>
+			<select name="auth_view">
+				{% for dl_auth in loops.dl_auth %}
+				<option value="{{ dl_auth.DL_VALUE }}"{% if dl_auth.DL_VALUE eq S_DL_AUTH_VIEW %} selected{% endif %}>{{ dl_auth.DL_NAME }}</option>
+				{% endfor %}
+			</select>
+		</dd>
+	</dl>
+	<dl>
+		<dt><label>{{ lang('DL_AUTH_DL') }}</label></dt>
+		<dd>
+			<select name="auth_dl">
+				{% for dl_auth in loops.dl_auth %}
+				<option value="{{ dl_auth.DL_VALUE }}"{% if dl_auth.DL_VALUE eq S_DL_AUTH_DL %} selected{% endif %}>{{ dl_auth.DL_NAME }}</option>
+				{% endfor %}
+			</select>
+		</dd>
+	</dl>
+	<dl>
+		<dt><label>{{ lang('DL_AUTH_UP') }}</label></dt>
+		<dd>
+			<select name="auth_up">
+				{% for dl_auth in loops.dl_auth %}
+				<option value="{{ dl_auth.DL_VALUE }}"{% if dl_auth.DL_VALUE eq S_DL_AUTH_UP %} selected{% endif %}>{{ dl_auth.DL_NAME }}</option>
+				{% endfor %}
+			</select>
+		</dd>
+	</dl>
+	<dl>
+		<dt><label>{{ lang('DL_AUTH_MOD') }}</label></dt>
+		<dd>
+			<select name="auth_mod">
+				{% for dl_auth in loops.dl_auth %}
+				<option value="{{ dl_auth.DL_VALUE }}"{% if dl_auth.DL_VALUE eq S_DL_AUTH_MOD %} selected{% endif %}>{{ dl_auth.DL_NAME }}</option>
+				{% endfor %}
+			</select>
+		</dd>
+	</dl>
+	<dl>
+		<dt><label>{{ lang('DL_AUTH_CREAD') }}</label></dt>
+		<dd>
+			<select name="auth_cread">
+				{% for dl_auth_comments in loops.dl_auth_comments %}
+				<option value="{{ dl_auth_comments.DL_VALUE }}"{% if dl_auth_comments.DL_VALUE eq S_DL_AUTH_CREAD %} selected{% endif %}>{{ dl_auth_comments.DL_NAME }}</option>
+				{% endfor %}
+			</select>
+		</dd>
+	</dl>
+	<dl>
+		<dt><label>{{ lang('DL_AUTH_CPOST') }}</label></dt>
+		<dd>
+			<select name="auth_cpost">
+				{% for dl_auth_comments in loops.dl_auth_comments %}
+				<option value="{{ dl_auth_comments.DL_VALUE }}"{% if dl_auth_comments.DL_VALUE eq S_DL_AUTH_CPOST %} selected{% endif %}>{{ dl_auth_comments.DL_NAME }}</option>
+				{% endfor %}
+			</select>
+		</dd>
+	</dl>
+
+</fieldset>
+
+<fieldset class="quick">
+	<input type="submit" name="save_cat" value="{{ lang('SUBMIT') }}" class="button1" />
+	{{ S_DL_HIDDEN_FIELDS }}
+	{{ S_FORM_TOKEN }}
+</fieldset>
+
+</form>
+
+<fieldset class="submit-buttons">{{ DL_MOD_RELEASE }}</fieldset>
+
+{% INCLUDE 'overall_footer.html' %}

@@ -1,4 +1,4 @@
-Subject: Rapport de bugs sur « {{ SITENAME }} »
+Subject: Rapport de bugs sur {{ SITENAME }}
 
 Bonjour {{ USERNAME }},
 

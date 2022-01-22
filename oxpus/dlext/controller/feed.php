@@ -26,6 +26,7 @@ class feed
 	protected $dlext_files;
 	protected $dlext_main;
 	protected $dlext_status;
+	protected $dlext_format;
 	protected $dlext_constants;
 
 	/**
@@ -42,6 +43,7 @@ class feed
 	 * @param \oxpus\dlext\core\files				$dlext_files
 	 * @param \oxpus\dlext\core\main				$dlext_main
 	 * @param \oxpus\dlext\core\status				$dlext_status
+	 * @param \oxpus\dlext\core\format				$dlext_format
 	 * @param \oxpus\dlext\core\helpers\constants	$dlext_constants
 	 */
 	public function __construct(
@@ -56,6 +58,7 @@ class feed
 		\oxpus\dlext\core\files $dlext_files,
 		\oxpus\dlext\core\main $dlext_main,
 		\oxpus\dlext\core\status $dlext_status,
+		\oxpus\dlext\core\format $dlext_format,
 		\oxpus\dlext\core\helpers\constants $dlext_constants
 	)
 	{
@@ -71,6 +74,7 @@ class feed
 		$this->dlext_files		= $dlext_files;
 		$this->dlext_main		= $dlext_main;
 		$this->dlext_status		= $dlext_status;
+		$this->dlext_format		= $dlext_format;
 		$this->dlext_constants	= $dlext_constants;
 	}
 
@@ -132,14 +136,7 @@ class feed
 				$order_by = ($this->config['dl_rss_select']) ? '' : 'DESC';
 				$sort_ary = [$sort_by => $order_by];
 
-				if ($this->config['dl_rss_desc_length'])
-				{
-					$fields = ['id', 'cat', 'description', 'desc_uid', 'hack_version', 'add_time', 'change_time', 'long_desc', 'long_desc_uid'];
-				}
-				else
-				{
-					$fields = ['id', 'cat', 'description', 'desc_uid', 'hack_version', 'add_time', 'change_time'];
-				}
+				$fields = ['id', 'cat', 'description', 'desc_uid', 'hack_version', 'add_time', 'change_time', 'long_desc', 'long_desc_uid', 'long_desc_bitfield', 'long_desc_flags'];
 
 				$rss = $this->dlext_constants::DL_TRUE;
 
@@ -161,33 +158,12 @@ class feed
 
 						$description		= $dl_files[$i]['description'];
 						$desc_uid			= $dl_files[$i]['desc_uid'];
-						$long_desc			= $dl_files[$i]['long_desc'];
-						$long_desc_uid		= $dl_files[$i]['long_desc_uid'];
 
 						$description	= censor_text($description);
 						strip_bbcode($description, $desc_uid);
 						$description	.= ' ' . $hack_version;
 
-						if ($long_desc)
-						{
-							$long_desc = censor_text($long_desc);
-							strip_bbcode($long_desc, $long_desc_uid);
-
-							if ($this->config['dl_rss_desc_length'])
-							{
-								if ($this->config['dl_rss_desc_length'] == $this->dlext_constants::DL_RSS_DESC_LENGTH_SHORT)
-								{
-									if (intval($this->config['dl_rss_desc_shorten']) && strlen($long_desc) > intval($this->config['dl_rss_desc_shorten']))
-									{
-										$long_desc = substr($long_desc, 0, intval($this->config['dl_rss_desc_shorten'])) . ' [...] ';
-									}
-									else
-									{
-										$long_desc = '';
-									}
-								}
-							}
-						}
+						$long_desc = $this->dlext_format->dl_shorten_string($dl_files[$i]['long_desc'], 'feed', $dl_files[$i]['long_desc_uid'], $dl_files[$i]['long_desc_bitfield'], $dl_files[$i]['long_desc_flags']);
 
 						if ($this->config['dl_rss_new_update'])
 						{

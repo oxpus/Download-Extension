@@ -60,6 +60,9 @@ class main_info
 				'perm_check'	=> [
 					'title' => 'DL_ACP_PERM_CHECK',				'auth' => 'ext_oxpus/dlext && acl_a_dl_perm_check',		'cat' => ['ACP_DOWNLOADS']
 				],
+				'assistant'	=> [
+					'title' => 'DL_ACP_ASSISTANT',				'auth' => 'ext_oxpus/dlext && acl_a_dl_assistant',		'cat' => ['ACP_DOWNLOADS']
+				],
 			],
 		];
 	}

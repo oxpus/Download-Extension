@@ -195,6 +195,11 @@ class physical implements physical_interface
 			->core_path($file_base)
 			->find(false, true);
 
+		if (empty($dirs))
+		{
+			return [];
+		}
+
 		foreach (array_keys($dirs) as $dir)
 		{
 			$separator = '';

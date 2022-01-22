@@ -19,7 +19,7 @@ class dl_schema extends \phpbb\db\migration\migration
 
 	public static function depends_on()
 	{
-		return ['\phpbb\db\migration\data\v330\v330'];
+		return ['\phpbb\db\migration\data\v320\v320'];
 	}
 
 	public function update_data()
@@ -436,10 +436,10 @@ class dl_schema extends \phpbb\db\migration\migration
 						'sort'					=> ['INT:11', 0],
 						'description'			=> ['MTEXT_UNI', ''],
 						'rules'					=> ['MTEXT_UNI', ''],
-						'auth_view'				=> ['UINT:1', 1],
-						'auth_dl'				=> ['UINT:1', 1],
-						'auth_up'				=> ['UINT:1', 0],
-						'auth_mod'				=> ['UINT:1', 0],
+						'auth_view'				=> ['BOOL', 1],
+						'auth_dl'				=> ['BOOL', 1],
+						'auth_up'				=> ['BOOL', 0],
+						'auth_mod'				=> ['BOOL', 0],
 						'must_approve'			=> ['BOOL', 0],
 						'allow_mod_desc'		=> ['BOOL', 0],
 						'statistics'			=> ['BOOL', 1],
@@ -447,8 +447,8 @@ class dl_schema extends \phpbb\db\migration\migration
 						'comments'				=> ['BOOL', 1],
 						'cat_traffic'			=> ['BINT', 0],
 						'allow_thumbs'			=> ['BOOL', 0],
-						'auth_cread'			=> ['UINT:1', 0],
-						'auth_cpost'			=> ['UINT:1', 1],
+						'auth_cread'			=> ['BOOL', 0],
+						'auth_cpost'			=> ['BOOL', 1],
 						'approve_comments'		=> ['BOOL', 1],
 						'bug_tracker'			=> ['BOOL', 0],
 						'desc_uid'				=> ['CHAR:8', ''],

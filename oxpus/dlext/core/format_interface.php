@@ -77,4 +77,17 @@ interface format_interface
 	 * @access public
 	 */
 	public function dl_hash($value, $type = '', $method = '');
+
+	/**
+	 * Shorten texts if option is setting to this
+	 *
+	 * @param string $text the text which will be reformatted with full length or shorton
+	 * @param string $mode workflow for the given page
+	 * @param string $uid bbcode uid
+	 * @param string $bitfield bbcode bitfield
+	 * @param int $flags bbcode flags
+	 * @return string reformatted text
+	 * @access public
+	 */
+	public function dl_shorten_string($text, $mode, $uid, $bitfield, $flags);
 }

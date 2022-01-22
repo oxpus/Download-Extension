@@ -1,4 +1,4 @@
-Subject: Nouveau statut pour le rapport de bugs sur « {{ SITENAME }} »
+Subject: Nouveau statut pour le rapport de bugs sur {{ SITENAME }}
 
 Bonjour {{ USERNAME }},
 

@@ -233,6 +233,12 @@ class acp_overview_controller implements acp_overview_interface
 					++$subs;
 				}
 			}
+
+			$u_dl_assistant = '';
+		}
+		else
+		{
+			$u_dl_assistant = $this->u_action . '&amp;mode=assistant';
 		}
 
 		$sql = 'SELECT count(ver_id) as versions
@@ -266,6 +272,7 @@ class acp_overview_controller implements acp_overview_interface
 			'S_DL_TRAFFIC_OFF'			=> $this->config['dl_traffic_off'],
 			'S_DL_ACP_MAIN_TYPE'		=> substr($this->config['version'], 0, 3),
 
+			'U_DL_ASSISTANT'			=> $u_dl_assistant,
 			'U_DL_ACTION'				=> $this->u_action,
 		]);
 	}

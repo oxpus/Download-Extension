@@ -93,6 +93,14 @@ class acp_perm_check_controller implements acp_perm_check_interface
 
 		$s_display_perms = $this->dlext_constants::DL_FALSE;
 
+		$dl_index = $this->dlext_main->full_index();
+
+		if (empty($dl_index))
+		{
+			$this->u_action = str_replace('mode=perm_check', 'mode=assistant', $this->u_action);
+			redirect($this->u_action);
+		}
+
 		if ($submit && $check_user)
 		{
 			$username = utf8_clean_string($check_user);
@@ -107,7 +115,6 @@ class acp_perm_check_controller implements acp_perm_check_interface
 			{
 				// First fetch ALL category permissions
 				$cat_perm_ary   = [];
-				$dl_index       = $this->dlext_main->full_index();
 
 				// Check for selected user and reinit the download classes to get the right content
 				$reset_user_data = $this->dlext_constants::DL_FALSE;
