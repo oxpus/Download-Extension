@@ -140,6 +140,8 @@ $lang = array_merge($lang, [
 	'DL_ASSISTANT_OPEN_INDEX'			=> '<br /><br /><a href="%s">Passer à l’index des catégories</a>',
 	'DL_ASSISTANT_OPEN_PERM'			=> '<br /><br /><a href="%s">Procéder aux autorisations pour cette catégorie</a>',
 	'DL_ASSISTANT_OPEN_TOOL'			=> '<br /><br /><a href="%s">Passez à la boîte à outils si vous souhaitez créer un dossier différent</a>',
+	'DL_ASSISTANT_NAME_MISSING'			=> 'Falta el nombre de la categoría.',
+	'DL_ASSISTANT_PERM_MISSING'			=> 'Spécification d’autorisation manquante pour <strong>%s</strong>.',
 	'DL_ASSISTANT_WELCOME'				=> 'Bienvenue dans l’assistant de configuration de la zone de téléchargement',
 	'DL_AUTH_CPOST'						=> 'Écrire un commentaire',
 	'DL_AUTH_CREAD'						=> 'Lire les commentaires',

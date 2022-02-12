@@ -138,6 +138,8 @@ $lang = array_merge($lang, [
 	'DL_ASSISTANT_OPEN_INDEX'			=> '<br /><br /><a href="%s">Go to category index</a>',
 	'DL_ASSISTANT_OPEN_PERM'			=> '<br /><br /><a href="%s">Go to permission settings for this category</a>',
 	'DL_ASSISTANT_OPEN_TOOL'			=> '<br /><br /><a href="%s">Go to Toolbox, if you want to create another folder</a>',
+	'DL_ASSISTANT_NAME_MISSING'			=> 'Category name missing.',
+	'DL_ASSISTANT_PERM_MISSING'			=> 'Missing permission specification for <strong>%s</strong>.',
 	'DL_ASSISTANT_WELCOME'				=> 'Welcome to the Setup Wizard of the Download Extension',
 	'DL_AUTH_CPOST'						=> 'Write comments',
 	'DL_AUTH_CREAD'						=> 'Read comments',

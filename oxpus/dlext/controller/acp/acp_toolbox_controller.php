@@ -482,8 +482,6 @@ class acp_toolbox_controller implements acp_toolbox_interface
 				$path = '';
 			}
 
-			$dir_name = str_replace('%', '', urlencode($dir_name));
-
 			$this->filesystem->mkdir($this->dlext_constants->get_value('files_dir') . '/downloads/' . $file_path . $dir_name . '/');
 
 			$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_FOLDER_CREATE', false, [$path . '/' . $dir_name]);

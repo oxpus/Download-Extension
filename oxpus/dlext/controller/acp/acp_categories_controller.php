@@ -592,7 +592,15 @@ class acp_categories_controller implements acp_categories_interface
 
 			$this->db->sql_freeresult($result);
 
-			$this->u_action_idx		= $this->u_action . '&amp;parent=' . $cat_parent . '&amp;type=';
+			if ($idx_type == 'c')
+			{
+				$this->u_action_idx		= $this->u_action . '&amp;type=';
+			}
+			else
+			{
+				$this->u_action_idx		= $this->u_action . '&amp;parent=' . $cat_parent . '&amp;type=';
+			}
+
 			$this->u_action_open	= $this->u_action . '&amp;parent=#CAT#&amp;type=' . $idx_type;
 			$this->u_action			.= '&amp;parent=' . $cat_parent . '&amp;type=' . $idx_type;
 

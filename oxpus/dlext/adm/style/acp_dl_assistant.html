@@ -24,7 +24,7 @@
 		<dt><label>{{ lang('DL_TRAFFIC_OFF') }}</label></dt>
 		<dd>
 			<a class="help nav" data-key="DL_TRAFFIC_OFF"><i class="icon fa-question-circle fa-fw"></i></a>&nbsp;
-			<input type="checkbox" class="radio switch" name="traffic_off" value="1" checked id="traffic_off" /><label class="switch" for="traffic_off">&nbsp;</label>
+			<input type="checkbox" class="radio switch" name="traffic_off" value="1"{% if DL_TRAFFIC_CHECKED %} checked{% endif %} id="traffic_off" /><label class="switch" for="traffic_off">&nbsp;</label>
 		</dd>
 	</dl>
 

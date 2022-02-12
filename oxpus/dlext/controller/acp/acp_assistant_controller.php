@@ -125,16 +125,23 @@ class acp_assistant_controller implements acp_assistant_interface
 	public function handle()
 	{
 		$action				= $this->request->variable('action', 'add');
-		$path				= $this->request->variable('path', '');
+		$path				= $this->request->variable('path', 'files/');
 		$cat_id				= $this->request->variable('cat_id', 0);
 		$cat_parent			= $this->request->variable('parent', 0);
 		$cat_name			= $this->request->variable('cat_name', '', $this->dlext_constants::DL_TRUE);
 		$description		= $this->request->variable('description', '', $this->dlext_constants::DL_TRUE);
 		$traffic_off		= $this->request->variable('traffic_off', 0);
-		$must_approve		= $this->request->variable('must_approve', 0);
-		$statistics			= $this->request->variable('statistics', 0);
-		$comments			= $this->request->variable('comments', 0);
-		$approve_comments	= $this->request->variable('approve_comments', 0);
+		$must_approve		= $this->request->variable('must_approve', $this->dlext_constants::DL_FALSE);
+		$statistics			= $this->request->variable('statistics', $this->dlext_constants::DL_FALSE);
+		$comments			= $this->request->variable('comments', $this->dlext_constants::DL_FALSE);
+		$approve_comments	= $this->request->variable('approve_comments', $this->dlext_constants::DL_FALSE);
+
+		$auth_view			= $this->request->variable('auth_view', $this->dlext_constants::DL_PERM_GENERAL_ALL);
+		$auth_dl			= $this->request->variable('auth_dl', $this->dlext_constants::DL_PERM_GENERAL_ALL);
+		$auth_up			= $this->request->variable('auth_up', $this->dlext_constants::DL_PERM_GENERAL_GROUPS);
+		$auth_mod			= $this->request->variable('auth_mod', $this->dlext_constants::DL_PERM_GENERAL_GROUPS);
+		$auth_cread			= $this->request->variable('auth_cread', $this->dlext_constants::DL_PERM_ALL);
+		$auth_cpost			= $this->request->variable('auth_cpost', $this->dlext_constants::DL_PERM_USER);
 
 		$index = $this->dlext_main->full_index();
 
@@ -144,11 +151,11 @@ class acp_assistant_controller implements acp_assistant_interface
 		}
 
 		$error = $this->dlext_constants::DL_FALSE;
-		$error_msg = '';
+		$error_msg = [];
 
 		if (!$path)
 		{
-			$path = '/';
+			$path = 'files/';
 		}
 
 		if (!empty($path) && $path[strlen($path) - 1] != '/')
@@ -159,11 +166,156 @@ class acp_assistant_controller implements acp_assistant_interface
 		$s_hidden_fields = [];
 
 		$cat_path		= ($path) ? $path : '/';
-		$s_cat_parent	= $this->dlext_extra->dl_dropdown(0, 0, 0, 'auth_view', $this->dlext_constants::DL_NONE);
+		$s_cat_parent	= $this->dlext_extra->dl_dropdown(0, 0, $cat_parent, 'auth_view', $this->dlext_constants::DL_NONE);
 
-		if ($action == 'add')
+		if ($action == 'save_cat')
+		{
+			if (!check_form_key('dl_adm_setup'))
+			{
+				trigger_error('FORM_INVALID', E_USER_WARNING);
+			}
+
+			$check_tree = $this->dlext_physical->get_file_base_tree('', $this->dlext_constants::DL_TRUE);
+
+			if (! empty($check_tree) && !in_array($path, $check_tree))
+			{
+				$error = $this->dlext_constants::DL_TRUE;
+				$error_msg[] = $this->language->lang('DL_PATH_NOT_EXIST', $path, $this->dlext_constants->get_value('files_dir', $this->dlext_constants::DL_TRUE) . '/downloads/', $this->dlext_constants->get_value('files_dir', $this->dlext_constants::DL_TRUE) . '/downloads/' . $path) . '<br />';
+			}
+
+			if (empty($cat_name))
+			{
+				$error = $this->dlext_constants::DL_TRUE;
+				$error_msg[] = $this->language->lang('DL_ASSISTANT_NAME_MISSING');
+			}
+
+			if ($auth_view == -1)
+			{
+				$error = $this->dlext_constants::DL_TRUE;
+				$error_msg[] = $this->language->lang('DL_ASSISTANT_PERM_MISSING', $this->language->lang('DL_AUTH_VIEW'));
+			}
+
+			if ($auth_dl == -1)
+			{
+				$error = $this->dlext_constants::DL_TRUE;
+				$error_msg[] = $this->language->lang('DL_ASSISTANT_PERM_MISSING', $this->language->lang('DL_AUTH_DL'));
+			}
+
+			if ($auth_up == -1)
+			{
+				$error = $this->dlext_constants::DL_TRUE;
+				$error_msg[] = $this->language->lang('DL_ASSISTANT_PERM_MISSING', $this->language->lang('DL_AUTH_UP'));
+			}
+
+			if ($auth_mod == -1)
+			{
+				$error = $this->dlext_constants::DL_TRUE;
+				$error_msg[] = $this->language->lang('DL_ASSISTANT_PERM_MISSING', $this->language->lang('DL_AUTH_MOD'));
+			}
+
+			if ($auth_cread == -1)
+			{
+				$error = $this->dlext_constants::DL_TRUE;
+				$error_msg[] = $this->language->lang('DL_ASSISTANT_PERM_MISSING', $this->language->lang('DL_AUTH_CREAD'));
+			}
+
+			if ($auth_cpost == -1)
+			{
+				$error = $this->dlext_constants::DL_TRUE;
+				$error_msg[] = $this->language->lang('DL_ASSISTANT_PERM_MISSING', $this->language->lang('DL_AUTH_CPOST'));
+			}
+
+			if (!$error)
+			{
+				// Create new folder
+				$this->filesystem->mkdir($this->dlext_constants->get_value('files_dir') . '/downloads/' . $path);
+				$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_FOLDER_CREATE', false, [$path]);
+
+				$allow_bbcode	= ($this->config['allow_bbcode']) ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE;
+				$allow_smilies	= ($this->config['allow_smilies']) ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE;
+				$desc_uid		= $desc_bitfield  = '';
+				$desc_flags		= 0;
+
+				if ($description)
+				{
+					generate_text_for_storage($description, $desc_uid, $desc_bitfield, $desc_flags, $allow_bbcode, $this->dlext_constants::DL_TRUE, $allow_smilies);
+				}
+
+				$sql_cat_data = [
+					'cat_name'				=> $cat_name,
+					'comments'				=> $comments,
+					'rules'					=> '',
+					'dl_topic_text'			=> '',
+					'desc_bitfield'			=> $desc_bitfield,
+					'desc_flags'			=> $desc_flags,
+					'desc_uid'				=> $desc_uid,
+					'description'			=> $description,
+					'dl_topic_type'			=> POST_NORMAL,
+					'must_approve'			=> $must_approve,
+					'approve_comments'		=> $approve_comments,
+					'show_file_hash'		=> 0,
+					'parent'				=> $cat_parent,
+					'path'					=> $path,
+					'statistics'			=> $statistics,
+					'stats_prune'			=> 100000,
+					'auth_view'				=> $auth_view,
+					'auth_dl'				=> $auth_dl,
+					'auth_up'				=> $auth_up,
+					'auth_mod'				=> $auth_mod,
+					'auth_cread'			=> $auth_cread,
+					'auth_cpost'			=> $auth_cpost,
+					];
+
+				$sql = 'INSERT INTO ' . $this->dlext_table_dl_cat . ' ' . $this->db->sql_build_array('INSERT', $sql_cat_data);
+				$this->db->sql_query($sql);
+
+				$cat_id = $this->db->sql_nextid();
+
+				$this->config->set('dl_traffic_off', $traffic_off);
+
+				$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_CAT_ADD', false, [$cat_name]);
+
+				$message = $this->language->lang('DL_ASSISTANT_ENDS');
+
+				$sql = 'INSERT INTO ' . $this->dlext_table_dl_cat_traf . ' ' . $this->db->sql_build_array('INSERT', [
+					'cat_id'			=> $cat_id,
+					'cat_traffic_use'	=> 0,
+				]);
+
+				$this->db->sql_query($sql);
+
+				// Purge the categories cache
+				$this->cache->destroy('_dlext_cats');
+				$this->cache->destroy('_dlext_auth');
+
+				$this->u_action = str_replace('mode=assistant', '', $this->u_action);
+
+				$message .= $this->language->lang('DL_ASSISTANT_OPEN_PERM', $this->u_action . '&amp;mode=permissions&amp;cat_select[]=' . $cat_id);
+
+				$this->u_action	.= '&amp;mode=categories&amp;parent=0&amp;type=c';
+
+				$message .= $this->language->lang('DL_ASSISTANT_OPEN_INDEX', $this->u_action);
+
+				$this->u_action	.= '&amp;mode=toolbox';
+
+				$message .= $this->language->lang('DL_ASSISTANT_OPEN_TOOL', $this->u_action);
+
+				trigger_error($message);
+			}
+		}
+
+		if ($action == 'add' || $error)
 		{
 			$s_hidden_fields += ['action' => 'save_cat'];
+
+			if (empty($error))
+			{
+				$cat_path ='';
+			}
+			else
+			{
+				$cat_path = $path;
+			}
 
 			$t_path_select	= $this->dlext_physical->get_file_base_tree($cat_path);
 
@@ -193,7 +345,7 @@ class acp_assistant_controller implements acp_assistant_interface
 			else
 			{
 				$this->template->assign_var('DL_CAT_PATH_NEW', $this->dlext_constants::DL_TRUE);
-				$cat_path = 'files/';
+				$cat_path = $path;
 			}
 
 			$this->language->add_lang('posting');
@@ -203,18 +355,27 @@ class acp_assistant_controller implements acp_assistant_interface
 			$this->u_action	.= '&amp;parent=' . $cat_parent . '&amp;type=c';
 
 			$this->template->assign_vars([
-				'DL_ERROR_MSG'				=> $error_msg,
+				'DL_ERROR_MSG'				=> (empty($error)) ? '' : implode('<br />', $error_msg),
 				'DL_CATEGORY'				=> (isset($index[$cat_id]['cat_name'])) ? $this->language->lang('DL_PERMISSIONS', $index[$cat_id]['cat_name']) : '',
-				'DL_MUST_APPROVE'			=> $this->dlext_constants::DL_FALSE,
-				'DL_STATS'					=> $this->dlext_constants::DL_FALSE,
-				'DL_COMMENTS'				=> $this->dlext_constants::DL_FALSE,
+				'DL_MUST_APPROVE'			=> $must_approve,
+				'DL_STATS'					=> $statistics,
+				'DL_COMMENTS'				=> $comments,
 				'DL_CAT_NAME'				=> $cat_name,
 				'DL_DESCRIPTION'			=> $description,
 				'DL_PATH'					=> $cat_path,
+				'DL_TRAFFIC_CHECKED'		=> $traffic_off,
+				'DL_APPROVE_COMMENTS'		=> $approve_comments,
 
 				'S_DL_CATEGORY_ACTION'		=> $this->u_action,
 				'S_DL_ERROR'				=> $error,
 				'S_DL_HIDDEN_FIELDS'		=> build_hidden_fields($s_hidden_fields),
+
+				'S_DL_AUTH_VIEW'			=> $auth_view,
+				'S_DL_AUTH_DL'				=> $auth_dl,
+				'S_DL_AUTH_UP'				=> $auth_up,
+				'S_DL_AUTH_MOD'				=> $auth_mod,
+				'S_DL_AUTH_CREAD'			=> $auth_cread,
+				'S_DL_AUTH_CPOST'			=> $auth_cpost,
 
 				'U_DL_BACK'					=> $this->u_action,
 			]);
@@ -248,15 +409,6 @@ class acp_assistant_controller implements acp_assistant_interface
 				]);
 			}
 
-			$this->template->assign_vars([
-				'S_DL_AUTH_VIEW'	=> $this->dlext_constants::DL_PERM_GENERAL_ALL,
-				'S_DL_AUTH_DL'		=> $this->dlext_constants::DL_PERM_GENERAL_ALL,
-				'S_DL_AUTH_UP'		=> $this->dlext_constants::DL_PERM_GENERAL_GROUPS,
-				'S_DL_AUTH_MOD'		=> $this->dlext_constants::DL_PERM_GENERAL_GROUPS,
-				'S_DL_AUTH_CREAD'	=> $this->dlext_constants::DL_PERM_ALL,
-				'S_DL_AUTH_CPOST'	=> $this->dlext_constants::DL_PERM_USER,
-			]);
-
 			if (!empty($s_cat_parent) && is_array($s_cat_parent))
 			{
 				foreach (array_keys($s_cat_parent) as $key)
@@ -273,113 +425,6 @@ class acp_assistant_controller implements acp_assistant_interface
 			{
 				$this->template->assign_var('DL_CAT_ROOT', $this->dlext_constants::DL_TRUE);
 			}
-		}
-		else if ($action == 'save_cat')
-		{
-			if (!check_form_key('dl_adm_setup'))
-			{
-				trigger_error('FORM_INVALID', E_USER_WARNING);
-			}
-
-			$t_path_select = $this->dlext_physical->get_file_base_tree();
-
-			if (empty($t_path_select))
-			{
-				// Create new folder
-				$this->filesystem->mkdir($this->dlext_constants->get_value('files_dir') . '/downloads/' . $path);
-				$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_FOLDER_CREATE', false, [$path]);
-			}
-
-			if ($action == 'save_cat')
-			{
-				$check_tree = $this->dlext_physical->get_file_base_tree(0, $this->dlext_constants::DL_TRUE);
-
-				if (empty($check_tree) || !in_array($path, $check_tree))
-				{
-					$error = $this->dlext_constants::DL_TRUE;
-					$error_msg = $this->language->lang('DL_PATH_NOT_EXIST', $path, $this->dlext_constants->get_value('files_dir', $this->dlext_constants::DL_TRUE) . '/downloads/', $this->dlext_constants->get_value('files_dir', $this->dlext_constants::DL_TRUE) . '/downloads/' . $path);
-					$action = 'add';
-					$s_hidden_fields += ['cat_id' => $cat_id];
-				}
-			}
-
-			$allow_bbcode	= ($this->config['allow_bbcode']) ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE;
-			$allow_smilies	= ($this->config['allow_smilies']) ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE;
-			$desc_uid		= $desc_bitfield  = '';
-			$desc_flags		= 0;
-
-			if ($description)
-			{
-				generate_text_for_storage($description, $desc_uid, $desc_bitfield, $desc_flags, $allow_bbcode, $this->dlext_constants::DL_TRUE, $allow_smilies);
-			}
-
-			$auth_view	= $this->request->variable('auth_view', 0);
-			$auth_dl	= $this->request->variable('auth_dl', 0);
-			$auth_up	= $this->request->variable('auth_up', 0);
-			$auth_mod	= $this->request->variable('auth_mod', 0);
-			$auth_cread	= $this->request->variable('auth_cread', 0);
-			$auth_cpost	= $this->request->variable('auth_cpost', 0);
-
-			$sql_cat_data = [
-				'cat_name'				=> $cat_name,
-				'comments'				=> $comments,
-				'rules'					=> '',
-				'dl_topic_text'			=> '',
-				'desc_bitfield'			=> $desc_bitfield,
-				'desc_flags'			=> $desc_flags,
-				'desc_uid'				=> $desc_uid,
-				'description'			=> $description,
-				'dl_topic_type'			=> POST_NORMAL,
-				'must_approve'			=> $must_approve,
-				'approve_comments'		=> $approve_comments,
-				'show_file_hash'		=> 0,
-				'parent'				=> 0,
-				'path'					=> $path,
-				'statistics'			=> $statistics,
-				'stats_prune'			=> 100000,
-				'auth_view'				=> $auth_view,
-				'auth_dl'				=> $auth_dl,
-				'auth_up'				=> $auth_up,
-				'auth_mod'				=> $auth_mod,
-				'auth_cread'			=> $auth_cread,
-				'auth_cpost'			=> $auth_cpost,
-				];
-
-			$sql = 'INSERT INTO ' . $this->dlext_table_dl_cat . ' ' . $this->db->sql_build_array('INSERT', $sql_cat_data);
-			$this->db->sql_query($sql);
-
-			$cat_id = $this->db->sql_nextid();
-
-			$this->config->set('dl_traffic_off', $traffic_off);
-
-			$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_CAT_ADD', false, [$cat_name]);
-
-			$message = $this->language->lang('DL_ASSISTANT_ENDS');
-
-			$sql = 'INSERT INTO ' . $this->dlext_table_dl_cat_traf . ' ' . $this->db->sql_build_array('INSERT', [
-				'cat_id'			=> $cat_id,
-				'cat_traffic_use'	=> 0,
-			]);
-
-			$this->db->sql_query($sql);
-
-			// Purge the categories cache
-			$this->cache->destroy('_dlext_cats');
-			$this->cache->destroy('_dlext_auth');
-
-			$this->u_action = str_replace('mode=assistant', '', $this->u_action);
-
-			$message .= $this->language->lang('DL_ASSISTANT_OPEN_PERM', $this->u_action . '&amp;mode=permissions&amp;cat_select[]=' . $cat_id);
-
-			$this->u_action	.= '&amp;mode=categories&amp;parent=0&amp;type=c';
-
-			$message .= $this->language->lang('DL_ASSISTANT_OPEN_INDEX', $this->u_action);
-
-			$this->u_action	.= '&amp;mode=toolbox';
-
-			$message .= $this->language->lang('DL_ASSISTANT_OPEN_TOOL', $this->u_action);
-
-			trigger_error($message);
 		}
 	}
 }
