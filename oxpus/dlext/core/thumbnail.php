@@ -144,13 +144,36 @@ class thumbnail implements thumbnail_interface
 
 		if ($image)
 		{
+			imagealphablending($image, false);
+			imagesavealpha($image, true);
+
 			if ($disp_art)
 			{
 				$newimage = imagecreatetruecolor($thumb_width, $thumb_height);
+				imagealphablending($newimage, false);
+				imagesavealpha($newimage, true);
+				$transparent = imagecolorallocatealpha($newimage, 255, 255, 255, 127);
+				imagefilledrectangle($newimage, 0, 0, $thumb_width, $thumb_height, $transparent);
 				imagecopyresampled($newimage, $image, 0, 0, 0, 0, $thumb_width, $thumb_height, $pic_width, $pic_height);
 
-				header('Content-type:image/jpg');
-				imagejpeg($newimage);
+				if ($file_ext == 'jpg')
+				{
+					header('Content-type:image/jpg');
+					imagejpeg($newimage);
+				}
+				else if ($file_ext == 'png')
+				{
+					header('Content-type:image/png');
+					imagepng($newimage);
+				}
+				else if ($file_ext == 'gif')
+				{
+					if (function_exists('imagecreatefromgif'))
+					{
+						header('Content-type:image/gif');
+						imagegif($newimage);
+					}
+				}
 			}
 			else
 			{

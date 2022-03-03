@@ -1332,9 +1332,9 @@ class download implements download_interface
 			{
 				if (isset($dl_file['thumbnail']))
 				{
-					$thumbnail = $this->dlext_constants->get_value('files_dir') . '/thumbs/' . $dl_file['thumbnail'];
+					$thumbnail = $this->helper->route('oxpus_dlext_thumbnail', ['pic' => $df_id, 'img_type' => 'thumb', 'disp_art' => $this->dlext_constants::DL_TRUE]);
 
-					if ($dl_file['thumbnail'] && $this->filesystem->exists($thumbnail))
+					if ($dl_file['thumbnail'] && $this->filesystem->exists($this->dlext_constants->get_value('files_dir') . '/thumbs/' . $dl_file['thumbnail']))
 					{
 						$this->template->assign_var('S_DL_DEL_THUMB', $this->dlext_constants::DL_TRUE);
 

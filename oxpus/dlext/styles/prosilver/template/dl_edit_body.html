@@ -177,7 +177,7 @@
 		<dd>
 			<a class="help" data-key="DL_THUMB" title="{{ lang('INFORMATION') }}"><i class="icon fa-question-circle fa-fw"></i></a>
 			{% if S_DL_SHOW_THUMB %}
-			<img src="{{ ROOT_PATH }}{{ DL_THUMBNAIL }}" alt="{{ lang('DL_THUMB') }}" title="" class="dl-thumb-box" />
+			<img src="{{ DL_THUMBNAIL }}" alt="{{ lang('DL_THUMB') }}" title="" class="dl-thumb-box" />
 			{% if S_DL_DEL_THUMB %}<br /><label><input type="checkbox" class="permissions_checkbox" name="del_thumb" value="1" />&nbsp;{{ lang('DELETE') }}</label>{% endif %}
 			{% endif %}
 			<br /><br />
