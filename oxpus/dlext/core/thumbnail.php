@@ -156,44 +156,26 @@ class thumbnail implements thumbnail_interface
 				imagefilledrectangle($newimage, 0, 0, $thumb_width, $thumb_height, $transparent);
 				imagecopyresampled($newimage, $image, 0, 0, 0, 0, $thumb_width, $thumb_height, $pic_width, $pic_height);
 
-				if ($file_ext == 'jpg')
-				{
-					header('Content-type:image/jpg');
-					imagejpeg($newimage);
-				}
-				else if ($file_ext == 'png')
-				{
-					header('Content-type:image/png');
-					imagepng($newimage);
-				}
-				else if ($file_ext == 'gif')
-				{
-					if (function_exists('imagecreatefromgif'))
-					{
-						header('Content-type:image/gif');
-						imagegif($newimage);
-					}
-				}
+				$image = $newimage;
+				unset($newimage);
 			}
-			else
+
+			if ($file_ext == 'jpg')
 			{
-				if ($file_ext == 'jpg')
+				header('Content-type:image/jpg');
+				imagejpeg($image);
+			}
+			else if ($file_ext == 'png')
+			{
+				header('Content-type:image/png');
+				imagepng($image);
+			}
+			else if ($file_ext == 'gif')
+			{
+				if (function_exists('imagecreatefromgif'))
 				{
-					header('Content-type:image/jpg');
-					imagejpeg($image);
-				}
-				else if ($file_ext == 'png')
-				{
-					header('Content-type:image/png');
-					imagepng($image);
-				}
-				else if ($file_ext == 'gif')
-				{
-					if (function_exists('imagecreatefromgif'))
-					{
-						header('Content-type:image/gif');
-						imagegif($image);
-					}
+					header('Content-type:image/gif');
+					imagegif($image);
 				}
 			}
 		}
