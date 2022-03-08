@@ -148,7 +148,7 @@ class physical implements physical_interface
 		}
 		else
 		{
-			$sql = 'SELECT SUM(file_size) AS total_size FROM . ' . $this->dlext_table_downloads;
+			$sql = 'SELECT SUM(file_size) AS total_size FROM ' . $this->dlext_table_downloads;
 			$result = $this->db->sql_query($sql);
 			$file_size = $this->db->sql_fetchfield('total_size');
 			$this->db->sql_freeresult($result);
