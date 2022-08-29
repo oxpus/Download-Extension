@@ -108,7 +108,7 @@ class todo
 
 		$index 			= ($cat) ? $this->dlext_main->index($cat) : $this->dlext_main->index();
 
-		if ($cancel || !$todo)
+		if ($cancel)
 		{
 			$df_id = 0;
 			$submit = '';
@@ -136,6 +136,7 @@ class todo
 			$todo_uid			= '';
 			$todo_bitfield		= '';
 			$todo_flags			= 0;
+			$preview_todo		= '';
 
 			// Preview a todo
 			if ($preview && $todo)
@@ -158,7 +159,7 @@ class todo
 			}
 
 			// Save or delete a todo
-			if ($submit && !$cancel && !$preview)
+			if ($submit && !$cancel)
 			{
 				if ($delete)
 				{
@@ -343,7 +344,7 @@ class todo
 
 			$this->template->assign_vars([
 				'DL_HACK_VERSION'		=> $hack_version,
-				'DL_TODO_TEXT'			=> (!empty($preview_todo)) ? $preview_todo : $todo,
+				'DL_TODO_TEXT'			=> ($preview) ? $preview_todo : $todo,
 
 				'S_BBCODE_ALLOWED'		=> $bbcode_status,
 				'S_BBCODE_IMG'			=> $img_status,
