@@ -69,4 +69,21 @@ interface physical_interface
 	 * @access public
 	 */
 	public function send_file_to_browser($dl_file_data);
+
+	/**
+	 * Fetch all file assigments in the given folder
+	 *
+	 * @param string $path path for the current category
+	 * @param string $browse_dir complete directory to browse in
+	 * @param array $exist array with flag if the exists in the downloads or is unassigned
+	 * @param array $filey array with link to the real file (assigned filename from download or physical file name if unassigned)
+	 * @param array $filen array with the physical file names
+	 * @param array $sizes array with the physical filesizes
+	 * @param bool $unassigned_files true if there are unassigned files
+	 * @param array $existing_files array with all recorded real file names
+	 * @param string $u_action path for current acp module. Missing this will not link the file for downloading
+	 * @return void
+	 * @access public
+	 */
+	public function get_files_assignments($path, &$browse_dir, &$exist, &$filey, &$filen, &$sizes, &$unassigned_files, &$existing_files, $u_action = '');
 }

@@ -516,10 +516,10 @@ class acp_toolbox_controller implements acp_toolbox_interface
 			$sizes = [];
 			$exist = [];
 			$dirs_delete = [];
-			$real_file_array = [];
-			$real_file_title = [];
 
-			$existing_files = $this->dlext_physical->read_exist_files();
+			$browse_dir = '';
+			$unassigned_files = $this->dlext_constants::DL_FALSE;
+			$existing_files = [];
 
 			if ($action != 'unassigned')
 			{
@@ -544,51 +544,9 @@ class acp_toolbox_controller implements acp_toolbox_interface
 							$dl_navi[] = ['link' => $this->u_action . '&amp;action=browse&amp;path=' . $temp_url, 'name' => $temp_path];
 						}
 					}
-
-					$sql = 'SELECT d.description, d.file_name, d.real_file FROM ' . $this->dlext_table_downloads . ' d, ' . $this->dlext_table_dl_cat . " c
-						WHERE d.cat = c.id
-							AND c.path = '" . $this->db->sql_escape(utf8_decode($path)) . "/'";
-					$result = $this->db->sql_query($sql);
-					$total_files = $this->db->sql_affectedrows();
-
-					if ($total_files)
-					{
-						while ($row = $this->db->sql_fetchrow($result))
-						{
-							$real_file_array[$row['real_file']] = '<strong>' . $row['description'] . '</strong><br />[' . $row['file_name'] . ']';
-							$real_file_title[$row['real_file']] = $row['file_name'];
-						}
-					}
-
-					$this->db->sql_freeresult($result);
-
-					$sql = 'SELECT d.description, v.ver_file_name, v.ver_real_file FROM ' . $this->dlext_table_dl_versions . ' v, ' . $this->dlext_table_downloads . ' d, ' . $this->dlext_table_dl_cat . " c
-						WHERE d.cat = c.id
-							AND v.dl_id = d.id
-							AND c.path = '" . $this->db->sql_escape(utf8_decode($path)) . "/'";
-					$result = $this->db->sql_query($sql);
-					$total_files = $this->db->sql_affectedrows();
-
-					if ($total_files)
-					{
-						while ($row = $this->db->sql_fetchrow($result))
-						{
-							$real_file_array[$row['ver_real_file']] = '<strong>' . $row['description'] . '</strong><br />[' . $row['ver_file_name'] . ']';
-							$real_file_title[$row['ver_real_file']] = $row['ver_file_name'];
-						}
-					}
-
-					$this->db->sql_freeresult($result);
 				}
 
-				if ($path)
-				{
-					$browse_dir = $this->dlext_constants->get_value('files_dir', $this->dlext_constants::DL_TRUE) . '/downloads/' . $path . '/';
-				}
-				else
-				{
-					$browse_dir = $this->dlext_constants->get_value('files_dir', $this->dlext_constants::DL_TRUE) . '/downloads/';
-				}
+				$this->dlext_physical->get_files_assignments($path, $browse_dir, $exist, $filey, $filen, $sizes, $unassigned_files, $existing_files, $this->u_action);
 
 				$files = $this->finder
 					->set_extensions([])
@@ -628,41 +586,6 @@ class acp_toolbox_controller implements acp_toolbox_interface
 					}
 				}
 
-				$files = $this->finder
-					->set_extensions([])
-					->core_path($browse_dir)
-					->find(false);
-
-				$unassigned_files = $this->dlext_constants::DL_FALSE;
-
-				foreach (array_keys($files) as $file)
-				{
-					$file_name	= basename($file);
-					$dirname	= dirname($file) . '/';
-
-					$check_path	= ($dirname == $browse_dir) ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE;
-
-					if ($file_name != 'index.html' && $file_name != 'index.htm' && $check_path)
-					{
-						$file_desc		= (isset($real_file_title[$file_name])) ? $real_file_title[$file_name] : $file_name;
-						$real_file_name = (isset($real_file_array[$file_name])) ? $real_file_array[$file_name] : $file_name;
-						$files_url		= $this->u_action . '&amp;action=dl&amp;description=' . $file_desc . '&amp;file_name=' . $file_name . '&amp;path=' . $file;
-						$filey[]		= $real_file_name . '|~|<a href="' . $files_url . '">' . $real_file_name . '</a>';
-						$filen[]		= $file_name;
-						$sizes[]		= sprintf('%u', filesize($this->root_path . $file));
-
-						if (in_array($file_name, $existing_files) && isset($real_file_title[$file_name]))
-						{
-							$exist[] = $this->dlext_constants::DL_TRUE;
-						}
-						else
-						{
-							$exist[] = $this->dlext_constants::DL_FALSE;
-							$unassigned_files = $this->dlext_constants::DL_TRUE;
-						}
-					}
-				}
-
 				for ($i = 0; $i < count($dl_navi); ++$i)
 				{
 					$this->template->assign_block_vars('dl_toolbox_navi', [
@@ -699,7 +622,7 @@ class acp_toolbox_controller implements acp_toolbox_interface
 				$this->template->assign_var('S_DL_THUMBNAIL_CHECK', $this->dlext_constants::DL_TRUE);
 			}
 
-			if (empty($dirs) && empty($files))
+			if (empty($dirs) && empty($files) && !$unassigned_files)
 			{
 				$this->template->assign_var('S_DL_EMPTY_FOLDER', $this->dlext_constants::DL_TRUE);
 			}
@@ -717,7 +640,7 @@ class acp_toolbox_controller implements acp_toolbox_interface
 				}
 			}
 
-			if ($filey)
+			if (!empty($filey))
 			{
 				natcasesort($filey);
 				$overall_size = 0;

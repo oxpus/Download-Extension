@@ -88,7 +88,7 @@
 		<dt><label>{{ lang('DL_CHOOSE_CATEGORY') }}</label></dt>
 		<dd>
 			<a class="help" data-key="DL_CAT_NAME"><i class="icon fa-question-circle fa-fw"></i></a>
-			<select name="cat_id">
+			<select name="cat_id" class="dl-select-edit-cat">
 				<option value="{{ S_DL_CATEGORY_OPTIONS }}" selected>{{ lang('DL_ALL') }}</option>
 				{% for search_cat_select in loops.search_cat_select %}
 				<option value="{{ search_cat_select.DL_CAT_ID }}"{% if search_cat_select.DL_SELECTED %} selected{% endif %}>{{ search_cat_select.DL_SEPERATOR }}{{ search_cat_select.DL_CAT_NAME }}</option>
@@ -105,10 +105,29 @@
 		</dd>
 	</dl>
 	<dl>
+		<dt><label>{{ lang('DL_FILE_NAME') }}</label></dt>
+		<dd>
+			<a class="help" data-key="DL_FILES_INTERN"><i class="icon fa-question-circle fa-fw"></i></a>
+			<span class="dl-unassigned">
+			{% if S_DL_CAT_UNASSIGNED %}
+			<select name="file_name">
+				<option value="0">{{ lang('DL_NO_CHANGE') }}</option>
+				{% for dl_select_unassigned_file in loops.dl_select_unassigned_file %}
+				<option value="{{ dl_select_unassigned_file.DL_FILE_NAME }}">{{ dl_select_unassigned_file.DL_FILE_NAME }}</option>
+				{% endfor %}
+			</select>
+			<span class="small">{{ DL_BLACKLIST_EXPLAIN }}</span>
+			{% else %}
+			<span class="dl-red">{{ lang('DL_NO_UNASSIGNED_FILES') }}</span>
+			{% endif %}
+			</span>
+		</dd>
+	</dl>
+	<dl>
 		<dt><label>{{ lang('DL_FILES_URL') }}</label></dt>
 		<dd>
-			<a class="help" data-key="DL_FILES_URL"><i class="icon fa-question-circle fa-fw"></i></a>
-			<input type="text" name="file_name" size="40" maxlength="255" value="{{ DL_URL }}" /><span class="small">{{ DL_BLACKLIST_EXPLAIN }}</span>
+			<a class="help" data-key="DL_FILES_EXTERN"><i class="icon fa-question-circle fa-fw"></i></a>
+			<input type="text" name="file_name_extern" size="40" maxlength="255" value="{{ DL_URL }}" />
 		</dd>
 	</dl>
 	<dl>
@@ -142,7 +161,7 @@
 	<dl>
 		<dt><label>{{ lang('DL_THUMB') }}</label></dt>
 		<dd>
-			<a class="help" data-key="DL_THUMB"><i class="icon fa-question-circle fa-fw"></i></a>&nbsp;
+			<a class="help" data-key="DL_THUMB"><i class="icon fa-question-circle fa-fw"></i></a>
 			{% if S_DL_SHOW_THUMB %}
 			<br /><img src="{{ DL_THUMBNAIL }}" alt="" title="" class="dl-thumb-max" />
 			{% if S_DL_DEL_THUMB %}<br /><label><input type="checkbox" class="radio" name="del_thumb" value="1" />&nbsp;{{ lang('DELETE') }}</label>{% endif %}

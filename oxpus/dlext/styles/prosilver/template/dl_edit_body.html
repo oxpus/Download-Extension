@@ -22,6 +22,12 @@
 </div>
 {% endif %}
 
+<div class="dl-unassign rules {% if not S_DL_CAT_UNASSIGNED %}noshow{% endif %}">
+	<div class="inner">
+		<span class="dl-unassign-hint">{{ S_DL_CAT_UNASSIGNED_COUNT }}</span>
+	</div>
+</div>
+
 <form action="{{ S_DL_DOWNLOADS_ACTION }}" method="post" enctype="multipart/form-data" id="dl_edit">
 
 {% if S_DL_VERSION_ON %}
@@ -104,7 +110,7 @@
 		<dt><label>{{ lang('DL_CAT_NAME') }}</label></dt>
 		<dd>
 			<a class="help" data-key="DL_CAT_NAME" title="{{ lang('INFORMATION') }}"><i class="icon fa-question-circle fa-fw"></i></a>
-			<select name="cat_id">
+			<select name="cat_id" class="dl-select-edit-cat">
 				{% for search_cat_select in loops.search_cat_select %}
 				<option value="{{ search_cat_select.DL_CAT_ID }}"{% if search_cat_select.DL_SELECTED %} selected{% endif %}>{{ search_cat_select.DL_SEPERATOR }}{{ search_cat_select.DL_CAT_NAME }}</option>
 				{% endfor %}
@@ -135,7 +141,7 @@
 		<dd>
 			<a class="help" data-key="DL_UPLOAD_FILE" title="{{ lang('INFORMATION') }}"><i class="icon fa-question-circle fa-fw"></i></a>
 			<input type="file" name="dl_name" class="inputbox" size="46" /><br />
-			<span class="small">{{ DL_MAX_UPLOAD_SIZE }}{{ DL_EXT_BLACKLIST }}</span>
+			<span class="small">{{ DL_MAX_UPLOAD_SIZE }}{{ DL_BLACKLIST_EXPLAIN }}</span>
 		</dd>
 	</dl>
 	<dl>

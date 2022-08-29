@@ -1,3 +1,6 @@
 <script>
 var dl_help_path = '{{ U_DL_HELP_POPUP|e('js') }}';
+{% if U_DL_UNASSIGN %}
+var dlAjaxUnassignUrl = '{{ U_DL_UNASSIGN|e('js') }}';
+{% endif %}
 </script>

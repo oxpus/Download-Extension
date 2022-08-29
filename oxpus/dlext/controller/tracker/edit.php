@@ -268,11 +268,11 @@ class edit
 					generate_text_for_storage($preview_text, $bug_uid, $bug_bitfield, $bug_flags, $allow_bbcode, $allow_urls, $allow_smilies);
 					$preview_text	= generate_text_for_display($preview_text, $bug_uid, $bug_bitfield, $bug_flags);
 
-					$this->template->assign_var('S_DL_PREVIEW', $this->dlext_constants::DL_TRUE);
-
 					$this->template->assign_vars([
 						'DL_PREVIEW_TITLE'	=> $preview_title,
 						'DL_PREVIEW_TEXT'	=> $preview_text,
+
+						'S_DL_PREVIEW'		=> $this->dlext_constants::DL_TRUE,
 					]);
 
 					$action = ($fav_id && $this->dlext_auth->user_admin()) ? 'edit' : 'add';

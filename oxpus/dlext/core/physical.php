@@ -32,6 +32,7 @@ class physical implements physical_interface
 
 	protected $dlext_table_dl_versions;
 	protected $dlext_table_downloads;
+	protected $dlext_table_dl_cat;
 
 	/**
 	 * Constructor
@@ -48,6 +49,7 @@ class physical implements physical_interface
 	 * @param \oxpus\dlext\core\helpers\constants	$dlext_constants
 	 * @param string								$dlext_table_dl_versions
 	 * @param string								$dlext_table_downloads
+	 * @param string								$dlext_table_dl_cat
 	 */
 	public function __construct(
 		$root_path,
@@ -61,7 +63,8 @@ class physical implements physical_interface
 		\oxpus\dlext\core\format $dlext_format,
 		\oxpus\dlext\core\helpers\constants $dlext_constants,
 		$dlext_table_dl_versions,
-		$dlext_table_downloads
+		$dlext_table_downloads,
+		$dlext_table_dl_cat
 	)
 	{
 		$this->root_path			= $root_path;
@@ -80,6 +83,7 @@ class physical implements physical_interface
 
 		$this->dlext_table_dl_versions	= $dlext_table_dl_versions;
 		$this->dlext_table_downloads	= $dlext_table_downloads;
+		$this->dlext_table_dl_cat		= $dlext_table_dl_cat;
 	}
 
 	public function read_exist_files()
@@ -90,7 +94,10 @@ class physical implements physical_interface
 
 		for ($i = 0; $i < count($dl_files); ++$i)
 		{
-			$exist_files[] = $dl_files[$i]['real_file'];
+			if ($dl_files[$i]['real_file'])
+			{
+				$exist_files[] = $dl_files[$i]['real_file'];
+			}
 		}
 
 		$sql = 'SELECT ver_real_file
@@ -99,7 +106,10 @@ class physical implements physical_interface
 
 		while ($row = $this->db->sql_fetchrow($result))
 		{
-			$exist_files[] = $row['ver_real_file'];
+			if ($row['ver_real_file'])
+			{
+				$exist_files[] = $row['ver_real_file'];
+			}
 		}
 
 		$this->db->sql_freeresult($result);
@@ -275,7 +285,7 @@ class physical implements physical_interface
 
 		if (empty($this->user->browser) || ((strpos(strtolower($this->user->browser), 'msie') !== false) && !phpbb_is_greater_ie_version($this->user->browser, 7)))
 		{
-			header('Content-Disposition: attachment; ' . header_filename(htmlspecialchars_decode($dl_file_data['real_filename'], ENT_COMPAT)));
+			header('Content-Disposition: attachment; ' . header_filename(html_entity_decode($dl_file_data['real_filename'], ENT_COMPAT)));
 			if (empty($this->user->browser) || (strpos(strtolower($this->user->browser), 'msie 6.0') !== false))
 			{
 				header('Expires: ' . gmdate('D, d M Y H:i:s', time()) . ' GMT');
@@ -283,7 +293,7 @@ class physical implements physical_interface
 		}
 		else
 		{
-			header('Content-Disposition: ' . ((strpos($dl_file_data['mimetype'], 'image') === 0) ? 'inline' : 'attachment') . '; ' . header_filename(htmlspecialchars_decode($dl_file_data['real_filename'], ENT_COMPAT)));
+			header('Content-Disposition: ' . ((strpos($dl_file_data['mimetype'], 'image') === 0) ? 'inline' : 'attachment') . '; ' . header_filename(html_entity_decode($dl_file_data['real_filename'], ENT_COMPAT)));
 			if (phpbb_is_greater_ie_version($this->user->browser, 7) && (strpos($dl_file_data['mimetype'], 'image') !== 0))
 			{
 				header('X-Download-Options: noopen');
@@ -327,6 +337,107 @@ class physical implements physical_interface
 		}
 
 		exit_handler();
+	}
+
+	/**
+	 * Fetch all file assigments in the given folder
+	 */
+	public function get_files_assignments($path, &$browse_dir, &$exist, &$filey, &$filen, &$sizes, &$unassigned_files, &$existing_files, $u_action = '')
+	{
+		$real_file_array = [];
+		$real_file_title = [];
+
+		$existing_files = self::read_exist_files();
+
+		if ($path)
+		{
+			$browse_dir = $this->dlext_constants->get_value('files_dir', $this->dlext_constants::DL_TRUE) . '/downloads/' . $path;
+		}
+		else
+		{
+			$browse_dir = $this->dlext_constants->get_value('files_dir', $this->dlext_constants::DL_TRUE) . '/downloads';
+		}
+
+		if ($u_action)
+		{
+			$browse_dir .= '/';
+			$path .= '/';
+		}
+
+		$sql = 'SELECT d.description, d.file_name, d.real_file FROM ' . $this->dlext_table_downloads . ' d, ' . $this->dlext_table_dl_cat . " c
+			WHERE d.cat = c.id
+				AND c.path = '" . $this->db->sql_escape(utf8_decode($path)) . "'";
+		$result = $this->db->sql_query($sql);
+		$total_files = $this->db->sql_affectedrows();
+
+		if ($total_files)
+		{
+			while ($row = $this->db->sql_fetchrow($result))
+			{
+				$real_file_array[$row['real_file']] = '<strong>' . $row['description'] . '</strong><br />[' . $row['file_name'] . ']';
+				$real_file_title[$row['real_file']] = $row['file_name'];
+			}
+		}
+
+		$this->db->sql_freeresult($result);
+
+		$sql = 'SELECT d.description, v.ver_file_name, v.ver_real_file FROM ' . $this->dlext_table_dl_versions . ' v, ' . $this->dlext_table_downloads . ' d, ' . $this->dlext_table_dl_cat . " c
+			WHERE d.cat = c.id
+				AND v.dl_id = d.id
+				AND c.path = '" . $this->db->sql_escape(utf8_decode($path)) . "'";
+		$result = $this->db->sql_query($sql);
+		$total_files = $this->db->sql_affectedrows();
+
+		if ($total_files)
+		{
+			while ($row = $this->db->sql_fetchrow($result))
+			{
+				$real_file_array[$row['ver_real_file']] = '<strong>' . $row['description'] . '</strong><br />[' . $row['ver_file_name'] . ']';
+				$real_file_title[$row['ver_real_file']] = $row['ver_file_name'];
+			}
+		}
+
+		$this->db->sql_freeresult($result);
+
+		$files = $this->finder
+		->set_extensions([])
+		->core_path($browse_dir)
+		->find(false);
+
+		foreach (array_keys($files) as $file)
+		{
+			$file_name	= basename($file);
+			$dirname	= dirname($file) . '/';
+
+			$check_path	= ($dirname == $browse_dir) ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE;
+
+			if ($file_name != 'index.html' && $file_name != 'index.htm' && $check_path)
+			{
+				$file_desc		= (isset($real_file_title[$file_name])) ? $real_file_title[$file_name] : $file_name;
+				$real_file_name = (isset($real_file_array[$file_name])) ? $real_file_array[$file_name] : $file_name;
+				if ($u_action)
+				{
+					$files_url		= $u_action . '&amp;action=dl&amp;description=' . $file_desc . '&amp;file_name=' . $file_name . '&amp;path=' . $file;
+					$filey[]		= $real_file_name . '|~|<a href="' . $files_url . '">' . $real_file_name . '</a>';
+				}
+				else
+				{
+					$filey[]		= $file . '|~|' . $real_file_name;
+				}
+				$filen[]		= $file_name;
+				$sizes[]		= sprintf('%u', filesize($this->root_path . $file));
+
+				if (in_array($file_name, $existing_files) && isset($real_file_title[$file_name]))
+				{
+					$exist[] = $this->dlext_constants::DL_TRUE;
+				}
+				else
+				{
+					$exist[] = $this->dlext_constants::DL_FALSE;
+					$unassigned_files = $this->dlext_constants::DL_TRUE;
+				}
+			}
+		}
 	}
 
 	// phpcs:set VariableAnalysis.CodeAnalysis.VariableAnalysis validUndefinedVariableNames

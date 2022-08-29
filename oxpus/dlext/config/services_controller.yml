@@ -265,6 +265,17 @@ services:
             - '@oxpus.dlext.helpers.constants'
             - '%oxpus.dlext.tables.downloads%'
             - '%oxpus.dlext.tables.dl_cat%'
+    oxpus.dlext.unassigned:
+        class: oxpus\dlext\controller\unassigned
+        public: true
+        arguments:
+            - '@dbal.conn'
+            - '@language'
+            - '@request'
+            - '@oxpus.dlext.core.auth'
+            - '@oxpus.dlext.core.physical'
+            - '@oxpus.dlext.helpers.constants'
+            - '%oxpus.dlext.tables.dl_cat%'
     oxpus.dlext.unbroken:
         class: oxpus\dlext\controller\unbroken
         public: true

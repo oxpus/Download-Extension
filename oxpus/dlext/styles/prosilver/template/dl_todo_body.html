@@ -40,6 +40,18 @@
 {% if S_DL_TODO_ADD %}
 <br />
 
+{% if S_DL_PREVIEW_TODO %}
+<div class="post bg1">
+	<div class="inner">
+	<div class="postbody">
+		<h3>{{ lang('PREVIEW') }}</h3>
+		<div class="content">{{ DL_PREVIEW_TODO }}</div>
+	</div>
+	</div>
+</div>
+<br />
+{% endif %}
+
 <form action="{{ S_DL_FORM_ACTION }}" method="post" name="postform">
 
 	<div class="panel">
@@ -89,7 +101,9 @@
 	</div>
 
 	<fieldset class="submit-buttons">
-		<input type="submit" name="submit" value="{{ lang('SUBMIT') }}" class="button icon-button" />&nbsp;&nbsp;
+		<input type="submit" name="submit" value="{{ lang('SUBMIT') }}" class="button icon-button" />
+		<input type="submit" name="preview" value="{{ lang('PREVIEW') }}" class="button icon-button" />
+		<input type="submit" name="cancel" value="{{ lang('CANCEL') }}" class="button icon-button" />
 		{{ S_FORM_TOKEN }}
 		{{ S_DL_HIDDEN_FIELDS }}
 	</fieldset>

@@ -1236,6 +1236,22 @@ class details
 			4 => ($hash_tab) ? $this->language->lang('DL_MOD_FILE_HASH_TABLE') : '',
 		];
 
+		/**
+		 * Additional detail pages by Add Ons
+		 *
+		 * @event oxpus.dlext.details_append_options
+		 * @var int		df_id				download ID
+		 * @var array	dl_files			array of download's data
+		 * @var array	detail_cat_names	array of option pages
+		 * @since 8.2.11
+		 */
+		$vars = array(
+			'df_id',
+			'dl_files',
+			'detail_cat_names',
+		);
+		extract($this->dispatcher->trigger_event('oxpus.dlext.details_append_options', compact($vars)));
+
 		for ($i = 0; $i < count($detail_cat_names); ++$i)
 		{
 			if ($detail_cat_names[$i])

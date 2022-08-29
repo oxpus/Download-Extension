@@ -72,6 +72,12 @@ $(document).ready(function () {
 
 		$('#' + button).click();
 	});
+
+	$('.dl-select-edit-cat').change(function () {
+		var cat_id = $(this).val();
+
+		AJAXDLUnassigned(cat_id, 'ext');
+	});
 });
 
 $(window).click(function(ev) {

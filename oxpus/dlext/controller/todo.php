@@ -98,13 +98,22 @@ class todo
 
 		$cat			= $this->request->variable('cat', 0);
 		$submit			= $this->request->variable('submit', '');
+		$preview		= $this->request->variable('preview', '');
 		$cancel			= $this->request->variable('cancel', '');
 		$delete			= $this->request->variable('delete', '');
 		$edit			= $this->request->variable('edit', '');
 		$df_id			= $this->request->variable('df_id', 0);
 		$cat_id			= $this->request->variable('cat_id', 0);
+		$todo			= $this->request->variable('message', '', $this->dlext_constants::DL_TRUE);
 
 		$index 			= ($cat) ? $this->dlext_main->index($cat) : $this->dlext_main->index();
+
+		if ($cancel || !$todo)
+		{
+			$df_id = 0;
+			$submit = '';
+			$preview = '';
+		}
 
 		/*
 		* create todo list
@@ -118,12 +127,38 @@ class todo
 
 		if (count($todo_access_ids) > 0 && $this->user->data['is_registered'])
 		{
-			$todo = $this->request->variable('message', '', $this->dlext_constants::DL_TRUE);
 
 			add_form_key('dl_todo');
 
+			$allow_bbcode		= ($this->config['allow_bbcode']) ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE;
+			$allow_urls			= $this->dlext_constants::DL_TRUE;
+			$allow_smilies		= ($this->config['allow_smilies']) ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE;
+			$todo_uid			= '';
+			$todo_bitfield		= '';
+			$todo_flags			= 0;
+
+			// Preview a todo
+			if ($preview && $todo)
+			{
+				$preview_todo	= $todo;
+				generate_text_for_storage($preview_todo, $todo_uid, $todo_bitfield, $todo_flags, $allow_bbcode, $allow_urls, $allow_smilies);
+				$text_ary			= generate_text_for_edit($preview_todo, $todo_uid, $todo_flags);
+				$preview_todo_tmp	= $text_ary['text'];
+				$preview_todo	= generate_text_for_display($preview_todo, $todo_uid, $todo_bitfield, $todo_flags);
+
+				$this->template->assign_vars([
+					'DL_PREVIEW_TODO'	=> $preview_todo,
+
+					'S_DL_PREVIEW_TODO'	=> $this->dlext_constants::DL_TRUE,
+				]);
+
+				$preview_todo = $preview_todo_tmp;
+				$submit = '';
+				$delete = '';
+			}
+
 			// Save or delete a todo
-			if ($submit && !$cancel)
+			if ($submit && !$cancel && !$preview)
 			{
 				if ($delete)
 				{
@@ -150,13 +185,6 @@ class todo
 					{
 						trigger_error('FORM_INVALID');
 					}
-
-					$allow_bbcode		= ($this->config['allow_bbcode']) ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE;
-					$allow_urls			= $this->dlext_constants::DL_TRUE;
-					$allow_smilies		= ($this->config['allow_smilies']) ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE;
-					$todo_uid			= '';
-					$todo_bitfield		= '';
-					$todo_flags			= 0;
 
 					if ($todo)
 					{
@@ -203,6 +231,7 @@ class todo
 				$s_hidden_fields = [
 					'view'		=> 'todo',
 					'df_id'		=> $df_id,
+					'edit'		=> $edit,
 				];
 
 				$total_possible_todo = $this->dlext_constants::DL_TRUE;
@@ -221,51 +250,66 @@ class todo
 
 				$total_possible_todo = $this->db->sql_affectedrows();
 
-				$dl_select = [];
-
-				while ($row = $this->db->sql_fetchrow($result))
+				if ($df_id)
 				{
-					$dl_select[$row['cat_name']][] = $row;
+					$this->db->sql_freeresult($result);
 				}
-
-				$this->db->sql_freeresult($result);
-
-				$cur_cat = '';
-
-				foreach ($dl_select as $category => $row)
+				else
 				{
-					if ($cur_cat != $category)
+					$dl_select = [];
+
+					while ($row = $this->db->sql_fetchrow($result))
 					{
-						$this->template->assign_block_vars('dl_todo_select', [
-							'DL_TYPE'	=> 'optgrp',
-							'DL_VALUE'	=> $category,
-						]);
+						$dl_select[$row['cat_name']][] = $row;
+					}
 
-						foreach ($dl_select[$category] as $row)
+					$this->db->sql_freeresult($result);
+
+					$cur_cat = '';
+
+					foreach ($dl_select as $category => $row)
+					{
+						if ($cur_cat != $category)
 						{
-							$description	= $row['description'];
-							$desc_uid		= $row['desc_uid'];
-							$desc_flags		= $row['desc_flags'];
+							$this->template->assign_block_vars('dl_todo_select', [
+								'DL_TYPE'	=> 'optgrp',
+								'DL_VALUE'	=> $category,
+							]);
 
-							$text_ary		= generate_text_for_edit($description, $desc_uid, $desc_flags);
-							$description	= $text_ary['text'];
+							foreach ($dl_select[$category] as $row)
+							{
+								$description	= $row['description'];
+								$desc_uid		= $row['desc_uid'];
+								$desc_flags		= $row['desc_flags'];
+
+								$text_ary		= generate_text_for_edit($description, $desc_uid, $desc_flags);
+								$description	= $text_ary['text'];
+
+								$this->template->assign_block_vars('dl_todo_select', [
+									'DL_TYPE'	=> 'option',
+									'DL_KEY'	=> $row['id'],
+									'DL_VALUE'	=> $description,
+								]);
+							}
 
 							$this->template->assign_block_vars('dl_todo_select', [
-								'DL_TYPE'	=> 'option',
-								'DL_KEY'	=> $row['id'],
-								'DL_VALUE'	=> $description,
+								'DL_TYPE'	=> 'optend',
 							]);
+
+							$cur_cat = $category;
 						}
-
-						$this->template->assign_block_vars('dl_todo_select', [
-							'DL_TYPE'	=> 'optend',
-						]);
-
-						$cur_cat = $category;
 					}
 				}
 
-				$s_hidden_fields = [];
+				$s_hidden_fields = [
+					'view'		=> 'todo',
+					'edit'		=> $this->dlext_constants::DL_FALSE,
+				];
+
+				if ($df_id)
+				{
+					$s_hidden_fields['df_id'] = $df_id;
+				}
 			}
 
 			// Status for HTML, BBCode, Smilies, Images and Flash,
@@ -299,7 +343,7 @@ class todo
 
 			$this->template->assign_vars([
 				'DL_HACK_VERSION'		=> $hack_version,
-				'DL_TODO_TEXT'			=> $todo,
+				'DL_TODO_TEXT'			=> (!empty($preview_todo)) ? $preview_todo : $todo,
 
 				'S_BBCODE_ALLOWED'		=> $bbcode_status,
 				'S_BBCODE_IMG'			=> $img_status,
@@ -308,7 +352,7 @@ class todo
 				'S_BBCODE_QUOTE'		=> $quote_status,
 				'S_LINKS_ALLOWED'		=> $url_status,
 
-				'S_DL_ADD_TODO'			=> ($edit) ? $this->dlext_constants::DL_FALSE : $this->dlext_constants::DL_TRUE,
+				'S_DL_ADD_TODO'			=> ($edit || $preview) ? $this->dlext_constants::DL_FALSE : $this->dlext_constants::DL_TRUE,
 				'S_DL_TODO_ADD'			=> $total_possible_todo,
 				'S_DL_HIDDEN_FIELDS'	=> build_hidden_fields($s_hidden_fields),
 				'S_DL_FORM_ACTION'		=> $this->helper->route('oxpus_dlext_todo'),

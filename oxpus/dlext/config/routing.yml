@@ -58,6 +58,9 @@ oxpus_dlext_tracker_view:
 oxpus_dlext_tracker_main:
     path: /dlext/tracker/main
     defaults: { _controller: oxpus.dlext.tracker.main:handle }
+oxpus_dlext_unassigned:
+    path: /dlext/unassigned
+    defaults: { _controller: oxpus.dlext.unassigned:handle }
 oxpus_dlext_unbroken:
     path: /dlext/unbroken
     defaults: { _controller: oxpus.dlext.unbroken:handle }

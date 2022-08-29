@@ -147,9 +147,9 @@ class update extends \phpbb\notification\type\base
 	public function get_email_template_variables()
 	{
 		return [
-			'DOWNLOAD'		=> strip_tags(htmlspecialchars_decode($this->get_data('description'), ENT_COMPAT)),
-			'DESCRIPTION'	=> strip_tags(htmlspecialchars_decode($this->get_data('long_desc'), ENT_COMPAT)),
-			'CATEGORY'		=> strip_tags(htmlspecialchars_decode($this->get_data('cat_name'), ENT_COMPAT)),
+			'DOWNLOAD'		=> strip_tags(html_entity_decode($this->get_data('description'), ENT_COMPAT)),
+			'DESCRIPTION'	=> strip_tags(html_entity_decode($this->get_data('long_desc'), ENT_COMPAT)),
+			'CATEGORY'		=> strip_tags(html_entity_decode($this->get_data('cat_name'), ENT_COMPAT)),
 			'U_CATEGORY'	=> generate_board_url(true) . $this->helper->route('oxpus_dlext_index', ['cat_df_id' => $this->get_data('df_id')]),
 		];
 	}

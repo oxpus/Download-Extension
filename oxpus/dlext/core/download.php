@@ -175,6 +175,7 @@ class download implements download_interface
 		$description			= $this->request->variable('description', '', $this->dlext_constants::DL_TRUE);
 		$long_desc				= $this->request->variable('long_desc', '', $this->dlext_constants::DL_TRUE);
 		$file_name				= $this->request->variable('file_name', '', $this->dlext_constants::DL_TRUE);
+		$file_name_extern		= $this->request->variable('file_name_extern', '', $this->dlext_constants::DL_TRUE);
 		$file_traffic			= $this->request->variable('file_traffic', 0);
 		$file_extern			= $this->request->variable('file_extern', 0);
 		$file_extern_size		= $this->request->variable('file_extern_size', '');
@@ -256,6 +257,10 @@ class download implements download_interface
 		if ($file_extern)
 		{
 			$file_traffic = 0;
+			if ($module == 'acp')
+			{
+				$file_name = $file_name_extern;
+			}
 		}
 		else
 		{
@@ -281,6 +286,11 @@ class download implements download_interface
 		if ($module == 'acp')
 		{
 			$file_name = basename($file_name);
+
+			if ($file_name == '0')
+			{
+				$file_name = '';
+			}
 
 			if ($df_id && !$file_extern)
 			{
@@ -341,7 +351,7 @@ class download implements download_interface
 				$this->filesystem->rename($this->dlext_constants->get_value('files_dir') . '/downloads/' . $file_path . $file_name, $this->dlext_constants->get_value('files_dir') . '/downloads/' . $file_path . $new_real_file);
 			}
 
-			if (!$file_extern && $file_name)
+			if (!$file_extern)
 			{
 				$file_size = sprintf('%u', filesize($this->dlext_constants->get_value('files_dir') . '/downloads/' . $file_path . $new_real_file));
 
@@ -1281,6 +1291,40 @@ class download implements download_interface
 			$file_extern_size_range	= $this->dlext_constants::DL_FILE_RANGE_BYTE;
 		}
 
+		$filey = [];
+		$filen = [];
+		$sizes = [];
+		$exist = [];
+		$browse_dir = '';
+		$unassigned_files = $this->dlext_constants::DL_FALSE;
+		$existing_files = [];
+
+		$this->dlext_physical->get_files_assignments($index[$cat_id]['cat_path'], $browse_dir, $exist, $filey, $filen, $sizes, $unassigned_files, $existing_files);
+
+		if ($unassigned_files)
+		{
+			$this->template->assign_var('S_DL_CAT_UNASSIGNED', $this->dlext_constants::DL_TRUE);
+
+			if ($module == 'acp')
+			{
+				foreach ($exist as $key)
+				{
+					if (!$exist[$key])
+					{
+						$file_ary = explode('|~|', $filey[$key]);
+
+						$this->template->assign_block_vars('dl_select_unassigned_file', [
+							'DL_FILE_NAME'	=> $file_ary[1],
+						]);
+					}
+				}
+			}
+			else
+			{
+				$this->template->assign_var('S_DL_CAT_UNASSIGNED_COUNT', $this->language->lang('DL_UNASSIGNED_EXISTS', $unassigned_files));
+			}
+		}
+
 		if ($module == 'upload' || ($module == 'acp' && !$df_id))
 		{
 			$select_new_cat = $this->dlext_extra->dl_dropdown(0, 0, $cat_id, 'auth_up');
@@ -1487,6 +1531,7 @@ class download implements download_interface
 			'S_DL_TRAFFIC'				=> $this->config['dl_traffic_off'],
 			'S_DL_HIDDEN_FIELDS'		=> build_hidden_fields($s_hidden_fields),
 
+			'U_DL_UNASSIGN'				=> $this->helper->route('oxpus_dlext_unassigned'),
 			'U_DL_GO_BACK'				=> $u_go_back,
 		];
 

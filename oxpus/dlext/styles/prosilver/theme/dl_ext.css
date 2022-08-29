@@ -103,6 +103,7 @@
 a.help
 {
 	float: right;
+	color: #aa0000;
 }
 
 a.help:hover
