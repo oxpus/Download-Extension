@@ -222,23 +222,23 @@
 			<div class="postbody dl-width-90">
 				<ul class="post-buttons">
 					<li class="dl-right">
-                        <a href="{{ dl_ver_cell.U_DL_VERSION }}" title="{{ lang('DL_DETAIL') }}" class="button button-icon-only">
-                            <i class="icon fa-info fa-fw" area-hidden="true"></i><span>{{ lang('DL_DETAIL') }}</span>
-                        </a>
-                    </li>
+						<a href="{{ dl_ver_cell.U_DL_VERSION }}" title="{{ lang('DL_DETAIL') }}" class="button button-icon-only">
+							<i class="icon fa-info fa-fw" area-hidden="true"></i><span>{{ lang('DL_DETAIL') }}</span>
+						</a>
+					</li>
 					{% if dl_ver_cell.S_DL_USER_PERM %}
 					<li class="dl-right">
-                        <a href="{{ dl_ver_cell.U_DL_VERSION_EDIT }}" title="{{ lang('DL_EDIT_FILE') }}" class="button button-icon-only">
-                            <i class="icon fa-pencil fa-fw" area-hidden="true"></i><span>{{ lang('DL_EDIT_FILE') }}</span>
-                        </a>
-                    </li>
+						<a href="{{ dl_ver_cell.U_DL_VERSION_EDIT }}" title="{{ lang('DL_EDIT_FILE') }}" class="button button-icon-only">
+							<i class="icon fa-pencil fa-fw" area-hidden="true"></i><span>{{ lang('DL_EDIT_FILE') }}</span>
+						</a>
+					</li>
 					{% endif %}
 				</ul>
 				<div><a href="{{ dl_ver_cell.U_DL_VERSION }}" class="forumtitle">{{ dl_ver_cell.DL_VER_TITLE }}</a>
 				{% if not dl_ver_cell.DL_VER_ACTIVE and dl_ver_cell.S_DL_USER_PERM %}
 				&nbsp;<span class="dl-red small"> &raquo; {{ lang('DL_NOT_ACTIVE') }} &laquo; </span>
 				{% endif %}
-                </div>
+				</div>
 				<div><time datetime="{{ dl_ver_cell.DL_VER_TIME_RFC }}">{{ dl_ver_cell.DL_VER_TIME }}</time></div>
 				<div class="content">{{ dl_ver_cell.DL_VER_DESC }} </div>
 			</div>
@@ -398,15 +398,15 @@
 	<h3>{{ lang('DL_MOD_FILE_HASH_TABLE') }}</h3>
 
 	<div class="tablewrap">
-    	<table class="table1">
-    		{% for dl_hash_row in loops.dl_hash_row %}
-    		<tr class="row">
-    			<td><label><strong>{{ dl_hash_row.DL_VERSION }}</strong></label></td>
-    			<td>{{ dl_hash_row.DL_FILE_NAME }}</td>
-    			<td>[{{ dl_hash_row.DL_HASH_METHOD }}] {{ dl_hash_row.DL_HASH }}</td>
-    		</tr>
-    		{% endfor %}
-    	</table>
+		<table class="table1">
+			{% for dl_hash_row in loops.dl_hash_row %}
+			<tr class="row">
+				<td><label><strong>{{ dl_hash_row.DL_VERSION }}</strong></label></td>
+				<td>{{ dl_hash_row.DL_FILE_NAME }}</td>
+				<td>[{{ dl_hash_row.DL_HASH_METHOD }}] {{ dl_hash_row.DL_HASH }}</td>
+			</tr>
+			{% endfor %}
+		</table>
 	</div>
 
 </div>
