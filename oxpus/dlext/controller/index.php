@@ -210,7 +210,7 @@ class index
 			WHERE d.change_user = u.user_id
 				AND d.approve = 1
 				AND d.cat = c.id
-			ORDER BY cat, change_time DESC, id DESC';
+			ORDER BY d.cat, d.change_time DESC, d.id DESC';
 		$result = $this->db->sql_query($sql);
 
 		$last_dl = [];
