@@ -214,24 +214,9 @@ class acp_config_controller implements acp_config_interface
 					]
 				];
 
-				$fulltext_dl_search_enabled = $this->dlext_constants::DL_FALSE;
 				global $dbms;
 
-				if (strpos(strtolower($dbms), 'mysql') !== false)
-				{
-					$sql = 'SHOW INDEX FROM ' . $this->dlext_table_downloads;
-					$result = $this->db->sql_query($sql);
-					while ($row = $this->db->sql_fetchrow($result))
-					{
-						if ($row['Key_name'] == 'desc_search')
-						{
-							$fulltext_dl_search_enabled = $this->dlext_constants::DL_TRUE;
-						}
-					}
-					$this->db->sql_freeresult($result);
-				}
-
-				if ($fulltext_dl_search_enabled)
+				if (strpos(strtolower($dbms), 'mysql') !== false && strpos(strtolower($this->config['search_type']), 'fulltext_mysql'))
 				{
 					$display_vars['vars'] += [
 						'legend5'				=> '',
