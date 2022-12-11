@@ -553,6 +553,8 @@ class acp_toolbox_controller implements acp_toolbox_interface
 					->core_path($browse_dir)
 					->find(false, true);
 
+				natcasesort($files);
+
 				foreach ($files as $file => $new_path)
 				{
 					$file_name	= basename($file);
@@ -569,6 +571,8 @@ class acp_toolbox_controller implements acp_toolbox_interface
 							->set_extensions([])
 							->core_path($file)
 							->find(false);
+
+						natcasesort($subfiles);
 
 						$count_sub_files = 0;
 
@@ -622,7 +626,7 @@ class acp_toolbox_controller implements acp_toolbox_interface
 				$this->template->assign_var('S_DL_THUMBNAIL_CHECK', $this->dlext_constants::DL_TRUE);
 			}
 
-			if (empty($dirs) && empty($files) && !$unassigned_files)
+			if (empty($dirs) && empty($filey) && !$unassigned_files)
 			{
 				$this->template->assign_var('S_DL_EMPTY_FOLDER', $this->dlext_constants::DL_TRUE);
 			}

@@ -181,7 +181,7 @@ class topic implements topic_interface
 
 		$topic_text_add .= "\n[b]" . $this->language->lang('DL_HACK_AUTOR') . ':[/b] ' . $author_link;
 
-		$topic_text_add .= ($long_desc) ? "\n[b]" . $this->language->lang('DL_FILE_DESCRIPTION') . ':[/b] ' . html_entity_decode($long_desc) : '';
+		$topic_text_add .= ($long_desc) ? "\n[b]" . $this->language->lang('DL_FILE_DESCRIPTION') . ':[/b] ' . html_entity_decode($long_desc, ENT_QUOTES) : '';
 		$topic_text_add .= ($version) ? "\n\n[b]" . $this->language->lang('DL_HACK_VERSION') . ':[/b] ' . $version : '';
 		$topic_text_add .= (!$topic_drop_mode) ? "\n[b]" . ((($extern) ? $this->language->lang('DL_EXTERN') : $this->language->lang('DL_FILE_NAME')) . ':[/b] ' . $file_name) : '';
 		$topic_text_add .= (!$topic_drop_mode) ? (($extern) ? '' : "\n[b]" . $this->language->lang('DL_FILE_SIZE') . ':[/b] ' . str_replace('&nbsp;', ' ', $this->dlext_format->dl_size($file_size))) : '';

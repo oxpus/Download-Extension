@@ -163,8 +163,8 @@ class broken extends \phpbb\notification\type\base
 	public function get_email_template_variables()
 	{
 		return [
-			'REPORTER'				=> strip_tags(html_entity_decode($this->get_data('reporter'), ENT_COMPAT)),
-			'REPORT_NOTIFY_TEXT'	=> strip_tags(html_entity_decode($this->get_data('report_notify_text'), ENT_COMPAT)),
+			'REPORTER'				=> strip_tags(html_entity_decode($this->get_data('reporter'), ENT_QUOTES)),
+			'REPORT_NOTIFY_TEXT'	=> strip_tags(html_entity_decode($this->get_data('report_notify_text'), ENT_QUOTES)),
 			'U_DOWNLOAD'			=> generate_board_url(true) . $this->helper->route('oxpus_dlext_details', ['df_id' => $this->get_data('df_id')], false),
 		];
 	}
