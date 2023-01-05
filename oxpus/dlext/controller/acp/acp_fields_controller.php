@@ -845,11 +845,17 @@ class acp_fields_controller implements acp_fields_interface
 								}
 							}
 
+							$lang_option_explain = $this->language->lang(strtoupper($this->dlext_fields_admin->profile_types[$field_type]) . '_ENTRIES_EXPLAIN');
+							if ($lang_option_explain == strtoupper($this->dlext_fields_admin->profile_types[$field_type]) . '_ENTRIES_EXPLAIN')
+							{
+								$lang_option_explain = '';
+							}
+
 							$this->template->assign_vars([
-								'SDL_BOOL'		=> ($field_type == FIELD_BOOL) ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE,
+								'S_DL_BOOL'		=> ($field_type == FIELD_BOOL) ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE,
 								'S_DL_DROPDOWN'	=> ($field_type == FIELD_DROPDOWN) ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE,
 
-								'L_DL_LANG_OPTIONS_EXPLAIN'	=> $this->language->lang(strtoupper($this->dlext_fields_admin->profile_types[$field_type]) . '_ENTRIES_EXPLAIN'),
+								'L_DL_LANG_OPTIONS_EXPLAIN'	=> $lang_option_explain,
 								'DL_LANG_OPTIONS'			=> ($field_type == FIELD_DROPDOWN) ? implode("\n", $this->dlext_fields_admin->vars['lang_options']) : '',
 								'DL_FIRST_LANG_OPTION'		=> ($field_type == FIELD_BOOL) ? $this->dlext_fields_admin->vars['lang_options'][0] : '',
 								'DL_SECOND_LANG_OPTION'		=> ($field_type == FIELD_BOOL) ? $this->dlext_fields_admin->vars['lang_options'][1] : '',
@@ -1022,6 +1028,11 @@ class acp_fields_controller implements acp_fields_interface
 			if ($this->language->lang('CP_' . strtoupper($field) . '_EXPLAIN'))
 			{
 				$lang_options[1]['fields'][$field]['EXPLAIN'] = $this->language->lang('CP_' . strtoupper($field) . '_EXPLAIN');
+
+				if ($lang_options[1]['fields'][$field]['EXPLAIN'] == 'CP_' . strtoupper($field) . '_EXPLAIN')
+				{
+					$lang_options[1]['fields'][$field]['EXPLAIN'] = '';
+				}
 			}
 		}
 
@@ -1059,6 +1070,11 @@ class acp_fields_controller implements acp_fields_interface
 					if ($this->language->lang('CP_' . strtoupper($field) . '_EXPLAIN'))
 					{
 						$lang_options[$lang_id]['fields'][$field]['EXPLAIN'] = $this->language->lang('CP_' . strtoupper($field) . '_EXPLAIN');
+
+						if ($lang_options[$lang_id]['fields'][$field]['EXPLAIN'] == 'CP_' . strtoupper($field) . '_EXPLAIN')
+						{
+							$lang_options[$lang_id]['fields'][$field]['EXPLAIN'] = '';
+						}
 					}
 				}
 				else
@@ -1073,6 +1089,11 @@ class acp_fields_controller implements acp_fields_interface
 					if ($this->language->lang('CP_' . strtoupper($field) . '_EXPLAIN') != 'CP_' . strtoupper($field) . '_EXPLAIN')
 					{
 						$lang_options[$lang_id]['fields'][$field]['EXPLAIN'] = $this->language->lang('CP_' . strtoupper($field) . '_EXPLAIN');
+
+						if ($lang_options[$lang_id]['fields'][$field]['EXPLAIN'] == 'CP_' . strtoupper($field) . '_EXPLAIN')
+						{
+							$lang_options[$lang_id]['fields'][$field]['EXPLAIN'] = '';
+						}
 					}
 				}
 			}

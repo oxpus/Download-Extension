@@ -8,7 +8,7 @@
 
 	{% if DL_ERROR_MSG %}
 		<div class="errorbox">
-			<h3>{{ lang('DL_WARNING') }}</h3>
+			<h3>{{ lang('DL_MOD_WARNING') }}</h3>
 			<p>{{ DL_ERROR_MSG }}</p>
 		</div>
 	{% endif %}
@@ -72,7 +72,7 @@
 					{% if S_DL_EDIT_MODE and S_DL_DROPDOWN %}
 						<br /><span>{{ lang('EDIT_DROPDOWN_LANG_EXPLAIN') }}</span>
 					{% else %}
-						<br /><span>{{ lang('LANG_OPTIONS_EXPLAIN') }}</span>
+						<br /><span>{{ L_DL_LANG_OPTIONS_EXPLAIN }}</span>
 					{% endif %}
 				</dt>
 			{% if S_DL_DROPDOWN %}

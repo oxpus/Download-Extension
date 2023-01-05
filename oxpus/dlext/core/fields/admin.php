@@ -30,6 +30,7 @@ class admin extends fields
 	protected $config;
 	protected $language;
 	protected $request;
+	protected $template;
 
 	/* extension owned objects */
 	protected $default_lang_id;
@@ -40,16 +41,45 @@ class admin extends fields
 	 * @param \phpbb\config\config			$config
 	 * @param \phpbb\language\language 		$language
 	 * @param \phpbb\request\request 		$request
+	 * @param phpbb\template\template 		$template
 	 */
 	public function __construct(
 		\phpbb\config\config $config,
 		\phpbb\language\language $language,
-		\phpbb\request\request $request
+		\phpbb\request\request $request,
+		\phpbb\template\template $template
 	)
 	{
 		$this->config 		= $config;
 		$this->language 	= $language;
 		$this->request 		= $request;
+		$this->template 	= $template;
+	}
+
+	/**
+	 * Return Templated value/field. Possible values for $mode are:
+	 * change == user is able to set/enter profile values; preview == just show the value
+	 * @access private
+	 */
+	public function process_admin_field_row($mode, $profile_row)
+	{
+		$preview = ($mode == 'preview') ? true : false;
+
+		// set template filename
+		$this->template->set_filenames(['cp_body' => '@oxpus_dlext/helpers/dl_custom_fields.html']);
+
+		// empty previously filled blockvars
+		foreach ($this->profile_types as $field_type)
+		{
+			$this->template->destroy_block_vars($field_type);
+		}
+
+		// Assign template variables
+		$type_func = 'generate_' . $profile_row['field_type'];
+		$this->$type_func($profile_row, $preview);
+
+		// Return templated data
+		return $this->template->assign_display('cp_body');
 	}
 
 	public function set_lang_defs($lang_defs)
@@ -139,7 +169,7 @@ class admin extends fields
 
 		$options = [
 			0 => ['TITLE' => $this->language->lang('FIELD_TYPE'), 'EXPLAIN' => $this->language->lang('BOOL_TYPE_EXPLAIN'), 'FIELD' => '<label><input type="radio" class="radio" name="field_length" value="1"' . (($this->vars['field_length'] == 1) ? ' checked' : '') . ' onchange="document.getElementById(\'add_profile_field\').submit();" /> ' . $this->language->lang('RADIO_BUTTONS') . '</label><label><input type="radio" class="radio" name="field_length" value="2"' . (($this->vars['field_length'] == 2) ? ' checked' : '') . ' onchange="document.getElementById(\'add_profile_field\').submit();" /> ' . $this->language->lang('CHECKBOX') . '</label>'],
-			1 => ['TITLE' => $this->language->lang('DEFAULT_VALUE'), 'FIELD' => $this->process_field_row('preview', $profile_row)],
+			1 => ['TITLE' => $this->language->lang('DEFAULT_VALUE'), 'FIELD' => $this->process_admin_field_row('preview', $profile_row)],
 		];
 
 		return $options;
@@ -168,8 +198,8 @@ class admin extends fields
 		$profile_row[1]['field_default_value']	= $this->vars['field_novalue'];
 
 		$options = [
-			0 => ['TITLE' => $this->language->lang('DEFAULT_VALUE'), 'FIELD' => $this->process_field_row('preview', $profile_row[0])],
-			1 => ['TITLE' => $this->language->lang('NO_VALUE_OPTION'), 'EXPLAIN' => $this->language->lang('NO_VALUE_OPTION_EXPLAIN'), 'FIELD' => $this->process_field_row('preview', $profile_row[1])],
+			0 => ['TITLE' => $this->language->lang('DEFAULT_VALUE'), 'FIELD' => $this->process_admin_field_row('preview', $profile_row[0])],
+			1 => ['TITLE' => $this->language->lang('NO_VALUE_OPTION'), 'EXPLAIN' => $this->language->lang('NO_VALUE_OPTION_EXPLAIN'), 'FIELD' => $this->process_admin_field_row('preview', $profile_row[1])],
 		];
 
 		return $options;
@@ -202,7 +232,7 @@ class admin extends fields
 		}
 
 		$options = [
-			0 => ['TITLE' => $this->language->lang('DEFAULT_VALUE'),	'FIELD' => $this->process_field_row('preview', $profile_row)],
+			0 => ['TITLE' => $this->language->lang('DEFAULT_VALUE'),	'FIELD' => $this->process_admin_field_row('preview', $profile_row)],
 			1 => ['TITLE' => $this->language->lang('ALWAYS_TODAY'),	'FIELD' => '<label><input type="radio" class="radio" name="always_now" value="1"' . (($s_checked) ? ' checked' : '') . ' onchange="document.getElementById(\'add_profile_field\').submit();" /> ' . $this->language->lang('YES') . '</label><label><input type="radio" class="radio" name="always_now" value="0"' . ((!$s_checked) ? ' checked' : '') . ' onchange="document.getElementById(\'add_profile_field\').submit();" /> ' . $this->language->lang('NO') . '</label>'],
 		];
 

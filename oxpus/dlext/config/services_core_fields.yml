@@ -6,6 +6,7 @@ services:
             - '@config'
             - '@language'
             - '@request'
+            - '@template'
     oxpus.dlext.fields.fields:
         class: oxpus\dlext\core\fields\fields
         public: true

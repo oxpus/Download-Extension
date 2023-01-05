@@ -534,7 +534,7 @@ class fields
 				else if ($day && $month && $year)
 				{
 					// d/m/y 00:00 GMT isn't necessarily on the same d/m/y in the user's timezone, so add the timezone seconds
-					return $this->user->format_date(gmmktime(0, 0, 0, $month, $day, $year) + $this->user->timezone + $this->user->dst, $this->language->lang('DATE_FORMAT'), true);
+					return $this->user->format_date(gmmktime(0, 0, 0, $month, $day, $year), $this->language->lang('DATE_FORMAT'), true);
 				}
 
 				return $value;
@@ -659,7 +659,7 @@ class fields
 	public function generate_int($profile_row, $preview = false)
 	{
 		$profile_row['field_value'] = $this->get_var('int', $profile_row, $profile_row['field_default_value'], $preview);
-		$this->template->assign_block_vars($this->profile_types[$profile_row['field_type']], array_change_key_case($profile_row, CASE_UPPER));
+		$this->template->assign_block_vars($this->profile_types[FIELD_INT], array_change_key_case($profile_row, CASE_UPPER));
 	}
 
 	/**
@@ -718,7 +718,7 @@ class fields
 		unset($now);
 
 		$profile_row['field_value'] = 0;
-		$this->template->assign_block_vars($this->profile_types[$profile_row['field_type']], array_change_key_case($profile_row, CASE_UPPER));
+		$this->template->assign_block_vars($this->profile_types[FIELD_DATE], array_change_key_case($profile_row, CASE_UPPER));
 	}
 
 	/**
@@ -729,7 +729,7 @@ class fields
 	{
 		$value = $this->get_var('int', $profile_row, $profile_row['field_default_value'], $preview);
 		$profile_row['field_value'] = $value;
-		$this->template->assign_block_vars($this->profile_types[$profile_row['field_type']], array_change_key_case($profile_row, CASE_UPPER));
+		$this->template->assign_block_vars($this->profile_types[FIELD_BOOL], array_change_key_case($profile_row, CASE_UPPER));
 
 		if ($profile_row['field_length'] == 1)
 		{
@@ -756,7 +756,7 @@ class fields
 	public function generate_string($profile_row, $preview = false)
 	{
 		$profile_row['field_value'] = $this->get_var('string', $profile_row, $profile_row['lang_default_value'], $preview);
-		$this->template->assign_block_vars($this->profile_types[$profile_row['field_type']], array_change_key_case($profile_row, CASE_UPPER));
+		$this->template->assign_block_vars($this->profile_types[FIELD_STRING], array_change_key_case($profile_row, CASE_UPPER));
 	}
 
 	/**
@@ -770,7 +770,7 @@ class fields
 		$profile_row['field_cols'] = $field_length[1];
 
 		$profile_row['field_value'] = $this->get_var('string', $profile_row, $profile_row['lang_default_value'], $preview);
-		$this->template->assign_block_vars($this->profile_types[$profile_row['field_type']], array_change_key_case($profile_row, CASE_UPPER));
+		$this->template->assign_block_vars($this->profile_types[FIELD_TEXT], array_change_key_case($profile_row, CASE_UPPER));
 	}
 
 	/**
@@ -787,7 +787,7 @@ class fields
 		}
 
 		$profile_row['field_value'] = $value;
-		$this->template->assign_block_vars($this->profile_types[$profile_row['field_type']], array_change_key_case($profile_row, CASE_UPPER));
+		$this->template->assign_block_vars($this->profile_types[FIELD_DROPDOWN], array_change_key_case($profile_row, CASE_UPPER));
 
 		foreach ($this->options_lang[$profile_row['field_id']][$profile_row['lang_id']] as $option_id => $option_value)
 		{
