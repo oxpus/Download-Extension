@@ -1307,9 +1307,9 @@ class download implements download_interface
 
 			if ($module == 'acp')
 			{
-				foreach ($exist as $key)
+				foreach ($exist as $key => $value)
 				{
-					if (!$exist[$key])
+					if (!$value)
 					{
 						$file_ary = explode('|~|', $filey[$key]);
 

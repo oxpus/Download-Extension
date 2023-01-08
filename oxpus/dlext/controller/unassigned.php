@@ -103,9 +103,9 @@ class unassigned
 				$return_json = '			<select name="file_name">';
 				$return_json .= '				<option value="0">' . $this->language->lang('DL_NO_CHANGE') . '</option>';
 
-				foreach ($exist as $key)
+				foreach ($exist as $key => $value)
 				{
-					if (!$exist[$key])
+					if (!$value)
 					{
 						$file_ary = explode('|~|', $filey[$key]);
 						$return_json .= '				<option value="' . $file_ary[1] . '">' . $file_ary[1] . '</option>';
