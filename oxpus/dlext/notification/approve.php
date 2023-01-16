@@ -78,7 +78,7 @@ class approve extends \phpbb\notification\type\base
 	{
 		$access_cat = $this->dlext_main->full_index(0, 0, 0, $this->dlext_constants::DL_AUTH_CHECK_MOD);
 
-		return (!empty($access_cat)) ? true : false;
+		return !empty($access_cat);
 	}
 
 	/**

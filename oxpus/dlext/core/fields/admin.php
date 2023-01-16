@@ -63,7 +63,7 @@ class admin extends fields
 	 */
 	public function process_admin_field_row($mode, $profile_row)
 	{
-		$preview = ($mode == 'preview') ? true : false;
+		$preview = $mode == 'preview';
 
 		// set template filename
 		$this->template->set_filenames(['cp_body' => '@oxpus_dlext/helpers/dl_custom_fields.html']);
@@ -224,11 +224,11 @@ class admin extends fields
 		$always_now = $this->request->variable('always_now', -1);
 		if ($always_now == -1)
 		{
-			$s_checked = ($this->vars['field_default_value'] == 'now') ? true : false;
+			$s_checked = $this->vars['field_default_value'] == 'now';
 		}
 		else
 		{
-			$s_checked = ($always_now) ? true : false;
+			$s_checked = $always_now > 0;
 		}
 
 		$options = [

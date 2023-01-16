@@ -28,6 +28,7 @@ class fields
 	protected $request;
 	protected $template;
 	protected $user;
+	protected $user_ident;
 
 	/* default field arrays */
 	public $profile_types = [FIELD_INT => 'int', FIELD_STRING => 'string', FIELD_TEXT => 'text', FIELD_BOOL => 'bool', FIELD_DROPDOWN => 'dropdown', FIELD_DATE => 'date'];
@@ -107,7 +108,7 @@ class fields
 				'LANG_EXPLAIN'	=> $row['lang_explain'],
 				'FIELD'			=> $tpl_snippet,
 				'FIELD_ID'		=> ($type == FIELD_DATE || ($type == FIELD_BOOL && $row['field_length'] == '1')) ? '' : 'pf_' . $row['field_ident'],
-				'S_REQUIRED'	=> ($row['field_required']) ? true : false,
+				'S_REQUIRED'	=> $row['field_required'] <> 0,
 			]);
 		}
 		$this->db->sql_freeresult($result);
@@ -806,7 +807,7 @@ class fields
 	 */
 	public function process_field_row($mode, $profile_row)
 	{
-		$preview = ($mode == 'preview') ? true : false;
+		$preview = $mode == 'preview';
 
 		// set template filename
 		$this->template->set_filenames(['cp_body' => '@oxpus_dlext/helpers/dl_custom_fields.html']);
