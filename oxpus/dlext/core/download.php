@@ -285,8 +285,6 @@ class download implements download_interface
 
 		if ($module == 'acp')
 		{
-			$file_name = basename($file_name);
-
 			if ($file_name == '0')
 			{
 				$file_name = '';
