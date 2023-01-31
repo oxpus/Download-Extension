@@ -26,6 +26,12 @@ jobs:
                     - php: '7.1'
                       db: "none"
                       NOTESTS: 1
+                    - php: '7.3'
+                      db: "none"
+                      NOTESTS: 1
+                    - php: '7.4'
+                      db: "none"
+                      NOTESTS: 1
 
         name: PHP ${{ matrix.php }} - ${{ matrix.db }}
 
