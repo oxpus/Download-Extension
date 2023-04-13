@@ -742,7 +742,7 @@ $lang = array_merge($lang, [
 	'DL_TRAFFICS_USERS'				=> 'Limiter le trafic des utilisateurs',
 	'DL_TRAFFICS_USERS_GROUPS'		=> 'Limiter le trafic des utilisateurs pour ces groupes d’utilisateurs',
 	'DL_TRAFFICS_GUESTS'			=> 'Limiter le trafic global pour les invités',
-	'DL_TRANSLATION'				=> 'Traduction française par : darky, EnYgma, <a href="http://www.dowfrance.com" title="DoWFrance - Communauté Francophone Days of War">panteror</a>, la <a href="http://www.ezcom-fr.com" title="Communauté EzCom">Communauté EzCom</a> & TazDevilBZH du <a href="https://forum.makersbzh.fr" title="Forum Makers BZH>Forum Makers BZH</a>.',
+	'DL_TRANSLATION'				=> 'Traduction française par : darky, EnYgma, <a href="http://www.dowfrance.com" title="DoWFrance - Communauté Francophone Days of War">panteror</a>, la <a href="http://www.ezcom-fr.com" title="Communauté EzCom">Communauté EzCom</a> & TazDevilBZH du <a href="https://forum.makersbzh.fr" title="Forum Makers BZH">Forum Makers BZH</a>.',
 
 	'DL_UNAPPROVED'				=> '[ non-validé ]',
 	'DL_UNASSIGNED_EXISTS'		=> '%s téléchargements non associés trouvés dans le dossier de catégorie.<br />Pour utiliser ces fichiers, veuillez utiliser le module ACP <strong>Gestion des Téléchargements</strong>.',
