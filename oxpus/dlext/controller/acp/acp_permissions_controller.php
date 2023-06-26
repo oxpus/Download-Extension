@@ -493,7 +493,7 @@ class acp_permissions_controller implements acp_permissions_interface
 
 					if ($s_presel_groups[0] == $this->dlext_constants::DL_NONE)
 					{
-						if (count($s_presel_cats) == 1)
+						if (count($s_presel_cats) >= 1)
 						{
 							$s_auth_all = [];
 							$s_auth_all[] = ['value' => $this->dlext_constants::DL_PERM_GENERAL_NONE, 		'lang' => $this->language->lang('SELECT_OPTION')];
