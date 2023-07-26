@@ -255,6 +255,11 @@ class details
 
 		$cat_auth		= $this->dlext_auth->dl_cat_auth($cat_id);
 
+		if (!$cat_auth['auth_view'])
+		{
+			trigger_error('DL_NO_PERMISSION');
+		}
+
 		/*
 		* Prepare all permissions for the current user
 		*/
@@ -398,7 +403,7 @@ class details
 		*/
 		$s_comments_tab = $this->dlext_constants::DL_FALSE;
 
-		if ($index[$cat_id]['comments'] && $this->dlext_auth->cat_auth_comment_read($cat_id))
+		if (!empty($index[$cat_id]['comments']) && $index[$cat_id]['comments'] && $this->dlext_auth->cat_auth_comment_read($cat_id))
 		{
 			$allow_manage	= $this->dlext_comments->get_auth_comment_manage($cat_id);
 			$deny_post		= $this->dlext_comments->get_auth_comment_post($cat_id);
@@ -455,7 +460,7 @@ class details
 				}
 			}
 
-			if ($index[$cat_id]['show_file_hash'])
+			if (!empty($index[$cat_id]['show_file_hash']) && $index[$cat_id]['show_file_hash'])
 			{
 				$dl_key = $dl_files['description'] . (($dl_files['hack_version']) ? ' ' . $dl_files['hack_version'] : ' (' . $this->language->lang('DL_CURRENT_VERSION') . ')');
 				$hash_table_tmp[$dl_key]['hash'] = ($dl_files['file_hash']) ? $dl_files['file_hash'] : '';
@@ -493,7 +498,7 @@ class details
 
 					$dl_key = $dl_files['description'] . (($row['ver_version']) ? ' ' . $row['ver_version'] : ' (' . $this->user->format_date($row['ver_change_time']) . ')');
 
-					if ($index[$cat_id]['show_file_hash'] && ($row['ver_active'] || $ver_can_edit))
+					if (!empty($index[$cat_id]['show_file_hash']) && $index[$cat_id]['show_file_hash'] && ($row['ver_active'] || $ver_can_edit))
 					{
 						$hash_table_tmp[$dl_key]['hash'] = ($ver_file_hash) ? $ver_file_hash : '';
 						$hash_table_tmp[$dl_key]['file'] = $row['ver_file_name'];
@@ -638,7 +643,7 @@ class details
 
 		if ($dl_files['mod_list'])
 		{
-			if ($index[$cat_id]['allow_mod_desc'])
+			if (!empty($index[$cat_id]['allow_mod_desc']) && $index[$cat_id]['allow_mod_desc'])
 			{
 				$s_mod_list_on = $this->dlext_constants::DL_TRUE;
 
@@ -929,7 +934,7 @@ class details
 		* Enabled Bug Tracker for this download category?
 		*/
 		$s_bug_tracker = $this->dlext_constants::DL_FALSE;
-		if ($index[$cat_id]['bug_tracker'] && !$this->user->data['is_bot'] && $this->user->data['is_registered'])
+		if (!empty($index[$cat_id]['bug_tracker']) && $index[$cat_id]['bug_tracker'] && !$this->user->data['is_bot'] && $this->user->data['is_registered'])
 		{
 			$s_bug_tracker = $this->dlext_constants::DL_TRUE;
 		}
@@ -937,7 +942,7 @@ class details
 		/*
 		* Thumbnails? Okay, getting some thumbs, if they exists...
 		*/
-		if ($index[$cat_id]['allow_thumbs'] && $this->config['dl_thumb_fsize'])
+		if (!empty($index[$cat_id]['allow_thumbs']) && $index[$cat_id]['allow_thumbs'] && $this->config['dl_thumb_fsize'])
 		{
 			$first_thumb_exists	= $this->dlext_constants::DL_FALSE;
 			$more_thumbs_exists	= $this->dlext_constants::DL_FALSE;
@@ -1021,7 +1026,7 @@ class details
 		$s_real_filetime = $this->dlext_constants::DL_FALSE;
 		if ($this->config['dl_show_real_filetime'] && !$dl_files['extern'])
 		{
-			if ($this->filesystem->exists($this->dlext_constants->get_value('files_dir') . '/downloads/' . $index[$cat_id]['cat_path'] . $real_file))
+			if (!empty($index[$cat_id]['cat_path']) && $this->filesystem->exists($this->dlext_constants->get_value('files_dir') . '/downloads/' . $index[$cat_id]['cat_path'] . $real_file))
 			{
 				$file_time = @filemtime($this->dlext_constants->get_value('files_dir') . '/downloads/' . $index[$cat_id]['cat_path'] . $real_file);
 				$s_real_filetime = $this->dlext_constants::DL_TRUE;
@@ -1093,7 +1098,7 @@ class details
 		{
 			$s_edit_button = $this->dlext_constants::DL_TRUE;
 
-			if ($index[$cat_id]['allow_thumbs'] && $this->config['dl_thumb_fsize'])
+			if (!empty($index[$cat_id]['allow_thumbs']) && $index[$cat_id]['allow_thumbs'] && $this->config['dl_thumb_fsize'])
 			{
 				$s_edit_thumbs = $this->dlext_constants::DL_TRUE;
 			}

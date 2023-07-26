@@ -199,6 +199,11 @@ class load
 		$check_status	= $this->dlext_status->status($df_id);
 		$cat_auth		= $this->dlext_auth->dl_cat_auth($cat_id);
 
+		if (!$cat_auth['auth_dl'])
+		{
+			trigger_error('DL_NO_PERMISSION');
+		}
+
 		if ($modcp)
 		{
 			$check_status['file_auth'] = $this->dlext_constants::DL_TRUE;
@@ -436,7 +441,7 @@ class load
 					}
 				}
 
-				if ($index[$cat_id]['statistics'] && $check_status['file_auth'])
+				if (!empty($index[$cat_id]['statistics']) && $index[$cat_id]['statistics'] && $check_status['file_auth'])
 				{
 					if ($index[$cat_id]['stats_prune'])
 					{
@@ -498,7 +503,7 @@ class load
 				garbage_collection();
 				exit_handler();
 			}
-			else if ($check_status['file_auth'])
+			else if ($check_status['file_auth'] && !empty($index[$cat_id]['cat_path']))
 			{
 				$dl_file_url = $this->dlext_constants->get_value('files_dir') . '/downloads/' . $index[$cat_id]['cat_path'];
 
