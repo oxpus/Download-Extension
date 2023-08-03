@@ -255,7 +255,7 @@ class details
 
 		$cat_auth		= $this->dlext_auth->dl_cat_auth($cat_id);
 
-		if (!$cat_auth['auth_view'])
+		if (!$this->dlext_auth->user_auth($cat_id, 'auth_view'))
 		{
 			trigger_error('DL_NO_PERMISSION');
 		}
