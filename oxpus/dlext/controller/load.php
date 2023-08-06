@@ -199,7 +199,7 @@ class load
 		$check_status	= $this->dlext_status->status($df_id);
 		$cat_auth		= $this->dlext_auth->dl_cat_auth($cat_id);
 
-		if (!$cat_auth['auth_dl'])
+		if (!$this->dlext_auth->user_auth($cat_id, 'auth_view'))
 		{
 			trigger_error('DL_NO_PERMISSION');
 		}
