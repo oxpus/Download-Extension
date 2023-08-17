@@ -368,9 +368,11 @@ class physical implements physical_interface
 			$path .= '/';
 		}
 
+		$sql_path = mb_convert_encoding($path, 'ISO-8859-1', mb_detect_encoding($path, 'UTF-8, ISO-8859-1, ISO-8859-15', true));
+
 		$sql = 'SELECT d.description, d.file_name, d.real_file FROM ' . $this->dlext_table_downloads . ' d, ' . $this->dlext_table_dl_cat . " c
 			WHERE d.cat = c.id
-				AND c.path = '" . $this->db->sql_escape(utf8_decode($path)) . "'";
+				AND c.path = '" . $this->db->sql_escape($sql_path) . "'";
 		$result = $this->db->sql_query($sql);
 		$total_files = $this->db->sql_affectedrows();
 
@@ -385,10 +387,12 @@ class physical implements physical_interface
 
 		$this->db->sql_freeresult($result);
 
+		$sql_path = mb_convert_encoding($path, 'ISO-8859-1', mb_detect_encoding($path, 'UTF-8, ISO-8859-1, ISO-8859-15', true));
+
 		$sql = 'SELECT d.description, v.ver_file_name, v.ver_real_file FROM ' . $this->dlext_table_dl_versions . ' v, ' . $this->dlext_table_downloads . ' d, ' . $this->dlext_table_dl_cat . " c
 			WHERE d.cat = c.id
 				AND v.dl_id = d.id
-				AND c.path = '" . $this->db->sql_escape(utf8_decode($path)) . "'";
+				AND c.path = '" . $this->db->sql_escape($sql_path) . "'";
 		$result = $this->db->sql_query($sql);
 		$total_files = $this->db->sql_affectedrows();
 

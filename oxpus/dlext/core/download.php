@@ -732,6 +732,19 @@ class download implements download_interface
 			];
 		}
 
+		if ($cat_auth['auth_mod'] || $index[$cat_id]['auth_mod'] || $index[$cat_id]['allow_mod_desc'] || $this->dlext_auth->user_admin())
+		{
+			$sql_array += [
+				'mod_list'			=> $mod_list,
+				'mod_desc_uid'		=> $mod_desc_uid,
+				'mod_desc_bitfield'	=> $mod_desc_bitfield,
+				'mod_desc_flags'	=> $mod_desc_flags,
+				'warn_uid'			=> $warn_uid,
+				'warn_bitfield'		=> $warn_bitfield,
+				'warn_flags'		=> $warn_flags,
+			];
+		}
+
 		if ($df_id)
 		{
 			if (!$change_time)
@@ -745,19 +758,6 @@ class download implements download_interface
 			if ($click_reset)
 			{
 				$sql_array += ['klicks' => 0];
-			}
-
-			if ($cat_auth['auth_mod'] || $index[$cat_id]['auth_mod'] || $index[$cat_id]['allow_mod_desc'] || $this->dlext_auth->user_admin())
-			{
-				$sql_array += [
-					'mod_list'			=> $mod_list,
-					'mod_desc_uid'		=> $mod_desc_uid,
-					'mod_desc_bitfield'	=> $mod_desc_bitfield,
-					'mod_desc_flags'	=> $mod_desc_flags,
-					'warn_uid'			=> $warn_uid,
-					'warn_bitfield'		=> $warn_bitfield,
-					'warn_flags'		=> $warn_flags,
-				];
 			}
 
 			if ($module == 'acp')
@@ -936,7 +936,7 @@ class download implements download_interface
 			$thumb_pic_extension = trim(strrchr(strtolower($thumb_name), '.'));
 			$thumb_upload_filename = $df_id . '_' . unique_id() . $thumb_pic_extension;
 
-			if (isset($dl_file['thumbnail']))
+			if (!empty($dl_file['thumbnail']))
 			{
 				$this->filesystem->remove($this->dlext_constants->get_value('files_dir') . '/thumbs/' . $dl_file['thumbnail']);
 			}
