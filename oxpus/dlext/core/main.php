@@ -381,14 +381,14 @@ class main implements main_interface
 			$dl_mod_is_active_for_admins = $this->dlext_constants::DL_TRUE;
 		}
 
-		if (!$this->config['dl_global_bots'] && $this->user->data['is_bot'])
+		if (!$this->config['dl_global_bots'] && !empty($this->user->data['is_bot']) && $this->user->data['is_bot'])
 		{
 			$dl_mod_link_show = $this->dlext_constants::DL_FALSE;
 			$dl_mod_is_active = $this->dlext_constants::DL_FALSE;
 			$dl_mod_is_active_for_admins = $this->dlext_constants::DL_FALSE;
 		}
 
-		if (!$this->config['dl_global_guests'] && !$this->user->data['is_registered'] && !$this->user->data['is_bot'])
+		if (!$this->config['dl_global_guests'] && (!empty($this->user->data['is_registered']) && !$this->user->data['is_registered']) && (!empty($this->user->data['is_bot']) && !$this->user->data['is_bot']))
 		{
 			$dl_mod_link_show = $this->dlext_constants::DL_FALSE;
 			$dl_mod_is_active = $this->dlext_constants::DL_FALSE;

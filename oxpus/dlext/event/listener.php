@@ -229,7 +229,7 @@ class listener implements EventSubscriberInterface
 				$this->db->sql_freeresult($result);
 			}
 
-			if ($this->user->data['is_registered'])
+			if (!empty($this->user->data['is_registered']) && $this->user->data['is_registered'])
 			{
 				$sql = 'SELECT count(d.id) as total FROM ' . $this->dlext_table_downloads . ' d, ' . $this->dlext_table_dl_cat . ' c
 					WHERE c.id = d.cat

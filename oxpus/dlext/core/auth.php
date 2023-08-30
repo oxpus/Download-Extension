@@ -95,7 +95,7 @@ class auth implements auth_interface
 			foreach (array_keys($dl_index) as $key)
 			{
 				// check the default cat permissions
-				if (isset($dl_index[$key]['auth_view']) && ($dl_index[$key]['auth_view'] == 1 || ($dl_index[$key]['auth_view'] == 2 && $this->user->data['is_registered'])))
+				if (isset($dl_index[$key]['auth_view']) && ($dl_index[$key]['auth_view'] == 1 || ($dl_index[$key]['auth_view'] == 2 && (!empty($this->user->data['is_registered']) && $this->user->data['is_registered']))))
 				{
 					$dl_index[$key]['auth_view'] = $this->dlext_constants::DL_TRUE;
 				}
@@ -104,7 +104,7 @@ class auth implements auth_interface
 					$dl_index[$key]['auth_view'] = $this->dlext_constants::DL_FALSE;
 				}
 
-				if (isset($dl_index[$key]['auth_dl']) && ($dl_index[$key]['auth_dl'] == 1 || ($dl_index[$key]['auth_dl'] == 2 && $this->user->data['is_registered'])))
+				if (isset($dl_index[$key]['auth_dl']) && ($dl_index[$key]['auth_dl'] == 1 || ($dl_index[$key]['auth_dl'] == 2 &&  (!empty($this->user->data['is_registered']) && $this->user->data['is_registered']))))
 				{
 					$dl_index[$key]['auth_dl'] = $this->dlext_constants::DL_TRUE;
 				}
@@ -113,7 +113,7 @@ class auth implements auth_interface
 					$dl_index[$key]['auth_dl'] = $this->dlext_constants::DL_FALSE;
 				}
 
-				if (isset($dl_index[$key]['auth_up']) && ($dl_index[$key]['auth_up'] == 1 || ($dl_index[$key]['auth_up'] == 2 && $this->user->data['is_registered'])))
+				if (isset($dl_index[$key]['auth_up']) && ($dl_index[$key]['auth_up'] == 1 || ($dl_index[$key]['auth_up'] == 2 &&  (!empty($this->user->data['is_registered']) && $this->user->data['is_registered']))))
 				{
 					$dl_index[$key]['auth_up'] = $this->dlext_constants::DL_TRUE;
 				}
@@ -122,7 +122,7 @@ class auth implements auth_interface
 					$dl_index[$key]['auth_up'] = $this->dlext_constants::DL_FALSE;
 				}
 
-				if (isset($dl_index[$key]['auth_mod']) && ($dl_index[$key]['auth_mod'] == 1 || ($dl_index[$key]['auth_mod'] == 2 && $this->user->data['is_registered'])))
+				if (isset($dl_index[$key]['auth_mod']) && ($dl_index[$key]['auth_mod'] == 1 || ($dl_index[$key]['auth_mod'] == 2 &&  (!empty($this->user->data['is_registered']) && $this->user->data['is_registered']))))
 				{
 					$dl_index[$key]['auth_mod'] = $this->dlext_constants::DL_TRUE;
 				}
