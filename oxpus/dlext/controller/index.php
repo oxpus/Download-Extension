@@ -489,7 +489,7 @@ class index
 
 		if ($cat && $total_downloads)
 		{
-			$dl_files = $this->dlext_files->files($cat, $sql_sort_by, $sql_order, $start, $this->config['dl_links_per_page'], 'id, description, desc_uid, desc_bitfield, desc_flags, hack_version, extern, file_size, klicks, overall_klicks, rating, long_desc, long_desc_uid, long_desc_bitfield, long_desc_flags, add_user, add_time, broken', $this->dlext_constants::DL_TRUE);
+			$dl_files = $this->dlext_files->files($cat, $sql_sort_by, $sql_order, $start, $this->config['dl_links_per_page'], 'id, description, desc_uid, desc_bitfield, desc_flags, hack_version, extern, file_size, klicks, overall_klicks, rating, long_desc, long_desc_uid, long_desc_bitfield, long_desc_flags, add_user, add_time, broken, thumbnail', $this->dlext_constants::DL_TRUE);
 
 			/**
 			 * Fetch additional data for the downloads
@@ -602,6 +602,13 @@ class index
 						$cat_edit_link = $this->dlext_constants::DL_FALSE;
 				}
 
+				$s_display_thumbnail = $this->dlext_constants::DL_FALSE;
+
+				if (!empty($dl_files[$i]['thumbnail']) && (($this->config['dl_thumbs_display_cat'] == $this->dlext_constants::DL_THUMBS_DISPLAY_ON) || ($this->config['dl_thumbs_display_cat'] == $this->dlext_constants::DL_THUMBS_DISPLAY_CAT && $index_cat[$cat]['display_thumbs'])))
+				{
+					$s_display_thumbnail = $this->dlext_constants::DL_TRUE;
+				}
+
 				/*
 				* Build rating imageset
 				*/
@@ -624,6 +631,9 @@ class index
 					'DL_RATE_COUNT'				=> ($rating_img_data != $this->dlext_constants::DL_FALSE) ? $rating_img_data['count']['count'] : '',
 					'DL_RATE_UNDO'				=> ($rating_img_data != $this->dlext_constants::DL_FALSE) ? $rating_img_data['count']['undo'] : '',
 					'DL_RATE_TITLE'				=> ($rating_img_data != $this->dlext_constants::DL_FALSE) ? $rating_img_data['count']['title'] : '',
+					'DL_THUMBNAIL_PIC'			=> $this->helper->route('oxpus_dlext_thumbnail', ['pic' => $file_id, 'img_type' => 'thumb', 'disp_art' => $this->dlext_constants::DL_TRUE]),
+
+					'S_DISPLAY_THUMBNAIL'		=> $s_display_thumbnail,
 
 					'U_DL_DIRECT_EDIT'			=> ($cat_edit_link) ? $this->helper->route('oxpus_dlext_mcp_edit', ['cat_id' => $cat, 'df_id' => $file_id]) : '',
 					'U_DL_FILE'					=> $file_url,

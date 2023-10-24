@@ -157,6 +157,7 @@ class acp_cat_edit_controller implements acp_cat_edit_interface
 		$topic_more_details	= $this->request->variable('topic_more_details', 1);
 		$comments			= $this->request->variable('comments', 0);
 		$perms_copy_from	= $this->request->variable('perms_copy_from', 0);
+		$display_thumbs		= $this->request->variable('display_thumbs', 0);
 
 		if ($cancel)
 		{
@@ -236,6 +237,7 @@ class acp_cat_edit_controller implements acp_cat_edit_interface
 				$topic_type			= $index[$cat_id]['dl_topic_type'];
 				$set_add			= $index[$cat_id]['dl_set_add'];
 				$set_user			= $index[$cat_id]['dl_set_user'];
+				$display_thumbs		= $index[$cat_id]['display_thumbs'];
 
 				$s_cat_parent		= $this->dlext_extra->dl_dropdown(0, 0, $index[$cat_id]['parent'], 'auth_view', $cat_id);
 				$perms_copy_from	= $this->dlext_extra->dl_dropdown(0, 0, 0, 'auth_view', $cat_id);
@@ -326,6 +328,11 @@ class acp_cat_edit_controller implements acp_cat_edit_interface
 			if ($this->config['dl_thumb_fsize'])
 			{
 				$this->template->assign_var('S_DL_THUMBNAILS', $this->dlext_constants::DL_TRUE);
+
+				if ($this->config['dl_thumbs_display_cat'] == $this->dlext_constants::DL_THUMBS_DISPLAY_CAT)
+				{
+					$this->template->assign_var('S_DL_DISPLAY_THUMBS', $this->dlext_constants::DL_TRUE);
+				}
 			}
 
 			if ($this->config['dl_topic_forum'] == $this->dlext_constants::DL_NONE)
@@ -409,6 +416,7 @@ class acp_cat_edit_controller implements acp_cat_edit_interface
 				'DL_CAT_PARENT'				=> $s_cat_parent,
 				'DL_CAT_TRAFFIC'			=> $cat_traffic_out,
 				'DL_ALLOW_THUMBS'			=> $allow_thumbs,
+				'DL_DISPLAY_THUMBS'			=> $display_thumbs,
 				'DL_APPROVE_COMMENTS'		=> $approve_comments,
 				'DL_BUG_TRACKER'			=> $bug_tracker,
 				'DL_TOPIC_TEXT'				=> $topic_text,
@@ -692,6 +700,7 @@ class acp_cat_edit_controller implements acp_cat_edit_interface
 				'stats_prune'			=> $stats_prune,
 				'topic_more_details'	=> $topic_more_details,
 				'topic_user'			=> $topic_user,
+				'display_thumbs'		=> $display_thumbs,
 			];
 
 			if ($cat_id)

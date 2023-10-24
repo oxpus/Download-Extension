@@ -26,6 +26,14 @@
 						<a href="{{ downloads.U_DL_LINK }}"><label>{{ downloads.DL_DESCRIPTION }}</label></a>{{ downloads.DL_HACK_VERSION }}
 						{% INCLUDE '@oxpus_dlext/helpers/dl_miniimg.html' %}
 						{% EVENT oxpus_dlext_overview_download_title_append %}
+						{% if downloads.S_DISPLAY_THUMBNAIL %}
+						<div>
+							<br />
+							<a href="{{ downloads.U_DL_LINK }}">
+								<img src="{{ downloads.DL_THUMBNAIL_PIC }}" alt="{{ downloads.DL_DESCRIPTION }}" title="{{ downloads.DL_DESCRIPTION }}" class="dl-thumb-box" />
+							</a>
+						</div>
+						{% endif %}
 						<br />{{ lang('DL_CAT_NAME') }}{{ lang('COLON') }} <a href="{{ downloads.U_DL_CAT_VIEW }}">{{ downloads.DL_CAT_NAME }}</a>
 					</dt>
 					<dd class="topics">{{ downloads.DL_FILE_SIZE }}</dd>

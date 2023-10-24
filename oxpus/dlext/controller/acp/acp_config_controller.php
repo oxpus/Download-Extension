@@ -211,6 +211,13 @@ class acp_config_controller implements acp_config_interface
 						'dl_nav_link_main'			=> ['lang' => 'DL_NAV_LINK_MAIN',			'validate' => 'string',	'type' => 'select',			'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => $this->dlext_constants::DL_FALSE,		'function' => [$this, 'select_nav_link_pos'],	'params' => ['{CONFIG_VALUE}']],
 						'dl_nav_link_hacks'			=> ['lang' => 'DL_NAV_LINK_HACKS',			'validate' => 'string',	'type' => 'select',			'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => $this->dlext_constants::DL_FALSE,		'function' => [$this, 'select_nav_link_pos'],	'params' => ['{CONFIG_VALUE}']],
 						'dl_nav_link_tracker'		=> ['lang' => 'DL_NAV_LINK_TRACKER',		'validate' => 'string',	'type' => 'select',			'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => $this->dlext_constants::DL_FALSE,		'function' => [$this, 'select_nav_link_pos'],	'params' => ['{CONFIG_VALUE}']],
+
+						'legend5'				=> '',
+
+						'dl_thumbs_display_cat'		=> ['lang' => 'DL_THUMB_DISPLAY_CAT',		'validate' => 'int',	'type' => 'select',		'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => $this->dlext_constants::DL_FALSE,		'function' => [$this, 'select_thumb_display'],	'params' => ['{CONFIG_VALUE}']],
+						'dl_thumbs_display_latest'	=> ['lang' => 'DL_THUMB_DISPLAY_LATEST',	'validate' => 'int',	'type' => 'select',		'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => $this->dlext_constants::DL_FALSE,		'function' => [$this, 'select_thumb_display'],	'params' => ['{CONFIG_VALUE}']],
+						'dl_thumbs_display_overall'	=> ['lang' => 'DL_THUMB_DISPLAY_OVERALL',	'validate' => 'int',	'type' => 'select',		'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => $this->dlext_constants::DL_FALSE,		'function' => [$this, 'select_thumb_display'],	'params' => ['{CONFIG_VALUE}']],
+						'dl_thumbs_display_search'	=> ['lang' => 'DL_THUMB_DISPLAY_SEARCH',	'validate' => 'int',	'type' => 'select',		'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => $this->dlext_constants::DL_FALSE,		'function' => [$this, 'select_thumb_display'],	'params' => ['{CONFIG_VALUE}']],
 					]
 				];
 
@@ -219,7 +226,7 @@ class acp_config_controller implements acp_config_interface
 				if (strpos(strtolower($dbms), 'mysql') !== false && strpos(strtolower($this->config['search_type']), 'fulltext_mysql'))
 				{
 					$display_vars['vars'] += [
-						'legend5'				=> '',
+						'legend6'				=> '',
 
 						'dl_similar_dl'		=> ['lang' => 'DL_SIMILAR_DL_OPTION',		'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_SIMILAR_DL'],
 						'dl_similar_limit'	=> ['lang' => 'DL_SIMILAR_DL_LIMIT',		'validate' => 'int',	'type' => 'text:3:5',		'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_SIMILAR_DL_LIMIT'],
@@ -1064,6 +1071,16 @@ class acp_config_controller implements acp_config_interface
 		$s_select = '<option value="' . $this->dlext_constants::DL_LATEST_TYPE_OFF . '">' . $this->language->lang('DL_LATEST_TYPE_OFF') . '</option>';
 		$s_select .= '<option value="' . $this->dlext_constants::DL_LATEST_TYPE_DEFAULT . '">' . $this->language->lang('DL_LATEST_TYPE_DEFAULT') . '</option>';
 		$s_select .= '<option value="' . $this->dlext_constants::DL_LATEST_TYPE_COMPLETE . '">' . $this->language->lang('DL_LATEST_TYPE_COMPLETE') . '</option>';
+		$s_select = str_replace('value="' . $value . '">', 'value="' . $value . '" selected>', $s_select);
+
+		return $s_select;
+	}
+
+	public function select_thumb_display($value)
+	{
+		$s_select = '<option value="' . $this->dlext_constants::DL_THUMBS_DISPLAY_OFF . '">'   . $this->language->lang('DL_THUMB_DISPLAY_SET_OFF')  . '</option>';
+		$s_select .= '<option value="' . $this->dlext_constants::DL_THUMBS_DISPLAY_ON . '">' . $this->language->lang('DL_THUMB_DISPLAY_SET_ON') . '</option>';
+		$s_select .= '<option value="' . $this->dlext_constants::DL_THUMBS_DISPLAY_CAT . '">' . $this->language->lang('DL_THUMB_DISPLAY_SET_CAT') . '</option>';
 		$s_select = str_replace('value="' . $value . '">', 'value="' . $value . '" selected>', $s_select);
 
 		return $s_select;

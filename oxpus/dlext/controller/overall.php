@@ -201,7 +201,7 @@ class overall
 				$sort_ary = ['change_time' => 'DESC'];
 			}
 
-			$fields = ['cat', 'id', 'description', 'desc_uid', 'desc_bitfield', 'desc_flags', 'hack_version', 'extern', 'file_size', 'klicks', 'overall_klicks', 'rating'];
+			$fields = ['cat', 'id', 'description', 'desc_uid', 'desc_bitfield', 'desc_flags', 'hack_version', 'extern', 'file_size', 'klicks', 'overall_klicks', 'rating', 'thumbnail'];
 			$dl_files = $this->dlext_files->all_files(0, $sort_ary, $latest_where, 0, 0, $fields, $this->config['dl_links_per_page'], $start);
 		}
 		else
@@ -225,7 +225,7 @@ class overall
 				];
 			}
 
-			$fields = ['cat', 'id', 'description', 'desc_uid', 'desc_bitfield', 'desc_flags', 'hack_version', 'extern', 'file_size', 'klicks', 'overall_klicks', 'rating'];
+			$fields = ['cat', 'id', 'description', 'desc_uid', 'desc_bitfield', 'desc_flags', 'hack_version', 'extern', 'file_size', 'klicks', 'overall_klicks', 'rating', 'thumbnail'];
 			$where_cats = ['{cat_perm}' => ['AND', 'IN', $this->db->sql_in_set('cat', $access_cats)]];
 			$dl_files = $this->dlext_files->all_files(0, $sort_ary, $where_cats, 0, 0, $fields, $this->config['dl_links_per_page'], $start);
 		}
@@ -323,6 +323,13 @@ class overall
 						$total_ratings = 0;
 					}
 
+					$s_display_thumbnail = $this->dlext_constants::DL_FALSE;
+
+					if (!empty($dl_files[$i]['thumbnail']) && (($this->config['dl_thumbs_display_' . $mode] == $this->dlext_constants::DL_THUMBS_DISPLAY_ON) || ($this->config['dl_thumbs_display_' . $mode] == $this->dlext_constants::DL_THUMBS_DISPLAY_CAT && $index[$cat_id]['display_thumbs'])))
+					{
+						$s_display_thumbnail = $this->dlext_constants::DL_TRUE;
+					}
+
 					/*
 					* Build rating imageset
 					*/
@@ -341,6 +348,9 @@ class overall
 						'DL_RATE_COUNT'				=> ($rating_img_data != $this->dlext_constants::DL_FALSE) ? $rating_img_data['count']['count'] : '',
 						'DL_RATE_UNDO'				=> ($rating_img_data != $this->dlext_constants::DL_FALSE) ? $rating_img_data['count']['undo'] : '',
 						'DL_RATE_TITLE'				=> ($rating_img_data != $this->dlext_constants::DL_FALSE) ? $rating_img_data['count']['title'] : '',
+						'DL_THUMBNAIL_PIC'			=> $this->helper->route('oxpus_dlext_thumbnail', ['pic' => $file_id, 'img_type' => 'thumb', 'disp_art' => $this->dlext_constants::DL_TRUE]),
+
+						'S_DISPLAY_THUMBNAIL'		=> $s_display_thumbnail,
 
 						'U_DL_CAT_VIEW'				=> $cat_view,
 						'U_DL_LINK'					=> $dl_link,

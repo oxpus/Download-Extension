@@ -319,19 +319,29 @@ class search
 					$description		= generate_text_for_display($description, $desc_uid, $desc_bitfield, $desc_flags);
 					$long_desc			= $this->dlext_format->dl_shorten_string($row['long_desc'], 'search', $row['long_desc_uid'], $row['long_desc_bitfield'], $row['long_desc_flags']);
 
-					$this->template->assign_block_vars('downloads', [
-						'DL_FILE_STATUS'	=> $file_status,
-						'DL_CAT_NAME'		=> $cat_name,
-						'DL_DESCRIPTION'	=> $description,
-						'DL_MINI_IMG'		=> $mini_icon,
-						'DL_FILE_NAME'		=> $file_name,
-						'DL_LONG_DESC'		=> ($this->config['dl_desc_search']) ? $long_desc : '',
-						'DL_ADD_USER'		=> $add_user,
-						'DL_ADD_TIME'		=> $add_time,
-						'DL_ADD_TIME_RFC'	=> $add_time_rfc,
+					$s_display_thumbnail = $this->dlext_constants::DL_FALSE;
 
-						'U_DL_CAT_LINK'	=> $u_cat_link,
-						'U_DL_FILE_LINK'	=> $u_file_link,
+					if (!empty($row['thumbnail']) && (($this->config['dl_thumbs_display_search'] == $this->dlext_constants::DL_THUMBS_DISPLAY_ON) || ($this->config['dl_thumbs_display_search'] == $this->dlext_constants::DL_THUMBS_DISPLAY_CAT && $index[$cat_id]['display_thumbs'])))
+					{
+						$s_display_thumbnail = $this->dlext_constants::DL_TRUE;
+					}
+
+					$this->template->assign_block_vars('downloads', [
+						'DL_FILE_STATUS'		=> $file_status,
+						'DL_CAT_NAME'			=> $cat_name,
+						'DL_DESCRIPTION'		=> $description,
+						'DL_MINI_IMG'			=> $mini_icon,
+						'DL_FILE_NAME'			=> $file_name,
+						'DL_LONG_DESC'			=> ($this->config['dl_desc_search']) ? $long_desc : '',
+						'DL_ADD_USER'			=> $add_user,
+						'DL_ADD_TIME'			=> $add_time,
+						'DL_ADD_TIME_RFC'		=> $add_time_rfc,
+						'DL_THUMBNAIL_PIC'		=> $this->helper->route('oxpus_dlext_thumbnail', ['pic' => $file_id, 'img_type' => 'thumb', 'disp_art' => $this->dlext_constants::DL_TRUE]),
+
+						'S_DISPLAY_THUMBNAIL'	=> $s_display_thumbnail,
+
+						'U_DL_CAT_LINK'			=> $u_cat_link,
+						'U_DL_FILE_LINK'		=> $u_file_link,
 					]);
 
 					/**
@@ -515,19 +525,29 @@ class search
 					$description	= generate_text_for_display($description, $desc_uid, $desc_bitfield, $desc_flags);
 					$long_desc		= $this->dlext_format->dl_shorten_string($row['long_desc'], 'search', $row['long_desc_uid'], $row['long_desc_bitfield'], $row['long_desc_flags']);
 
-					$this->template->assign_block_vars('downloads', [
-						'DL_FILE_STATUS'	=> $file_status,
-						'DL_CAT_NAME'		=> $cat_name,
-						'DL_DESCRIPTION'	=> $description,
-						'DL_MINI_ICON'		=> $mini_icon,
-						'DL_FILE_NAME'		=> $file_name,
-						'DL_LONG_DESC'		=> ($this->config['dl_desc_search']) ? $long_desc : '',
-						'DL_ADD_USER'		=> $add_user,
-						'DL_ADD_TIME'		=> $add_time,
-						'DL_ADD_TIME_RFC'	=> $add_time_rfc,
+					$s_display_thumbnail = $this->dlext_constants::DL_FALSE;
 
-						'U_DL_CAT_LINK'	=> $u_cat_link,
-						'U_DL_FILE_LINK'	=> $u_file_link,
+					if (!empty($row['thumbnail']) && (($this->config['dl_thumbs_display_search'] == $this->dlext_constants::DL_THUMBS_DISPLAY_ON) || ($this->config['dl_thumbs_display_search'] == $this->dlext_constants::DL_THUMBS_DISPLAY_CAT && $index[$cat_id]['display_thumbs'])))
+					{
+						$s_display_thumbnail = $this->dlext_constants::DL_TRUE;
+					}
+
+					$this->template->assign_block_vars('downloads', [
+						'DL_FILE_STATUS'		=> $file_status,
+						'DL_CAT_NAME'			=> $cat_name,
+						'DL_DESCRIPTION'		=> $description,
+						'DL_MINI_ICON'			=> $mini_icon,
+						'DL_FILE_NAME'			=> $file_name,
+						'DL_LONG_DESC'			=> ($this->config['dl_desc_search']) ? $long_desc : '',
+						'DL_ADD_USER'			=> $add_user,
+						'DL_ADD_TIME'			=> $add_time,
+						'DL_ADD_TIME_RFC'		=> $add_time_rfc,
+						'DL_THUMBNAIL_PIC'		=> $this->helper->route('oxpus_dlext_thumbnail', ['pic' => $file_id, 'img_type' => 'thumb', 'disp_art' => $this->dlext_constants::DL_TRUE]),
+
+						'S_DISPLAY_THUMBNAIL'	=> $s_display_thumbnail,
+
+						'U_DL_CAT_LINK'			=> $u_cat_link,
+						'U_DL_FILE_LINK'		=> $u_file_link,
 					]);
 
 					/**

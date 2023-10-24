@@ -78,7 +78,15 @@
 						{{ downloads.DL_HACK_VERSION }}
 						{% INCLUDE '@oxpus_dlext/helpers/dl_miniimg.html' %}
 						{% EVENT oxpus_dlext_category_download_title_append %}
-					<br />{{ lang('POST_BY_AUTHOR') }} {{ downloads.DL_ADD_USER }} &raquo; <time datetime="{{ downloads.DL_ADD_TIME_RFC }}">{{ downloads.DL_ADD_TIME }}</time>
+						{% if downloads.S_DISPLAY_THUMBNAIL %}
+						<div>
+							<br />
+							<a href="{{ downloads.U_DL_FILE }}">
+								<img src="{{ downloads.DL_THUMBNAIL_PIC }}" alt="{{ downloads.DL_DESCRIPTION }}" title="{{ downloads.DL_DESCRIPTION }}" class="dl-thumb-box" />
+							</a>
+						</div>
+						{% endif %}
+						<br />{{ lang('POST_BY_AUTHOR') }} {{ downloads.DL_ADD_USER }} &raquo; <time datetime="{{ downloads.DL_ADD_TIME_RFC }}">{{ downloads.DL_ADD_TIME }}</time>
 					{% if downloads.DL_LONG_DESC %}<hr />{{ downloads.DL_LONG_DESC }}{% endif %}
 					</div>
 				</dt>

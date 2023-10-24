@@ -145,6 +145,15 @@
 			<input type="checkbox" class="radio switch" name="allow_thumbs" value="1" {% if DL_ALLOW_THUMBS %}checked{% endif %} id="allow_thumbs"  /><label class="switch" for="allow_thumbs">&nbsp;</label>
 		</dd>
 	</dl>
+	{% if S_DL_DISPLAY_THUMBS %}
+	<dl>
+		<dt><label>{{ lang('DL_THUMB_DISPLAY_LISTS') }}</label></dt>
+		<dd>
+			<a class="help nav" data-key="DL_THUMB_DISPLAY_CAT"><i class="icon fa-question-circle fa-fw"></i></a>&nbsp;
+			<input type="checkbox" class="radio switch" name="display_thumbs" value="1" {% if DL_DISPLAY_THUMBS %}checked{% endif %} id="display_thumbs"  /><label class="switch" for="display_thumbs">&nbsp;</label>
+		</dd>
+	</dl>
+	{% endif %}
 	{% endif %}
 	<dl>
 		<dt><label>{{ lang('DL_BUG_TRACKER_CAT') }}</label></dt>
