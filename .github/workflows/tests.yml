@@ -32,15 +32,6 @@ jobs:
                     - php: '7.4'
                       db: "none"
                       NOTESTS: 1
-                    - php: '8.0'
-                      db: "none"
-                      NOTESTS: 1
-                    - php: '8.1'
-                      db: "none"
-                      NOTESTS: 1
-                    - php: '8.2'
-                      db: "none"
-                      NOTESTS: 1
 
         name: PHP ${{ matrix.php }} - ${{ matrix.db }}
 
@@ -106,24 +97,20 @@ jobs:
         strategy:
             matrix:
                 include:
-                    - php: '7.2'
+                    - php: '7.3'
                       db: "mariadb:10.1"
-                    - php: '7.2'
+                    - php: '7.3'
                       db: "mariadb:10.2"
-                    - php: '7.2'
+                    - php: '7.3'
                       db: "mariadb:10.3"
-                    - php: '7.2'
+                    - php: '7.3'
                       db: "mariadb:10.4"
-                    - php: '7.2'
+                    - php: '7.3'
                       db: "mariadb:10.5"
-                    - php: '7.2'
+                    - php: '7.3'
                       db: "mysql:5.6"
                       db_alias: "MyISAM Tests"
                       MYISAM: 1
-                    - php: '7.2'
-                      db: "mysql:5.6"
-                    - php: '7.2'
-                      db: "mysql:5.7"
                     - php: '7.3'
                       db: "mysql:5.7"
                       COVERAGE: 1
@@ -249,17 +236,17 @@ jobs:
         strategy:
             matrix:
                 include:
-                    - php: '7.2'
+                    - php: '7.3'
                       db: "postgres:9.5"
-                    - php: '7.2'
+                    - php: '7.3'
                       db: "postgres:9.6"
-                    - php: '7.2'
+                    - php: '7.3'
                       db: "postgres:10"
-                    - php: '7.2'
+                    - php: '7.3'
                       db: "postgres:11"
-                    - php: '7.2'
+                    - php: '7.3'
                       db: "postgres:12"
-                    - php: '7.2'
+                    - php: '7.3'
                       db: "postgres:13"
 
         name: PHP ${{ matrix.php }} - ${{ matrix.db }}
@@ -349,12 +336,12 @@ jobs:
         strategy:
             matrix:
                 include:
-                    - php: '7.2'
+                    - php: '7.3'
                       db: "sqlite3"
-                    - php: '7.2'
+                    - php: '7.3'
                       db: "mcr.microsoft.com/mssql/server:2017-latest"
                       db_alias: 'MSSQL 2017'
-                    - php: '7.2'
+                    - php: '7.3'
                       db: "mcr.microsoft.com/mssql/server:2019-latest"
                       db_alias: 'MSSQL 2019'
 
