@@ -841,9 +841,9 @@ class acp_config_controller implements acp_config_interface
 
 	public function select_rss_cats($value)
 	{
-		$s_select = '<label><input type="radio" name="config[dl_rss_cats]" id="dl_rss_cats" class="radio" value="' . $this->dlext_constants::DL_RSS_CATS_ALL . '" ' . (($value == $this->dlext_constants::DL_RSS_CATS_ALL) ? 'checked="checked"' : '') . ' />' . $this->language->lang('DL_RSS_CATS_ALL') . '</label>&nbsp;';
-		$s_select .= '<label><input type="radio" name="config[dl_rss_cats]" class="radio" value="' . $this->dlext_constants::DL_RSS_CATS_SELECTED . '" ' . (($value == $this->dlext_constants::DL_RSS_CATS_SELECTED) ? 'checked="checked"' : '') . ' />' . $this->language->lang('DL_RSS_CATS_SELECTED') . '</label>&nbsp;';
-		$s_select .= '<label><input type="radio" name="config[dl_rss_cats]" class="radio" value="' . $this->dlext_constants::DL_RSS_CATS_OTHER . '" ' . (($value == $this->dlext_constants::DL_RSS_CATS_OTHER) ? 'checked="checked"' : '') . ' />' . $this->language->lang('DL_RSS_CATS_NOT_SELECTED') . '</label>&nbsp;';
+		$s_select = '<label><input type="radio" name="config[dl_rss_cats]" id="dl_rss_cats" class="radio" value="' . $this->dlext_constants::DL_RSS_CATS_ALL . '" ' . (($value == $this->dlext_constants::DL_RSS_CATS_ALL) ? 'checked' : '') . ' />' . $this->language->lang('DL_RSS_CATS_ALL') . '</label>&nbsp;';
+		$s_select .= '<label><input type="radio" name="config[dl_rss_cats]" class="radio" value="' . $this->dlext_constants::DL_RSS_CATS_SELECTED . '" ' . (($value == $this->dlext_constants::DL_RSS_CATS_SELECTED) ? 'checked' : '') . ' />' . $this->language->lang('DL_RSS_CATS_SELECTED') . '</label>&nbsp;';
+		$s_select .= '<label><input type="radio" name="config[dl_rss_cats]" class="radio" value="' . $this->dlext_constants::DL_RSS_CATS_OTHER . '" ' . (($value == $this->dlext_constants::DL_RSS_CATS_OTHER) ? 'checked' : '') . ' />' . $this->language->lang('DL_RSS_CATS_NOT_SELECTED') . '</label>&nbsp;';
 
 		if ($value != $this->dlext_constants::DL_RSS_CATS_ALL)
 		{
