@@ -393,6 +393,4 @@ class overall
 		$this->dlext_footer->set_parameter($mode, 0, 0, $index);
 		$this->dlext_footer->handle();
 	}
-
-	// phpcs:set VariableAnalysis.CodeAnalysis.VariableAnalysis validUnsedVariableNames
 }
