@@ -42,9 +42,6 @@ class main_info
 				'stats'			=> [
 					'title' => 'DL_ACP_STATS_MANAGEMENT',		'auth' => 'ext_oxpus/dlext && acl_a_dl_stats',			'cat' => ['ACP_DOWNLOADS']
 				],
-				'banlist'		=> [
-					'title' => 'DL_ACP_BANLIST',				'auth' => 'ext_oxpus/dlext && acl_a_dl_banlist',		'cat' => ['ACP_DOWNLOADS']
-				],
 				'ext_blacklist'	=> [
 					'title' => 'DL_EXT_BLACKLIST',				'auth' => 'ext_oxpus/dlext && acl_a_dl_blacklist',		'cat' => ['ACP_DOWNLOADS']
 				],
@@ -53,9 +50,6 @@ class main_info
 				],
 				'fields'		=> [
 					'title' => 'DL_ACP_FIELDS',					'auth' => 'ext_oxpus/dlext && acl_a_dl_fields',			'cat' => ['ACP_DOWNLOADS']
-				],
-				'browser'		=> [
-					'title' => 'DL_ACP_BROWSER',				'auth' => 'ext_oxpus/dlext && acl_a_dl_browser',		'cat' => ['ACP_DOWNLOADS']
 				],
 				'perm_check'	=> [
 					'title' => 'DL_ACP_PERM_CHECK',				'auth' => 'ext_oxpus/dlext && acl_a_dl_perm_check',		'cat' => ['ACP_DOWNLOADS']
