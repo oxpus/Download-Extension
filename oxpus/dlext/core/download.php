@@ -863,6 +863,7 @@ class download implements download_interface
 		}
 
 		$dl_t_id = ($df_id) ? $df_id : $next_id;
+		$df_id = $dl_t_id;
 
 		$foreign_thumb_message	= '';
 		$thumb_error			= '';

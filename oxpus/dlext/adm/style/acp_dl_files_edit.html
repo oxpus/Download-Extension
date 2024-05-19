@@ -14,6 +14,8 @@
 </fieldset>
 {% endif %}
 
+{% INCLUDE 'acp_dl_limits.html' %}
+
 <form action="{{ S_DL_DOWNLOADS_ACTION }}" method="post" id="cat_id" enctype="multipart/form-data">
 
 {% if S_DL_VERSION_ON %}

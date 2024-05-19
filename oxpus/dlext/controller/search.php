@@ -321,7 +321,7 @@ class search
 
 					$s_display_thumbnail = $this->dlext_constants::DL_FALSE;
 
-					if (!empty($row['thumbnail']) && (($this->config['dl_thumbs_display_search'] == $this->dlext_constants::DL_THUMBS_DISPLAY_ON) || ($this->config['dl_thumbs_display_search'] == $this->dlext_constants::DL_THUMBS_DISPLAY_CAT && $index[$cat_id]['display_thumbs'])))
+					if (!empty($row['thumbnail']) && (($this->config['dl_thumbs_display_search'] == $this->dlext_constants::DL_THUMBS_DISPLAY_ON) || ($this->config['dl_thumbs_display_search'] == $this->dlext_constants::DL_THUMBS_DISPLAY_CAT && (!empty($index[$cat_id]['display_thumbs']) && $index[$cat_id]['display_thumbs']))))
 					{
 						$s_display_thumbnail = $this->dlext_constants::DL_TRUE;
 					}

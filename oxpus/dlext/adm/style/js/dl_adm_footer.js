@@ -37,4 +37,17 @@ $(document).ready(function () {
 
 		AJAXDLUnassigned(cat_id, 'acp');
 	});
+
+	$('.dl-limit-title').click(function () {
+		if ($('.dl-limit-block').is(':visible'))
+		{
+			$('.dl-limit-block').fadeOut();
+			$('.dl-limit-title').html(dl_limit_title_shown).removeClass('dl-blue-bg').addClass('dl-red-bg');
+		}
+		else
+		{
+			$('.dl-limit-block').fadeIn();
+			$('.dl-limit-title').html(dl_limit_title_hidden).removeClass('dl-red-bg').addClass('dl-blue-bg');
+		};
+	});
 });

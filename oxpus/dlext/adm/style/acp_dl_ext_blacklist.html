@@ -4,6 +4,10 @@
 
 <p>{{ lang('DL_EXT_BLACKLIST_EXPLAIN') }}</p>
 
+{% INCLUDE 'acp_dl_limits.html' %}
+
+<br />
+
 <form action="{{ S_DL_DOWNLOADS_ACTION }}" method="post" id="add_ext">
 
 <fieldset class="quick">

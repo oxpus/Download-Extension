@@ -32,6 +32,7 @@ class load
 	protected $dlext_constants;
 
 	protected $dlext_table_dl_cat_traf;
+	protected $dlext_table_dl_favorites;
 	protected $dlext_table_dl_hotlink;
 	protected $dlext_table_dl_notraf;
 	protected $dlext_table_dl_stats;
@@ -57,6 +58,7 @@ class load
 	 * @param \oxpus\dlext\core\status				$dlext_status
 	 * @param \oxpus\dlext\core\helpers\constants	$dlext_constants
 	 * @param string								$dlext_table_dl_cat_traf
+	 * @param string								$dlext_table_dl_favorites
 	 * @param string								$dlext_table_dl_hotlink
 	 * @param string								$dlext_table_dl_notraf
 	 * @param string								$dlext_table_dl_stats
@@ -80,6 +82,7 @@ class load
 		\oxpus\dlext\core\status $dlext_status,
 		\oxpus\dlext\core\helpers\constants $dlext_constants,
 		$dlext_table_dl_cat_traf,
+		$dlext_table_dl_favorites,
 		$dlext_table_dl_hotlink,
 		$dlext_table_dl_notraf,
 		$dlext_table_dl_stats,
@@ -98,6 +101,7 @@ class load
 		$this->filesystem				= $filesystem;
 
 		$this->dlext_table_dl_cat_traf	= $dlext_table_dl_cat_traf;
+		$this->dlext_table_dl_favorites	= $dlext_table_dl_favorites;
 		$this->dlext_table_dl_hotlink	= $dlext_table_dl_hotlink;
 		$this->dlext_table_dl_notraf	= $dlext_table_dl_notraf;
 		$this->dlext_table_dl_stats		= $dlext_table_dl_stats;
@@ -123,6 +127,7 @@ class load
 		$df_id			= $this->request->variable('df_id', 0);
 		$cat_id			= $this->request->variable('cat_id', 0);
 		$modcp			= $this->request->variable('modcp', 0);
+		$dl_add_fav		= $this->request->variable('dl_add_fav', 0);
 
 		/*
 		* check for hotlinking
@@ -482,6 +487,28 @@ class load
 			$this->cache->destroy('_dlext_cat_counts');
 			$this->cache->destroy('_dlext_file_p');
 			$this->cache->destroy('_dlext_file_preset');
+
+			/*
+			* Add download to favorites on user selection
+			*/
+			if ($this->user->data['user_dl_auto_fav'] == $this->dlext_constants::DL_AUTOADD_FAV_ALL || ($this->user->data['user_dl_auto_fav'] == $this->dlext_constants::DL_AUTOADD_FAV_SELECT && $dl_add_fav))
+			{
+				$sql = 'SELECT COUNT(fav_dl_id) AS total FROM ' . $this->dlext_table_dl_favorites . '
+						WHERE fav_dl_id = ' . (int) $df_id . '
+							AND fav_user_id = ' . (int) $this->user->data['user_id'];
+				$result = $this->db->sql_query($sql);
+				$fav_check = $this->db->sql_fetchfield('total');
+				$this->db->sql_freeresult($result);
+
+				if (!$fav_check)
+				{
+					$sql = 'INSERT INTO ' . $this->dlext_table_dl_favorites . ' ' . $this->db->sql_build_array('INSERT', array(
+						'fav_dl_id'		=> $df_id,
+						'fav_dl_cat'	=> $cat_id,
+						'fav_user_id'	=> $this->user->data['user_id']));
+					$this->db->sql_query($sql);
+				}
+			}
 
 			/*
 			* now it is time and we are ready to rumble: send the file to the user client to download it there!

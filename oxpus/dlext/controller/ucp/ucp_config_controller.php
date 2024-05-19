@@ -84,6 +84,7 @@ class ucp_config_controller implements ucp_config_interface
 				'user_dl_sort_opt'				=> $this->request->variable('user_dl_sort_opt', 0),
 				'user_dl_sort_dir'				=> $this->request->variable('user_dl_sort_dir', 0),
 				'user_dl_sub_on_index'			=> $this->request->variable('user_dl_sub_on_index', 0),
+				'user_dl_auto_fav'				=> $this->request->variable('user_dl_auto_fav', 0),
 			];
 
 			/**
@@ -125,6 +126,7 @@ class ucp_config_controller implements ucp_config_interface
 			'S_DL_SORT_USER_OPT'	=> $this->user->data['user_dl_sort_fix'],
 			'S_DL_SORT_USER_EXT'	=> $this->user->data['user_dl_sort_opt'],
 			'S_DL_SORT_USER_DIR'	=> $this->user->data['user_dl_sort_dir'],
+			'S_DL_AUTOADD_TO_FAV'	=> $this->user->data['user_dl_auto_fav'],
 			'S_DL_FORM_ACTION'		=> $this->u_action,
 		];
 

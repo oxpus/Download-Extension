@@ -29,6 +29,7 @@ services:
             - '@oxpus.dlext.core.format'
             - '@oxpus.dlext.core.main'
             - '@oxpus.dlext.core.privacy'
+            - '@oxpus.dlext.core.physical'
             - '@oxpus.dlext.helpers.constants'
             - '%oxpus.dlext.tables.dl_cat_traf%'
             - '%oxpus.dlext.tables.dl_comments%'

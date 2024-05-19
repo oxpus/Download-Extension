@@ -145,6 +145,7 @@ services:
             - '@oxpus.dlext.core.status'
             - '@oxpus.dlext.helpers.constants'
             - '%oxpus.dlext.tables.dl_cat_traf%'
+            - '%oxpus.dlext.tables.dl_favorites%'
             - '%oxpus.dlext.tables.dl_hotlink%'
             - '%oxpus.dlext.tables.dl_notraf%'
             - '%oxpus.dlext.tables.dl_stats%'

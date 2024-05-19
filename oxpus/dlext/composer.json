@@ -3,8 +3,8 @@
 	"type": "phpbb-extension",
 	"description": "Download Extension",
 	"homepage": "https://phpbb3.oxpus.net",
-	"version": "8.2.14",
-	"time": "2023-10-25",
+	"version": "8.2.15",
+	"time": "2024-05-18",
 	"license": "GPL-2.0-only",
 	"authors": [{
 			"name": "Karsten Ude",
@@ -13,7 +13,7 @@
 			"role": "Lead Developer"
 		}],
 	"require": {
-		"php": ">=7.1.0"
+		"php": ">=7.2.0"
 	},
 	"extra": {
 		"display-name": "Hotschi's Downloads",

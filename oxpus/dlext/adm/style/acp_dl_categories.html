@@ -4,6 +4,10 @@
 
 <p>{{ lang('DL_CAT_EDIT_EXPLAIN') }}</p>
 
+{% INCLUDE 'acp_dl_limits.html' %}
+
+<br />
+
 {% if S_DL_IDX_TYPE %}
 <fieldset class="quick">
 	<a href="{{ U_DL_IDX_ACTION }}{% if S_DL_IDX_TYPE == 'c' %}f{% else %}c{% endif %}" title="">

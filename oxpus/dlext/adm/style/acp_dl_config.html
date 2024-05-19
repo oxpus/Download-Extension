@@ -14,6 +14,10 @@
 	<p><strong>{{ lang('DL_DOWNLOAD_PATH') }}{{ lang('COLON') }} {{ DL_EXT_FILES_PATH }}</strong></p><p>{{ lang('DL_DOWNLOAD_PATH_EXPLAIN') }}</p>
 </div>
 
+{% INCLUDE 'acp_dl_limits.html' %}
+
+<br />
+
 <form id="mode_select" method="post" action="{{ U_DL_MODE_SELECT }}">
 	<fieldset class="quick">
 		{{ lang('SELECT_FORM') }}{{ lang('COLON') }} <select name="view" class="dl-change-select" data-button="config-mode">{{ S_DL_MODE_SELECT }}</select> <input class="button2" id="config-mode" type="submit" value="{{ lang('GO') }}" />

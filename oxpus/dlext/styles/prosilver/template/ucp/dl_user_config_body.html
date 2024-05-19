@@ -54,6 +54,25 @@
 	</div>
 </div>
 
+<div class="panel">
+	<div class="inner">
+	<h3>{{ lang('DL_FAVORITE') }}</h3>
+
+	<fieldset>
+
+		<dl>
+			<dt><label>{{ lang('DL_AUTO_ADD_FAV') }}</label></dt>
+			<dd>
+				<label><input type="radio" class="radio" name="user_dl_auto_fav" value="0"{% if S_DL_AUTOADD_TO_FAV eq 0 %} checked{% endif %} />&nbsp;{{ lang('DL_NO') }}</label>
+				<label><input type="radio" class="radio" name="user_dl_auto_fav" value="1"{% if S_DL_AUTOADD_TO_FAV eq 1 %} checked{% endif %} />&nbsp;{{ lang('DL_ALL') }}</label>
+				<label><input type="radio" class="radio" name="user_dl_auto_fav" value="2"{% if S_DL_AUTOADD_TO_FAV eq 2 %} checked{% endif %} />&nbsp;{{ lang('DL_AUTO_ADD_FAV_SELECT') }}</label>
+			</dd>
+		</dl>
+
+	</fieldset>
+	</div>
+</div>
+
 {% EVENT oxpus_dlext_ucp_configuration_append %}
 
 {% if not S_DL_FAV_BLOCK %}

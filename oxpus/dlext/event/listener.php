@@ -40,6 +40,7 @@ class listener implements EventSubscriberInterface
 	protected $dlext_format;
 	protected $dlext_main;
 	protected $dlext_privacy;
+	protected $dlext_physical;
 	protected $dlext_constants;
 
 	protected $dl_index;
@@ -70,6 +71,7 @@ class listener implements EventSubscriberInterface
 	 * @param \oxpus\dlext\core\format 				$dlext_format
 	 * @param \oxpus\dlext\core\main 				$dlext_main
 	 * @param \oxpus\dlext\core\privacy 			$dlext_privacy
+	 * @param \oxpus\dlext\core\physical			$dlext_physical
 	 * @param \oxpus\dlext\core\helpers\constants 	$dlext_constants
 	 * @param string								$dlext_table_dl_cat_traf
 	 * @param string								$dlext_table_dl_comments
@@ -95,6 +97,7 @@ class listener implements EventSubscriberInterface
 		\oxpus\dlext\core\format $dlext_format,
 		\oxpus\dlext\core\main $dlext_main,
 		\oxpus\dlext\core\privacy $dlext_privacy,
+		\oxpus\dlext\core\physical $dlext_physical,
 		\oxpus\dlext\core\helpers\constants $dlext_constants,
 		$dlext_table_dl_cat_traf,
 		$dlext_table_dl_comments,
@@ -132,6 +135,7 @@ class listener implements EventSubscriberInterface
 		$this->dlext_format				= $dlext_format;
 		$this->dlext_main				= $dlext_main;
 		$this->dlext_privacy			= $dlext_privacy;
+		$this->dlext_physical			= $dlext_physical;
 		$this->dlext_constants			= $dlext_constants;
 	}
 
@@ -141,6 +145,7 @@ class listener implements EventSubscriberInterface
 			// Board default events
 			'core.user_setup'							=> 'core_user_setup',
 			'core.page_header'							=> 'core_page_header',
+			'core.adm_page_header_after'				=> 'core_adm_page_header_after',
 			'core.viewonline_overwrite_location'		=> 'core_viewonline_overwrite_location',
 			'core.memberlist_view_profile'				=> 'core_memberlist_view_profile',
 			'core.update_username'						=> 'core_update_username',
@@ -168,6 +173,14 @@ class listener implements EventSubscriberInterface
 			'ext_name' => 'oxpus/dlext',
 			'lang_set' => 'common',
 		];
+
+		if (defined('ADMIN_START'))
+		{
+			$lang_set_ext[] = [
+				'ext_name' => 'oxpus/dlext',
+				'lang_set' => 'dlext_acp',
+			];
+		}
 
 		$event['lang_set_ext'] = $lang_set_ext;
 	}
@@ -256,6 +269,44 @@ class listener implements EventSubscriberInterface
 			$this->_dl_navi_links();
 			$this->_dl_purge_hotlinks();
 		}
+	}
+
+	public function core_adm_page_header_after()
+	{
+		$file_uploads			= ini_get('file_uploads');
+		$max_file_uploads		= ini_get('max_file_uploads');
+		$max_execution_time		= ini_get('max_execution_time');
+		$max_input_time			= ini_get('max_input_time');
+		$memory_limit			= ini_get('memory_limit');
+		$post_max_size			= ini_get('post_max_size');
+		$upload_max_filesize	= ini_get('upload_max_filesize');
+
+		$physical_limit = $this->config['dl_physical_quota'];
+		$total_size = $this->dlext_physical->read_dl_sizes();
+		$total_size = ($total_size > $physical_limit) ? $physical_limit : $total_size;
+		$total_limit_remain = $this->dlext_format->dl_size($physical_limit - $total_size, 2);
+
+		$remain_traffic = $this->dlext_format->dl_size($this->config['dl_overall_traffic'] - (int) $this->config['dl_remain_traffic'], 2);
+		$remain_guest_traffic = $this->dlext_format->dl_size($this->config['dl_overall_guest_traffic'] - (int) $this->config['dl_remain_guest_traffic'], 2);
+
+		$this->template->assign_vars([
+			'DL_LIMIT_PHP_FILE_UPLOAD'			=> $file_uploads,
+			'DL_LIMIT_PHP_MAX_FILE_UPLOAD'		=> $max_file_uploads,
+			'DL_LIMIT_PHP_MAX_INPUT_TIME'		=> $max_input_time,
+			'DL_LIMIT_PHP_MAX_EXECUTION_TIME'	=> $max_execution_time,
+			'DL_LIMIT_PHP_MEMORY_LIMIT'			=> $memory_limit,
+			'DL_LIMIT_PHP_POST_MAX_SIZE'		=> $post_max_size,
+			'DL_LIMIT_PHP_UPLOAD_MAX_FILESIZE'	=> $upload_max_filesize,
+
+			'DL_LIMIT_TRAFFIC_USER_REMAIN'		=> $remain_traffic,
+			'DL_LIMIT_TRAFFIC_GUESTS_REMAIN'	=> $remain_guest_traffic,
+			'DL_LIMIT_TOTAL_REMAIN'				=> $total_limit_remain,
+			'DL_LIMIT_THUMBNAIL_SIZE'			=> $this->dlext_format->dl_size($this->config['dl_thumb_fsize'],2),
+			'DL_LIMIT_THUMBNAIL_XY_SIZE'		=> $this->language->lang('DL_LIMIT_THUMBNAIL_XYSIZE', $this->config['dl_thumb_xsize'], $this->config['dl_thumb_ysize']),
+			'DL_PHP_INI'						=> $this->language->lang('DL_PHP_INI_EXPLAIN', php_ini_loaded_file()),
+
+			'S_DL_TRAFFIC_OFF'					=> $this->config['dl_traffic_off'],
+		]);
 	}
 
 	public function core_viewonline_overwrite_location($event)

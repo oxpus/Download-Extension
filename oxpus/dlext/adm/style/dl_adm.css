@@ -63,6 +63,13 @@ div.dl_help_close:hover {
 	background-color: #dddddd;
 }
 
+.dl-blue-bg {
+	background-color: #70aed3;
+	border: 2px #aaaaaa solid;
+	padding: 5px;
+	color: #ffffff;
+}
+
 .dl-red-bg {
 	background-color: #BC2A4D;
 	border: 2px #555555 solid;
@@ -193,6 +200,14 @@ div.dl_help_close:hover {
 {
 	background-color: #00aa00 !important;
 	cursor: pointer;
+}
+
+.dl-limit-title
+{
+	cursor: pointer;
+	font-weight: bold;
+	font-size: 0.8em;
+	text-transform: uppercase;
 }
 
 /**

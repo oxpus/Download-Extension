@@ -149,6 +149,9 @@ $lang = array_merge($lang, [
 	'DL_AUTH_SINGLE_EXPLAIN'			=> 'You selected 1 category and 1 usergroup, therefore the permissions have been preset to the saved values.',
 	'DL_AUTH_UP'						=> 'Upload',
 	'DL_AUTH_VIEW'						=> 'View',
+	'DL_AUTO_ADD_FAV'					=> 'Automatically add downloads to favorites',
+	'DL_AUTO_ADD_FAV_ONE'				=> 'Add download automatically to favorites',
+	'DL_AUTO_ADD_FAV_SELECT'			=> 'decide individually',
 	'DL_AUTO_TRAFFIC'					=> 'Automatic download traffic',
 	'DL_AUTO_TRAFFIC_EXPLAIN'			=> 'On this table you can set the traffic all users or all members of a usergroup will get every month for downloads.',
 

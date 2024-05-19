@@ -444,6 +444,10 @@
 					{% endfor %}
 				</select>
 				{% endif %}
+				{% if S_DL_AUTOADD_FAV %}
+				<br />
+				<input type="checkbox" name="dl_add_fav" id="dl_add_fav" value="1" />&nbsp;<label for="dl_add_fav"><strong>{{ lang('DL_AUTO_ADD_FAV_ONE') }}</strong></label>
+				{% endif %}
 				<br />
 				<input type="submit" name="submit" id="submit" class="downloadbtn" value="{{ lang('DL_DOWNLOAD') }}" />
 				{{ S_DL_HIDDEN }}{{ S_FORM_TOKEN_DOWNLOAD }}

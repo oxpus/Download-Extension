@@ -17,6 +17,10 @@ class constants
 	const DL_AUTH_CHECK_UPLOAD = 3;
 	const DL_AUTH_CHECK_VIEW = 1;
 
+	const DL_AUTOADD_FAV_NONE = 0;
+	const DL_AUTOADD_FAV_ALL = 1;
+	const DL_AUTOADD_FAV_SELECT = 2;
+
 	const DL_CAPTCHA_PERM_ADMINS = 4;
 	const DL_CAPTCHA_PERM_ALL = 5;
 	const DL_CAPTCHA_PERM_GUESTS = 1;

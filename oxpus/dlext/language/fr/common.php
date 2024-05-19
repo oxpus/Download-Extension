@@ -151,6 +151,9 @@ $lang = array_merge($lang, [
 	'DL_AUTH_SINGLE_EXPLAIN'			=> 'Il y a une catégorie et un groupe d’utilisateurs sélectionnés. Les permissions sont définies pour les valeurs enregistrées.',
 	'DL_AUTH_UP'						=> 'Téléverser',
 	'DL_AUTH_VIEW'						=> 'Voir',
+	'DL_AUTO_ADD_FAV'					=> 'Ajouter automatiquement les téléchargements aux favoris',
+	'DL_AUTO_ADD_FAV_ONE'				=> 'Ajouter automatiquement le téléchargement aux favoris',
+	'DL_AUTO_ADD_FAV_SELECT'			=> 'décider individuellement',
 	'DL_AUTO_TRAFFIC'					=> 'Trafic automatique',
 	'DL_AUTO_TRAFFIC_EXPLAIN'			=> 'Sur ce tableau, vous pouvez définir le trafic que tous les utilisateurs ou que tous les membres d’un groupe d’utilisateurs recevront chaque mois pour télécharger.',
 

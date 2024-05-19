@@ -895,7 +895,9 @@ class details
 					);
 					extract($this->dispatcher->trigger_event('oxpus.dlext.details_download_before', compact($vars)));
 
-					redirect($this->helper->route('oxpus_dlext_load', ['hotlink_id' => $hotlink_id, 'code' => $code, 'df_id' => $df_id, 'modcp' => $modcp, 'cat_id' => $cat_id, 'file_version' => $file_version]));
+					$dl_add_fav = $this->request->variable('dl_add_fav', 0);
+
+					redirect($this->helper->route('oxpus_dlext_load', ['dl_add_fav' => $dl_add_fav, 'hotlink_id' => $hotlink_id, 'code' => $code, 'df_id' => $df_id, 'modcp' => $modcp, 'cat_id' => $cat_id, 'file_version' => $file_version]));
 				}
 			}
 		}
@@ -1054,15 +1056,15 @@ class details
 		/*
 		* Some user like to link to each favorite page, download, programm, friend, house friend... ahrrrrrrggggg...
 		*/
-		if ($this->user->data['is_registered'] && !$this->config['dl_disable_email'])
-		{
-			$sql = 'SELECT fav_id FROM ' . $this->dlext_table_dl_favorites . '
+		$sql = 'SELECT fav_id FROM ' . $this->dlext_table_dl_favorites . '
 				WHERE fav_dl_id = ' . (int) $df_id . '
 					AND fav_user_id = ' . (int) $this->user->data['user_id'];
-			$result = $this->db->sql_query($sql);
-			$fav_id = $this->db->sql_fetchfield('fav_id');
-			$this->db->sql_freeresult($result);
+		$result = $this->db->sql_query($sql);
+		$fav_id = $this->db->sql_fetchfield('fav_id');
+		$this->db->sql_freeresult($result);
 
+		if ($this->user->data['is_registered'] && !$this->config['dl_disable_email'])
+		{
 			$this->template->assign_var('S_DL_FAV_BLOCK', $this->dlext_constants::DL_TRUE);
 
 			if ($fav_id)
@@ -1084,6 +1086,11 @@ class details
 			$l_favorite = '';
 			$u_favorite = '';
 			$c_favorite = $this->dlext_constants::DL_FALSE;
+		}
+
+		if ($this->user->data['user_dl_auto_fav'] == 2 && !$fav_id)
+		{
+			$this->template->assign_var('S_DL_AUTOADD_FAV', $this->dlext_constants::DL_TRUE);
 		}
 
 		$file_id	= $dl_files['id'];
