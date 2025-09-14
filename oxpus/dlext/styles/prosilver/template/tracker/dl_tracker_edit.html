@@ -4,7 +4,7 @@
 
 <h2>{{ lang('DL_BUG_TRACKER') }}</h2>
 
-<br />
+<br>
 
 {% if S_DL_PREVIEW %}
 <h3>{{ lang('PREVIEW') }}</h3>
@@ -16,7 +16,7 @@
 	</div>
 	</div>
 </div>
-<br />
+<br>
 {% endif %}
 
 <form action="{{ S_DL_FORM_ACTION }}" method="post" id="postform">
@@ -33,7 +33,7 @@
 
 			<dl>
 				<dt><label>{{ lang('SUBJECT') }}</label></dt>
-				<dd>&nbsp;<input type="text" size="75" maxlength="255" class="inputbox autowidth" name="report_title" value="{{ DL_REPORT_TITLE }}" /></dd>
+				<dd>&nbsp;<input type="text" size="75" maxlength="255" class="inputbox autowidth" name="report_title" value="{{ DL_REPORT_TITLE }}"></dd>
 			</dl>
 
 			<dl>
@@ -53,11 +53,11 @@
 
 			{% if loops.smiley|length %}
 			<div id="smiley-box" class="smiley-box">
-				<strong>{{ lang('SMILIES') }}</strong><br />
+				<strong>{{ lang('SMILIES') }}</strong><br>
 				{% for smiley in loops.smiley %}
-					<a href="#" class="dl-smiley-insert" data-smiley="{{ smiley.A_SMILEY_CODE }}"><img src="{{ smiley.SMILEY_IMG }}" width="{{ smiley.SMILEY_WIDTH }}" height="{{ smiley.SMILEY_HEIGHT }}" alt="{{ smiley.SMILEY_CODE }}" title="{{ smiley.SMILEY_DESC }}" /></a>
+					<a href="#" class="dl-smiley-insert" data-smiley="{{ smiley.A_SMILEY_CODE }}"><img src="{{ smiley.SMILEY_IMG }}" width="{{ smiley.SMILEY_WIDTH }}" height="{{ smiley.SMILEY_HEIGHT }}" alt="{{ smiley.SMILEY_CODE }}" title="{{ smiley.SMILEY_DESC }}"></a>
 				{% endfor %}
-				<br /><a href="#" class="dl-smiley-popup" data-url="{{ U_DL_MORE_SMILIES }}">{{ lang('MORE_SMILIES') }}</a>
+				<br><a href="#" class="dl-smiley-popup" data-url="{{ U_DL_MORE_SMILIES }}">{{ lang('MORE_SMILIES') }}</a>
 			</div>
 			{% endif %}
 
@@ -67,33 +67,33 @@
 
 			<dl>
 				<dt><label>{{ lang('DL_HACK_VERSION') }}</label></dt>
-				<dd>&nbsp;<input type="text" size="20" maxlength="50" class="inputbox autowidth" name="report_file_ver" value="{{ DL_REPORT_FILE_VER }}" /></dd>
+				<dd>&nbsp;<input type="text" size="20" maxlength="50" class="inputbox autowidth" name="report_file_ver" value="{{ DL_REPORT_FILE_VER }}"></dd>
 			</dl>
 
 			<dl>
 				<dt><label>{{ lang('DL_BUG_REPORT_PHP') }}</label></dt>
-				<dd>&nbsp;<input type="text" size="20" maxlength="50" class="inputbox autowidth" name="report_php" value="{{ DL_REPORT_PHP }}" /></dd>
+				<dd>&nbsp;<input type="text" size="20" maxlength="50" class="inputbox autowidth" name="report_php" value="{{ DL_REPORT_PHP }}"></dd>
 			</dl>
 
 			<dl>
 				<dt><label>{{ lang('DL_BUG_REPORT_DB') }}</label></dt>
-				<dd>&nbsp;<input type="text" size="20" maxlength="50" class="inputbox autowidth" name="report_db" value="{{ DL_REPORT_DB }}" /></dd>
+				<dd>&nbsp;<input type="text" size="20" maxlength="50" class="inputbox autowidth" name="report_db" value="{{ DL_REPORT_DB }}"></dd>
 			</dl>
 
 			<dl>
 				<dt><label>{{ lang('DL_BUG_REPORT_FORUM') }}</label></dt>
-				<dd>&nbsp;<input type="text" size="20" maxlength="50" class="inputbox autowidth" name="report_forum" value="{{ DL_REPORT_FORUM }}" /></dd>
+				<dd>&nbsp;<input type="text" size="20" maxlength="50" class="inputbox autowidth" name="report_forum" value="{{ DL_REPORT_FORUM }}"></dd>
 			</dl>
 		</fieldset>
 
 		<fieldset class="submit-buttons">
-			<input type="submit" name="submit" value="{{ lang('SUBMIT') }}" class="button1" />
-			<input type="submit" name="preview" value="{{ lang('PREVIEW') }}" class="button1" />
+			<input type="submit" name="submit" value="{{ lang('SUBMIT') }}" class="button1">
+			<input type="submit" name="preview" value="{{ lang('PREVIEW') }}" class="button1">
 			{{ S_FORM_TOKEN }}
 			{{ S_DL_HIDDEN_FIELDS }}
 		</fieldset>
 
-		<br />
+		<br>
 
 	</div>
 

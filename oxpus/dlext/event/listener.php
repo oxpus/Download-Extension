@@ -50,6 +50,7 @@ class listener implements EventSubscriberInterface
 	protected $dlext_table_dl_favorites;
 	protected $dlext_table_dl_hotlink;
 	protected $dlext_table_dl_notraf;
+	protected $dlext_table_dl_reports;
 	protected $dlext_table_dl_stats;
 	protected $dlext_table_downloads;
 	protected $dlext_table_dl_cat;
@@ -78,6 +79,7 @@ class listener implements EventSubscriberInterface
 	 * @param string								$dlext_table_dl_favorites
 	 * @param string								$dlext_table_dl_hotlink
 	 * @param string								$dlext_table_dl_notraf
+	 * @param string								$dlext_table_dl_reports
 	 * @param string								$dlext_table_dl_stats
 	 * @param string								$dlext_table_downloads
 	 * @param string								$dlext_table_dl_cat
@@ -104,6 +106,7 @@ class listener implements EventSubscriberInterface
 		$dlext_table_dl_favorites,
 		$dlext_table_dl_hotlink,
 		$dlext_table_dl_notraf,
+		$dlext_table_dl_reports,
 		$dlext_table_dl_stats,
 		$dlext_table_downloads,
 		$dlext_table_dl_cat
@@ -125,6 +128,7 @@ class listener implements EventSubscriberInterface
 		$this->dlext_table_dl_favorites		= $dlext_table_dl_favorites;
 		$this->dlext_table_dl_hotlink		= $dlext_table_dl_hotlink;
 		$this->dlext_table_dl_notraf		= $dlext_table_dl_notraf;
+		$this->dlext_table_dl_reports		= $dlext_table_dl_reports;
 		$this->dlext_table_dl_stats			= $dlext_table_dl_stats;
 		$this->dlext_table_downloads		= $dlext_table_downloads;
 		$this->dlext_table_dl_cat			= $dlext_table_dl_cat;
@@ -204,11 +208,11 @@ class listener implements EventSubscriberInterface
 
 		if ($dl_mod_link_show)
 		{
-			$sql = 'SELECT COUNT(id) as total
+			$sql = 'SELECT id
 					FROM ' . $this->dlext_table_downloads . '
 					WHERE add_user = ' . (int) $this->user->data['user_id'];
-			$result = $this->db->sql_query($sql);
-			$total_downloads = $this->db->sql_fetchfield('total');
+			$result = $this->db->sql_query_limit($sql, 1);
+			$total_downloads = $this->db->sql_affectedrows($result);
 			$this->db->sql_freeresult($result);
 
 			$dl_main_link = $this->helper->route('oxpus_dlext_index');
@@ -221,46 +225,33 @@ class listener implements EventSubscriberInterface
 
 			if ($this->config['dl_use_hacklist'])
 			{
-				$sql = 'SELECT COUNT(id) AS total FROM ' . $this->dlext_table_downloads . '
+				$sql = 'SELECT id FROM ' . $this->dlext_table_downloads . '
 					WHERE hacklist = 1';
-				$result = $this->db->sql_query($sql);
-
-				if ($result)
-				{
-					$row = $this->db->sql_fetchrow($result);
-					$total = $row['total'];
-
-					if ($total)
-					{
-						$dl_hacks_link = $this->helper->route('oxpus_dlext_hacklist');
-
-						$this->template->assign_vars([
-							'U_DL_HACKS_LIST'	=> $dl_hacks_link,
-						]);
-					}
-				}
+				$result = $this->db->sql_query_limit($sql, 1);
+				$total_hl = $this->db->sql_affectedrows($result);
 				$this->db->sql_freeresult($result);
+
+				if ($total_hl)
+				{
+					$this->template->assign_vars([
+						'U_DL_HACKS_LIST'	=> $this->helper->route('oxpus_dlext_hacklist'),
+					]);
+				}
 			}
 
 			if (!empty($this->user->data['is_registered']) && $this->user->data['is_registered'])
 			{
-				$sql = 'SELECT count(d.id) as total FROM ' . $this->dlext_table_downloads . ' d, ' . $this->dlext_table_dl_cat . ' c
+				$sql = 'SELECT d.id FROM ' . $this->dlext_table_downloads . ' d, ' . $this->dlext_table_dl_cat . ' c
 					WHERE c.id = d.cat
 						AND c.bug_tracker = 1';
-				$result = $this->db->sql_query($sql);
-
-				if ($result)
-				{
-					$row = $this->db->sql_fetchrow($result);
-				}
+				$result = $this->db->sql_query_limit($sql, 1);
+				$total_bl = $this->db->sql_affectedrows($result);
 				$this->db->sql_freeresult($result);
 
-				if (isset($row) && $row['total'] != 0)
+				if ($total_bl)
 				{
-					$dl_bt_link = $this->helper->route('oxpus_dlext_tracker_view');
-
 					$this->template->assign_vars([
-						'U_DL_BUG_TRACKER'	=> $dl_bt_link,
+						'U_DL_BUG_TRACKER'	=> $this->helper->route('oxpus_dlext_tracker_view'),
 					]);
 				}
 			}
@@ -390,7 +381,7 @@ class listener implements EventSubscriberInterface
 
 	public function core_delete_user_after($event)
 	{
-		$table_ary = [$this->dlext_table_dl_notraf];
+		$table_ary = [$this->dlext_table_dl_notraf, $this->dlext_table_dl_reports];
 
 		// Delete the miscellaneous (non-post) data for the user
 		foreach ($table_ary as $table)
@@ -782,7 +773,7 @@ class listener implements EventSubscriberInterface
 
 		if ($tpl_type[0] == 'switch')
 		{
-			$tpl = '<input type="checkbox" name="' . $name . '"  value="1" ' . $checked . ' class="radio switch" id="switch_' . $key . '" /><label class="switch" for="switch_' . $key . '">&nbsp;</label>';
+			$tpl = '<input type="checkbox" name="' . $name . '"  value="1" ' . $checked . ' class="radio switch" id="switch_' . $key . '"><label class="switch" for="switch_' . $key . '">&nbsp;</label>';
 		}
 
 		$event['tpl'] = $tpl;

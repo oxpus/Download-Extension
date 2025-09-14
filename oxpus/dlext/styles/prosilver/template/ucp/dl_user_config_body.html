@@ -27,7 +27,7 @@
 					<option value="{{ dl_sort_order.DL_KEY }}"{% if dl_sort_order.DL_KEY eq S_DL_SORT_USER_DIR %} selected {% endif %}>{{dl_sort_order.DL_VALUE }}</option>
 				{% endfor %}
 				</select>
-				&nbsp;<label><input type="checkbox" class="permissions-checkbox" name="user_dl_sort_opt" value="1"{% if S_DL_SORT_USER_EXT eq 1 %} checked{% endif %} />&nbsp;{{ lang('DL_SORT_USER_EXT') }}</label>
+				&nbsp;<label><input type="checkbox" class="permissions-checkbox" name="user_dl_sort_opt" value="1"{% if S_DL_SORT_USER_EXT eq 1 %} checked{% endif %}>&nbsp;{{ lang('DL_SORT_USER_EXT') }}</label>
 			</dd>
 		</dl>
 
@@ -45,8 +45,8 @@
 		<dl>
 			<dt><label>{{ lang('DL_SUB_ON_INDEX') }}</label></dt>
 			<dd>
-				<label><input type="radio" class="radio" name="user_dl_sub_on_index" value="1"{% if S_DL_SUB_ON_INDEX eq 1 %} checked{% endif %} />&nbsp;{{ lang('YES') }}</label>
-				<label><input type="radio" class="radio" name="user_dl_sub_on_index" value="0"{% if S_DL_SUB_ON_INDEX eq 0 %} checked{% endif %} />&nbsp;{{ lang('NO') }}</label>
+				<label><input type="radio" class="radio" name="user_dl_sub_on_index" value="1"{% if S_DL_SUB_ON_INDEX eq 1 %} checked{% endif %}>&nbsp;{{ lang('YES') }}</label>
+				<label><input type="radio" class="radio" name="user_dl_sub_on_index" value="0"{% if S_DL_SUB_ON_INDEX eq 0 %} checked{% endif %}>&nbsp;{{ lang('NO') }}</label>
 			</dd>
 		</dl>
 
@@ -63,9 +63,9 @@
 		<dl>
 			<dt><label>{{ lang('DL_AUTO_ADD_FAV') }}</label></dt>
 			<dd>
-				<label><input type="radio" class="radio" name="user_dl_auto_fav" value="0"{% if S_DL_AUTOADD_TO_FAV eq 0 %} checked{% endif %} />&nbsp;{{ lang('DL_NO') }}</label>
-				<label><input type="radio" class="radio" name="user_dl_auto_fav" value="1"{% if S_DL_AUTOADD_TO_FAV eq 1 %} checked{% endif %} />&nbsp;{{ lang('DL_ALL') }}</label>
-				<label><input type="radio" class="radio" name="user_dl_auto_fav" value="2"{% if S_DL_AUTOADD_TO_FAV eq 2 %} checked{% endif %} />&nbsp;{{ lang('DL_AUTO_ADD_FAV_SELECT') }}</label>
+				<label><input type="radio" class="radio" name="user_dl_auto_fav" value="0"{% if S_DL_AUTOADD_TO_FAV eq 0 %} checked{% endif %}>&nbsp;{{ lang('DL_NO') }}</label>
+				<label><input type="radio" class="radio" name="user_dl_auto_fav" value="1"{% if S_DL_AUTOADD_TO_FAV eq 1 %} checked{% endif %}>&nbsp;{{ lang('DL_ALL') }}</label>
+				<label><input type="radio" class="radio" name="user_dl_auto_fav" value="2"{% if S_DL_AUTOADD_TO_FAV eq 2 %} checked{% endif %}>&nbsp;{{ lang('DL_AUTO_ADD_FAV_SELECT') }}</label>
 			</dd>
 		</dl>
 
@@ -101,7 +101,7 @@
 					{% endfor %}
 				</div>
 			</td>
-			<td class="center dl-width-10"><input type="checkbox" name="fav_id[]" value="{{ dl_favorite_row.DL_ID }}" /></td>
+			<td class="center dl-width-10"><input type="checkbox" name="fav_id[]" value="{{ dl_favorite_row.DL_ID }}"></td>
 		</tr>
 		{% endfor %}
 		</tbody>
@@ -133,13 +133,13 @@
 
 {% if not S_DL_UCP_PRIVACY %}
 <fieldset class="submit-buttons">
-    <input type="submit" name="submit" value="{{ lang('SUBMIT') }}" class="button1 icon-button" />
+    <input type="submit" name="submit" value="{{ lang('SUBMIT') }}" class="button1 icon-button">
 	{{ S_FORM_TOKEN }}
 </fieldset>
 {% endif %}
 
 </form>
 
-<br />
+<br>
 
 {% INCLUDE 'ucp_footer.html' %}

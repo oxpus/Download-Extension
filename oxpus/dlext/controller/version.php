@@ -357,7 +357,7 @@ class version
 			if ($error_count > 1 && $ver_file_name)
 			{
 				$ver_file->remove();
-				trigger_error(implode('<br />', $ver_file->error), E_USER_ERROR);
+				trigger_error(implode('<br>', $ver_file->error), E_USER_WARNING);
 			}
 
 			if ($ver_file_name)
@@ -411,7 +411,7 @@ class version
 			if ($error_count > 1 && $ver_image_name)
 			{
 				$ver_image->remove();
-				trigger_error(implode('<br />', $ver_image->error), E_USER_ERROR);
+				trigger_error(implode('<br>', $ver_image->error), E_USER_WARNING);
 			}
 
 			if ($ver_image_name)
@@ -423,13 +423,13 @@ class version
 				if (!$pic_width || !$pic_height)
 				{
 					$ver_image->remove();
-					trigger_error($this->language->lang('DL_UPLOAD_ERROR'), E_USER_ERROR);
+					trigger_error($this->language->lang('DL_UPLOAD_ERROR'), E_USER_WARNING);
 				}
 
 				if ($pic_width > $this->config['dl_thumb_xsize'] || $pic_height > $this->config['dl_thumb_ysize'] || (sprintf('%u', filesize($ver_image_temp) > $this->config['dl_thumb_fsize'])))
 				{
 					$ver_image->remove();
-					trigger_error($this->language->lang('DL_THUMB_TO_BIG'), E_USER_ERROR);
+					trigger_error($this->language->lang('DL_THUMB_TO_BIG'), E_USER_WARNING);
 				}
 
 				do

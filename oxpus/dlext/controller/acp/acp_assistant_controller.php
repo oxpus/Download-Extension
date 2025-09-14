@@ -180,7 +180,7 @@ class acp_assistant_controller implements acp_assistant_interface
 			if (! empty($check_tree) && !in_array($path, $check_tree))
 			{
 				$error = $this->dlext_constants::DL_TRUE;
-				$error_msg[] = $this->language->lang('DL_PATH_NOT_EXIST', $path, $this->dlext_constants->get_value('files_dir', $this->dlext_constants::DL_TRUE) . '/downloads/', $this->dlext_constants->get_value('files_dir', $this->dlext_constants::DL_TRUE) . '/downloads/' . $path) . '<br />';
+				$error_msg[] = $this->language->lang('DL_PATH_NOT_EXIST', $path, $this->dlext_constants->get_value('files_dir', $this->dlext_constants::DL_TRUE) . '/downloads/', $this->dlext_constants->get_value('files_dir', $this->dlext_constants::DL_TRUE) . '/downloads/' . $path) . '<br>';
 			}
 
 			if (empty($cat_name))
@@ -269,7 +269,7 @@ class acp_assistant_controller implements acp_assistant_interface
 				$sql = 'INSERT INTO ' . $this->dlext_table_dl_cat . ' ' . $this->db->sql_build_array('INSERT', $sql_cat_data);
 				$this->db->sql_query($sql);
 
-				$cat_id = $this->db->sql_nextid();
+				$cat_id = $this->db->sql_last_inserted_id();
 
 				$this->config->set('dl_traffic_off', $traffic_off);
 
@@ -355,7 +355,7 @@ class acp_assistant_controller implements acp_assistant_interface
 			$this->u_action	.= '&amp;parent=' . $cat_parent . '&amp;type=c';
 
 			$this->template->assign_vars([
-				'DL_ERROR_MSG'				=> (empty($error)) ? '' : implode('<br />', $error_msg),
+				'DL_ERROR_MSG'				=> (empty($error)) ? '' : implode('<br>', $error_msg),
 				'DL_CATEGORY'				=> (isset($index[$cat_id]['cat_name'])) ? $this->language->lang('DL_PERMISSIONS', $index[$cat_id]['cat_name']) : '',
 				'DL_MUST_APPROVE'			=> $must_approve,
 				'DL_STATS'					=> $statistics,

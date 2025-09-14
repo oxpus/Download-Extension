@@ -33,6 +33,7 @@ class broken
 	protected $dlext_footer;
 
 	protected $dlext_table_downloads;
+	protected $dlext_table_dl_reports;
 
 	/**
 	 * Constructor
@@ -52,6 +53,7 @@ class broken
 	 * @param \oxpus\dlext\core\helpers\constants	$dlext_constants
 	 * @param \oxpus\dlext\core\helpers\footer		$dlext_footer
 	 * @param string								$dlext_table_downloads
+	 * @param string								$dlext_table_dl_reports
 	 */
 	public function __construct(
 		\phpbb\db\driver\driver_interface $db,
@@ -68,7 +70,8 @@ class broken
 		\oxpus\dlext\core\status $dlext_status,
 		\oxpus\dlext\core\helpers\constants $dlext_constants,
 		\oxpus\dlext\core\helpers\footer $dlext_footer,
-		$dlext_table_downloads
+		$dlext_table_downloads,
+		$dlext_table_dl_reports
 	)
 	{
 		$this->db 						= $db;
@@ -82,6 +85,7 @@ class broken
 		$this->captcha					= $captcha;
 
 		$this->dlext_table_downloads	= $dlext_table_downloads;
+		$this->dlext_table_dl_reports	= $dlext_table_dl_reports;
 
 		$this->dlext_auth				= $dlext_auth;
 		$this->dlext_main				= $dlext_main;
@@ -194,7 +198,7 @@ class broken
 
 						'S_DL_CONFIRM_ACTION'	=> $this->helper->route('oxpus_dlext_broken'),
 						'S_DL_HIDDEN_FIELDS'	=> build_hidden_fields($s_hidden_fields),
-						'S_DL_CONFIRM_CODE'	=> $this->dlext_constants::DL_TRUE,
+						'S_DL_CONFIRM_CODE'		=> $this->dlext_constants::DL_TRUE,
 					]);
 
 					/*
@@ -240,22 +244,34 @@ class broken
 			}
 			else
 			{
+				$processing_user	= $this->dlext_auth->dl_auth_users($cat_id, 'auth_mod');
+				$reporter_name		= ($this->user->data['is_registered']) ? $this->user->data['username'] : $this->language->lang('DL_A_GUEST');
+				$reporter_user_id	= ($this->user->data['is_registered']) ? $this->user->data['user_id'] : ANONYMOUS;
+
+				$report_notify_text = censor_text($this->request->variable('report_notify_text', '', $this->dlext_constants::DL_TRUE));
+
 				$sql = 'UPDATE ' . $this->dlext_table_downloads . ' SET ' . $this->db->sql_build_array('UPDATE', [
 					'broken' => $this->dlext_constants::DL_TRUE
 				]) . ' WHERE id = ' . (int) $df_id;
 				$this->db->sql_query($sql);
 
-				$processing_user = $this->dlext_auth->dl_auth_users($cat_id, 'auth_mod');
-				$reporter = ($this->user->data['is_registered']) ? $this->user->data['username'] : $this->language->lang('DL_A_GUEST');
+				$sql_data = [
+					'dl_id'					=> $df_id,
+					'user_id'				=> $reporter_user_id,
+					'report_time'			=> time(),
+					'report_text'			=> $report_notify_text,
+				];
 
-				$report_notify_text = $this->request->variable('report_notify_text', '', $this->dlext_constants::DL_TRUE);
+				$sql = 'INSERT INTO ' . $this->dlext_table_dl_reports . ' ' . $this->db->sql_build_array('INSERT', $sql_data);
+				$this->db->sql_query($sql);
+
 				$report_notify_text = ($report_notify_text) ? $this->language->lang('DL_REPORT_NOTIFY_TEXT', $report_notify_text) : '';
 
 				$notification_data = [
 					'user_ids'				=> $processing_user,
 					'df_id'					=> $df_id,
 					'description'			=> $description,
-					'reporter'				=> $reporter,
+					'reporter'				=> $reporter_name,
 					'report_notify_text'	=> $report_notify_text,
 				];
 

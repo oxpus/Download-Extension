@@ -323,7 +323,7 @@ class edit
 						]);
 						$this->db->sql_query($sql);
 
-						$fav_id = $this->db->sql_nextid();
+						$fav_id = $this->db->sql_last_inserted_id();
 
 						$sql = 'INSERT INTO ' . $this->dlext_table_dl_bug_history . ' ' . $this->db->sql_build_array('INSERT', [
 							'df_id'					=> $df_id,
@@ -346,7 +346,7 @@ class edit
 						$controller = 'oxpus_dlext_tracker_main';
 					}
 
-					$message = $this->language->lang('DL_BUG_REPORT_ADDED') . '<br /><br />' . $this->language->lang('CLICK_RETURN_BUG_TRACKER', '<a href="' . $this->helper->route($controller, $link_array) . '">', '</a>');
+					$message = $this->language->lang('DL_BUG_REPORT_ADDED') . '<br><br>' . $this->language->lang('CLICK_RETURN_BUG_TRACKER', '<a href="' . $this->helper->route($controller, $link_array) . '">', '</a>');
 
 					trigger_error($message);
 				}
@@ -468,7 +468,7 @@ class edit
 					}
 
 					$this->template->assign_vars([
-						'DL_ERROR'				=> ($error) ? implode('<br />', $error_txt) : $this->dlext_constants::DL_FALSE,
+						'DL_ERROR'				=> ($error) ? implode('<br>', $error_txt) : $this->dlext_constants::DL_FALSE,
 
 						'DL_REPORT_TITLE'		=> ($preview) ? $report_title : '',
 						'DL_REPORT_TEXT'		=> ($preview) ? $report_text : '',

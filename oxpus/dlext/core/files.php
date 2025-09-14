@@ -24,6 +24,7 @@ class files implements files_interface
 	protected $dlext_constants;
 
 	protected $dlext_table_downloads;
+	protected $dlext_dlext_images_table;
 
 	/**
 	 * Constructor
@@ -34,6 +35,7 @@ class files implements files_interface
 	 * @param \phpbb\template\template				$template
 	 * @param \oxpus\dlext\core\helpers\constants	$dlext_constants
 	 * @param string								$dlext_table_downloads
+	 * @param string								$dlext_dlext_images_table
 	 */
 	public function __construct(
 		\phpbb\db\driver\driver_interface $db,
@@ -41,7 +43,8 @@ class files implements files_interface
 		\phpbb\user $user,
 		\phpbb\template\template $template,
 		\oxpus\dlext\core\helpers\constants $dlext_constants,
-		$dlext_table_downloads
+		$dlext_table_downloads,
+		$dlext_dlext_images_table
 	)
 	{
 		$this->db 						= $db;
@@ -52,9 +55,10 @@ class files implements files_interface
 		$this->dlext_constants			= $dlext_constants;
 
 		$this->dlext_table_downloads	= $dlext_table_downloads;
+		$this->dlext_dlext_images_table	= $dlext_dlext_images_table;
 	}
 
-	public function files($cat_id, $sql_sort_by, $sql_order, $start, $limit, $sql_fields = '*', $add_user = false)
+	public function files($cat_id, $sql_sort_by, $sql_order, $start, $limit, $sql_fields = '*', $add_user = false, $thumb_art = 'thumb')
 	{
 		$dl_files = [];
 
@@ -72,7 +76,7 @@ class files implements files_interface
 			}
 		}
 
-		$sql_array['SELECT'] = $sql_fields;
+		$sql_array['SELECT'] = $sql_fields . ', img.img_name as thumbnail';
 
 		$sql_array['FROM'][$this->dlext_table_downloads] = 'd';
 
@@ -83,6 +87,23 @@ class files implements files_interface
 				'ON'	=> 'u.user_id = d.add_user'
 			];
 		}
+
+		switch ($thumb_art)
+		{
+			case 'thumb':
+				$sql_where_thumb = ' AND img.img_index = 1';
+			break;
+			case 'thumb_list':
+				$sql_where_thumb = ' AND img.img_lists = 1';
+			break;
+			default:
+				$sql_where_thumb = '';
+		}
+
+		$sql_array['LEFT_JOIN'][] = [
+			'FROM'	=> [$this->dlext_dlext_images_table => 'img'],
+			'ON'	=> 'img.dl_id = d.id' . (string) $sql_where_thumb
+		];
 
 		$sql_array['WHERE'] = 'd.cat = ' . (int) $cat_id . ' AND d.approve = 1';
 
@@ -109,7 +130,7 @@ class files implements files_interface
 		return $dl_files;
 	}
 
-	public function all_files($cat_id, $sort_ary, $extra_where, $df_id, $modcp, $fields, $limit = 0, $limit_start = 0)
+	public function all_files($cat_id, $sort_ary, $extra_where, $df_id, $modcp, $fields, $limit = 0, $limit_start = 0, $thumb_art = 'thumb_list')
 	{
 		if (!is_array($fields))
 		{
@@ -127,7 +148,7 @@ class files implements files_interface
 
 		$dl_files = [];
 
-		$sql_array['SELECT'] = $sql_fields . ', au.username add_username, au.user_colour add_user_colour, cu.username change_username, cu.user_colour change_user_colour';
+		$sql_array['SELECT'] = $sql_fields . ', au.username add_username, au.user_colour add_user_colour, cu.username change_username, cu.user_colour change_user_colour, img.img_name as thumbnail';
 
 		$sql_array['FROM'][$this->dlext_table_downloads] = 'd';
 
@@ -138,6 +159,23 @@ class files implements files_interface
 		$sql_array['LEFT_JOIN'][] = [
 			'FROM'	=> [USERS_TABLE => 'cu'],
 			'ON'	=> 'cu.user_id = d.change_user'
+		];
+
+		switch ($thumb_art)
+		{
+			case 'thumb':
+				$sql_where_thumb = ' AND img.img_index = 1 ';
+			break;
+			case 'thumb_list':
+				$sql_where_thumb = ' AND img.img_lists = 1 ';
+			break;
+			default:
+				$sql_where_thumb = '';
+		}
+
+		$sql_array['LEFT_JOIN'][] = [
+			'FROM'	=> [$this->dlext_dlext_images_table => 'img'],
+			'ON'	=> 'img.dl_id = d.id' . (string) $sql_where_thumb
 		];
 
 		$sql_array['WHERE'] = ($modcp) ? $this->db->sql_in_set('d.approve', [0, 1]) : 'd.approve = 1';
@@ -417,7 +455,6 @@ class files implements files_interface
 			'change_user',
 			'last_time',
 			'down_user',
-			'thumbnail',
 			'broken',
 			'mod_desc_uid',
 			'mod_desc_bitfield',

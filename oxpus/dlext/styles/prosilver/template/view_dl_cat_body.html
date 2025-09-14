@@ -2,12 +2,12 @@
 
 <h2 class="dl-left">{{ lang('DL_CAT_TITLE') }}</h2>
 
-<br />
+<br>
 
 <div id="search-box" class="search-box dl-right" role="search" style="margin-right: 0.7em;">
 	<form action="{{ U_DL_SEARCH }}" method="post" id="news_search">
 		<fieldset>
-			<input name="search_keywords" id="search_keywords" type="search" maxlength="255" title="{{ lang('DL_SEARCH_DOWNLOAD') }}" class="inputbox search tiny" size="20" value="" placeholder="{{ lang('DL_SEARCH_DOWNLOAD') }}" />
+			<input name="search_keywords" id="search_keywords" type="search" maxlength="255" title="{{ lang('DL_SEARCH_DOWNLOAD') }}" class="inputbox search tiny" size="20" value="" placeholder="{{ lang('DL_SEARCH_DOWNLOAD') }}">
 			<button class="button button-search" type="submit" title="{{ lang('SEARCH') }}">
 				<i class="icon fa-search fa-fw" aria-hidden="true"></i><span class="sr-only">{{ lang('SEARCH') }}</span>
 			</button>
@@ -20,7 +20,7 @@
 
 <div class="clear"></div>
 
-<br />
+<br>
 
 <div class="forabg">
 	<div class="inner">
@@ -48,9 +48,9 @@
 					<span class="forum-image">
 						{% INCLUDE '@oxpus_dlext/helpers/dl_foldericon.html' %}
 					</span>
-					{% if downloads.DL_CAT_ICON %}<span class="forum-image"><img src="{{ downloads.DL_CAT_ICON }}" alt="" title="{{ downloads.DL_CAT_NAME }}" /></span>{% endif %}
-					<a href="{{ downloads.U_DL_CAT_VIEW }}" class="forumtitle">{{ downloads.DL_CAT_NAME }}</a><br />
-					{% if not S_DL_ENABLE_DESC_HIDE %}<div class="dl-index-desc list-inner"><br />{{ downloads.DL_CAT_DESC }}</div>{% endif %}
+					{% if downloads.DL_CAT_ICON %}<span class="forum-image"><img src="{{ downloads.DL_CAT_ICON }}" alt="" title="{{ downloads.DL_CAT_NAME }}"></span>{% endif %}
+					<a href="{{ downloads.U_DL_CAT_VIEW }}" class="forumtitle">{{ downloads.DL_CAT_NAME }}</a><br>
+					{% if not S_DL_ENABLE_DESC_HIDE %}<div class="dl-index-desc"><br>{{ downloads.DL_CAT_DESC }}</div>{% endif %}
 					{% if downloads.pagination|length %}
 					<div class="pagination">
 						<ul>
@@ -67,12 +67,12 @@
 					{% endif %}
 					{% if S_DL_SUB_ON_INDEX %}
 					{% for sub in downloads.sub %}
-					<br />
+					<br>
 					{% for sublevel_row in sub.sublevel_row %}
 					<div class="dl-padding-left-5">
 						{% INCLUDE '@oxpus_dlext/helpers/dl_subfoldericon.html' %}
 						{% if sublevel_row.M_DL_SUBLEVEL_ICON %}
-						<img src="{{ sublevel_row.M_DL_SUBLEVEL_ICON }}" alt="" title="{{ sublevel_row.L_DL_SUBLEVEL }}" class="dl-subfolder-small" />
+						<img src="{{ sublevel_row.M_DL_SUBLEVEL_ICON }}" alt="" title="{{ sublevel_row.L_DL_SUBLEVEL }}" class="dl-subfolder-small">
 						{% endif %}
 						&nbsp; <a href="{{ sublevel_row.U_DL_SUBLEVEL }}" class="small"{% if sublevel_row.DL_SUBLEVEL_COUNT %} title="{{ sublevel_row.DL_SUBLEVEL_COUNT }} {{ lang('DL_CAT_FILES') }}"{% endif %}><strong>{{ sublevel_row.L_DL_SUBLEVEL }}</strong></a>
 					</div>
@@ -90,7 +90,7 @@
 							{% INCLUDE '@oxpus_dlext/helpers/dl_filestatus.html' %}
 							{{ downloads.DL_CAT_LAST_DL }}
 						</a>
-						<br />
+						<br>
 						<a href="{{ downloads.U_DL_CAT_LAST_USER }}">{{ downloads.DL_CAT_LAST_USER }}</a>
 						{% if downloads.DL_CAT_LAST_TIME %}&nbsp;<time datetime="{{ downloads.DL_CAT_LAST_TIME_RFC }}">{{ downloads.DL_CAT_LAST_TIME }}</time>{% endif %}
 					</div>
@@ -105,6 +105,6 @@
 	</div>
 </div>
 
-<br />
+<br>
 
 {% INCLUDE '@oxpus_dlext/helpers/dl_footer.html' %}

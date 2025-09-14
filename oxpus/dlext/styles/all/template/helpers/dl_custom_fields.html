@@ -9,19 +9,19 @@
 {% endfor %}
 
 {% for string in loops.string %}
-<input type="text" class="inputbox autowidth" name="{{ string.FIELD_IDENT }}" id="{{ string.FIELD_IDENT }}" size="{{ string.FIELD_LENGTH }}" maxlength="{{ string.FIELD_MAXLEN }}" value="{{ string.FIELD_VALUE }}" />
+<input type="text" class="inputbox autowidth" name="{{ string.FIELD_IDENT }}" id="{{ string.FIELD_IDENT }}" size="{{ string.FIELD_LENGTH }}" maxlength="{{ string.FIELD_MAXLEN }}" value="{{ string.FIELD_VALUE }}">
 {% endfor %}
 
 {% for bool in loops.bool %}
 {% if bool.FIELD_LENGTH eq 1 %}
-	{% for options in bool.options %}<label for="{{ bool.FIELD_IDENT }}_{{ options.OPTION_ID }}"><input type="radio" class="radio" name="{{ bool.FIELD_IDENT }}" id="{{ bool.FIELD_IDENT }}_{{ options.OPTION_ID }}" value="{{ options.OPTION_ID }}"{{ options.CHECKED }} /> {{ options.VALUE }}</label> {% endfor %}
+	{% for options in bool.options %}<label for="{{ bool.FIELD_IDENT }}_{{ options.OPTION_ID }}"><input type="radio" class="radio" name="{{ bool.FIELD_IDENT }}" id="{{ bool.FIELD_IDENT }}_{{ options.OPTION_ID }}" value="{{ options.OPTION_ID }}"{{ options.CHECKED }}> {{ options.VALUE }}</label> {% endfor %}
 {% else %}
-	<input type="checkbox" class="radio" name="{{ bool.FIELD_IDENT }}" id="{{ bool.FIELD_IDENT }}"{% if bool.FIELD_VALUE %} checked{% endif %} />
+	<input type="checkbox" class="radio" name="{{ bool.FIELD_IDENT }}" id="{{ bool.FIELD_IDENT }}"{% if bool.FIELD_VALUE %} checked{% endif %}>
 {% endif %}
 {% endfor %}
 
 {% for int in loops.int %}
-<input type="text" class="inputbox autowidth" name="{{ int.FIELD_IDENT }}" id="{{ int.FIELD_IDENT }}" size="{{ int.FIELD_LENGTH }}" value="{{ int.FIELD_VALUE }}" />
+<input type="text" class="inputbox autowidth" name="{{ int.FIELD_IDENT }}" id="{{ int.FIELD_IDENT }}" size="{{ int.FIELD_LENGTH }}" value="{{ int.FIELD_VALUE }}">
 {% endfor %}
 
 {% for date in loops.date %}

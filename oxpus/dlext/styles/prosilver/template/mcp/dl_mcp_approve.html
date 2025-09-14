@@ -30,7 +30,7 @@
 					<i class="icon fa-times fa-fw" aria-hidden="true"></i><span class="sr-only">{{ lang('DL_DELETE') }}</span>
 				</a>
 			</td>
-			<td class="center"><input type="checkbox" class="permissions-checkbox" name="dlo_id[]" value="{{ approve_row.DL_FILE_ID }}" /></td>
+			<td class="center"><input type="checkbox" class="permissions-checkbox" name="dlo_id[]" value="{{ approve_row.DL_FILE_ID }}"></td>
 		</tr>
 		{% else %}
 		<tr class="bg1"><td class="center" colspan="3"><b>{{ lang('DL_NO_APPROVE') }}</b></td></tr>
@@ -59,7 +59,7 @@
 {% endif %}
 
 <fieldset class="submit-buttons">
-	<input type="submit" name="submit" value="{{ lang('DL_APPROVE') }}" class="button1" />
+	<input type="submit" name="submit" value="{{ lang('DL_APPROVE') }}" class="button1">
 	{{ S_FORM_TOKEN }}
 	{{ S_DL_HIDDEN_FIELDS }}
 </fieldset>
@@ -74,6 +74,6 @@
 </div>
 {% endif %}
 
-<br />
+<br>
 
 {% INCLUDE '@oxpus_dlext/helpers/dl_mcp_footer.html' %}

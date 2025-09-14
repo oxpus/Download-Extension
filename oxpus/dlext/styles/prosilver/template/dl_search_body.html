@@ -2,7 +2,7 @@
 
 <h2>{{ lang('DL_SEARCH_DOWNLOAD') }}</h2>
 
-<br />
+<br>
 
 <form action="{{ S_DL_SEARCH_ACTION }}" method="post" >
 
@@ -15,11 +15,11 @@
 
 				<dl>
 					<dt><label>{{ lang('SEARCH_KEYWORDS') }}</label></dt>
-					<dd><input type="text" class="inputbox autowidth" name="search_keywords" size="50" maxlength="255" value="" /></dd>
+					<dd><input type="text" class="inputbox autowidth" name="search_keywords" size="50" maxlength="255" value=""></dd>
 				</dl>
 				<dl>
 					<dt><label>{{ lang('DL_SEARCH_AUTHOR') }}</label></dt>
-					<dd><input type="text" class="inputbox autowidth" name="search_author" size="50" maxlength="255" value="" /></dd>
+					<dd><input type="text" class="inputbox autowidth" name="search_author" size="50" maxlength="255" value=""></dd>
 				</dl>
 
 			</fieldset>
@@ -67,15 +67,15 @@
 				<dl>
 					<dt><label>{{ lang('DL_SEARCH_TYPE') }}</label></dt>
 					<dd class="time">
-						<label><input type="radio" name="search_type" value="0" checked /> {{ lang('DL_SEARCH_TYPE_ALL') }}</label><br />
-						<label><input type="radio" name="search_type" value="1" /> {{ lang('DL_SEARCH_TYPE_SINGLE') }}</label>
+						<label><input type="radio" name="search_type" value="0" checked> {{ lang('DL_SEARCH_TYPE_ALL') }}</label><br>
+						<label><input type="radio" name="search_type" value="1"> {{ lang('DL_SEARCH_TYPE_SINGLE') }}</label>
 					</dd>
 				</dl>
 
 			</fieldset>
 
 			<fieldset class="submit-buttons">
-				<input type="submit" name="submit" value="{{ lang('SEARCH') }}" class="button icon-button" />
+				<input type="submit" name="submit" value="{{ lang('SEARCH') }}" class="button icon-button">
 				{{ S_FORM_TOKEN }}
 			</fieldset>
 
@@ -85,6 +85,6 @@
 
 </form>
 
-<br />
+<br>
 
 {% INCLUDE '@oxpus_dlext/helpers/dl_footer.html' %}

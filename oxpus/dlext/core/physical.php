@@ -380,7 +380,7 @@ class physical implements physical_interface
 		{
 			while ($row = $this->db->sql_fetchrow($result))
 			{
-				$real_file_array[$row['real_file']] = '<strong>' . $row['description'] . '</strong><br />[' . $row['file_name'] . ']';
+				$real_file_array[$row['real_file']] = '<strong>' . $row['description'] . '</strong><br>[' . $row['file_name'] . ']';
 				$real_file_title[$row['real_file']] = $row['file_name'];
 			}
 		}
@@ -400,7 +400,7 @@ class physical implements physical_interface
 		{
 			while ($row = $this->db->sql_fetchrow($result))
 			{
-				$real_file_array[$row['ver_real_file']] = '<strong>' . $row['description'] . '</strong><br />[' . $row['ver_file_name'] . ']';
+				$real_file_array[$row['ver_real_file']] = '<strong>' . $row['description'] . '</strong><br>[' . $row['ver_file_name'] . ']';
 				$real_file_title[$row['ver_real_file']] = $row['ver_file_name'];
 			}
 		}
@@ -444,7 +444,7 @@ class physical implements physical_interface
 				else
 				{
 					$exist[] = $this->dlext_constants::DL_FALSE;
-					$unassigned_files = $this->dlext_constants::DL_TRUE;
+					$unassigned_files += 1;
 				}
 			}
 		}

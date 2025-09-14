@@ -486,7 +486,7 @@ class fields
 		}
 		else
 		{
-			trigger_error($this->language->lang('NO_MODE'), E_USER_ERROR);
+			trigger_error($this->language->lang('NO_MODE'), E_USER_WARNING);
 		}
 	}
 
@@ -588,7 +588,7 @@ class fields
 				break;
 
 			default:
-				trigger_error($this->language->lang('NO_MODE'), E_USER_ERROR);
+				trigger_error($this->language->lang('NO_MODE'), E_USER_WARNING);
 				break;
 		}
 	}

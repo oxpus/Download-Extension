@@ -304,6 +304,8 @@ class acp_config_controller implements acp_config_interface
 						'dl_thumb_fsize'		=> ['lang' => 'DL_THUMB_MAX_SIZE',			'validate' => 'int',	'type' => 'custom',			'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_THUMB_MAX_SIZE',	 		'function' => [$this, 'select_size'],			'params' => ['{CONFIG_VALUE}', 'dl_thumb_fsize', '10', '20', 'dl_f_quote', $this->dlext_constants::DL_FILE_RANGE_MBYTE, $this->dlext_constants::DL_FALSE]],
 						'dl_thumb_xsize'		=> ['lang' => 'DL_THUMB_MAX_DIM_X',			'validate' => 'int',	'type' => 'text:5:5',		'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_THUMB_MAX_DIM_X'],
 						'dl_thumb_ysize'		=> ['lang' => 'DL_THUMB_MAX_DIM_Y',			'validate' => 'int',	'type' => 'text:5:5',		'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_THUMB_MAX_DIM_Y'],
+						'dl_thumb_xsize_max'	=> ['lang' => 'DL_THUMB_MAX_DIM_X_MAX',		'validate' => 'int',	'type' => 'text:5:5',		'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_THUMB_MAX_DIM_X_MAX'],
+						'dl_thumb_ysize_max'	=> ['lang' => 'DL_THUMB_MAX_DIM_Y_MAX',		'validate' => 'int',	'type' => 'text:5:5',		'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_THUMB_MAX_DIM_Y_MAX'],
 
 						'legend7'				=> '',
 
@@ -656,7 +658,7 @@ class acp_config_controller implements acp_config_interface
 			'DL_TITLE_PAGE'			=> $this->language->lang($display_vars['title']),
 
 			'DL_EXT_FILES_PATH'		=> $this->dlext_constants->get_value('files_dir'),
-			'DL_ERROR_MSG'			=> implode('<br />', $error),
+			'DL_ERROR_MSG'			=> implode('<br>', $error),
 
 			'S_DL_ERROR'			=> (!empty($error)) ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE,
 			'S_DL_HIDDEN_FIELDS'	=> (!empty($s_hidden_fields)) ? build_hidden_fields($s_hidden_fields) : '',
@@ -841,15 +843,15 @@ class acp_config_controller implements acp_config_interface
 
 	public function select_rss_cats($value)
 	{
-		$s_select = '<label><input type="radio" name="config[dl_rss_cats]" id="dl_rss_cats" class="radio" value="' . $this->dlext_constants::DL_RSS_CATS_ALL . '" ' . (($value == $this->dlext_constants::DL_RSS_CATS_ALL) ? 'checked' : '') . ' />' . $this->language->lang('DL_RSS_CATS_ALL') . '</label>&nbsp;';
-		$s_select .= '<label><input type="radio" name="config[dl_rss_cats]" class="radio" value="' . $this->dlext_constants::DL_RSS_CATS_SELECTED . '" ' . (($value == $this->dlext_constants::DL_RSS_CATS_SELECTED) ? 'checked' : '') . ' />' . $this->language->lang('DL_RSS_CATS_SELECTED') . '</label>&nbsp;';
-		$s_select .= '<label><input type="radio" name="config[dl_rss_cats]" class="radio" value="' . $this->dlext_constants::DL_RSS_CATS_OTHER . '" ' . (($value == $this->dlext_constants::DL_RSS_CATS_OTHER) ? 'checked' : '') . ' />' . $this->language->lang('DL_RSS_CATS_NOT_SELECTED') . '</label>&nbsp;';
+		$s_select = '<label><input type="radio" name="config[dl_rss_cats]" id="dl_rss_cats" class="radio" value="' . $this->dlext_constants::DL_RSS_CATS_ALL . '" ' . (($value == $this->dlext_constants::DL_RSS_CATS_ALL) ? 'checked' : '') . '>' . $this->language->lang('DL_RSS_CATS_ALL') . '</label>&nbsp;';
+		$s_select .= '<label><input type="radio" name="config[dl_rss_cats]" class="radio" value="' . $this->dlext_constants::DL_RSS_CATS_SELECTED . '" ' . (($value == $this->dlext_constants::DL_RSS_CATS_SELECTED) ? 'checked' : '') . '>' . $this->language->lang('DL_RSS_CATS_SELECTED') . '</label>&nbsp;';
+		$s_select .= '<label><input type="radio" name="config[dl_rss_cats]" class="radio" value="' . $this->dlext_constants::DL_RSS_CATS_OTHER . '" ' . (($value == $this->dlext_constants::DL_RSS_CATS_OTHER) ? 'checked' : '') . '>' . $this->language->lang('DL_RSS_CATS_NOT_SELECTED') . '</label>&nbsp;';
 
 		if ($value != $this->dlext_constants::DL_RSS_CATS_ALL)
 		{
 			$rss_cats = $this->dlext_extra->dl_dropdown(0, 0, array_map('intval', explode(',', $this->config['dl_rss_cats_select'])));
 
-			$s_select .= '<br /><select name="dl_rss_cats_select[]" id="dl_rss_cats_select" multiple="multiple" size="10">';
+			$s_select .= '<br><select name="dl_rss_cats_select[]" id="dl_rss_cats_select" multiple="multiple" size="10">';
 
 			if (!empty($rss_cats) && is_array($rss_cats))
 			{
@@ -944,10 +946,10 @@ class acp_config_controller implements acp_config_interface
 					break;
 			}
 
-			$remain_text_out = '<br /><span>&nbsp;' . $remain_text_out . '</span>';
+			$remain_text_out = '<br><span>&nbsp;' . $remain_text_out . '</span>';
 		}
 
-		return '<input type="text" size="' . $size . '" maxlength="' . $maxlength . '" name="config[' . $field . ']" id="' . $field . '" value="' . $quota_out . '" class="post" />&nbsp;' . $s_select . '' . $remain_text_out;
+		return '<input type="text" size="' . $size . '" maxlength="' . $maxlength . '" name="config[' . $field . ']" id="' . $field . '" value="' . $quota_out . '" class="post">&nbsp;' . $s_select . '' . $remain_text_out;
 	}
 
 	public function select_sort($value)
@@ -1040,7 +1042,7 @@ class acp_config_controller implements acp_config_interface
 
 	public function select_dl_user($value, $config)
 	{
-		$input_field = '<input class="text medium" type="text" id="' . $config . '" name="config[' . $config . ']" value="' . $value . '" />';
+		$input_field = '<input class="text medium" type="text" id="' . $config . '" name="config[' . $config . ']" value="' . $value . '">';
 		$input_field .= '&nbsp;[ <a href="#" class="dl-finduser" data-href="' . append_sid($this->root_path . 'memberlist.' . $this->phpEx, 'mode=searchuser&amp;form=acp_dl_config&amp;field=' . $config . '&amp;select_single=1') . '">' . $this->language->lang('FIND_USERNAME') . '</a> ]';
 
 		return $input_field;
@@ -1069,6 +1071,7 @@ class acp_config_controller implements acp_config_interface
 	public function select_latest_type($value)
 	{
 		$s_select = '<option value="' . $this->dlext_constants::DL_LATEST_TYPE_OFF . '">' . $this->language->lang('DL_LATEST_TYPE_OFF') . '</option>';
+		$s_select .= '<option value="' . $this->dlext_constants::DL_LATEST_TYPE_NEW . '">' . $this->language->lang('DL_LATEST_TYPE_NEW') . '</option>';
 		$s_select .= '<option value="' . $this->dlext_constants::DL_LATEST_TYPE_DEFAULT . '">' . $this->language->lang('DL_LATEST_TYPE_DEFAULT') . '</option>';
 		$s_select .= '<option value="' . $this->dlext_constants::DL_LATEST_TYPE_COMPLETE . '">' . $this->language->lang('DL_LATEST_TYPE_COMPLETE') . '</option>';
 		$s_select = str_replace('value="' . $value . '">', 'value="' . $value . '" selected>', $s_select);

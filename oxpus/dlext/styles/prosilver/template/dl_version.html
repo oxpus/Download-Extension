@@ -17,7 +17,7 @@
 	</label>
 </h2>
 
-<br />
+<br>
 
 <div class="panel bg1">
 	<div class="tablewrap">
@@ -25,7 +25,7 @@
 
 			<div class="postbody dl-width-100">
 				<h3>{{ lang('DL_HACK_VERSION') }}{{ lang('COLON') }} {{ DL_VER_VERSION }}</h3>
-				{% if not S_DL_ACTIVE %}<br /><div class="rules">{{ lang('DL_NOT_ACTIVE') }}</div>{% endif %}
+				{% if not S_DL_ACTIVE %}<br><div class="rules">{{ lang('DL_NOT_ACTIVE') }}</div>{% endif %}
 				{% if U_DL_VER_EDIT %}
 				<ul class="post-buttons">
 					<li class="rightside">
@@ -49,7 +49,7 @@
 
 			{% for images in loops.images %}
 			{% if images.S_FIRST_ROW %}
-			<br />
+			<br>
 			<h3>{{ lang('DL_IMAGES') }}{{ lang('COLON') }}</h3>
 			<dl>
 				<ul class="dl-detail-row">
@@ -58,7 +58,7 @@
 						{% if S_DL_POPUPIMAGE %}
 						<a href="{{ images.DL_IMAGE }}" title="{{ images.DL_NAME }}" rel="prettyPhoto[pp_gal]">
 						{% endif %}
-							<img src="{{ images.DL_LINK }}" alt="{{ images.DL_NAME }}" title="{{ images.DL_NAME }}" class="dl-thumb-box" />
+							<img src="{{ images.DL_LINK }}" alt="{{ images.DL_NAME }}" title="{{ images.DL_NAME }}" class="dl-thumb-box">
 						{% if S_DL_POPUPIMAGE %}
 						</a>
 						{% endif %}
@@ -71,7 +71,7 @@
 
 			{% for files in loops.files %}
 			{% if files.S_FIRST_ROW %}
-			<br />
+			<br>
 			<h3>{{ lang('DL_FILES_TITLE') }}{{ lang('COLON') }}</h3>
 			<dl>
 				<ul class="topiclist">
@@ -93,6 +93,6 @@
 
 <div class="clearfix"></div>
 
-<br />
+<br>
 
 {% INCLUDE '@oxpus_dlext/helpers/dl_footer.html' %}

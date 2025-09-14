@@ -22,6 +22,10 @@
 						{% endif %}
 						{% if U_DL_MCP_MANAGE_TOOLBOX %}
 						<li id="active-subsection" class="active{% if S_DL_MCP_TOOLBOX %}-subsection{% endif %}"><a href="{{ U_DL_MCP_MANAGE_TOOLBOX }}"><span>{{ lang('DL_MODCP_MANAGE') }}</span></a></li>
+						{% endif %}
+						{% if S_DL_MCP_BROKEN %}
+						<li id="active-subsection" class="active{% if not S_DL_BROKEN_VIEW %}-subsection{% endif %}"><a href="{{ U_DL_MCP_MANAGE_BROKEN_OPEN }}"><span>{{ lang('DL_MODCP_QUEUE') }}</span></a></li>
+						<li id="active-subsection" class="active{% if S_DL_BROKEN_VIEW %}-subsection{% endif %}"><a href="{{ U_DL_MCP_MANAGE_BROKEN_CLOSE }}"><span>{{ lang('DL_MODCP_BROKEN_CLOSED') }}</span></a></li>
 						{% else %}
 						<li id="active-subsection" class="active-subsection"><a href=""><span>{{ DL_MCP_TAB_MODULE }}</span></a></li>
 						{% endif %}

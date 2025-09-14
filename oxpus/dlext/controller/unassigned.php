@@ -93,7 +93,7 @@ class unassigned
 
 				if (!empty($ext_blacklist))
 				{
-					$blacklist_explain = '<br />' . $this->language->lang('DL_FORBIDDEN_EXT_EXPLAIN', implode(', ', $ext_blacklist));
+					$blacklist_explain = '<br>' . $this->language->lang('DL_FORBIDDEN_EXT_EXPLAIN', implode(', ', $ext_blacklist));
 				}
 				else
 				{

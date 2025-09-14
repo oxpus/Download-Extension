@@ -110,9 +110,9 @@ class admin extends fields
 	public function get_string_options()
 	{
 		$options = [
-			0 => ['TITLE' => $this->language->lang('FIELD_LENGTH'),		'FIELD' => '<input type="text" name="field_length" size="5" value="' . $this->vars['field_length'] . '" />'],
-			1 => ['TITLE' => $this->language->lang('MIN_FIELD_CHARS'),	'FIELD' => '<input type="text" name="field_minlen" size="5" value="' . $this->vars['field_minlen'] . '" />'],
-			2 => ['TITLE' => $this->language->lang('MAX_FIELD_CHARS'),	'FIELD' => '<input type="text" name="field_maxlen" size="5" value="' . $this->vars['field_maxlen'] . '" />'],
+			0 => ['TITLE' => $this->language->lang('FIELD_LENGTH'),		'FIELD' => '<input type="text" name="field_length" size="5" value="' . $this->vars['field_length'] . '">'],
+			1 => ['TITLE' => $this->language->lang('MIN_FIELD_CHARS'),	'FIELD' => '<input type="text" name="field_minlen" size="5" value="' . $this->vars['field_minlen'] . '">'],
+			2 => ['TITLE' => $this->language->lang('MAX_FIELD_CHARS'),	'FIELD' => '<input type="text" name="field_maxlen" size="5" value="' . $this->vars['field_maxlen'] . '">'],
 			3 => ['TITLE' => $this->language->lang('FIELD_VALIDATION'),	'FIELD' => '<select name="field_validation">' . $this->validate_options() . '</select>'],
 		];
 
@@ -125,9 +125,9 @@ class admin extends fields
 	public function get_text_options()
 	{
 		$options = [
-			0 => ['TITLE' => $this->language->lang('FIELD_LENGTH'),		'FIELD' => '<input name="rows" size="5" value="' . $this->vars['rows'] . '" /> ' . $this->language->lang('ROWS') . '</dd><dd><input name="columns" size="5" value="' . $this->vars['columns'] . '" /> ' . $this->language->lang('COLUMNS') . ' <input type="hidden" name="field_length" value="' . $this->vars['field_length'] . '" />'],
-			1 => ['TITLE' => $this->language->lang('MIN_FIELD_CHARS'),	'FIELD' => '<input type="text" name="field_minlen" size="10" value="' . $this->vars['field_minlen'] . '" />'],
-			2 => ['TITLE' => $this->language->lang('MAX_FIELD_CHARS'),	'FIELD' => '<input type="text" name="field_maxlen" size="10" value="' . $this->vars['field_maxlen'] . '" />'],
+			0 => ['TITLE' => $this->language->lang('FIELD_LENGTH'),		'FIELD' => '<input name="rows" size="5" value="' . $this->vars['rows'] . '"> ' . $this->language->lang('ROWS') . '</dd><dd><input name="columns" size="5" value="' . $this->vars['columns'] . '"> ' . $this->language->lang('COLUMNS') . ' <input type="hidden" name="field_length" value="' . $this->vars['field_length'] . '">'],
+			1 => ['TITLE' => $this->language->lang('MIN_FIELD_CHARS'),	'FIELD' => '<input type="text" name="field_minlen" size="10" value="' . $this->vars['field_minlen'] . '">'],
+			2 => ['TITLE' => $this->language->lang('MAX_FIELD_CHARS'),	'FIELD' => '<input type="text" name="field_maxlen" size="10" value="' . $this->vars['field_maxlen'] . '">'],
 			3 => ['TITLE' => $this->language->lang('FIELD_VALIDATION'),	'FIELD' => '<select name="field_validation">' . $this->validate_options() . '</select>'],
 		];
 
@@ -140,10 +140,10 @@ class admin extends fields
 	public function get_int_options()
 	{
 		$options = [
-			0 => ['TITLE' => $this->language->lang('FIELD_LENGTH'),		'FIELD' => '<input type="text" name="field_length" size="5" value="' . $this->vars['field_length'] . '" />'],
-			1 => ['TITLE' => $this->language->lang('MIN_FIELD_NUMBER'),	'FIELD' => '<input type="text" name="field_minlen" size="5" value="' . $this->vars['field_minlen'] . '" />'],
-			2 => ['TITLE' => $this->language->lang('MAX_FIELD_NUMBER'),	'FIELD' => '<input type="text" name="field_maxlen" size="5" value="' . $this->vars['field_maxlen'] . '" />'],
-			3 => ['TITLE' => $this->language->lang('DEFAULT_VALUE'),	'FIELD' => '<input type="post" name="field_default_value" value="' . $this->vars['field_default_value'] . '" />'],
+			0 => ['TITLE' => $this->language->lang('FIELD_LENGTH'),		'FIELD' => '<input type="text" name="field_length" size="5" value="' . $this->vars['field_length'] . '">'],
+			1 => ['TITLE' => $this->language->lang('MIN_FIELD_NUMBER'),	'FIELD' => '<input type="text" name="field_minlen" size="5" value="' . $this->vars['field_minlen'] . '">'],
+			2 => ['TITLE' => $this->language->lang('MAX_FIELD_NUMBER'),	'FIELD' => '<input type="text" name="field_maxlen" size="5" value="' . $this->vars['field_maxlen'] . '">'],
+			3 => ['TITLE' => $this->language->lang('DEFAULT_VALUE'),	'FIELD' => '<input type="post" name="field_default_value" value="' . $this->vars['field_default_value'] . '">'],
 		];
 
 		return $options;
@@ -168,7 +168,7 @@ class admin extends fields
 		];
 
 		$options = [
-			0 => ['TITLE' => $this->language->lang('FIELD_TYPE'), 'EXPLAIN' => $this->language->lang('BOOL_TYPE_EXPLAIN'), 'FIELD' => '<label><input type="radio" class="radio" name="field_length" value="1"' . (($this->vars['field_length'] == 1) ? ' checked' : '') . ' onchange="document.getElementById(\'add_profile_field\').submit();" /> ' . $this->language->lang('RADIO_BUTTONS') . '</label><label><input type="radio" class="radio" name="field_length" value="2"' . (($this->vars['field_length'] == 2) ? ' checked' : '') . ' onchange="document.getElementById(\'add_profile_field\').submit();" /> ' . $this->language->lang('CHECKBOX') . '</label>'],
+			0 => ['TITLE' => $this->language->lang('FIELD_TYPE'), 'EXPLAIN' => $this->language->lang('BOOL_TYPE_EXPLAIN'), 'FIELD' => '<label><input type="radio" class="radio" name="field_length" value="1"' . (($this->vars['field_length'] == 1) ? ' checked' : '') . ' onchange="document.getElementById(\'add_profile_field\').submit();"> ' . $this->language->lang('RADIO_BUTTONS') . '</label><label><input type="radio" class="radio" name="field_length" value="2"' . (($this->vars['field_length'] == 2) ? ' checked' : '') . ' onchange="document.getElementById(\'add_profile_field\').submit();"> ' . $this->language->lang('CHECKBOX') . '</label>'],
 			1 => ['TITLE' => $this->language->lang('DEFAULT_VALUE'), 'FIELD' => $this->process_admin_field_row('preview', $profile_row)],
 		];
 
@@ -233,7 +233,7 @@ class admin extends fields
 
 		$options = [
 			0 => ['TITLE' => $this->language->lang('DEFAULT_VALUE'),	'FIELD' => $this->process_admin_field_row('preview', $profile_row)],
-			1 => ['TITLE' => $this->language->lang('ALWAYS_TODAY'),	'FIELD' => '<label><input type="radio" class="radio" name="always_now" value="1"' . (($s_checked) ? ' checked' : '') . ' onchange="document.getElementById(\'add_profile_field\').submit();" /> ' . $this->language->lang('YES') . '</label><label><input type="radio" class="radio" name="always_now" value="0"' . ((!$s_checked) ? ' checked' : '') . ' onchange="document.getElementById(\'add_profile_field\').submit();" /> ' . $this->language->lang('NO') . '</label>'],
+			1 => ['TITLE' => $this->language->lang('ALWAYS_TODAY'),	'FIELD' => '<label><input type="radio" class="radio" name="always_now" value="1"' . (($s_checked) ? ' checked' : '') . ' onchange="document.getElementById(\'add_profile_field\').submit();"> ' . $this->language->lang('YES') . '</label><label><input type="radio" class="radio" name="always_now" value="0"' . ((!$s_checked) ? ' checked' : '') . ' onchange="document.getElementById(\'add_profile_field\').submit();"> ' . $this->language->lang('NO') . '</label>'],
 		];
 
 		return $options;

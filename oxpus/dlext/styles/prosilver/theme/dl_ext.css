@@ -183,6 +183,21 @@ div.dl_help_close:hover, .dl-close-footer:hover
 	color: #009900 !important;
 }
 
+.dl-grey-icon
+{
+	color: #cccccc !important;
+}
+
+.dl-white-icon
+{
+	color: #ffffff !important;
+}
+
+.dl-green-button
+{
+	background-color: #009900 !important;
+}
+
 .dl-red
 {
 	color: #ff0000;
@@ -334,12 +349,6 @@ div.dl_help_close:hover, .dl-close-footer:hover
 	background-color: transparent !important;
 }
 
-.dl-thumb-box
-{
-	max-width: 150px;
-	max-height: 100px;
-}
-
 .dl-thumb-box-manage
 {
 	border-right: 1px #555555 solid;
@@ -382,6 +391,11 @@ div.dl_help_close:hover, .dl-close-footer:hover
 .dl-intent
 {
 	padding-left: 1em !important;
+}
+
+.dl-intent-wide
+{
+	padding-left: 3em !important;
 }
 
 .dl-intent-right
@@ -518,6 +532,15 @@ table.zebra-list tr.dl-reported:nth-child(even) td
 .dl-comment-height
 {
 	max-height: 100px;
+}
+
+.dl-thumb-input
+{
+	max-height: 100px !important;
+	padding-top: 3em;
+	text-align: center;
+	font-weight: bold;
+	font-size: 1.2em;
 }
 
 .title

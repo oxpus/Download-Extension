@@ -287,11 +287,6 @@ class details
 		*/
 		$s_dl_popupimage = $this->dlext_constants::DL_FALSE;
 
-		if ($dl_files['thumbnail'])
-		{
-			$s_dl_popupimage = $this->dlext_constants::DL_TRUE;
-		}
-
 		$sql = 'SELECT * FROM ' . 	$this->dlext_table_dl_images . '
 			WHERE dl_id = ' . (int) $df_id;
 		$result = $this->db->sql_query($sql);
@@ -308,7 +303,7 @@ class details
 			{
 				$thumbs_ary[$i] = $row;
 				$thumbs_ary[$i]['img_type'] = 'more';
-				++$i;
+				$i++;
 			}
 		}
 
@@ -946,44 +941,12 @@ class details
 		*/
 		if (!empty($index[$cat_id]['allow_thumbs']) && $index[$cat_id]['allow_thumbs'] && $this->config['dl_thumb_fsize'])
 		{
-			$first_thumb_exists	= $this->dlext_constants::DL_FALSE;
-			$more_thumbs_exists	= $this->dlext_constants::DL_FALSE;
-
-			if ($dl_files['thumbnail'] && $this->filesystem->exists($this->dlext_constants->get_value('files_dir') . '/thumbs/' . $dl_files['thumbnail']))
+			if (!$total_images)
 			{
-				if (!$total_images)
-				{
-					$this->template->assign_var('S_DL_POPUPIMAGE', $this->dlext_constants::DL_TRUE);
-				}
-
-				$first_thumb_exists = $this->dlext_constants::DL_TRUE;
+				$this->template->assign_var('S_DL_POPUPIMAGE', $this->dlext_constants::DL_TRUE);
 			}
 
 			if (!empty($thumbs_ary))
-			{
-				$more_thumbs_exists = $this->dlext_constants::DL_TRUE;
-			}
-
-			if ($first_thumb_exists)
-			{
-				$first_thumbs = [0 => [
-					'img_id'	=> 0,
-					'dl_id'		=> $df_id,
-					'img_type'	=> 'thumb',
-					'img_name'	=> $dl_files['thumbnail'],
-					'img_title'	=> $description,
-				]];
-
-				if ($more_thumbs_exists)
-				{
-					$first_thumbs += $thumbs_ary;
-				}
-
-				$thumbs_ary = $first_thumbs;
-				unset($first_thumbs);
-			}
-
-			if ($first_thumb_exists || $more_thumbs_exists)
 			{
 				$drop_images = [];
 
@@ -991,18 +954,9 @@ class details
 				{
 					if ($thumbs_ary[$key]['img_name'])
 					{
-						if ($thumbs_ary[$key]['img_type'] == 'thumb')
-						{
-							$pic_id = $thumbs_ary[$key]['dl_id'];
-						}
-						else
-						{
-							$pic_id = $thumbs_ary[$key]['img_id'];
-						}
-
 						$this->template->assign_block_vars('dl_thumbnail', [
-							'DL_THUMBNAIL_LINK'	=> $this->helper->route('oxpus_dlext_thumbnail', ['pic' => $pic_id, 'img_type' => $thumbs_ary[$key]['img_type'], 'disp_art' => $this->dlext_constants::DL_FALSE]),
-							'DL_THUMBNAIL_PIC'	=> $this->helper->route('oxpus_dlext_thumbnail', ['pic' => $pic_id, 'img_type' => $thumbs_ary[$key]['img_type'], 'disp_art' => $this->dlext_constants::DL_TRUE]),
+							'DL_THUMBNAIL_LINK'	=> $this->helper->route('oxpus_dlext_thumbnail', ['pic' => $thumbs_ary[$key]['img_id'], 'img_type' => $thumbs_ary[$key]['img_type'], 'disp_art' => $this->dlext_constants::DL_FALSE]),
+							'DL_THUMBNAIL_PIC'	=> $this->helper->route('oxpus_dlext_thumbnail', ['pic' => $thumbs_ary[$key]['img_id'], 'img_type' => $thumbs_ary[$key]['img_type'], 'disp_art' => $this->dlext_constants::DL_TRUE]),
 							'DL_THUMBNAIL_NAME'	=> $thumbs_ary[$key]['img_title'],
 						]);
 					}

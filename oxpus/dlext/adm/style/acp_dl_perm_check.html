@@ -8,7 +8,7 @@
 </p>
 {% endif %}
 
-<br />
+<br>
 
 {% INCLUDE 'acp_dl_limits.html' %}
 
@@ -16,11 +16,11 @@
 
 <h2>{{ lang('USERS') }}{{ lang('COLON') }} {{ DL_CHECK_USERNAME }}</h2>
 
-<br />
+<br>
 <p><strong>{{ lang('DL_PC_ADMIN') }}{{ lang('COLON') }}</strong> {% if DL_USER_IS_ADMIN %}<strong class="dl-red">{{ lang('YES') }}</strong>{% else %}<span class="dl-green">{{ lang('NO') }}</span>{% endif %}</p>
 
 <table cellspacing="1">
-	<col class="col1" /><col class="col2" /><col class="col1" /><col class="col2" />
+	<col class="col1"><col class="col2"><col class="col1"><col class="col2">
 <thead>
 <tr>
 	<th>{{ lang('STATISTIC') }}</th>
@@ -48,7 +48,7 @@
 <h2>{{ lang('DL_CAT_TITLE') }}</h2>
 
 <table cellspacing="1">
-	<col class="col1" /><col class="col2" /><col class="col2" /><col class="col2" /><col class="col2" /><col class="col2" /><col class="col2" />
+	<col class="col1"><col class="col2"><col class="col2"><col class="col2"><col class="col2"><col class="col2"><col class="col2">
 <thead>
 <tr>
 	<th>{{ lang('DL_CAT_NAME') }}</th>
@@ -84,8 +84,8 @@
         <dl>
             <dt><label>{{ lang('USERNAME') }}</label></dt>
             <dd>
-                <input type="text" name="check_user" id="check_user" size="20" maxlength="32" value="" />
-                <br />
+                <input type="text" name="check_user" id="check_user" size="20" maxlength="32" value="">
+                <br>
                 [ <a href="#" class="dl-finduser" data-href="{{ U_DL_FIND_USERNAME }}">{{ lang('FIND_USERNAME') }}</a> ]
             </dd>
         </dl>
@@ -93,7 +93,7 @@
     </fieldset>
 
     <fieldset class="quick">
-        <input type="submit" name="submit" value="{{ lang('SUBMIT') }}" class="button1" />
+        <input type="submit" name="submit" value="{{ lang('SUBMIT') }}" class="button1">
     </fieldset>
 
     </form>

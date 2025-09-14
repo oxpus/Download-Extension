@@ -158,6 +158,7 @@ class acp_cat_edit_controller implements acp_cat_edit_interface
 		$comments			= $this->request->variable('comments', 0);
 		$perms_copy_from	= $this->request->variable('perms_copy_from', 0);
 		$display_thumbs		= $this->request->variable('display_thumbs', 0);
+		$max_thumbs			= $this->request->variable('max_thumbs', 1);
 
 		if ($cancel)
 		{
@@ -191,6 +192,11 @@ class acp_cat_edit_controller implements acp_cat_edit_interface
 
 		if ($action == 'save_cat')
 		{
+			if (!$max_thumbs)
+			{
+				$max_thumbs = 1;
+			}
+
 			$check_tree = $this->dlext_physical->get_file_base_tree(0, $this->dlext_constants::DL_TRUE);
 
 			if (empty($check_tree) || !in_array($path, $check_tree))
@@ -238,6 +244,7 @@ class acp_cat_edit_controller implements acp_cat_edit_interface
 				$set_add			= $index[$cat_id]['dl_set_add'];
 				$set_user			= $index[$cat_id]['dl_set_user'];
 				$display_thumbs		= $index[$cat_id]['display_thumbs'];
+				$max_thumbs			= $index[$cat_id]['max_thumbs'];
 
 				$s_cat_parent		= $this->dlext_extra->dl_dropdown(0, 0, $index[$cat_id]['parent'], 'auth_view', $cat_id);
 				$perms_copy_from	= $this->dlext_extra->dl_dropdown(0, 0, 0, 'auth_view', $cat_id);
@@ -424,6 +431,7 @@ class acp_cat_edit_controller implements acp_cat_edit_interface
 				'DL_TOPIC_USER'				=> $this->dlext_extra->dl_user_switch($topic_user),
 				'DL_SHOW_FILE_HASH'			=> $show_file_hash,
 				'DL_SET_USER'				=> $this->dlext_extra->dl_user_switch($set_user),
+				'DL_MAX_THUMBS'				=> $max_thumbs,
 
 				'DL_PERM_COPY_NONE'			=> $this->dlext_constants::DL_PERM_GENERAL_NONE,
 				'DL_PERM_COPY_PARENT'		=> $this->dlext_constants::DL_PERM_GENERAL_ZERO,
@@ -701,6 +709,7 @@ class acp_cat_edit_controller implements acp_cat_edit_interface
 				'topic_more_details'	=> $topic_more_details,
 				'topic_user'			=> $topic_user,
 				'display_thumbs'		=> $display_thumbs,
+				'max_thumbs'			=> $max_thumbs,
 			];
 
 			if ($cat_id)
@@ -726,7 +735,7 @@ class acp_cat_edit_controller implements acp_cat_edit_interface
 
 			if (!$cat_id)
 			{
-				$cat_id = $this->db->sql_nextid();
+				$cat_id = $this->db->sql_last_inserted_id();
 
 				$sql = 'INSERT INTO ' . $this->dlext_table_dl_cat_traf . ' ' . $this->db->sql_build_array('INSERT', [
 					'cat_id'			=> $cat_id,

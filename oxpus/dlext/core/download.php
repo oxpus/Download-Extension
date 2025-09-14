@@ -199,7 +199,6 @@ class download implements download_interface
 		$click_reset			= $this->request->variable('click_reset', 0);
 		$send_notify			= $this->request->variable('send_notify', 0);
 		$approve				= $this->request->variable('approve', 0);
-		$del_thumb				= $this->request->variable('del_thumb', 0);
 		$action					= $this->request->variable('action', '');
 
 		$allow_bbcode			= ($this->config['allow_bbcode']) ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE;
@@ -387,14 +386,14 @@ class download implements download_interface
 					$extension = str_replace('.', '', trim(strrchr(strtolower($file_name), '.')));
 					if (in_array($extension, $ext_blacklist))
 					{
-						trigger_error($this->language->lang('DL_FORBIDDEN_EXTENSION'), E_USER_ERROR);
+						trigger_error($this->language->lang('DL_FORBIDDEN_EXTENSION'), E_USER_WARNING);
 					}
 				}
 
 				if (count($upload_file->error) > 1 && $file_name)
 				{
 					$upload_file->remove();
-					trigger_error(implode('<br />', $upload_file->error), E_USER_ERROR);
+					trigger_error(implode('<br>', $upload_file->error), E_USER_WARNING);
 				}
 
 				$upload_file->error = [];
@@ -417,7 +416,7 @@ class download implements download_interface
 						if (!$file_size || ($remain_traffic && $file_size > $remain_traffic && $this->config['dl_upload_traffic_count']))
 						{
 							$upload_file->remove();
-							trigger_error($this->language->lang('DL_NO_UPLOAD_TRAFFIC'), E_USER_ERROR);
+							trigger_error($this->language->lang('DL_NO_UPLOAD_TRAFFIC'), E_USER_WARNING);
 						}
 					}
 
@@ -440,7 +439,7 @@ class download implements download_interface
 					if ($module == 'upload')
 					{
 						$upload_file->remove();
-						trigger_error($this->language->lang('DL_NO_FILENAME_ENTERED'), E_USER_ERROR);
+						trigger_error($this->language->lang('DL_NO_FILENAME_ENTERED'), E_USER_WARNING);
 					}
 
 					$new_real_file = $real_file_old;
@@ -488,7 +487,7 @@ class download implements download_interface
 				if (count($upload_file->error) > 1)
 				{
 					$upload_file->remove();
-					trigger_error(implode('<br />', $upload_file->error), E_USER_ERROR);
+					trigger_error(implode('<br>', $upload_file->error), E_USER_WARNING);
 				}
 			}
 		}
@@ -509,7 +508,7 @@ class download implements download_interface
 
 		$file_hash = '';
 
-		if ($new_real_file)
+		if (!empty($new_real_file))
 		{
 			$file_hash = $this->dlext_format->dl_hash($this->dlext_constants->get_value('files_dir') . '/downloads/' . $file_path . $new_real_file, 'file', $this->config['dl_file_hash_algo']);
 		}
@@ -522,102 +521,7 @@ class download implements download_interface
 		// Stop here, if custom fields are invalid!
 		if (!empty($error))
 		{
-			trigger_error(implode('<br />', $error), E_USER_WARNING);
-		}
-
-		$allow_thumbs_upload = $this->dlext_constants::DL_FALSE;
-
-		if ($this->config['dl_thumb_fsize'] && $index[$cat_id]['allow_thumbs'])
-		{
-			$allow_thumbs_upload = $this->dlext_constants::DL_TRUE;
-		}
-
-		$thumb_form_name	= 'thumb_name';
-		$thumb_name 		= '';
-
-		if ($module == 'acp')
-		{
-			/**
-			 * Manipulate thumbnail upload
-			 *
-			 * @event oxpus.dlext.acp_edit_thumbnail_before
-			 * @var string thumb_form_name		thumbnail upload form field
-			 * @var bool	allow_thumbs_upload		enable/disable thumbnail upload
-			 * @since 8.1.0-RC2
-			 */
-			$vars = [
-				'thumb_form_name',
-				'allow_thumbs_upload',
-			];
-			extract($this->dispatcher->trigger_event('oxpus.dlext.acp_edit_thumbnail_before', compact($vars)));
-		}
-		else if ($module == 'mcp')
-		{
-			/**
-			 * Manipulate thumbnail upload
-			 *
-			 * @event oxpus.dlext.mcp_edit_thumbnail_before
-			 * @var string thumb_form_name		thumbnail upload form field
-			 * @var bool	allow_thumbs_upload		enable/disable thumbnail upload
-			 * @since 8.1.0-RC2
-			 */
-			$vars = [
-				'thumb_form_name',
-				'allow_thumbs_upload',
-			];
-			extract($this->dispatcher->trigger_event('oxpus.dlext.mcp_edit_thumbnail_before', compact($vars)));
-		}
-
-		if ($allow_thumbs_upload)
-		{
-			$min_pic_width = $this->dlext_constants::DL_PIC_MIN_SIZE;
-			$allowed_imagetypes = ['gif', 'png', 'jpg'];
-
-			$upload_image = $this->files_factory->get('upload')
-				->set_allowed_extensions($allowed_imagetypes)
-				->set_max_filesize($this->config['dl_thumb_fsize'])
-				->set_allowed_dimensions(
-					$min_pic_width,
-					$min_pic_width,
-					$this->config['dl_thumb_xsize'],
-					$this->config['dl_thumb_ysize']
-				)
-				->set_disallowed_content((isset($this->config['mime_triggers']) ? explode('|', $this->config['mime_triggers']) : $this->dlext_constants::DL_FALSE));
-
-			$upload_thumb_file = $this->request->file($thumb_form_name);
-			unset($upload_thumb_file['local_mode']);
-			$thumb_file = $upload_image->handle_upload('files.types.form', $thumb_form_name);
-
-			if (isset($upload_thumb_file['name']))
-			{
-				$thumb_name = $upload_thumb_file['name'];
-				$thumb_temp = $upload_thumb_file['tmp_name'];
-			}
-
-			if (!empty($thumb_file->error) && $thumb_name)
-			{
-				$thumb_file->remove();
-				trigger_error(implode('<br />', $thumb_file->error), E_USER_ERROR);
-			}
-
-			if ($thumb_name)
-			{
-				$pic_size	= getimagesize($thumb_temp);
-				$pic_width	= $pic_size[0];
-				$pic_height	= $pic_size[1];
-
-				if (!$pic_width || !$pic_height)
-				{
-					$thumb_file->remove();
-					trigger_error($this->language->lang('DL_UPLOAD_ERROR'), E_USER_ERROR);
-				}
-
-				if ($pic_width > $this->config['dl_thumb_xsize'] || $pic_height > $this->config['dl_thumb_ysize'] || (sprintf('%u', filesize($thumb_temp)) > $this->config['dl_thumb_fsize']))
-				{
-					$thumb_file->remove();
-					trigger_error($this->language->lang('DL_THUMB_TO_BIG'), E_USER_ERROR);
-				}
-			}
+			trigger_error(implode('<br>', $error), E_USER_WARNING);
 		}
 
 		if ($file_name && $df_id)
@@ -641,7 +545,7 @@ class download implements download_interface
 
 				$this->db->sql_query($sql);
 
-				$new_version = $this->db->sql_nextid();
+				$new_version = $this->db->sql_last_inserted_id();
 			}
 			else if ($file_option == $this->dlext_constants::DL_VERSION_REPLACE)
 			{
@@ -824,7 +728,7 @@ class download implements download_interface
 
 			$sql = 'INSERT INTO ' . $this->dlext_table_downloads . ' ' . $this->db->sql_build_array('INSERT', $sql_array);
 			$this->db->sql_query($sql);
-			$next_id = $this->db->sql_nextid();
+			$next_id = $this->db->sql_last_inserted_id();
 
 			if ($module == 'acp')
 			{
@@ -864,140 +768,6 @@ class download implements download_interface
 
 		$dl_t_id = ($df_id) ? $df_id : $next_id;
 		$df_id = $dl_t_id;
-
-		$foreign_thumb_message	= '';
-		$thumb_error			= '';
-		$thumb_message			= '';
-
-		if ($module == 'acp')
-		{
-			/**
-			 * Manipulate thumbnail data before storage
-			 *
-			 * @event oxpus.dlext.acp_files_sql_thumbnail_before
-			 * @var string	foreign_thumb_message	message after manipulate thumbnail
-			 * @var bool		thumb_error				thumbnail error (true to break here)
-			 * @var string	thumb_name				thumbnail name (true to avoid overwrite foreign storage)
-			 * @var int		df_id					download ID
-			 * @var array	sql_array				array of download's data for storage
-			 * @since 8.1.0-RC2
-			 */
-			$vars = [
-				'foreign_thumb_message',
-				'thumb_error',
-				'thumb_name',
-				'df_id',
-				'sql_array',
-			];
-			extract($this->dispatcher->trigger_event('oxpus.dlext.acp_files_sql_thumbnail_before', compact($vars)));
-		}
-		else if ($module == 'mcp')
-		{
-			/**
-			 * Manipulate thumbnail data before storage
-			 *
-			 * @event oxpus.dlext.mcp_sql_thumbnail_before
-			 * @var string	foreign_thumb_message	message after manipulate thumbnail
-			 * @var string	thumb_name				thumbnail name (empty to avoid overwrite foreign storage)
-			 * @var int		df_id					download ID
-			 * @var array	sql_array				array of download's data for storage
-			 * @since 8.1.0-RC2
-			 */
-			$vars = [
-				'foreign_thumb_message',
-				'thumb_name',
-				'df_id',
-				'sql_array',
-			];
-			extract($this->dispatcher->trigger_event('oxpus.dlext.mcp_sql_thumbnail_before', compact($vars)));
-		}
-		else if ($module == 'upload')
-		{
-			/**
-			 * Manipulate thumbnail data before storage
-			 *
-			 * @event oxpus.dlext.upload_sql_thumbnail_before
-			 * @var string	foreign_thumb_message	message after manipulate thumbnail
-			 * @var string	thumb_name				thumbnail name (empty to avoid overwrite foreign storage)
-			 * @var int		df_id					download ID
-			 * @var array	sql_array				array of download's data for storage
-			 * @since 8.1.0-RC2
-			 */
-			$vars = [
-				'foreign_thumb_message',
-				'thumb_name',
-				'df_id',
-				'sql_array',
-			];
-			extract($this->dispatcher->trigger_event('oxpus.dlext.upload_sql_thumbnail_before', compact($vars)));
-		}
-
-		if (!$thumb_error && isset($thumb_name) && $thumb_name != '')
-		{
-			$thumb_pic_extension = trim(strrchr(strtolower($thumb_name), '.'));
-			$thumb_upload_filename = $df_id . '_' . unique_id() . $thumb_pic_extension;
-
-			if (!empty($dl_file['thumbnail']))
-			{
-				$this->filesystem->remove($this->dlext_constants->get_value('files_dir') . '/thumbs/' . $dl_file['thumbnail']);
-			}
-
-			if ($thumb_upload_filename)
-			{
-				$this->filesystem->remove($this->dlext_constants->get_value('files_dir') . '/thumbs/' . $thumb_upload_filename);
-			}
-
-			$upload_thumb_file['name'] = $thumb_upload_filename;
-			$dest_folder = str_replace($this->root_path, '', substr($this->dlext_constants->get_value('files_dir') . '/thumbs/', 0, -1));
-
-			$thumb_file->set_upload_ary($upload_thumb_file);
-			$thumb_file->move_file($dest_folder, $this->dlext_constants::DL_FALSE, $this->dlext_constants::DL_FALSE);
-
-			$thumb_message = '<br />' . $this->language->lang('DL_THUMB_UPLOAD');
-
-			$sql = 'UPDATE ' . $this->dlext_table_downloads . ' SET ' . $this->db->sql_build_array('UPDATE', [
-				'thumbnail' => $thumb_upload_filename
-			]) . ' WHERE id = ' . (int) $df_id;
-			$this->db->sql_query($sql);
-		}
-		else if ($del_thumb)
-		{
-			$sql = 'UPDATE ' . $this->dlext_table_downloads . ' SET ' . $this->db->sql_build_array('UPDATE', [
-				'thumbnail' => ''
-			]) . ' WHERE id = ' . (int) $df_id;
-			$this->db->sql_query($sql);
-
-			if (isset($dl_file['thumbnail']))
-			{
-				$this->filesystem->remove($this->dlext_constants->get_value('files_dir') . '/thumbs/' . $dl_file['thumbnail']);
-			}
-
-			$thumb_message = '<br />' . $this->language->lang('DL_THUMB_DEL');
-		}
-
-		if ($foreign_thumb_message)
-		{
-			$thumb_message = '<br />' . $foreign_thumb_message;
-		}
-
-		if ($module == 'upload')
-		{
-			/**
-			 * Manipulate thumbnail data after storage
-			 *
-			 * @event oxpus.dlext.upload_sql_thumbnail_after
-			 * @var string	thumb_name		thumbnail name
-			 * @var int		next_id			download ID
-			 * @var array	sql_array		array of download's data for storage
-			 * @since 8.1.0-RC2
-			 */
-			$vars = [
-				'thumb_name',
-				'next_id',
-				'sql_array',
-			];
-			extract($this->dispatcher->trigger_event('oxpus.dlext.upload_sql_thumbnail_after', compact($vars)));
-		}
 
 		// Update Custom Fields
 		$this->dlext_fields->update_profile_field_data($dl_t_id, $cp_data);
@@ -1126,38 +896,38 @@ class download implements download_interface
 		if ($new_version)
 		{
 			$version_url	= $this->helper->route('oxpus_dlext_version', ['ver_id' => $new_version]);
-			$ver_message	= '<br /><br />' . $this->language->lang('CLICK_VIEW_NEW_VERSION', '<a href="' . $version_url . '">', '</a>');
+			$ver_message	= '<br><br>' . $this->language->lang('CLICK_VIEW_NEW_VERSION', '<a href="' . $version_url . '">', '</a>');
 		}
 
 		if ($module == 'acp')
 		{
-			$message .= $thumb_message . '<br /><br />' . $this->language->lang('CLICK_RETURN_DOWNLOADADMIN', '<a href="' . $u_action . '&amp;cat_id=' . $cat_id . '">', '</a>') . $ver_message . adm_back_link($u_action);
+			$message .= $this->language->lang('CLICK_RETURN_DOWNLOADADMIN', '<a href="' . $u_action . '&amp;cat_id=' . $cat_id . '">', '</a>') . $ver_message . adm_back_link($u_action);
 		}
 		else if ($module == 'mcp')
 		{
 			if ($own_edit)
 			{
 				$meta_url	= $this->helper->route('oxpus_dlext_details', ['df_id' => $df_id]);
-				$message	= $this->language->lang('DL_DOWNLOAD_UPDATED') . $thumb_message . '<br /><br />' . $this->language->lang('CLICK_RETURN_DOWNLOAD_DETAILS', '<a href="' . $meta_url . '">', '</a>') . $ver_message;
+				$message	= $this->language->lang('DL_DOWNLOAD_UPDATED') . $this->language->lang('CLICK_RETURN_DOWNLOAD_DETAILS', '<a href="' . $meta_url . '">', '</a>') . $ver_message;
 			}
 			else
 			{
 				$meta_url		= $this->helper->route('oxpus_dlext_mcp_manage', ['view' => 'toolbox', 'cat_id' => $cat_id]);
 				$approve_string	= ($action == 'approve' || $approve) ? 'CLICK_RETURN_MODCP_APPROVE' : 'CLICK_RETURN_MODCP_MANAGE';
-				$message		= $this->language->lang('DL_DOWNLOAD_UPDATED') . $thumb_message . '<br /><br />' . $this->language->lang($approve_string, '<a href="' . $meta_url . '">', '</a>') . $ver_message;
+				$message		= $this->language->lang('DL_DOWNLOAD_UPDATED') . $this->language->lang($approve_string, '<a href="' . $meta_url . '">', '</a>') . $ver_message;
 			}
 		}
 		else
 		{
-			$approve_string = ($approve) ? '' : '<br />' . $this->language->lang('DL_MUST_BE_APPROVED');
-			$message		= $this->language->lang('DL_DOWNLOAD_ADDED') . $thumb_message . $approve_string . '<br /><br />' . $this->language->lang('CLICK_RETURN_DOWNLOADS', '<a href="' . $this->helper->route('oxpus_dlext_index', ['cat' => $cat_id]) . '">', '</a>');
+			$approve_string = ($approve) ? '' : $this->language->lang('DL_MUST_BE_APPROVED') . '<br><br>';
+			$message		= $this->language->lang('DL_DOWNLOAD_ADDED') . $approve_string . $this->language->lang('CLICK_RETURN_DOWNLOADS', '<a href="' . $this->helper->route('oxpus_dlext_index', ['cat' => $cat_id]) . '">', '</a>');
 		}
 
 		$cat_auth = $this->dlext_auth->dl_cat_auth($cat_id);
 
 		if ($cat_auth['auth_up'])
 		{
-			$message .= '<br /><br />' . $this->language->lang('DL_UPLOAD_ONE_MORE', '<a href="' . $this->helper->route('oxpus_dlext_upload', ['cat_id' => $cat_id]) . '">', '</a>');
+			$message .= '<br><br>' . $this->language->lang('DL_UPLOAD_ONE_MORE', '<a href="' . $this->helper->route('oxpus_dlext_upload', ['cat_id' => $cat_id]) . '">', '</a>');
 		}
 
 		if ($module != 'acp' && !$new_version && $meta_url)
@@ -1363,33 +1133,6 @@ class download implements download_interface
 			$this->template->assign_var('S_DL_MODCP', $this->dlext_constants::DL_TRUE);
 		}
 
-		$thumbnail			= '';
-		$thumbnail_explain	= '';
-
-		if ($index[$cat_id]['allow_thumbs'] && $this->config['dl_thumb_fsize'])
-		{
-			$this->template->assign_var('S_DL_ALLOW_THUMBS', $this->dlext_constants::DL_TRUE);
-			$thumbnail_explain = $this->language->lang('DL_THUMB_DIM_SIZE', $this->config['dl_thumb_xsize'], $this->config['dl_thumb_ysize'], $this->dlext_format->dl_size($this->config['dl_thumb_fsize']));
-
-			if ($module != 'upload')
-			{
-				if (isset($dl_file['thumbnail']))
-				{
-					$thumbnail = $this->helper->route('oxpus_dlext_thumbnail', ['pic' => $df_id, 'img_type' => 'thumb', 'disp_art' => $this->dlext_constants::DL_TRUE]);
-
-					if ($dl_file['thumbnail'] && $this->filesystem->exists($this->dlext_constants->get_value('files_dir') . '/thumbs/' . $dl_file['thumbnail']))
-					{
-						$this->template->assign_var('S_DL_DEL_THUMB', $this->dlext_constants::DL_TRUE);
-
-						if ($dl_file['thumbnail'] != $df_id . '_')
-						{
-							$this->template->assign_var('S_DL_SHOW_THUMB', $this->dlext_constants::DL_TRUE);
-						}
-					}
-				}
-			}
-		}
-
 		if ($df_id)
 		{
 			$this->template->assign_var('S_DL_VERSION_ON', $this->dlext_constants::DL_TRUE);
@@ -1412,7 +1155,7 @@ class download implements download_interface
 
 		if (!empty($ext_blacklist))
 		{
-			$blacklist_explain = '<br />' . $this->language->lang('DL_FORBIDDEN_EXT_EXPLAIN', implode(', ', $ext_blacklist));
+			$blacklist_explain = '<br>' . $this->language->lang('DL_FORBIDDEN_EXT_EXPLAIN', implode(', ', $ext_blacklist));
 		}
 
 		if ($module != 'upload' && $df_id)
@@ -1492,7 +1235,6 @@ class download implements download_interface
 		add_form_key($form_check);
 
 		$template_ary = [
-			'DL_THUMBNAIL_SECOND'		=> $thumbnail_explain,
 			'DL_ACTION_MODE'			=> ($df_id) ? $this->language->lang('DL_EDIT_DOWNLOAD') : $this->language->lang('DL_ADD_DOWNLOAD'),
 			'DL_BLACKLIST_EXPLAIN'		=> $blacklist_explain,
 			'DL_CHECKEXTERN'			=> $dl_extern,
@@ -1513,11 +1255,11 @@ class download implements download_interface
 			'DL_HACK_AUTHOR_WEBSITE'	=> $hack_author_web,
 			'DL_HACK_DL_URL'			=> $hack_dl_url,
 			'DL_HACK_VERSION'			=> $hack_version,
-			'DL_THUMBNAIL'				=> $thumbnail,
 			'DL_FILE_EXT_SIZE'			=> $file_extern_size_out,
 			'DL_FORMATED_HINT_TEXT'		=> $formated_hint_text,
 			'DL_VERSION_SELECT_SIZE'	=> $multiple_size,
 			'DL_MAX_UPLOAD_SIZE' 		=> $this->language->lang('DL_UPLOAD_MAX_FILESIZE', $this->dlext_physical->dl_max_upload_size()),
+			'DL_CAT_NAME' 				=> $index[$cat_id]['cat_name'],
 
 			'S_DL_TODO_LINK_ONOFF'		=> ($this->config['dl_todo_onoff']) ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE,
 			'S_DL_CHECK_FREE'			=> $dl_free,
@@ -1655,7 +1397,7 @@ class download implements download_interface
 
 		if (empty($file_ver_del))
 		{
-			trigger_error($this->language->lang('DL_VER_DEL_ERROR'), E_USER_ERROR);
+			trigger_error($this->language->lang('DL_VER_DEL_ERROR'), E_USER_WARNING);
 		}
 
 		if (confirm_box($this->dlext_constants::DL_TRUE))

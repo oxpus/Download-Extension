@@ -1,4 +1,4 @@
-<br />
+<br>
 
 <div class="forabg">
 	<div class="inner">
@@ -19,9 +19,9 @@
 					<span class="forum-image">
 						{% INCLUDE '@oxpus_dlext/helpers/dl_foldericon.html' %}
 					</span>
-					<span class="forum-image">{% if subcats.DL_CAT_ICON %}<img src="{{ subcats.DL_CAT_ICON }}" alt="" title="{{ subcats.DL_CAT_NAME }}" />{% else %}&nbsp;{% endif %}</span>
-					<a href="{{ subcats.U_DL_CAT_VIEW }}" class="forumtitle">{{ subcats.DL_CAT_NAME }}</a><br />
-					{% if not S_DL_ENABLE_DESC_HIDE %}<div class="dl-index-desc list-inner"><br />{{ subcats.DL_CAT_DESC }}</div>{% endif %}
+					<span class="forum-image">{% if subcats.DL_CAT_ICON %}<img src="{{ subcats.DL_CAT_ICON }}" alt="" title="{{ subcats.DL_CAT_NAME }}">{% else %}&nbsp;{% endif %}</span>
+					<a href="{{ subcats.U_DL_CAT_VIEW }}" class="forumtitle">{{ subcats.DL_CAT_NAME }}</a><br>
+					{% if not S_DL_ENABLE_DESC_HIDE %}<div class="dl-index-desc list-inner"><br>{{ subcats.DL_CAT_DESC }}</div>{% endif %}
 					{% if subcats.pagination|length %}
 					<div class="pagination">
 						<ul>
@@ -38,12 +38,12 @@
 					{% endif %}
 					{% if S_DL_SUB_ON_INDEX %}
 					{% for sub in subcats.sub %}
-					<br />
+					<br>
 					{% for sublevel_row in sub.sublevel_row %}
 					<div class="dl-padding-left-5">
 						{% INCLUDE '@oxpus_dlext/helpers/dl_subfoldericon.html' %}
 						{% if sublevel_row.M_DL_SUBLEVEL_ICON %}
-						<img src="{{ sublevel_row.M_DL_SUBLEVEL_ICON }}" alt="" title="{{ sublevel_row.L_DL_SUBLEVEL }}" class="dl-subfolder-small" />
+						<img src="{{ sublevel_row.M_DL_SUBLEVEL_ICON }}" alt="" title="{{ sublevel_row.L_DL_SUBLEVEL }}" class="dl-subfolder-small">
 						{% endif %}
 						&nbsp;<a href="{{ sublevel_row.U_DL_SUBLEVEL }}" class="small"{% if sublevel_row.DL_SUBLEVEL_COUNT %} title="{{ sublevel_row.DL_SUBLEVEL_COUNT }} {{ lang('DL_CAT_FILES') }}"{% endif %}><strong>{{ sublevel_row.L_DL_SUBLEVEL }}</strong></a>
 					</div>
@@ -61,7 +61,7 @@
 							{% INCLUDE '@oxpus_dlext/helpers/dl_filestatus.html' %}
 							{{ subcats.DL_CAT_LAST_DL }}
 						</a>
-						<br />
+						<br>
 	                    <a href="{{ subcats.U_DL_CAT_LAST_USER }}">{{ subcats.DL_CAT_LAST_USER }}</a>
 						{% if subcats.DL_CAT_LAST_TIME %}&nbsp;<time datetime="{{ subcats.DL_CAT_LAST_TIME_RFC }}">{{ subcats.DL_CAT_LAST_TIME }}</time>{% endif %}
 					</div>

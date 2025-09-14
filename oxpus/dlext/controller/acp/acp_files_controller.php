@@ -255,11 +255,6 @@ class acp_files_controller implements acp_files_interface
 					$this->db->sql_freeresult($result);
 				}
 
-				if ($dl_file['thumbnail'])
-				{
-					$this->filesystem->remove($this->dlext_constants->get_value('files_dir') . '/thumbs/' . $dl_file['thumbnail']);
-				}
-
 				$sql = 'SELECT cat, description, dl_topic FROM ' . $this->dlext_table_downloads . '
 					WHERE id = ' . (int) $df_id;
 				$result = $this->db->sql_query($sql);
@@ -349,7 +344,7 @@ class acp_files_controller implements acp_files_interface
 				$this->cache->destroy('_dlext_cat_counts');
 				$this->cache->destroy('_dlext_file_preset');
 
-				$message = $this->language->lang('DL_DOWNLOAD_REMOVED') . '<br /><br />' . $this->language->lang('CLICK_RETURN_DOWNLOADADMIN', '<a href="' . $this->u_action . '&amp;cat_id=' . $dl_cat . '">', '</a>') . adm_back_link($this->u_action);
+				$message = $this->language->lang('DL_DOWNLOAD_REMOVED') . '<br><br>' . $this->language->lang('CLICK_RETURN_DOWNLOADADMIN', '<a href="' . $this->u_action . '&amp;cat_id=' . $dl_cat . '">', '</a>') . adm_back_link($this->u_action);
 
 				trigger_error($message);
 			}
@@ -470,7 +465,7 @@ class acp_files_controller implements acp_files_interface
 				$file_extern	= $row['extern'];
 				$test			= ($row['test']) ? '[' . $row['test'] . ']' : '';
 				$dl_cat			= $row['cat'];
-				$file_name		= ($file_extern) ? $this->language->lang('DL_EXTERN') : $this->language->lang('DL_DOWNLOAD') . ': ' . $row['file_name'] . '<br />{' . $row['real_file'] . '}';
+				$file_name		= ($file_extern) ? $this->language->lang('DL_EXTERN') : $this->language->lang('DL_DOWNLOAD') . ': ' . $row['file_name'] . '<br>{' . $row['real_file'] . '}';
 
 				$desc_uid		= $row['desc_uid'];
 				$desc_bitfield	= $row['desc_bitfield'];

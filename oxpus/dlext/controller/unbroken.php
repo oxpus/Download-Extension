@@ -17,12 +17,14 @@ class unbroken
 	protected $db;
 	protected $helper;
 	protected $request;
+	protected $user;
 
 	/* extension owned objects */
 	protected $dlext_auth;
 	protected $dlext_main;
 
 	protected $dlext_table_downloads;
+	protected $dlext_table_dl_reports;
 
 	/**
 	 * Constructor
@@ -31,26 +33,32 @@ class unbroken
 	 * @param \phpbb\db\driver\driver_interface		$db
 	 * @param \phpbb\controller\helper				$helper
 	 * @param \phpbb\request\request 				$request
+	 * @param \phpbb\user							$user
 	 * @param \oxpus\dlext\core\auth				$dlext_auth
 	 * @param \oxpus\dlext\core\main				$dlext_main
 	 * @param string								$dlext_table_downloads
+	 * @param string								$dlext_table_dl_reports
 	 */
 	public function __construct(
 		\phpbb\notification\manager $notification,
 		\phpbb\db\driver\driver_interface $db,
 		\phpbb\controller\helper $helper,
 		\phpbb\request\request $request,
+		\phpbb\user $user,
 		\oxpus\dlext\core\auth $dlext_auth,
 		\oxpus\dlext\core\main $dlext_main,
-		$dlext_table_downloads
+		$dlext_table_downloads,
+		$dlext_table_dl_reports
 	)
 	{
 		$this->notification				= $notification;
 		$this->db 						= $db;
 		$this->helper 					= $helper;
 		$this->request					= $request;
+		$this->user						= $user;
 
 		$this->dlext_table_downloads	= $dlext_table_downloads;
+		$this->dlext_table_dl_reports	= $dlext_table_dl_reports;
 
 		$this->dlext_auth				= $dlext_auth;
 		$this->dlext_main				= $dlext_main;
@@ -76,6 +84,13 @@ class unbroken
 				$sql = 'UPDATE ' . $this->dlext_table_downloads . ' SET ' . $this->db->sql_build_array('UPDATE', [
 					'broken' => 0
 				]) . ' WHERE id = ' . (int) $df_id;
+				$this->db->sql_query($sql);
+
+				$sql = 'UPDATE ' . $this->dlext_table_dl_reports . ' SET ' . $this->db->sql_build_array('UPDATE', [
+					'report_closed' => 1,
+					'report_cuser' => $this->user->data['user_id'],
+					'report_ctime' => time(),
+				]) . ' WHERE dl_id = ' . (int) $df_id . ' AND report_closed = 0';
 				$this->db->sql_query($sql);
 			}
 

@@ -489,7 +489,7 @@ class index
 
 		if ($cat && $total_downloads)
 		{
-			$dl_files = $this->dlext_files->files($cat, $sql_sort_by, $sql_order, $start, $this->config['dl_links_per_page'], 'id, description, desc_uid, desc_bitfield, desc_flags, hack_version, extern, file_size, klicks, overall_klicks, rating, long_desc, long_desc_uid, long_desc_bitfield, long_desc_flags, add_user, add_time, broken, thumbnail', $this->dlext_constants::DL_TRUE);
+			$dl_files = $this->dlext_files->files($cat, $sql_sort_by, $sql_order, $start, $this->config['dl_links_per_page'], 'id, description, desc_uid, desc_bitfield, desc_flags, hack_version, extern, file_size, klicks, overall_klicks, rating, long_desc, long_desc_uid, long_desc_bitfield, long_desc_flags, add_user, add_time, broken', $this->dlext_constants::DL_TRUE);
 
 			/**
 			 * Fetch additional data for the downloads

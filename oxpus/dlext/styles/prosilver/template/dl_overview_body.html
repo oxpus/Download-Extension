@@ -9,7 +9,7 @@
 				<dl>
 					<dt>{{ lang('DL_NAME') }}</dt>
 					<dd class="topics">{{ lang('DL_FILE_SIZE') }}</dd>
-					<dd class="posts">{{ lang('DL_KLICKS') }} /<br />{{ lang('DL_OVERALL_KLICKS') }}</dd>
+					<dd class="posts">{{ lang('DL_KLICKS') }} /<br>{{ lang('DL_OVERALL_KLICKS') }}</dd>
 					{% if S_DL_ENABLE_RATE %}
 					<dd class="lastpost dl-cell-clock">{{ lang('DL_RATING') }}</dd>
 					{% endif %}
@@ -28,13 +28,13 @@
 						{% EVENT oxpus_dlext_overview_download_title_append %}
 						{% if downloads.S_DISPLAY_THUMBNAIL %}
 						<div>
-							<br />
+							<br>
 							<a href="{{ downloads.U_DL_LINK }}">
-								<img src="{{ downloads.DL_THUMBNAIL_PIC }}" alt="{{ downloads.DL_DESCRIPTION }}" title="{{ downloads.DL_DESCRIPTION }}" class="dl-thumb-box" />
+								<img src="{{ downloads.DL_THUMBNAIL_PIC }}" alt="{{ downloads.DL_DESCRIPTION }}" title="{{ downloads.DL_DESCRIPTION }}" class="dl-thumb-box">
 							</a>
 						</div>
 						{% endif %}
-						<br />{{ lang('DL_CAT_NAME') }}{{ lang('COLON') }} <a href="{{ downloads.U_DL_CAT_VIEW }}">{{ downloads.DL_CAT_NAME }}</a>
+						<br>{{ lang('DL_CAT_NAME') }}{{ lang('COLON') }} <a href="{{ downloads.U_DL_CAT_VIEW }}">{{ downloads.DL_CAT_NAME }}</a>
 					</dt>
 					<dd class="topics">{{ downloads.DL_FILE_SIZE }}</dd>
 					<dd class="posts">{{ downloads.DL_FILE_KLICKS }} | {{ downloads.DL_FILE_OVERALL_KLICKS }}</dd>
@@ -62,6 +62,6 @@
 
 	{% INCLUDE '@oxpus_dlext/helpers/dl_sorting.html' %}
 
-<br />
+<br>
 
 {% INCLUDE '@oxpus_dlext/helpers/dl_footer.html' %}

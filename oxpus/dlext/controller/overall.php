@@ -196,12 +196,32 @@ class overall
 					$sort_ary = [$sql_sort_by => $sql_order];
 				}
 			}
+			else if ($this->config['dl_latest_type'] == $this->dlext_constants::DL_LATEST_TYPE_NEW)
+			{
+				$sql_sort_by = '';
+				$sql_order = '';
+
+				$this->dlext_files->dl_sorting($sort_by, $order, $sql_sort_by, $sql_order);
+
+				$check_add_time		= time() - ($this->config['dl_new_time'] * $this->dlext_constants::DL_ONE_DAY);
+
+				$latest_where += ['add_time' => ['AND', '>=', (int) $check_add_time]];
+
+				if ($sql_sort_by == 'sort')
+				{
+					$sort_ary = ['cat' => $sql_order, 'sort' => $sql_order];
+				}
+				else
+				{
+					$sort_ary = [$sql_sort_by => $sql_order];
+				}
+			}
 			else
 			{
 				$sort_ary = ['change_time' => 'DESC'];
 			}
 
-			$fields = ['cat', 'id', 'description', 'desc_uid', 'desc_bitfield', 'desc_flags', 'hack_version', 'extern', 'file_size', 'klicks', 'overall_klicks', 'rating', 'thumbnail'];
+			$fields = ['cat', 'id', 'description', 'desc_uid', 'desc_bitfield', 'desc_flags', 'hack_version', 'extern', 'file_size', 'klicks', 'overall_klicks', 'rating'];
 			$dl_files = $this->dlext_files->all_files(0, $sort_ary, $latest_where, 0, 0, $fields, $this->config['dl_links_per_page'], $start);
 		}
 		else
@@ -225,7 +245,7 @@ class overall
 				];
 			}
 
-			$fields = ['cat', 'id', 'description', 'desc_uid', 'desc_bitfield', 'desc_flags', 'hack_version', 'extern', 'file_size', 'klicks', 'overall_klicks', 'rating', 'thumbnail'];
+			$fields = ['cat', 'id', 'description', 'desc_uid', 'desc_bitfield', 'desc_flags', 'hack_version', 'extern', 'file_size', 'klicks', 'overall_klicks', 'rating'];
 			$where_cats = ['{cat_perm}' => ['AND', 'IN', $this->db->sql_in_set('cat', $access_cats)]];
 			$dl_files = $this->dlext_files->all_files(0, $sort_ary, $where_cats, 0, 0, $fields, $this->config['dl_links_per_page'], $start);
 		}
@@ -348,7 +368,7 @@ class overall
 						'DL_RATE_COUNT'				=> ($rating_img_data != $this->dlext_constants::DL_FALSE) ? $rating_img_data['count']['count'] : '',
 						'DL_RATE_UNDO'				=> ($rating_img_data != $this->dlext_constants::DL_FALSE) ? $rating_img_data['count']['undo'] : '',
 						'DL_RATE_TITLE'				=> ($rating_img_data != $this->dlext_constants::DL_FALSE) ? $rating_img_data['count']['title'] : '',
-						'DL_THUMBNAIL_PIC'			=> $this->helper->route('oxpus_dlext_thumbnail', ['pic' => $file_id, 'img_type' => 'thumb', 'disp_art' => $this->dlext_constants::DL_TRUE]),
+						'DL_THUMBNAIL_PIC'			=> $this->helper->route('oxpus_dlext_thumbnail', ['pic' => $file_id, 'img_type' => 'thumb_list', 'disp_art' => $this->dlext_constants::DL_TRUE]),
 
 						'S_DISPLAY_THUMBNAIL'		=> $s_display_thumbnail,
 

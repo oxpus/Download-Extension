@@ -126,7 +126,7 @@ class ucp_privacy_controller implements ucp_privacy_interface
 						}
 						else
 						{
-							$output_row[$counter][] .= "'" . str_replace("\n", '<br />', $value) . "'";
+							$output_row[$counter][] .= "'" . str_replace("\n", '<br>', $value) . "'";
 						}
 					}
 					++$counter;

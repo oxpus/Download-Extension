@@ -30,11 +30,13 @@ services:
             - '@request'
             - '@template'
             - '@language'
+            - '@user'
             - '@oxpus.dlext.core.auth'
             - '@oxpus.dlext.core.main'
             - '@oxpus.dlext.helpers.constants'
             - '@oxpus.dlext.helpers.footer'
             - '%oxpus.dlext.tables.downloads%'
+            - '%oxpus.dlext.tables.dl_reports%'
     oxpus.dlext.mcp_capprove:
         class: oxpus\dlext\controller\mcp\mcp_capprove
         public: true
@@ -103,6 +105,7 @@ services:
             - '%oxpus.dlext.tables.dl_images%'
             - '%oxpus.dlext.tables.dl_notraf%'
             - '%oxpus.dlext.tables.dl_ratings%'
+            - '%oxpus.dlext.tables.dl_reports%'
             - '%oxpus.dlext.tables.dl_stats%'
             - '%oxpus.dlext.tables.dl_ver_files%'
             - '%oxpus.dlext.tables.dl_versions%'

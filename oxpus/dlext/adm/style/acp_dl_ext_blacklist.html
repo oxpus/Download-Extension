@@ -6,15 +6,15 @@
 
 {% INCLUDE 'acp_dl_limits.html' %}
 
-<br />
+<br>
 
 <form action="{{ S_DL_DOWNLOADS_ACTION }}" method="post" id="add_ext">
 
 <fieldset class="quick">
 	<label><strong>{{ lang('DL_EXTENSION') }}</strong></label>&nbsp;
-	<input type="text" name="extension" size="5" maxlength="10" value="" />&nbsp;
-	<input type="submit" class="button1" name="submit" value="{{ lang('DL_ADD_EXTENSION') }}" />
-	<input type="hidden" name="action" value="add" />
+	<input type="text" name="extension" size="5" maxlength="10" value="">&nbsp;
+	<input type="submit" class="button1" name="submit" value="{{ lang('DL_ADD_EXTENSION') }}">
+	<input type="hidden" name="action" value="add">
 	{{ S_FORM_TOKEN }}
 </fieldset>
 
@@ -34,7 +34,7 @@
 	{% for dl_extension_row in loops.dl_extension_row %}
 	{% if dl_extension_row.S_ROW_COUNT is even %}<tr class="row4 dl-line-hight">{% else %}<tr class="row3 dl-line-hight">{% endif %}
 		<td class="dl-text-left"><strong>{{ dl_extension_row.DL_EXTENSION }}</strong></td>
-		<td class="dl-text-center"><input type="checkbox" title="{{ dl_extension_row.DL_EXTENSION }}" class="permissions-checkbox" name="extension[]" value="{{ dl_extension_row.DL_EXTENSION }}" /></td>
+		<td class="dl-text-center"><input type="checkbox" title="{{ dl_extension_row.DL_EXTENSION }}" class="permissions-checkbox" name="extension[]" value="{{ dl_extension_row.DL_EXTENSION }}"></td>
 	</tr>
 	{% endfor %}
 </tbody>
@@ -42,9 +42,9 @@
 
 <fieldset class="quick">
 	<span class="small"><a href="#" class="dl-marklist" data-form="extension" data-field="extension">{{ lang('MARK_ALL') }}</a> :: <a href="#" class="dl-unmarklist" data-form="extension" data-field="extension">{{ lang('UNMARK_ALL') }}</a></span>
-	<br />
-	<input type="submit" name="submit" class="button1" value="{{ lang('DL_DELETE') }}" /><br />
-	<input type="hidden" name="action" value="delete" />
+	<br>
+	<input type="submit" name="submit" class="button1" value="{{ lang('DL_DELETE') }}"><br>
+	<input type="hidden" name="action" value="delete">
 	{{ S_FORM_TOKEN }}
 </fieldset>
 

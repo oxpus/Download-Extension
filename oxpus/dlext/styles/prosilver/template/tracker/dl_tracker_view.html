@@ -2,12 +2,12 @@
 
 <h2>{{ lang('DL_BUG_TRACKER') }}</h2>
 
-<br />
+<br>
 
 {% if S_DL_NO_BUG_TRACKER %}
 <h3 class="solo">{{ lang('DL_NO_BUG_TRACKER') }}</h3>
 
-<br />
+<br>
 {% else %}
 
 <div class="forabg">
@@ -43,17 +43,17 @@
 						{% endfor %}
 					</ul>
 					<label>{{ bug_tracker_row.DL_REPORT_ID }}&nbsp;&bull;&nbsp;{{ bug_tracker_row.DL_REPORT_TITLE }}</label>
-					<br /><strong>{{ bug_tracker_row.DL_REPORT_FILE }} {{ bug_tracker_row.DL_REPORT_FILE_VER }}</strong>
-					<br /><span>{{ lang('DL_BUG_REPORT_DATE') }} <time datetime="{{ bug_tracker_row.DL_REPORT_DATE_RFC }}">{{ bug_tracker_row.DL_REPORT_DATE }}</time>
-					<br />{{ lang('DL_BUG_REPORT_AUTHOR') }} {{ bug_tracker_row.DL_REPORT_AUTHOR_LINK }}</span>
-					{% if S_DL_REPORT_TEXT %}<hr /><span class="small"><i>{{ bug_tracker_row.DL_REPORT_TEXT }}</i></span>{% endif %}
+					<br><strong>{{ bug_tracker_row.DL_REPORT_FILE }} {{ bug_tracker_row.DL_REPORT_FILE_VER }}</strong>
+					<br><span>{{ lang('DL_BUG_REPORT_DATE') }} <time datetime="{{ bug_tracker_row.DL_REPORT_DATE_RFC }}">{{ bug_tracker_row.DL_REPORT_DATE }}</time>
+					<br>{{ lang('DL_BUG_REPORT_AUTHOR') }} {{ bug_tracker_row.DL_REPORT_AUTHOR_LINK }}</span>
+					{% if S_DL_REPORT_TEXT %}<hr><span class="small"><i>{{ bug_tracker_row.DL_REPORT_TEXT }}</i></span>{% endif %}
 					</div>
 				</dt>
 				<dd class="dl-text-center dl-width-10 dl-left">
 					{{ bug_tracker_row.DL_REPORT_PHP }}
-					<br />
+					<br>
 					{{ bug_tracker_row.DL_REPORT_DB }}
-					<br />
+					<br>
 					{{ bug_tracker_row.DL_REPORT_FORUM }}
 				</dd>
 				<dd class="time"><span>
@@ -76,7 +76,7 @@
 
 {% endif %}
 
-<br />
+<br>
 
 <div class="panel">
 	<div class="inner">
@@ -89,22 +89,22 @@
 					<option value="{{ dl_report_filter.DL_VALUE }}"{% if dl_report_filter.DL_VALUE eq S_DL_SELECT_FILTER %} selected{% endif %}>{{ dl_report_filter.DL_LANG }}{% if dl_report_filter.DL_COUNT %} ({{ dl_report_filter.DL_COUNT }}){% endif %}</option>
 					{% endfor %}
 				</select>
-				<input type="submit" name="submit" value="{{ lang('DL_FILTER') }}" class="button1" />
+				<input type="submit" name="submit" value="{{ lang('DL_FILTER') }}" class="button1">
 			</div>
 		</form>
 		{% if S_DL_OWN_REPORT %}
 		<form action="{{ S_DL_FORM_OWN_ACTION }}" method="post" id="filter_own_report" class="dl-left dl-margin-right-small">
-			<div><input type="submit" name="submit" value="{{ lang('DL_FILTER_BT_OWN') }}" class="button2" /></div>
+			<div><input type="submit" name="submit" value="{{ lang('DL_FILTER_BT_OWN') }}" class="button2"></div>
 		</form>
 		{% endif %}
 		{% if S_DL_ASSIGN_REPORT %}
 		<form action="{{ S_DL_FORM_ASSIGN_ACTION }}" method="post" id="filter_assign_report" class="dl-left dl-margin-right-small">
-			<div><input type="submit" name="submit" value="{{ lang('DL_FILTER_BT_ASSIGN') }}" class="button2" /></div>
+			<div><input type="submit" name="submit" value="{{ lang('DL_FILTER_BT_ASSIGN') }}" class="button2"></div>
 		</form>
 		{% endif %}
 		{% if S_DL_ADD_NEW_REPORT %}
 		<form action="{{ S_DL_FORM_ADD_ACTION }}" method="post" id="add_new_report" class="dl-left dl-margin-right-small">
-			<div><input type="submit" name="submit" value="{{ lang('NEW_POST') }}" class="button1" /></div>
+			<div><input type="submit" name="submit" value="{{ lang('NEW_POST') }}" class="button1" ></div>
 			{{ S_DL_HIDDEN_FIELD }}
 		</form>
 		{% endif %}
@@ -114,6 +114,6 @@
 	</div>
 </div>
 
-<br />
+<br>
 
 {% INCLUDE '@oxpus_dlext/helpers/dl_footer.html' %}

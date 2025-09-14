@@ -9,11 +9,11 @@
 	</div>
 {% endif %}
 
-<br />
+<br>
 
 {% INCLUDE 'acp_dl_limits.html' %}
 
-<br />
+<br>
 
 {% if U_DL_BACK %}
 <p class="quick">
@@ -31,7 +31,7 @@
 		<dt><label>{{ lang('DL_CAT_NAME') }}</label></dt>
 		<dd>
 			<a class="help nav" data-key="DL_CAT_NAME"><i class="icon fa-question-circle fa-fw"></i></a>&nbsp;
-			<input type="text" name="cat_name" size="40" maxlength="255" value="{{ DL_CAT_NAME }}" />
+			<input type="text" name="cat_name" size="40" maxlength="255" value="{{ DL_CAT_NAME }}">
 		</dd>
 	</dl>
 	<dl>
@@ -69,7 +69,7 @@
 		<dt><label>{{ lang('DL_CAT_ICON') }}</label></dt>
 		<dd>
 			<a class="help nav" data-key="DL_CAT_ICON"><i class="icon fa-question-circle fa-fw"></i></a>&nbsp;
-			<input type="text" name="cat_icon" size="40" maxlength="255" value="{{ DL_CAT_ICON }}" />
+			<input type="text" name="cat_icon" size="40" maxlength="255" value="{{ DL_CAT_ICON }}">
 		</dd>
 	</dl>
 	<dl>
@@ -100,14 +100,14 @@
 		<dt><label>{{ lang('DL_MUST_APPROVE') }}</label></dt>
 		<dd>
 			<a class="help nav" data-key="DL_MUST_APPROVE"><i class="icon fa-question-circle fa-fw"></i></a>&nbsp;
-			<input type="checkbox" class="radio switch" name="must_approve" value="1" {% if DL_MUST_APPROVE %}checked{% endif %} id="must_approve" /><label class="switch" for="must_approve">&nbsp;</label>
+			<input type="checkbox" class="radio switch" name="must_approve" value="1" {% if DL_MUST_APPROVE %}checked{% endif %} id="must_approve"><label class="switch" for="must_approve">&nbsp;</label>
 		</dd>
 	</dl>
 	<dl>
 		<dt><label>{{ lang('DL_MOD_DESC_ALLOW') }}</label></dt>
 		<dd>
 			<a class="help nav" data-key="DL_MOD_DESC_ALLOW"><i class="icon fa-question-circle fa-fw"></i></a>&nbsp;
-			<input type="checkbox" class="radio switch" name="allow_mod_desc" value="1" {% if DL_ALLOW_MOD_DESC %}checked{% endif %} id="allow_mod_desc" /><label class="switch" for="allow_mod_desc">&nbsp;</label>
+			<input type="checkbox" class="radio switch" name="allow_mod_desc" value="1" {% if DL_ALLOW_MOD_DESC %}checked{% endif %} id="allow_mod_desc"><label class="switch" for="allow_mod_desc">&nbsp;</label>
 		</dd>
 	</dl>
 
@@ -119,28 +119,28 @@
 		<dt><label>{{ lang('DL_STATISTICS') }}</label></dt>
 		<dd>
 			<a class="help nav" data-key="DL_STATISTICS"><i class="icon fa-question-circle fa-fw"></i></a>&nbsp;
-			<input type="checkbox" class="radio switch" name="statistics" value="1" {% if DL_STATS %}checked{% endif %} id="statistics"  /><label class="switch" for="statistics">&nbsp;</label>
+			<input type="checkbox" class="radio switch" name="statistics" value="1" {% if DL_STATS %}checked{% endif %} id="statistics"><label class="switch" for="statistics">&nbsp;</label>
 		</dd>
 	</dl>
 	<dl>
 		<dt><label>{{ lang('DL_STATS_PRUNE') }}</label></dt>
 		<dd>
 			<a class="help nav" data-key="DL_STATS_PRUNE"><i class="icon fa-question-circle fa-fw"></i></a>&nbsp;
-			<input type="text" name="stats_prune" value="{{ DL_STATS_PRUNE }}" size="10" maxlength="8" />
+			<input type="text" name="stats_prune" value="{{ DL_STATS_PRUNE }}" size="10" maxlength="8">
 		</dd>
 	</dl>
 	<dl>
 		<dt><label>{{ lang('DL_COMMENTS') }}</label></dt>
 		<dd>
 			<a class="help nav" data-key="DL_COMMENTS"><i class="icon fa-question-circle fa-fw"></i></a>&nbsp;
-			<input type="checkbox" class="radio switch" name="comments" value="1" {% if DL_COMMENTS %}checked{% endif %}  id="comments" /><label class="switch" for="comments">&nbsp;</label>
+			<input type="checkbox" class="radio switch" name="comments" value="1" {% if DL_COMMENTS %}checked{% endif %}  id="comments"><label class="switch" for="comments">&nbsp;</label>
 		</dd>
 	</dl>
 	<dl>
 		<dt><label>{{ lang('DL_APPROVE_COMMENTS') }}</label></dt>
 		<dd>
 			<a class="help nav" data-key="DL_APPROVE_COMMENTS"><i class="icon fa-question-circle fa-fw"></i></a>&nbsp;
-			<input type="checkbox" class="radio switch" name="approve_comments" value="1" {% if DL_APPROVE_COMMENTS %}checked{% endif %} id="approve_comments"  /><label class="switch" for="approve_comments">&nbsp;</label>
+			<input type="checkbox" class="radio switch" name="approve_comments" value="1" {% if DL_APPROVE_COMMENTS %}checked{% endif %} id="approve_comments"><label class="switch" for="approve_comments">&nbsp;</label>
 		</dd>
 	</dl>
 	{% if S_DL_THUMBNAILS %}
@@ -148,7 +148,7 @@
 		<dt><label>{{ lang('DL_THUMB_CAT') }}</label></dt>
 		<dd>
 			<a class="help nav" data-key="DL_THUMB_CAT"><i class="icon fa-question-circle fa-fw"></i></a>&nbsp;
-			<input type="checkbox" class="radio switch" name="allow_thumbs" value="1" {% if DL_ALLOW_THUMBS %}checked{% endif %} id="allow_thumbs"  /><label class="switch" for="allow_thumbs">&nbsp;</label>
+			<input type="checkbox" class="radio switch" name="allow_thumbs" value="1" {% if DL_ALLOW_THUMBS %}checked{% endif %} id="allow_thumbs"><label class="switch" for="allow_thumbs">&nbsp;</label>
 		</dd>
 	</dl>
 	{% if S_DL_DISPLAY_THUMBS %}
@@ -156,23 +156,30 @@
 		<dt><label>{{ lang('DL_THUMB_DISPLAY_LISTS') }}</label></dt>
 		<dd>
 			<a class="help nav" data-key="DL_THUMB_DISPLAY_CAT"><i class="icon fa-question-circle fa-fw"></i></a>&nbsp;
-			<input type="checkbox" class="radio switch" name="display_thumbs" value="1" {% if DL_DISPLAY_THUMBS %}checked{% endif %} id="display_thumbs"  /><label class="switch" for="display_thumbs">&nbsp;</label>
+			<input type="checkbox" class="radio switch" name="display_thumbs" value="1" {% if DL_DISPLAY_THUMBS %}checked{% endif %} id="display_thumbs"><label class="switch" for="display_thumbs">&nbsp;</label>
 		</dd>
 	</dl>
 	{% endif %}
+	<dl>
+		<dt><label>{{ lang('DL_THUMB_CAT_MAX') }}</label></dt>
+		<dd>
+			<a class="help nav" data-key="DL_THUMB_CAT_MAX"><i class="icon fa-question-circle fa-fw"></i></a>&nbsp;
+			<input type="text" name="max_thumbs" size="10" maxlength="8" value="{{ DL_MAX_THUMBS }}">
+		</dd>
+	</dl>
 	{% endif %}
 	<dl>
 		<dt><label>{{ lang('DL_BUG_TRACKER_CAT') }}</label></dt>
 		<dd>
 			<a class="help nav" data-key="DL_BUG_TRACKER_CAT"><i class="icon fa-question-circle fa-fw"></i></a>&nbsp;
-			<input type="checkbox" class="radio switch" name="bug_tracker" value="1" {% if DL_BUG_TRACKER %}checked{% endif %} id="bug_tracker" /><label class="switch" for="bug_tracker">&nbsp;</label>
+			<input type="checkbox" class="radio switch" name="bug_tracker" value="1" {% if DL_BUG_TRACKER %}checked{% endif %} id="bug_tracker"><label class="switch" for="bug_tracker">&nbsp;</label>
 		</dd>
 	</dl>
 	<dl>
 		<dt><label>{{ lang('DL_CAT_TRAFFIC') }}</label></dt>
 		<dd>
 			<a class="help nav" data-key="DL_CAT_TRAFFIC" data-param="{{ lang('DL_CAT_TRAFFIC_HELP') }}"><i class="icon fa-question-circle fa-fw"></i></a>&nbsp;
-			<input type="text" name="cat_traffic" size="10" maxlength="10" value="{{ DL_CAT_TRAFFIC }}" />
+			<input type="text" name="cat_traffic" size="10" maxlength="10" value="{{ DL_CAT_TRAFFIC }}">
 			<select name="cat_traffic_range">
 				{% for dl_cat_traffic_range in loops.dl_cat_traffic_range %}
 				<option value="{{ dl_cat_traffic_range.DL_VALUE }}"{% if dl_cat_traffic_range.DL_VALUE eq S_DL_CAT_TRAFFIC_RANGE %} selected{% endif %}>{{ dl_cat_traffic_range.DL_NAME }}</option>
@@ -184,7 +191,7 @@
 		<dt><label>{{ lang('DL_SHOW_FILE_HASH') }}</label></dt>
 		<dd>
 			<a class="help nav" data-key="DL_SHOW_FILE_HASH"><i class="icon fa-question-circle fa-fw"></i></a>&nbsp;
-			<input type="checkbox" class="radio switch" name="show_file_hash" value="1" {% if DL_SHOW_FILE_HASH %}checked{% endif %} id="show_file_hash" /><label class="switch" for="show_file_hash">&nbsp;</label>
+			<input type="checkbox" class="radio switch" name="show_file_hash" value="1" {% if DL_SHOW_FILE_HASH %}checked{% endif %} id="show_file_hash"><label class="switch" for="show_file_hash">&nbsp;</label>
 		</dd>
 	</dl>
 
@@ -204,7 +211,7 @@
 					{% endfor %}
 				</select>
 			</label>
-			<input type="text" name="set_user" id="set_user" value="{{ DL_SET_USER }}" class="inputbox autowidth" size="32" />
+			<input type="text" name="set_user" id="set_user" value="{{ DL_SET_USER }}" class="inputbox autowidth" size="32">
 			&nbsp;[ <a href="#" class="dl-finduser" data-href="{{ S_DL_USER_SELECT }}">{{ lang('FIND_USERNAME') }}</a> ]
 		</dd>
 	</dl>
@@ -250,7 +257,7 @@
 					{% endfor %}
 				</select>
 			</label>
-			<input type="text" name="dl_topic_user" id="dl_topic_user" value="{{ DL_TOPIC_USER }}" class="inputbox autowidth" size="32" />
+			<input type="text" name="dl_topic_user" id="dl_topic_user" value="{{ DL_TOPIC_USER }}" class="inputbox autowidth" size="32">
 			&nbsp;[ <a href="#" class="dl-finduser" data-href="{{ S_DL_USER_SELECT_2 }}">{{ lang('FIND_USERNAME') }}</a> ]
 		</dd>
 	</dl>
@@ -288,7 +295,7 @@
 {% endif %}
 
 <fieldset class="quick">
-	<input type="submit" name="save_cat" value="{{ lang('SUBMIT') }}" class="button1" />
+	<input type="submit" name="save_cat" value="{{ lang('SUBMIT') }}" class="button1">
 	{{ S_DL_HIDDEN_FIELDS }}
 	{{ S_FORM_TOKEN }}
 </fieldset>

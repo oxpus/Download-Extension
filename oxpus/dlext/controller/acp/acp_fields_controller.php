@@ -788,7 +788,7 @@ class acp_fields_controller implements acp_fields_interface
 				$this->template->assign_vars([
 					'S_DL_EDIT'			=> $this->dlext_constants::DL_TRUE,
 					'S_DL_EDIT_MODE'	=> ($action == 'edit') ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE,
-					'DL_ERROR_MSG'		=> (!empty($error)) ? implode('<br />', $error) : '',
+					'DL_ERROR_MSG'		=> (!empty($error)) ? implode('<br>', $error) : '',
 
 					'L_DL_TITLE'		=> $this->language->lang('DL_FIELDS_STEP' . $step . '_TITLE_' . strtoupper($action)),
 					'L_DL_EXPLAIN'		=> $this->language->lang('DL_FIELDS_STEP' . $step . '_EXPLAIN'),
@@ -1022,7 +1022,7 @@ class acp_fields_controller implements acp_fields_interface
 			$lang_options[1]['lang_iso'] = $this->lang_defs['id'][$default_lang_id];
 			$lang_options[1]['fields'][$field] = [
 				'TITLE'		=> $this->language->lang('CP_' . strtoupper($field)),
-				'FIELD'		=> '<dd>' . ((is_array($this->dlext_fields_admin->vars[$field])) ? implode('<br />', $this->dlext_fields_admin->vars[$field]) : bbcode_nl2br($this->dlext_fields_admin->vars[$field])) . '</dd>'
+				'FIELD'		=> '<dd>' . ((is_array($this->dlext_fields_admin->vars[$field])) ? implode('<br>', $this->dlext_fields_admin->vars[$field]) : bbcode_nl2br($this->dlext_fields_admin->vars[$field])) . '</dd>'
 			];
 
 			if ($this->language->lang('CP_' . strtoupper($field) . '_EXPLAIN'))
@@ -1053,8 +1053,8 @@ class acp_fields_controller implements acp_fields_interface
 							$lang_options[$lang_id]['fields'][$field] = [
 								'TITLE'		=> $this->language->lang('CP_' . strtoupper($field)),
 								'FIELD'		=> '
-											<dd><input class="medium" name="l_' . $field . '[' . $lang_id . '][]" value="' . ((isset($value[$lang_id][0])) ? $value[$lang_id][0] : $var[0]) . '" /> ' . $this->language->lang('FIRST_OPTION') . '</dd>
-											<dd><input class="medium" name="l_' . $field . '[' . $lang_id . '][]" value="' . ((isset($value[$lang_id][1])) ? $value[$lang_id][1] : $var[1]) . '" /> ' . $this->language->lang('SECOND_OPTION') . '</dd>'
+											<dd><input class="medium" name="l_' . $field . '[' . $lang_id . '][]" value="' . ((isset($value[$lang_id][0])) ? $value[$lang_id][0] : $var[0]) . '"> ' . $this->language->lang('FIRST_OPTION') . '</dd>
+											<dd><input class="medium" name="l_' . $field . '[' . $lang_id . '][]" value="' . ((isset($value[$lang_id][1])) ? $value[$lang_id][1] : $var[1]) . '"> ' . $this->language->lang('SECOND_OPTION') . '</dd>'
 							];
 							break;
 
@@ -1083,7 +1083,7 @@ class acp_fields_controller implements acp_fields_interface
 
 					$lang_options[$lang_id]['fields'][$field] = [
 						'TITLE'		=> $this->language->lang('CP_' . strtoupper($field)),
-						'FIELD'		=> ($field_type == 'string') ? '<dd><input class="medium" type="text" name="l_' . $field . '[' . $lang_id . ']" value="' . ((isset($value[$lang_id])) ? $value[$lang_id] : $var) . '" /></dd>' : '<dd><textarea name="l_' . $field . '[' . $lang_id . ']" rows="3" cols="80">' . ((isset($value[$lang_id])) ? $value[$lang_id] : $var) . '</textarea></dd>'
+						'FIELD'		=> ($field_type == 'string') ? '<dd><input class="medium" type="text" name="l_' . $field . '[' . $lang_id . ']" value="' . ((isset($value[$lang_id])) ? $value[$lang_id] : $var) . '"></dd>' : '<dd><textarea name="l_' . $field . '[' . $lang_id . ']" rows="3" cols="80">' . ((isset($value[$lang_id])) ? $value[$lang_id] : $var) . '</textarea></dd>'
 					];
 
 					if ($this->language->lang('CP_' . strtoupper($field) . '_EXPLAIN') != 'CP_' . strtoupper($field) . '_EXPLAIN')
@@ -1150,7 +1150,7 @@ class acp_fields_controller implements acp_fields_interface
 			$sql = 'INSERT INTO ' . $this->dlext_table_dl_fields . ' ' . $this->db->sql_build_array('INSERT', $profile_fields);
 			$this->db->sql_query($sql);
 
-			$field_id = $this->db->sql_nextid();
+			$field_id = $this->db->sql_last_inserted_id();
 		}
 		else
 		{

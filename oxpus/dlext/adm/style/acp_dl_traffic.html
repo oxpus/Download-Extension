@@ -2,7 +2,7 @@
 
 <h1>{{ lang('DL_TRAFFIC') }}</h1>
 
-<br />
+<br>
 
 {% INCLUDE 'acp_dl_limits.html' %}
 
@@ -20,7 +20,7 @@
 	<div class="permissions-panel" id="options0">
 		<div class="tablewrap">
 
-			<br />
+			<br>
 			<strong>{{ lang('DL_AUTO_TRAFFIC_EXPLAIN') }}</strong>
 
 			<form action="{{ S_DL_CONFIG_ACTION }}" method="post" id="auto_traffic">
@@ -32,7 +32,7 @@
 				<dl>
 					<dt><label>{{ lang('DL_USER_AUTO_TRAFFIC') }}</label></dt>
 					<dd>
-						<input name="user_dl_auto_traffic" type="text" size="10" maxlength="50" value="{{ DL_USER_DL_AUTO_TRAFFIC }}" />
+						<input name="user_dl_auto_traffic" type="text" size="10" maxlength="50" value="{{ DL_USER_DL_AUTO_TRAFFIC }}">
 						<select name="data_user_range">
 							{% for data_range_select in loops.data_range_select %}
 							<option value="{{ data_range_select.DL_VALUE }}"{% if data_range_select.DL_VALUE eq S_DL_USER_DATA_RANGE %} selected{% endif %}>{{ data_range_select.DL_LANG }}</option>
@@ -52,7 +52,7 @@
 				<dl>
 					<dt>{% if group_row.DL_GROUP_SPECIAL %}<strong>{{ group_row.DL_GROUP_NAME }}</strong>{% else %}{{ group_row.DL_GROUP_NAME }}{% endif %}</dt>
 					<dd>
-						<input name="group_dl_auto_traffic[{{ group_row.DL_GROUP_ID }}]" type="text" size="10" maxlength="50" value="{{ group_row.DL_GROUP_DL_AUTO_TRAFFIC }}" />
+						<input name="group_dl_auto_traffic[{{ group_row.DL_GROUP_ID }}]" type="text" size="10" maxlength="50" value="{{ group_row.DL_GROUP_DL_AUTO_TRAFFIC }}">
 						<select name="data_group_range[{{ group_row.DL_GROUP_ID }}]">
 							{% for data_range_select in loops.data_range_select %}
 							<option value="{{ data_range_select.DL_VALUE }}"{% if data_range_select.DL_VALUE eq group_row.S_DL_GROUP_DATA_RANGE %} selected{% endif %}>{{ data_range_select.DL_LANG }}</option>
@@ -65,7 +65,7 @@
 			</fieldset>
 
 			<fieldset class="quick">
-				<input type="submit" name="submit" value="{{ lang('SUBMIT') }}" class="button1" />
+				<input type="submit" name="submit" value="{{ lang('SUBMIT') }}" class="button1">
 				{{ S_FORM_TOKEN }}
 			</fieldset>
 			{% endif %}
@@ -87,7 +87,7 @@
 				<dl>
 					<dt><label>{{ lang('DL_USERS_TRAFFIC_TITLE') }}</label></dt>
 					<dd>
-						<input type="text" name="all_traffic" size="20" maxlength="40" />
+						<input type="text" name="all_traffic" size="20" maxlength="40">
 						<select name="traffic_range">
 							{% for data_range_select in loops.data_range_select %}
 							<option value="{{ data_range_select.DL_VALUE }}"{% if data_range_select.DL_VALUE eq S_DL_TRAFFIC_RANGE %} selected{% endif %}>{{ data_range_select.DL_LANG }}</option>
@@ -98,15 +98,15 @@
 				<dl>
 					<dt><label>{{ lang('DL_FUNCTION') }}</label></dt>
 					<dd>
-						<label><input type="radio" class="radio" name="func" value="add" /> {{ lang('DL_ADD') }}</label>
-						<label><input type="radio" class="radio" name="func" value="set" checked /> {{ lang('DL_SET') }}</label>
+						<label><input type="radio" class="radio" name="func" value="add"> {{ lang('DL_ADD') }}</label>
+						<label><input type="radio" class="radio" name="func" value="set" checked> {{ lang('DL_SET') }}</label>
 					</dd>
 				</dl>
 
 			</fieldset>
 
 			<fieldset class="quick">
-				<input type="submit" name="submit" value="{{ lang('SUBMIT') }}" class="button1" />
+				<input type="submit" name="submit" value="{{ lang('SUBMIT') }}" class="button1">
 				{{ S_FORM_TOKEN }}
 			</fieldset>
 
@@ -127,14 +127,14 @@
 				<dl>
 					<dt><label>{{ lang('USERNAME') }}</label></dt>
 					<dd>
-						<input type="text" name="username" id="username" size="20" maxlength="32" value="" />
-						<br />
+						<input type="text" name="username" id="username" size="20" maxlength="32" value="">
+						<br>
 						[ <a href="#" class="dl-finduser" data-href="{{ U_DL_FIND_USERNAME }}">{{ lang('FIND_USERNAME') }}</a> ]
 					</dd>
 				</dl>
 				<dl>
 					<dt><label>{{ lang('DL_SINGLE_USER_TRAFFIC_TITLE') }}</label></dt>
-					<dd><input type="text" name="user_traffic" size="20" maxlength="40" />
+					<dd><input type="text" name="user_traffic" size="20" maxlength="40">
 						<select name="traffic_range">
 							{% for data_range_select in loops.data_range_select %}
 							<option value="{{ data_range_select.DL_VALUE }}"{% if data_range_select.DL_VALUE eq S_DL_TRAFFIC_RANGE %} selected{% endif %}>{{ data_range_select.DL_LANG }}</option>
@@ -145,14 +145,14 @@
 				<dl>
 					<dt><label>{{ lang('DL_FUNCTION') }}</label></dt>
 					<dd>
-						<label><input type="radio" class="radio" name="func" value="add" /> {{ lang('DL_ADD') }}</label>
-						<label><input type="radio" class="radio" name="func" value="set" checked /> {{ lang('DL_SET') }}</label></dd>
+						<label><input type="radio" class="radio" name="func" value="add"> {{ lang('DL_ADD') }}</label>
+						<label><input type="radio" class="radio" name="func" value="set" checked> {{ lang('DL_SET') }}</label></dd>
 				</dl>
 
 			</fieldset>
 
 			<fieldset class="quick">
-				<input type="submit" name="submit" value="{{ lang('SUBMIT') }}" class="button1" />
+				<input type="submit" name="submit" value="{{ lang('SUBMIT') }}" class="button1">
 				{{ S_FORM_TOKEN }}
 			</fieldset>
 
@@ -183,7 +183,7 @@
 				</dl>
 				<dl>
 					<dt><label>{{ lang('DL_USERGROUP_TRAFFIC_TITLE') }}</label></dt>
-					<dd><input type="text" class="post" name="group_traffic" size="20" maxlength="40" />
+					<dd><input type="text" class="post" name="group_traffic" size="20" maxlength="40">
 						<select name="traffic_range">
 							{% for data_range_select in loops.data_range_select %}
 							<option value="{{ data_range_select.DL_VALUE }}"{% if data_range_select.DL_VALUE eq S_DL_TRAFFIC_RANGE %} selected{% endif %}>{{ data_range_select.DL_LANG }}</option>
@@ -194,15 +194,15 @@
 				<dl>
 					<dt><label>{{ lang('DL_FUNCTION') }}</label></dt>
 					<dd>
-						<label><input type="radio" class="radio" name="func" value="add" /> {{ lang('DL_ADD') }}</label>
-						<label><input type="radio" class="radio" name="func" value="set" checked /> {{ lang('DL_SET') }}</label>
+						<label><input type="radio" class="radio" name="func" value="add"> {{ lang('DL_ADD') }}</label>
+						<label><input type="radio" class="radio" name="func" value="set" checked> {{ lang('DL_SET') }}</label>
 					</dd>
 				</dl>
 
 			</fieldset>
 
 			<fieldset class="quick">
-				<input type="submit" name="submit" value="{{ lang('SUBMIT') }}" class="button1" />
+				<input type="submit" name="submit" value="{{ lang('SUBMIT') }}" class="button1">
 				{{ S_FORM_TOKEN }}
 			</fieldset>
 
@@ -214,7 +214,7 @@
 
 </fieldset>
 
-<br />
+<br>
 
 <fieldset class="submit-buttons">{{ DL_MOD_RELEASE }}</fieldset>
 

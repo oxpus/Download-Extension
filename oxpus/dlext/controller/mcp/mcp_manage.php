@@ -46,6 +46,7 @@ class mcp_manage
 	protected $dlext_table_dl_images;
 	protected $dlext_table_dl_notraf;
 	protected $dlext_table_dl_ratings;
+	protected $dlext_table_dl_reports;
 	protected $dlext_table_dl_stats;
 	protected $dlext_table_dl_ver_files;
 	protected $dlext_table_dl_versions;
@@ -83,6 +84,7 @@ class mcp_manage
 	 * @param string								$dlext_table_dl_images
 	 * @param string								$dlext_table_dl_notraf
 	 * @param string								$dlext_table_dl_ratings
+	 * @param string								$dlext_table_dl_reports
 	 * @param string								$dlext_table_dl_stats
 	 * @param string								$dlext_table_dl_ver_files
 	 * @param string								$dlext_table_dl_versions
@@ -118,6 +120,7 @@ class mcp_manage
 		$dlext_table_dl_images,
 		$dlext_table_dl_notraf,
 		$dlext_table_dl_ratings,
+		$dlext_table_dl_reports,
 		$dlext_table_dl_stats,
 		$dlext_table_dl_ver_files,
 		$dlext_table_dl_versions,
@@ -145,6 +148,7 @@ class mcp_manage
 		$this->dlext_table_dl_images		= $dlext_table_dl_images;
 		$this->dlext_table_dl_notraf		= $dlext_table_dl_notraf;
 		$this->dlext_table_dl_ratings		= $dlext_table_dl_ratings;
+		$this->dlext_table_dl_reports		= $dlext_table_dl_reports;
 		$this->dlext_table_dl_stats			= $dlext_table_dl_stats;
 		$this->dlext_table_dl_ver_files		= $dlext_table_dl_ver_files;
 		$this->dlext_table_dl_versions		= $dlext_table_dl_versions;
@@ -381,7 +385,7 @@ class mcp_manage
 							$this->db->sql_freeresult($result);
 						}
 
-						$sql = 'SELECT c.path, d.cat, d.real_file, d.thumbnail, d.dl_topic, d.id AS df_id FROM ' . $this->dlext_table_dl_cat . ' c, ' . $this->dlext_table_downloads . ' d
+						$sql = 'SELECT c.path, d.cat, d.real_file, d.dl_topic, d.id AS df_id FROM ' . $this->dlext_table_dl_cat . ' c, ' . $this->dlext_table_downloads . ' d
 							WHERE c.id = d.cat
 								AND ' . $this->db->sql_in_set('d.id', $dlo_id);
 						$result = $this->db->sql_query($sql);
@@ -403,11 +407,6 @@ class mcp_manage
 							$path		= $row['path'];
 							$real_file	= $row['real_file'];
 							$df_id		= $row['df_id'];
-
-							if ($row['thumbnail'])
-							{
-								$this->filesystem->remove($this->dlext_constants->get_value('files_dir') . '/thumbs/' . $row['thumbnail']);
-							}
 
 							if ($del_file)
 							{
@@ -516,6 +515,10 @@ class mcp_manage
 						$this->db->sql_query($sql);
 
 						$sql = 'DELETE FROM ' . $this->dlext_table_dl_images . '
+							WHERE ' . $this->db->sql_in_set('dl_id', $dlo_id);
+						$this->db->sql_query($sql);
+
+						$sql = 'DELETE FROM ' . $this->dlext_table_dl_reports . '
 							WHERE ' . $this->db->sql_in_set('dl_id', $dlo_id);
 						$this->db->sql_query($sql);
 

@@ -110,6 +110,7 @@ services:
             - '@template'
             - '@oxpus.dlext.helpers.constants'
             - '%oxpus.dlext.tables.downloads%'
+            - '%oxpus.dlext.tables.dl_images%'
     oxpus.dlext.core.format:
         class: oxpus\dlext\core\format
         public: true

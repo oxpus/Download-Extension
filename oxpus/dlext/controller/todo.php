@@ -201,7 +201,7 @@ class todo
 					$this->db->sql_query($sql);
 
 					$meta_url	= $this->helper->route('oxpus_dlext_todo');
-					$message	= $this->language->lang('DL_DOWNLOAD_UPDATED') . '<br /><br />' . $this->language->lang('CLICK_RETURN_TODO_EDIT', '<a href="' . $meta_url . '">', '</a>');
+					$message	= $this->language->lang('DL_DOWNLOAD_UPDATED') . '<br><br>' . $this->language->lang('CLICK_RETURN_TODO_EDIT', '<a href="' . $meta_url . '">', '</a>');
 
 					meta_refresh(3, $meta_url);
 

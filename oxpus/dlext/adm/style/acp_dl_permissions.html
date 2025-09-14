@@ -8,7 +8,7 @@
 </p>
 {% endif %}
 
-<br />
+<br>
 
 {% INCLUDE 'acp_dl_limits.html' %}
 
@@ -23,7 +23,7 @@
 		<dd>
 			{% if S_DL_GROUPS_TOTAL %}
 			{% for preselected_cats in loops.preselected_cats %}
-			{{ preselected_cats.DL_CAT_TITLE }}<br />
+			{{ preselected_cats.DL_CAT_TITLE }}<br>
 			{% endfor %}
 			{% else %}
 			<select name="cat_select[]" multiple="multiple" size="{{ S_DL_CATS_SELECT_SIZE }}" class="selectbox">
@@ -125,7 +125,7 @@
 			</select>
 			{% else %}
 			{% for preselected_groups in loops.preselected_groups %}
-			{% if preselected_groups.DL_GROUP_SEP %}<strong>{% endif %}{{ preselected_groups.DL_GROUP_NAME }}{% if preselected_groups.DL_GROUP_SEP %}</strong>{% endif %}<br />
+			{% if preselected_groups.DL_GROUP_SEP %}<strong>{% endif %}{{ preselected_groups.DL_GROUP_NAME }}{% if preselected_groups.DL_GROUP_SEP %}</strong>{% endif %}<br>
 			{% endfor %}
 			{% endif %}
 		</dd>
@@ -208,7 +208,7 @@
 	</tbody>
 	</table>
 
-	<br />
+	<br>
 
 	<fieldset class="submit-buttons">
 		{% if DL_SELECT_SINGLE_GROUP %}
@@ -235,28 +235,28 @@
 	<tbody>
 	<tr class="row4">
 		<td class="row4">{{ lang('DL_AUTH_VIEW') }}</td>
-		<td class="row4"><input type="radio" class="radio" name="auth_view" value="1"{% if DL_AUTH_VIEW eq 1 %} checked{% endif %} /></td>
-		<td class="row4"><input type="radio" class="radio" name="auth_view" value="0"{% if DL_AUTH_VIEW eq 0 %} checked{% endif %} /></td>
+		<td class="row4"><input type="radio" class="radio" name="auth_view" value="1"{% if DL_AUTH_VIEW eq 1 %} checked{% endif %}></td>
+		<td class="row4"><input type="radio" class="radio" name="auth_view" value="0"{% if DL_AUTH_VIEW eq 0 %} checked{% endif %}></td>
 	</tr>
 	<tr class="row3">
 		<td class="row3">{{ lang('DL_AUTH_DL') }}</td>
-		<td class="row3"><input type="radio" class="radio" name="auth_dl" value="1"{% if DL_AUTH_DL eq 1 %} checked{% endif %} /></td>
-		<td class="row3"><input type="radio" class="radio" name="auth_dl" value="0"{% if DL_AUTH_DL eq 0 %} checked{% endif %} /></td>
+		<td class="row3"><input type="radio" class="radio" name="auth_dl" value="1"{% if DL_AUTH_DL eq 1 %} checked{% endif %}></td>
+		<td class="row3"><input type="radio" class="radio" name="auth_dl" value="0"{% if DL_AUTH_DL eq 0 %} checked{% endif %}></td>
 	</tr>
 	<tr class="row4">
 		<td class="row4">{{ lang('DL_AUTH_UP') }}</td>
-		<td class="row4"><input type="radio" class="radio" name="auth_up" value="1"{% if DL_AUTH_UP eq 1 %} checked{% endif %} /></td>
-		<td class="row4"><input type="radio" class="radio" name="auth_up" value="0"{% if DL_AUTH_UP eq 0 %} checked{% endif %} /></td>
+		<td class="row4"><input type="radio" class="radio" name="auth_up" value="1"{% if DL_AUTH_UP eq 1 %} checked{% endif %}></td>
+		<td class="row4"><input type="radio" class="radio" name="auth_up" value="0"{% if DL_AUTH_UP eq 0 %} checked{% endif %}></td>
 	</tr>
 	<tr class="row3">
 		<td class="row3">{{ lang('DL_AUTH_MOD') }}</td>
-		<td class="row3"><input type="radio" class="radio" name="auth_mod" value="1"{% if DL_AUTH_MOD eq 1 %} checked{% endif %} /></td>
-		<td class="row3"><input type="radio" class="radio" name="auth_mod" value="0"{% if DL_AUTH_MOD eq 0 %} checked{% endif %} /></td>
+		<td class="row3"><input type="radio" class="radio" name="auth_mod" value="1"{% if DL_AUTH_MOD eq 1 %} checked{% endif %}></td>
+		<td class="row3"><input type="radio" class="radio" name="auth_mod" value="0"{% if DL_AUTH_MOD eq 0 %} checked{% endif %}></td>
 	</tr>
 	</tbody>
 	</table>
 
-	<br />
+	<br>
 
 	<fieldset class="submit-buttons">
 		{% if DL_SELECT_SINGLE_GROUP %}
@@ -277,10 +277,10 @@
 	<dl>
 		<dt><label>{{ lang('DL_DROP_PERMISSIONS') }}</label></dt>
 		<dd>
-			<p><label><input type="radio" class="radio" name="view_perm" value="1" checked /> {{ lang('DL_VIEW_PERM') }}</label></p>
-			<p><label><input type="radio" class="radio" name="view_perm" value="0" /> {{ lang('DL_PERM_DROP_NO') }}</label></p>
-			<p><label><input type="radio" class="radio" name="view_perm" value="2" /> {{ lang('DL_PERM_DROP_CATS') }}</label></p>
-			<p><label><input type="radio" class="radio" name="view_perm" value="3" /> {{ lang('DL_PERM_DROP_ALL') }}</label></p>
+			<p><label><input type="radio" class="radio" name="view_perm" value="1" checked> {{ lang('DL_VIEW_PERM') }}</label></p>
+			<p><label><input type="radio" class="radio" name="view_perm" value="0"> {{ lang('DL_PERM_DROP_NO') }}</label></p>
+			<p><label><input type="radio" class="radio" name="view_perm" value="2"> {{ lang('DL_PERM_DROP_CATS') }}</label></p>
+			<p><label><input type="radio" class="radio" name="view_perm" value="3"> {{ lang('DL_PERM_DROP_ALL') }}</label></p>
 		</dd>
 	</dl>
 
@@ -288,7 +288,7 @@
 {% endif %}
 
 <fieldset class="quick">
-	<input type="submit" name="submit" class="button1" value="{% if not S_DL_AUTH_ALL_USERS and not S_DL_AUTH_GROUPS %}{{ lang('SELECT') }}{% else %}{{ lang('DL_SET') }}{% endif %}" />
+	<input type="submit" name="submit" class="button1" value="{% if not S_DL_AUTH_ALL_USERS and not S_DL_AUTH_GROUPS %}{{ lang('SELECT') }}{% else %}{{ lang('DL_SET') }}{% endif %}">
 	{{ S_DL_HIDDEN_FIELDS }}
 	{{ S_FORM_TOKEN }}
 </fieldset>

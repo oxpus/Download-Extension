@@ -2,7 +2,7 @@
 
 <h2>{{ lang('DL_HACKS_LIST') }}</h2>
 
-<br />
+<br>
 
 {% if loops.pagination|length or DL_TOTAL_DL %}
 	<div class="pagination">
@@ -34,8 +34,8 @@
 				<dd class="dl-width-40 dl-cell-block dl-intent">{{ dl_listrow.DL_HACK_DESCRIPTION }}</dd>
 				<dd class="dl-width-20 dl-cell-block dl-intent">
 					{% if dl_listrow.DL_HACK_AUTHOR_MAIL %}<a href="mailto:{{ dl_listrow.DL_HACK_AUTHOR_MAIL }}">{% endif %}{{ dl_listrow.DL_HACK_AUTHOR }}{% if dl_listrow.DL_HACK_AUTHOR_MAIL %}</a>{% endif %}
-					{% if dl_listrow.DL_HACK_AUTHOR_WEBSITE %}<br /><a href="{{ dl_listrow.DL_HACK_AUTHOR_WEBSITE }}">{{ lang('DL_HACK_AUTOR_WEBSITE') }}</a>{% endif %}
-					{% if dl_listrow.DL_HACK_DL_URL %}<br /><a href="{{ dl_listrow.DL_HACK_DL_URL }}">{{ lang('DL_DOWNLOAD') }}</a>{% endif %}
+					{% if dl_listrow.DL_HACK_AUTHOR_WEBSITE %}<br><a href="{{ dl_listrow.DL_HACK_AUTHOR_WEBSITE }}">{{ lang('DL_HACK_AUTOR_WEBSITE') }}</a>{% endif %}
+					{% if dl_listrow.DL_HACK_DL_URL %}<br><a href="{{ dl_listrow.DL_HACK_DL_URL }}">{{ lang('DL_DOWNLOAD') }}</a>{% endif %}
 				</dd>
 			</dl>
 		</li>
@@ -63,12 +63,12 @@
 				<option value="DESC"{% if S_DL_SELECTED_SORT_DESC %} selected{% endif %}>{{ lang('DESCENDING') }}</option>
 			</select>
 		</label>
-	<label><input type="submit" class="button2" id="dl-select-button" value="{{ lang('GO') }}" /></label>
+	<label><input type="submit" class="button2" id="dl-select-button" value="{{ lang('GO') }}"></label>
 </fieldset>
 
 </form>
 
-<hr />
+<hr>
 
 {% if loops.pagination|length or DL_TOTAL_DL %}
 	<div class="pagination">

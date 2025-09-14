@@ -68,9 +68,10 @@ class thumbnail implements thumbnail_interface
 		switch ($img_type)
 		{
 			case 'thumb':
-				$table		= $this->dlext_downloads_table;
-				$field		= 'thumbnail';
-				$data_id	= 'id';
+			case 'thumb_list':
+				$table		= $this->dlext_dlext_images_table;
+				$field		= 'img_name';
+				$data_id	= 'dl_id';
 				$folder		= '/thumbs/';
 				break;
 			case 'more':
@@ -95,6 +96,15 @@ class thumbnail implements thumbnail_interface
 		$sql = 'SELECT ' . $field . '
 				FROM ' . $table . '
 				WHERE ' . $data_id . ' = ' . (int) $pic_id;
+		if ($img_type == 'thumb')
+		{
+			$sql .= ' AND img_index = 1 ';
+		}
+		if ($img_type == 'thumb_list')
+		{
+			$sql .= ' AND img_lists = 1 ';
+		}
+
 		$result = $this->db->sql_query($sql);
 		$real_filename = $this->db->sql_fetchfield($field);
 		$this->db->sql_freeresult($result);
@@ -121,23 +131,20 @@ class thumbnail implements thumbnail_interface
 			return 'NO_WIDTH';
 		}
 
-		$max_width = $this->dlext_constants::DL_THUMBS_MAX_WIDTH;
-		$max_height = $this->dlext_constants::DL_THUMBS_MAX_HEIGHT;
-
-		if (($pic_height <= $max_height) && ($pic_width <= $max_width))
+		if (($pic_height <= DL_THUMBS_MAX_HEIGHT) && ($pic_width <= DL_THUMBS_MAX_WIDTH))
 		{
 			$disp_art = $this->dlext_constants::DL_FALSE;
 		}
 
-		if (($pic_height / $max_height) > ($pic_width / $max_width))
+		if (($pic_height / DL_THUMBS_MAX_HEIGHT) > ($pic_width / DL_THUMBS_MAX_WIDTH))
 		{
-			$thumb_height	= $max_height;
-			$thumb_width	= round($max_width * (($pic_width / $max_width) / ($pic_height / $max_height)));
+			$thumb_height	= DL_THUMBS_MAX_HEIGHT;
+			$thumb_width	= round(DL_THUMBS_MAX_WIDTH * (($pic_width / DL_THUMBS_MAX_WIDTH) / ($pic_height / DL_THUMBS_MAX_HEIGHT)));
 		}
 		else
 		{
-			$thumb_height	= round($max_height * (($pic_height / $max_height) / ($pic_width / $max_width)));
-			$thumb_width	= $max_width;
+			$thumb_height	= round(DL_THUMBS_MAX_HEIGHT * (($pic_height / DL_THUMBS_MAX_HEIGHT) / ($pic_width / DL_THUMBS_MAX_WIDTH)));
+			$thumb_width	= DL_THUMBS_MAX_WIDTH;
 		}
 
 		$image = $this->_get_image($thumbnail, $file_ext);

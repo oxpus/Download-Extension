@@ -146,7 +146,7 @@ class acp_traffic_controller implements acp_traffic_interface
 
 						if (!$user_id)
 						{
-							trigger_error($this->language->lang('USERNAME') . ' ' . $username . '<br /><br />' . $this->language->lang('NO_USER') . adm_back_link($this->u_action));
+							trigger_error($this->language->lang('USERNAME') . ' ' . $username . '<br><br>' . $this->language->lang('NO_USER') . adm_back_link($this->u_action));
 						}
 
 						if ($func == 'add')

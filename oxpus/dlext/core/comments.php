@@ -222,7 +222,7 @@ class comments implements comments_interface
 			]);
 			$this->db->sql_query($sql);
 
-			$dl_id = $this->db->sql_nextid();
+			$dl_id = $this->db->sql_last_inserted_id();
 
 			$comment_message = $this->language->lang('DL_COMMENT_ADDED');
 		}
@@ -285,7 +285,7 @@ class comments implements comments_interface
 				];
 
 				$this->notification->add_notifications('oxpus.dlext.notification.type.capprove', $notification_data);
-				$approve_message	= '<br />' . $this->language->lang('DL_MUST_BE_APPROVE_COMMENT');
+				$approve_message	= '<br>' . $this->language->lang('DL_MUST_BE_APPROVE_COMMENT');
 			}
 
 			$return_parameters	= ['df_id' => $df_id];
@@ -344,7 +344,7 @@ class comments implements comments_interface
 			$return_text		= 'CLICK_RETURN_COMMENTS';
 		}
 
-		$message = $comment_message . $approve_message . '<br /><br />' . $this->language->lang($return_text, '<a href="' . $this->helper->route('oxpus_dlext_details', $return_parameters) . '">', '</a>');
+		$message = $comment_message . $approve_message . '<br><br>' . $this->language->lang($return_text, '<a href="' . $this->helper->route('oxpus_dlext_details', $return_parameters) . '">', '</a>');
 
 		meta_refresh(3, $this->helper->route('oxpus_dlext_details', $return_parameters));
 
@@ -573,14 +573,21 @@ class comments implements comments_interface
 				$u_delete_comment	= $this->helper->route('oxpus_dlext_details', ['view' => 'comment', 'action' => 'delete', 'cat_id' => $cat_id, 'df_id' => $df_id, 'dl_id' => $dl_id]);
 				$u_edit_comment		= $this->helper->route('oxpus_dlext_details', ['view' => 'comment', 'action' => 'edit', 'cat_id' => $cat_id, 'df_id' => $df_id, 'dl_id' => $dl_id]);
 
+				$decoded_message = censor_text($row['comment_text']);
+				decode_message($decoded_message, $row['com_uid']);
+
 				$this->template->assign_block_vars('dl_comment_row', [
 					'DL_EDITED_BY'		=> $edited_by,
 					'DL_POSTER'			=> get_username_string('full', $poster_id, $poster, $poster_color),
+					'DL_POSTER_ID'		=> $poster_id,
+					'DL_POSTER_NAME'	=> $poster,
 					'DL_POSTER_AVATAR'	=> $poster_avatar,
 					'DL_MESSAGE'		=> $message,
 					'DL_POST_TIME'		=> $this->user->format_date($comment_time),
+					'DL_POST_TIME_RAW'	=> $comment_time,
 					'DL_POST_TIME_RFC'	=> gmdate(DATE_RFC3339, $comment_time),
 					'DL_ID'				=> $dl_id,
+					'DL_DECODED_TEXT'	=> $decoded_message,
 
 					'U_DL_DELETE_COMMENT'	=> $u_delete_comment,
 					'U_DL_EDIT_COMMENT'		=> ($this->dl_deny_post) ? '' : $u_edit_comment,

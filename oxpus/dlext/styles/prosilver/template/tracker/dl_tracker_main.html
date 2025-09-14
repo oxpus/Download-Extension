@@ -2,7 +2,7 @@
 
 <h2>{{ lang('DL_BUG_TRACKER_REPORT') }}</h2>
 
-<br />
+<br>
 
 <div class="dl-report-panel panel dl-left dl-width-75 dl-top">
 	<div class="inner">
@@ -12,7 +12,7 @@
 			<h3>{{ lang('DL_BUG_REPORT_TITLE') }}</h3>
 			<div class="title">{{ DL_REPORT_TITLE }}</div>
 
-			<br />
+			<br>
 
 			<h3>{{ lang('DL_BUG_REPORT_TEXT') }}</h3>
 			<div class="message">{{ DL_REPORT_TEXT }}</div>
@@ -83,7 +83,7 @@
 							<option value="{{ assign_users.DL_USER_ID }}"{% if assign_users.DL_USER_ID eq S_DL_SELECT_ASSIGNED_USER %} selected{% endif %}>{{ assign_users.DL_USER_NAME }}</option>
 						{% endfor %}
 					</select>
-					<input type="submit" name="submit" value="{{ lang('DL_BUG_REPORT_ASSIGN') }}" class="button2" />
+					<input type="submit" name="submit" value="{{ lang('DL_BUG_REPORT_ASSIGN') }}" class="button2">
 					{{ S_FORM_TOKEN }}
 				</div>
 			</form>
@@ -94,7 +94,7 @@
 	</div>
 </div>
 
-<br class="clear" />
+<br class="clear">
 
 {% if S_DL_SELECT_STATUS %}
 <div class="panel bg2">
@@ -113,9 +113,9 @@
 						<option value="{{ dl_report_new_status.DL_VALUE }}">{{ dl_report_new_status.DL_LANG }}</option>
 						{% endfor %}
 					</select>
-					<input type="submit" name="submit" value="{{ lang('DL_BUG_REPORT_STATUS_UPDATE') }}" class="button2" />
+					<input type="submit" name="submit" value="{{ lang('DL_BUG_REPORT_STATUS_UPDATE') }}" class="button2">
 				</dd>
-				<dd><label>{{ lang('DL_BUG_REPORT_STATUS_TEXT') }}</label><br /><textarea cols="75" rows="3" class="inputbox" name="new_status_text"></textarea></dd>
+				<dd><label>{{ lang('DL_BUG_REPORT_STATUS_TEXT') }}</label><br><textarea cols="75" rows="3" class="inputbox" name="new_status_text"></textarea></dd>
 			</dl>
 		</li>
 	</ul>
@@ -139,13 +139,13 @@
 	<tr>
 		<td class="row bg3 dl-width-15 dl-text-top">
 			<label>{{ history_row.DL_VALUE }}</label>
-			<br />
+			<br>
 			<span class="small"><time datetime="{{ history_row.DL_DATE_RFC }}">{{ history_row.DL_DATE }}</time></span>
 		</td>
 		<td class="row bg2 dl-width-85 dl-text-top">
 			<label>{{ history_row.DL_USER }}</label><span>{{ history_row.DL_TEXT }}</span>
 			{% if history_row.DL_TEXT_VALUE %}
-			<hr />
+			<hr>
 			<span>{{ history_row.DL_TEXT_VALUE }}</span>
 			{% endif %}
 		</td>
@@ -157,6 +157,6 @@
 </div>
 {% endif %}
 
-<br />
+<br>
 
 {% INCLUDE '@oxpus_dlext/helpers/dl_footer.html' %}

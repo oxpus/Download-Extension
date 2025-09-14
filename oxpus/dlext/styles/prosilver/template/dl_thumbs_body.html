@@ -1,4 +1,6 @@
 {% INCLUDE '@oxpus_dlext/helpers/dl_header.html' %}
+{% INCLUDECSS '@oxpus_dlext/plupload/css/jquery-ui.css' %}
+{% INCLUDECSS '@oxpus_dlext/plupload/css/jquery.ui.plupload.css' %}
 
 <h2>
 	{% INCLUDE '@oxpus_dlext/helpers/dl_filestatus.html' %}
@@ -7,48 +9,84 @@
 	</label>
 </h2>
 
-<br />
+{% if U_DL_BACK %}
+<p class="quick">
+	<a href="{{ U_DL_BACK }}">&laquo;{{ lang('BACK') }}</a>
+</p>
+{% endif %}
 
-<form action="{{ S_DL_FORMS_ACTION }}" method="post" enctype="multipart/form-data" id="dl_thumbs">
+{% if S_DL_TOTAL_IMAGES %}
+<br>
+
+<h3>{{ lang('DL_EDIT_THUMBS') }}</h3>
 
 <div class="panel">
 	<div class="inner">
 
-	<h3>{{ lang('DL_EDIT_THUMBS') }}</h3>
+	<form action="{{ U_DL_PLUPLOAD_URL }}" method="post" enctype="multipart/form-data" id="dl_thumbs" name="dl_thumbs" class="dl-left">
 
-	<fieldset>
+		<fieldset>
 
-	<dl>
-		<dt><label>{{ lang('DL_FILE_NAME') }}</label></dt>
-		<dd><input type="file" name="img_link" class="inputbox" size="60" /><br /><span class="small">{{ DL_THUMB_MAX_SIZE }}</span></dd>
-	</dl>
-	<dl>
-		<dt><label>{{ lang('DL_FILE_DESCRIPTION') }}</label></dt>
-		<dd><input type="text" name="img_title" size="70" maxlength="255" value="{{ DL_EDIT_IMG_TITLE }}" class="inputbox autowidth" /></dd>
-	</dl>
+			<div id="uploader" class="dl-left">
+				<p>{{ lang('PLUPLOAD_ENGINE_ERROR') }}</p>
+			</div>
 
+		</fieldset>
+
+	</form>
+
+	<br>
+
+	{% if S_DL_ACTION == 'edit' %}
+	<form action="{{ U_DL_PLUPLOAD_URL }}" method="post" enctype="multipart/form-data" id="dl_thumbs" name="dl_thumbs" class="dl-right">
+
+		<fieldset>
+
+			{% if DL_EDIT_IMG_PIC %}
+			<div id="img_edit" class="dl-left dl-intent-wide">
+				<img src="{{ DL_EDIT_IMG_PIC }}">
+			</div>
+			{% endif %}
+
+			<div class="dl-right dl-intent">
+			<dl>
+				<dt><label>{{ lang('DL_FILE_DESCRIPTION') }}</label></dt>
+				<dd><input type="text" name="img_title" size="70" maxlength="255" value="{{ DL_EDIT_IMG_TITLE }}" class="inputbox autowidth"></dd>
+			</dl>
+			<dl>
+				<dt><label>{{ lang('DL_FILE_INDEX') }}</label></dt>
+				<dd><input type="checkbox" name="img_index" class="radio" value="1" {% if DL_EDIT_IMG_INDEX %}checked{% endif %}></dd>
+			</dl>
+			<dl>
+				<dt><label>{{ lang('DL_FILE_LISTS') }}</label></dt>
+				<dd><input type="checkbox" name="img_lists" class="radio" value="1" {% if DL_EDIT_IMG_LISTS %}checked{% endif %}></dd>
+			</dl>
+			</div>
+
+		</fieldset>
+
+	<fieldset class="submit-buttons">
+		<input type="submit" name="submit" id="add_filess" value="{{ lang('SUBMIT') }}" class="button icon-button" onclick="upload=true; this.submit();">&nbsp;&nbsp;
+		<input type="submit" name="cancel" value="{{ lang('CANCEL') }}" class="button icon-button">
 	</fieldset>
+
+	<div>{{ S_FORM_TOKEN }}{{ S_DL_HIDDEN_FIELDS }}</div>
+
+	</form>
 
 	</div>
 </div>
-
-<fieldset class="submit-buttons">
-	<input type="submit" name="submit" value="{{ lang('SUBMIT') }}" class="button icon-button" />&nbsp;&nbsp;
-	<input type="submit" name="cancel" value="{{ lang('CANCEL') }}" class="button icon-button" />
-</fieldset>
-
-<div>{{ S_FORM_TOKEN }}{{ S_DL_HIDDEN_FIELDS }}</div>
-
-</form>
+{% endif %}
+{% endif %}
 
 {% for dl_thumbnails in loops.dl_thumbnails %}
 {% if dl_thumbnails.S_FIRST_ROW %}
-<br />
+<br class="clear">
 
 <div class="rules">
 	<div class="inner">
 
-	{{ lang('DL_THUMB_HINTS') }}
+	{{ DL_THUMB_HINTS }}
 
 	</div>
 </div>
@@ -59,11 +97,14 @@
 
 	<div class="dl-left dl-cell-block dl-intent-right dl-thumb-box-manage">
 		<div class="dl-thumb-cell">
-			<a href="{{ dl_thumbnails.DL_IMG_LINK }}" rel="prettyPhoto[pp_gal]" title="{{ dl_thumbnails.DL_IMG_TITLE }}"><img src="{{ dl_thumbnails.DL_IMG_PIC }}" alt="{{ dl_thumbnails.DL_IMG_TITLE }}" title="{{ dl_thumbnails.DL_IMG_TITLE }}" class="dl-thumb-box" /></a>
+			<a href="{{ dl_thumbnails.DL_IMG_LINK }}" rel="prettyPhoto[pp_gal]" title="{{ dl_thumbnails.DL_IMG_TITLE }}"><img src="{{ dl_thumbnails.DL_IMG_PIC }}" alt="{{ dl_thumbnails.DL_IMG_TITLE }}" title="{{ dl_thumbnails.DL_IMG_TITLE }}" class="dl-thumb-box"></a>
 		</div>
 		<div class="dl-thumb-cell-button">
 			<a href="{{ dl_thumbnails.U_DL_DELETE }}" title="{{ lang('DL_DELETE') }}" class="button button-icon-only"><i class="icon fa-times fa-fw" aria-hidden="true"></i><span>{{ lang('DL_DELETE') }}</span></a>
 			<a href="{{ dl_thumbnails.U_DL_EDIT }}" title="{{ lang('DL_EDIT_FILE') }}" class="button button-icon-only"><i class="icon fa-pencil fa-fw" aria-hidden="true"></i><span>{{ lang('DL_EDIT_FILE') }}</span></a>
+			&nbsp;|&nbsp;
+			<a href="{{ dl_thumbnails.U_DL_INDEX }}" title="{{ lang('DL_FILE_INDEX') }}" class="button button-icon-only{% if dl_thumbnails.DL_IMG_INDEX == 1 %} dl-green-button{% endif %}"><i class="icon fa-folder fa-fw{% if dl_thumbnails.DL_IMG_INDEX == 1 %} dl-white-icon{% else %} dl-grey-icon{% endif %}" aria-hidden="true"></i><span>{{ lang('DL_FILE_INDEX') }}</span></a>
+			<a href="{{ dl_thumbnails.U_DL_LISTS }}" title="{{ lang('DL_FILE_LISTS') }}" class="button button-icon-only{% if dl_thumbnails.DL_IMG_LISTS == 1 %} dl-green-button{% endif %}"><i class="icon fa-list fa-fw{% if dl_thumbnails.DL_IMG_LISTS == 1 %} dl-white-icon{% else %} dl-grey-icon{% endif %}" aria-hidden="true"></i><span>{{ lang('DL_FILE_LISTS') }}</span></a>
 		</div>
 	</div>
 
@@ -73,6 +114,21 @@
 {% endif %}
 {% endfor %}
 
-<br />
+<br>
 
+<script>
+var dl_pic_url = '{{ U_DL_PLUPLOAD_URL }}';
+var dl_param_1 = '{{ PLUPLOAD_PARAM_1 }}';
+var dl_param_2 = '{{ PLUPLOAD_PARAM_2 }}';
+var dl_param_3 = '{{ PLUPLOAD_PARAM_3 }}';
+var dl_param_4 = '{{ PLUPLOAD_PARAM_4 }}';
+var dl_max_files = {{ UPLOADPIC_MAX_FIELDS }};
+var dl_max_sizes = '{{ PLUPLOAD_MAX_SIZE }}b';
+</script>
+
+{% INCLUDEJS '@oxpus_dlext/js/jquery-ui.min.js' %}
+{% INCLUDEJS '@oxpus_dlext/js/plupload.full.min.js' %}
+{% INCLUDEJS '@oxpus_dlext/js/jquery.ui.plupload.js' %}
+{% INCLUDEJS '@oxpus_dlext/js/dl_plupload.js' %}
+{% INCLUDEJS '@oxpus_dlext/js/i18n/' ~ PLUPLOAD_USER_LANG ~ '.js' %}
 {% INCLUDE '@oxpus_dlext/helpers/dl_footer.html' %}

@@ -67,6 +67,7 @@ class constants
 
 	const DL_LATEST_TYPE_COMPLETE = 2;
 	const DL_LATEST_TYPE_DEFAULT = 1;
+	const DL_LATEST_TYPE_NEW = 3;
 	const DL_LATEST_TYPE_OFF = 0;
 
 	const DL_MOVE_DOWN = 15;
@@ -130,8 +131,6 @@ class constants
 	const DL_STATS_FILE_UPLOAD = 1;
 	const DL_STATS_POS_LIMIT = 10;
 
-	const DL_THUMBS_MAX_HEIGHT = 100;
-	const DL_THUMBS_MAX_WIDTH = 150;
 	const DL_THUMBS_DISPLAY_OFF = 0;
 	const DL_THUMBS_DISPLAY_ON = 1;
 	const DL_THUMBS_DISPLAY_CAT = 2;
@@ -206,6 +205,9 @@ class constants
 		$this->cache					= $cache;
 		$this->filesystem 				= $filesystem;
 		$this->extension_manager		= $extension_manager;
+
+		define('DL_THUMBS_MAX_HEIGHT', $config['dl_thumb_xsize_max']);
+		define('DL_THUMBS_MAX_WIDTH', $config['dl_thumb_ysize_max']);
 	}
 
 	public function init()

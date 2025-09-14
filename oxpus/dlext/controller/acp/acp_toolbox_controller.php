@@ -301,7 +301,7 @@ class acp_toolbox_controller implements acp_toolbox_interface
 				$check_file_size = sprintf('%u', @filesize($this->dlext_constants->get_value('files_dir') . '/downloads/' . $file_path . $real_file));
 				if ($check_file_size == 0 || $check_file_size == '')
 				{
-					$message .= str_replace('/', ' / ', $file_path) . ((!$real_file) ? '(' . $file_desc . ')' : $real_file) . '<br />';
+					$message .= str_replace('/', ' / ', $file_path) . ((!$real_file) ? '(' . $file_desc . ')' : $real_file) . '<br>';
 				}
 				else if ($check_file_size != $file_size)
 				{
@@ -314,7 +314,7 @@ class acp_toolbox_controller implements acp_toolbox_interface
 
 					if (!$result_new)
 					{
-						$message .= str_replace('/', ' / ', $file_path) . ((!$real_file) ? '(' . $file_desc . ')' : $real_file) . '<br />';
+						$message .= str_replace('/', ' / ', $file_path) . ((!$real_file) ? '(' . $file_desc . ')' : $real_file) . '<br>';
 					}
 				}
 			}
@@ -323,7 +323,7 @@ class acp_toolbox_controller implements acp_toolbox_interface
 
 			if ($message != '')
 			{
-				$check_message = $this->language->lang('DL_CHECK_FILESIZES_RESULT_ERROR') . '<br /><br />' . $message;
+				$check_message = $this->language->lang('DL_CHECK_FILESIZES_RESULT_ERROR') . '<br><br>' . $message;
 			}
 			else
 			{
@@ -384,13 +384,6 @@ class acp_toolbox_controller implements acp_toolbox_interface
 			}
 
 			$dl_thumbs = [];
-
-			$sql = 'SELECT thumbnail FROM ' . $this->dlext_table_downloads . "
-				WHERE thumbnail <> ''";
-			$result = $this->db->sql_query($sql);
-
-			while ($dl_thumbs[] = $this->db->sql_fetchfield('thumbnail'));
-			$this->db->sql_freeresult($result);
 
 			$sql = 'SELECT img_name FROM ' . 	$this->dlext_table_dl_images;
 			$result = $this->db->sql_query($sql);

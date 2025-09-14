@@ -1,4 +1,5 @@
 {% INCLUDECSS '@oxpus_dlext/dl_ext.css' %}
+{% if S_DL_PLUPLOAD %}{% INCLUDECSS 'plupload.css' %}{% endif %}
 {% if S_DL_POPUPIMAGE %}{% INCLUDECSS '@oxpus_dlext/3rdparty/prettyPhoto/css/prettyPhoto.css' %}{% endif %}
 <script>
 	var dl_help_path = '{{ U_DL_HELP_POPUP|e('js') }}';

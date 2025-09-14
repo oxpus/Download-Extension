@@ -23,13 +23,13 @@
 			<td>
 				<label>{{ approve_row.DL_MINI_ICON }}&nbsp;<a href="{{ approve_row.U_DL_DOWNLOAD }}">{{ approve_row.DL_DESCRIPTION }}</a></label> &bull; <span><a href="{{ approve_row.U_DL_CAT_VIEW }}" class="small">{{ approve_row.DL_CAT_NAME }}</a></span>
 			</td>
-			<td><a href="{{ approve_row.U_DL_USER_LINK }}">{{ approve_row.DL_COMMENT_USERNAME }}</a><br /><span class="small">{{ approve_row.DL_COMMENT_TEXT }}</span></td>
+			<td><a href="{{ approve_row.U_DL_USER_LINK }}">{{ approve_row.DL_COMMENT_USERNAME }}</a><br><span class="small">{{ approve_row.DL_COMMENT_TEXT }}</span></td>
 			<td class="center">
 				<a href="{{ approve_row.U_DL_EDIT }}" title="{{ lang('DL_EDIT_FILE') }}" class="button button-icon-only">
 					<i class="icon fa-pencil fa-fw" aria-hidden="true"></i><span class="sr-only">{{ lang('DL_EDIT_FILE') }}</span>
 				</a>
 			</td>
-			<td class="center"><input type="checkbox" class="permissions-checkbox" name="dlo_id[]" value="{{ approve_row.DL_COMMENT_ID }}" /></td>
+			<td class="center"><input type="checkbox" class="permissions-checkbox" name="dlo_id[]" value="{{ approve_row.DL_COMMENT_ID }}"></td>
 		</tr>
 		{% else %}
 		<tr class="bg1"><td class="center" colspan="3"><b>{{ lang('DL_NO_CAPPROVE') }}</b></td></tr>
@@ -58,8 +58,8 @@
 {% endif %}
 
 <fieldset class="submit-buttons">
-	<input type="submit" name="delete" value="{{ lang('DL_DELETE') }}" class="button2" />&nbsp;&nbsp;
-	<input type="submit" name="submit" value="{{ lang('DL_APPROVE') }}" class="button1" />
+	<input type="submit" name="delete" value="{{ lang('DL_DELETE') }}" class="button2">&nbsp;&nbsp;
+	<input type="submit" name="submit" value="{{ lang('DL_APPROVE') }}" class="button1">
 	{{ S_FORM_TOKEN }}
 	{{ S_DL_HIDDEN_FIELDS }}
 </fieldset>
@@ -74,6 +74,6 @@
 </div>
 {% endif %}
 
-<br />
+<br>
 
 {% INCLUDE '@oxpus_dlext/helpers/dl_mcp_footer.html' %}

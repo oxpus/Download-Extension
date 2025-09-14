@@ -8,28 +8,28 @@
 	<p>{{ MESSAGE_TEXT }}</p>
 
 	{% if S_DL_DELETE_FILES_CONFIRM %}
-	<br />
+	<br>
 
 	<dl>
 		<dt><label>{{ lang('DL_DELETE_FILE_CONFIRM') }}</label></dt>
-		<dd><input type="checkbox" class="permissions-checkbox" name="del_file" value="1" /></dd>
+		<dd><input type="checkbox" class="permissions-checkbox" name="del_file" value="1"></dd>
 	</dl>
 	{% endif %}
 
 	{% if S_DL_DELETE_TOPIC_CONFIRM %}
-	<br />
+	<br>
 
 	<dl>
 		<dt><label>{{ lang('DL_TOPIC_DROP_MODE') }}</label></dt>
 		<dd>
-			<input type="radio" class="checkbox" name="topic_drop_mode" id="tdmd" value="drop" checked /> <label for="tdmd">{{ lang('DL_TOPIC_DROP_MODE_DELETE') }}</label>
-			<input type="radio" class="checkbox" name="topic_drop_mode" id="tdmc" value="close" /> <label for="tdmc">{{ lang('DL_TOPIC_DROP_MODE_CLOSE') }}</label>
+			<input type="radio" class="checkbox" name="topic_drop_mode" id="tdmd" value="drop" checked> <label for="tdmd">{{ lang('DL_TOPIC_DROP_MODE_DELETE') }}</label>
+			<input type="radio" class="checkbox" name="topic_drop_mode" id="tdmc" value="close"> <label for="tdmc">{{ lang('DL_TOPIC_DROP_MODE_CLOSE') }}</label>
 		</dd>
 	</dl>
 	{% endif %}
 
 	{% if S_DL_SWITCH_CAT %}
-	<br />
+	<br>
 
 	<dl>
 		<dt>{{ lang('DL_DELETE_CAT_CONFIRM') }}</dt>
@@ -46,11 +46,11 @@
 	</dl>
 	{% endif %}
 
-	<br />
+	<br>
 
 	<div style="text-align: center;">
-		<input type="submit" name="confirm" value="{{ lang('YES') }}" class="button1" />&nbsp;
-		<input type="submit" name="cancel" value="{{ lang('NO') }}" class="button2" />
+		<input type="submit" name="confirm" value="{{ lang('YES') }}" class="button1">&nbsp;
+		<input type="submit" name="cancel" value="{{ lang('NO') }}" class="button2">
 		{{ S_HIDDEN_FIELDS }}
 	</div>
 

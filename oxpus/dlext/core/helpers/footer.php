@@ -297,6 +297,18 @@ class footer implements footer_interface
 						$this->template->assign_var('U_DL_LATEST_DOWNLOADS', $this->helper->route('oxpus_dlext_latest'));
 					}
 				}
+				else if ($this->config['dl_latest_type'] == $this->dlext_constants::DL_LATEST_TYPE_NEW)
+				{
+					$check_add_time		= time() - ($this->config['dl_new_time'] * $this->dlext_constants::DL_ONE_DAY);
+
+					$sql_latest_where = ['add_time' => ['AND', '>=', (int) $check_add_time]];
+					$dl_latest_files = $this->dlext_files->all_files(0, [], $sql_latest_where, 0, 0, ['id'], 1);
+
+					if (!empty($dl_latest_files))
+					{
+						$this->template->assign_var('U_DL_LATEST_DOWNLOADS', $this->helper->route('oxpus_dlext_latest'));
+					}
+				}
 				else
 				{
 					$this->template->assign_var('U_DL_LATEST_DOWNLOADS', $this->helper->route('oxpus_dlext_latest'));

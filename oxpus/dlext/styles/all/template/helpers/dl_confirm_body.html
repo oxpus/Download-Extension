@@ -1,6 +1,6 @@
 {% INCLUDE 'overall_header.html' %}
 
-<br />
+<br>
 
 <div class="panel">
 	<div class="inner">
@@ -14,15 +14,15 @@
 		<dl>
 			<dt>{{ MESSAGE_TEXT }}</dt>
 			<dd>
-				<input type="submit" name="confirm" value="{{ lang('YES') }}" class="button1" />
-				<input type="submit" name="cancel" value="{{ lang('NO') }}" class="button2" />
+				<input type="submit" name="confirm" value="{{ lang('YES') }}" class="button1">
+				<input type="submit" name="cancel" value="{{ lang('NO') }}" class="button2">
 			</dd>
 		</dl>
 
 		{% if S_DL_DELETE_FILES_CONFIRM %}
 		<dl>
 			<dt><label>{{ lang('DL_DELETE_FILE_CONFIRM') }}</label></dt>
-			<dd><input type="checkbox" class="permissions-checkbox" name="del_file" value="1" /></dd>
+			<dd><input type="checkbox" class="permissions-checkbox" name="del_file" value="1"></dd>
 		</dl>
 		{% endif %}
 
@@ -30,8 +30,8 @@
 		<dl>
 			<dt><label>{{ lang('DL_TOPIC_DROP_MODE') }}</label></dt>
 			<dd>
-				<input type="radio" class="checkbox" name="topic_drop_mode" id="tdmd" value="drop" checked /><label for="tdmd">{{ lang('DL_TOPIC_DROP_MODE_DELETE') }}</label>
-				<input type="radio" class="checkbox" name="topic_drop_mode" id="tdmc" value="close" /><label for="tdmc">{{ lang('DL_TOPIC_DROP_MODE_CLOSE') }}</label>
+				<input type="radio" class="checkbox" name="topic_drop_mode" id="tdmd" value="drop" checked><label for="tdmd">{{ lang('DL_TOPIC_DROP_MODE_DELETE') }}</label>
+				<input type="radio" class="checkbox" name="topic_drop_mode" id="tdmc" value="close"><label for="tdmc">{{ lang('DL_TOPIC_DROP_MODE_CLOSE') }}</label>
 			</dd>
 		</dl>
 		{% endif %}
@@ -46,6 +46,6 @@
 	</div>
 </div>
 
-<br />
+<br>
 
 {% INCLUDE 'overall_footer.html' %}

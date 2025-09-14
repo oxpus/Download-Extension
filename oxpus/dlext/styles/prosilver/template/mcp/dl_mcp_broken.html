@@ -1,6 +1,6 @@
 {% INCLUDE '@oxpus_dlext/helpers/dl_mcp_header.html' %}
 
-<h2>{{ lang('DL_MODCP_BROKEN') }}</h2>
+<h2>{% if S_DL_BROKEN_VIEW %}{{ lang('DL_MODCP_BROKEN_CLOSED') }}{% else %}{{ lang('DL_MODCP_BROKEN') }}{% endif %}</h2>
 
 {% if S_DL_MODCP_ACTION %}
 
@@ -14,7 +14,15 @@
 		<tr>
 			<th class="name">{{ lang('DL_DOWNLOAD') }}</th>
 			<th class="name">{{ lang('DL_CAT_NAME') }}</th>
+			<th class="name">{{ lang('DL_BUG_REPORT_TITLE_DETAILS') }}</th>
+			<th class="name">{{ lang('DL_BUG_REPORT_AUTHOR') }}</th>
+			<th class="name">{{ lang('DL_BUG_REPORT_DATE') }}</th>
+			{% if S_DL_BROKEN_VIEW %}
+			<th class="name">{{ lang('DL_BUG_REPORT_CAUTHOR') }}</th>
+			<th class="name">{{ lang('DL_BUG_REPORT_CTIME') }}</th>
+			{% else %}
 			<th class="center" colspan="2">{{ lang('OPTIONS') }}</th>
+			{% endif %}
 		</tr>
 		</thead>
 		<tbody>
@@ -22,6 +30,13 @@
 		<tr{% if broken_row.DL_BROKEN %} class="dl-reported"{% endif %}>
 			<td>{{ broken_row.DL_MINI_ICON }}&nbsp;<a href="{{ broken_row.U_DL_DOWNLOAD }}" class="topictitle">{{ broken_row.DL_DESCRIPTION }}</a></td>
 			<td><a href="{{ broken_row.U_DL_CAT_VIEW }}">{{ broken_row.DL_CAT_NAME }}</a></td>
+			<td>{{ broken_row.DL_REPORT_TEXT }}</td>
+			<td>{{ broken_row.DL_REPORT_USER }}</td>
+			<td><time datetime="{{ broken_row.DL_REPORT_TIME_RFC }}"></time>{{ broken_row.DL_REPORT_TIME }}</time></td>
+			{% if S_DL_BROKEN_VIEW %}
+			<td>{{ broken_row.DL_REPORT_CUSER }}</td>
+			<td><time datetime="{{ broken_row.DL_REPORT_CTIME_RFC }}"></time>{{ broken_row.DL_REPORT_CTIME }}</time></td>
+			{% else %}
 			<td class="center">
 				<a href="{{ broken_row.U_DL_EDIT }}" title="{{ lang('DL_EDIT_FILE') }}" class="button button-icon-only">
 					<i class="icon fa-pencil fa-fw" aria-hidden="true"></i><span class="sr-only">{{ lang('DL_EDIT_FILE') }}</span>
@@ -30,10 +45,11 @@
 					<i class="icon fa-times fa-fw" aria-hidden="true"></i><span class="sr-only">{{ lang('DL_DELETE') }}</span>
 				</a>
 			</td>
-			<td class="center"><input type="checkbox" class="permissions-checkbox" name="dlo_id[]" value="{{ broken_row.DL_FILE_ID }}" /></td>
+			<td class="center"><input type="checkbox" class="permissions-checkbox" name="dlo_id[]" value="{{ broken_row.DL_FILE_ID }}"></td>
+			{% endif %}
 		</tr>
 		{% else %}
-		<tr class="bg1"><td class="center" colspan="3"><b>{{ lang('DL_NO_LAST_TIME') }}</b></td></tr>
+		<tr class="bg1"><td class="center" colspan="7"><b>{{ lang('DL_NO_BUG_TRACKER') }}</b></td></tr>
 		{% endfor %}
 		</tbody>
 	</table>
@@ -41,11 +57,14 @@
 	</div>
 </div>
 
+{% if not S_DL_BROKEN_VIEW %}
+
 <ul class="linklist">
 	<li class="rightside">
 		<span><a href="#" class="dl-marklist" data-form="dl_modcp" data-field="dlo_id">{{ lang('MARK_ALL') }}</a> :: <a href="#" class="dl-unmarklist" data-form="dl_modcp" data-field="dlo_id">{{ lang('UNMARK_ALL') }}</a></span>
 	</li>
 </ul>
+{% endif %}
 
 {% if loops.pagination|length or DL_TOTAL_DL %}
 	<div class="pagination">
@@ -58,11 +77,15 @@
 	</div>
 {% endif %}
 
+{% if not S_DL_BROKEN_VIEW %}
+
 <fieldset class="submit-buttons">
-	<input type="submit" name="submit" value="{{ lang('DL_BROKEN_MOD') }}" class="button1" />
+	<input type="submit" name="submit" value="{{ lang('DL_BROKEN_MOD') }}" class="button1">
 	{{ S_FORM_TOKEN }}
 	{{ S_DL_HIDDEN_FIELDS }}
 </fieldset>
+
+{% endif %}
 
 </form>
 
@@ -74,6 +97,6 @@
 </div>
 {% endif %}
 
-<br />
+<br>
 
 {% INCLUDE '@oxpus_dlext/helpers/dl_mcp_footer.html' %}

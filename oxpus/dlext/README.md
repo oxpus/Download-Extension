@@ -1,7 +1,6 @@
-Hotschi's Downloads
-===================
+# Hotschi's Downloads
 
-# phpBB 3.2 / 3.3 Downloads Extension
+## phpBB 3.2 / 3.3 Downloads Extension
 
 Downloads Extension for phpBB 3.2 / 3.3 (https://www.phpbb.com/)
 Build from Hotschi's Download Extension 7.x for phpBB 3.1

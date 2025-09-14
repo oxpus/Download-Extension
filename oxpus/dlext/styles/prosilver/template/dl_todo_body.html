@@ -38,7 +38,7 @@
 {% endif %}
 
 {% if S_DL_TODO_ADD %}
-<br />
+<br>
 
 {% if S_DL_PREVIEW_TODO %}
 <div class="post bg1">
@@ -49,7 +49,7 @@
 	</div>
 	</div>
 </div>
-<br />
+<br>
 {% endif %}
 
 <form action="{{ S_DL_FORM_ACTION }}" method="post" name="postform">
@@ -75,7 +75,7 @@
 
 		<table width="100%">
 		<tr>
-			<td class="dl-width-15 dl-text-top"><br /><strong>{% if S_DL_ADD_TODO %}{{ lang('DL_MOD_TODO') }}{% else %}{{ S_DL_DOWNLOAD }} {{ DL_HACK_VERSION }}{% endif %}</strong></td>
+			<td class="dl-width-15 dl-text-top"><br><strong>{% if S_DL_ADD_TODO %}{{ lang('DL_MOD_TODO') }}{% else %}{{ S_DL_DOWNLOAD }} {{ DL_HACK_VERSION }}{% endif %}</strong></td>
 			<td class="dl-width-70 dl-text-top">
 				{% INCLUDE 'posting_buttons.html' %}
 				<textarea name="message" id="message" rows="10" cols="100" class="inputbox autowidth">{{ DL_TODO_TEXT }}</textarea>
@@ -83,9 +83,9 @@
 			<td class="dl-width-15 dl-text-top">
 				{% for smiley in loops.smiley %}
 				{% if smiley.S_FIRST_ROW %}
-				<br /><br /><div class="dl-width-100 smiley-box">
+				<br><br><div class="dl-width-100 smiley-box">
 				{% endif %}
-					<a href="#" class="dl-smiley-insert" data-smiley="{{ smiley.A_SMILEY_CODE }}"><img src="{{ smiley.SMILEY_IMG }}" width="{{ smiley.SMILEY_WIDTH }}" height="{{ smiley.SMILEY_HEIGHT }}" alt="{{ smiley.SMILEY_CODE }}" title="{{ smiley.SMILEY_DESC }}" /></a>
+					<a href="#" class="dl-smiley-insert" data-smiley="{{ smiley.A_SMILEY_CODE }}"><img src="{{ smiley.SMILEY_IMG }}" width="{{ smiley.SMILEY_WIDTH }}" height="{{ smiley.SMILEY_HEIGHT }}" alt="{{ smiley.SMILEY_CODE }}" title="{{ smiley.SMILEY_DESC }}"></a>
 				{% if smiley.S_LAST_ROW %}
 					<a href="#" class="dl-smiley-popup" data-url="{{ U_DL_MORE_SMILIES }}">{{ lang('MORE_SMILIES') }}</a>
 				</div>
@@ -101,9 +101,9 @@
 	</div>
 
 	<fieldset class="submit-buttons">
-		<input type="submit" name="submit" value="{{ lang('SUBMIT') }}" class="button icon-button" />
-		<input type="submit" name="preview" value="{{ lang('PREVIEW') }}" class="button icon-button" />
-		<input type="submit" name="cancel" value="{{ lang('CANCEL') }}" class="button icon-button" />
+		<input type="submit" name="submit" value="{{ lang('SUBMIT') }}" class="button icon-button">
+		<input type="submit" name="preview" value="{{ lang('PREVIEW') }}" class="button icon-button">
+		<input type="submit" name="cancel" value="{{ lang('CANCEL') }}" class="button icon-button">
 		{{ S_FORM_TOKEN }}
 		{{ S_DL_HIDDEN_FIELDS }}
 	</fieldset>
@@ -111,6 +111,6 @@
 </form>
 {% endif %}
 
-<br />
+<br>
 
 {% INCLUDE '@oxpus_dlext/helpers/dl_footer.html' %}

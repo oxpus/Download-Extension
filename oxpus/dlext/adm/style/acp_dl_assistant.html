@@ -6,7 +6,7 @@
 
 <p>{{ lang('DL_ASSISTANT_WELCOME') }}</p>
 
-<br />
+<br>
 <p>{{ lang('DL_ASSISTANT_EXPLAIN') }}</p>
 
 {% if S_DL_ERROR %}
@@ -24,7 +24,7 @@
 		<dt><label>{{ lang('DL_TRAFFIC_OFF') }}</label></dt>
 		<dd>
 			<a class="help nav" data-key="DL_TRAFFIC_OFF"><i class="icon fa-question-circle fa-fw"></i></a>&nbsp;
-			<input type="checkbox" class="radio switch" name="traffic_off" value="1"{% if DL_TRAFFIC_CHECKED %} checked{% endif %} id="traffic_off" /><label class="switch" for="traffic_off">&nbsp;</label>
+			<input type="checkbox" class="radio switch" name="traffic_off" value="1"{% if DL_TRAFFIC_CHECKED %} checked{% endif %} id="traffic_off"><label class="switch" for="traffic_off">&nbsp;</label>
 		</dd>
 	</dl>
 
@@ -36,7 +36,7 @@
 		<dt><label>{{ lang('DL_CAT_NAME') }}</label></dt>
 		<dd>
 			<a class="help nav" data-key="DL_CAT_NAME"><i class="icon fa-question-circle fa-fw"></i></a>&nbsp;
-			<input type="text" name="cat_name" size="40" maxlength="255" value="{{ DL_CAT_NAME }}" />
+			<input type="text" name="cat_name" size="40" maxlength="255" value="{{ DL_CAT_NAME }}">
 		</dd>
 	</dl>
 	<dl>
@@ -44,7 +44,7 @@
 		<dd>
 			<a class="help nav" data-key="DL_CAT_PARENT"><i class="icon fa-question-circle fa-fw"></i></a>&nbsp;
 			{% if DL_CAT_ROOT %}
-				<input type="hidden" name="parent" value="0" />&nbsp;&raquo;&nbsp;{{ lang('DL_CAT_INDEX') }}
+				<input type="hidden" name="parent" value="0">&nbsp;&raquo;&nbsp;{{ lang('DL_CAT_INDEX') }}
 			{% else %}
 			<select name="parent">
 				<option value="0">&nbsp;&raquo;&nbsp;{{ lang('DL_CAT_INDEX') }}</option>
@@ -61,9 +61,9 @@
 			<a class="help nav" data-key="DL_CAT_PATH"><i class="icon fa-question-circle fa-fw"></i></a>&nbsp;
 			{% if DL_CAT_PATH_NEW %}
 				{% if DL_CAT_PATH_ONE %}
-				<input type="hidden" name="path" value="{{ DL_PATH }}" />&nbsp;&raquo;&nbsp;{{ DL_PATH}}
+				<input type="hidden" name="path" value="{{ DL_PATH }}">&nbsp;&raquo;&nbsp;{{ DL_PATH}}
 				{% else %}
-				<input type="text" name="path" size="40" maxlength="255" value="{{ DL_PATH }}" />
+				<input type="text" name="path" size="40" maxlength="255" value="{{ DL_PATH }}">
 				{% endif %}
 			{% else %}
 			<select name="path">
@@ -91,28 +91,28 @@
 		<dt><label>{{ lang('DL_MUST_APPROVE') }}</label></dt>
 		<dd>
 			<a class="help nav" data-key="DL_MUST_APPROVE"><i class="icon fa-question-circle fa-fw"></i></a>&nbsp;
-			<input type="checkbox" class="radio switch" name="must_approve" value="1" {% if DL_MUST_APPROVE %}checked{% endif %} id="must_approve" /><label class="switch" for="must_approve">&nbsp;</label>
+			<input type="checkbox" class="radio switch" name="must_approve" value="1" {% if DL_MUST_APPROVE %}checked{% endif %} id="must_approve"><label class="switch" for="must_approve">&nbsp;</label>
 		</dd>
 	</dl>
 	<dl>
 		<dt><label>{{ lang('DL_STATISTICS') }}</label></dt>
 		<dd>
 			<a class="help nav" data-key="DL_STATISTICS"><i class="icon fa-question-circle fa-fw"></i></a>&nbsp;
-			<input type="checkbox" class="radio switch" name="statistics" value="1" {% if DL_STATS %}checked{% endif %} id="statistics"  /><label class="switch" for="statistics">&nbsp;</label>
+			<input type="checkbox" class="radio switch" name="statistics" value="1" {% if DL_STATS %}checked{% endif %} id="statistics" ><label class="switch" for="statistics">&nbsp;</label>
 		</dd>
 	</dl>
 	<dl>
 		<dt><label>{{ lang('DL_COMMENTS') }}</label></dt>
 		<dd>
 			<a class="help nav" data-key="DL_COMMENTS"><i class="icon fa-question-circle fa-fw"></i></a>&nbsp;
-			<input type="checkbox" class="radio switch" name="comments" value="1" {% if DL_COMMENTS %}checked{% endif %}  id="comments" /><label class="switch" for="comments">&nbsp;</label>
+			<input type="checkbox" class="radio switch" name="comments" value="1" {% if DL_COMMENTS %}checked{% endif %}  id="comments"><label class="switch" for="comments">&nbsp;</label>
 		</dd>
 	</dl>
 	<dl>
 		<dt><label>{{ lang('DL_APPROVE_COMMENTS') }}</label></dt>
 		<dd>
 			<a class="help nav" data-key="DL_APPROVE_COMMENTS"><i class="icon fa-question-circle fa-fw"></i></a>&nbsp;
-			<input type="checkbox" class="radio switch" name="approve_comments" value="1" {% if DL_APPROVE_COMMENTS %}checked{% endif %} id="approve_comments"  /><label class="switch" for="approve_comments">&nbsp;</label>
+			<input type="checkbox" class="radio switch" name="approve_comments" value="1" {% if DL_APPROVE_COMMENTS %}checked{% endif %} id="approve_comments"><label class="switch" for="approve_comments">&nbsp;</label>
 		</dd>
 	</dl>
 
@@ -186,7 +186,7 @@
 </fieldset>
 
 <fieldset class="quick">
-	<input type="submit" name="save_cat" value="{{ lang('SUBMIT') }}" class="button1" />
+	<input type="submit" name="save_cat" value="{{ lang('SUBMIT') }}" class="button1">
 	{{ S_DL_HIDDEN_FIELDS }}
 	{{ S_FORM_TOKEN }}
 </fieldset>

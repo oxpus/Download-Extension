@@ -37,6 +37,7 @@ class search
 
 	protected $dlext_table_downloads;
 	protected $dlext_table_dl_cat;
+	protected $dlext_dlext_images_table;
 
 	/**
 	 * Constructor
@@ -59,6 +60,7 @@ class search
 	 * @param \oxpus\dlext\core\helpers\constants	$dlext_constants
 	 * @param string								$dlext_table_downloads
 	 * @param string								$dlext_table_dl_cat
+	 * @param string								$dlext_dlext_images_table
 	 */
 	public function __construct(
 		\phpbb\db\driver\driver_interface $db,
@@ -78,7 +80,8 @@ class search
 		\oxpus\dlext\core\helpers\footer $dlext_footer,
 		\oxpus\dlext\core\helpers\constants $dlext_constants,
 		$dlext_table_downloads,
-		$dlext_table_dl_cat
+		$dlext_table_dl_cat,
+		$dlext_dlext_images_table
 	)
 	{
 		$this->db 						= $db;
@@ -93,6 +96,7 @@ class search
 
 		$this->dlext_table_downloads	= $dlext_table_downloads;
 		$this->dlext_table_dl_cat		= $dlext_table_dl_cat;
+		$this->dlext_dlext_images_table	= $dlext_dlext_images_table;
 
 		$this->dlext_auth				= $dlext_auth;
 		$this->dlext_extra				= $dlext_extra;
@@ -110,7 +114,7 @@ class search
 		$cat		= $this->request->variable('cat', 0);
 		$start		= $this->request->variable('start', 0);
 
-		$index 		= ($cat) ? $this->dlext_main->index($cat) : $this->dlext_main->index();
+		$index 		= ($cat) ? $this->dlext_main->full_index($cat) : $this->dlext_main->full_index();
 
 		$this->language->add_lang('search');
 
@@ -268,7 +272,7 @@ class search
 			}
 			else
 			{
-				$sql_array['SELECT'] = 'd.*, c.cat_name, u.username, u.user_colour';
+				$sql_array['SELECT'] = 'd.*, c.cat_name, u.username, u.user_colour, img.img_name as thumbnail';
 
 				$sql_array['FROM'][$this->dlext_table_downloads] = 'd';
 				$sql_array['FROM'][$this->dlext_table_dl_cat] = 'c';
@@ -276,6 +280,11 @@ class search
 				$sql_array['LEFT_JOIN'][] = [
 					'FROM'	=> [USERS_TABLE => 'u'],
 					'ON'	=> 'd.add_user = u.user_id'
+				];
+
+				$sql_array['LEFT_JOIN'][] = [
+					'FROM'	=> [$this->dlext_dlext_images_table => 'img'],
+					'ON'	=> 'img.dl_id = d.id AND img.img_lists = 1'
 				];
 
 				$sql_array['WHERE'] = 'd.cat = c.id AND ' . $this->db->sql_in_set('d.id', $search_ids);
@@ -474,7 +483,7 @@ class search
 				);
 				extract($this->dispatcher->trigger_event('oxpus.dlext.search_user_fetch_download_data', compact($vars)));
 
-				$sql_array['SELECT'] = 'd.*, c.cat_name, u.username, u.user_colour';
+				$sql_array['SELECT'] = 'd.*, c.cat_name, u.username, u.user_colour, img.img_name as thumbnail';
 
 				$sql_array['FROM'][$this->dlext_table_downloads] = 'd';
 				$sql_array['FROM'][$this->dlext_table_dl_cat] = 'c';
@@ -482,6 +491,11 @@ class search
 				$sql_array['LEFT_JOIN'][] = [
 					'FROM'	=> [USERS_TABLE => 'u'],
 					'ON'	=> 'd.add_user = u.user_id'
+				];
+
+				$sql_array['LEFT_JOIN'][] = [
+					'FROM'	=> [$this->dlext_dlext_images_table => 'img'],
+					'ON'	=> 'img.dl_id = d.id AND img.img_lists = 1'
 				];
 
 				$sql_array['WHERE'] = 'd.cat = c.id AND d.approve = 1 AND ' . $this->db->sql_in_set('d.id', $search_ids);
@@ -542,7 +556,7 @@ class search
 						'DL_ADD_USER'			=> $add_user,
 						'DL_ADD_TIME'			=> $add_time,
 						'DL_ADD_TIME_RFC'		=> $add_time_rfc,
-						'DL_THUMBNAIL_PIC'		=> $this->helper->route('oxpus_dlext_thumbnail', ['pic' => $file_id, 'img_type' => 'thumb', 'disp_art' => $this->dlext_constants::DL_TRUE]),
+						'DL_THUMBNAIL_PIC'		=> $this->helper->route('oxpus_dlext_thumbnail', ['pic' => $file_id, 'img_type' => 'thumb_list', 'disp_art' => $this->dlext_constants::DL_TRUE]),
 
 						'S_DISPLAY_THUMBNAIL'	=> $s_display_thumbnail,
 

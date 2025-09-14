@@ -122,7 +122,7 @@ class acp_permissions_controller implements acp_permissions_interface
 			{
 				for ($i = 0; $i < count($s_presel_cats); ++$i)
 				{
-					$cat_list .= $index[$s_presel_cats[$i]]['cat_name'] . '<br />';
+					$cat_list .= $index[$s_presel_cats[$i]]['cat_name'] . '<br>';
 					$s_hidden_fields += ['cat_select[' . $i . ']' => $s_presel_cats[$i]];
 				}
 			}
@@ -185,11 +185,11 @@ class acp_permissions_controller implements acp_permissions_interface
 
 			if ($cancel)
 			{
-				$message = $this->language->lang('DL_PERM_DROP_ABORTED') . '<br /><br />' . $this->language->lang('CLICK_RETURN_DOWNLOADADMIN', '<a href="' . $this->u_action . '">', '</a>') . adm_back_link($this->u_action);
+				$message = $this->language->lang('DL_PERM_DROP_ABORTED') . '<br><br>' . $this->language->lang('CLICK_RETURN_DOWNLOADADMIN', '<a href="' . $this->u_action . '">', '</a>') . adm_back_link($this->u_action);
 			}
 			else
 			{
-				$message = $this->language->lang('DL_PERM_DROP') . '<br /><br />' . $this->language->lang('CLICK_RETURN_DOWNLOADADMIN', '<a href="' . $this->u_action . '">', '</a>') . adm_back_link($this->u_action);
+				$message = $this->language->lang('DL_PERM_DROP') . '<br><br>' . $this->language->lang('CLICK_RETURN_DOWNLOADADMIN', '<a href="' . $this->u_action . '">', '</a>') . adm_back_link($this->u_action);
 			}
 
 			trigger_error($message);
@@ -228,7 +228,7 @@ class acp_permissions_controller implements acp_permissions_interface
 					'ON'	=> 'g.group_id = a.group_id'
 				];
 
-				$sql_array['WHERE'] = $this->db->sql_in_set('c.id', $s_presel_cats);
+				$sql_array['WHERE'] = $this->db->sql_in_set('c.id', $s_presel_cats) . ' AND g.group_name is not null';
 
 				$sql_array['ORDER_BY']	= 'c.sort, c.cat_name, g.group_type DESC, g.group_name';
 

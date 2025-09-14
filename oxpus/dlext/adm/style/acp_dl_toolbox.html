@@ -12,7 +12,7 @@
 
 {% INCLUDE 'acp_dl_limits.html' %}
 
-<br />
+<br>
 
 {% if S_DL_THUMBS %}
 {% INCLUDE '@oxpus_dlext/acp_dl_thumbs.html' %}
@@ -24,7 +24,7 @@
 	{% if S_DL_THUMBNAIL_CHECK %}&nbsp;<a href="{{ U_DL_DOWNLOADS_CHECK_THUMB }}" class="button1">{{ lang('DL_CHECK_THUMBNAILS') }}</a>{% endif %}
 </fieldset>
 <fieldset class="submit-buttons">
-	{% if S_DL_CREATE_DIR_COMMAND %}<br /><input type="submit" name="dircreate" class="button2" value="{{ lang('DL_MANAGE_CREATE_DIR') }}" />{{ lang('COLON') }}&nbsp;<input type="text" name="dir_name" size="30" maxlength="200" />{% endif %}
+	{% if S_DL_CREATE_DIR_COMMAND %}<br><input type="submit" name="dircreate" class="button2" value="{{ lang('DL_MANAGE_CREATE_DIR') }}">{{ lang('COLON') }}&nbsp;<input type="text" name="dir_name" size="30" maxlength="200">{% endif %}
 </fieldset>
 
 <fieldset>
@@ -49,12 +49,12 @@
 		<dt class="inner-list">{% if files_row.DL_FILE_EXIST %}<span class="dl-red">{{ lang('DL_UNKNOWN_FILE') }}</span>{% endif %}{{ files_row.DL_FILE_NAME }}</dt>
 		<dd>
 			{% if files_row.DL_FILE_EXIST %}
-			<input type="checkbox" class="permissions-checkbox" name="files[]" value="{{ files_row.DL_FILE_EXIST }}" />
+			<input type="checkbox" class="permissions-checkbox" name="files[]" value="{{ files_row.DL_FILE_EXIST }}">
 			{% else %}
-			<input type="checkbox" class="permissions-checkbox" value="" disabled="disabled" />
+			<input type="checkbox" class="permissions-checkbox" value="" disabled="disabled">
 			{% endif %}
 		</dd>
-		<dd><span>{{ files_row.DL_FILE_SIZE }}&nbsp;{{ files_row.DL_FILE_SIZE_RANGE }}{% if files_row.DL_FILE_NAME_REAL %}<br />{{ files_row.DL_FILE_NAME_REAL }}{% endif %}</span></dd>
+		<dd><span>{{ files_row.DL_FILE_SIZE }}&nbsp;{{ files_row.DL_FILE_SIZE_RANGE }}{% if files_row.DL_FILE_NAME_REAL %}<br>{{ files_row.DL_FILE_NAME_REAL }}{% endif %}</span></dd>
 	</dl>
 	{% endfor %}
 
@@ -70,7 +70,7 @@
 <div class="dl-right">
 	<span class="small"><a href="#" class="dl-marklist" data-form="create_dir" data-field="files">{{ lang('MARK_ALL') }}</a> :: <a href="#" class="dl-unmarklist" data-form="create_dir" data-field="files">{{ lang('UNMARK_ALL') }}</a></span>
 </div>
-<br class="clear" />
+<br class="clear">
 {% endif %}
 
 {% for overall_size in loops.overall_size %}
@@ -97,7 +97,7 @@
 				<option value="{{ folder_tree_select.DL_PATH }}">{{ folder_tree_select.DL_TARGET }}</option>
 				{% endfor %}
 			</select>
-			<input type="submit" class="button2" name="file_action" value="{{ lang('DL_GO') }}" />
+			<input type="submit" class="button2" name="file_action" value="{{ lang('DL_GO') }}">
 			{{ S_FORM_TOKEN }}
 		</dd>
 	</dl>

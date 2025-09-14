@@ -8,7 +8,7 @@
 	</label>
 </h2>
 
-<br />
+<br>
 
 <div class="panel">
 	<div class="inner">
@@ -25,15 +25,15 @@
 		</dl>
 		{% if DL_CAPTCHA_TEMPLATE %}
 				{% DEFINE CAPTCHA_TAB_INDEX = 8 %}
-				<br />{{ lang('DL_CONFIRM_EXPLAIN') }}<br /><br />
+				<br>{{ lang('DL_CONFIRM_EXPLAIN') }}<br><br>
 				{% INCLUDE ''~ DL_CAPTCHA_TEMPLATE ~'' %}
 		{% endif %}
 
 	</fieldset>
 
 	<fieldset class="submit-buttons">
-		<input type="submit" name="submit" value="{{ lang('SUBMIT') }}" class="button icon-button" />
-		<input type="submit" name="cancel" value="{{ lang('CANCEL') }}" class="button icon-button" />
+		<input type="submit" name="submit" value="{{ lang('SUBMIT') }}" class="button icon-button">
+		<input type="submit" name="cancel" value="{{ lang('CANCEL') }}" class="button icon-button">
 		{{ S_FORM_TOKEN }}
 		{{ S_DL_HIDDEN_FIELDS }}
 	</fieldset>
@@ -43,6 +43,6 @@
 	</div>
 </div>
 
-<br />
+<br>
 
 {% INCLUDE '@oxpus_dlext/helpers/dl_footer.html' %}

@@ -9,9 +9,9 @@
 		<dt><label><a href="{{ thumbnails.U_DL_REAL_FILE }}" class="genmed">{{ thumbnails.DL_REAL_FILE }}</a></label></dt>
 		<dd>
 			{% if thumbnails.DL_CHECKBOX %}
-			<input type="checkbox" class="permissions-checkbox" name="thumb[{{ thumbnails.DL_CHECKBOX }}]" value="{{ thumbnails.DL_REAL_FILE_CODE }}" />
+			<input type="checkbox" class="permissions-checkbox" name="thumb[{{ thumbnails.DL_CHECKBOX }}]" value="{{ thumbnails.DL_REAL_FILE_CODE }}">
 			{% else %}
-			<input type="checkbox" class="permissions-checkbox" name="thumb[{{ thumbnails.DL_CHECKBOX }}]" value="" disabled="disabled" />
+			<input type="checkbox" class="permissions-checkbox" name="thumb[{{ thumbnails.DL_CHECKBOX }}]" value="" disabled="disabled">
 			{% endif %}
 			&nbsp;<span>{{ thumbnails.DL_FILE_SIZE }}</span>
 		</dd>
@@ -23,7 +23,7 @@
 	</p>
 
 	<p class="submit-buttons">
-		<input type="submit" class="button1" name="del_real_thumbs" value="{{ lang('DELETE') }}" /><br /><br />
+		<input type="submit" class="button1" name="del_real_thumbs" value="{{ lang('DELETE') }}"><br><br>
 		{{ S_FORM_TOKEN }}
 	</p>
 

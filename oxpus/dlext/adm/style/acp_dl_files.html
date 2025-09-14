@@ -2,7 +2,7 @@
 
 <h1>{{ lang('DL_FILES_TITLE') }}</h1>
 
-<br />
+<br>
 
 {% INCLUDE 'acp_dl_limits.html' %}
 
@@ -10,8 +10,8 @@
 <form method="post" action="{{ S_DL_DOWNLOADS_ACTION }}" id="add_dl">
 
 	<p class="submit-buttons">
-		<input type="submit" class="button1" name="submit" value="{{ lang('ADD_NEW_DOWNLOAD') }}" />
-		<input type="hidden" name="action" value="add" />
+		<input type="submit" class="button1" name="submit" value="{{ lang('ADD_NEW_DOWNLOAD') }}">
+		<input type="hidden" name="action" value="add">
 		{{ S_DL_HIDDEN_FIELDS }}
 	</p>
 
@@ -36,7 +36,7 @@
 						{% endfor %}
 					</select>
 			</label>
-			<input type="submit" value="{{ lang('GO') }}" class="button1" id="dl-cat-select-button" />{% if S_DL_LIST_DOWNLOADS %}&nbsp;<span>{{ DL_COUNT }}</span>{% endif %}
+			<input type="submit" value="{{ lang('GO') }}" class="button1" id="dl-cat-select-button">{% if S_DL_LIST_DOWNLOADS %}&nbsp;<span>{{ DL_COUNT }}</span>{% endif %}
 		</dt>
 		{% if DL_CAT > 0 %}
 		<dd>{% if S_DL_LIST_DOWNLOADS %}<a href="{{ U_DL_DOWNLOAD_ORDER_ALL }}">{{ lang('DL_SORT_BY') }}</a>{% else %}<span>{{ lang('DL_EMPTY_CATEGORY') }}</span>{% endif %}</dd>
@@ -52,11 +52,11 @@
 <thead>
 <tr>
 	<th>#</th>
-	<th>{{ lang('DL_NAME') }}<br />{{ lang('DL_FILE_NAME') }}</th>
+	<th>{{ lang('DL_NAME') }}<br>{{ lang('DL_FILE_NAME') }}</th>
 	<th>{{ lang('DL_FILE_SIZE') }}</th>
-	<th>{{ lang('DL_IS_FREE') }}<br />{{ lang('DL_EXTERN') }}</th>
-	<th>{{ lang('DL_KLICKS') }}<br />{{ lang('DL_OVERALL_KLICKS') }}</th>
-	<th>{{ lang('DL_TRAFFIC') }}<br />{{ lang('DL_HACKS_LIST') }}</th>
+	<th>{{ lang('DL_IS_FREE') }}<br>{{ lang('DL_EXTERN') }}</th>
+	<th>{{ lang('DL_KLICKS') }}<br>{{ lang('DL_OVERALL_KLICKS') }}</th>
+	<th>{{ lang('DL_TRAFFIC') }}<br>{{ lang('DL_HACKS_LIST') }}</th>
 	<th>{{ lang('ACTION') }}</th>
 </tr>
 </thead>
@@ -66,15 +66,15 @@
 	<td><span>{{ downloads.DL_FILE_ID }}</span></td>
 	<td>
 		<span>{{ downloads.DL_TEST }} <strong>{{ downloads.DL_DESCRIPTION }}</strong>&nbsp;{{ downloads.DL_VERSION }}</span>
-		<br />
+		<br>
 		<span>{{ downloads.DL_FILE_NAME }}</span>
-		<br />
+		<br>
 		<span>{{ downloads.DL_UNAPPROVED }}</span>
 	</td>
 	<td><span>{{ downloads.DL_FILE_SIZE }}</span></td>
 	<td><span>{{ downloads.DL_FILE_FREE_EXTERN }}</span></td>
-	<td><span>{{ downloads.DL_FILE_KLICKS }}<br />{{ downloads.DL_OVERALL_KLICKS }}</span></td>
-	<td><span>{{ downloads.DL_FILE_TRAFFIC }}<br />{{ downloads.DL_HACKLIST }}</span></td>
+	<td><span>{{ downloads.DL_FILE_KLICKS }}<br>{{ downloads.DL_OVERALL_KLICKS }}</span></td>
+	<td><span>{{ downloads.DL_FILE_TRAFFIC }}<br>{{ downloads.DL_HACKLIST }}</span></td>
 	<td>
 		{% if downloads.S_FIRST_ROW && not downloads.S_LAST_ROW %}
 		{{ ICON_MOVE_UP_DISABLED }}
@@ -96,7 +96,7 @@
 {% endfor %}
 </tbody>
 </table>
-<br />
+<br>
 {% endif %}
 
 <fieldset class="submit-buttons">{{ DL_MOD_RELEASE }}</fieldset>
