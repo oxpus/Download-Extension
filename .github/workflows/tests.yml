@@ -18,7 +18,7 @@ jobs:
     name: Extension tests
     uses: phpbb-extensions/test-framework/.github/workflows/tests.yml@3.3.x
     with:
-      EXTNAME: oxpus/dlext   # Your extension vendor/package name (required)
+      EXTNAME: oxpus/Download-Extension   # Your extension vendor/package name (required)
       RUN_MYSQL_JOBS: 0
       RUN_PGSQL_JOBS: 0
       RUN_MSSQL_JOBS: 0
