@@ -336,12 +336,12 @@ jobs:
         strategy:
             matrix:
                 include:
-                    - php: '7.3'
+                    - php: '7.4'
                       db: "sqlite3"
                     - php: '7.3'
                       db: "mcr.microsoft.com/mssql/server:2017-latest"
                       db_alias: 'MSSQL 2017'
-                    - php: '7.3'
+                    - php: '7.4'
                       db: "mcr.microsoft.com/mssql/server:2019-latest"
                       db_alias: 'MSSQL 2019'
 
