@@ -49,8 +49,8 @@
 						{% INCLUDE '@oxpus_dlext/helpers/dl_foldericon.html' %}
 					</span>
 					{% if downloads.DL_CAT_ICON %}<span class="forum-image"><img src="{{ downloads.DL_CAT_ICON }}" alt="" title="{{ downloads.DL_CAT_NAME }}"></span>{% endif %}
-					<a href="{{ downloads.U_DL_CAT_VIEW }}" class="forumtitle">{{ downloads.DL_CAT_NAME }}</a><br>
-					{% if not S_DL_ENABLE_DESC_HIDE %}<div class="dl-index-desc"><br>{{ downloads.DL_CAT_DESC }}</div>{% endif %}
+					<a href="{{ downloads.U_DL_CAT_VIEW }}" class="forumtitle">{{ downloads.DL_CAT_NAME }}</a>
+					{% if not S_DL_ENABLE_DESC_HIDE %}<div class="dl-index-desc">{{ downloads.DL_CAT_DESC }}</div>{% endif %}
 					{% if downloads.pagination|length %}
 					<div class="pagination">
 						<ul>

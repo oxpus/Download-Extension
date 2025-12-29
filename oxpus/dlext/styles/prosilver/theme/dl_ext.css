@@ -242,6 +242,13 @@ div.dl_help_close:hover, .dl-close-footer:hover
 	padding-left: 8px;
 }
 
+.dl-folder-big
+{
+	font-size: 2.5em;
+	margin: 4px;
+	padding-left: 5px;
+}
+
 .dl-text-adnew
 {
 	padding: 1px 0px;
@@ -582,7 +589,7 @@ table.zebra-list tr.dl-reported:nth-child(even) td
 
 .dl-index-desc
 {
-	padding: 0.5em 0 0.5em 4em;
+	padding: 0 0 0.5em 4.8em;
 }
 
 .dl-padding-left-1

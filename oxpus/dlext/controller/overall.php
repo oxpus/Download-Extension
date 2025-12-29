@@ -154,20 +154,7 @@ class overall
 
 		foreach (array_keys($index) as $cat_id)
 		{
-			if (!empty($index[$cat_id]['total']))
-			{
-				$total_files += $index[$cat_id]['total'];
-			}
 			$access_cats[] = $cat_id;
-		}
-
-		if ($total_files)
-		{
-			$this->template->assign_var('S_DL_OVERALL_VIEW', $this->dlext_constants::DL_TRUE);
-		}
-		else
-		{
-			redirect($this->helper->route('oxpus_dlext_index'));
 		}
 
 		if ($mode == 'latest')
@@ -222,6 +209,8 @@ class overall
 			}
 
 			$fields = ['cat', 'id', 'description', 'desc_uid', 'desc_bitfield', 'desc_flags', 'hack_version', 'extern', 'file_size', 'klicks', 'overall_klicks', 'rating'];
+			$dl_files = $this->dlext_files->all_files(0, $sort_ary, $latest_where, 0, 0, $fields);
+			$total_files = count($dl_files);
 			$dl_files = $this->dlext_files->all_files(0, $sort_ary, $latest_where, 0, 0, $fields, $this->config['dl_links_per_page'], $start);
 		}
 		else
@@ -247,7 +236,18 @@ class overall
 
 			$fields = ['cat', 'id', 'description', 'desc_uid', 'desc_bitfield', 'desc_flags', 'hack_version', 'extern', 'file_size', 'klicks', 'overall_klicks', 'rating'];
 			$where_cats = ['{cat_perm}' => ['AND', 'IN', $this->db->sql_in_set('cat', $access_cats)]];
+			$dl_files = $this->dlext_files->all_files(0, $sort_ary, $where_cats, 0, 0, $fields);
+			$total_files = count($dl_files);
 			$dl_files = $this->dlext_files->all_files(0, $sort_ary, $where_cats, 0, 0, $fields, $this->config['dl_links_per_page'], $start);
+		}
+
+		if ($total_files)
+		{
+			$this->template->assign_var('S_DL_OVERALL_VIEW', $this->dlext_constants::DL_TRUE);
+		}
+		else
+		{
+			redirect($this->helper->route('oxpus_dlext_index'));
 		}
 
 		if ($total_files > $this->config['dl_links_per_page'])

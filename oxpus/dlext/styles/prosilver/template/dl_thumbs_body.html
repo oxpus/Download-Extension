@@ -46,6 +46,8 @@
 			<div id="img_edit" class="dl-left dl-intent-wide">
 				<img src="{{ DL_EDIT_IMG_PIC }}">
 			</div>
+
+			<br>
 			{% endif %}
 
 			<div class="dl-right dl-intent">
@@ -66,7 +68,7 @@
 		</fieldset>
 
 	<fieldset class="submit-buttons">
-		<input type="submit" name="submit" id="add_filess" value="{{ lang('SUBMIT') }}" class="button icon-button" onclick="upload=true; this.submit();">&nbsp;&nbsp;
+		<input type="submit" name="submit" id="add_files" value="{{ lang('SUBMIT') }}" class="button icon-button" onclick="upload=true; this.submit();">&nbsp;&nbsp;
 		<input type="submit" name="cancel" value="{{ lang('CANCEL') }}" class="button icon-button">
 	</fieldset>
 
@@ -103,8 +105,8 @@
 			<a href="{{ dl_thumbnails.U_DL_DELETE }}" title="{{ lang('DL_DELETE') }}" class="button button-icon-only"><i class="icon fa-times fa-fw" aria-hidden="true"></i><span>{{ lang('DL_DELETE') }}</span></a>
 			<a href="{{ dl_thumbnails.U_DL_EDIT }}" title="{{ lang('DL_EDIT_FILE') }}" class="button button-icon-only"><i class="icon fa-pencil fa-fw" aria-hidden="true"></i><span>{{ lang('DL_EDIT_FILE') }}</span></a>
 			&nbsp;|&nbsp;
-			<a href="{{ dl_thumbnails.U_DL_INDEX }}" title="{{ lang('DL_FILE_INDEX') }}" class="button button-icon-only{% if dl_thumbnails.DL_IMG_INDEX == 1 %} dl-green-button{% endif %}"><i class="icon fa-folder fa-fw{% if dl_thumbnails.DL_IMG_INDEX == 1 %} dl-white-icon{% else %} dl-grey-icon{% endif %}" aria-hidden="true"></i><span>{{ lang('DL_FILE_INDEX') }}</span></a>
-			<a href="{{ dl_thumbnails.U_DL_LISTS }}" title="{{ lang('DL_FILE_LISTS') }}" class="button button-icon-only{% if dl_thumbnails.DL_IMG_LISTS == 1 %} dl-green-button{% endif %}"><i class="icon fa-list fa-fw{% if dl_thumbnails.DL_IMG_LISTS == 1 %} dl-white-icon{% else %} dl-grey-icon{% endif %}" aria-hidden="true"></i><span>{{ lang('DL_FILE_LISTS') }}</span></a>
+			<a href="{{ dl_thumbnails.U_DL_INDEX }}" title="{{ lang('DL_FILE_INDEX') }}" class="button button-icon-only"><i class="icon fa-folder fa-fw{% if dl_thumbnails.DL_IMG_INDEX == 1 %} dl-green-icon{% else %} dl-grey-icon{% endif %}" aria-hidden="true"></i><span>{{ lang('DL_FILE_INDEX') }}</span></a>
+			<a href="{{ dl_thumbnails.U_DL_LISTS }}" title="{{ lang('DL_FILE_LISTS') }}" class="button button-icon-only"><i class="icon fa-list fa-fw{% if dl_thumbnails.DL_IMG_LISTS == 1 %} dl-green-icon{% else %} dl-grey-icon{% endif %}" aria-hidden="true"></i><span>{{ lang('DL_FILE_LISTS') }}</span></a>
 		</div>
 	</div>
 

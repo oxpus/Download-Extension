@@ -252,7 +252,9 @@ class thumbs
 
 				// Get a file name
 				$files_name	= $this->request->file('file');
-				$fileName	= uniqid($df_id . '_') . '.jpg';
+				$upload_name = $files_name['name'];
+				$file_ext	= trim(strrchr(strtolower($upload_name), '.'));
+				$fileName	= uniqid($df_id . '_') . $file_ext;
 				$thumb_name	= $this->dlext_constants->get_value('files_dir') . '/thumbs/' . $fileName;
 
 				// Chunking might be enabled

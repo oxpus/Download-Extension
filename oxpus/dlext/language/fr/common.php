@@ -547,6 +547,7 @@ $lang = array_merge($lang, [
 	'DL_NO_MORE_REMAIN_TRAFFIC'			=> 'Le trafic des téléchargements, pour les utilisateurs enregistrés, dans %s a été complètement utilisé ce mois-ci. Attendez le mois prochain ou contactez un administrateur.',
 	'DL_NO_PERMISSION'					=> 'Accès interdit !<br><br>Vous n’avez pas les permissions nécessaires !',
 	'DL_NO_PERMS_COPY'					=> 'Ne pas copier/conserver les permissions actuelles',
+	'DL_NO_SUBJECT'						=> 'Aucun nom de téléchargement spécifié',
 	'DL_NO_UNASSIGNED_FILES'			=> 'Pas de fichiers disponibles.<br>Veuillez télécharger le fichier souhaité sur le serveur, par exemple avec un client FTP, ou intégrer le fichier via le formulaire dans la zone de la carte.',
 	'DL_NO_UPLOAD_TRAFFIC'				=> 'Désolé, mais il n’y a plus de trafic de téléversement disponible. Veuillez contacter un administrateur si vous souhaitez téléverser ce fichier',
 	'DL_NOT_ACTIVE'						=> 'verrouillé',

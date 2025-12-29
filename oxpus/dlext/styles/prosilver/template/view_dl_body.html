@@ -428,6 +428,8 @@
 
 <div class="clearfix"></div>
 
+{% EVENT oxpus_dlext_dlbutton_before %}
+
 {% if S_DL_BUTTON %}
 <br>
 
@@ -479,6 +481,8 @@
 	</div>
 </div>
 {% endif %}
+
+{% EVENT oxpus_dlext_dlbutton_append %}
 
 {% for dl_similar_dl in loops.dl_similar_dl %}
 {% if dl_similar_dl.S_FIRST_ROW %}

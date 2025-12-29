@@ -545,6 +545,7 @@ $lang = array_merge($lang, [
 	'DL_NO_MORE_REMAIN_TRAFFIC'			=> 'El tráfico de descargas para los usuarios registrados en %s se ha utilizado completamente para este mes. Espere hasta el próximo mes o pregunte a un administrador.',
 	'DL_NO_PERMISSION'					=> '¡Accesso denegado!<br><br>¡No tiene permisos para hacer esto!',
 	'DL_NO_PERMS_COPY'					=> 'No copiar / mantener permisos actuales',
+	'DL_NO_SUBJECT'						=> 'No se ha especificado ningún nombre de descarga',
 	'DL_NO_UNASSIGNED_FILES'			=> 'No se encontraron archivos disponibles.<br>Por ejemplo, cargue el archivo deseado al servidor con un cliente FTP o incorpore el archivo a través del formulario en el panel.',
 	'DL_NO_UPLOAD_TRAFFIC'				=> 'Lo sentimos, pero no le queda tráfico de subida. Por favor, póngase en contacto con el administrador si desea subir este archivo.',
 	'DL_NOT_ACTIVE'						=> 'Bloqueado',

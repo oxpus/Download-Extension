@@ -108,7 +108,7 @@ class format implements format_interface
 
 	public function rating_img($rating_points, $rate = false, $df_id = 0, $total_ratings = 0)
 	{
-		if (!$this->config['dl_enable_rate'])
+		if (!$this->config['dl_enable_rate'] || empty($this->config['dl_rate_points']) || !$this->config['dl_rate_points'])
 		{
 			return $this->dlext_constants::DL_FALSE;
 		}
