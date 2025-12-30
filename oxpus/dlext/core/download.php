@@ -169,6 +169,8 @@ class download implements download_interface
 			trigger_error('FORM_INVALID');
 		}
 
+		$dl_data_array = [];
+
 		$new_version			= $this->dlext_constants::DL_FALSE;
 		$cat_id					= $dl_data_array['cat_id'] = 				$this->request->variable('cat_id', 0);
 		$action					= $dl_data_array['action'] = 				$this->request->variable('action', '');
@@ -222,7 +224,7 @@ class download implements download_interface
 		$warn_flags				= 0;
 		$todo_flags				= 0;
 
-		$dl_error = $this->dlext_constants::DL_FALSE;;
+		$dl_error = $this->dlext_constants::DL_FALSE;
 		$error = [];
 		$cp_data = [];
 
@@ -1044,10 +1046,6 @@ class download implements download_interface
 			$dl_free				= $this->request->variable('file_free', $dl_file['free']);
 			$approve				= $this->request->variable('approve', $dl_file['approve']);
 
-			$file_name_extern		= $this->request->variable('file_name_extern', '', $this->dlext_constants::DL_TRUE);
-			$file_version			= $this->request->variable('file_version', 0);
-			$file_option			= $this->request->variable('file_ver_opt', 0);
-
 			$tmp_ary				= $this->dlext_format->dl_size($file_traffic, 2, 'select');
 			$file_traffic_out		= $tmp_ary['size_out'];
 			$data_range_select		= $tmp_ary['range'];
@@ -1096,10 +1094,6 @@ class download implements download_interface
 			$mod_list				= $this->request->variable('mod_list', 0);
 			$dl_free				= $this->request->variable('file_free', 0);
 			$approve				= $this->request->variable('approve', 0);
-
-			$file_name_extern		= $this->request->variable('file_name_extern', '', $this->dlext_constants::DL_TRUE);
-			$file_version			= $this->request->variable('file_version', 0);
-			$file_option			= $this->request->variable('file_ver_opt', 0);
 
 			$tmp_ary				= $this->dlext_format->dl_size($file_traffic, 2, 'select');
 			$file_traffic_out		= $tmp_ary['size_out'];
