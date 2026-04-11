@@ -329,16 +329,21 @@ class download implements download_interface
 						$extension = str_replace('.', '', trim(strrchr(strtolower($dl_file['real_file']), '.')));
 						$new_real_file = $this->dlext_format->dl_hash($dl_file['real_file']) . '.' . $extension;
 
-						while ($this->filesystem->exists($this->dlext_constants->get_value('files_dir') . '/downloads/' . $file_path_old . $new_real_file))
+						while ($this->filesystem->exists($this->dlext_constants->get_value('files_dir') . '/downloads/' . $file_path_new . $new_real_file))
 						{
 							$new_real_file = $this->dlext_format->dl_hash($dl_file['real_file']) . '.' . $extension;
 						}
 
-						$this->filesystem->rename($this->dlext_constants->get_value('files_dir') . '/downloads/' . $file_path_old . $real_file_old, $this->dlext_constants->get_value('files_dir') . '/downloads/' . $file_path_old . $new_real_file);
+						$this->filesystem->rename($this->dlext_constants->get_value('files_dir') . '/downloads/' . $file_path_old . $real_file_old, $this->dlext_constants->get_value('files_dir') . '/downloads/' . $file_path_new . $new_real_file);
 					}
 					else
 					{
 						$new_real_file = $dl_file['real_file'];
+
+						if ($file_path_old != $file_path_new)
+						{
+							$this->filesystem->rename($this->dlext_constants->get_value('files_dir') . '/downloads/' . $file_path_old . $real_file_old, $this->dlext_constants->get_value('files_dir') . '/downloads/' . $file_path_new . $real_file_old);
+						}
 					}
 				}
 			}
@@ -994,10 +999,19 @@ class download implements download_interface
 			$index		= $this->dlext_main->full_index($cat_id);
 			$cat_auth	= $this->dlext_auth->dl_cat_auth($cat_id);
 
-			$s_hidden_fields += [
-				'cat_id'	=> $cat_id,
-				'df_id'		=> $df_id
-			];
+			if ($dl_file['extern'])
+			{
+				$s_hidden_fields += [
+					'cat_id'	=> $cat_id,
+					'df_id'		=> $df_id
+				];
+			}
+			else
+			{
+				$s_hidden_fields += [
+					'df_id'		=> $df_id
+				];
+			}
 
 			$mod_desc_uid			= $dl_file['mod_desc_uid'];
 			$mod_desc_flags			= $dl_file['mod_desc_flags'];
@@ -1140,7 +1154,7 @@ class download implements download_interface
 			}
 		}
 
-		if ($module == 'upload' || ($module == 'acp' && !$df_id))
+		if ($module == 'upload' || ($module == 'acp' && (!$df_id || !$dl_extern)))
 		{
 			$select_new_cat = $this->dlext_extra->dl_dropdown(0, 0, $cat_id, 'auth_up');
 
