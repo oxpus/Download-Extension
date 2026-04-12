@@ -74,32 +74,8 @@
 
 	<h3>{{ lang('DL_FOOTER') }}</h3>
 
-	{% if L_CAN_DOWNLOAD_AGAIN %}
-	<div class="small">{{ lang('CAN_DOWNLOAD_AGAIN') }}</div>
-	{% endif %}
-	{% if DL_ACCOUNT_TRAFFIC %}
-	<div class="small">{{ DL_ACCOUNT_TRAFFIC }}</div>
-	{% endif %}
-	{% if DL_REMAIN_TRAFFIC %}
-	<div class="small">{{ DL_REMAIN_TRAFFIC }}</div>
-	{% endif %}
-	{% if not DL_NO_OVERALL_TRAFFIC %}
-	<div class="small"><strong class="dl-text-underline">{{ DL_NO_OVERALL_TRAFFIC }}</strong></div>
-	{% endif %}
-	{% if DL_REMAIN_GUEST_TRAFFIC %}
-	<div class="small">{{ DL_REMAIN_GUEST_TRAFFIC }}</div>
-	{% endif %}
-	{% if DL_NO_OVERALL_GUEST_TRAFFIC %}
-	<div class="small"><strong class="dl-text-underline">{{ DL_NO_OVERALL_GUEST_TRAFFIC }}</strong></div>
-	{% endif %}
 	{% if DL_TOTAL_STAT %}
 	<div class="small">{{ DL_TOTAL_STAT }}</div>
-	{% endif %}
-    {% if DL_EXT_STATS_OVERALL_TRAFFIC %}
-	<div class="small">{{ lang('DL_OVERALL_TRAFFIC') }}{{ lang('COLON') }} {{ DL_EXT_STATS_OVERALL_TRAFFIC }}</div>
-	{% endif %}
-    {% if DL_EXT_STATS_OVERALL_GUESTS_TRAFFIC %}
-	<div class="small">{{ lang('DL_OVERALL_GUEST_TRAFFIC') }}{{ lang('COLON') }} {{ DL_EXT_STATS_OVERALL_GUESTS_TRAFFIC }}</div>
 	{% endif %}
     {% if DL_EXT_STATS_MONTH_CLICKS %}
 	<div class="small">{{ lang('DL_KLICKS') }}{{ lang('COLON') }} {{ DL_EXT_STATS_MONTH_CLICKS }}</div>

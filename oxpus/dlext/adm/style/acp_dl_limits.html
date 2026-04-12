@@ -43,19 +43,6 @@
 <fieldset>
 	<legend>{{ lang('DL_CUR_LIMITS') }}</legend>
 
-	{% if S_DL_TRAFFIC_OFF %}
-	<div class="dl-red">{{ lang('DL_TRAFFIC_OFF_EXPLAIN') }}</div>
-	<br>
-	{% endif %}
-	<dl>
-		<dt><label>{{ lang('DL_ACP_MAIN_STATS_REMAIN_TRAFFIC') }}</label><br><span>{{ lang('DL_LIMIT_TRAFFIC_USER_REMAIN_EXPLAIN') }}</span></dt>
-		<dd>{{ DL_LIMIT_TRAFFIC_USER_REMAIN }}</dd>
-	</dl>
-	<dl>
-		<dt><label>{{ lang('DL_ACP_MAIN_STATS_REMAIN_GTRAFFIC') }}</label><br><span>{{ lang('DL_LIMIT_TRAFFIC_GUESTS_REMAIN_EXPLAIN') }}</span></dt>
-		<dd>{{ DL_LIMIT_TRAFFIC_GUESTS_REMAIN }}</dd>
-	</dl>
-	<hr>
 	<dl>
 		<dt><label>{{ lang('DL_LIMIT_TOTAL_REMAIN') }}</label><br><span>{{ lang('DL_LIMIT_TOTAL_REMAIN_EXPLAIN') }}</span></dt>
 		<dd>{{ DL_LIMIT_TOTAL_REMAIN }}</dd>

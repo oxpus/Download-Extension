@@ -44,7 +44,6 @@ class mcp_manage
 	protected $dlext_table_dl_favorites;
 	protected $dlext_table_dl_fields_data;
 	protected $dlext_table_dl_images;
-	protected $dlext_table_dl_notraf;
 	protected $dlext_table_dl_ratings;
 	protected $dlext_table_dl_reports;
 	protected $dlext_table_dl_stats;
@@ -82,7 +81,6 @@ class mcp_manage
 	 * @param string								$dlext_table_dl_favorites
 	 * @param string								$dlext_table_dl_fields_data
 	 * @param string								$dlext_table_dl_images
-	 * @param string								$dlext_table_dl_notraf
 	 * @param string								$dlext_table_dl_ratings
 	 * @param string								$dlext_table_dl_reports
 	 * @param string								$dlext_table_dl_stats
@@ -118,7 +116,6 @@ class mcp_manage
 		$dlext_table_dl_favorites,
 		$dlext_table_dl_fields_data,
 		$dlext_table_dl_images,
-		$dlext_table_dl_notraf,
 		$dlext_table_dl_ratings,
 		$dlext_table_dl_reports,
 		$dlext_table_dl_stats,
@@ -146,7 +143,6 @@ class mcp_manage
 		$this->dlext_table_dl_favorites		= $dlext_table_dl_favorites;
 		$this->dlext_table_dl_fields_data	= $dlext_table_dl_fields_data;
 		$this->dlext_table_dl_images		= $dlext_table_dl_images;
-		$this->dlext_table_dl_notraf		= $dlext_table_dl_notraf;
 		$this->dlext_table_dl_ratings		= $dlext_table_dl_ratings;
 		$this->dlext_table_dl_reports		= $dlext_table_dl_reports;
 		$this->dlext_table_dl_stats			= $dlext_table_dl_stats;
@@ -488,10 +484,6 @@ class mcp_manage
 						$sql = 'DELETE FROM ' . $this->dlext_table_dl_comments . '
 							WHERE ' . $this->db->sql_in_set('id', $dlo_id) . '
 								AND cat_id = ' . (int) $cat_id;
-						$this->db->sql_query($sql);
-
-						$sql = 'DELETE FROM ' . $this->dlext_table_dl_notraf . '
-							WHERE ' . $this->db->sql_in_set('dl_id', $dlo_id);
 						$this->db->sql_query($sql);
 
 						$sql = 'DELETE FROM ' . $this->dlext_table_dl_versions . '

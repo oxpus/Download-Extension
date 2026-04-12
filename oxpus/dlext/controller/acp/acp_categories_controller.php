@@ -38,7 +38,6 @@ class acp_categories_controller implements acp_categories_interface
 	protected $dlext_constants;
 
 	protected $dlext_table_dl_auth;
-	protected $dlext_table_dl_cat_traf;
 	protected $dlext_table_dl_comments;
 	protected $dlext_table_dl_stats;
 	protected $dlext_table_dl_versions;
@@ -63,7 +62,6 @@ class acp_categories_controller implements acp_categories_interface
 	 * @param \oxpus\dlext\core\nav					$dlext_nav
 	 * @param \oxpus\dlext\core\helpers\constants	$dlext_constants
 	 * @param string								$dlext_table_dl_auth
-	 * @param string								$dlext_table_dl_cat_traf
 	 * @param string								$dlext_table_dl_comments
 	 * @param string								$dlext_table_dl_stats
 	 * @param string								$dlext_table_dl_versions
@@ -86,7 +84,6 @@ class acp_categories_controller implements acp_categories_interface
 		\oxpus\dlext\core\nav $dlext_nav,
 		\oxpus\dlext\core\helpers\constants $dlext_constants,
 		$dlext_table_dl_auth,
-		$dlext_table_dl_cat_traf,
 		$dlext_table_dl_comments,
 		$dlext_table_dl_stats,
 		$dlext_table_dl_versions,
@@ -106,7 +103,6 @@ class acp_categories_controller implements acp_categories_interface
 		$this->filesystem				= $filesystem;
 
 		$this->dlext_table_dl_auth		= $dlext_table_dl_auth;
-		$this->dlext_table_dl_cat_traf	= $dlext_table_dl_cat_traf;
 		$this->dlext_table_dl_comments	= $dlext_table_dl_comments;
 		$this->dlext_table_dl_stats		= $dlext_table_dl_stats;
 		$this->dlext_table_dl_versions	= $dlext_table_dl_versions;
@@ -315,10 +311,6 @@ class acp_categories_controller implements acp_categories_interface
 
 				$sql = 'DELETE FROM ' . $this->dlext_table_dl_cat . '
 					WHERE id = ' . (int) $cat_id;
-				$this->db->sql_query($sql);
-
-				$sql = 'DELETE FROM ' . $this->dlext_table_dl_cat_traf . '
-					WHERE cat_id = ' . (int) $cat_id;
 				$this->db->sql_query($sql);
 
 				$sql = 'DELETE FROM ' . $this->dlext_table_dl_comments . '

@@ -257,7 +257,7 @@ class load
 				}
 			}
 
-				// Prepare correct file for download
+			// Prepare correct file for download
 			if ($file_version)
 			{
 				$sql = 'SELECT ver_file_name, ver_real_file, ver_file_size, ver_active FROM ' . $this->dlext_table_dl_versions . '

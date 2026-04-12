@@ -266,18 +266,9 @@ class acp_assistant_controller implements acp_assistant_interface
 
 				$cat_id = $this->db->sql_last_inserted_id();
 
-				$this->config->set('dl_traffic_off', $traffic_off);
-
 				$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_CAT_ADD', false, [$cat_name]);
 
 				$message = $this->language->lang('DL_ASSISTANT_ENDS');
-
-				$sql = 'INSERT INTO ' . $this->dlext_table_dl_cat_traf . ' ' . $this->db->sql_build_array('INSERT', [
-					'cat_id'			=> $cat_id,
-					'cat_traffic_use'	=> 0,
-				]);
-
-				$this->db->sql_query($sql);
 
 				// Purge the categories cache
 				$this->cache->destroy('_dlext_cats');
@@ -358,7 +349,7 @@ class acp_assistant_controller implements acp_assistant_interface
 				'DL_CAT_NAME'				=> $cat_name,
 				'DL_DESCRIPTION'			=> $description,
 				'DL_PATH'					=> $cat_path,
-				'DL_TRAFFIC_CHECKED'		=> $traffic_off,
+				'DL_TRAFFIC_CHECKED'		=> 0,
 				'DL_APPROVE_COMMENTS'		=> $approve_comments,
 
 				'S_DL_CATEGORY_ACTION'		=> $this->u_action,
