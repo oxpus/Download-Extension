@@ -35,7 +35,6 @@ $lang = array_merge($lang, [
 	'HELP_DL_APPROVE'			=> 'This will approve the download immediately after submitting this form.<br>Otherwise this download will be hidden for users until approved by a download moderator or administrator.',
 	'HELP_DL_APPROVE_COMMENTS'	=> 'If you disable this option, each new comment must be approved by a download moderator or administrator before other users can see it.',
 
-	'HELP_DL_BUG_TRACKER_CAT'	=> 'Enables the Bug Tracker for downloads in this category.<br>Bugs can be posted and viewed by every registered user for the related downloads and from other categories, if the bug tracker is enabled there, too.<br>Only Administrators and Board Moderators can manage the bugs.<br>For each change on the bug message the author will get an email message and the team member working on that bug will be informed, too.',
 
 	'HELP_DL_CAT_DESCRIPTION'	=> 'A short description of this category.<br>BBCodes are only available if the description will be displayed on index at all times.<br>This description will be shown on the downloads index and on subcategories.',
 	'HELP_DL_CAT_EDIT_LINK'		=> 'Determines who can see and use the link to edit a download from the category view, provided that this option is not deactivated.<br>´Own downloads´ is only active if the option to edit own downloads is activated, too.',

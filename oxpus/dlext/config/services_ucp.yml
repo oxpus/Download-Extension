@@ -37,6 +37,5 @@ services:
             - '@dbal.conn'
             - '@oxpus.dlext.core.physical'
             - '@oxpus.dlext.helpers.constants'
-            - '%oxpus.dlext.tables.dl_tracker%'
             - '%oxpus.dlext.tables.dl_comments%'
             - '%oxpus.dlext.tables.dl_stats%'

@@ -35,7 +35,6 @@ $lang = array_merge($lang, [
 	'HELP_DL_APPROVE'			=> 'Esta aprobará la descarga inmediatamente si envia este formulario.<br>De lo contrario, esta descarga estará oculta para los usuarios.',
 	'HELP_DL_APPROVE_COMMENTS'	=> 'Si deshabilita esta opción, cada nuevo comentario deberá ser aprobado por un moderador de descargas o un administrador antes de otro usuario pueda verlos.',
 
-	'HELP_DL_BUG_TRACKER_CAT'	=> 'Habilita el Seguimiento de Errores para las descargas en esta categoría.<br>Los errores pueden ser publicados y vistos por todos los usuarios registrados para las descargas relacionadas y de otras categorías, si el seguimiento de errores está habilitado allí también.<br>Sólo los administradores y los moderadores del foro puede gestionar los errores.<br>Por cada cambio en los mensajes de errores el autor recibirá un mensaje de correo electrónico, y el miembro del equipo, que obrará en pro del fallo, será informado también.',
 
 	'HELP_DL_CAT_DESCRIPTION'	=> 'Una breve descripción para esta categoría.<br>Los BBCodes solo están disponibles aquí si la información en el índice siempre debe mostrarse.<br>Esta descripción se muestra en el índice de descargas y en subcategorías.',
 	'HELP_DL_CAT_EDIT_LINK'		=> 'Ciertamente quienes pueden ver y utilizar el enlace para editar una descarga desde la vista de categoría, a condición de que esta opción no esté desactivado.<br>"Descargas Propias" sólo está activa si la opción de editar descargas propias está activada también.',

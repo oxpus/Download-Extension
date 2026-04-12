@@ -38,7 +38,6 @@ $lang = array_merge($lang, [
 	'HELP_DL_APPROVE'			=> 'Diese Einstellung gibt den Download sofort frei, wenn Du dieses Formular absendest.<br>Andernfalls wird dieser Downloads vor den Benutzern versteckt, bis ein Administrator oder Download Moderator den Download freigibt.',
 	'HELP_DL_APPROVE_COMMENTS'	=> 'Wenn Du diese Option deaktivierst, müssen neue Kommentare zunächst von einem Download Moderator oder Administrator freigegeben werden, bevor diese angezeigt werden.',
 
-	'HELP_DL_BUG_TRACKER_CAT'	=> 'Aktiviert den Bug Tracker für die Downloads dieser Kategorie.<br>Bugs kann dann jeder registrierte Benutzer für den betreffenden Download einstellen, ansehen und auch für alle anderen Kategorien betrachten, sofern auch dort der Bug Tracker aktiviert wurde.<br>Bearbeiten können die Einträge nur Administratoren und Board Moderatoren.<br>Über Änderungen an Bugmeldungen werden dem Urheber betreffende Nachrichten per E-Mail verschickt, ebenso wie an das Teammitglied, welchem ein Bug zugewiesen wurde.',
 
 	'HELP_DL_CAT_DESCRIPTION'	=> 'Eine kurze Beschreibung für diese Kategorie.<br>BBCodes sind hier nur verfügbar, wenn die Beschreibungen auf dem Index immer angezeigt werden sollen.<br>Diese Beschreibung wird auf dem Downloads Index und in den Subkategorien angezeigt.',
 	'HELP_DL_CAT_EDIT_LINK'		=> 'Bestimmt, wer den Link zum Bearbeiten eines Downloads in der Kategorieansicht sehen darf, sofern diese Option nicht deaktiviert wird.<br>´Eigene Downloads´ ist hierbei nur aktiv, wenn die Option für das Bearbeiten der eigenen Downloads ebenfalls aktiv ist.',

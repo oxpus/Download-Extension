@@ -239,23 +239,6 @@ class listener implements EventSubscriberInterface
 				}
 			}
 
-			if (!empty($this->user->data['is_registered']) && $this->user->data['is_registered'])
-			{
-				$sql = 'SELECT d.id FROM ' . $this->dlext_table_downloads . ' d, ' . $this->dlext_table_dl_cat . ' c
-					WHERE c.id = d.cat
-						AND c.bug_tracker = 1';
-				$result = $this->db->sql_query_limit($sql, 1);
-				$total_bl = $this->db->sql_affectedrows($result);
-				$this->db->sql_freeresult($result);
-
-				if ($total_bl)
-				{
-					$this->template->assign_vars([
-						'U_DL_BUG_TRACKER'	=> $this->helper->route('oxpus_dlext_tracker_view'),
-					]);
-				}
-			}
-
 			$this->_dl_reset_values();
 			$this->_dl_navi_links();
 			$this->_dl_purge_hotlinks();
@@ -306,21 +289,6 @@ class listener implements EventSubscriberInterface
 		{
 			$event['location'] = $this->language->lang('DL_PAGE_DL_HACKSLIST');
 			$event['location_url'] = $this->helper->route('oxpus_dlext_hacklist');
-		}
-		else if (strpos($event['row']['session_page'], 'dlext/tracker/edit') !== false)
-		{
-			$event['location'] = $this->language->lang('DL_PAGE_BUG_TRACKER');
-			$event['location_url'] = $this->helper->route('oxpus_dlext_tracker_edit');
-		}
-		else if (strpos($event['row']['session_page'], 'dlext/tracker/view') !== false)
-		{
-			$event['location'] = $this->language->lang('DL_PAGE_BUG_TRACKER');
-			$event['location_url'] = $this->helper->route('oxpus_dlext_tracker_view');
-		}
-		else if (strpos($event['row']['session_page'], 'dlext/tracker/main') !== false)
-		{
-			$event['location'] = $this->language->lang('DL_PAGE_BUG_TRACKER');
-			$event['location_url'] = $this->helper->route('oxpus_dlext_tracker_main');
 		}
 		else if (strpos($event['row']['session_page'], 'dlext') !== false)
 		{
@@ -744,21 +712,6 @@ class listener implements EventSubscriberInterface
 			'S_DL_NAV_HACKS_OFTzA'		=> ($this->config['dl_nav_link_hacks'] == 'OFTzA') ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE,
 			'S_DL_NAV_HACKS_OFTlB'		=> ($this->config['dl_nav_link_hacks'] == 'OFTlB') ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE,
 			'S_DL_NAV_HACKS_OFTlA'		=> ($this->config['dl_nav_link_hacks'] == 'OFTlA') ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE,
-
-			'S_DL_NAV_TRACKER_NHQLB'	=> ($this->config['dl_nav_link_tracker'] == 'NHQLB') ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE,
-			'S_DL_NAV_TRACKER_NHQLA'	=> ($this->config['dl_nav_link_tracker'] == 'NHQLA') ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE,
-			'S_DL_NAV_TRACKER_OHNP' 	=> ($this->config['dl_nav_link_tracker'] == 'OHNP') ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE,
-			'S_DL_NAV_TRACKER_OHNA' 	=> ($this->config['dl_nav_link_tracker'] == 'OHNA') ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE,
-			'S_DL_NAV_TRACKER_NHUPP'	=> ($this->config['dl_nav_link_tracker'] == 'NHUPP') ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE,
-			'S_DL_NAV_TRACKER_NHUP' 	=> ($this->config['dl_nav_link_tracker'] == 'NHUP') ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE,
-			'S_DL_NAV_TRACKER_NHPLB'	=> ($this->config['dl_nav_link_tracker'] == 'NHPLB') ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE,
-			'S_DL_NAV_TRACKER_NHPLA'	=> ($this->config['dl_nav_link_tracker'] == 'NHPLA') ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE,
-			'S_DL_NAV_TRACKER_NHUA'		=> ($this->config['dl_nav_link_tracker'] == 'NHUA') ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE,
-			'S_DL_NAV_TRACKER_NHUPA'	=> ($this->config['dl_nav_link_tracker'] == 'NHUPA') ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE,
-			'S_DL_NAV_TRACKER_OFTzB'	=> ($this->config['dl_nav_link_tracker'] == 'OFTzB') ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE,
-			'S_DL_NAV_TRACKER_OFTzA'	=> ($this->config['dl_nav_link_tracker'] == 'OFTzA') ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE,
-			'S_DL_NAV_TRACKER_OFTlB'	=> ($this->config['dl_nav_link_tracker'] == 'OFTlB') ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE,
-			'S_DL_NAV_TRACKER_OFTlA'	=> ($this->config['dl_nav_link_tracker'] == 'OFTlA') ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE,
 		]);
 	}
 

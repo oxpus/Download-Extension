@@ -146,7 +146,6 @@ class acp_cat_edit_controller implements acp_cat_edit_interface
 		$allow_mod_desc		= $this->request->variable('allow_mod_desc', 0);
 		$allow_thumbs		= $this->request->variable('allow_thumbs', 0);
 		$approve_comments	= $this->request->variable('approve_comments', 0);
-		$bug_tracker		= $this->request->variable('bug_tracker', 0);
 		$cat_traffic		= $this->request->variable('cat_traffic', 0);
 		$must_approve		= $this->request->variable('must_approve', 0);
 		$set_add			= $this->request->variable('set_add', 0);
@@ -232,7 +231,6 @@ class acp_cat_edit_controller implements acp_cat_edit_interface
 				$cat_remain_traffic	= $index[$cat_id]['cat_traffic'] - $index[$cat_id]['cat_traffic_use'];
 				$allow_thumbs		= $index[$cat_id]['allow_thumbs'];
 				$approve_comments	= $index[$cat_id]['approve_comments'];
-				$bug_tracker		= $index[$cat_id]['bug_tracker'];
 				$topic_more_details	= $index[$cat_id]['topic_more_details'];
 				$topic_forum		= $index[$cat_id]['dl_topic_forum'];
 				$topic_text			= $index[$cat_id]['dl_topic_text'];
@@ -327,7 +325,6 @@ class acp_cat_edit_controller implements acp_cat_edit_interface
 			$comments			= ($comments) ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE;
 			$allow_thumbs		= ($allow_thumbs) ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE;
 			$approve_comments	= ($approve_comments) ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE;
-			$bug_tracker		= ($bug_tracker) ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE;
 			$show_file_hash		= ($show_file_hash) ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE;
 
 			$this->language->add_lang('posting');
@@ -425,7 +422,6 @@ class acp_cat_edit_controller implements acp_cat_edit_interface
 				'DL_ALLOW_THUMBS'			=> $allow_thumbs,
 				'DL_DISPLAY_THUMBS'			=> $display_thumbs,
 				'DL_APPROVE_COMMENTS'		=> $approve_comments,
-				'DL_BUG_TRACKER'			=> $bug_tracker,
 				'DL_TOPIC_TEXT'				=> $topic_text,
 				'DL_CAT_ICON'				=> $cat_icon,
 				'DL_TOPIC_USER'				=> $this->dlext_extra->dl_user_switch($topic_user),
@@ -682,7 +678,6 @@ class acp_cat_edit_controller implements acp_cat_edit_interface
 				'allow_mod_desc'		=> $allow_mod_desc,
 				'allow_thumbs'			=> $allow_thumbs,
 				'approve_comments'		=> $approve_comments,
-				'bug_tracker'			=> $bug_tracker,
 				'cat_icon'				=> $cat_icon,
 				'cat_name'				=> $cat_name,
 				'cat_traffic'			=> $cat_traffic,
