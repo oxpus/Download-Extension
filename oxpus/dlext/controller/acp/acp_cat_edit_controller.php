@@ -38,7 +38,6 @@ class acp_cat_edit_controller implements acp_cat_edit_interface
 	protected $dlext_constants;
 
 	protected $dlext_table_dl_auth;
-	protected $dlext_table_dl_cat_traf;
 	protected $dlext_table_dl_versions;
 	protected $dlext_table_downloads;
 	protected $dlext_table_dl_cat;
@@ -63,7 +62,6 @@ class acp_cat_edit_controller implements acp_cat_edit_interface
 	 * @param \oxpus\dlext\core\physical			$dlext_physical
 	 * @param \oxpus\dlext\core\helpers\constants	$dlext_constants
 	 * @param string								$dlext_table_dl_auth
-	 * @param string								$dlext_table_dl_cat_traf
 	 * @param string								$dlext_table_dl_versions
 	 * @param string								$dlext_table_downloads
 	 * @param string								$dlext_table_dl_cat
@@ -86,7 +84,6 @@ class acp_cat_edit_controller implements acp_cat_edit_interface
 		\oxpus\dlext\core\physical $dlext_physical,
 		\oxpus\dlext\core\helpers\constants $dlext_constants,
 		$dlext_table_dl_auth,
-		$dlext_table_dl_cat_traf,
 		$dlext_table_dl_versions,
 		$dlext_table_downloads,
 		$dlext_table_dl_cat
@@ -105,7 +102,6 @@ class acp_cat_edit_controller implements acp_cat_edit_interface
 		$this->filesystem				= $filesystem;
 
 		$this->dlext_table_dl_auth		= $dlext_table_dl_auth;
-		$this->dlext_table_dl_cat_traf	= $dlext_table_dl_cat_traf;
 		$this->dlext_table_dl_versions	= $dlext_table_dl_versions;
 		$this->dlext_table_downloads	= $dlext_table_downloads;
 		$this->dlext_table_dl_cat		= $dlext_table_dl_cat;
@@ -126,7 +122,6 @@ class acp_cat_edit_controller implements acp_cat_edit_interface
 	{
 		$action				= $this->request->variable('action', '');
 		$cancel				= $this->request->variable('cancel', '');
-		$cat_traffic_range	= $this->request->variable('cat_traffic_range', '');
 		$edit				= $this->request->variable('edit', '');
 		$idx_type			= $this->request->variable('type', 'c');
 		$path				= $this->request->variable('path', '');
@@ -146,7 +141,6 @@ class acp_cat_edit_controller implements acp_cat_edit_interface
 		$allow_mod_desc		= $this->request->variable('allow_mod_desc', 0);
 		$allow_thumbs		= $this->request->variable('allow_thumbs', 0);
 		$approve_comments	= $this->request->variable('approve_comments', 0);
-		$cat_traffic		= $this->request->variable('cat_traffic', 0);
 		$must_approve		= $this->request->variable('must_approve', 0);
 		$set_add			= $this->request->variable('set_add', 0);
 		$show_file_hash		= $this->request->variable('show_file_hash', 0);
@@ -227,8 +221,6 @@ class acp_cat_edit_controller implements acp_cat_edit_interface
 				$comments			= $index[$cat_id]['comments'];
 				$must_approve		= $index[$cat_id]['must_approve'];
 				$allow_mod_desc		= $index[$cat_id]['allow_mod_desc'];
-				$cat_traffic		= $index[$cat_id]['cat_traffic'];
-				$cat_remain_traffic	= $index[$cat_id]['cat_traffic'] - $index[$cat_id]['cat_traffic_use'];
 				$allow_thumbs		= $index[$cat_id]['allow_thumbs'];
 				$approve_comments	= $index[$cat_id]['approve_comments'];
 				$topic_more_details	= $index[$cat_id]['topic_more_details'];
@@ -260,22 +252,8 @@ class acp_cat_edit_controller implements acp_cat_edit_interface
 			}
 			else
 			{
-				if ($cat_traffic_range == $this->dlext_constants::DL_FILE_RANGE_KBYTE)
-				{
-					$cat_traffic = $cat_traffic * $this->dlext_constants::DL_FILE_SIZE_KBYTE;
-				}
-				else if ($cat_traffic_range == $this->dlext_constants::DL_FILE_RANGE_MBYTE)
-				{
-					$cat_traffic = $cat_traffic * $this->dlext_constants::DL_FILE_SIZE_MBYTE;
-				}
-				else if ($cat_traffic_range == $this->dlext_constants::DL_FILE_RANGE_GBYTE)
-				{
-					$cat_traffic = $cat_traffic * $this->dlext_constants::DL_FILE_SIZE_GBYTE;
-				}
-
 				$cat_path			= ($path) ? $path : '/';
 				$cat_parent_id		= $cat_parent;
-				$cat_remain_traffic	= $cat_traffic;
 
 				$s_cat_parent		= $this->dlext_extra->dl_dropdown(0, 0, $cat_parent_id, 'auth_view', $this->dlext_constants::DL_NONE);
 				$perms_copy_from	= $this->dlext_extra->dl_dropdown(0, 0, 0, 'auth_view', $cat_id);
@@ -293,30 +271,6 @@ class acp_cat_edit_controller implements acp_cat_edit_interface
 						'DL_NAME'		=> $t_path_select[$key]['entry'],
 					]);
 				}
-			}
-
-			$cat_traffic_out	= 0;
-			$cat_remain_traffic	= ($cat_remain_traffic < 0) ? 0 : $cat_remain_traffic;
-			$cat_remain_traffic	= $this->dlext_format->dl_size($cat_remain_traffic);
-
-			if ($cat_traffic > $this->dlext_constants::DL_FILE_SIZE_GBYTE)
-			{
-				$cat_traffic_out	= number_format($cat_traffic / $this->dlext_constants::DL_FILE_SIZE_GBYTE, 2);
-				$data_range_select	=  $this->dlext_constants::DL_FILE_RANGE_GBYTE;
-			}
-			else if ($cat_traffic > $this->dlext_constants::DL_FILE_SIZE_MBYTE)
-			{
-				$cat_traffic_out	= number_format($cat_traffic / $this->dlext_constants::DL_FILE_SIZE_MBYTE, 2);
-				$data_range_select	= $this->dlext_constants::DL_FILE_RANGE_MBYTE;
-			}
-			else if ($cat_traffic > $this->dlext_constants::DL_FILE_SIZE_KBYTE)
-			{
-				$cat_traffic_out	= number_format($cat_traffic / $this->dlext_constants::DL_FILE_SIZE_KBYTE, 2);
-				$data_range_select	= $this->dlext_constants::DL_FILE_RANGE_KBYTE;
-			}
-			else
-			{
-				$data_range_select	= $this->dlext_constants::DL_FILE_RANGE_KBYTE;
 			}
 
 			$approve			= ($must_approve) ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE;
@@ -404,9 +358,6 @@ class acp_cat_edit_controller implements acp_cat_edit_interface
 			$this->u_action	.= '&amp;parent=' . $cat_parent . '&amp;type=' . $idx_type;
 
 			$this->template->assign_vars([
-				'L_DL_CAT_TRAFFIC'			=> (isset($index[$cat_id]['cat_traffic']) && $index[$cat_id]['cat_traffic'] && isset($cat_remain_traffic) && $cat_remain_traffic) ? $this->language->lang('DL_CAT_TRAFFIC', $cat_remain_traffic) : $this->language->lang('DL_CAT_TRAFFIC_OFF'),
-				'L_DL_CAT_TRAFFIC_HELP'		=> htmlentities((isset($index[$cat_id]['cat_traffic']) && $index[$cat_id]['cat_traffic'] && isset($cat_remain_traffic) && $cat_remain_traffic) ? $this->language->lang('DL_CAT_TRAFFIC', $cat_remain_traffic) : $this->language->lang('DL_CAT_TRAFFIC_OFF'), ENT_QUOTES),
-
 				'DL_ERROR_MSG'				=> $error_msg,
 				'DL_CATEGORY'				=> (isset($index[$cat_id]['cat_name'])) ? $this->language->lang('DL_PERMISSIONS', $index[$cat_id]['cat_name']) : '',
 				'DL_MUST_APPROVE'			=> $approve,
@@ -418,7 +369,6 @@ class acp_cat_edit_controller implements acp_cat_edit_interface
 				'DL_DESCRIPTION'			=> $description,
 				'DL_RULES'					=> $rules,
 				'DL_CAT_PARENT'				=> $s_cat_parent,
-				'DL_CAT_TRAFFIC'			=> $cat_traffic_out,
 				'DL_ALLOW_THUMBS'			=> $allow_thumbs,
 				'DL_DISPLAY_THUMBS'			=> $display_thumbs,
 				'DL_APPROVE_COMMENTS'		=> $approve_comments,
@@ -436,7 +386,6 @@ class acp_cat_edit_controller implements acp_cat_edit_interface
 				'S_DL_CAT_MODE'				=> $action,
 				'S_DL_TOPIC_TYPE'			=> $topic_type,
 				'S_DL_TOPIC_FORUM'			=> $topic_forum,
-				'S_DL_CAT_TRAFFIC_RANGE'	=> $data_range_select,
 				'S_DL_CATEGORY_ACTION'		=> $this->u_action,
 				'S_DL_DIFF_TOPIC_USER'		=> $diff_topic_user,
 				'S_DL_SET_USER'				=> $set_add,
@@ -448,19 +397,6 @@ class acp_cat_edit_controller implements acp_cat_edit_interface
 
 				'U_DL_BACK'					=> $this->u_action,
 			]);
-
-			$s_cat_traffic_range = [];
-			$s_cat_traffic_range[] = ['value' => $this->dlext_constants::DL_FILE_RANGE_KBYTE, 'name' => $this->language->lang('DL_KB')];
-			$s_cat_traffic_range[] = ['value' => $this->dlext_constants::DL_FILE_RANGE_MBYTE, 'name' => $this->language->lang('DL_MB')];
-			$s_cat_traffic_range[] = ['value' => $this->dlext_constants::DL_FILE_RANGE_GBYTE, 'name' => $this->language->lang('DL_GB')];
-
-			for ($i = 0; $i < count($s_cat_traffic_range); ++$i)
-			{
-				$this->template->assign_block_vars('dl_cat_traffic_range', [
-					'DL_VALUE'	=> $s_cat_traffic_range[$i]['value'],
-					'DL_NAME'	=> $s_cat_traffic_range[$i]['name'],
-				]);
-			}
 
 			$s_topic_type = [];
 			$s_topic_type[] = ['value' => POST_NORMAL, 		'name' => $this->language->lang('POST_NORMAL')];
@@ -566,18 +502,6 @@ class acp_cat_edit_controller implements acp_cat_edit_interface
 				generate_text_for_storage($rules, $rules_uid, $rules_bitfield, $rules_flags, $allow_bbcode, $this->dlext_constants::DL_TRUE, $allow_smilies);
 			}
 
-			if ($cat_traffic_range == $this->dlext_constants::DL_FILE_RANGE_KBYTE)
-			{
-				$cat_traffic = $cat_traffic * $this->dlext_constants::DL_FILE_SIZE_KBYTE;
-			}
-			else if ($cat_traffic_range == $this->dlext_constants::DL_FILE_RANGE_MBYTE)
-			{
-				$cat_traffic = $cat_traffic * $this->dlext_constants::DL_FILE_SIZE_MBYTE;
-			}
-			else if ($cat_traffic_range == $this->dlext_constants::DL_FILE_RANGE_GBYTE)
-			{
-				$cat_traffic = $cat_traffic * $this->dlext_constants::DL_FILE_SIZE_GBYTE;
-			}
 
 			// Move files, if the path was changed
 			if ($cat_id && $index[$cat_id]['path'] != $path)
@@ -680,7 +604,6 @@ class acp_cat_edit_controller implements acp_cat_edit_interface
 				'approve_comments'		=> $approve_comments,
 				'cat_icon'				=> $cat_icon,
 				'cat_name'				=> $cat_name,
-				'cat_traffic'			=> $cat_traffic,
 				'comments'				=> $comments,
 				'desc_bitfield'			=> $desc_bitfield,
 				'desc_flags'			=> $desc_flags,
@@ -731,13 +654,6 @@ class acp_cat_edit_controller implements acp_cat_edit_interface
 			if (!$cat_id)
 			{
 				$cat_id = $this->db->sql_last_inserted_id();
-
-				$sql = 'INSERT INTO ' . $this->dlext_table_dl_cat_traf . ' ' . $this->db->sql_build_array('INSERT', [
-					'cat_id'			=> $cat_id,
-					'cat_traffic_use'	=> 0,
-				]);
-
-				$this->db->sql_query($sql);
 			}
 
 			// Copy permissions if needed

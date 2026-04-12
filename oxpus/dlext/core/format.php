@@ -166,86 +166,45 @@ class format implements format_interface
 			case 'dl_physical_quota':
 				$quote = 'dl_x_quota';
 				break;
-			case 'dl_overall_traffic':
-				$quote = 'dl_x_over';
-				break;
-			case 'dl_overall_guest_traffic':
-				$quote = 'dl_x_g_over';
-				break;
-			case 'dl_newtopic_traffic':
-				$quote = 'dl_x_new';
-				break;
-			case 'dl_reply_traffic':
-				$quote = 'dl_x_reply';
-				break;
 			case 'dl_method_quota':
 				$quote = 'dl_m_quote';
 				break;
 			case 'dl_extern_size':
 				$quote = 'dl_e_quote';
 				break;
-			case 'dl_file_traffic':
-				$quote = 'dl_t_quote';
-				break;
 		}
 
 		$file_size_range = $this->request->variable($quote, '', $this->dlext_constants::DL_TRUE);
 
-		return $this->get_traffic_save_value($config_value, $file_size_range);
+		return $this->_get_size_save_value($config_value, $file_size_range);
 	}
 
-	public function get_traffic_save_value($traffic_amount, $traffic_range)
+	private function _get_size_save_value($size_amount, $size_range)
 	{
-		if ($traffic_amount == 0)
+		if ($size_amount == 0)
 		{
 			return 0;
 		}
 
-		switch ($traffic_range)
+		switch ($size_range)
 		{
 			case $this->dlext_constants::DL_FILE_RANGE_BYTE:
-				$traffic_bytes = $traffic_amount;
+				$size_bytes = $size_amount;
 				break;
 			case $this->dlext_constants::DL_FILE_RANGE_KBYTE:
-				$traffic_bytes = floor($traffic_amount * $this->dlext_constants::DL_FILE_SIZE_KBYTE);
+				$size_bytes = floor($size_amount * $this->dlext_constants::DL_FILE_SIZE_KBYTE);
 				break;
 			case $this->dlext_constants::DL_FILE_RANGE_MBYTE:
-				$traffic_bytes = floor($traffic_amount * $this->dlext_constants::DL_FILE_SIZE_MBYTE);
+				$size_bytes = floor($size_amount * $this->dlext_constants::DL_FILE_SIZE_MBYTE);
 				break;
 			case $this->dlext_constants::DL_FILE_RANGE_GBYTE:
-				$traffic_bytes = floor($traffic_amount * $this->dlext_constants::DL_FILE_SIZE_GBYTE);
+				$size_bytes = floor($size_amount * $this->dlext_constants::DL_FILE_SIZE_GBYTE);
 				break;
 			default:
-				$traffic_bytes = 0;
+				$size_bytes = 0;
 		}
 
-		return $traffic_bytes;
-	}
-
-	public function get_traffic_display_value($traffic_amount)
-	{
-		if ($traffic_amount >= $this->dlext_constants::DL_FILE_SIZE_GBYTE)
-		{
-			$traffic_value = number_format($traffic_amount / $this->dlext_constants::DL_FILE_SIZE_GBYTE, 2);
-			$traffic_range = $this->dlext_constants::DL_FILE_RANGE_GBYTE;
-		}
-		if ($traffic_amount < $this->dlext_constants::DL_FILE_SIZE_GBYTE)
-		{
-			$traffic_value = number_format($traffic_amount / $this->dlext_constants::DL_FILE_SIZE_MBYTE, 2);
-			$traffic_range = $this->dlext_constants::DL_FILE_RANGE_MBYTE;
-		}
-		if ($traffic_amount < $this->dlext_constants::DL_FILE_SIZE_MBYTE)
-		{
-			$traffic_value = number_format($traffic_amount / $this->dlext_constants::DL_FILE_SIZE_KBYTE, 2);
-			$traffic_range = $this->dlext_constants::DL_FILE_RANGE_KBYTE;
-		}
-		if ($traffic_amount < $this->dlext_constants::DL_FILE_SIZE_KBYTE)
-		{
-			$traffic_value = number_format($traffic_amount, 2);
-			$traffic_range = $this->dlext_constants::DL_FILE_RANGE_BYTE;
-		}
-
-		return ['traffic_value' => $traffic_value, 'traffic_range' => $traffic_range];
+		return $size_bytes;
 	}
 
 	public function dl_hash($value, $type = '', $method = '')

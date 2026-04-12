@@ -195,11 +195,6 @@ class acp_overview_controller implements acp_overview_interface
 		$total_vfsize = $this->dlext_format->dl_size($total_vfsize, 2);
 		$total_vtsize = $this->dlext_format->dl_size($total_vtsize, 2);
 
-		$remain_traffic = $this->dlext_format->dl_size($this->config['dl_overall_traffic'] - (int) $this->config['dl_remain_traffic'], 2);
-		$overall_traffic = $this->dlext_format->dl_size($this->config['dl_overall_traffic']);
-		$overall_guest_traffic = $this->dlext_format->dl_size($this->config['dl_overall_guest_traffic']);
-		$remain_guest_traffic = $this->dlext_format->dl_size($this->config['dl_overall_guest_traffic'] - (int) $this->config['dl_remain_guest_traffic'], 2);
-
 		$sql = "SELECT
 					SUM(CASE WHEN todo <> '' THEN 1 ELSE 0 END) as todos,
 					SUM(broken) as broken,
@@ -254,10 +249,6 @@ class acp_overview_controller implements acp_overview_interface
 			'DL_TOTAL_SIZE'				=> $total_size,
 			'DL_TOTAL_LIMIT'			=> $physical_limit,
 			'DL_TOTAL_EXTERN'			=> $total_extern,
-			'DL_REMAIN_TRAFFIC'			=> ($remain_traffic <= 0) ? $this->language->lang('DL_ACP_MAIN_STATS_REMAIN_OFF') : $remain_traffic,
-			'DL_OVERALL_TRAFFIC'		=> $overall_traffic,
-			'DL_REMAIN_GTRAFFIC'		=> ($remain_guest_traffic <= 0) ? $this->language->lang('DL_ACP_MAIN_STATS_REMAIN_OFF') : $remain_guest_traffic,
-			'DL_OVERALL_GTRAFFIC'		=> $overall_guest_traffic,
 			'DL_MCLICKS'				=> $mclick,
 			'DL_OCLICKS'				=> $oclick,
 			'DL_CATEGORIES'				=> $cats,
@@ -269,7 +260,6 @@ class acp_overview_controller implements acp_overview_interface
 			'DL_TOTAL_VERSION_FSIZE'	=> $total_vfsize,
 			'DL_TOTAL_VERSION_TSIZE'	=> $total_vtsize,
 
-			'S_DL_TRAFFIC_OFF'			=> $this->config['dl_traffic_off'],
 			'S_DL_ACP_MAIN_TYPE'		=> substr($this->config['version'], 0, 3),
 
 			'U_DL_ASSISTANT'			=> $u_dl_assistant,

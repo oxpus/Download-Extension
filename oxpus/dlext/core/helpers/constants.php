@@ -56,12 +56,6 @@ class constants
 	const DL_FOOTER_STATS_GUESTS_USER = 1;
 	const DL_FOOTER_STATS_OFF = 0;
 
-	const DL_HACKLIST_EXTRA = 2;
-	const DL_HACKLIST_NO = 0;
-	const DL_HACKLIST_SORT_AUTHOR = 2;
-	const DL_HACKLIST_SORT_DESC = 1;
-	const DL_HACKLIST_YES = 1;
-
 	const DL_HOTLINK_DETAILS = 1;
 	const DL_HOTLINK_MESSAGE = 0;
 
@@ -135,11 +129,6 @@ class constants
 	const DL_TOPIC_USER_OTHER = 1;
 	const DL_TOPIC_USER_SELF = 0;
 
-	const DL_TRAFFICS_OFF_ALL = 0;
-	const DL_TRAFFICS_OFF_GROUPS = 3;
-	const DL_TRAFFICS_ON_ALL = 1;
-	const DL_TRAFFICS_ON_GROUPS = 2;
-
 	const DL_VERSION_ADD_OLD = 1;
 	const DL_VERSION_DELETE = 3;
 	const DL_VERSION_REPLACE = 2;
@@ -165,10 +154,6 @@ class constants
 	protected $cache;
 	protected $filesystem;
 	protected $extension_manager;
-
-	/* extension owned objects */
-	protected $dl_overall_traffics;
-	protected $dl_users_traffics;
 
 	/**
 	 * Constructor
@@ -276,102 +261,6 @@ class constants
 
 	public function get_value($value, $raw = false)
 	{
-		if (in_array($value, ['overall_traffics', 'users_traffics']))
-		{
-			// get group ids for the current user
-			$user_group_ids = [];
-
-			if (($this->config['dl_traffics_overall'] > self::DL_TRAFFICS_ON_ALL || $this->config['dl_traffics_users'] > self::DL_TRAFFICS_ON_ALL) && empty($user_group_ids))
-			{
-				$sql = 'SELECT g.group_id FROM ' . GROUPS_TABLE . ' g, ' . USER_GROUP_TABLE . ' ug
-					WHERE g.group_id = ug.group_id
-						AND ug.user_id = ' . (int) $this->user->data['user_id'] . '
-						AND ug.user_pending <> 1';
-				$result = $this->db->sql_query($sql);
-
-				while ($row = $this->db->sql_fetchrow($result))
-				{
-					$user_group_ids[] = $row['group_id'];
-				}
-
-				$this->db->sql_freeresult($result);
-			}
-
-			// preset all traffic permissions and helper values
-			$this->dl_overall_traffics = self::DL_FALSE;
-			$this->dl_users_traffics = self::DL_FALSE;
-			$dl_overall_traffics_groups = explode(',', $this->config['dl_traffics_overall_groups']);
-			$dl_users_traffics_groups = explode(',', $this->config['dl_traffics_users_groups']);
-
-			// check the several settings for the traffic management
-			if (!$this->config['dl_traffic_off'])
-			{
-				// check the overall traffic settings
-				if ($this->config['dl_traffics_overall'] == self::DL_TRAFFICS_ON_ALL)
-				{
-					// enable the overall traffic for all users
-					$this->dl_overall_traffics = self::DL_TRUE;
-				}
-				else if ($this->config['dl_traffics_overall'] == self::DL_TRAFFICS_ON_GROUPS)
-				{
-					// enable the overall traffics for all selected user groups
-					foreach (array_keys($user_group_ids) as $key)
-					{
-						if (in_array($user_group_ids[$key], $dl_overall_traffics_groups))
-						{
-							$this->dl_overall_traffics = self::DL_TRUE;
-						}
-					}
-				}
-				else if ($this->config['dl_traffics_overall'] == self::DL_TRAFFICS_OFF_GROUPS)
-				{
-					// first enable the limit to be able to disable it
-					$this->dl_overall_traffics = self::DL_TRUE;
-
-					// disable the overall traffics for all selected user groups
-					foreach (array_keys($user_group_ids) as $key)
-					{
-						if (in_array($user_group_ids[$key], $dl_overall_traffics_groups))
-						{
-							$this->dl_overall_traffics = self::DL_FALSE;
-						}
-					}
-				}
-
-				// check the user traffic settings
-				if ($this->config['dl_traffics_users'] == self::DL_TRAFFICS_ON_ALL)
-				{
-					// enable the user traffic for all users
-					$this->dl_users_traffics = self::DL_TRUE;
-				}
-				else if ($this->config['dl_traffics_users'] == self::DL_TRAFFICS_ON_GROUPS)
-				{
-					// enable the user traffics for all selected user groups
-					foreach (array_keys($user_group_ids) as $key)
-					{
-						if (in_array($user_group_ids[$key], $dl_users_traffics_groups))
-						{
-							$this->dl_users_traffics = self::DL_TRUE;
-						}
-					}
-				}
-				else if ($this->config['dl_traffics_users'] == self::DL_TRAFFICS_OFF_GROUPS)
-				{
-					// first enable the limit to be able to disable it
-					$this->dl_users_traffics = self::DL_TRUE;
-
-					// disable the user traffics for all selected user groups
-					foreach (array_keys($user_group_ids) as $key)
-					{
-						if (in_array($user_group_ids[$key], $dl_users_traffics_groups))
-						{
-							$this->dl_users_traffics = self::DL_FALSE;
-						}
-					}
-				}
-			}
-		}
-
 		switch ($value)
 		{
 			case 'files_dir':
@@ -385,22 +274,6 @@ class constants
 				{
 					$return = $this->root_path . $core_upload_path . '/dlext';
 				}
-				break;
-
-			case 'founder_traffics':
-				$return = ($this->config['dl_traffics_founder'] && $this->user->data['user_type'] == USER_FOUNDER) ? self::DL_TRUE : self::DL_FALSE;
-				break;
-
-			case 'guests_traffics':
-				$return = (!$this->config['dl_traffic_off'] && $this->config['dl_traffics_guests']) ? self::DL_TRUE : self::DL_FALSE;
-				break;
-
-			case 'overall_traffics':
-				$return = $this->dl_overall_traffics;
-				break;
-
-			case 'users_traffics':
-				$return = $this->dl_users_traffics;
 				break;
 
 			default:

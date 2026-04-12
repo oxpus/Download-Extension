@@ -56,7 +56,6 @@
 	<th>{{ lang('DL_FILE_SIZE') }}</th>
 	<th>{{ lang('DL_IS_FREE') }}<br>{{ lang('DL_EXTERN') }}</th>
 	<th>{{ lang('DL_KLICKS') }}<br>{{ lang('DL_OVERALL_KLICKS') }}</th>
-	<th>{{ lang('DL_TRAFFIC') }}<br>{{ lang('DL_HACKS_LIST') }}</th>
 	<th>{{ lang('ACTION') }}</th>
 </tr>
 </thead>
@@ -74,7 +73,6 @@
 	<td><span>{{ downloads.DL_FILE_SIZE }}</span></td>
 	<td><span>{{ downloads.DL_FILE_FREE_EXTERN }}</span></td>
 	<td><span>{{ downloads.DL_FILE_KLICKS }}<br>{{ downloads.DL_OVERALL_KLICKS }}</span></td>
-	<td><span>{{ downloads.DL_FILE_TRAFFIC }}<br>{{ downloads.DL_HACKLIST }}</span></td>
 	<td>
 		{% if downloads.S_FIRST_ROW && not downloads.S_LAST_ROW %}
 		{{ ICON_MOVE_UP_DISABLED }}

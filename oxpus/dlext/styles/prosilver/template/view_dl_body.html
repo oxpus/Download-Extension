@@ -1,9 +1,5 @@
 {% INCLUDE '@oxpus_dlext/helpers/dl_header.html' %}
 
-{% if S_CAT_TRAFFIC %}
-<div class="panel bg3"><div class="inner"><span><strong>{{ DL_CAT_TRAFFIC }}</strong></span></div></div>
-{% endif %}
-
 {% if S_DL_CAT_RULE %}
 <div class="rules"><div class="inner"><span>{{ DL_CAT_RULE }}</span></div></div>
 {% endif %}
@@ -121,7 +117,7 @@
 			</dl>
 			{% endif %}
 
-			{% if S_DL_HACKLIST and DL_HACK_AUTHOR %}
+			{% if DL_HACK_AUTHOR %}
 			<dl>
 				<dt><label>{{ lang('DL_HACK_AUTOR') }}</label></dt>
 				<dd class="lastpost dl-cell-block">
@@ -150,7 +146,7 @@
 				<dd class="lastpost dl-cell-block"><label>{{ DL_FILE_KLICKS }} / {{ DL_FILE_OVERALL_KLICKS }}</label></dd>
 			</dl>
 			{% endif %}
-			{% if S_DL_HACKLIST and DL_HACK_DL_URL %}
+			{% if DL_HACK_DL_URL %}
 			<dl>
 				<dt><label>{{ lang('DL_HACK_DL_URL') }}</label></dt>
 				<dd class="lastpost dl-cell-block"><label><a href="{{ DL_HACK_DL_URL }}">{{ lang('DL_DOWNLOAD') }}</a></label></dd>
@@ -459,7 +455,6 @@
 				<input type="submit" name="submit" id="submit" class="downloadbtn" value="{{ lang('DL_DOWNLOAD') }}">
 				{{ S_DL_HIDDEN }}{{ S_FORM_TOKEN_DOWNLOAD }}
 			</div>
-			{% if S_DL_TRAFFICFREE_DL %}<div class="small dl-text-center dl-red">{{ lang('DL_CAN_DOWNLOAD_TRAFFIC') }}</div>{% endif %}
 		</li>
 	</ul>
 

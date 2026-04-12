@@ -152,9 +152,7 @@ class acp_config_controller implements acp_config_interface
 						'legend1'				=> '',
 
 						'dl_active'			=> ['lang' => 'DL_ACTIVE',				'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_ACTIVE'],
-						'dl_traffic_off'	=> ['lang' => 'DL_TRAFFIC_OFF',			'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_TRAFFIC_OFF'],
 						'dl_stop_uploads'	=> ['lang' => 'DL_STOP_UPLOADS',		'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_STOP_UPLOADS'],
-						'dl_use_hacklist'	=> ['lang' => 'DL_USE_HACKLIST',		'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_USE_HACKLIST'],
 						'dl_todo_onoff'		=> ['lang' => 'DL_USE_TODOLIST',		'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_USE_TODOLIST'],
 
 						'legend2'				=> '',
@@ -209,7 +207,6 @@ class acp_config_controller implements acp_config_interface
 						'legend4'				=> '',
 
 						'dl_nav_link_main'			=> ['lang' => 'DL_NAV_LINK_MAIN',			'validate' => 'string',	'type' => 'select',			'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => $this->dlext_constants::DL_FALSE,		'function' => [$this, 'select_nav_link_pos'],	'params' => ['{CONFIG_VALUE}']],
-						'dl_nav_link_hacks'			=> ['lang' => 'DL_NAV_LINK_HACKS',			'validate' => 'string',	'type' => 'select',			'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => $this->dlext_constants::DL_FALSE,		'function' => [$this, 'select_nav_link_pos'],	'params' => ['{CONFIG_VALUE}']],
 						'legend5'				=> '',
 
 						'dl_thumbs_display_cat'		=> ['lang' => 'DL_THUMB_DISPLAY_CAT',		'validate' => 'int',	'type' => 'select',		'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => $this->dlext_constants::DL_FALSE,		'function' => [$this, 'select_thumb_display'],	'params' => ['{CONFIG_VALUE}']],
@@ -249,12 +246,7 @@ class acp_config_controller implements acp_config_interface
 
 						'dl_use_ext_blacklist'	=> ['lang' => 'DL_USE_EXT_BLACKLIST',	'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_USE_EXT_BLACKLIST'],
 
-						'legend3'				=> 'DL_ANTISPAM',
-
-						'dl_antispam_posts'		=> ['lang' => 'DL_ANTISPAM_POSTS',		'validate' => 'int',	'type' => 'text:5:10',		'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_ANTISPAM'],
-						'dl_antispam_hours'		=> ['lang' => 'DL_ANTISPAM_HOURS',		'validate' => 'int',	'type' => 'text:5:10',		'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_ANTISPAM'],
-
-						'legend4'				=> '',
+						'legend3'				=> '',
 
 						'dl_download_vc'		=> ['lang' => 'DL_VISUAL_CONFIRMATION',	'validate' => 'int',	'type' => 'select',			'explain' => $this->dlext_constants::DL_TRUE,		'help_key' => 'DL_VISUAL_CONFIRMATION',		'function' => [$this, 'select_dl_vc'],			'params' => ['{CONFIG_VALUE}']],
 						'dl_report_broken_vc'	=> ['lang' => 'DL_REPORT_BROKEN_VC',	'validate' => 'int',	'type' => 'select',			'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_REPORT_BROKEN_VC',		'function' => [$this, 'select_report_vc'],		'params' => ['{CONFIG_VALUE}']],
@@ -283,7 +275,6 @@ class acp_config_controller implements acp_config_interface
 						'dl_report_broken'			=> ['lang' => 'DL_REPORT_BROKEN',		'validate' => 'int',	'type' => 'select',			'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_REPORT_BROKEN',			'function' => [$this, 'select_report_action'],	'params' => ['{CONFIG_VALUE}']],
 						'dl_report_broken_lock'		=> ['lang' => 'DL_REPORT_BROKEN_LOCK',	'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_REPORT_BROKEN_LOCK'],
 						'dl_sort_preform'			=> ['lang' => 'DL_SORT_PREFORM',		'validate' => 'int',	'type' => 'select',			'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_SORT_PREFORM',			'function' => [$this, 'select_sort'],			'params' => ['{CONFIG_VALUE}']],
-						'dl_posts'					=> ['lang' => 'DL_POSTS',				'validate' => 'int',	'type' => 'text:3:4',		'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_POSTS'],
 
 						'legend3'				=> '',
 
@@ -309,83 +300,6 @@ class acp_config_controller implements acp_config_interface
 
 						'dl_enable_rate'		=> ['lang' => 'DL_ENABLE_RATE',				'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_ENABLE_RATE'],
 						'dl_rate_points'		=> ['lang' => 'DL_RATE_POINTS',				'validate' => 'int',	'type' => 'text:3:3',		'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_RATE_POINTS'],
-					]
-				];
-				break;
-			case 'traffic':
-				$sql = 'SELECT group_id, group_name, group_type FROM ' . GROUPS_TABLE . '
-						WHERE ' . $this->db->sql_in_set('group_name', ['GUESTS', 'BOTS'], $this->dlext_constants::DL_TRUE) . '
-						ORDER BY group_type DESC, group_name';
-				$result = $this->db->sql_query($sql);
-				$total_groups = $this->db->sql_affectedrows();
-
-				$traffics_overall_group_ids = explode(',', $this->config['dl_traffics_overall_groups']);
-				$traffics_users_group_ids = explode(',', $this->config['dl_traffics_users_groups']);
-
-				$s_groups_overall_select = $s_groups_users_select = '';
-
-				while ($row = $this->db->sql_fetchrow($result))
-				{
-					$group_name = ($row['group_type'] == GROUP_SPECIAL) ? $this->language->lang('G_' . $row['group_name']) : $row['group_name'];
-					$group_sep = ($row['group_type'] == GROUP_SPECIAL) ? ' class="sep"' : '';
-					$group_id = $row['group_id'];
-
-					if (in_array($group_id, $traffics_overall_group_ids) && $this->config['dl_traffics_overall'] > 1)
-					{
-						$s_groups_overall_select .= '<option value="' . $group_id . '" selected' . $group_sep . '>' . $group_name . '</option>';
-					}
-					else
-					{
-						$s_groups_overall_select .= '<option value="' . $group_id . '"' . $group_sep . '>' . $group_name . '</option>';
-					}
-
-					if (in_array($group_id, $traffics_users_group_ids) && $this->config['dl_traffics_users'] > $this->dlext_constants::DL_TRAFFICS_ON_ALL)
-					{
-						$s_groups_users_select .= '<option value="' . $group_id . '" selected' . $group_sep . '>' . $group_name . '</option>';
-					}
-					else
-					{
-						$s_groups_users_select .= '<option value="' . $group_id . '"' . $group_sep . '>' . $group_name . '</option>';
-					}
-				}
-
-				$this->db->sql_freeresult($result);
-
-				$select_size = ($total_groups < $this->dlext_constants::DL_SELECT_MAX_SIZE) ? $total_groups : $this->dlext_constants::DL_SELECT_MAX_SIZE;
-
-				$display_vars = [
-					'title'	=> 'DL_ACP_CONF_TRAFFIC',
-					'vars'	=> [
-						'legend1'				=> '',
-
-						'dl_traffics_founder'			=> ['lang' => 'DL_TRAFFICS_FOUNDER',			'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_TRAFFICS_FOUNDER'],
-						'dl_traffics_overall'			=> ['lang' => 'DL_TRAFFICS_OVERALL',			'validate' => 'int',	'type' => 'select',			'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_TRAFFICS_OVERALL',			'function' => [$this, 'select_traffic'],		'params' => ['{CONFIG_VALUE}', $total_groups]],
-						'dl_traffics_overall_groups'	=> ['lang' => 'DL_TRAFFICS_OVERALL_GROUPS',								'type' => 'custom',			'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_TRAFFICS_OVERALL_GROUPS',		'function' => [$this, 'select_traffic_multi'],	'params' => ['dl_traffics_overall_groups', $s_groups_overall_select, $select_size]],
-						'dl_traffics_users'				=> ['lang' => 'DL_TRAFFICS_USERS',				'validate' => 'int',	'type' => 'select',			'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_TRAFFICS_USERS',				'function' => [$this, 'select_traffic'],		'params' => ['{CONFIG_VALUE}', $total_groups]],
-						'dl_traffics_users_groups'		=> ['lang' => 'DL_TRAFFICS_USERS_GROUPS',								'type' => 'custom',			'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_TRAFFICS_USERS_GROUPS',		'function' => [$this, 'select_traffic_multi'],	'params' => ['dl_traffics_users_groups', $s_groups_users_select, $select_size]],
-						'dl_traffics_guests'			=> ['lang' => 'DL_TRAFFICS_GUESTS',				'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_TRAFFICS_GUESTS'],
-
-						'legend2'				=> '',
-
-						'dl_overall_traffic'			=> ['lang' => 'DL_OVERALL_TRAFFIC',				'validate' => 'int',	'type' => 'custom',			'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_OVERALL_TRAFFIC',				'function' => [$this, 'select_size'],	'params' => ['{CONFIG_VALUE}', 'dl_overall_traffic', '10', '20', 'dl_x_over', $this->dlext_constants::DL_FILE_RANGE_GBYTE, $this->dlext_constants::DL_TRUE]],
-						'dl_overall_guest_traffic'		=> ['lang' => 'DL_OVERALL_GUEST_TRAFFIC',		'validate' => 'int',	'type' => 'custom',			'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_OVERALL_GUEST_TRAFFIC',		'function' => [$this, 'select_size'],	'params' => ['{CONFIG_VALUE}', 'dl_overall_guest_traffic', '10', '20', 'dl_x_g_over', $this->dlext_constants::DL_FILE_RANGE_GBYTE, $this->dlext_constants::DL_TRUE]],
-
-						'legend3'				=> '',
-
-						'dl_enable_post_dl_traffic'		=> ['lang' => 'DL_ENABLE_POST_TRAFFIC',			'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_ENABLE_POST_TRAFFIC'],
-						'dl_newtopic_traffic'			=> ['lang' => 'DL_NEWTOPIC_TRAFFIC',			'validate' => 'int',	'type' => 'custom',			'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_NEWTOPIC_TRAFFIC',			'function' => [$this, 'select_size'],	'params' => ['{CONFIG_VALUE}', 'dl_newtopic_traffic', '10', '20', 'dl_x_new', $this->dlext_constants::DL_FILE_RANGE_GBYTE, $this->dlext_constants::DL_FALSE]],
-						'dl_reply_traffic'				=> ['lang' => 'DL_REPLY_TRAFFIC',				'validate' => 'int',	'type' => 'custom',			'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_REPLY_TRAFFIC',				'function' => [$this, 'select_size'],	'params' => ['{CONFIG_VALUE}', 'dl_reply_traffic', '10', '20', 'dl_x_reply', $this->dlext_constants::DL_FILE_RANGE_GBYTE, $this->dlext_constants::DL_FALSE]],
-						'dl_drop_traffic_postdel'		=> ['lang' => 'DL_DROP_TRAFFIC_POSTDEL',		'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_DROP_TRAFFIC_POSTDEL'],
-
-						'legend4'				=> '',
-
-						'dl_delay_auto_traffic'		=> ['lang' => 'DL_DELAY_AUTO_TRAFFIC',				'validate' => 'int',	'type' => 'text:3:4',		'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_DELAY_AUTO_TRAFFIC'],
-						'dl_delay_post_traffic'		=> ['lang' => 'DL_DELAY_POST_TRAFFIC',				'validate' => 'int',	'type' => 'text:3:4',		'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_DELAY_POST_TRAFFIC'],
-
-						'legend5'				=> '',
-
-						'dl_user_traffic_once'		=> ['lang' => 'DL_USER_TRAFFIC_ONCE',				'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_USER_TRAFFIC_ONCE'],
-						'dl_upload_traffic_count'	=> ['lang' => 'DL_UPLOAD_TRAFFIC_COUNT',			'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_UPLOAD_TRAFFIC_COUNT'],
 					]
 				];
 				break;
@@ -494,7 +408,7 @@ class acp_config_controller implements acp_config_interface
 					$this->new_config[$config_name] = $config_value = intval($config_value);
 				}
 
-				if (in_array($config_name, ['dl_thumb_fsize', 'dl_physical_quota', 'dl_overall_traffic', 'dl_overall_guest_traffic', 'dl_newtopic_traffic', 'dl_reply_traffic', 'dl_method_quota']))
+				if (in_array($config_name, ['dl_thumb_fsize', 'dl_physical_quota', 'dl_method_quota']))
 				{
 					$this->new_config[$config_name] = $config_value = $this->dlext_format->resize_value($config_name, $config_value);
 				}
@@ -581,29 +495,6 @@ class acp_config_controller implements acp_config_interface
 
 		if ($submit)
 		{
-			// Refetch all multi select fields which are not provided by the forum default methods
-			if ($view == 'traffic')
-			{
-				$dl_traffic_overall_groups	= $this->request->variable('dl_traffics_overall_groups', [0]);
-				$dl_traffics_users_groups	= $this->request->variable('dl_traffics_users_groups', [0]);
-
-				$this->new_config['dl_traffics_overall_groups'] = implode(',', $dl_traffic_overall_groups);
-				$this->new_config['dl_traffics_users_groups'] = implode(',', $dl_traffics_users_groups);
-
-				if (!empty($dl_traffic_overall_groups) && $cfg_array['dl_traffics_overall'] <= 1)
-				{
-					$this->new_config['dl_traffics_overall_groups'] = '';
-				}
-
-				if (!empty($dl_traffics_users_groups) && $cfg_array['dl_traffics_users'] <= $this->dlext_constants::DL_TRAFFICS_ON_ALL)
-				{
-					$this->new_config['dl_traffics_users_groups'] = '';
-				}
-
-				$this->config->set('dl_traffics_overall_groups', $this->new_config['dl_traffics_overall_groups']);
-				$this->config->set('dl_traffics_users_groups', $this->new_config['dl_traffics_users_groups']);
-			}
-
 			$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_CONFIG');
 
 			$this->cache->destroy('config');
@@ -620,20 +511,14 @@ class acp_config_controller implements acp_config_interface
 			trigger_error($message);
 		}
 
-		if ($this->config['dl_traffic_off'])
-		{
-			$error[] = $this->language->lang('DL_TRAFFIC_OFF_EXPLAIN');
-		}
-
 		$acl_cat_names = [
 			0 => [$this->language->lang('DL_ACP_CONF_GENERAL'),	'general'],
 			1 => [$this->language->lang('DL_ACP_CONF_VIEW'),	'view'],
 			2 => [$this->language->lang('DL_ACP_CONF_PROTECT'),	'protect'],
 			3 => [$this->language->lang('DL_ACP_CONF_LIMIT'),	'limit'],
-			4 => [$this->language->lang('DL_ACP_CONF_TRAFFIC'),	'traffic'],
-			5 => [$this->language->lang('DL_ACP_CONF_MESSAGE'),	'message'],
-			6 => [$this->language->lang('DL_ACP_CONF_TOPIC'),	'topic'],
-			7 => [$this->language->lang('DL_ACP_CONF_RSS'),		'rss'],
+			4 => [$this->language->lang('DL_ACP_CONF_MESSAGE'),	'message'],
+			5 => [$this->language->lang('DL_ACP_CONF_TOPIC'),	'topic'],
+			6 => [$this->language->lang('DL_ACP_CONF_RSS'),		'rss'],
 		];
 
 		$mode_select = '';
@@ -919,26 +804,6 @@ class acp_config_controller implements acp_config_interface
 		{
 			switch ($field)
 			{
-				case 'dl_overall_traffic':
-					$remain_traffic_text = $this->language->lang('DL_REMAIN_OVERALL_TRAFFIC');
-					$remain_traffic = $this->config['dl_overall_traffic'] - (int) $this->config['dl_remain_traffic'];
-					$remain_traffic = ($remain_traffic <= 0) ? 0 : $remain_traffic;
-
-					$remain_traffic_tmp = $this->dlext_format->dl_size($remain_traffic, 2, 'none');
-					$remain_traffic_out = $remain_traffic_tmp['size_out'];
-					$x_rem = $remain_traffic_tmp['range'];
-					$remain_text_out = $remain_traffic_text . $remain_traffic_out . $x_rem;
-					break;
-				case 'dl_overall_guest_traffic':
-					$remain_traffic_text = $this->language->lang('DL_REMAIN_OVERALL_GUEST_TRAFFIC');
-					$remain_traffic = $this->config['dl_overall_guest_traffic'] - (int) $this->config['dl_remain_guest_traffic'];
-					$remain_traffic = ($remain_traffic <= 0) ? 0 : $remain_traffic;
-
-					$remain_traffic_tmp = $this->dlext_format->dl_size($remain_traffic, 2, 'none');
-					$remain_traffic_out = $remain_traffic_tmp['size_out'];
-					$x_rem = $remain_traffic_tmp['range'];
-					$remain_text_out = $remain_traffic_text . $remain_traffic_out . $x_rem;
-					break;
 				case 'dl_physical_quota':
 					$remain_text_out = $this->language->lang('DL_PHYSICAL_QUOTA_EXPLAIN', $this->dlext_format->dl_size($this->dlext_physical->read_dl_sizes(), 2));
 					break;
@@ -989,25 +854,6 @@ class acp_config_controller implements acp_config_interface
 		$s_select = str_replace('value="' . $value . '">', 'value="' . $value . '" selected>', $s_select);
 
 		return $s_select;
-	}
-
-	public function select_traffic($value, $total_groups)
-	{
-		$s_select = '<option value="' . $this->dlext_constants::DL_TRAFFICS_ON_ALL . '">' . $this->language->lang('DL_TRAFFICS_ON_ALL') . '</option>';
-		if ($total_groups)
-		{
-			$s_select .= '<option value="' . $this->dlext_constants::DL_TRAFFICS_ON_GROUPS . '">' . $this->language->lang('DL_TRAFFICS_ON_GROUPS') . '</option>';
-			$s_select .= '<option value="' . $this->dlext_constants::DL_TRAFFICS_OFF_GROUPS . '">' . $this->language->lang('DL_TRAFFICS_OFF_GROUPS') . '</option>';
-		}
-		$s_select .= '<option value="' . $this->dlext_constants::DL_TRAFFICS_OFF_ALL . '">' . $this->language->lang('DL_TRAFFICS_OFF_ALL') . '</option>';
-		$s_select = str_replace('value="' . $value . '">', 'value="' . $value . '" selected>', $s_select);
-
-		return $s_select;
-	}
-
-	public function select_traffic_multi($field, $s_select, $select_size)
-	{
-		return '<select name="' . $field . '[]" id="' . $field . '" multiple="multiple" size="' . $select_size . '">' . $s_select . '</select>';
 	}
 
 	public function textarea_input($value, $field, $cols, $rows)

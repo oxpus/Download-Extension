@@ -172,32 +172,8 @@ class status implements status_interface
 		$cat_auth		= $this->dlext_auth->dl_cat_auth($cat_id);
 		$index			= $this->dlext_main->full_index($cat_id);
 
-		$file_auth		= $this->dlext_constants::DL_FALSE;
-		$file_status	= 'red';
-
-		if (!$this->config['dl_traffic_off'] && ($this->dlext_constants->get_value('users_traffics') || $this->dlext_constants->get_value('founder_traffics')))
-		{
-			if ($this->dlext_constants->get_value('founder_traffics'))
-			{
-				$file_status = 'yellow';
-				$file_auth = $this->dlext_constants::DL_TRUE;
-			}
-			else if ($this->user->data['is_registered'] && intval($this->user->data['user_traffic']) >= $this->dl_file_p[$df_id]['s'] && !$this->dl_file_p[$df_id]['e'])
-			{
-				$file_status = 'yellow';
-				$file_auth = $this->dlext_constants::DL_TRUE;
-			}
-			else if ($this->user->data['is_registered'] && intval($this->user->data['user_traffic']) < $this->dl_file_p[$df_id]['s'] && !$this->dl_file_p[$df_id]['e'])
-			{
-				$file_status = 'red';
-				$file_auth = $this->dlext_constants::DL_FALSE;
-			}
-		}
-		else
-		{
-			$file_status = 'green';
-			$file_auth = $this->dlext_constants::DL_TRUE;
-		}
+		$file_auth		= $this->dlext_constants::DL_TRUE;
+		$file_status	= 'green';
 
 		if ($this->user->data['user_posts'] < $this->config['dl_posts'] && !$this->dl_file_p[$df_id]['e'] && !$this->dl_file_p[$df_id]['f'])
 		{
@@ -224,7 +200,7 @@ class status implements status_interface
 				$file_status = 'white';
 			}
 
-			if ($this->user->data['is_registered'] || $this->dlext_constants->get_value('founder_traffics'))
+			if ($this->user->data['is_registered'])
 			{
 				$file_auth = $this->dlext_constants::DL_TRUE;
 			}
@@ -238,61 +214,6 @@ class status implements status_interface
 		{
 			$file_status = 'red';
 			$file_auth = $this->dlext_constants::DL_FALSE;
-		}
-
-		if ($this->dl_file_p[$df_id]['t'] && $this->dl_file_p[$df_id]['k'] * $this->dl_file_p[$df_id]['s'] >= $this->dl_file_p[$df_id]['t'] && !$this->config['dl_traffic_off'])
-		{
-			$file_status = 'blue';
-
-			if ($this->dlext_constants->get_value('founder_traffics'))
-			{
-				$file_auth = $this->dlext_constants::DL_TRUE;
-			}
-			else
-			{
-				$file_auth = $this->dlext_constants::DL_FALSE;
-			}
-		}
-
-		if ($this->user->data['is_registered'])
-		{
-			$load_limit = $this->dlext_constants->get_value('overall_traffics');
-			$overall_traffic = $this->config['dl_overall_traffic'];
-			$remain_traffic = $this->config['dl_remain_traffic'];
-		}
-		else
-		{
-			$load_limit = $this->dlext_constants->get_value('guests_traffics');
-			$overall_traffic = $this->config['dl_overall_guest_traffic'];
-			$remain_traffic = $this->config['dl_remain_guest_traffic'];
-		}
-
-		if (($overall_traffic - (int) $remain_traffic <= $this->dl_file_p[$df_id]['s']) && !$this->config['dl_traffic_off'] && $load_limit == $this->dlext_constants::DL_TRUE)
-		{
-			$file_status = 'blue';
-
-			if ($this->dlext_constants->get_value('founder_traffics'))
-			{
-				$file_auth = $this->dlext_constants::DL_TRUE;
-			}
-			else
-			{
-				$file_auth = $this->dlext_constants::DL_FALSE;
-			}
-		}
-
-		if (($index[$cat_id]['cat_traffic'] && ($index[$cat_id]['cat_traffic'] - $index[$cat_id]['cat_traffic_use'] <= 0)) && !$this->config['dl_traffic_off'])
-		{
-			$file_status = 'blue';
-
-			if ($this->dlext_constants->get_value('founder_traffics'))
-			{
-				$file_auth = $this->dlext_constants::DL_TRUE;
-			}
-			else
-			{
-				$file_auth = $this->dlext_constants::DL_FALSE;
-			}
 		}
 
 		if ($this->dl_file_p[$df_id]['e'])

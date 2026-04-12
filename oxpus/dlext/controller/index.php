@@ -447,42 +447,6 @@ class index
 				}
 			}
 
-			$cat_traffic = 0;
-
-			if (!$this->config['dl_traffic_off'])
-			{
-				if ($this->user->data['is_registered'])
-				{
-					$cat_overall_traffic = $this->config['dl_overall_traffic'];
-					$cat_limit = $this->dlext_constants->get_value('overall_traffics');
-				}
-				else
-				{
-					$cat_overall_traffic = $this->config['dl_overall_guest_traffic'];
-					$cat_limit = $this->dlext_constants->get_value('guests_traffics');
-				}
-
-				if (isset($index_cat[$cat]['cat_traffic_use']))
-				{
-					$cat_traffic = $index_cat[$cat]['cat_traffic'] - $index_cat[$cat]['cat_traffic_use'];
-				}
-				else
-				{
-					$cat_traffic = 0;
-				}
-
-				if ($index_cat[$cat]['cat_traffic'] && $cat_traffic > 0)
-				{
-					$cat_traffic = ($cat_traffic > $cat_overall_traffic && $cat_limit == $this->dlext_constants::DL_TRUE) ? $cat_overall_traffic : $cat_traffic;
-					$cat_traffic = $this->dlext_format->dl_size($cat_traffic);
-
-					$this->template->assign_var('S_DL_CAT_TRAFFIC', $this->dlext_constants::DL_TRUE);
-				}
-			}
-			else
-			{
-				unset($cat_traffic);
-			}
 		}
 
 		$i = 0;
@@ -689,7 +653,7 @@ class index
 
 		$this->template->assign_vars([
 			'DL_CAT_RULE'		=> (isset($cat_rule)) ? $cat_rule : '',
-			'DL_CAT_TRAFFIC'	=> (isset($cat_traffic)) ? $this->language->lang('DL_CAT_TRAFFIC_MAIN', $cat_traffic) : '',
+			'DL_CAT_TRAFFIC'	=> '',
 			'T_DL_CAT'			=> (isset($index[$cat]['cat_name']) && $cat) ? $index[$cat]['cat_name'] : $this->language->lang('DL_CAT_NAME'),
 			'DL_UPLOAD'			=> $this->helper->route('oxpus_dlext_upload', ['cat_id' => $cat]),
 			'DL_PHPEX'			=> $this->php_ext,

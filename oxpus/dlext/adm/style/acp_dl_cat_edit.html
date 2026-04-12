@@ -169,18 +169,6 @@
 	</dl>
 	{% endif %}
 	<dl>
-		<dt><label>{{ lang('DL_CAT_TRAFFIC') }}</label></dt>
-		<dd>
-			<a class="help nav" data-key="DL_CAT_TRAFFIC" data-param="{{ lang('DL_CAT_TRAFFIC_HELP') }}"><i class="icon fa-question-circle fa-fw"></i></a>&nbsp;
-			<input type="text" name="cat_traffic" size="10" maxlength="10" value="{{ DL_CAT_TRAFFIC }}">
-			<select name="cat_traffic_range">
-				{% for dl_cat_traffic_range in loops.dl_cat_traffic_range %}
-				<option value="{{ dl_cat_traffic_range.DL_VALUE }}"{% if dl_cat_traffic_range.DL_VALUE eq S_DL_CAT_TRAFFIC_RANGE %} selected{% endif %}>{{ dl_cat_traffic_range.DL_NAME }}</option>
-				{% endfor %}
-			</select>
-		</dd>
-	</dl>
-	<dl>
 		<dt><label>{{ lang('DL_SHOW_FILE_HASH') }}</label></dt>
 		<dd>
 			<a class="help nav" data-key="DL_SHOW_FILE_HASH"><i class="icon fa-question-circle fa-fw"></i></a>&nbsp;

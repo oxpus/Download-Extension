@@ -45,7 +45,6 @@ class details
 	protected $dlext_table_dl_favorites;
 	protected $dlext_table_dl_hotlink;
 	protected $dlext_table_dl_images;
-	protected $dlext_table_dl_notraf;
 	protected $dlext_table_dl_ratings;
 	protected $dlext_table_dl_versions;
 	protected $dlext_table_downloads;
@@ -79,7 +78,6 @@ class details
 	 * @param string								$dlext_table_dl_favorites
 	 * @param string								$dlext_table_dl_hotlink
 	 * @param string								$dlext_table_dl_images
-	 * @param string								$dlext_table_dl_notraf
 	 * @param string								$dlext_table_dl_ratings
 	 * @param string								$dlext_table_dl_versions
 	 * @param string								$dlext_table_downloads
@@ -111,7 +109,6 @@ class details
 		$dlext_table_dl_favorites,
 		$dlext_table_dl_hotlink,
 		$dlext_table_dl_images,
-		$dlext_table_dl_notraf,
 		$dlext_table_dl_ratings,
 		$dlext_table_dl_versions,
 		$dlext_table_downloads
@@ -137,7 +134,6 @@ class details
 		$this->dlext_table_dl_favorites	= $dlext_table_dl_favorites;
 		$this->dlext_table_dl_hotlink	= $dlext_table_dl_hotlink;
 		$this->dlext_table_dl_images	= $dlext_table_dl_images;
-		$this->dlext_table_dl_notraf	= $dlext_table_dl_notraf;
 		$this->dlext_table_dl_ratings	= $dlext_table_dl_ratings;
 		$this->dlext_table_dl_versions	= $dlext_table_dl_versions;
 		$this->dlext_table_downloads	= $dlext_table_downloads;
@@ -327,43 +323,6 @@ class details
 		{
 			$s_cat_rule = $this->dlext_constants::DL_FALSE;
 			$cat_rule = '';
-		}
-
-		/*
-		* Cat Traffic?
-		*/
-		$cat_traffic = 0;
-		$s_cat_traffic = $this->dlext_constants::DL_FALSE;
-
-		if (!$this->config['dl_traffic_off'])
-		{
-			if ($this->user->data['is_registered'])
-			{
-				$cat_overall_traffic = $this->config['dl_overall_traffic'];
-				$cat_limit = $this->dlext_constants->get_value('overall_traffics');
-			}
-			else
-			{
-				$cat_overall_traffic = $this->config['dl_overall_guest_traffic'];
-				$cat_limit = $this->dlext_constants->get_value('guests_traffics');
-			}
-
-			if (isset($index[$cat_id]['cat_traffic']) && isset($index[$cat_id]['cat_traffic_use']))
-			{
-				$cat_traffic = $index[$cat_id]['cat_traffic'] - $index[$cat_id]['cat_traffic_use'];
-
-				if ($index[$cat_id]['cat_traffic'] && $cat_traffic > 0)
-				{
-					$cat_traffic = ($cat_traffic > $cat_overall_traffic && $cat_limit == $this->dlext_constants::DL_TRUE) ? $cat_overall_traffic : $cat_traffic;
-					$cat_traffic = $this->dlext_format->dl_size($cat_traffic);
-
-					$s_cat_traffic = $this->dlext_constants::DL_FALSE;
-				}
-			}
-		}
-		else
-		{
-			unset($cat_traffic);
 		}
 
 		/*
@@ -619,15 +578,6 @@ class details
 		$mod_desc				= $dl_files['mod_desc'];
 
 		/*
-		* hacklist
-		*/
-		$s_hacklist = $this->dlext_constants::DL_FALSE;
-		if ($dl_files['hacklist'] && $this->config['dl_use_hacklist'])
-		{
-			$s_hacklist = $this->dlext_constants::DL_TRUE;
-		}
-
-		/*
 		* Block for extra informations - The MOD Block ;-)
 		*/
 		$s_mod_test = $this->dlext_constants::DL_FALSE;
@@ -688,27 +638,6 @@ class details
 		else
 		{
 			$s_mod_todo = $this->dlext_constants::DL_FALSE;
-		}
-
-		/*
-		* Check for recurring downloads
-		*/
-		$s_trafficfree_dl = $this->dlext_constants::DL_FALSE;
-
-		if ($this->config['dl_user_traffic_once'] && !$file_load && !$dl_files['free'] && !$dl_files['extern'] && ($dl_files['file_size'] > $this->user->data['user_traffic']) && !$this->config['dl_traffic_off'] && $this->dlext_constants->get_value('users_traffics'))
-		{
-			$sql = 'SELECT * FROM ' . $this->dlext_table_dl_notraf . '
-				WHERE user_id = ' . (int) $this->user->data['user_id'] . '
-					AND dl_id = ' . (int) $df_id;
-			$result = $this->db->sql_query($sql);
-			$still_count = $this->db->sql_affectedrows();
-			$this->db->sql_freeresult($result);
-
-			if ($still_count)
-			{
-				$file_load = $this->dlext_constants::DL_TRUE;
-				$s_trafficfree_dl = $this->dlext_constants::DL_TRUE;
-			}
 		}
 
 		/*
@@ -1073,7 +1002,7 @@ class details
 			'DL_FAVORITE_COLOR'			=> $c_favorite,
 			'DL_EDIT_IMG'				=> $this->language->lang('DL_EDIT_FILE'),
 			'DL_CAT_RULE'				=> (isset($cat_rule)) ? $cat_rule : '',
-			'DL_CAT_TRAFFIC'			=> (isset($cat_traffic)) ? $this->language->lang('DL_CAT_TRAFFIC_MAIN', $cat_traffic) : '',
+			'DL_CAT_TRAFFIC'			=> '',
 			'DL_VER_TAB'				=> ($ver_tab) ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE,
 			'DL_DESCRIPTION'			=> $description,
 			'DL_MINI_IMG'				=> $mini_icon,
@@ -1107,9 +1036,9 @@ class details
 			'S_DL_DETAIL_JS'		=> $this->dlext_constants::DL_TRUE,
 			'S_DL_POPUPIMAGE'		=> $s_dl_popupimage,
 			'S_DL_CAT_RULE'			=> $s_cat_rule,
-			'S_DL_CAT_TRAFFIC'		=> $s_cat_traffic,
+			'S_DL_CAT_TRAFFIC'		=> $this->dlext_constants::DL_FALSE,
 			'S_DL_COMMENTS_TAB'		=> $s_comments_tab,
-			'S_DL_TRAFFICFREE_DL'	=> $s_trafficfree_dl,
+			'S_DL_TRAFFICFREE_DL'	=> $this->dlext_constants::DL_FALSE,
 			'S_DL_REPORT_BROKEN'	=> $s_report_broken,
 			'S_DL_BROKEN_MOD'		=> $s_dl_broken_mod,
 			'S_DL_BROKEN_CUR'		=> $s_dl_broken_cur,
@@ -1117,7 +1046,6 @@ class details
 			'S_DL_EDIT_BUTTON'		=> $s_edit_button,
 			'S_DL_EDIT_THUMBS'		=> $s_edit_thumbs,
 			'S_DL_MOD_TODO'			=> $s_mod_todo,
-			'S_DL_HACKLIST'			=> $s_hacklist,
 			'S_DL_OPEN_PANEL'		=> ($view == 'comment' && $s_comments_tab) ? $this->dlext_constants::DL_DEFAULT_PANEL : $this->dlext_constants::DL_FALSE,
 			'S_DL_POST_COMMENT'		=> ($s_comments_tab && !$deny_post) ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE,
 

@@ -103,7 +103,6 @@ services:
             - '%oxpus.dlext.tables.dl_favorites%'
             - '%oxpus.dlext.tables.dl_fields_data%'
             - '%oxpus.dlext.tables.dl_images%'
-            - '%oxpus.dlext.tables.dl_notraf%'
             - '%oxpus.dlext.tables.dl_ratings%'
             - '%oxpus.dlext.tables.dl_reports%'
             - '%oxpus.dlext.tables.dl_stats%'

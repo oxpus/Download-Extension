@@ -139,22 +139,13 @@ class acp_perm_check_controller implements acp_perm_check_interface
 					$cat_perm_ary[$cat_id]['comment_read']	= $this->dlext_auth->cat_auth_comment_read($cat_id);
 					$cat_perm_ary[$cat_id]['comment_post']	= $this->dlext_auth->cat_auth_comment_post($cat_id);
 
-					$cat_perm_ary[$cat_id]['cat_remain']    = ($this->config['dl_traffic_off']) ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE;
-					if (($dl_index[$cat_id]['cat_traffic'] && ($dl_index[$cat_id]['cat_traffic'] - $dl_index[$cat_id]['cat_traffic_use'] <= 0)) && !$this->config['dl_traffic_off'])
-					{
-						if ($this->dlext_constants->get_value('founder_traffics'))
-						{
-							$cat_perm_ary[$cat_id]['cat_remain'] = $this->dlext_constants::DL_TRUE;
-						}
 					}
-				}
 
 				// General user permissions
 				$this->template->assign_vars([
 					'DL_USER_IS_ADMIN'         => $this->dlext_auth->user_admin(),
 					'DL_USER_CAN_VIEW_STATS'   => $this->dlext_auth->stats_perm(),
-					'DL_USER_HAVE_TRAFFIC'     => $this->dlext_format->dl_size($this->user->data['user_traffic']),
-					'DL_USER_HAVE_POSTS'       => $this->user->data['user_posts'] . ' / ' . $this->config['dl_posts'],
+					'DL_USER_HAVE_POSTS'       => $this->user->data['user_posts'],
 					'DL_CHECK_USERNAME'        => $this->user->data['username'],
 
 					'U_DL_BACK'					=> $this->u_action,

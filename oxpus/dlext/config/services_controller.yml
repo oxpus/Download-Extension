@@ -49,7 +49,6 @@ services:
             - '%oxpus.dlext.tables.dl_favorites%'
             - '%oxpus.dlext.tables.dl_hotlink%'
             - '%oxpus.dlext.tables.dl_images%'
-            - '%oxpus.dlext.tables.dl_notraf%'
             - '%oxpus.dlext.tables.dl_ratings%'
             - '%oxpus.dlext.tables.dl_versions%'
             - '%oxpus.dlext.tables.downloads%'
@@ -78,21 +77,6 @@ services:
             - '@oxpus.dlext.core.main'
             - '@oxpus.dlext.core.status'
             - '@oxpus.dlext.core.format'
-            - '@oxpus.dlext.helpers.constants'
-    oxpus.dlext.hacklist:
-        class: oxpus\dlext\controller\hacklist
-        public: true
-        arguments:
-            - '%core.root_path%'
-            - '%core.php_ext%'
-            - '@request'
-            - '@config'
-            - '@language'
-            - '@template'
-            - '@controller.helper'
-            - '@pagination'
-            - '@oxpus.dlext.core.hacklist'
-            - '@oxpus.dlext.helpers.footer'
             - '@oxpus.dlext.helpers.constants'
     oxpus.dlext.help:
         class: oxpus\dlext\controller\help
@@ -145,10 +129,8 @@ services:
             - '@oxpus.dlext.core.physical'
             - '@oxpus.dlext.core.status'
             - '@oxpus.dlext.helpers.constants'
-            - '%oxpus.dlext.tables.dl_cat_traf%'
             - '%oxpus.dlext.tables.dl_favorites%'
             - '%oxpus.dlext.tables.dl_hotlink%'
-            - '%oxpus.dlext.tables.dl_notraf%'
             - '%oxpus.dlext.tables.dl_stats%'
             - '%oxpus.dlext.tables.dl_versions%'
             - '%oxpus.dlext.tables.downloads%'

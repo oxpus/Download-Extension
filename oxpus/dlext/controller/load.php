@@ -31,10 +31,8 @@ class load
 	protected $dlext_status;
 	protected $dlext_constants;
 
-	protected $dlext_table_dl_cat_traf;
 	protected $dlext_table_dl_favorites;
 	protected $dlext_table_dl_hotlink;
-	protected $dlext_table_dl_notraf;
 	protected $dlext_table_dl_stats;
 	protected $dlext_table_dl_versions;
 	protected $dlext_table_downloads;
@@ -57,10 +55,8 @@ class load
 	 * @param \oxpus\dlext\core\physical			$dlext_physical
 	 * @param \oxpus\dlext\core\status				$dlext_status
 	 * @param \oxpus\dlext\core\helpers\constants	$dlext_constants
-	 * @param string								$dlext_table_dl_cat_traf
 	 * @param string								$dlext_table_dl_favorites
 	 * @param string								$dlext_table_dl_hotlink
-	 * @param string								$dlext_table_dl_notraf
 	 * @param string								$dlext_table_dl_stats
 	 * @param string								$dlext_table_dl_versions
 	 * @param string								$dlext_table_downloads
@@ -81,10 +77,8 @@ class load
 		\oxpus\dlext\core\physical $dlext_physical,
 		\oxpus\dlext\core\status $dlext_status,
 		\oxpus\dlext\core\helpers\constants $dlext_constants,
-		$dlext_table_dl_cat_traf,
 		$dlext_table_dl_favorites,
 		$dlext_table_dl_hotlink,
-		$dlext_table_dl_notraf,
 		$dlext_table_dl_stats,
 		$dlext_table_dl_versions,
 		$dlext_table_downloads
@@ -100,10 +94,8 @@ class load
 		$this->dispatcher				= $dispatcher;
 		$this->filesystem				= $filesystem;
 
-		$this->dlext_table_dl_cat_traf	= $dlext_table_dl_cat_traf;
 		$this->dlext_table_dl_favorites	= $dlext_table_dl_favorites;
 		$this->dlext_table_dl_hotlink	= $dlext_table_dl_hotlink;
-		$this->dlext_table_dl_notraf	= $dlext_table_dl_notraf;
 		$this->dlext_table_dl_stats		= $dlext_table_dl_stats;
 		$this->dlext_table_dl_versions	= $dlext_table_dl_versions;
 		$this->dlext_table_downloads	= $dlext_table_downloads;
@@ -265,50 +257,7 @@ class load
 				}
 			}
 
-			if (!$this->config['dl_traffic_off'])
-			{
-				if ($this->dlext_constants->get_value('founder_traffics'))
-				{
-					$check_status['file_auth'] = $this->dlext_constants::DL_TRUE;
-				}
-				else if ($this->user->data['is_registered'] && $this->dlext_constants->get_value('overall_traffics') == $this->dlext_constants::DL_TRUE)
-				{
-					if (($this->config['dl_overall_traffic'] - $this->config['dl_remain_traffic']) < $dl_file['file_size'])
-					{
-						$check_status['file_auth'] = $this->dlext_constants::DL_FALSE;
-					}
-				}
-				else if (!$this->user->data['is_registered'] && $this->dlext_constants->get_value('guests_traffics') == $this->dlext_constants::DL_TRUE)
-				{
-					if (($this->config['dl_overall_guest_traffic'] - $this->config['dl_remain_guest_traffic']) < $dl_file['file_size'])
-					{
-						$check_status['file_auth'] = $this->dlext_constants::DL_FALSE;
-					}
-				}
-			}
-
-			/*
-			* Antispam-Modul
-			*
-			* Block downloads for users who must have at least the given number of posts to download a file
-			* and tries to download after spamming in the forum more than the needed number of posts in the last 24 hours
-			*/
-			if ($this->user->data['user_posts'] >= $this->config['dl_posts'] && !$dl_file['extern'] && !$dl_file['free'] && $this->config['dl_antispam_posts'] && $this->config['dl_antispam_hours'])
-			{
-				$sql = 'SELECT COUNT(post_id) AS total_posts FROM ' . POSTS_TABLE . '
-					WHERE poster_id = ' . (int) $this->user->data['user_id'] . '
-						AND post_time >= ' . (time() - ((int) $this->config['dl_antispam_hours'] * $this->dlext_constants::DL_ONE_HOUR));
-				$result = $this->db->sql_query($sql);
-				$post_count = $this->db->sql_fetchfield('total_posts');
-				$this->db->sql_freeresult($result);
-
-				if ($post_count >= $this->config['dl_antispam_posts'])
-				{
-					$check_status['file_auth'] = $this->dlext_constants::DL_FALSE;
-				}
-			}
-
-			// Prepare correct file for download
+				// Prepare correct file for download
 			if ($file_version)
 			{
 				$sql = 'SELECT ver_file_name, ver_real_file, ver_file_size, ver_active FROM ' . $this->dlext_table_dl_versions . '
@@ -358,93 +307,6 @@ class load
 				$this->db->sql_query($sql);
 
 				$this->cache->destroy('_dlext_file_p');
-
-				if ($this->user->data['is_registered'] && !$dl_file['free'] && !$dl_file['extern'] && !$this->config['dl_traffic_off'] && $this->dlext_constants->get_value('users_traffics'))
-				{
-					$count_user_traffic = $this->dlext_constants::DL_TRUE;
-
-					if ($this->config['dl_user_traffic_once'])
-					{
-						$sql = 'SELECT COUNT(dl_id) AS total FROM ' . $this->dlext_table_dl_notraf . '
-							WHERE user_id = ' . (int) $this->user->data['user_id'] . '
-								AND dl_id = ' . (int) $dl_file['id'];
-						$result = $this->db->sql_query($sql);
-						$still_count = $this->db->sql_fetchfield('total');
-						$this->db->sql_freeresult($result);
-
-						if ($still_count)
-						{
-							$count_user_traffic = $this->dlext_constants::DL_FALSE;
-						}
-					}
-
-					if ($count_user_traffic && $this->dlext_constants->get_value('founder_traffics') == $this->dlext_constants::DL_FALSE)
-					{
-						$this->user->data['user_traffic'] -= $dl_file['file_size'];
-
-						$sql = 'UPDATE ' . USERS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', [
-							'user_traffic' => $this->user->data['user_traffic']
-						]) . ' WHERE user_id = ' . (int) $this->user->data['user_id'];
-						$this->db->sql_query($sql);
-
-						if ($this->config['dl_user_traffic_once'])
-						{
-							$sql = 'INSERT INTO ' . $this->dlext_table_dl_notraf . ' ' . $this->db->sql_build_array('INSERT', [
-								'user_id'	=> $this->user->data['user_id'],
-								'dl_id'		=> $dl_file['id']
-							]);
-							$this->db->sql_query($sql);
-						}
-					}
-				}
-
-				if ($this->user->data['is_registered'])
-				{
-					$load_limit = $this->dlext_constants->get_value('overall_traffics');
-					$used_traffic = 'dl_remain_traffic';
-				}
-				else
-				{
-					$load_limit = $this->dlext_constants->get_value('guests_traffics');
-					$used_traffic = 'dl_remain_guest_traffic';
-				}
-
-				if (!$dl_file['extern'] && !$this->config['dl_traffic_off'] && $this->dlext_constants->get_value('founder_traffics') == $this->dlext_constants::DL_FALSE)
-				{
-					if ($load_limit == $this->dlext_constants::DL_TRUE)
-					{
-						$new_used_traffic = $this->config[$used_traffic] + $dl_file['file_size'];
-
-						$this->config->set($used_traffic, $new_used_traffic);
-					}
-
-					$cat_traffic = $index[$cat_id]['cat_traffic'];
-
-					if ($cat_traffic)
-					{
-						$sql = 'SELECT cat_traffic_use FROM ' . $this->dlext_table_dl_cat_traf . '
-							WHERE cat_id = ' . (int) $cat_id;
-						$result = $this->db->sql_query($sql);
-						$cat_traffic_use = $this->db->sql_fetchfield('cat_traffic_use');
-						$this->db->sql_freeresult($result);
-
-						if (($cat_traffic - $cat_traffic_use) < $dl_file['file_size'])
-						{
-							$check_status['file_auth'] = $this->dlext_constants::DL_FALSE;
-						}
-						else
-						{
-							$cat_traffic_use += $dl_file['file_size'];
-
-							$sql = 'UPDATE ' . $this->dlext_table_dl_cat_traf . ' SET ' . $this->db->sql_build_array('UPDATE', [
-								'cat_traffic_use' => $cat_traffic_use
-							]) . ' WHERE cat_id = ' . (int) $cat_id;
-							$this->db->sql_query($sql);
-
-							$this->cache->destroy('_dlext_cats');
-						}
-					}
-				}
 
 				if (!empty($index[$cat_id]['statistics']) && $index[$cat_id]['statistics'] && $check_status['file_auth'])
 				{

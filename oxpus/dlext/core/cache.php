@@ -20,7 +20,6 @@ class cache implements cache_interface
 	protected $dlext_constants;
 
 	protected $dlext_table_dl_auth;
-	protected $dlext_table_dl_cat_traf;
 	protected $dlext_table_dl_ext_blacklist;
 	protected $dlext_table_downloads;
 	protected $dlext_table_dl_cat;
@@ -32,7 +31,6 @@ class cache implements cache_interface
 	 * @param \phpbb\db\driver\driver_interface		$db
 	 * @param \oxpus\dlext\core\helpers\constants	$dlext_constants
 	 * @param string								$dlext_table_dl_auth
-	 * @param string								$dlext_table_dl_cat_traf
 	 * @param string								$dlext_table_dl_ext_blacklist
 	 * @param string								$dlext_table_downloads
 	 * @param string								$dlext_table_dl_cat
@@ -42,7 +40,6 @@ class cache implements cache_interface
 		\phpbb\db\driver\driver_interface $db,
 		\oxpus\dlext\core\helpers\constants $dlext_constants,
 		$dlext_table_dl_auth,
-		$dlext_table_dl_cat_traf,
 		$dlext_table_dl_ext_blacklist,
 		$dlext_table_downloads,
 		$dlext_table_dl_cat
@@ -54,7 +51,6 @@ class cache implements cache_interface
 		$this->dlext_constants 	= $dlext_constants;
 
 		$this->dlext_table_dl_auth			= $dlext_table_dl_auth;
-		$this->dlext_table_dl_cat_traf		= $dlext_table_dl_cat_traf;
 		$this->dlext_table_dl_ext_blacklist	= $dlext_table_dl_ext_blacklist;
 		$this->dlext_table_downloads		= $dlext_table_downloads;
 		$this->dlext_table_dl_cat			= $dlext_table_dl_cat;
@@ -68,13 +64,8 @@ class cache implements cache_interface
 		if (($dl_index = $this->cache->get('_dlext_cats')) === false)
 		{
 			$sql_array = [
-				'SELECT'	=> 'c.*, t.cat_traffic_use',
+				'SELECT'	=> 'c.*',
 				'FROM'		=> [$this->dlext_table_dl_cat => 'c'],
-			];
-			$sql_array['LEFT_JOIN'] = [];
-			$sql_array['LEFT_JOIN'][] = [
-				'FROM'	=> [$this->dlext_table_dl_cat_traf => 't'],
-				'ON'	=> 't.cat_id = c.id'
 			];
 			$sql_array['ORDER_BY'] = 'parent, sort';
 
@@ -362,7 +353,7 @@ class cache implements cache_interface
 	{
 		if (($dl_file_p = $this->cache->get('_dlext_file_p')) === false)
 		{
-			$sql = 'SELECT id as i, cat as c, file_size as s, extern as e, free as f, file_traffic as t, klicks as k 
+			$sql = 'SELECT id as i, cat as c, file_size as s, extern as e, free as f, klicks as k
 					FROM ' . $this->dlext_table_downloads . '
 					WHERE approve = 1';
 			$result = $this->db->sql_query($sql);

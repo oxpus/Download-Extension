@@ -49,25 +49,6 @@ interface format_interface
 	public function resize_value($config_name, $config_value);
 
 	/**
-	 * Transform traffic value into bytes for storage
-	 *
-	 * @param int $traffic_amount amount of traffic value
-	 * @param string $traffic_range indicator for value range e. g. KB or MB
-	 * @return int recalculated value in bytes for storage
-	 * @access public
-	 */
-	public function get_traffic_save_value($traffic_amount, $traffic_range);
-
-	/**
-	 * Format traffic values from bytes into readable size
-	 *
-	 * @param int $traffic_amount amount of stored traffic value
-	 * @return mixed recalculated amount into range value
-	 * @access public
-	 */
-	public function get_traffic_display_value($traffic_amount);
-
-	/**
 	 * Generate hash value for posts or other cases e. g. for file names
 	 *
 	 * @param string $value string to generate hash about

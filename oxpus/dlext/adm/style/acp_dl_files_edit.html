@@ -68,12 +68,6 @@
 </fieldset>
 {% endif %}
 
-{% if S_DL_UPLOAD_TRAFFIC %}
-<div class="error">
-	<div><strong>{{ lang('DL_UPLOAD_TRAFFIC') }}</strong></div>
-</div>
-{% endif %}
-
 <fieldset>
 
 	<legend>{{ DL_ACTION_MODE }}</legend>
@@ -170,39 +164,13 @@
 			</select>
 		</dd>
 	</dl>
-	{% if not S_DL_TRAFFIC %}
-	<dl>
-		<dt><label>{{ lang('DL_TRAFFIC') }}</label></dt>
-		<dd>
-			<a class="help" data-key="DL_TRAFFIC"><i class="icon fa-question-circle fa-fw"></i></a>
-			<input type="text" name="file_traffic" size="10" maxlength="10" value="{{ DL_TRAFFIC }}">
-			<select name="dl_t_quote">
-				{% for dl_t_quote_select in loops.dl_t_quote_select %}
-				<option value="{{ dl_t_quote_select.DL_VALUE }}"{% if dl_t_quote_select.DL_VALUE eq S_DL_TRAFFIC_RANGE %} selected{% endif %}>{{ dl_t_quote_select.DL_LANG }}</option>
-				{% endfor %}
-			</select>
-		</dd>
-	</dl>
-	{% endif %}
 
 </fieldset>
 
-{% if S_DL_USE_HACKLIST %}
 <fieldset>
 
-	<legend>{{ lang('DL_HACKS_LIST') }}</legend>
+	<legend>{{ lang('DL_MOD_LIST_SHORT') }}</legend>
 
-	<dl>
-		<dt><label>{{ lang('DL_HACKLIST') }}</label></dt>
-		<dd>
-			<a class="help" data-key="DL_HACKLIST"><i class="icon fa-question-circle fa-fw"></i></a>
-			<select name="hacklist">
-				{% for dl_hacklist_select in loops.dl_hacklist_select %}
-				<option value="{{ dl_hacklist_select.DL_VALUE }}"{% if dl_hacklist_select.DL_VALUE eq S_DL_HACKLIST %} selected{% endif %}>{{ dl_hacklist_select.DL_LANG }}</option>
-				{% endfor %}
-			</select>
-		</dd>
-	</dl>
 	<dl>
 		<dt><label>{{ lang('DL_HACK_AUTOR') }}</label></dt>
 		<dd>
@@ -233,7 +201,6 @@
 	</dl>
 
 </fieldset>
-{% endif %}
 
 {% if S_DL_ALLOW_EDIT_MOD_DESC or S_DL_TODO_LINK_ONOFF %}
 <fieldset>

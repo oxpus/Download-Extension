@@ -13,8 +13,6 @@
 
 	<tbody>
 	<tr>
-		<td>{{ lang('DL_ACP_MAIN_STATS_TRAFFIC') }}{{ lang('COLON') }}</td>
-		<td><span class="dl-{% if S_DL_TRAFFIC_OFF %}red{% else %}green{% endif %}"><strong>{% if S_DL_TRAFFIC_OFF %}{{ lang('DL_ACP_MAIN_STATS_TRAFFIC_OFF') }}{% else %}{{ lang('DL_ACP_MAIN_STATS_TRAFFIC_ON') }}{% endif %}</strong></span></td>
 		<td>{{ lang('DL_VERSION_CHECK') }}{{ lang('COLON') }}</td>
 		<td><strong>{{ DL_MOD_VERSION_SIMPLE }}</strong></td>
 	</tr>
@@ -30,20 +28,6 @@
 		<td>{{ lang('DL_ACP_MAIN_STATS_TOTAL_SIZE') }}{{ lang('COLON') }}</td>
 		<td><strong>{{ DL_TOTAL_SIZE }}</strong></td>
 	</tr>
-	{% if not S_DL_TRAFFIC_OFF %}
-	<tr>
-		<td>{{ lang('DL_ACP_MAIN_STATS_TOTAL_TRAFFIC') }}{{ lang('COLON') }}</td>
-		<td><strong>{{ DL_OVERALL_TRAFFIC }}</strong></td>
-		<td>{{ lang('DL_ACP_MAIN_STATS_REMAIN_TRAFFIC') }}{{ lang('COLON') }}</td>
-		<td><strong>{{ DL_REMAIN_TRAFFIC }}</strong></td>
-	</tr>
-	<tr>
-		<td>{{ lang('DL_ACP_MAIN_STATS_TOTAL_GTRAFFIC') }}{{ lang('COLON') }}</td>
-		<td><strong>{{ DL_OVERALL_GTRAFFIC }}</strong></td>
-		<td>{{ lang('DL_ACP_MAIN_STATS_REMAIN_GTRAFFIC') }}{{ lang('COLON') }}</td>
-		<td><strong>{{ DL_REMAIN_GTRAFFIC }}</strong></td>
-	</tr>
-	{% endif %}
 	<tr>
 		<td>{{ lang('DL_OVERALL_KLICKS') }}{{ lang('COLON') }}</td>
 		<td><strong>{{ DL_OCLICKS }}</strong></td>

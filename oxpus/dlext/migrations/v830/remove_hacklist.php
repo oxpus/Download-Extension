@@ -10,12 +10,12 @@
 
 namespace oxpus\dlext\migrations\v830;
 
-class remove_bug_tracker extends \phpbb\db\migration\migration
+class remove_hacklist extends \phpbb\db\migration\migration
 {
 	public function effectively_installed()
 	{
-		return !$this->db_tools->sql_table_exists($this->table_prefix . 'dl_bug_tracker')
-			&& !$this->db_tools->sql_table_exists($this->table_prefix . 'dl_bug_history');
+		return !$this->db_tools->sql_table_exists($this->table_prefix . 'downloads')
+			|| !$this->db_tools->sql_column_exists($this->table_prefix . 'downloads', 'hacklist');
 	}
 
 	public static function depends_on()
@@ -26,13 +26,9 @@ class remove_bug_tracker extends \phpbb\db\migration\migration
 	public function update_schema()
 	{
 		return [
-			'drop_tables' => [
-				$this->table_prefix . 'dl_bug_tracker',
-				$this->table_prefix . 'dl_bug_history',
-			],
 			'drop_columns' => [
-				$this->table_prefix . 'downloads_cat' => [
-					'bug_tracker',
+				$this->table_prefix . 'downloads' => [
+					'hacklist',
 				],
 			],
 		];
@@ -47,7 +43,8 @@ class remove_bug_tracker extends \phpbb\db\migration\migration
 	public function update_data()
 	{
 		return [
-			['config.remove', ['dl_nav_link_tracker']],
+			['config.remove', ['dl_use_hacklist']],
+			['config.remove', ['dl_nav_link_hacks']],
 		];
 	}
 }

@@ -219,15 +219,6 @@ class footer implements footer_interface
 				$s_dl_jumpbox = $this->dlext_constants::DL_FALSE;
 			}
 
-			if ($this->config['dl_user_traffic_once'])
-			{
-				$l_can_download_again = $this->language->lang('DL_CAN_DOWNLOAD_TRAFFIC_FOOTER');
-			}
-			else
-			{
-				$l_can_download_again = '';
-			}
-
 			$ext_stats_enable = $this->dlext_constants::DL_FALSE;
 
 			switch ($this->config['dl_mini_stats_ext'])
@@ -257,9 +248,6 @@ class footer implements footer_interface
 
 			if ($ext_stats_enable)
 			{
-				$overall_traffic = $this->dlext_format->dl_size($this->config['dl_overall_traffic']);
-				$overall_guest_traffic = $this->dlext_format->dl_size($this->config['dl_overall_guest_traffic']);
-
 				$dl_file_p = $this->dlext_cache->obtain_dl_file_p();
 				$total_cur_clicks = 0;
 
@@ -272,8 +260,6 @@ class footer implements footer_interface
 				}
 
 				$this->template->assign_vars([
-					'DL_EXT_STATS_OVERALL_TRAFFIC'			=> $overall_traffic,
-					'DL_EXT_STATS_OVERALL_GUESTS_TRAFFIC'	=> $overall_guest_traffic,
 					'DL_EXT_STATS_MONTH_CLICKS'				=> $total_cur_clicks,
 					'S_DL_FOOTER_STATS'						=> $this->dlext_constants::DL_TRUE,
 				]);
@@ -318,11 +304,10 @@ class footer implements footer_interface
 			$translation = $this->language->lang('DL_TRANSLATION');
 
 			$this->template->assign_vars([
-				'L_DL_GREEN_EXPLAIN'		=> ($this->config['dl_traffic_off']) ? $this->language->lang('DL_GREEN_EXPLAIN_T_OFF') : $this->language->lang('DL_GREEN_EXPLAIN'),
-				'L_DL_WHITE_EXPLAIN'		=> ($this->config['dl_traffic_off']) ? $this->language->lang('DL_WHITE_EXPLAIN_T_OFF') : $this->language->lang('DL_WHITE_EXPLAIN'),
-				'L_DL_GREY_EXPLAIN'			=> ($this->config['dl_traffic_off']) ? $this->language->lang('DL_GREY_EXPLAIN_T_OFF') : $this->language->lang('DL_GREY_EXPLAIN'),
-				'L_DL_RED_EXPLAIN'			=> sprintf((($this->config['dl_traffic_off']) ? $this->language->lang('DL_RED_EXPLAIN_T_OFF') : $this->language->lang('DL_RED_EXPLAIN')), $this->config['dl_posts']),
-				'L_CAN_DOWNLOAD_AGAIN'		=> $l_can_download_again,
+				'L_DL_GREEN_EXPLAIN'		=> $this->language->lang('DL_GREEN_EXPLAIN'),
+				'L_DL_WHITE_EXPLAIN'		=> $this->language->lang('DL_WHITE_EXPLAIN'),
+				'L_DL_GREY_EXPLAIN'			=> $this->language->lang('DL_GREY_EXPLAIN'),
+				'L_DL_RED_EXPLAIN'			=> sprintf($this->language->lang('DL_RED_EXPLAIN'), $this->config['dl_posts']),
 
 				'DL_MOD_RELEASE'			=> $this->language->lang('DL_MOD_VERSION_PUBLIC'),
 				'DL_LIGHTBOX_RESIZE_WIDTH'	=> 0,
@@ -334,81 +319,6 @@ class footer implements footer_interface
 				'U_DL_TODOLIST'				=> $this->helper->route('oxpus_dlext_todo'),
 				'U_DL_OVERALL_VIEW'			=> ($this->config['dl_overview_link_onoff']) ? $this->helper->route('oxpus_dlext_overall') : '',
 			]);
-
-			if ($this->config['dl_show_footer_stat'] && !$this->config['dl_traffic_off'])
-			{
-				$remain_traffic = $this->config['dl_overall_traffic'] - (int) $this->config['dl_remain_traffic'];
-
-				if ($this->user->data['is_registered'] && $this->dlext_constants->get_value('overall_traffics'))
-				{
-					if ($remain_traffic <= 0)
-					{
-						$overall_traffic = $this->dlext_format->dl_size($this->config['dl_overall_traffic']);
-
-						$text_no_more_remain_traffic = $this->language->lang('DL_NO_MORE_REMAIN_TRAFFIC', $overall_traffic);
-
-						if ($this->dlext_constants->get_value('founder_traffics'))
-						{
-							$text_no_more_remain_traffic = $this->language->lang('DL_TRAFFICS_FOUNDER_INFO', $text_no_more_remain_traffic);
-						}
-
-						$this->template->assign_var('DL_NO_OVERALL_TRAFFIC', $text_no_more_remain_traffic);
-					}
-					else
-					{
-						$remain_text_out = $this->language->lang('DL_REMAIN_OVERALL_TRAFFIC_FOOTER', $this->dlext_format->dl_size($remain_traffic, 2));
-
-						if ($this->dlext_constants->get_value('founder_traffics'))
-						{
-							$remain_text_out = $this->language->lang('DL_TRAFFICS_FOUNDER_INFO', $remain_text_out);
-						}
-
-						$this->template->assign_var('DL_REMAIN_TRAFFIC', $remain_text_out);
-					}
-				}
-
-				if ($this->user->data['is_registered'] && $this->dlext_constants->get_value('users_traffics'))
-				{
-					$user_traffic			= ($this->user->data['user_traffic'] > $remain_traffic && $this->dlext_constants->get_value('overall_traffics')) ? $remain_traffic : $this->user->data['user_traffic'];
-					$user_traffic_out		= $this->dlext_format->dl_size($user_traffic, 2);
-					$user_account_traffic	= $this->language->lang('DL_ACCOUNT', $user_traffic_out);
-
-					if ($this->dlext_constants->get_value('founder_traffics'))
-					{
-						$user_account_traffic = $this->language->lang('DL_TRAFFICS_FOUNDER_INFO', $user_account_traffic);
-					}
-
-					$this->template->assign_var('DL_ACCOUNT_TRAFFIC', ($this->user->data['user_id'] != ANONYMOUS) ? $user_account_traffic : '');
-				}
-
-				if ($this->user->data['user_type'] == USER_FOUNDER || $this->dlext_constants->get_value('guests_traffics'))
-				{
-					if ($this->config['dl_overall_guest_traffic'] - (int) $this->config['dl_remain_guest_traffic'] <= 0)
-					{
-						$overall_guest_traffic			= $this->dlext_format->dl_size($this->config['dl_overall_guest_traffic']);
-						$text_no_overall_guest_traffic	= $this->language->lang('DL_NO_MORE_REMAIN_GUEST_TRAFFIC', $overall_guest_traffic);
-
-						if ($this->user->data['user_type'] == USER_FOUNDER)
-						{
-							$text_no_overall_guest_traffic = $this->language->lang('DL_TRAFFICS_FOUNDER_INFO', $text_no_overall_guest_traffic);
-						}
-
-						$this->template->assign_var('DL_NO_OVERALL_GUEST_TRAFFIC', $text_no_overall_guest_traffic);
-					}
-					else
-					{
-						$remain_guest_traffic	= $this->config['dl_overall_guest_traffic'] - $this->config['dl_remain_guest_traffic'];
-						$remain_guest_text_out	= $this->language->lang('DL_REMAIN_OVERALL_GUEST_TRAFFIC_F', $this->dlext_format->dl_size($remain_guest_traffic, 2));
-
-						if ($this->user->data['user_type'] == USER_FOUNDER)
-						{
-							$remain_guest_text_out = $this->language->lang('DL_TRAFFICS_FOUNDER_INFO', $remain_guest_text_out);
-						}
-
-						$this->template->assign_var('DL_REMAIN_GUEST_TRAFFIC', $remain_guest_text_out);
-					}
-				}
-			}
 
 			if ($this->config['dl_show_footer_legend'])
 			{

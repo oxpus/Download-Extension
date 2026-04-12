@@ -179,13 +179,11 @@ class download implements download_interface
 		$long_desc				= $dl_data_array['long_desc'] = 			$this->request->variable('long_desc', '', $this->dlext_constants::DL_TRUE);
 		$file_name				= $dl_data_array['file_name'] = 			$this->request->variable('file_name', '', $this->dlext_constants::DL_TRUE);
 		$file_name_extern		= $dl_data_array['file_name_extern'] = 		$this->request->variable('file_name_extern', '', $this->dlext_constants::DL_TRUE);
-		$file_traffic			= $dl_data_array['file_traffic'] = 			$this->request->variable('file_traffic', 0);
 		$file_extern			= $dl_data_array['file_extern'] = 			$this->request->variable('file_extern', 0);
 		$file_extern_size		= $dl_data_array['file_extern_size'] = 		$this->request->variable('file_extern_size', '');
 		$file_free				= $dl_data_array['file_free'] = 			$this->request->variable('file_free', 0);
 		$file_version			= $dl_data_array['file_version'] = 			$this->request->variable('file_version', 0);
 		$file_option			= $dl_data_array['file_ver_opt'] = 			$this->request->variable('file_ver_opt', 0);
-		$hacklist				= $dl_data_array['hacklist'] = 				$this->request->variable('hacklist', 0);
 		$hack_author			= $dl_data_array['hack_author'] = 			$this->request->variable('hack_author', '', $this->dlext_constants::DL_TRUE);
 		$hack_author_email		= $dl_data_array['hack_author_email'] = 	$this->request->variable('hack_author_email', '', $this->dlext_constants::DL_TRUE);
 		$hack_author_web		= $dl_data_array['hack_author_website'] = 	$this->request->variable('hack_author_website', '', $this->dlext_constants::DL_TRUE);
@@ -262,15 +260,10 @@ class download implements download_interface
 
 		if ($file_extern)
 		{
-			$file_traffic = 0;
 			if ($module == 'acp')
 			{
 				$file_name = $file_name_extern;
 			}
-		}
-		else
-		{
-			$file_traffic = $this->dlext_format->resize_value('dl_file_traffic', $file_traffic);
 		}
 
 		$index		= $this->dlext_main->full_index($cat_id);
@@ -415,27 +408,6 @@ class download implements download_interface
 
 				if ($file_name)
 				{
-					if (!$this->config['dl_traffic_off'])
-					{
-						$remain_traffic = 0;
-
-						if ($this->user->data['is_registered'] && $this->dlext_constants->get_value('overall_traffics'))
-						{
-							$remain_traffic = $this->config['dl_overall_traffic'] - $this->config['dl_remain_traffic'];
-						}
-						else if (!$this->user->data['is_registered'] && $this->dlext_constants->get_value('guests_traffics'))
-						{
-							$remain_traffic = $this->config['dl_overall_guest_traffic'] - $this->config['dl_remain_guest_traffic'];
-						}
-
-						if (!$file_size || ($remain_traffic && $file_size > $remain_traffic && $this->config['dl_upload_traffic_count']))
-						{
-							$upload_file->remove();
-							$dl_error = $this->dlext_constants::DL_TRUE;
-							$error[] = $this->language->lang('DL_NO_UPLOAD_TRAFFIC');
-						}
-					}
-
 					if ($file_option == $this->dlext_constants::DL_VERSION_REPLACE && !$file_version && $file_path && $real_file_old)
 					{
 						$this->filesystem->remove($this->dlext_constants->get_value('files_dir') . '/downloads/' . $file_path . $real_file_old);
@@ -632,12 +604,10 @@ class download implements download_interface
 
 		$sql_array = [
 			'description'			=> $description,
-			'file_traffic'			=> $file_traffic,
 			'long_desc'				=> $long_desc,
 			'free'					=> $file_free,
 			'extern'				=> $file_extern,
 			'cat'					=> $cat_id,
-			'hacklist'				=> $hacklist,
 			'hack_author'			=> $hack_author,
 			'hack_author_email'		=> $hack_author_email,
 			'hack_author_website'	=> $hack_author_web,
@@ -815,20 +785,6 @@ class download implements download_interface
 
 		// Update Custom Fields
 		$this->dlext_fields->update_profile_field_data($dl_t_id, $cp_data);
-
-		if ($this->config['dl_upload_traffic_count'] && !$file_extern && !$this->config['dl_traffic_off'])
-		{
-			if ($this->user->data['is_registered'] && $this->dlext_constants->get_value('overall_traffics') == $this->dlext_constants::DL_TRUE)
-			{
-				$this->config['dl_remain_traffic'] += $file_size;
-				$this->config->set('dl_remain_traffic', $this->config['dl_remain_traffic']);
-			}
-			else if (!$this->user->data['is_registered'] && $this->dlext_constants->get_value('guests_traffics') == $this->dlext_constants::DL_TRUE)
-			{
-				$this->config['dl_remain_guest_traffic'] += $file_size;
-				$this->config->set('dl_remain_guest_traffic', $this->config['dl_remain_guest_traffic']);
-			}
-		}
 
 		if ($index[$cat_id]['statistics'])
 		{
@@ -1040,11 +996,9 @@ class download implements download_interface
 			$dl_file['todo']		= $text_ary['text'];
 
 			$description			= $this->request->variable('description', $dl_file['description'], $this->dlext_constants::DL_TRUE);
-			$file_traffic			= $this->request->variable('file_traffic', $dl_file['file_traffic']);
 			$dl_extern				= $this->request->variable('file_extern', $dl_file['extern']);
 			$dl_extern_size			= $this->request->variable('file_extern_size', $dl_file['file_size']);
 			$file_name				= ($dl_extern) ? $this->request->variable('file_name', $dl_file['file_name'], $this->dlext_constants::DL_TRUE) : '';
-			$hacklist				= $this->request->variable('hacklist', $dl_file['hacklist']);
 			$hack_author			= $this->request->variable('hack_author', $dl_file['hack_author'], $this->dlext_constants::DL_TRUE);
 			$hack_author_email		= $this->request->variable('hack_author_email', $dl_file['hack_author_email'], $this->dlext_constants::DL_TRUE);
 			$hack_author_web		= $this->request->variable('hack_author_website', $dl_file['hack_author_website'], $this->dlext_constants::DL_TRUE);
@@ -1060,10 +1014,6 @@ class download implements download_interface
 			$dl_free				= $this->request->variable('file_free', $dl_file['free']);
 			$approve				= $this->request->variable('approve', $dl_file['approve']);
 
-			$tmp_ary				= $this->dlext_format->dl_size($file_traffic, 2, 'select');
-			$file_traffic_out		= $tmp_ary['size_out'];
-			$data_range_select		= $tmp_ary['range'];
-
 			$tmp_ary				= $this->dlext_format->dl_size($dl_extern_size, 2, 'select');
 			$file_extern_size_out	= $tmp_ary['size_out'];
 			$file_extern_size_range	= $tmp_ary['range'];
@@ -1076,11 +1026,6 @@ class download implements download_interface
 			}
 
 			$this->template->assign_var('S_DL_CLICK_RESET', $this->dlext_constants::DL_TRUE);
-
-			if ($this->config['dl_traffic_off'])
-			{
-				$s_hidden_fields += ['file_traffic' => 0];
-			}
 		}
 		else
 		{
@@ -1089,11 +1034,9 @@ class download implements download_interface
 			$cat_auth	= $this->dlext_auth->dl_cat_auth($cat_id);
 
 			$description			= $this->request->variable('description', '', $this->dlext_constants::DL_TRUE);
-			$file_traffic			= $this->request->variable('file_traffic', 0);
 			$dl_extern				= $this->request->variable('file_extern', 0);
 			$dl_extern_size			= $this->request->variable('file_extern_size', 0);
 			$file_name				= ($dl_extern) ? $this->request->variable('file_name', '', $this->dlext_constants::DL_TRUE) : '';
-			$hacklist				= $this->request->variable('hacklist', 0);
 			$hack_author			= $this->request->variable('hack_author', '', $this->dlext_constants::DL_TRUE);
 			$hack_author_email		= $this->request->variable('hack_author_email', '', $this->dlext_constants::DL_TRUE);
 			$hack_author_web		= $this->request->variable('hack_author_website', '', $this->dlext_constants::DL_TRUE);
@@ -1108,10 +1051,6 @@ class download implements download_interface
 			$mod_list				= $this->request->variable('mod_list', 0);
 			$dl_free				= $this->request->variable('file_free', 0);
 			$approve				= $this->request->variable('approve', 0);
-
-			$tmp_ary				= $this->dlext_format->dl_size($file_traffic, 2, 'select');
-			$file_traffic_out		= $tmp_ary['size_out'];
-			$data_range_select		= $tmp_ary['range'];
 
 			$tmp_ary				= $this->dlext_format->dl_size($dl_extern_size, 2, 'select');
 			$file_extern_size_out	= $tmp_ary['size_out'];
@@ -1198,11 +1137,6 @@ class download implements download_interface
 			$this->template->assign_var('S_DL_VERSION_ON', $this->dlext_constants::DL_TRUE);
 		}
 
-		if ($this->config['dl_use_hacklist'] && $this->dlext_auth->user_admin())
-		{
-			$this->template->assign_var('S_DL_USE_HACKLIST', $this->dlext_constants::DL_TRUE);
-		}
-
 		if ($index[$cat_id]['allow_mod_desc'])
 		{
 			$this->template->assign_var('S_DL_ALLOW_EDIT_MOD_DESC', $this->dlext_constants::DL_TRUE);
@@ -1261,13 +1195,6 @@ class download implements download_interface
 			$formated_hint_text 		= generate_text_for_display($dl_file_edit_hint, $dl_file_edit_hint_uid, $dl_file_edit_hint_bitfield, $dl_file_edit_hint_flags);
 		}
 
-		$s_upload_traffic = $this->dlext_constants::DL_FALSE;
-
-		if ($this->config['dl_upload_traffic_count'] && !$this->config['dl_traffic_off'])
-		{
-			$s_upload_traffic = $this->dlext_constants::DL_TRUE;
-		}
-
 		if ($module == 'upload' && !$cat_auth['auth_mod'] && !$index[$cat_id]['auth_mod'] && !$this->dlext_auth->user_admin())
 		{
 			$approve = ($index[$cat_id]['must_approve']) ? $this->dlext_constants::DL_FALSE : $this->dlext_constants::DL_TRUE;
@@ -1300,7 +1227,6 @@ class download implements download_interface
 			'DL_CHECKEXTERN'			=> $dl_extern,
 			'DL_DESCRIPTION'			=> $description,
 			'DL_LONG_DESC'				=> $long_desc,
-			'DL_TRAFFIC'				=> $file_traffic_out,
 			'DL_APPROVE'				=> $approve,
 			'DL_FILE_NAME'				=> $file_name,
 			'DL_URL'					=> $file_name,
@@ -1323,13 +1249,9 @@ class download implements download_interface
 
 			'S_DL_TODO_LINK_ONOFF'		=> ($this->config['dl_todo_onoff']) ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE,
 			'S_DL_CHECK_FREE'			=> $dl_free,
-			'S_DL_TRAFFIC_RANGE'		=> $data_range_select,
 			'S_DL_FILE_EXT_SIZE_RANGE'	=> $file_extern_size_range,
-			'S_DL_HACKLIST'				=> $hacklist,
-			'S_DL_UPLOAD_TRAFFIC'		=> $s_upload_traffic,
 			'S_DL_SELECT_VER_DEL'		=> $total_versions,
 			'S_DL_DOWNLOADS_ACTION'		=> $s_form_action,
-			'S_DL_TRAFFIC'				=> $this->config['dl_traffic_off'],
 			'S_DL_HIDDEN_FIELDS'		=> build_hidden_fields($s_hidden_fields),
 
 			'U_DL_UNASSIGN'				=> $this->helper->route('oxpus_dlext_unassigned'),
@@ -1349,20 +1271,6 @@ class download implements download_interface
 			]);
 		}
 
-		$s_traffic_range = [];
-		$s_traffic_range[] = ['value' => $this->dlext_constants::DL_FILE_RANGE_BYTE,	'lang'	=> $this->language->lang('DL_BYTES')];
-		$s_traffic_range[] = ['value' => $this->dlext_constants::DL_FILE_RANGE_KBYTE,	'lang'	=> $this->language->lang('DL_KB')];
-		$s_traffic_range[] = ['value' => $this->dlext_constants::DL_FILE_RANGE_MBYTE,	'lang'	=> $this->language->lang('DL_MB')];
-		$s_traffic_range[] = ['value' => $this->dlext_constants::DL_FILE_RANGE_GBYTE,	'lang'	=> $this->language->lang('DL_GB')];
-
-		for ($i = 0; $i < count($s_traffic_range); ++$i)
-		{
-			$this->template->assign_block_vars('dl_t_quote_select', [
-				'DL_VALUE'		=> $s_traffic_range[$i]['value'],
-				'DL_LANG'		=> $s_traffic_range[$i]['lang'],
-			]);
-		}
-
 		$s_file_ext_size_range = [];
 		$s_file_ext_size_range[] = ['value' => $this->dlext_constants::DL_FILE_RANGE_BYTE,	'lang'	=> $this->language->lang('DL_BYTES')];
 		$s_file_ext_size_range[] = ['value' => $this->dlext_constants::DL_FILE_RANGE_KBYTE,	'lang'	=> $this->language->lang('DL_KB')];
@@ -1374,19 +1282,6 @@ class download implements download_interface
 			$this->template->assign_block_vars('dl_e_quote_select', [
 				'DL_VALUE'		=> $s_file_ext_size_range[$i]['value'],
 				'DL_LANG'		=> $s_file_ext_size_range[$i]['lang'],
-			]);
-		}
-
-		$s_hacklist = [];
-		$s_hacklist[] = ['value' => $this->dlext_constants::DL_HACKLIST_NO,		'lang'	=> $this->language->lang('NO')];
-		$s_hacklist[] = ['value' => $this->dlext_constants::DL_HACKLIST_YES,	'lang'	=> $this->language->lang('YES')];
-		$s_hacklist[] = ['value' => $this->dlext_constants::DL_HACKLIST_EXTRA,	'lang'	=> $this->language->lang('DL_MOD_LIST_SHORT')];
-
-		for ($i = 0; $i < count($s_hacklist); ++$i)
-		{
-			$this->template->assign_block_vars('dl_hacklist_select', [
-				'DL_VALUE'		=> $s_hacklist[$i]['value'],
-				'DL_LANG'		=> $s_hacklist[$i]['lang'],
 			]);
 		}
 

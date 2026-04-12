@@ -45,11 +45,9 @@ class listener implements EventSubscriberInterface
 
 	protected $dl_index;
 
-	protected $dlext_table_dl_cat_traf;
 	protected $dlext_table_dl_comments;
 	protected $dlext_table_dl_favorites;
 	protected $dlext_table_dl_hotlink;
-	protected $dlext_table_dl_notraf;
 	protected $dlext_table_dl_reports;
 	protected $dlext_table_dl_stats;
 	protected $dlext_table_downloads;
@@ -74,11 +72,9 @@ class listener implements EventSubscriberInterface
 	 * @param \oxpus\dlext\core\privacy 			$dlext_privacy
 	 * @param \oxpus\dlext\core\physical			$dlext_physical
 	 * @param \oxpus\dlext\core\helpers\constants 	$dlext_constants
-	 * @param string								$dlext_table_dl_cat_traf
 	 * @param string								$dlext_table_dl_comments
 	 * @param string								$dlext_table_dl_favorites
 	 * @param string								$dlext_table_dl_hotlink
-	 * @param string								$dlext_table_dl_notraf
 	 * @param string								$dlext_table_dl_reports
 	 * @param string								$dlext_table_dl_stats
 	 * @param string								$dlext_table_downloads
@@ -101,11 +97,9 @@ class listener implements EventSubscriberInterface
 		\oxpus\dlext\core\privacy $dlext_privacy,
 		\oxpus\dlext\core\physical $dlext_physical,
 		\oxpus\dlext\core\helpers\constants $dlext_constants,
-		$dlext_table_dl_cat_traf,
 		$dlext_table_dl_comments,
 		$dlext_table_dl_favorites,
 		$dlext_table_dl_hotlink,
-		$dlext_table_dl_notraf,
 		$dlext_table_dl_reports,
 		$dlext_table_dl_stats,
 		$dlext_table_downloads,
@@ -123,11 +117,9 @@ class listener implements EventSubscriberInterface
 		$this->cache					= $cache;
 		$this->filesystem				= $filesystem;
 
-		$this->dlext_table_dl_cat_traf		= $dlext_table_dl_cat_traf;
 		$this->dlext_table_dl_comments		= $dlext_table_dl_comments;
 		$this->dlext_table_dl_favorites		= $dlext_table_dl_favorites;
 		$this->dlext_table_dl_hotlink		= $dlext_table_dl_hotlink;
-		$this->dlext_table_dl_notraf		= $dlext_table_dl_notraf;
 		$this->dlext_table_dl_reports		= $dlext_table_dl_reports;
 		$this->dlext_table_dl_stats			= $dlext_table_dl_stats;
 		$this->dlext_table_downloads		= $dlext_table_downloads;
@@ -223,22 +215,6 @@ class listener implements EventSubscriberInterface
 				'U_DL_SELF'		=> ($total_downloads) ? $dl_main_self : '',
 			]);
 
-			if ($this->config['dl_use_hacklist'])
-			{
-				$sql = 'SELECT id FROM ' . $this->dlext_table_downloads . '
-					WHERE hacklist = 1';
-				$result = $this->db->sql_query_limit($sql, 1);
-				$total_hl = $this->db->sql_affectedrows($result);
-				$this->db->sql_freeresult($result);
-
-				if ($total_hl)
-				{
-					$this->template->assign_vars([
-						'U_DL_HACKS_LIST'	=> $this->helper->route('oxpus_dlext_hacklist'),
-					]);
-				}
-			}
-
 			$this->_dl_reset_values();
 			$this->_dl_navi_links();
 			$this->_dl_purge_hotlinks();
@@ -260,9 +236,6 @@ class listener implements EventSubscriberInterface
 		$total_size = ($total_size > $physical_limit) ? $physical_limit : $total_size;
 		$total_limit_remain = $this->dlext_format->dl_size($physical_limit - $total_size, 2);
 
-		$remain_traffic = $this->dlext_format->dl_size($this->config['dl_overall_traffic'] - (int) $this->config['dl_remain_traffic'], 2);
-		$remain_guest_traffic = $this->dlext_format->dl_size($this->config['dl_overall_guest_traffic'] - (int) $this->config['dl_remain_guest_traffic'], 2);
-
 		$this->template->assign_vars([
 			'DL_LIMIT_PHP_FILE_UPLOAD'			=> $file_uploads,
 			'DL_LIMIT_PHP_MAX_FILE_UPLOAD'		=> $max_file_uploads,
@@ -272,25 +245,16 @@ class listener implements EventSubscriberInterface
 			'DL_LIMIT_PHP_POST_MAX_SIZE'		=> $post_max_size,
 			'DL_LIMIT_PHP_UPLOAD_MAX_FILESIZE'	=> $upload_max_filesize,
 
-			'DL_LIMIT_TRAFFIC_USER_REMAIN'		=> $remain_traffic,
-			'DL_LIMIT_TRAFFIC_GUESTS_REMAIN'	=> $remain_guest_traffic,
 			'DL_LIMIT_TOTAL_REMAIN'				=> $total_limit_remain,
 			'DL_LIMIT_THUMBNAIL_SIZE'			=> $this->dlext_format->dl_size($this->config['dl_thumb_fsize'],2),
 			'DL_LIMIT_THUMBNAIL_XY_SIZE'		=> $this->language->lang('DL_LIMIT_THUMBNAIL_XYSIZE', $this->config['dl_thumb_xsize'], $this->config['dl_thumb_ysize']),
 			'DL_PHP_INI'						=> $this->language->lang('DL_PHP_INI_EXPLAIN', php_ini_loaded_file()),
-
-			'S_DL_TRAFFIC_OFF'					=> $this->config['dl_traffic_off'],
 		]);
 	}
 
 	public function core_viewonline_overwrite_location($event)
 	{
-		if (strpos($event['row']['session_page'], 'hacklist') !== false)
-		{
-			$event['location'] = $this->language->lang('DL_PAGE_DL_HACKSLIST');
-			$event['location_url'] = $this->helper->route('oxpus_dlext_hacklist');
-		}
-		else if (strpos($event['row']['session_page'], 'dlext') !== false)
+		if (strpos($event['row']['session_page'], 'dlext') !== false)
 		{
 			$event['location'] = $this->language->lang('DL_PAGE_DOWNLOADS');
 			$event['location_url'] = $this->helper->route('oxpus_dlext_index');
@@ -322,16 +286,6 @@ class listener implements EventSubscriberInterface
 			'DL_DOWNLOADS'		=> $total_downloads,
 			'U_DL_DOWNLOADS'	=> ($total_downloads) ? $this->helper->route('oxpus_dlext_search', ['search_user_id' => $user_id]) : '',
 		]);
-
-		if (!$this->config['dl_traffic_off'])
-		{
-			$user_traffic = $this->dlext_format->dl_size($member['user_traffic'], 2, 'combine');
-
-			$this->template->assign_block_vars('custom_fields', [
-				'PROFILE_FIELD_NAME'	=> $this->language->lang('DL_REMAIN_USER_TRAFFIC'),
-				'PROFILE_FIELD_VALUE'	=> $user_traffic,
-			]);
-		}
 	}
 
 	public function core_update_username($event)
@@ -349,7 +303,7 @@ class listener implements EventSubscriberInterface
 
 	public function core_delete_user_after($event)
 	{
-		$table_ary = [$this->dlext_table_dl_notraf, $this->dlext_table_dl_reports];
+		$table_ary = [$this->dlext_table_dl_reports];
 
 		// Delete the miscellaneous (non-post) data for the user
 		foreach ($table_ary as $table)
@@ -366,86 +320,12 @@ class listener implements EventSubscriberInterface
 
 	public function core_submit_post_end($event)
 	{
-		if ($this->config['dl_enable_post_dl_traffic'] && !$this->config['dl_traffic_off'] && $this->dlext_constants->get_value('users_traffics') && !$this->dlext_constants->get_value('founder_traffics'))
-		{
-			if (!$this->config['dl_delay_post_traffic'] || ((time() - $this->user->data['user_regdate']) / 84600) > $this->config['dl_delay_post_traffic'])
-			{
-				$dl_traffic = 0;
-
-				if ($event['mode'] == 'post')
-				{
-					$dl_traffic = $this->config['dl_newtopic_traffic'];
-				}
-				else if ($event['mode'] == 'reply' || $event['mode'] == 'quote')
-				{
-					$dl_traffic = $this->config['dl_reply_traffic'];
-				}
-
-				if (intval($dl_traffic) > 0)
-				{
-					$sql = 'UPDATE ' . USERS_TABLE . '
-						SET user_traffic = user_traffic + ' . (int) $dl_traffic . '
-						WHERE user_id = ' . (int) $this->user->data['user_id'];
-					$this->db->sql_query($sql);
-				}
-			}
-		}
+		// Traffic management removed
 	}
 
 	public function core_modify_posting_parameters($event)
 	{
-		if ($this->config['dl_drop_traffic_postdel'] && !$this->config['dl_traffic_off'] && $this->dlext_constants->get_value('users_traffics') && !$this->dlext_constants->get_value('founder_traffics'))
-		{
-			if ($event['mode'] == 'delete')
-			{
-				if ($event['topic_id'] && !$event['post_id'])
-				{
-					$drop_traffic_amount = $this->config['dl_newtopic_traffic'];
-
-					$sql = 'SELECT topic_poster
-						FROM ' . TOPICS_TABLE . '
-						WHERE topic_id = ' . (int) $event['topic_id'];
-					$result = $this->db->sql_query($sql);
-					$poster_id = $this->db->sql_fetchfield('topic_poster');
-					$this->db->sql_freeresult($result);
-				}
-				else if ($event['post_id'])
-				{
-					$drop_traffic_amount = $this->config['dl_reply_traffic'];
-
-					$sql = 'SELECT poster_id
-						FROM ' . POSTS_TABLE . '
-						WHERE post_id = ' . (int) $event['post_id'];
-					$result = $this->db->sql_query($sql);
-					$poster_id = $this->db->sql_fetchfield('poster_id');
-					$this->db->sql_freeresult($result);
-				}
-
-				if ($poster_id)
-				{
-					$sql = 'SELECT user_traffic FROM ' . USERS_TABLE . '
-						WHERE user_id = ' . (int) $poster_id;
-					$result = $this->db->sql_query($sql);
-					$row = $this->db->sql_fetchrow($result);
-					$user_traffic = $row['user_traffic'];
-					$this->db->sql_freeresult($result);
-
-					if ($user_traffic < $drop_traffic_amount)
-					{
-						$user_traffic = 0;
-					}
-					else
-					{
-						$user_traffic -= $drop_traffic_amount;
-					}
-
-					$sql = 'UPDATE ' . USERS_TABLE . '
-						SET user_traffic = ' . (int) $user_traffic . '
-						WHERE user_id = ' . (int) $poster_id;
-					$this->db->sql_query($sql);
-				}
-			}
-		}
+		// Traffic management removed
 	}
 
 	public function dlext_modify_text_for_dl_link($event)
@@ -572,28 +452,6 @@ class listener implements EventSubscriberInterface
 		/*
 		* set the overall traffic and categories traffic if needed (each first day of a month)
 		*/
-		if (isset($this->config['dl_traffic_retime']) && !$this->config['dl_traffic_off'])
-		{
-			$auto_overall_traffic_month = gmdate('Ym', $this->config['dl_traffic_retime']);
-
-			if ($auto_overall_traffic_month < $current_month)
-			{
-				$this->config['dl_traffic_retime'] = time();
-				$this->config['dl_remain_traffic'] = 0;
-				$this->config['dl_remain_guest_traffic'] = 0;
-
-				$this->config->set('dl_remain_traffic', 0);
-				$this->config->set('dl_remain_guest_traffic', 0);
-
-				$sql = 'UPDATE ' . $this->dlext_table_dl_cat_traf . ' SET ' . $this->db->sql_build_array('UPDATE', [
-					'cat_traffic_use' => 0
-				]);
-				$this->db->sql_query($sql);
-
-				$this->config->set('dl_traffic_retime', $this->config['dl_traffic_retime']);
-			}
-		}
-
 		/*
 		* reset download clicks (each first day of a month)
 		*/
@@ -614,35 +472,6 @@ class listener implements EventSubscriberInterface
 			}
 		}
 
-		/*
-		* set the user traffic if needed (each first day of the month)
-		*/
-		if ($this->user->data['user_id'] != ANONYMOUS && !$this->config['dl_traffic_off'] && (intval($this->config['dl_delay_auto_traffic']) == 0 || (time() - $this->user->data['user_regdate']) / 84600 > $this->config['dl_delay_auto_traffic']))
-		{
-			$user_auto_traffic_month = gmdate('Ym', $this->user->data['user_dl_update_time']);
-
-			if ($user_auto_traffic_month < $current_month)
-			{
-				$sql = 'SELECT max(g.group_dl_auto_traffic) AS max_traffic FROM ' . GROUPS_TABLE . ' g, ' . USER_GROUP_TABLE . ' ug
-					WHERE g.group_id = ug.group_id
-						AND ug.user_id = ' . (int) $this->user->data['user_id'] . '
-						AND ug.user_pending <> 1';
-				$result = $this->db->sql_query($sql);
-				$max_group_row = $this->db->sql_fetchfield('max_traffic');
-				$this->db->sql_freeresult($result);
-
-				$new_user_traffic = (intval($max_group_row) != 0) ? $max_group_row : $this->config['dl_user_dl_auto_traffic'];
-
-				if ($new_user_traffic > $this->user->data['user_traffic'])
-				{
-					$sql = 'UPDATE ' . USERS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', [
-						'user_traffic'			=> $new_user_traffic,
-						'user_dl_update_time'	=> time()
-					]) . ' WHERE user_id = ' . (int) $this->user->data['user_id'];
-					$this->db->sql_query($sql);
-				}
-			}
-		}
 	}
 
 	public function core_group_change_user_after()
@@ -698,20 +527,6 @@ class listener implements EventSubscriberInterface
 			'S_DL_NAV_MAIN_OFTlB'		=> ($this->config['dl_nav_link_main'] == 'OFTlB') ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE,
 			'S_DL_NAV_MAIN_OFTlA'		=> ($this->config['dl_nav_link_main'] == 'OFTlA') ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE,
 
-			'S_DL_NAV_HACKS_NHQLB'		=> ($this->config['dl_nav_link_hacks'] == 'NHQLB') ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE,
-			'S_DL_NAV_HACKS_NHQLA'		=> ($this->config['dl_nav_link_hacks'] == 'NHQLA') ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE,
-			'S_DL_NAV_HACKS_OHNP' 		=> ($this->config['dl_nav_link_hacks'] == 'OHNP') ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE,
-			'S_DL_NAV_HACKS_OHNA' 		=> ($this->config['dl_nav_link_hacks'] == 'OHNA') ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE,
-			'S_DL_NAV_HACKS_NHUPP'		=> ($this->config['dl_nav_link_hacks'] == 'NHUPP') ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE,
-			'S_DL_NAV_HACKS_NHUP' 		=> ($this->config['dl_nav_link_hacks'] == 'NHUP') ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE,
-			'S_DL_NAV_HACKS_NHPLB'		=> ($this->config['dl_nav_link_hacks'] == 'NHPLB') ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE,
-			'S_DL_NAV_HACKS_NHPLA'		=> ($this->config['dl_nav_link_hacks'] == 'NHPLA') ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE,
-			'S_DL_NAV_HACKS_NHUA'		=> ($this->config['dl_nav_link_hacks'] == 'NHUA') ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE,
-			'S_DL_NAV_HACKS_NHUPA'		=> ($this->config['dl_nav_link_hacks'] == 'NHUPA') ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE,
-			'S_DL_NAV_HACKS_OFTzB'		=> ($this->config['dl_nav_link_hacks'] == 'OFTzB') ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE,
-			'S_DL_NAV_HACKS_OFTzA'		=> ($this->config['dl_nav_link_hacks'] == 'OFTzA') ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE,
-			'S_DL_NAV_HACKS_OFTlB'		=> ($this->config['dl_nav_link_hacks'] == 'OFTlB') ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE,
-			'S_DL_NAV_HACKS_OFTlA'		=> ($this->config['dl_nav_link_hacks'] == 'OFTlA') ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE,
 		]);
 	}
 
