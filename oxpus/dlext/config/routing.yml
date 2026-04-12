@@ -49,15 +49,6 @@ oxpus_dlext_thumbnail:
 oxpus_dlext_todo:
     path: /dlext/todo
     defaults: { _controller: oxpus.dlext.todo:handle }
-oxpus_dlext_tracker_edit:
-    path: /dlext/tracker/edit
-    defaults: { _controller: oxpus.dlext.tracker.edit:handle }
-oxpus_dlext_tracker_view:
-    path: /dlext/tracker/view
-    defaults: { _controller: oxpus.dlext.tracker.view:handle }
-oxpus_dlext_tracker_main:
-    path: /dlext/tracker/main
-    defaults: { _controller: oxpus.dlext.tracker.main:handle }
 oxpus_dlext_unassigned:
     path: /dlext/unassigned
     defaults: { _controller: oxpus.dlext.unassigned:handle }

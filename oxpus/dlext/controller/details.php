@@ -928,15 +928,6 @@ class details
 		}
 
 		/*
-		* Enabled Bug Tracker for this download category?
-		*/
-		$s_bug_tracker = $this->dlext_constants::DL_FALSE;
-		if (!empty($index[$cat_id]['bug_tracker']) && $index[$cat_id]['bug_tracker'] && !$this->user->data['is_bot'] && $this->user->data['is_registered'])
-		{
-			$s_bug_tracker = $this->dlext_constants::DL_TRUE;
-		}
-
-		/*
 		* Thumbnails? Okay, getting some thumbs, if they exists...
 		*/
 		if (!empty($index[$cat_id]['allow_thumbs']) && $index[$cat_id]['allow_thumbs'] && $this->config['dl_thumb_fsize'])
@@ -1122,7 +1113,6 @@ class details
 			'S_DL_REPORT_BROKEN'	=> $s_report_broken,
 			'S_DL_BROKEN_MOD'		=> $s_dl_broken_mod,
 			'S_DL_BROKEN_CUR'		=> $s_dl_broken_cur,
-			'S_DL_BUG_TRACKER'		=> $s_bug_tracker,
 			'S_DL_REAL_FILETIME'	=> $s_real_filetime,
 			'S_DL_EDIT_BUTTON'		=> $s_edit_button,
 			'S_DL_EDIT_THUMBS'		=> $s_edit_thumbs,
@@ -1133,7 +1123,6 @@ class details
 
 			'U_DL_REPORT'			=> $this->helper->route('oxpus_dlext_unbroken', ['df_id' => $df_id, 'cat_id' => $cat_id]),
 			'U_DL_BROKEN_DOWNLOAD' 	=> $this->helper->route('oxpus_dlext_broken', ['df_id' => $df_id, 'cat_id' => $cat_id]),
-			'U_DL_FILE_TRACKER'		=> $this->helper->route('oxpus_dlext_tracker_view', ['df_id' => $df_id]),
 			'U_DL_TOPIC'			=> append_sid($this->root_path . 'viewtopic.' . $this->php_ext, 't=' . $dl_files['dl_topic']),
 			'U_DL_EDIT'				=> $this->helper->route('oxpus_dlext_mcp_edit', ['df_id' => $df_id, 'cat_id' => $cat_id]),
 			'U_DL_EDIT_THUMBS'		=> $this->helper->route('oxpus_dlext_thumbs', ['df_id' => $df_id, 'cat_id' => $cat_id]),

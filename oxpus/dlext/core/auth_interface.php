@@ -108,15 +108,6 @@ interface auth_interface
 	public function dl_auth_users($cat_id, $perm);
 
 	/**
-	 * Fetch the bug tracker status
-	 *
-	 * @param string $u_action the current module url
-	 * @return bool true if the bug tracker is enabled (by category and at least one download), otherwise false
-	 * @access public
-	 */
-	public function bug_tracker();
-
-	/**
 	 * Chech the permission to enable/disable the captcha
 	 *
 	 * @param string $captcha_config setting for captcha status from constants DL_CAPTCHA_PERM_...

@@ -30,8 +30,6 @@ class ext extends \phpbb\extension\base
 				$phpbb_notifications->enable_notifications('oxpus.dlext.notification.type.comments');
 				$phpbb_notifications->enable_notifications('oxpus.dlext.notification.type.capprove');
 				$phpbb_notifications->enable_notifications('oxpus.dlext.notification.type.broken');
-				$phpbb_notifications->enable_notifications('oxpus.dlext.notification.type.bt_assign');
-				$phpbb_notifications->enable_notifications('oxpus.dlext.notification.type.bt_status');
 
 				return 'notifications';
 				break;
@@ -54,8 +52,6 @@ class ext extends \phpbb\extension\base
 				$phpbb_notifications->disable_notifications('oxpus.dlext.notification.type.comments');
 				$phpbb_notifications->disable_notifications('oxpus.dlext.notification.type.capprove');
 				$phpbb_notifications->disable_notifications('oxpus.dlext.notification.type.broken');
-				$phpbb_notifications->disable_notifications('oxpus.dlext.notification.type.bt_assign');
-				$phpbb_notifications->disable_notifications('oxpus.dlext.notification.type.bt_status');
 
 				return 'notifications';
 				break;
@@ -80,8 +76,6 @@ class ext extends \phpbb\extension\base
 					$phpbb_notifications->purge_notifications('oxpus.dlext.notification.type.comments');
 					$phpbb_notifications->purge_notifications('oxpus.dlext.notification.type.capprove');
 					$phpbb_notifications->purge_notifications('oxpus.dlext.notification.type.broken');
-					$phpbb_notifications->purge_notifications('oxpus.dlext.notification.type.bt_assign');
-					$phpbb_notifications->purge_notifications('oxpus.dlext.notification.type.bt_status');
 				}
 				catch (\phpbb\notification\exception $e)
 				{

@@ -25,7 +25,6 @@ class ucp_privacy_controller implements ucp_privacy_interface
 	protected $dlext_physical;
 	protected $dlext_constants;
 
-	protected $dlext_table_dl_tracker;
 	protected $dlext_table_dl_comments;
 	protected $dlext_table_dl_stats;
 
@@ -38,7 +37,6 @@ class ucp_privacy_controller implements ucp_privacy_interface
 	 * @param \phpbb\db\driver\driver_interface		$db
 	 * @param \oxpus\dlext\core\physical			$dlext_physical
 	 * @param \oxpus\dlext\core\helpers\constants 	$dlext_constants
-	 * @param string								$dlext_table_dl_tracker
 	 * @param string								$dlext_table_dl_comments
 	 * @param string								$dlext_table_dl_stats
 	 */
@@ -49,7 +47,6 @@ class ucp_privacy_controller implements ucp_privacy_interface
 		\phpbb\db\driver\driver_interface $db,
 		\oxpus\dlext\core\physical $dlext_physical,
 		\oxpus\dlext\core\helpers\constants $dlext_constants,
-		$dlext_table_dl_tracker,
 		$dlext_table_dl_comments,
 		$dlext_table_dl_stats
 	)
@@ -62,7 +59,6 @@ class ucp_privacy_controller implements ucp_privacy_interface
 		$this->dlext_physical	= $dlext_physical;
 		$this->dlext_constants	= $dlext_constants;
 
-		$this->dlext_table_dl_tracker	= $dlext_table_dl_tracker;
 		$this->dlext_table_dl_comments	= $dlext_table_dl_comments;
 		$this->dlext_table_dl_stats		= $dlext_table_dl_stats;
 	}
@@ -84,12 +80,6 @@ class ucp_privacy_controller implements ucp_privacy_interface
 		{
 			switch ($dl_privacy)
 			{
-				case 'tracker':
-					$fields = 'df_id, report_title, report_text, report_file_ver, report_date, report_status, report_status_date, report_php, report_db, report_forum';
-					$time_fields = ['report_date', 'report_status_date'];
-					$user_field = 'report_author_id';
-					$table = $this->dlext_table_dl_tracker;
-					break;
 				case 'comments':
 					$fields = 'dl_id, username, comment_time, comment_edit_time, comment_text';
 					$time_fields = ['comment_time', 'comment_edit_time'];
@@ -157,7 +147,6 @@ class ucp_privacy_controller implements ucp_privacy_interface
 		$this->template->assign_vars([
 			'S_DL_UCP_PRIVACY'		=> $this->dlext_constants::DL_TRUE,
 			'S_SL_FORM_ACTION'		=> $this->u_action,
-			'U_DL_PRIVACY_BUGS'		=> $this->u_action . '&amp;submit=1&amp;privacy=tracker',
 			'U_DL_PRIVACY_COMMENTS'	=> $this->u_action . '&amp;submit=1&amp;privacy=comments',
 			'U_DL_PRIVACY_STATS'	=> $this->u_action . '&amp;submit=1&amp;privacy=stats',
 		]);

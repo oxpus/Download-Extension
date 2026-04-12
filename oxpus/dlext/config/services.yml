@@ -7,8 +7,7 @@ imports:
     - { resource: services_core.yml }
     - { resource: services_mcp.yml }
     - { resource: services_notifications.yml }
-    - { resource: services_tracker.yml }
-    - { resource: services_ucp.yml }
+- { resource: services_ucp.yml }
 
 services:
     oxpus.dlext.listener:

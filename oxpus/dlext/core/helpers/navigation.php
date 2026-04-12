@@ -153,10 +153,6 @@ class navigation implements navigation_interface
 					$nav_string['name'][] = $this->language->lang('DL_UPLOAD');
 					$nav_string['link'][] = $this->helper->route('oxpus_dlext_upload', ['cat_id' => $this->cat_id]);
 					break;
-				case 'tracker':
-					$nav_string['name'][] = $this->language->lang('DL_BUG_TRACKER');
-					$nav_string['link'][] = $this->helper->route('oxpus_dlext_tracker_view', ['df_id' => $this->df_id]);
-					break;
 				case 'stats':
 					$nav_string['name'][] = $this->language->lang('DL_STATS');
 					$nav_string['link'][] = $this->helper->route('oxpus_dlext_stats');

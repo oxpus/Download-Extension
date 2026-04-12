@@ -337,44 +337,6 @@ class auth implements auth_interface
 		return array_unique($user_ids);
 	}
 
-	public function bug_tracker()
-	{
-		$dl_index = $this->dlext_cache->obtain_dl_cats();
-		$bug_tracker = $this->dlext_constants::DL_FALSE;
-
-		if (!is_array($dl_index) || empty($dl_index))
-		{
-			return $bug_tracker;
-		}
-
-		foreach (array_keys($dl_index) as $cat_id)
-		{
-			if (isset($dl_index[$cat_id]['bug_tracker']) && $dl_index[$cat_id]['bug_tracker'])
-			{
-				$bug_tracker = $this->dlext_constants::DL_TRUE;
-				break;
-			}
-		}
-
-		if ($bug_tracker)
-		{
-			$sql = 'SELECT count(d.id) as total
-					FROM ' . $this->dlext_table_downloads . ' d, ' . $this->dlext_table_dl_cat . ' c
-					WHERE c.id = d.cat
-						AND c.bug_tracker = 1';
-			$result = $this->db->sql_query($sql);
-			$total = $this->db->sql_fetchfield('total');
-			$this->db->sql_freeresult($result);
-
-			if ($total == 0)
-			{
-				$bug_tracker = $this->dlext_constants::DL_FALSE;
-			}
-		}
-
-		return $bug_tracker;
-	}
-
 	public function get_captcha_status($captcha_config, $cat_id)
 	{
 		$user_is_guest		= $this->dlext_constants::DL_FALSE;
