@@ -96,7 +96,7 @@
 		<br><input type="text" name="todo_cat_color" id="todo_cat_color" class="inputbox autowidth" size="6" maxsize="6" value="{{ TODO_CAT_COLOR }}">
 		[ <a href="#" id="color_palette_toggle">{{ lang('COLOUR_SWATCH') }}</a> ]
 		<div id="color_palette_placeholder" style="display: none;" data-color-palette="h" data-height="12" data-width="15" data-target="#todo_cat_color"></div>
-		
+
 		{{ S_FORM_TOKEN }}
 	</fieldset>
 
@@ -159,8 +159,6 @@
 
 {% endif %}
 
-{% if S_CAN_EDIT %}
-
 {% if S_FORM_TODO_ADD or S_TODO_EDIT %}
 <br>
 
@@ -217,8 +215,6 @@
 	</fieldset>
 
 </form>
-
-{% endif %}
 
 {% endif %}
 
