@@ -137,14 +137,14 @@ class topic implements topic_interface
 
 		if ($this->config['dl_topic_title_catname'])
 		{
-			$dl_title .= ' (' . $dl_index[$cat_id]['cat_name_nav'] . ')';
+			$dl_title .= ' (' . $dl_index[$cat_id]['cat_name'] . ')';
 		}
 
 		$topic_text_add = "\n[b]" . $this->language->lang('DL_NAME') . ':[/b] ' . $description;
 
 		if ($this->config['dl_topic_post_catname'])
 		{
-			$topic_text_add .= "\n[b]" . $this->language->lang('DL_CAT_NAME') . ':[/b] ' . $dl_index[$cat_id]['cat_name_nav'];
+			$topic_text_add .= "\n[b]" . $this->language->lang('DL_CAT_NAME') . ':[/b] ' . $dl_index[$cat_id]['cat_name'];
 		}
 
 		$sql = 'SELECT username, user_colour

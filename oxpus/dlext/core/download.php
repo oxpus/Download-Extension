@@ -1182,7 +1182,7 @@ class download implements download_interface
 			$this->template->assign_var('S_DL_POPUP_NOTIFY', $this->dlext_constants::DL_TRUE);
 		}
 
-		if ($module != 'upload' && $cat_auth['auth_mod'] || $index[$cat_id]['auth_mod'] || $this->dlext_auth->user_admin())
+		if ($module != 'upload' && $cat_auth['auth_mod'] || $this->dlext_auth->user_admin())
 		{
 			$this->template->assign_var('S_DL_MODCP', $this->dlext_constants::DL_TRUE);
 		}
