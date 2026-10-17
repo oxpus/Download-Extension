@@ -12,6 +12,9 @@ namespace oxpus\dlext\core;
 
 class main implements main_interface
 {
+	// phpcs:set VariableAnalysis.CodeAnalysis.VariableAnalysis validUndefinedVariableNames dl_index
+	// phpcs:set VariableAnalysis.CodeAnalysis.VariableAnalysis validUnusedVariableNames dl_index
+
 	/* phpbb objects */
 	protected $root_path;
 	protected $php_ext;
@@ -88,6 +91,8 @@ class main implements main_interface
 			$this->dl_index			= $this->dlext_auth->dl_index();
 			$this->user_admin		= $this->dlext_auth->user_admin();
 		}
+
+		$dl_index = $this->dl_index;
 
 		if (empty($this->dl_index))
 		{
@@ -223,6 +228,7 @@ class main implements main_interface
 		}
 
 		$tree_dl = [];
+		$dl_index = $this->dl_index;
 
 		if (empty($this->dl_index))
 		{
@@ -534,4 +540,7 @@ class main implements main_interface
 
 		return $can_view;
 	}
+
+	// phpcs:set VariableAnalysis.CodeAnalysis.VariableAnalysis validUndefinedVariableNames
+	// phpcs:set VariableAnalysis.CodeAnalysis.VariableAnalysis validUnusedVariableNames
 }

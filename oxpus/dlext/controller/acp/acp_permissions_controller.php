@@ -186,6 +186,12 @@ class acp_permissions_controller implements acp_permissions_interface
 			if (!empty($s_presel_cats))
 			{
 				$this->template->assign_var('S_DL_SHOW_PERMS', $this->dlext_constants::DL_TRUE);
+				$sql_order = [];
+
+				foreach ($index as $data)
+				{
+					$sql_order[] = 'c.id = ' . (int) $data['id'] . ' DESC';
+				}
 
 				$sql_array['SELECT'] = 'c.id as c_cat_id, c.cat_name, a.*, g.group_name, g.group_type';
 
@@ -203,7 +209,7 @@ class acp_permissions_controller implements acp_permissions_interface
 
 				$sql_array['WHERE'] = $this->db->sql_in_set('c.id', $s_presel_cats) . ' AND g.group_name is not null';
 
-				$sql_array['ORDER_BY']	= 'c.sort, c.cat_name, g.group_type DESC, g.group_name';
+				$sql_array['ORDER_BY'] = implode(', ', $sql_order) . ', g.group_type DESC, g.group_name';
 
 				$sql = $this->db->sql_build_query('SELECT', $sql_array);
 				$result = $this->db->sql_query($sql);
@@ -219,7 +225,7 @@ class acp_permissions_controller implements acp_permissions_interface
 						$cur_cat = $cat_id;
 
 						$this->template->assign_block_vars('cat_perm_block', [
-							'DL_CAT_NAME'		=> $row['cat_name'],
+							'DL_CAT_NAME'		=> $index[$cat_id]['cat_name'],
 						]);
 					}
 

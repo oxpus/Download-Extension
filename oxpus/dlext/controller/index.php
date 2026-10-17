@@ -147,7 +147,7 @@ class index
 		if ($cat_id || $cat)
 		{
 			$check_cat = ($cat_id) ? $cat_id : $cat;
-			$dl_index = $this->dlext_main->index();
+			$dl_index = $this->dlext_main->full_index($check_cat);
 
 			if (!isset($dl_index[$check_cat]))
 			{
