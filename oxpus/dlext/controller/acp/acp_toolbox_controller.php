@@ -229,10 +229,10 @@ class acp_toolbox_controller implements acp_toolbox_interface
 					 * @var array	dl_cats		download category ID's
 					 * @since 8.1.0-RC2
 					 */
-					$vars = array(
+					$vars = [
 						'dl_ids',
 						'dl_cats',
-					);
+					];
 					extract($this->dispatcher->trigger_event('oxpus.dlext.acp_toolbox_delete_downloads_after', compact($vars)));
 
 					$this->notification->delete_notifications([

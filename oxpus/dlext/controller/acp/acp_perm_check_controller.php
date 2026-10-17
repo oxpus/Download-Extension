@@ -111,6 +111,11 @@ class acp_perm_check_controller implements acp_perm_check_interface
 			$row			= $this->db->sql_fetchrow($result);
 			$this->db->sql_freeresult($result);
 
+			if (!$user_id)
+			{
+				$user_id = $row['user_id'];
+			}
+
 			if ($row)
 			{
 				// First fetch ALL category permissions
@@ -132,12 +137,12 @@ class acp_perm_check_controller implements acp_perm_check_interface
 				foreach (array_keys($dl_index) as $cat_id)
 				{
 					$cat_perm_ary[$cat_id]['cat_name']		= $dl_index[$cat_id]['cat_name'];
-					$cat_perm_ary[$cat_id]['auth_view']		= $this->dlext_auth->user_auth($cat_id, 'auth_view');
-					$cat_perm_ary[$cat_id]['auth_dl']		= $this->dlext_auth->user_auth($cat_id, 'auth_dl');
-					$cat_perm_ary[$cat_id]['auth_up']		= $this->dlext_auth->user_auth($cat_id, 'auth_up');
-					$cat_perm_ary[$cat_id]['auth_mod']		= $this->dlext_auth->user_auth($cat_id, 'auth_mod');
-					$cat_perm_ary[$cat_id]['comment_read']	= $this->dlext_auth->cat_auth_comment_read($cat_id);
-					$cat_perm_ary[$cat_id]['comment_post']	= $this->dlext_auth->cat_auth_comment_post($cat_id);
+					$cat_perm_ary[$cat_id]['auth_view']		= $this->dlext_auth->user_auth($cat_id, 'auth_view', $user_id, $reset_user_data);
+					$cat_perm_ary[$cat_id]['auth_dl']		= $this->dlext_auth->user_auth($cat_id, 'auth_dl', $user_id, $reset_user_data);
+					$cat_perm_ary[$cat_id]['auth_up']		= $this->dlext_auth->user_auth($cat_id, 'auth_up', $user_id, $reset_user_data);
+					$cat_perm_ary[$cat_id]['auth_mod']		= $this->dlext_auth->user_auth($cat_id, 'auth_mod', $user_id, $reset_user_data);
+					$cat_perm_ary[$cat_id]['auth_cread']	=  $this->dlext_auth->user_auth($cat_id, 'auth_cread', $user_id, $reset_user_data);
+					$cat_perm_ary[$cat_id]['auth_cpost']	=  $this->dlext_auth->user_auth($cat_id, 'auth_cpost', $user_id, $reset_user_data);
 
 					$cat_perm_ary[$cat_id]['cat_remain']    = ($this->config['dl_traffic_off']) ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE;
 					if (($dl_index[$cat_id]['cat_traffic'] && ($dl_index[$cat_id]['cat_traffic'] - $dl_index[$cat_id]['cat_traffic_use'] <= 0)) && !$this->config['dl_traffic_off'])
@@ -163,14 +168,15 @@ class acp_perm_check_controller implements acp_perm_check_interface
 
 				foreach ($cat_perm_ary as $data_ary)
 				{
-					$this->template->assign_block_vars('dl_cat_row', [
+
+				$this->template->assign_block_vars('dl_cat_row', [
 						'DL_CAT_NAME'  => $data_ary['cat_name'],
 						'DL_CAT_VIEW'  => $data_ary['auth_view'],
 						'DL_CAT_DL'    => $data_ary['auth_dl'],
 						'DL_CAT_UP'    => $data_ary['auth_up'],
 						'DL_CAT_MOD'   => $data_ary['auth_mod'],
-						'DL_CAT_CREAD' => $data_ary['comment_read'],
-						'DL_CAT_CPOST' => $data_ary['comment_post'],
+						'DL_CAT_CREAD' => $data_ary['auth_cread'],
+						'DL_CAT_CPOST' => $data_ary['auth_cpost'],
 					]);
 				}
 

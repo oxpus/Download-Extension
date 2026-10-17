@@ -476,11 +476,11 @@ class load
 			 * @var int		cat_id			download category ID
 			 * @since 8.1.1
 			 */
-			$vars = array(
+			$vars = [
 				'dl_file',
 				'df_id',
 				'cat_id',
-			);
+			];
 			extract($this->dispatcher->trigger_event('oxpus.dlext.load_download_prepend', compact($vars)));
 
 			// Purge the files cache

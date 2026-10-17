@@ -34,33 +34,6 @@ interface acp_config_interface
 	public function handle();
 
 	/**
-	 * Build radio select to enable/disable the mod
-	 *
-	 * @param string $value current value to preselect the right option
-	 * @return string prebuild radio button input element
-	 * @access public
-	 */
-	public function mod_disable($value);
-
-	/**
-	 * Build radio select for rss permissions
-	 *
-	 * @param string $value current value to preselect the right option
-	 * @return string prebuild radio button input element
-	 * @access public
-	 */
-	public function rss_perm($value);
-
-	/**
-	 * Build radio select for rss content selection
-	 *
-	 * @param string $value current value to preselect the right option
-	 * @return string prebuild radio button input element
-	 * @access public
-	 */
-	public function rss_select($value);
-
-	/**
 	 * Build custom select for cat edit links
 	 *
 	 * @param string $value current value to preselect the right option

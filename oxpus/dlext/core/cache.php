@@ -87,12 +87,6 @@ class cache implements cache_interface
 			while ($row = $this->db->sql_fetchrow($result))
 			{
 				$dl_index[$row['id']] = $row;
-
-				$dl_index[$row['id']]['auth_view_real'] = $dl_index[$row['id']]['auth_view'];
-				$dl_index[$row['id']]['auth_dl_real'] = $dl_index[$row['id']]['auth_dl'];
-				$dl_index[$row['id']]['auth_up_real'] = $dl_index[$row['id']]['auth_up'];
-				$dl_index[$row['id']]['auth_mod_real'] = $dl_index[$row['id']]['auth_mod'];
-				$dl_index[$row['id']]['cat_name_nav'] = $dl_index[$row['id']]['cat_name'];
 			}
 
 			$this->db->sql_freeresult($result);
@@ -266,6 +260,8 @@ class cache implements cache_interface
 					$auth_perm[$cat_id][$group_id]['auth_dl'] = $row['auth_dl'];
 					$auth_perm[$cat_id][$group_id]['auth_up'] = $row['auth_up'];
 					$auth_perm[$cat_id][$group_id]['auth_mod'] = $row['auth_mod'];
+					$auth_perm[$cat_id][$group_id]['auth_cread'] = $row['auth_cread'];
+					$auth_perm[$cat_id][$group_id]['auth_cpost'] = $row['auth_cpost'];
 				}
 
 				$this->db->sql_freeresult($result);
@@ -295,61 +291,110 @@ class cache implements cache_interface
 	public function obtain_dl_access_groups($auth_cat, $user_id, $auth_perm, $group_perm_ids = [])
 	{
 		$cat_auth_array	= [];
+		$dl_auth_groups = [];
 
-		if (($dl_auth_groups = $this->cache->get('_dlext_auth_groups')) === false)
+		$sql = 'SELECT group_id FROM ' . USER_GROUP_TABLE . '
+			WHERE ' . $this->db->sql_in_set('group_id', array_map('intval', $group_perm_ids)) . '
+				AND user_id = ' . (int) $user_id . '
+				AND user_pending <> 1';
+		$result = $this->db->sql_query($sql);
+
+		while ($row = $this->db->sql_fetchrow($result))
 		{
-			$sql = 'SELECT user_id, group_id FROM ' . USER_GROUP_TABLE . '
-				WHERE ' . $this->db->sql_in_set('group_id', array_map('intval', $group_perm_ids)) . '
-					AND user_pending <> 1';
-			$result = $this->db->sql_query($sql);
-
-			while ($row = $this->db->sql_fetchrow($result))
-			{
-				$dl_auth_groups[$row['user_id']][]	= $row['group_id'];
-			}
-			$this->db->sql_freeresult($result);
-
-			$this->cache->put('_dlext_auth_groups', $dl_auth_groups);
+			$dl_auth_groups[]	= $row['group_id'];
 		}
+		$this->db->sql_freeresult($result);
 
-		if (!isset($dl_auth_groups[$user_id]) || !$dl_auth_groups[$user_id][0])
+		if (!isset($dl_auth_groups) || !$dl_auth_groups[0])
 		{
 			return [];
 		}
 
-		$group_ids = $dl_auth_groups[$user_id];
+		$group_ids = $dl_auth_groups;
 
 		for ($i = 0; $i < count($auth_cat); ++$i)
 		{
-			$auth_view = $auth_dl = $auth_up = $auth_mod = 0;
+			$auth_view = $auth_dl = $auth_up = $auth_mod = $auth_cread = $auth_cpost = $this->dlext_constants::DL_FALSE;
 			$cat = $auth_cat[$i];
 
 			for ($j = 0; $j < count($group_ids); ++$j)
 			{
 				$user_group = $group_ids[$j];
 
-				if (isset($auth_perm[$cat][$user_group]['auth_view']) && $auth_perm[$cat][$user_group]['auth_view'] == 1)
+				if (isset($auth_perm[$cat][$user_group]['auth_view']) && $auth_view != $this->dlext_constants::DL_NEVER)
 				{
-					$auth_view = 1;
+					if ($auth_perm[$cat][$user_group]['auth_view'] == $this->dlext_constants::DL_TRUE)
+					{
+						$auth_view = $this->dlext_constants::DL_TRUE;
+					}
+					if ($auth_perm[$cat][$user_group]['auth_view'] == $this->dlext_constants::DL_NEVER)
+					{
+						$auth_view = $this->dlext_constants::DL_NEVER;
+					}
 				}
-				if (isset($auth_perm[$cat][$user_group]['auth_dl']) && $auth_perm[$cat][$user_group]['auth_dl'] == 1)
+				if (isset($auth_perm[$cat][$user_group]['auth_dl']) && $auth_dl != $this->dlext_constants::DL_NEVER)
 				{
-					$auth_dl = 1;
+					if ($auth_perm[$cat][$user_group]['auth_dl'] == $this->dlext_constants::DL_TRUE)
+					{
+						$auth_dl = $this->dlext_constants::DL_TRUE;
+					}
+					if ($auth_perm[$cat][$user_group]['auth_dl'] == $this->dlext_constants::DL_NEVER)
+					{
+						$auth_dl = $this->dlext_constants::DL_NEVER;
+					}
 				}
-				if (isset($auth_perm[$cat][$user_group]['auth_up']) && $auth_perm[$cat][$user_group]['auth_up'] == 1)
+				if (isset($auth_perm[$cat][$user_group]['auth_up']) && $auth_up != $this->dlext_constants::DL_NEVER)
 				{
-					$auth_up = 1;
+					if ($auth_perm[$cat][$user_group]['auth_up'] == $this->dlext_constants::DL_TRUE)
+					{
+						$auth_up = $this->dlext_constants::DL_TRUE;
+					}
+					if ($auth_perm[$cat][$user_group]['auth_up'] == $this->dlext_constants::DL_NEVER)
+					{
+						$auth_up = $this->dlext_constants::DL_NEVER;
+					}
 				}
-				if (isset($auth_perm[$cat][$user_group]['auth_mod']) && $auth_perm[$cat][$user_group]['auth_mod'] == 1)
+				if (isset($auth_perm[$cat][$user_group]['auth_mod']) && $auth_mod != $this->dlext_constants::DL_NEVER)
 				{
-					$auth_mod = 1;
+					if ($auth_perm[$cat][$user_group]['auth_mod'] == $this->dlext_constants::DL_TRUE)
+					{
+						$auth_mod = $this->dlext_constants::DL_TRUE;
+					}
+					if ($auth_perm[$cat][$user_group]['auth_mod'] == $this->dlext_constants::DL_NEVER)
+					{
+						$auth_mod = $this->dlext_constants::DL_NEVER;
+					}
+				}
+				if (isset($auth_perm[$cat][$user_group]['auth_cread']) && $auth_cread != $this->dlext_constants::DL_NEVER)
+				{
+					if ($auth_perm[$cat][$user_group]['auth_cread'] == $this->dlext_constants::DL_TRUE)
+					{
+						$auth_cread = $this->dlext_constants::DL_TRUE;
+					}
+					if ($auth_perm[$cat][$user_group]['auth_cread'] == $this->dlext_constants::DL_NEVER)
+					{
+						$auth_cread = $this->dlext_constants::DL_NEVER;
+					}
+				}
+				if (isset($auth_perm[$cat][$user_group]['auth_cpost']) && $auth_cpost != $this->dlext_constants::DL_NEVER)
+				{
+					if ($auth_perm[$cat][$user_group]['auth_cpost'] == $this->dlext_constants::DL_TRUE)
+					{
+						$auth_cpost = $this->dlext_constants::DL_TRUE;
+					}
+					if ($auth_perm[$cat][$user_group]['auth_cpost'] == $this->dlext_constants::DL_NEVER)
+					{
+						$auth_cpost = $this->dlext_constants::DL_NEVER;
+					}
 				}
 			}
 
-			$cat_auth_array[$cat]['auth_view'] = $auth_view;
-			$cat_auth_array[$cat]['auth_dl'] = $auth_dl;
-			$cat_auth_array[$cat]['auth_up'] = $auth_up;
-			$cat_auth_array[$cat]['auth_mod'] = $auth_mod;
+			$cat_auth_array[$cat]['auth_view']	= ($auth_view == $this->dlext_constants::DL_NEVER) ? $this->dlext_constants::DL_FALSE : $auth_view;
+			$cat_auth_array[$cat]['auth_dl']	= ($auth_dl == $this->dlext_constants::DL_NEVER) ? $this->dlext_constants::DL_FALSE : $auth_dl;
+			$cat_auth_array[$cat]['auth_up']	= ($auth_up == $this->dlext_constants::DL_NEVER) ? $this->dlext_constants::DL_FALSE : $auth_up;
+			$cat_auth_array[$cat]['auth_mod']	= ($auth_mod == $this->dlext_constants::DL_NEVER) ? $this->dlext_constants::DL_FALSE : $auth_mod;
+			$cat_auth_array[$cat]['auth_cread']	= ($auth_cread == $this->dlext_constants::DL_NEVER) ? $this->dlext_constants::DL_FALSE : $auth_cread;
+			$cat_auth_array[$cat]['auth_cpost']	= ($auth_cpost == $this->dlext_constants::DL_NEVER) ? $this->dlext_constants::DL_FALSE : $auth_cpost;
 		}
 
 		return $cat_auth_array;
@@ -362,7 +407,7 @@ class cache implements cache_interface
 	{
 		if (($dl_file_p = $this->cache->get('_dlext_file_p')) === false)
 		{
-			$sql = 'SELECT id as i, cat as c, file_size as s, extern as e, free as f, file_traffic as t, klicks as k 
+			$sql = 'SELECT id as i, cat as c, file_size as s, extern as e, free as f, file_traffic as t, klicks as k
 					FROM ' . $this->dlext_table_downloads . '
 					WHERE approve = 1';
 			$result = $this->db->sql_query($sql);

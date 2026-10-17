@@ -381,7 +381,26 @@
 		{% if S_DL_MOD_TODO %}
 		<br>
 		<h3>{{ lang('DL_MOD_TODO') }}</h3>
+		{% if S_TODO_EXT %}
+		<div class="inner">
+			<div class="postbody">
+				<div class="content">
+				{% for todolist_cat in loops.todolist_cat %}
+				<strong{% if todolist_cat.TODO_CAT_COLOR %} style="color: #{{ todolist_cat.TODO_CAT_COLOR }}"{% endif %}>{{ todolist_cat.TODO_CATNAME }}</strong><br>
+				{% for todolist_entry in todolist_cat.todolist_entry %}
+				{{ todolist_entry.TODO_TITLE }}
+				{% endfor %}
+				{% if not todolist_entry.S_LAST_ROW %}
+				<br>
+				<br>
+				{% endif %}
+				{% endfor %}
+				</div>
+			</div>
+		</div>
+		{% else %}
 		<p>{{ DL_MOD_TODO }}</p>
+		{% endif %}
 		{% endif %}
 
 		{% if DL_MOD_DESC %}

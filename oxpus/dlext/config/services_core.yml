@@ -140,6 +140,7 @@ services:
             - '@template'
             - '@user'
             - '@language'
+            - '@dispatcher'
             - '@oxpus.dlext.core.auth'
             - '@oxpus.dlext.helpers.constants'
             - '%oxpus.dlext.tables.dl_stats%'

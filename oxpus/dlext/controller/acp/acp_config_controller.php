@@ -155,7 +155,7 @@ class acp_config_controller implements acp_config_interface
 						'dl_traffic_off'	=> ['lang' => 'DL_TRAFFIC_OFF',			'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_TRAFFIC_OFF'],
 						'dl_stop_uploads'	=> ['lang' => 'DL_STOP_UPLOADS',		'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_STOP_UPLOADS'],
 						'dl_use_hacklist'	=> ['lang' => 'DL_USE_HACKLIST',		'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_USE_HACKLIST'],
-						'dl_todo_onoff'		=> ['lang' => 'DL_USE_TODOLIST',		'validate' => 'bool',	'type' => 'switch:yes_no',	'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_USE_TODOLIST'],
+						'dl_todo_onoff'		=> ['lang' => 'DL_USE_TODOLIST',		'validate' => 'int',	'type' => 'select',			'explain' => $this->dlext_constants::DL_FALSE,		'help_key' => 'DL_USE_TODOLIST', 		'function' => [$this, 'select_todo_status'],	'params' => ['{CONFIG_VALUE}']],
 
 						'legend2'				=> '',
 
@@ -1084,6 +1084,16 @@ class acp_config_controller implements acp_config_interface
 		$s_select = '<option value="' . $this->dlext_constants::DL_THUMBS_DISPLAY_OFF . '">'   . $this->language->lang('DL_THUMB_DISPLAY_SET_OFF')  . '</option>';
 		$s_select .= '<option value="' . $this->dlext_constants::DL_THUMBS_DISPLAY_ON . '">' . $this->language->lang('DL_THUMB_DISPLAY_SET_ON') . '</option>';
 		$s_select .= '<option value="' . $this->dlext_constants::DL_THUMBS_DISPLAY_CAT . '">' . $this->language->lang('DL_THUMB_DISPLAY_SET_CAT') . '</option>';
+		$s_select = str_replace('value="' . $value . '">', 'value="' . $value . '" selected>', $s_select);
+
+		return $s_select;
+	}
+
+	public function select_todo_status($value)
+	{
+		$s_select = '<option value="' . $this->dlext_constants::DL_TODO_DISABLED . '">'   . $this->language->lang('DL_TODO_DISABLED')  . '</option>';
+		$s_select .= '<option value="' . $this->dlext_constants::DL_TODO_ENABLED . '">' . $this->language->lang('DL_TODO_ENABLED') . '</option>';
+		$s_select .= '<option value="' . $this->dlext_constants::DL_TODO_ENABLED_EXT . '">' . $this->language->lang('DL_TODO_ENABLED_EXT') . '</option>';
 		$s_select = str_replace('value="' . $value . '">', 'value="' . $value . '" selected>', $s_select);
 
 		return $s_select;

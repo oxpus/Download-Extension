@@ -1,0 +1,229 @@
+{% INCLUDE '@oxpus_dlext/helpers/dl_header.html' %}
+
+<br>
+
+<div class="dl-right">
+	{% if S_TODO_EDIT_ENTRY %}<a href="{{ S_TODO_EDIT_ENTRY }}" class="button2">{{ lang('DL_MOD_TODO') }}</a>{% endif %}
+	{% if S_TODO_CATS %}<a href="{{ S_TODO_CATS }}" class="button2">{{ lang('DL_ACP_CATEGORIES') }}</a>{% endif %}
+</div>
+
+<h2>{{ lang('DL_MOD_TODO') }} {% if DL_MOD_TODO_MODE %} :: {{ DL_MOD_TODO_MODE }}{% endif %}</h2>
+
+<br>
+
+{% if S_TODO_CAT_ACTION == 'cat_edit' %}
+<form action="{{ S_TODO_CAT_FORM }}" method="post" name="postform">
+
+	<div class="panel">
+		<div class="inner">
+
+		<fieldset>
+
+		<dl>
+			<dt><strong>{{ lang('DL_CAT_NAME') }}</strong></dt>
+			<dd><input type="text" name="todo_catname" class="inputbox autowidth" size="60" maxlength="255" value="{{ TODO_CATNAME }}"></dd>
+		</dl>
+		<dl>
+			<dt><strong>{{ lang('DL_CAT_COLOR') }}</strong></dt>
+			<dd>
+				<input type="text" name="todo_cat_color" id="todo_cat_color" class="inputbox autowidth" size="6" maxsize="6" value="{{ TODO_CAT_COLOR }}">
+				{% if TODO_CAT_COLOR %}&nbsp;<span style="background-color: #{TODO_CAT_COLOR}">&nbsp; &nbsp;</span>{% endif %}&nbsp;&nbsp;
+				[ <a href="#" id="color_palette_toggle">{{ lang('COLOUR_SWATCH') }}</a> ]</span>
+				<div id="color_palette_placeholder" style="display: none;" data-color-palette="h" data-height="12" data-width="15" data-target="#todo_cat_color"></div>
+			</dl>
+		</dl>
+
+		</fieldset>
+
+		</div>
+	</div>
+
+	<fieldset class="submit-buttons">
+		<input type="submit" name="submit" value="{{ lang('SUBMIT') }}" class="button1 icon-button">
+		<input type="submit" name="cancel" value="{{ lang('CANCEL') }}" class="button2 icon-button">
+		{{ S_FORM_TOKEN }}
+		{{ S_TODO_CAT_HIDDEN }}
+	</fieldset>
+
+</form>
+{% endif %}
+
+{% if S_FORM_TODO_CAT_ADD %}
+<div class="panel">
+	<div class="inner">
+
+	{% if S_NO_TODO_CATS %}
+	<div>{{ lang('DL_NO_CATEGORY_TODO') }}</div>
+	{% else %}
+		<ul class="topiclist">
+		{% for todo_row in loops.todo_row %}
+		<li class="row">
+		<dl>
+			<dt><a href="{{ todo_row.U_CAT_EDIT }}"" class="forumtitle"{% if todo_row.TODO_CAT_COLOR %} style="color: #{{ todo_row.TODO_CAT_COLOR }}"{% endif %}>{{ todo_row.TODO_CATNAME }}</a></dt>
+			<dd class="options">
+				{% if not todo_row.S_FIRST_ROW %}
+				<a href="{{ todo_row.U_CAT_SORT_UP }}"><i class="icon fa-arrow-up fa-fw dl-blue-icon" aria-hidden="true"></i><span class="sr-only">{{ lang('DL_UP') }}</span></a>
+				{% else %}
+				<i class="icon fa-arrow-up fa-fw dl-white-icon" aria-hidden="true"></i><span class="sr-only">{{ lang('DL_UP') }}</span>
+				{% endif %}
+				{% if not todo_row.S_LAST_ROW %}
+				<a href="{{ todo_row.U_CAT_SORT_DOWN }}"><i class="icon fa-arrow-down fa-fw dl-blue-icon" aria-hidden="true"></i><span class="sr-only">{{ lang('DL_DOWN') }}</span></a>
+				{% else %}
+				<i class="icon fa-arrow-down fa-fw dl-white-icon" aria-hidden="true"></i><span class="sr-only">{{ lang('DL_DOWN') }}</span>
+				{% endif %}
+				<a href="{{ todo_row.U_CAT_EDIT }}"><i class="icon fa-pencil fa-fw dl-green-icon" aria-hidden="true"></i><span class="sr-only">{{ lang('DL_EDIT_FILE') }}</span></a>
+				{% if todo_row.U_CAT_DELETE %}
+				<a href="{{ todo_row.U_CAT_DELETE }}"><i class="icon fa-times fa-fw dl-red-icon" aria-hidden="true"></i><span class="sr-only">{{ lang('DL_DELETE') }}</span></a>
+				{% else %}
+				<i class="icon fa-times fa-fw dl-white-icon" aria-hidden="true"></i><span class="sr-only">{{ lang('DL_DELETE') }}</span>
+				{% endif %}
+			</dd>
+		</dl>
+		{% endfor %}
+		</ul>
+	{% endif %}
+
+	</div>
+</div>
+
+<br>
+
+<form action="{{ S_FORM_TODO_CAT_ADD }}" method="post" name="postform">
+
+	<fieldset class="dl-right">
+		{{ lang('DL_ADD_CATEGORY') }}
+		<input type="text" name="todo_catname" class="inputbox autowidth" size="30" maxlength="255" value="">&nbsp;<input type="submit" name="submit" value="{{ lang('SUBMIT') }}" class="button1 icon-button">
+		<br><input type="text" name="todo_cat_color" id="todo_cat_color" class="inputbox autowidth" size="6" maxsize="6" value="{{ TODO_CAT_COLOR }}">
+		[ <a href="#" id="color_palette_toggle">{{ lang('COLOUR_SWATCH') }}</a> ]
+		<div id="color_palette_placeholder" style="display: none;" data-color-palette="h" data-height="12" data-width="15" data-target="#todo_cat_color"></div>
+		
+		{{ S_FORM_TOKEN }}
+	</fieldset>
+
+</form>
+
+{% else %}
+
+{% if S_DL_NO_TODOLIST %}
+<div class="panel"><strong>{{ lang('DL_NO_MOD_TODO') }}</strong></div>
+{% else %}
+
+{% for todolist_row in loops.todolist_row %}
+<div class="panel">
+	<div class="inner">
+
+		<h2><a href="{{ todolist_row.DL_FILE_LINK }}" class="forumtitle">{{ todolist_row.DL_FILENAME }} {{ todolist_row.DL_HACK_VERSION }}</a></h2>
+		<div><strong>{{ lang('DL_CAT_NAME') }}{{ lang('COLON') }}</strong> {{ todolist_row.DL_CAT_NAME }}</div>
+		<br>
+		{% for todolist_cat in todolist_row.todolist_cat %}
+		<br>
+		<h3><strong{% if todolist_cat.TODO_CAT_COLOR %} style="color: #{{ todolist_cat.TODO_CAT_COLOR }}"{% endif %}>{{ todolist_cat.TODO_CATNAME }}</strong></h3>
+		<table class="zebra-list dl-width-100">
+		{% for todolist_entry in todolist_cat.todolist_entry %}
+		<tr>
+			<td class="dl-width-75">{{ todolist_entry.TODO_TITLE }}</td>
+			<td>
+				{% if S_CAN_EDIT %}
+				{% if todolist_entry.S_FIRST_ROW %}
+				<a class="button button-icon-only"><i class="icon fa-arrow-up fa-fw dl-grey-icon" aria-hidden="true"></i><span class="sr-only">{{ lang('DL_MOVE_UP') }}</span></a>
+				{% else %}
+				<a href="{{ todolist_entry.U_TODO_SORT_UP }}" title="{{ lang('DL_MOVE_UP') }}" class="button button-icon-only">
+					<i class="icon fa-arrow-up fa-fw dl-blue-icon" aria-hidden="true"></i><span class="sr-only">{{ lang('DL_MOVE_UP') }}</span>
+				</a>
+				{% endif %}
+				{% if todolist_entry.S_LAST_ROW %}
+				<a class="button button-icon-only"><i class="icon fa-arrow-up fa-fw dl-grey-icon" aria-hidden="true"></i><span class="sr-only">{{ lang('DL_MOVE_UP') }}</span></a>
+				{% else %}
+				<a href="{{ todolist_entry.U_TODO_SORT_DOWN }}" title="{{ lang('DL_MOVE_DOWN') }}" class="button button-icon-only">
+					<i class="icon fa-arrow-down fa-fw dl-blue-icon" aria-hidden="true"></i><span class="sr-only">{{ lang('DL_MOVE_DOWN') }}</span>
+				</a>
+				{% endif %}
+				<a href="{{ todolist_entry.U_DL_TODO_EDIT }}" title="{{ lang('DL_EDIT_FILE') }}" class="button button-icon-only">
+					<i class="icon fa-pencil fa-fw dl-green-icon" aria-hidden="true"></i><span class="sr-only">{{ lang('DL_EDIT_FILE') }}</span>
+				</a>
+				<a href="{{ todolist_entry.U_DL_TODO_DELETE }}" title="{{ lang('DL_DELETE') }}" class="button button-icon-only">
+					<i class="icon fa-times fa-fw dl-red-icon" aria-hidden="true"></i><span class="sr-only">{{ lang('DL_DELETE') }}</span>
+				</a>
+				{% else %}
+				&nbsp;
+				{% endif %}
+			</td>
+		</tr>
+		{% endfor %}
+		</table>
+		{% endfor %}
+
+	</div>
+</div>
+{% endfor %}
+
+{% endif %}
+
+{% if S_CAN_EDIT %}
+
+{% if S_FORM_TODO_ADD or S_TODO_EDIT %}
+<br>
+
+<form action="{{ S_FORM_TODO_ADD }}" method="post" name="postform">
+
+	<fieldset>
+	<legend><strong>{{ lang('DL_TODO_ADD') }}</strong></legend>
+
+	<div class="panel">
+		<div class="inner">
+
+		<br>
+
+		<dl>
+			<dt>{{ lang('DL_DOWNLOAD') }}</dt>
+			<dd>
+				{% if not S_TODO_EDIT %}
+				<select name="df_id" class="select autowidth">
+					{% for dl_todo_select in loops.dl_todo_select %}
+					{% if dl_todo_select.DL_TYPE eq 'optgrp' %}<optgroup label="{{ dl_todo_select.DL_VALUE }}">{% endif %}
+					{% if dl_todo_select.DL_TYPE eq 'option' %}<option value="{{ dl_todo_select.DL_KEY }}"{{ dl_todo_select.DL_SELECT }}>{{ dl_todo_select.DL_VALUE }}</option>{% endif %}
+					{% if dl_todo_select.DL_TYPE eq 'optend' %}</optgroup>{% endif %}
+					{% endfor %}
+				</select>
+				{% else %}
+				{{ DL_DOWNLOAD_NAME }}&nbsp;{{ DL_HACK_VERSION }}
+				{% endif %}
+			</dd>
+		</dl>
+		<dl>
+			<dt>{{ lang('DL_CAT_NAME') }}</dt>
+			<dd>
+				<select name="todo_cat_id">
+					{% for todo_cat_select in loops.todo_cat_select %}
+					<option value="{{ todo_cat_select.TODO_CAT_ID }}"{{ todo_cat_select.TODO_CAT_SELECT }}{% if todo_cat_select.TODO_CAT_COLOR %} style="color: #{{ todo_cat_select.TODO_CAT_COLOR }}"{% endif %}>{{ todo_cat_select.TODO_CATNAME }}</option>
+					{% endfor %}
+				</select>
+			</dd>
+		</dl>
+		<dl>
+			<dt>{{ lang('DL_TODO') }}</dt>
+			<dd><input type="text" name="todo_title" size="60" maxlength="255" class="inputbox autowidth" value="{{ DL_TODO_TITLE }}"></dt>
+		</dl>
+
+		</div>
+	</div>
+
+	</fieldset>
+
+	<fieldset class="submit-buttons">
+		<input type="submit" name="submit" value="{{ lang('SUBMIT') }}" class="button1 icon-button">
+		<input type="submit" name="cancel" value="{{ lang('CANCEL') }}" class="button2 icon-button">
+		{{ S_FORM_TOKEN }}
+	</fieldset>
+
+</form>
+
+{% endif %}
+
+{% endif %}
+
+{% endif %}
+
+<br>
+
+{% INCLUDE '@oxpus_dlext/helpers/dl_footer.html' %}

@@ -253,7 +253,7 @@ class thumbs
 				// Get a file name
 				$files_name	= $this->request->file('file');
 				$upload_name = $files_name['name'];
-				$file_ext	= trim(strrchr(strtolower($upload_name), '.'));
+				$file_ext	= trim(strrchr(strtolower($upload_name), '.'), " \n\r\t\v\x00");
 				$fileName	= uniqid($df_id . '_') . $file_ext;
 				$thumb_name	= $this->dlext_constants->get_value('files_dir') . '/thumbs/' . $fileName;
 

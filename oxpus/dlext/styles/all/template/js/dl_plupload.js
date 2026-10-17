@@ -36,7 +36,7 @@ $(function() {
 			// Maximum file size
 			max_file_size : dl_max_sizes,
 			// Specify what files to browse for
-			mime_types: [{title : "Image files", extensions : "gif,png,jpg,jpeg"}],
+			mime_types: [{title : "Image files", extensions : "gif,png,jpg,jpeg,webp"}],
 			prevent_duplicates : true
 		},
 

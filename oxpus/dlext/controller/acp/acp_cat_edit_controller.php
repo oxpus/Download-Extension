@@ -27,6 +27,7 @@ class acp_cat_edit_controller implements acp_cat_edit_interface
 	protected $template;
 	protected $cache;
 	protected $filesystem;
+	protected $dispatcher;
 
 	/* extension owned objects */
 	public $u_action;
@@ -57,6 +58,7 @@ class acp_cat_edit_controller implements acp_cat_edit_interface
 	 * @param \phpbb\log\log_interface 				$log
 	 * @param \phpbb\user							$user
 	 * @param \phpbb\filesystem\filesystem			$filesystem
+	 * @param \phpbb\event\dispatcher_interface		$dispatcher
 	 * @param \oxpus\dlext\core\extra				$dlext_extra
 	 * @param \oxpus\dlext\core\format				$dlext_format
 	 * @param \oxpus\dlext\core\main				$dlext_main
@@ -80,6 +82,7 @@ class acp_cat_edit_controller implements acp_cat_edit_interface
 		\phpbb\log\log_interface $log,
 		\phpbb\user $user,
 		\phpbb\filesystem\filesystem $filesystem,
+		\phpbb\event\dispatcher_interface $dispatcher,
 		\oxpus\dlext\core\extra $dlext_extra,
 		\oxpus\dlext\core\format $dlext_format,
 		\oxpus\dlext\core\main $dlext_main,
@@ -103,6 +106,7 @@ class acp_cat_edit_controller implements acp_cat_edit_interface
 		$this->request					= $request;
 		$this->template					= $template;
 		$this->filesystem				= $filesystem;
+		$this->dispatcher				= $dispatcher;
 
 		$this->dlext_table_dl_auth		= $dlext_table_dl_auth;
 		$this->dlext_table_dl_cat_traf	= $dlext_table_dl_cat_traf;
@@ -159,6 +163,7 @@ class acp_cat_edit_controller implements acp_cat_edit_interface
 		$perms_copy_from	= $this->request->variable('perms_copy_from', 0);
 		$display_thumbs		= $this->request->variable('display_thumbs', 0);
 		$max_thumbs			= $this->request->variable('max_thumbs', 1);
+		$cat_status			= $this->request->variable('cat_status', 0);
 
 		if ($cancel)
 		{
@@ -245,6 +250,7 @@ class acp_cat_edit_controller implements acp_cat_edit_interface
 				$set_user			= $index[$cat_id]['dl_set_user'];
 				$display_thumbs		= $index[$cat_id]['display_thumbs'];
 				$max_thumbs			= $index[$cat_id]['max_thumbs'];
+				$cat_status			= $index[$cat_id]['cat_status'];
 
 				$s_cat_parent		= $this->dlext_extra->dl_dropdown(0, 0, $index[$cat_id]['parent'], 'auth_view', $cat_id);
 				$perms_copy_from	= $this->dlext_extra->dl_dropdown(0, 0, 0, 'auth_view', $cat_id);
@@ -406,7 +412,7 @@ class acp_cat_edit_controller implements acp_cat_edit_interface
 
 			$this->u_action	.= '&amp;parent=' . $cat_parent . '&amp;type=' . $idx_type;
 
-			$this->template->assign_vars([
+			$template_array = [
 				'L_DL_CAT_TRAFFIC'			=> (isset($index[$cat_id]['cat_traffic']) && $index[$cat_id]['cat_traffic'] && isset($cat_remain_traffic) && $cat_remain_traffic) ? $this->language->lang('DL_CAT_TRAFFIC', $cat_remain_traffic) : $this->language->lang('DL_CAT_TRAFFIC_OFF'),
 				'L_DL_CAT_TRAFFIC_HELP'		=> htmlentities((isset($index[$cat_id]['cat_traffic']) && $index[$cat_id]['cat_traffic'] && isset($cat_remain_traffic) && $cat_remain_traffic) ? $this->language->lang('DL_CAT_TRAFFIC', $cat_remain_traffic) : $this->language->lang('DL_CAT_TRAFFIC_OFF'), ENT_QUOTES),
 
@@ -437,6 +443,7 @@ class acp_cat_edit_controller implements acp_cat_edit_interface
 				'DL_PERM_COPY_PARENT'		=> $this->dlext_constants::DL_PERM_GENERAL_ZERO,
 				'DL_TOPIC_DEACTIVATED'		=> $this->dlext_constants::DL_PERM_GENERAL_ZERO,
 
+				'S_DL_CAT_STATUS'			=> $cat_status,
 				'S_DL_CAT_MODE'				=> $action,
 				'S_DL_TOPIC_TYPE'			=> $topic_type,
 				'S_DL_TOPIC_FORUM'			=> $topic_forum,
@@ -451,7 +458,25 @@ class acp_cat_edit_controller implements acp_cat_edit_interface
 				'S_DL_HIDDEN_FIELDS'		=> build_hidden_fields($s_hidden_fields),
 
 				'U_DL_BACK'					=> $this->u_action,
-			]);
+			];
+
+			/**
+			 * Additional actions before category will be editable in acp
+			 *
+			 * @event oxpus.dlext.acp_category_edit_template_before
+			 * @var int		cat_id			category id
+			 * @var array	template_array	category editable data
+			 * @var array	index			complete category index data
+			 * @since 8.4.0
+			 */
+			$vars = [
+				'cat_id',
+				'template_array',
+				'index',
+			];
+			extract($this->dispatcher->trigger_event('oxpus.dlext.acp_category_edit_template_before', compact($vars)));
+
+			$this->template->assign_vars($template_array);
 
 			$s_cat_traffic_range = [];
 			$s_cat_traffic_range[] = ['value' => $this->dlext_constants::DL_FILE_RANGE_KBYTE, 'name' => $this->language->lang('DL_KB')];
@@ -514,6 +539,19 @@ class acp_cat_edit_controller implements acp_cat_edit_interface
 				$this->template->assign_block_vars('dl_topic_details', [
 					'DL_VALUE'	=> $s_topic_details_select[$i]['value'],
 					'DL_NAME'	=> $s_topic_details_select[$i]['name'],
+				]);
+			}
+
+			$s_cat_status_select = [];
+			$s_cat_status_select[] = ['value' => $this->dlext_constants::DL_CAT_STATUS_NORMAL,		'name' => $this->language->lang('DL_CAT_STATUS_NORMAL')];
+			$s_cat_status_select[] = ['value' => $this->dlext_constants::DL_CAT_STATUS_HIDDEN,		'name' => $this->language->lang('DL_CAT_STATUS_HIDDEN')];
+			$s_cat_status_select[] = ['value' => $this->dlext_constants::DL_CAT_STATUS_FOUNDER,		'name' => $this->language->lang('DL_CAT_STATUS_FOUNDER')];
+
+			for ($i = 0; $i < count($s_cat_status_select); ++$i)
+			{
+				$this->template->assign_block_vars('dl_cat_status', [
+					'DL_VALUE'	=> $s_cat_status_select[$i]['value'],
+					'DL_NAME'	=> $s_cat_status_select[$i]['name'],
 				]);
 			}
 
@@ -710,7 +748,24 @@ class acp_cat_edit_controller implements acp_cat_edit_interface
 				'topic_user'			=> $topic_user,
 				'display_thumbs'		=> $display_thumbs,
 				'max_thumbs'			=> $max_thumbs,
+				'cat_status'			=> $cat_status,
 			];
+
+			/**
+			 * Additional actions before category will be saved
+			 *
+			 * @event oxpus.dlext.acp_category_save_before
+			 * @var int		cat_id			category id, != 0 on edit, 0 for creating
+			 * @var array	sql_cat_data	category data before saving
+			 * @var array	index			complete category index data
+			 * @since 8.4.0
+			 */
+			$vars = [
+				'cat_id',
+				'sql_cat_data',
+				'index',
+			];
+			extract($this->dispatcher->trigger_event('oxpus.dlext.acp_category_save_before', compact($vars)));
 
 			if ($cat_id)
 			{
@@ -752,37 +807,12 @@ class acp_cat_edit_controller implements acp_cat_edit_interface
 
 				if ($copy_from !== 0)
 				{
-					// At first copy the general permissions for all users
-					$sql = 'SELECT cat_name, auth_view, auth_dl, auth_up, auth_mod, auth_cread, auth_cpost FROM ' . $this->dlext_table_dl_cat . '
+					$sql = 'SELECT cat_name FROM ' . $this->dlext_table_dl_cat . '
 						WHERE id = ' . (int) $copy_from;
 					$result = $this->db->sql_query($sql);
 					$row = $this->db->sql_fetchrow($result);
-
-					$auth_view	= $row['auth_view'];
-					$auth_dl	= $row['auth_dl'];
-					$auth_up	= $row['auth_up'];
-					$auth_mod	= $row['auth_mod'];
-					$auth_cread	= $row['auth_cread'];
-					$auth_cpost	= $row['auth_cpost'];
 					$source_cat	= $row['cat_name'];
-
 					$this->db->sql_freeresult($result);
-
-					$sql = 'SELECT cat_name FROM ' . $this->dlext_table_dl_cat . '
-						WHERE id = ' . (int) $cat_id;
-					$result = $this->db->sql_query($sql);
-					$dest_cat = $this->db->sql_fetchfield('cat_name');
-					$this->db->sql_freeresult($result);
-
-					$sql = 'UPDATE ' . $this->dlext_table_dl_cat . ' SET ' . $this->db->sql_build_array('UPDATE', [
-						'auth_view'		=> $auth_view,
-						'auth_dl'		=> $auth_dl,
-						'auth_up'		=> $auth_up,
-						'auth_mod'		=> $auth_mod,
-						'auth_cread'	=> $auth_cread,
-						'auth_cpost'	=> $auth_cpost
-					]) . ' WHERE id = ' . (int) $cat_id;
-					$this->db->sql_query($sql);
 
 					// And now copy all permissions for usergroups
 					$sql = 'DELETE FROM ' . $this->dlext_table_dl_auth . '
@@ -795,28 +825,40 @@ class acp_cat_edit_controller implements acp_cat_edit_interface
 
 					while ($row = $this->db->sql_fetchrow($result))
 					{
-						$group_id	= $row['group_id'];
-						$auth_view	= $row['auth_view'];
-						$auth_dl	= $row['auth_dl'];
-						$auth_up	= $row['auth_up'];
-						$auth_mod	= $row['auth_mod'];
-
 						$sql = 'INSERT INTO ' . $this->dlext_table_dl_auth . ' ' . $this->db->sql_build_array('INSERT', [
-							'cat_id'	=> $cat_id,
-							'group_id'	=> $group_id,
-							'auth_view'	=> $auth_view,
-							'auth_dl'	=> $auth_dl,
-							'auth_up'	=> $auth_up,
-							'auth_mod'	=> $auth_mod
+							'cat_id'		=> $cat_id,
+							'group_id'		=> $row['group_id'],
+							'auth_view'		=> $row['auth_view'],
+							'auth_dl'		=> $row['auth_dl'],
+							'auth_up'		=> $row['auth_up'],
+							'auth_mod'		=> $row['auth_mod'],
+							'auth_cread'	=> $row['auth_cread'],
+							'auth_cpost'	=> $row['auth_cpost'],
 						]);
 						$this->db->sql_query($sql);
 					}
 
 					$this->db->sql_freeresult($result);
 
-					$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_CAT_PERM_COPY', false, [$source_cat, $dest_cat]);
+					$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_CAT_PERM_COPY', false, [$source_cat, $cat_name]);
 				}
 			}
+
+			/**
+			 * Additional actions after category was saved
+			 *
+			 * @event oxpus.dlext.acp_category_save_after
+			 * @var int		cat_id			category id
+			 * @var array	sql_cat_data	category data after saving
+			 * @var array	index			complete category index data
+			 * @since 8.4.0
+			 */
+			$vars = [
+				'cat_id',
+				'sql_cat_data',
+				'index',
+			];
+			extract($this->dispatcher->trigger_event('oxpus.dlext.acp_category_save_after', compact($vars)));
 
 			// Purge the categories cache
 			$this->cache->destroy('_dlext_cats');

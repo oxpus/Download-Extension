@@ -46,6 +46,22 @@ div.dl_help_close:hover {
 	margin: 8px 14px;
 }
 
+.dl-perm-never, .dl-perm-never-hover:hover {
+	background-color: #DD0000;
+	color: #ffffff;
+	font-weight: bold;
+}
+
+.dl-perm-no, .dl-perm-no-hover:hover {
+	background-color: #EFB0B2;
+	color: #000000;
+}
+
+.dl-perm-yes, .dl-perm-yes-hover:hover {
+	background-color: #86F786;
+	color: #000000;
+}
+
 .dl-red {
 	color: #cc0000;
 }

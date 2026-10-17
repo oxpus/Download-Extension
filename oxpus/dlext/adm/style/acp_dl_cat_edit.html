@@ -110,6 +110,16 @@
 			<input type="checkbox" class="radio switch" name="allow_mod_desc" value="1" {% if DL_ALLOW_MOD_DESC %}checked{% endif %} id="allow_mod_desc"><label class="switch" for="allow_mod_desc">&nbsp;</label>
 		</dd>
 	</dl>
+	<dl>
+		<dt><label>{{ lang('DL_CAT_STATUS') }}</label></dt>
+		<dd><a class="help nav" data-key="DL_CAT_STATUS"><i class="icon fa-question-circle fa-fw"></i></a>&nbsp;
+			<select name="cat_status">
+				{% for dl_cat_status in loops.dl_cat_status %}
+				<option value="{{ dl_cat_status.DL_VALUE }}"{% if dl_cat_status.DL_VALUE eq S_DL_CAT_STATUS %} selected{% endif %}>{{ dl_cat_status.DL_NAME }}</option>
+				{% endfor %}
+			</select>
+		</dd>
+	</dl>
 
 </fieldset>
 

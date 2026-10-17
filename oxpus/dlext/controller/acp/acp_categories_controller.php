@@ -224,10 +224,10 @@ class acp_categories_controller implements acp_categories_interface
 					 * @var int		cat_id		download category ID
 					 * @since 8.1.0-RC2
 					 */
-					$vars = array(
+					$vars = [
 						'dl_ids',
 						'cat_id',
-					);
+					];
 					extract($this->dispatcher->trigger_event('oxpus.dlext.acp_categories_delete_downloads_after', compact($vars)));
 
 					if (!empty($dl_ids))
@@ -675,7 +675,22 @@ class acp_categories_controller implements acp_categories_interface
 						$u_delete_comments = $this->u_action . '&amp;action=delete_comments&amp;cat_id=' . $cat_id;
 					}
 
-					$this->template->assign_block_vars('categories', [
+					switch ($cur_cat['cat_status'])
+					{
+						case 1:
+							$cat_status = $this->language->lang('DL_CAT_STATUS_HIDDEN');
+							$cat_status_colour = 'dl-red';
+						break;
+						case 2:
+							$cat_status = $this->language->lang('DL_CAT_STATUS_FOUNDER');
+							$cat_status_colour = 'dl-blue';
+						break;
+						default:
+							$cat_status = $this->language->lang('DL_CAT_STATUS_NORMAL');
+							$cat_status_colour = 'dl-green';
+					}
+
+					$template_array = [
 						'L_DL_DELETE_STATS'			=> $l_delete_stats,
 						'L_DL_DELETE_COMMENTS'		=> $l_delete_comments,
 						'L_DL_SORT_ASC'				=> $l_sort_asc,
@@ -684,6 +699,8 @@ class acp_categories_controller implements acp_categories_interface
 						'DL_CAT_DESCRIPTION'		=> $cat_description,
 						'DL_CAT_FOLDER'				=> $cat_folder,
 						'DL_CAT_ICON'				=> $cat_icon,
+						'DL_CAT_STATUS'				=> $cat_status,
+						'DL_CAT_STATUS_COLOUR'		=> $cat_status_colour,
 
 						'U_DL_CAT_EDIT'				=> $cat_edit,
 						'U_DL_CAT_DELETE'			=> $cat_delete,
@@ -693,7 +710,27 @@ class acp_categories_controller implements acp_categories_interface
 						'U_DL_DELETE_STATS'			=> $u_delete_stats,
 						'U_DL_DELETE_COMMENTS'		=> $u_delete_comments,
 						'U_DL_CAT_OPEN'				=> ($cat_sub_count && $idx_type == 'c') ? str_replace('#CAT#', $cat_id, $this->u_action_open) : '',
-					]);
+					];
+
+					/**
+					 * Additional actions before category will be displayed in ACP
+					 *
+					 * @event oxpus.dlext.acp_category_template_before
+					 * @var int		cat_id			category id
+					 * @var array	template_array	category display data
+					 * @var array	index			complete category index data
+					 * @var array	cur_cat			index data from current category
+					 * @since 8.4.0
+					 */
+					$vars = [
+						'cat_id',
+						'template_array',
+						'index',
+						'cur_cat',
+					];
+					extract($this->dispatcher->trigger_event('oxpus.dlext.acp_category_template_before', compact($vars)));
+
+					$this->template->assign_block_vars('categories', $template_array);
 				}
 
 				if (count($stats_cats))

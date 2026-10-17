@@ -182,13 +182,13 @@ class comments implements comments_interface
 		 * @var bool	approve			download approval
 		 * @since 8.1.1
 		 */
-		$vars = array(
+		$vars = [
 			'df_id',
 			'dl_id',
 			'cat_id',
 			'comment_text',
 			'approve',
-		);
+		];
 		extract($this->dispatcher->trigger_event('oxpus.dlext.details_comment_storage_before', compact($vars)));
 
 		if ($dl_id)
@@ -242,7 +242,7 @@ class comments implements comments_interface
 		 * @var string	comment_message	success message after save/update comment
 		 * @since 8.1.1
 		 */
-		$vars = array(
+		$vars = [
 			'df_id',
 			'dl_id',
 			'cat_id',
@@ -252,7 +252,7 @@ class comments implements comments_interface
 			'com_flags',
 			'approve',
 			'comment_message',
-		);
+		];
 		extract($this->dispatcher->trigger_event('oxpus.dlext.details_comment_storage_after', compact($vars)));
 
 		$sql = 'SELECT description, desc_uid, desc_bitfield, desc_flags

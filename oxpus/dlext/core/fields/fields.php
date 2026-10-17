@@ -160,7 +160,7 @@ class fields
 				break;
 
 			case FIELD_INT:
-				if (trim($field_value) === '' && !$field_data['field_required'])
+				if (trim($field_value, " \n\r\t\v\x00") === '' && !$field_data['field_required'])
 				{
 					return false;
 				}
@@ -188,11 +188,11 @@ class fields
 
 			case FIELD_STRING:
 			case FIELD_TEXT:
-				if (trim($field_value) === '' && !$field_data['field_required'])
+				if (trim($field_value, " \n\r\t\v\x00") === '' && !$field_data['field_required'])
 				{
 					return false;
 				}
-				else if (trim($field_value) === '' && $field_data['field_required'])
+				else if (trim($field_value, " \n\r\t\v\x00") === '' && $field_data['field_required'])
 				{
 					return 'DL_FIELD_REQUIRED';
 				}

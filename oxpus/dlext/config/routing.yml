@@ -46,6 +46,9 @@ oxpus_dlext_thumbs:
 oxpus_dlext_thumbnail:
     path: /dlext/thumbnail
     defaults: { _controller: oxpus.dlext.core.thumbnail:handle }
+oxpus_dlext_todo_ext:
+    path: /dlext/todo_ext
+    defaults: { _controller: oxpus.dlext.todo_ext:handle }
 oxpus_dlext_todo:
     path: /dlext/todo
     defaults: { _controller: oxpus.dlext.todo:handle }

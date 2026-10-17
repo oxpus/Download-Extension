@@ -56,7 +56,7 @@ class nav implements nav_interface
 		if (((isset($dl_index[$cat_id]['auth_view']) && $dl_index[$cat_id]['auth_view']) || (isset($dl_auth[$cat_id]['auth_view']) && $dl_auth[$cat_id]['auth_view']) || $user_admin))
 		{
 			$tmp_nav[] = [
-				'name'		=> $dl_index[$cat_id]['cat_name_nav'],
+				'name'		=> $dl_index[$cat_id]['cat_name'],
 				'cat_id'	=> $cat_id,
 				'parent_id' => $dl_index[$cat_id]['parent'],
 			];

@@ -147,7 +147,7 @@ class index
 		if ($cat_id || $cat)
 		{
 			$check_cat = ($cat_id) ? $cat_id : $cat;
-			$dl_index = $this->dlext_auth->dl_index();
+			$dl_index = $this->dlext_main->index();
 
 			if (!isset($dl_index[$check_cat]))
 			{
@@ -328,7 +328,7 @@ class index
 					);
 				}
 
-				$this->template->assign_block_vars($block, [
+				$index_tmp_data = [
 					'DL_MINI_IMG'			=> $mini_cat_icon,
 					'DL_SUBLEVEL'			=> $cat_sublevel,
 					'DL_SUBLEVEL_SUB'		=> $folder_sub,
@@ -346,7 +346,29 @@ class index
 					'U_DL_CAT_VIEW'			=> $cat_view,
 					'U_DL_CAT_LAST_LINK'	=> (isset($last_dl[$last_cat_id]['link'])) ? $last_dl[$last_cat_id]['link'] : '',
 					'U_DL_CAT_LAST_USER'	=> (isset($last_dl[$last_cat_id]['user_link'])) ? $last_dl[$last_cat_id]['user_link'] : '',
-				]);
+				];
+
+				/**
+				 * Additional actions before the category will be displayed
+				 *
+				 * @event oxpus.dlext.index_template_before
+				 * @var array	index_tmp_data	template data of the current cagegory
+				 * @var array	last_dl			last category data
+				 * @var int		last_cat_id		last category id
+				 * @var array	index			complete category index data
+				 * @var string	block			template display block name
+				 * @since 8.4.0
+				 */
+				$vars = [
+					'index_tmp_data',
+					'last_dl',
+					'last_cat_id',
+					'index',
+					'block',
+				];
+				extract($this->dispatcher->trigger_event('oxpus.dlext.index_template_before', compact($vars)));
+
+				$this->template->assign_block_vars($block, $index_tmp_data);
 
 				if ($cat_subs && $this->user->data['user_dl_sub_on_index'])
 				{
@@ -377,14 +399,32 @@ class index
 							$mini_cat_icon = 'default';
 						}
 
-						$this->template->assign_block_vars($block . '.sub.sublevel_row', [
+						$index_tmp_subdata = [
 							'L_DL_SUBLEVEL'			=> $cat_sublevel['cat_name'][$j],
 							'DL_SUBLEVEL_COUNT'		=> $cat_sublevel['total'][$j] + $this->dlext_main->get_sublevel_count($sub_id),
 							'M_DL_SUBLEVEL'			=> $mini_cat_icon,
 							'M_DL_SUBLEVEL_SUB'		=> $sub_subs,
 							'M_DL_SUBLEVEL_ICON'	=> (isset($cat_sublevel['cat_icon'][$j])) ? $cat_sublevel['cat_icon'][$j] : '',
 							'U_DL_SUBLEVEL'			=> $cat_sublevel['cat_path'][$j],
-						]);
+						];
+
+						/**
+						 * Additional actions before the sub category will be displayed
+						 *
+						 * @event oxpus.dlext.index_subcat_template_before
+						 * @var array	index_tmp_subdata	template data of the current sub cagegory
+						 * @var array	index				complete category index data
+						 * @var string	block				template display block name
+						 * @since 8.4.0
+						 */
+						$vars = [
+							'index_tmp_subdata',
+							'index',
+							'block',
+						];
+						extract($this->dispatcher->trigger_event('oxpus.dlext.index_subcat_template_before', compact($vars)));
+
+						$this->template->assign_block_vars($block . '.sub.sublevel_row', $index_tmp_subdata);
 					}
 				}
 
@@ -502,11 +542,12 @@ class index
 			 */
 			$latest_where = '';
 			$sort_ary = [$sql_sort_by, $sql_order];
-			$vars = array(
+
+			$vars = [
 				'cat',
 				'sort_ary',
 				'latest_where',
-			);
+			];
 			extract($this->dispatcher->trigger_event('oxpus.dlext.index_fetch_download_data', compact($vars)));
 
 			for ($i = 0; $i < count($dl_files); ++$i)
@@ -664,10 +705,11 @@ class index
 				 * @since 8.1.0-RC2
 				 */
 				$block = 'downloads';
-				$vars = array(
+
+				$vars = [
 					'block',
 					'file_id',
-				);
+				];
 				extract($this->dispatcher->trigger_event('oxpus.dlext.index_display_data_after', compact($vars)));
 			}
 		}

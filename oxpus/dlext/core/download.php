@@ -305,7 +305,7 @@ class download implements download_interface
 
 				if ($file_name)
 				{
-					$extension = str_replace('.', '', trim(strrchr(strtolower($file_name), '.')));
+					$extension = str_replace('.', '', trim(strrchr(strtolower($file_name), '.'), " \n\r\t\v\x00"));
 					$new_real_file = $this->dlext_format->dl_hash($file_name) . '.' . $extension;
 
 					if ($file_option == $this->dlext_constants::DL_VERSION_REPLACE && !$file_version && $file_path_old && $real_file_old)
@@ -326,7 +326,7 @@ class download implements download_interface
 				{
 					if ($dl_file['file_name'] == $dl_file['real_file'])
 					{
-						$extension = str_replace('.', '', trim(strrchr(strtolower($dl_file['real_file']), '.')));
+						$extension = str_replace('.', '', trim(strrchr(strtolower($dl_file['real_file']), '.'), " \n\r\t\v\x00"));
 						$new_real_file = $this->dlext_format->dl_hash($dl_file['real_file']) . '.' . $extension;
 
 						while ($this->filesystem->exists($this->dlext_constants->get_value('files_dir') . '/downloads/' . $file_path_old . $new_real_file))
@@ -344,7 +344,7 @@ class download implements download_interface
 			}
 			else if (!$file_extern && $file_name)
 			{
-				$extension = str_replace('.', '', trim(strrchr(strtolower($file_name), '.')));
+				$extension = str_replace('.', '', trim(strrchr(strtolower($file_name), '.'), " \n\r\t\v\x00"));
 				$new_real_file = $this->dlext_format->dl_hash($file_name) . '.' . $extension;
 
 				while ($this->filesystem->exists($this->dlext_constants->get_value('files_dir') . '/downloads/' . $file_path . $new_real_file))
@@ -377,7 +377,7 @@ class download implements download_interface
 			{
 				$form_name = 'dl_name';
 				$file = $this->request->file($form_name);
-				$file_extension = str_replace('.', '', trim(strrchr(strtolower($file['name']), '.')));
+				$file_extension = str_replace('.', '', trim(strrchr(strtolower($file['name']), '.'), " \n\r\t\v\x00"));
 				$allowed_extensions = [$file_extension];
 				$upload = $this->files_factory->get('upload')
 					->set_allowed_extensions($allowed_extensions)
@@ -391,7 +391,7 @@ class download implements download_interface
 
 				if ($this->config['dl_enable_blacklist'])
 				{
-					$extension = str_replace('.', '', trim(strrchr(strtolower($file_name), '.')));
+					$extension = str_replace('.', '', trim(strrchr(strtolower($file_name), '.'), " \n\r\t\v\x00"));
 					if (in_array($extension, $ext_blacklist))
 					{
 						$dl_error = $this->dlext_constants::DL_TRUE;
@@ -639,7 +639,6 @@ class download implements download_interface
 			'hack_dl_url'			=> $hack_dl_url,
 			'test'					=> $test,
 			'req'					=> $require,
-			'todo'					=> $todo,
 			'warning'				=> $warning,
 			'mod_desc'				=> $mod_desc,
 			'desc_uid'				=> $desc_uid,
@@ -653,6 +652,15 @@ class download implements download_interface
 			'todo_flags'			=> $todo_flags,
 			'approve'				=> $approve,
 		];
+
+		if ($this->config['dl_todo_onoff'] == 1)
+		{
+			$sql_array += ['todo' => $todo];
+		}
+		else
+		{
+			$sql_array += ['todo' => $dl_file['todo']];
+		}
 
 		if ($df_id && (!$file_option || ($file_option == $this->dlext_constants::DL_VERSION_REPLACE && !$file_version)))
 		{
@@ -1307,7 +1315,7 @@ class download implements download_interface
 			'DL_MAX_UPLOAD_SIZE' 		=> $this->language->lang('DL_UPLOAD_MAX_FILESIZE', $this->dlext_physical->dl_max_upload_size()),
 			'DL_CAT_NAME' 				=> $index[$cat_id]['cat_name'],
 
-			'S_DL_TODO_LINK_ONOFF'		=> ($this->config['dl_todo_onoff']) ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE,
+			'S_DL_TODO_LINK_ONOFF'		=> ($this->config['dl_todo_onoff'] == 1) ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE,
 			'S_DL_CHECK_FREE'			=> $dl_free,
 			'S_DL_TRAFFIC_RANGE'		=> $data_range_select,
 			'S_DL_FILE_EXT_SIZE_RANGE'	=> $file_extern_size_range,
@@ -1387,11 +1395,11 @@ class download implements download_interface
 			 * @var array	template_ary	array of download's data for edit
 			 * @since 8.1.0-RC2
 			 */
-			$vars = array(
+			$vars = [
 				'df_id',
 				'cat_id',
 				'template_ary',
-			);
+			];
 			extract($this->dispatcher->trigger_event('oxpus.dlext.acp_files_template_before', compact($vars)));
 		}
 		else if ($module == 'mcp')
@@ -1405,11 +1413,11 @@ class download implements download_interface
 			 * @var array	template_ary	array of download's data for edit
 			 * @since 8.1.0-RC2
 			 */
-			$vars = array(
+			$vars = [
 				'df_id',
 				'cat_id',
 				'template_ary',
-			);
+			];
 			extract($this->dispatcher->trigger_event('oxpus.dlext.mcp_edit_template_before', compact($vars)));
 		}
 		else if ($module == 'upload')
@@ -1422,10 +1430,10 @@ class download implements download_interface
 			 * @var array	template_ary	array of download's data for edit
 			 * @since 8.1.0-RC2
 			 */
-			$vars = array(
+			$vars = [
 				'cat_id',
 				'template_ary',
-			);
+			];
 			extract($this->dispatcher->trigger_event('oxpus.dlext.upload_template_before', compact($vars)));
 		}
 

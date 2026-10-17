@@ -49,6 +49,8 @@ class details
 	protected $dlext_table_dl_ratings;
 	protected $dlext_table_dl_versions;
 	protected $dlext_table_downloads;
+	protected $dlext_table_dl_todo_cat;
+	protected $dlext_table_dl_todo;
 
 	/**
 	 * Constructor
@@ -83,6 +85,8 @@ class details
 	 * @param string								$dlext_table_dl_ratings
 	 * @param string								$dlext_table_dl_versions
 	 * @param string								$dlext_table_downloads
+	 * @param string								$dlext_table_dl_todo_cat
+	 * @param string								$dlext_table_dl_todo
 	 */
 	public function __construct(
 		$root_path,
@@ -114,7 +118,9 @@ class details
 		$dlext_table_dl_notraf,
 		$dlext_table_dl_ratings,
 		$dlext_table_dl_versions,
-		$dlext_table_downloads
+		$dlext_table_downloads,
+		$dlext_table_dl_todo_cat,
+		$dlext_table_dl_todo
 	)
 	{
 		$this->root_path				= $root_path;
@@ -141,6 +147,8 @@ class details
 		$this->dlext_table_dl_ratings	= $dlext_table_dl_ratings;
 		$this->dlext_table_dl_versions	= $dlext_table_dl_versions;
 		$this->dlext_table_downloads	= $dlext_table_downloads;
+		$this->dlext_table_dl_todo_cat	= $dlext_table_dl_todo_cat;
+		$this->dlext_table_dl_todo		= $dlext_table_dl_todo;
 
 		$this->dlext_auth				= $dlext_auth;
 		$this->dlext_comments			= $dlext_comments;
@@ -266,7 +274,7 @@ class details
 		$user_can_alltimes_load = $this->dlext_constants::DL_FALSE;
 		$user_is_mod = $this->dlext_constants::DL_FALSE;
 
-		if (($cat_auth['auth_mod'] || $this->dlext_auth->user_admin()))
+		if ($cat_auth['auth_mod'])
 		{
 			$modcp = ($modcp) ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE;
 			$user_can_alltimes_load = $this->dlext_constants::DL_TRUE;
@@ -675,19 +683,62 @@ class details
 		/*
 		* ToDO's? ToDo's!
 		*/
-		$mod_todo = $dl_files['todo'];
+		$s_mod_todo = $this->dlext_constants::DL_FALSE;
+		$mod_todo = '';
 
-		if ($mod_todo)
+		if ($this->config['dl_todo_onoff'] == 1)
 		{
-			$s_mod_todo			= $this->dlext_constants::DL_TRUE;
-			$mod_todo_uid		= $dl_files['todo_uid'];
-			$mod_todo_bitfield	= $dl_files['todo_bitfield'];
-			$mod_todo_flags		= (isset($dl_files['todo_flags'])) ? $dl_files['todo_flags'] : 0;
-			$mod_todo			= generate_text_for_display($mod_todo, $mod_todo_uid, $mod_todo_bitfield, $mod_todo_flags);
+			$mod_todo = $dl_files['todo'];
+
+			if ($mod_todo)
+			{
+				$s_mod_todo			= $this->dlext_constants::DL_TRUE;
+				$mod_todo_uid		= $dl_files['todo_uid'];
+				$mod_todo_bitfield	= $dl_files['todo_bitfield'];
+				$mod_todo_flags		= (isset($dl_files['todo_flags'])) ? $dl_files['todo_flags'] : 0;
+				$mod_todo			= generate_text_for_display($mod_todo, $mod_todo_uid, $mod_todo_bitfield, $mod_todo_flags);
+			}
 		}
-		else
+		else if ($this->config['dl_todo_onoff'] == 2)
 		{
-			$s_mod_todo = $this->dlext_constants::DL_FALSE;
+			$sql = 'SELECT	tc.todo_catname, tc.todo_cat_color, tc.todo_cat_id, te.todo_title
+			FROM ' . $this->dlext_table_dl_todo_cat . ' tc,
+				' . $this->dlext_table_dl_todo . ' te
+			WHERE te.df_id = ' . (int) $df_id . '
+				AND tc.todo_cat_id = te.todo_cat_id
+			ORDER BY tc.todo_cat_sort, te.todo_sort';
+			$result = $this->db->sql_query($sql);
+
+			$total_possible_todo = $this->db->sql_affectedrows();
+
+			if ($total_possible_todo)
+			{
+				$s_mod_todo = $this->dlext_constants::DL_TRUE;
+				$cur_cat = 0;
+
+				$this->template->assign_var('S_TODO_EXT', $this->dlext_constants::DL_TRUE);
+
+				while ($row = $this->db->sql_fetchrow($result))
+				{
+					$todo_cat_id	= $row['todo_cat_id'];
+
+					if ($cur_cat <> $todo_cat_id)
+					{
+						$this->template->assign_block_vars('todolist_cat', [
+							'TODO_CATNAME'		=> $row['todo_catname'],
+							'TODO_CAT_COLOR'	=> $row['todo_cat_color'],
+						]);
+
+						$cur_cat = $todo_cat_id;
+					}
+
+					$this->template->assign_block_vars('todolist_cat.todolist_entry', [
+						'TODO_TITLE'	=> $row['todo_title'],
+					]);
+				}
+			}
+
+			$this->db->sql_freeresult($result);
 		}
 
 		/*
@@ -880,14 +931,14 @@ class details
 					 * @var int		file_version	download version ID
 					 * @since 8.1.1
 					 */
-					$vars = array(
+					$vars = [
 						'hotlink_id',
 						'code',
 						'df_id',
 						'modcp',
 						'cat_id',
 						'file_version',
-					);
+					];
 					extract($this->dispatcher->trigger_event('oxpus.dlext.details_download_before', compact($vars)));
 
 					$dl_add_fav = $this->request->variable('dl_add_fav', 0);
@@ -916,7 +967,7 @@ class details
 		$s_dl_broken_cur = $this->dlext_constants::DL_FALSE;
 		if ($dl_files['broken'] && !$this->user->data['is_bot'])
 		{
-			if ($index[$cat_id]['auth_mod'] || $cat_auth['auth_mod'] || $this->dlext_auth->user_admin())
+			if ($cat_auth['auth_mod'])
 			{
 				$s_dl_broken_mod = $this->dlext_constants::DL_TRUE;
 			}
@@ -1187,11 +1238,11 @@ class details
 		 * @var array	dl_files		array of download's data
 		 * @since 8.1.0-RC2
 		 */
-		$vars = array(
+		$vars = [
 			'df_id',
 			'cat_id',
 			'dl_files',
-		);
+		];
 		extract($this->dispatcher->trigger_event('oxpus.dlext.details_display_after', compact($vars)));
 
 		$detail_cat_names = [
@@ -1211,11 +1262,11 @@ class details
 		 * @var array	detail_cat_names	array of option pages
 		 * @since 8.2.11
 		 */
-		$vars = array(
+		$vars = [
 			'df_id',
 			'dl_files',
 			'detail_cat_names',
-		);
+		];
 		extract($this->dispatcher->trigger_event('oxpus.dlext.details_append_options', compact($vars)));
 
 		for ($i = 0; $i < count($detail_cat_names); ++$i)

@@ -114,7 +114,7 @@ class thumbnail implements thumbnail_interface
 			return 'NO_THUMB';
 		}
 
-		$file_ext	= str_replace('.', '', trim(strrchr(strtolower($real_filename), '.')));
+		$file_ext	= str_replace('.', '', trim(strrchr(strtolower($real_filename), '.'), " \n\r\t\v\x00"));
 		$thumbnail	= $this->dlext_constants->get_value('files_dir') . $folder . $real_filename;
 
 		if (!$this->filesystem->exists($thumbnail) && strpos($thumbnail, $this->dlext_constants->get_value('files_dir') . '/thumbs/') === 0)
@@ -167,7 +167,7 @@ class thumbnail implements thumbnail_interface
 				unset($newimage);
 			}
 
-			if ($file_ext == 'jpg')
+			if ($file_ext == 'jpg' || $file_ext == 'jpeg')
 			{
 				header('Content-type:image/jpg');
 				imagejpeg($image);
@@ -176,6 +176,14 @@ class thumbnail implements thumbnail_interface
 			{
 				header('Content-type:image/png');
 				imagepng($image);
+			}
+			else if ($file_ext == 'webp')
+			{
+				if (function_exists('imagecreatefromwebp'))
+				{
+					header('Content-type:image/webp');
+					imagewebp($image);
+				}
 			}
 			else if ($file_ext == 'gif')
 			{
@@ -195,13 +203,20 @@ class thumbnail implements thumbnail_interface
 	{
 		$image = $this->dlext_constants::DL_FALSE;
 
-		if ($file_ext == 'jpg')
+		if ($file_ext == 'jpg' || $file_ext == 'jpeg')
 		{
 			$image = imagecreatefromjpeg($pic_path);
 		}
 		else if ($file_ext == 'png')
 		{
 			$image = imagecreatefrompng($pic_path);
+		}
+		else if ($file_ext == 'webp')
+		{
+			if (function_exists('imagecreatefromwebp'))
+			{
+				$image = imagecreatefromwebp($pic_path);
+			}
 		}
 		else if ($file_ext == 'gif')
 		{

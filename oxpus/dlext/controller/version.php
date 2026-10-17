@@ -340,7 +340,7 @@ class version
 			// Upload new file
 			$form_name = 'ver_new_file';
 			$file = $this->request->file($form_name);
-			$extension = str_replace('.', '', trim(strrchr(strtolower($file['name']), '.')));
+			$extension = str_replace('.', '', trim(strrchr(strtolower($file['name']), '.'), " \n\r\t\v\x00"));
 			$allowed_extensions = [$extension];
 
 			$upload = $this->files_factory->get('upload')
@@ -393,7 +393,7 @@ class version
 			// Upload new image
 			$form_name = 'ver_new_image';
 			$file = $this->request->file($form_name);
-			$extension = str_replace('.', '', trim(strrchr(strtolower($file['name']), '.')));
+			$extension = str_replace('.', '', trim(strrchr(strtolower($file['name']), '.'), " \n\r\t\v\x00"));
 			$allowed_extensions = [$extension];
 
 			$upload_image = $this->files_factory->get('upload')

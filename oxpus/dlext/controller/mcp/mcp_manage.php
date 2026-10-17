@@ -531,10 +531,11 @@ class mcp_manage
 						 * @since 8.1.0-RC2
 						 */
 						$dl_ids = $dlo_id;
-						$vars = array(
+
+						$vars = [
 							'dl_ids',
 							'cat_id',
-						);
+						];
 						extract($this->dispatcher->trigger_event('oxpus.dlext.mcp_manage_delete_downloads_after', compact($vars)));
 
 						$dlo_id = $dl_ids;

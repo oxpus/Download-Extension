@@ -39,6 +39,7 @@ services:
             - '@log'
             - '@user'
             - '@filesystem'
+            - '@dispatcher'
             - '@oxpus.dlext.core.extra'
             - '@oxpus.dlext.core.format'
             - '@oxpus.dlext.core.main'

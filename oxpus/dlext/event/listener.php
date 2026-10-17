@@ -164,6 +164,7 @@ class listener implements EventSubscriberInterface
 			'core.ucp_display_module_before'			=> 'core_ucp_display_module_before',
 			'core.build_config_template'				=> 'core_build_config_template',
 			'core.adm_page_footer'						=> 'core_adm_page_footer',
+			'core.user_add_after'						=> 'core_user_add_after',
 
 			// Events by extensions
 			'tas2580.privacyprotection_delete_ip_after'	=> 'tas2580_privacyprotection_delete_ip_after',
@@ -199,9 +200,12 @@ class listener implements EventSubscriberInterface
 			'U_DL_HELP_POPUP'	=> $this->helper->route('oxpus_dlext_help'),
 		]);
 
-		$dl_index = $this->dlext_main->full_index(0, 0, 0, $this->dlext_constants::DL_AUTH_CHECK_VIEW);
+		$sql = 'SELECT id FROM ' . $this->dlext_table_dl_cat;
+		$result = $this->db->sql_query_limit($sql, 1);
+		$dl_index = $this->db->sql_affectedrows();
+		$this->db->sql_freeresult($result);
 
-		if (empty($dl_index))
+		if (!$dl_index)
 		{
 			$dl_mod_link_show = $this->dlext_constants::DL_FALSE;
 		}
@@ -800,5 +804,12 @@ class listener implements EventSubscriberInterface
 				'U_DL_HELP_POPUP'	=> $this->helper->route('oxpus_dlext_help'),
 			]);
 		}
+	}
+
+	public function core_user_add_after()
+	{
+		// Purge the auth cache
+		$this->cache->destroy('_dlext_auth');
+		$this->cache->destroy('_dlext_auth_groups');
 	}
 }

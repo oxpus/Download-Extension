@@ -278,11 +278,12 @@ class overall
 		 */
 		$cat = 0;
 		$latest_where = '';
-		$vars = array(
+
+		$vars = [
 			'cat',
 			'sort_ary',
 			'latest_where',
-		);
+		];
 		extract($this->dispatcher->trigger_event('oxpus.dlext.overall_fetch_download_data', compact($vars)));
 
 		if (!empty($dl_files))
@@ -396,10 +397,11 @@ class overall
 					 * @since 8.1.0-RC2
 					 */
 					$block = 'downloads';
-					$vars = array(
+
+					$vars = [
 						'block',
 						'file_id',
-					);
+					];
 					extract($this->dispatcher->trigger_event('oxpus.dlext.overall_display_data_after', compact($vars)));
 				}
 			}

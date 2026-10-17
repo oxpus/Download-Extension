@@ -17,6 +17,8 @@ parameters:
     oxpus.dlext.tables.dl_ratings: '%core.table_prefix%dl_ratings'
     oxpus.dlext.tables.dl_reports: '%core.table_prefix%dl_reports'
     oxpus.dlext.tables.dl_stats: '%core.table_prefix%dl_stats'
+    oxpus.dlext.tables.dl_todo_cat: '%core.table_prefix%dl_todo_cat'
+    oxpus.dlext.tables.dl_todo: '%core.table_prefix%dl_todo'
     oxpus.dlext.tables.dl_versions: '%core.table_prefix%dl_versions'
     oxpus.dlext.tables.dl_ver_files: '%core.table_prefix%dl_ver_files'
     oxpus.dlext.tables.downloads: '%core.table_prefix%downloads'

@@ -38,6 +38,7 @@
 <tr>
 	<th colspan="2">{{ lang('DL_CAT_NAME') }}</th>
 	<th colspan="2" class="dl-text-center">{{ lang('ACTION') }}</th>
+	<th class="dl-text-center">{{ lang('DL_CAT_STATUS') }}</th>
 </tr>
 </thead>
 <tbody>
@@ -91,6 +92,9 @@
 		{% if categories.L_DL_DELETE_STATS %}&nbsp;&bull;&nbsp;<a href="{{ categories.U_DL_DELETE_STATS }}">{{ categories.L_DL_DELETE_STATS }}</a> {% endif %}
 		{% if categories.L_DL_DELETE_COMMENTS %}&nbsp;&bull;&nbsp;<a href="{{ categories.U_DL_DELETE_COMMENTS }}">{{ categories.L_DL_DELETE_COMMENTS }}</a>{% endif %}
 		{% if categories.L_DL_SORT_ASC %}{% if categories.L_DELETE_STATS or categories.L_DL_DELETE_COMMENTS %}<br>{% endif %}&nbsp;&bull;&nbsp;<a href="{{ categories.U_DL_CATEGORY_ASC_SORT }}">{{ categories.L_DL_SORT_ASC }}</a> {% endif %}
+	</td>
+	<td class="dl-text-center">
+		<strong class="{{ categories.DL_CAT_STATUS_COLOUR }}">{{ categories.DL_CAT_STATUS }}</strong>
 	</td>
 </tr>
 {% endfor %}

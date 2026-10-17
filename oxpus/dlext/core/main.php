@@ -21,6 +21,7 @@ class main implements main_interface
 	protected $template;
 	protected $user;
 	protected $language;
+	protected $dispatcher;
 
 	/* extension owned objects */
 	protected $dlext_auth;
@@ -43,6 +44,7 @@ class main implements main_interface
 	 * @param \phpbb\template\template				$template
 	 * @param \phpbb\user							$user
 	 * @param \phpbb\language\language				$language
+	 * @param \phpbb\event\dispatcher_interface		$dispatcher
 	 * @param \oxpus\dlext\core\auth				$dlext_auth
 	 * @param \oxpus\dlext\core\helpers\constants	$dlext_constants
 	 * @param string								$dlext_table_dl_stats
@@ -56,6 +58,7 @@ class main implements main_interface
 		\phpbb\template\template $template,
 		\phpbb\user $user,
 		\phpbb\language\language $language,
+		\phpbb\event\dispatcher_interface $dispatcher,
 		\oxpus\dlext\core\auth $dlext_auth,
 		\oxpus\dlext\core\helpers\constants $dlext_constants,
 		$dlext_table_dl_stats
@@ -69,6 +72,7 @@ class main implements main_interface
 		$this->template 		= $template;
 		$this->user 			= $user;
 		$this->language			= $language;
+		$this->dispatcher		= $dispatcher;
 
 		$this->dlext_auth		= $dlext_auth;
 		$this->dlext_constants	= $dlext_constants;
@@ -90,12 +94,28 @@ class main implements main_interface
 			return [];
 		}
 
-		if ($only_cat > 0)
+		if ($only_cat > 0 && $this->get_cat_status($only_cat))
 		{
 			$tree_dl[$only_cat]					= $this->dl_index[$only_cat];
 			$tree_dl[$only_cat]['nav_path']		= $this->helper->route('oxpus_dlext_index', ['cat' => $only_cat]);
 			$tree_dl[$only_cat]['cat_path']		= $this->dl_index[$only_cat]['path'];
 			$tree_dl[$only_cat]['cat_name_nav']	= $this->dl_index[$only_cat]['cat_name'];
+
+			/**
+			 * Additional actions before the given one category will be returned
+			 *
+			 * @event oxpus.dlext.main_onlycat_after
+			 * @var int		only_cat		category id
+			 * @var array	tree_dl			category data as tree
+			 * @var array	dl_index		complete category index data
+			 * @since 8.4.0
+			 */
+			$vars = [
+				'only_cat',
+				'tree_dl',
+				'dl_index',
+			];
+			extract($this->dispatcher->trigger_event('oxpus.dlext.main_onlycat_after', compact($vars)));
 		}
 		else
 		{
@@ -106,7 +126,27 @@ class main implements main_interface
 
 			foreach ($this->dl_index as $cat_id => $value)
 			{
-				if ((isset($value['auth_view']) && $value['auth_view']) || (isset($this->dl_auth[$cat_id]['auth_view']) && $this->dl_auth[$cat_id]['auth_view']) || $this->user_admin)
+				/**
+				 * Additional actions before category will be setup on full index
+				 *
+				 * @event oxpus.dlext.main_fullindex_before
+				 * @var int		cat_id			category id
+				 * @var array	value			category data
+				 * @var array	dl_index		complete category index data
+				 * @since 8.4.0
+				 */
+				$vars = [
+					'cat_id',
+					'value',
+					'dl_index',
+				];
+				extract($this->dispatcher->trigger_event('oxpus.dlext.main_fullindex_before', compact($vars)));
+
+				if (!$this->get_cat_status($cat_id))
+				{
+					continue;
+				}
+				else if ((isset($value['auth_view']) && $value['auth_view']) || (isset($this->dl_auth[$cat_id]['auth_view']) && $this->dl_auth[$cat_id]['auth_view']) || $this->user_admin)
 				{
 					/*
 					* $auth level will return the following data
@@ -116,15 +156,15 @@ class main implements main_interface
 					* 3 = IDs from upload categories
 					*/
 
-					if ($auth_level == $this->dlext_constants::DL_AUTH_CHECK_VIEW && isset($value['id']) && $value['id'] && ($value['auth_view'] || (isset($this->dl_auth[$cat_id]['auth_view']) && $this->dl_auth[$cat_id]['auth_view']) || $this->user_admin))
+					if ($auth_level == $this->dlext_constants::DL_AUTH_CHECK_VIEW && isset($value['id']) && $value['id'] && ((isset($this->dl_auth[$cat_id]['auth_view']) && $this->dl_auth[$cat_id]['auth_view']) || $this->user_admin))
 					{
 						$access_ids[] = $cat_id;
 					}
-					else if ($auth_level == $this->dlext_constants::DL_AUTH_CHECK_MOD && isset($value['id']) && $value['id'] && ((isset($value['auth_mod']) && $value['auth_mod']) || (isset($this->dl_auth[$cat_id]['auth_mod']) && $this->dl_auth[$cat_id]['auth_mod']) || $this->user_admin))
+					else if ($auth_level == $this->dlext_constants::DL_AUTH_CHECK_MOD && isset($value['id']) && $value['id'] && ((isset($this->dl_auth[$cat_id]['auth_mod']) && $this->dl_auth[$cat_id]['auth_mod']) || $this->user_admin))
 					{
 						$access_ids[] = $cat_id;
 					}
-					else if ($auth_level == $this->dlext_constants::DL_AUTH_CHECK_UPLOAD && isset($value['id']) && $value['id'] && ((isset($value['auth_up']) && $value['auth_up']) || (isset($this->dl_auth[$cat_id]['auth_up']) && $this->dl_auth[$cat_id]['auth_up']) || $this->user_admin))
+					else if ($auth_level == $this->dlext_constants::DL_AUTH_CHECK_UPLOAD && isset($value['id']) && $value['id'] && ((isset($this->dl_auth[$cat_id]['auth_up']) && $this->dl_auth[$cat_id]['auth_up']) || $this->user_admin))
 					{
 						$access_ids[] = $cat_id;
 					}
@@ -154,6 +194,20 @@ class main implements main_interface
 					}
 				}
 			}
+
+			/**
+			 * Additional actions after tree is build for full index
+			 *
+			 * @event oxpus.dlext.main_fullindex_after
+			 * @var array	tree_dl			category tree data
+			 * @var array	dl_index		complete category index data
+			 * @since 8.4.0
+			 */
+			$vars = [
+				'tree_dl',
+				'dl_index',
+			];
+			extract($this->dispatcher->trigger_event('oxpus.dlext.main_fullindex_after', compact($vars)));
 		}
 
 		return (!empty($auth_level) && $auth_level != 0) ? $access_ids : $tree_dl;
@@ -177,7 +231,27 @@ class main implements main_interface
 
 		foreach ($this->dl_index as $cat_id => $value)
 		{
-			if (((isset($value['auth_view']) && $value['auth_view']) || (isset($this->dl_auth[$cat_id]['auth_view']) && $this->dl_auth[$cat_id]['auth_view']) || $this->user_admin) && (isset($value['parent']) && $value['parent'] == $parent))
+			/**
+			 * Additional actions before category will be setup on default index
+			 *
+			 * @event oxpus.dlext.main_index_before
+			 * @var int		cat_id			category id
+			 * @var array	value			category data
+			 * @var array	dl_index		complete category index data
+			 * @since 8.4.0
+			 */
+			$vars = [
+				'cat_id',
+				'value',
+				'dl_index',
+			];
+			extract($this->dispatcher->trigger_event('oxpus.dlext.main_index_before', compact($vars)));
+
+			if (!$this->get_cat_status($cat_id))
+			{
+				continue;
+			}
+			else if (((isset($this->dl_auth[$cat_id]['auth_view']) && $this->dl_auth[$cat_id]['auth_view']) || $this->user_admin) && (isset($value['parent']) && $value['parent'] == $parent))
 			{
 				$tree_dl[$cat_id] = $value;
 				$tree_dl[$cat_id]['nav_path']		= $this->helper->route('oxpus_dlext_index', ['cat' => $cat_id]);
@@ -186,6 +260,21 @@ class main implements main_interface
 				$tree_dl[$cat_id]['sublevel']		= $this->get_sublevel($cat_id);
 			}
 		}
+
+		/**
+		 * Additional actions after tree will be setup on default index
+		 *
+		 * @event oxpus.dlext.main_index_after
+		 * @var array	tree_dl			category tree data
+		 * @var array	dl_index		complete category index data
+		 * @since 8.4.0
+		 */
+		$vars = [
+			'tree_dl',
+			'dl_index',
+		];
+		extract($this->dispatcher->trigger_event('oxpus.dlext.main_index_after', compact($vars)));
+
 		return $tree_dl;
 	}
 
@@ -246,7 +335,11 @@ class main implements main_interface
 
 		foreach (array_keys($this->dl_index) as $cat_id)
 		{
-			if (isset($this->dl_index[$cat_id]['parent']) && $this->dl_index[$cat_id]['parent'] == $parent && (isset($this->dl_index[$cat_id]['auth_view']) || isset($this->dl_auth[$cat_id]['auth_view']) || $this->user_admin))
+			if (!$this->get_cat_status($cat_id))
+			{
+				continue;
+			}
+			else if (isset($this->dl_index[$cat_id]['parent']) && $this->dl_index[$cat_id]['parent'] == $parent && (isset($this->dl_index[$cat_id]['auth_view']) || isset($this->dl_auth[$cat_id]['auth_view']) || $this->user_admin))
 			{
 				$sublevel_count += (isset($this->dl_index[$cat_id]['total'])) ? $this->dl_index[$cat_id]['total'] : 0;
 				$sublevel_count += $this->get_sublevel_count($cat_id);
@@ -274,7 +367,11 @@ class main implements main_interface
 
 		foreach (array_keys($this->dl_index) as $cat_id)
 		{
-			if ((isset($this->dl_index[$cat_id]['auth_view']) || isset($this->dl_auth[$cat_id]['auth_view']) || $this->user_admin) && (isset($this->dl_index[$cat_id]['parent']) && $this->dl_index[$cat_id]['parent'] == $parent))
+			if (!$this->get_cat_status($cat_id))
+			{
+				continue;
+			}
+			else if ((isset($this->dl_index[$cat_id]['auth_view']) || isset($this->dl_auth[$cat_id]['auth_view']) || $this->user_admin) && (isset($this->dl_index[$cat_id]['parent']) && $this->dl_index[$cat_id]['parent'] == $parent))
 			{
 				++$sublevel;
 			}
@@ -421,5 +518,20 @@ class main implements main_interface
 		}
 
 		return $dl_mod_link_show;
+	}
+
+	private function get_cat_status($cat_id)
+	{
+		$can_view = $this->dlext_constants::DL_TRUE;
+
+		if (!defined('ADMIN_START'))
+		{
+			if (!empty($this->dl_index[$cat_id]['cat_status']) && ($this->dl_index[$cat_id]['cat_status'] == 1 || ($this->dl_index[$cat_id]['cat_status'] == 2 && !$this->user_admin)))
+			{
+				$can_view = $this->dlext_constants::DL_FALSE;
+			}
+		}
+
+		return $can_view;
 	}
 }

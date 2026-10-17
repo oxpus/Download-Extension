@@ -53,6 +53,8 @@ services:
             - '%oxpus.dlext.tables.dl_ratings%'
             - '%oxpus.dlext.tables.dl_versions%'
             - '%oxpus.dlext.tables.downloads%'
+            - '%oxpus.dlext.tables.dl_todo_cat%'
+            - '%oxpus.dlext.tables.dl_todo%'
     oxpus.dlext.fav:
         class: oxpus\dlext\controller\fav
         public: true
@@ -269,6 +271,29 @@ services:
             - '@oxpus.dlext.helpers.constants'
             - '%oxpus.dlext.tables.downloads%'
             - '%oxpus.dlext.tables.dl_cat%'
+    oxpus.dlext.todo_ext:
+        class: oxpus\dlext\controller\todo_ext
+        public: true
+        arguments:
+            - '%core.root_path%'
+            - '%core.php_ext%'
+            - '@dbal.conn'
+            - '@config'
+            - '@controller.helper'
+            - '@request'
+            - '@template'
+            - '@user'
+            - '@language'
+            - '@auth'
+            - '@oxpus.dlext.core.extra'
+            - '@oxpus.dlext.core.files'
+            - '@oxpus.dlext.core.main'
+            - '@oxpus.dlext.helpers.footer'
+            - '@oxpus.dlext.helpers.constants'
+            - '%oxpus.dlext.tables.downloads%'
+            - '%oxpus.dlext.tables.dl_cat%'
+            - '%oxpus.dlext.tables.dl_todo_cat%'
+            - '%oxpus.dlext.tables.dl_todo%'
     oxpus.dlext.unassigned:
         class: oxpus\dlext\controller\unassigned
         public: true

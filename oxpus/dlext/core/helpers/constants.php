@@ -34,6 +34,9 @@ class constants
 	const DL_CAT_EDIT_ADMIN_MOD_OWN = 3;
 	const DL_CAT_EDIT_ADMIN_ONLY = 1;
 	const DL_CAT_EDIT_OFF = 0;
+	const DL_CAT_STATUS_NORMAL = 0;
+	const DL_CAT_STATUS_HIDDEN = 1;
+	const DL_CAT_STATUS_FOUNDER = 2;
 
 	const DL_FILE_FREE_ALL = 1;
 	const DL_FILE_FREE_NONE = 0;
@@ -135,6 +138,10 @@ class constants
 	const DL_THUMBS_DISPLAY_ON = 1;
 	const DL_THUMBS_DISPLAY_CAT = 2;
 
+	const DL_TODO_DISABLED = 0;
+	const DL_TODO_ENABLED = 1;
+	const DL_TODO_ENABLED_EXT = 2;
+
 	const DL_TOPIC_MORE_DETAILS_OVER = 2;
 	const DL_TOPIC_MORE_DETAILS_UNDER = 1;
 	const DL_TOPIC_NO_MORE_DETAILS = 0;
@@ -154,6 +161,7 @@ class constants
 	const DL_DEFAULT_PANEL = 2;
 	const DL_FALSE = 0;
 	const DL_MAX_STRING_LENGTH = 16777215;
+	const DL_NEVER = 2;
 	const DL_NONE = -1;
 	const DL_ONE_DAY = 86400;
 	const DL_ONE_HOUR = 3600;

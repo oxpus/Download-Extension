@@ -123,6 +123,11 @@ class todo
 			redirect($this->helper->route('oxpus_dlext_index'));
 		}
 
+		if ($this->config['dl_todo_onoff'] == 2)
+		{
+			redirect($this->helper->route('oxpus_dlext_todo_ext'));
+		}
+
 		$todo_access_ids = $this->dlext_main->full_index(0, 0, 0, $this->dlext_constants::DL_AUTH_CHECK_MOD);
 
 		if (count($todo_access_ids) > 0 && $this->user->data['is_registered'])
@@ -371,6 +376,7 @@ class todo
 					$df_id = $dl_todo['df_id'][$i];
 
 					$this->template->assign_block_vars('todolist_row', [
+						'DL_CAT_NAME'		=> $index[$dl_todo['cat'][$i]]['cat_name_nav'],
 						'DL_FILENAME'		=> $dl_todo['file_name'][$i],
 						'DL_FILE_LINK'		=> $this->helper->route('oxpus_dlext_details', ['df_id' => $df_id]),
 						'DL_HACK_VERSION'	=> $dl_todo['hack_version'][$i],

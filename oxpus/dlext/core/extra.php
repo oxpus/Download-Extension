@@ -31,7 +31,6 @@ class extra implements extra_interface
 	 * @param \oxpus\dlext\core\files				$dlext_files
 	 * @param \oxpus\dlext\core\main				$dlext_main
 	 * @param \oxpus\dlext\core\helpers\constants	$dlext_constants
-
 	 */
 	public function __construct(
 		\phpbb\db\driver\driver_interface $db,
@@ -73,6 +72,7 @@ class extra implements extra_interface
 				$todo['hack_version'][]	= $hack_version;
 				$todo['todo'][]			= $todo_text;
 				$todo['df_id'][]		= $dl_files[$i]['id'];
+				$todo['cat'][]			= $cat_id;
 			}
 		}
 
@@ -81,7 +81,7 @@ class extra implements extra_interface
 
 	public function dl_dropdown($parent = 0, $level = 0, $select_cat = 0, $perm = 'auth_view', $rem_cat = 0, &$catlist = [])
 	{
-		$dl_index	= $this->dlext_auth->dl_index();
+		$dl_index	= $this->dlext_main->full_index();
 		$dl_auth	= $this->dlext_auth->dl_auth();
 
 		if (empty($dl_index))

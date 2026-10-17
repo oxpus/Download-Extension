@@ -244,9 +244,9 @@ class search
 			 * @var array	search_ids		download ids
 			 * @since 8.1.0-RC2
 			 */
-			$vars = array(
+			$vars = [
 				'search_ids',
-			);
+			];
 			extract($this->dispatcher->trigger_event('oxpus.dlext.search_keywords_fetch_download_data', compact($vars)));
 
 			if ($search_counter > $this->config['dl_links_per_page'])
@@ -362,10 +362,11 @@ class search
 					 * @since 8.1.0-RC2
 					 */
 					$block = 'downloads';
-					$vars = array(
+
+					$vars = [
 						'block',
 						'file_id',
-					);
+					];
 					extract($this->dispatcher->trigger_event('oxpus.dlext.search_keywords_display_data_after', compact($vars)));
 				}
 
@@ -386,7 +387,7 @@ class search
 			{
 				$search_author = str_replace('sql', '', $search_author);
 				$search_author = str_replace('union', '', $search_author);
-				$search_author = str_replace('*', '%', trim($search_author));
+				$search_author = str_replace('*', '%', trim($search_author, " \n\r\t\v\x00"));
 
 				$sql = 'SELECT user_id FROM ' . USERS_TABLE . '
 					WHERE username ' . $this->db->sql_like_expression($this->db->get_any_char() . $search_author . $this->db->get_any_char());
@@ -478,9 +479,9 @@ class search
 				 * @var array	search_ids		download ids
 				 * @since 8.1.0-RC2
 				 */
-				$vars = array(
+				$vars = [
 					'search_ids',
-				);
+				];
 				extract($this->dispatcher->trigger_event('oxpus.dlext.search_user_fetch_download_data', compact($vars)));
 
 				$sql_array['SELECT'] = 'd.*, c.cat_name, u.username, u.user_colour, img.img_name as thumbnail';
@@ -573,10 +574,11 @@ class search
 					 * @since 8.1.0-RC2
 					 */
 					$block = 'downloads';
-					$vars = array(
+
+					$vars = [
 						'block',
 						'file_id',
-					);
+					];
 					extract($this->dispatcher->trigger_event('oxpus.dlext.search_user_display_data_after', compact($vars)));
 				}
 			}

@@ -331,7 +331,7 @@ class footer implements footer_interface
 				'S_DL_TRANSLATION'			=> ($translation) ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE,
 
 				'U_DL_STATS'				=> $this->helper->route('oxpus_dlext_stats'),
-				'U_DL_TODOLIST'				=> $this->helper->route('oxpus_dlext_todo'),
+				'U_DL_TODOLIST'				=> ($this->config['dl_todo_onoff'] == 2) ? $this->helper->route('oxpus_dlext_todo_ext') : $this->helper->route('oxpus_dlext_todo'),
 				'U_DL_OVERALL_VIEW'			=> ($this->config['dl_overview_link_onoff']) ? $this->helper->route('oxpus_dlext_overall') : '',
 			]);
 

@@ -234,7 +234,7 @@ class status implements status_interface
 			}
 		}
 
-		if (!$cat_auth['auth_dl'] && !$index[$cat_id]['auth_dl'] && !$this->dlext_auth->user_admin())
+		if (!$cat_auth['auth_dl'])
 		{
 			$file_status = 'red';
 			$file_auth = $this->dlext_constants::DL_FALSE;
@@ -281,7 +281,7 @@ class status implements status_interface
 			}
 		}
 
-		if (($index[$cat_id]['cat_traffic'] && ($index[$cat_id]['cat_traffic'] - $index[$cat_id]['cat_traffic_use'] <= 0)) && !$this->config['dl_traffic_off'])
+		if ((!empty($index[$cat_id]['cat_traffic']) && ($index[$cat_id]['cat_traffic'] - $index[$cat_id]['cat_traffic_use'] <= 0)) && !$this->config['dl_traffic_off'])
 		{
 			$file_status = 'blue';
 

@@ -94,9 +94,9 @@ class ucp_config_controller implements ucp_config_interface
 			 * @var array	sql_array		array of user's data for storage
 			 * @since 8.1.0-RC2
 			 */
-			$vars = array(
+			$vars = [
 				'sql_array',
-			);
+			];
 			extract($this->dispatcher->trigger_event('oxpus.dlext.ucp_config_sql_update_before', compact($vars)));
 
 			$sql = 'UPDATE ' . USERS_TABLE . ' SET ' . $this->db->sql_build_array('UPDATE', $sql_array) . '
@@ -170,9 +170,9 @@ class ucp_config_controller implements ucp_config_interface
 		 * @var array	template_ary		template data for displaying
 		 * @since 8.1.0-RC2
 		 */
-		$vars = array(
+		$vars = [
 			'template_ary',
-		);
+		];
 		extract($this->dispatcher->trigger_event('oxpus.dlext.ucp_config_template_before', compact($vars)));
 
 		$this->template->assign_vars($template_ary);

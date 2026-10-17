@@ -142,31 +142,11 @@ class acp_permissions_controller implements acp_permissions_interface
 						WHERE ' . $this->db->sql_in_set('cat_id', $cat_ids);
 					$this->db->sql_query($sql);
 
-					$sql = 'UPDATE ' . $this->dlext_table_dl_cat . ' SET ' . $this->db->sql_build_array('UPDATE', [
-						'auth_view'		=> $this->dlext_constants::DL_PERM_GENERAL_ALL,
-						'auth_dl'		=> $this->dlext_constants::DL_PERM_GENERAL_ALL,
-						'auth_up'		=> $this->dlext_constants::DL_PERM_GENERAL_ALL,
-						'auth_mod'		=> $this->dlext_constants::DL_PERM_GENERAL_ALL,
-						'auth_cread'	=> $this->dlext_constants::DL_PERM_ADMIN,
-						'auth_cpost'	=> $this->dlext_constants::DL_PERM_ADMIN
-					]) . ' WHERE ' . $this->db->sql_in_set('id', $cat_ids);
-					$this->db->sql_query($sql);
-
 					$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_CAT_PERM_DROP', false, [$cat_list]);
 				}
 				else
 				{
 					$sql = 'DELETE FROM ' . $this->dlext_table_dl_auth;
-					$this->db->sql_query($sql);
-
-					$sql = 'UPDATE ' . $this->dlext_table_dl_cat . ' SET ' . $this->db->sql_build_array('UPDATE', [
-						'auth_view'		=> $this->dlext_constants::DL_PERM_GENERAL_ALL,
-						'auth_dl'		=> $this->dlext_constants::DL_PERM_GENERAL_ALL,
-						'auth_up'		=> $this->dlext_constants::DL_PERM_GENERAL_ALL,
-						'auth_mod'		=> $this->dlext_constants::DL_PERM_GENERAL_ALL,
-						'auth_cread'	=> $this->dlext_constants::DL_PERM_ADMIN,
-						'auth_cpost'	=> $this->dlext_constants::DL_PERM_ADMIN
-					]);
 					$this->db->sql_query($sql);
 
 					$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_CAT_PERM_ALL');
@@ -196,16 +176,9 @@ class acp_permissions_controller implements acp_permissions_interface
 		}
 
 		$auth_perm_downloads = [
-			$this->dlext_constants::DL_PERM_GENERAL_ALL			=> 'DL_PERM_ALL',
-			$this->dlext_constants::DL_PERM_GENERAL_REG_USER	=> 'DL_PERM_REG',
-			'default'											=> 'DL_PERM_GRG',
-		];
-
-		$auth_perm_comments = [
-			$this->dlext_constants::DL_PERM_USER	=> 'DL_STAT_PERM_USER',
-			$this->dlext_constants::DL_PERM_MOD		=> 'DL_STAT_PERM_MOD',
-			$this->dlext_constants::DL_PERM_ADMIN	=> 'DL_STAT_PERM_ADMIN',
-			'default'								=> 'DL_STAT_PERM_ALL',
+			$this->dlext_constants::DL_TRUE		=> 'DL_YES',
+			$this->dlext_constants::DL_NEVER	=> 'DL_NEVER',
+			'default'							=> 'DL_NO',
 		];
 
 		if ($view_perm == $this->dlext_constants::DL_PERM_VIEW)
@@ -245,22 +218,8 @@ class acp_permissions_controller implements acp_permissions_interface
 					{
 						$cur_cat = $cat_id;
 
-						$l_auth_view	= $auth_perm_downloads[$index[$cat_id]['auth_view_real']] ?? $auth_perm_downloads['default'];
-						$l_auth_dl		= $auth_perm_downloads[$index[$cat_id]['auth_dl_real']] ?? $auth_perm_downloads['default'];
-						$l_auth_up		= $auth_perm_downloads[$index[$cat_id]['auth_up_real']] ?? $auth_perm_downloads['default'];
-						$l_auth_mod		= $auth_perm_downloads[$index[$cat_id]['auth_mod_real']] ?? $auth_perm_downloads['default'];
-
-						$l_auth_cread	= $auth_perm_comments[$index[$cat_id]['auth_cread']] ?? $auth_perm_comments['default'];
-						$l_auth_cpost	= $auth_perm_comments[$index[$cat_id]['auth_cpost']] ?? $auth_perm_comments['default'];
-
 						$this->template->assign_block_vars('cat_perm_block', [
 							'DL_CAT_NAME'		=> $row['cat_name'],
-							'DL_AUTH_VIEW'		=> $l_auth_view,
-							'DL_AUTH_DL'		=> $l_auth_dl,
-							'DL_AUTH_UP'		=> $l_auth_up,
-							'DL_AUTH_MOD'		=> $l_auth_mod,
-							'DL_AUTH_CREAD'		=> $l_auth_cread,
-							'DL_AUTH_CPOST'		=> $l_auth_cpost,
 						]);
 					}
 
@@ -274,6 +233,8 @@ class acp_permissions_controller implements acp_permissions_interface
 						'DL_AUTH_DL'		=> $row['auth_dl'],
 						'DL_AUTH_UP'		=> $row['auth_up'],
 						'DL_AUTH_MOD'		=> $row['auth_mod'],
+						'DL_AUTH_CREAD'		=> $row['auth_cread'],
+						'DL_AUTH_CPOST'		=> $row['auth_cpost'],
 					]);
 				}
 
@@ -296,86 +257,60 @@ class acp_permissions_controller implements acp_permissions_interface
 				trigger_error('FORM_INVALID', E_USER_WARNING);
 			}
 
-			$auth_cread		= $this->request->variable('auth_cread', $this->dlext_constants::DL_PERM_ADMIN);
-			$auth_cpost		= $this->request->variable('auth_cpost', $this->dlext_constants::DL_PERM_ADMIN);
-			$auth_dl		= $this->request->variable('auth_dl', $this->dlext_constants::DL_PERM_GENERAL_ALL);
-			$auth_mod		= $this->request->variable('auth_mod', $this->dlext_constants::DL_PERM_GENERAL_ALL);
-			$auth_up		= $this->request->variable('auth_up', $this->dlext_constants::DL_PERM_GENERAL_ALL);
-			$auth_view		= $this->request->variable('auth_view', $this->dlext_constants::DL_PERM_GENERAL_ALL);
+			$auth_view		= $this->request->variable('auth_view', $this->dlext_constants::DL_TRUE);
+			$auth_dl		= $this->request->variable('auth_dl', $this->dlext_constants::DL_FALSE);
+			$auth_up		= $this->request->variable('auth_up', $this->dlext_constants::DL_FALSE);
+			$auth_mod		= $this->request->variable('auth_mod', $this->dlext_constants::DL_FALSE);
+			$auth_cread		= $this->request->variable('auth_cread', $this->dlext_constants::DL_TRUE);
+			$auth_cpost		= $this->request->variable('auth_cpost', $this->dlext_constants::DL_FALSE);
 
 			$log_auth_view	= $this->language->lang($auth_perm_downloads[$auth_view] ?? $auth_perm_downloads['default']);
 			$log_auth_dl	= $this->language->lang($auth_perm_downloads[$auth_dl] ?? $auth_perm_downloads['default']);
 			$log_auth_up	= $this->language->lang($auth_perm_downloads[$auth_up] ?? $auth_perm_downloads['default']);
 			$log_auth_mod	= $this->language->lang($auth_perm_downloads[$auth_mod] ?? $auth_perm_downloads['default']);
+			$log_auth_cread	= $this->language->lang($auth_perm_downloads[$auth_cread] ?? $auth_perm_downloads['default']);
+			$log_auth_cpost	= $this->language->lang($auth_perm_downloads[$auth_cpost] ?? $auth_perm_downloads['default']);
 
-			$log_auth_cread	= $this->language->lang($auth_perm_comments[$auth_cread] ?? $auth_perm_comments['default']);
-			$log_auth_cpost	= $this->language->lang($auth_perm_comments[$auth_cpost] ?? $auth_perm_comments['default']);
-
-			if (isset($s_presel_groups[0]) && $s_presel_groups[0] == $this->dlext_constants::DL_NONE)
+			for ($i = 0; $i < count($s_presel_cats); ++$i)
 			{
-				for ($i = 0; $i < count($s_presel_cats); ++$i)
-				{
-					$sql = 'SELECT cat_name FROM ' . $this->dlext_table_dl_cat . '
-						WHERE id = ' . (int) $s_presel_cats[$i];
-					$result = $this->db->sql_query($sql);
-					$cat_name = $this->db->sql_fetchfield('cat_name');
-					$this->db->sql_freeresult($result);
+				$sql = 'SELECT cat_name FROM ' . $this->dlext_table_dl_cat . '
+					WHERE id = ' . (int) $s_presel_cats[$i];
+				$result = $this->db->sql_query($sql);
+				$cat_name = $this->db->sql_fetchfield('cat_name');
+				$this->db->sql_freeresult($result);
 
-					$sql = 'UPDATE ' . $this->dlext_table_dl_cat . ' SET ' . $this->db->sql_build_array('UPDATE', [
+				for ($j = 0; $j < count($s_presel_groups); ++$j)
+				{
+					$sql = 'DELETE FROM ' . $this->dlext_table_dl_auth . '
+						WHERE cat_id = ' . (int) $s_presel_cats[$i] . '
+							AND group_id = ' . (int) $s_presel_groups[$j];
+					$this->db->sql_query($sql);
+
+					$sql = 'INSERT INTO ' . $this->dlext_table_dl_auth . ' ' . $this->db->sql_build_array('INSERT', [
+						'cat_id'		=> $s_presel_cats[$i],
+						'group_id'		=> $s_presel_groups[$j],
 						'auth_view'		=> $auth_view,
 						'auth_dl'		=> $auth_dl,
 						'auth_up'		=> $auth_up,
 						'auth_mod'		=> $auth_mod,
 						'auth_cread'	=> $auth_cread,
 						'auth_cpost'	=> $auth_cpost
-					]) . ' WHERE id = ' . (int) $s_presel_cats[$i];
+					]);
 					$this->db->sql_query($sql);
 
-					$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_CAT_PERM_ALL', false, [$cat_name, $log_auth_view, $log_auth_dl, $log_auth_up, $log_auth_mod, $log_auth_cread, $log_auth_cpost]);
-				}
-			}
-			else
-			{
-				for ($i = 0; $i < count($s_presel_cats); ++$i)
-				{
-					$sql = 'SELECT cat_name FROM ' . $this->dlext_table_dl_cat . '
-						WHERE id = ' . (int) $s_presel_cats[$i];
+					$sql = 'SELECT group_type, group_name FROM ' . GROUPS_TABLE . '
+							WHERE group_id = ' . (int) $s_presel_groups[$j];
 					$result = $this->db->sql_query($sql);
-					$cat_name = $this->db->sql_fetchfield('cat_name');
+					$row = $this->db->sql_fetchrow($result);
 					$this->db->sql_freeresult($result);
+					$group_name = ($row['group_type'] == GROUP_SPECIAL) ? '<strong>' . $this->language->lang('G_' . $row['group_name']) . '</strong>' : $row['group_name'];
 
-					for ($j = 0; $j < count($s_presel_groups); ++$j)
-					{
-						$sql = 'DELETE FROM ' . $this->dlext_table_dl_auth . '
-							WHERE cat_id = ' . (int) $s_presel_cats[$i] . '
-								AND group_id = ' . (int) $s_presel_groups[$j];
-						$this->db->sql_query($sql);
-
-						$sql = 'INSERT INTO ' . $this->dlext_table_dl_auth . ' ' . $this->db->sql_build_array('INSERT', [
-							'cat_id'	=> $s_presel_cats[$i],
-							'group_id'	=> $s_presel_groups[$j],
-							'auth_view'	=> $auth_view,
-							'auth_dl'	=> $auth_dl,
-							'auth_up'	=> $auth_up,
-							'auth_mod'	=> $auth_mod
-						]);
-						$this->db->sql_query($sql);
-
-						$sql = 'SELECT group_type, group_name FROM ' . GROUPS_TABLE . '
-								WHERE group_id = ' . (int) $s_presel_groups[$j];
-						$result = $this->db->sql_query($sql);
-						$row = $this->db->sql_fetchrow($result);
-						$this->db->sql_freeresult($result);
-						$group_name = ($row['group_type'] == GROUP_SPECIAL) ? '<strong>' . $this->language->lang('G_' . $row['group_name']) . '</strong>' : $row['group_name'];
-
-						$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_CAT_PERM_GRP', false, [$cat_name, $group_name, $log_auth_view, $log_auth_dl, $log_auth_up, $log_auth_mod]);
-					}
+					$this->log->add('admin', $this->user->data['user_id'], $this->user->ip, 'DL_LOG_CAT_PERM_GRP', false, [$cat_name, $group_name, $log_auth_view, $log_auth_dl, $log_auth_up, $log_auth_mod, $log_auth_cread, $log_auth_cpost]);
 				}
 			}
 
 			// Purge the auth cache
 			$this->cache->destroy('_dlext_auth');
-			$this->cache->destroy('_dlext_cats');
 
 			$message = $this->language->lang('CLICK_RETURN_DOWNLOADADMIN', '<a href="' . $this->u_action . '">', '</a>') . adm_back_link($this->u_action);
 
@@ -470,16 +405,8 @@ class acp_permissions_controller implements acp_permissions_interface
 
 					for ($i = 0; $i < count($s_presel_groups); ++$i)
 					{
-						if ($s_presel_groups[$i] != $this->dlext_constants::DL_NONE)
-						{
-							$group_name = $group_data[$s_presel_groups[$i]];
-							$group_sep = $group_sepr[$s_presel_groups[$i]];
-						}
-						else
-						{
-							$group_name = $this->language->lang('DL_ALL');
-							$group_sep = '';
-						}
+						$group_name = $group_data[$s_presel_groups[$i]];
+						$group_sep = $group_sepr[$s_presel_groups[$i]];
 
 						$this->template->assign_block_vars('preselected_groups', [
 							'DL_GROUP_NAME'	=> $group_name,
@@ -491,73 +418,27 @@ class acp_permissions_controller implements acp_permissions_interface
 
 					$s_hidden_fields += ['action' => 'save_perm'];
 
-					if ($s_presel_groups[0] == $this->dlext_constants::DL_NONE)
+					$this->template->assign_var('S_DL_AUTH_GROUPS', $this->dlext_constants::DL_TRUE);
+
+					$sql = 'SELECT auth_view, auth_dl, auth_up, auth_mod, auth_cread, auth_cpost FROM ' . $this->dlext_table_dl_auth . '
+						WHERE ' . $this->db->sql_in_set('cat_id', $s_presel_cats) . '
+							AND ' . $this->db->sql_in_set('group_id', $s_presel_groups) . '
+						GROUP BY auth_view, auth_dl, auth_up, auth_mod, auth_cread, auth_cpost';
+					$result = $this->db->sql_query($sql);
+					$row = $this->db->sql_fetchrow($result);
+					$total_auths = $this->db->sql_affectedrows();
+					$this->db->sql_freeresult($result);
+
+					if ($total_auths == 1)
 					{
-						if (count($s_presel_cats) >= 1)
-						{
-							$s_auth_all = [];
-							$s_auth_all[] = ['value' => $this->dlext_constants::DL_PERM_GENERAL_NONE, 		'lang' => $this->language->lang('SELECT_OPTION')];
-							$s_auth_all[] = ['value' => $this->dlext_constants::DL_PERM_GENERAL_ALL, 		'lang' => $this->language->lang('DL_PERM_ALL')];
-							$s_auth_all[] = ['value' => $this->dlext_constants::DL_PERM_GENERAL_REG_USER,	'lang' => $this->language->lang('DL_PERM_REG')];
-							$s_auth_all[] = ['value' => $this->dlext_constants::DL_PERM_GENERAL_GROUPS, 	'lang' => $this->language->lang('DL_PERM_GRG')];
-
-							for ($i = 0; $i < count($s_auth_all); ++$i)
-							{
-								$this->template->assign_block_vars('dl_perm_all_default', [
-									'DL_VALUE'	=> $s_auth_all[$i]['value'],
-									'DL_NAME'	=> $s_auth_all[$i]['lang'],
-								]);
-							}
-
-							$s_auth_all = [];
-							$s_auth_all[] = ['value' => $this->dlext_constants::DL_PERM_GENERAL_NONE, 	'lang' => $this->language->lang('SELECT_OPTION')];
-							$s_auth_all[] = ['value' => $this->dlext_constants::DL_PERM_ALL, 			'lang' => $this->language->lang('DL_STAT_PERM_ALL')];
-							$s_auth_all[] = ['value' => $this->dlext_constants::DL_PERM_USER, 			'lang' => $this->language->lang('DL_STAT_PERM_USER')];
-							$s_auth_all[] = ['value' => $this->dlext_constants::DL_PERM_MOD, 			'lang' => $this->language->lang('DL_STAT_PERM_MOD')];
-							$s_auth_all[] = ['value' => $this->dlext_constants::DL_PERM_ADMIN, 			'lang' => $this->language->lang('DL_STAT_PERM_ADMIN')];
-
-							for ($i = 0; $i < count($s_auth_all); ++$i)
-							{
-								$this->template->assign_block_vars('dl_perm_all_comments', [
-									'DL_VALUE'	=> $s_auth_all[$i]['value'],
-									'DL_NAME'	=> $s_auth_all[$i]['lang'],
-								]);
-							}
-
-							$this->template->assign_var('S_DL_AUTH_ALL_USERS', $this->dlext_constants::DL_TRUE);
-
-							$this->template->assign_vars([
-								'S_DL_AUTH_VIEW'	=> $index[$s_presel_cats[0]]['auth_view_real'],
-								'S_DL_AUTH_DL'		=> $index[$s_presel_cats[0]]['auth_dl_real'],
-								'S_DL_AUTH_UP'		=> $index[$s_presel_cats[0]]['auth_up_real'],
-								'S_DL_AUTH_MOD'		=> $index[$s_presel_cats[0]]['auth_mod_real'],
-								'S_DL_AUTH_CREAD'	=> $index[$s_presel_cats[0]]['auth_cread'],
-								'S_DL_AUTH_CPOST'	=> $index[$s_presel_cats[0]]['auth_cpost'],
-							]);
-						}
-					}
-					else
-					{
-						$this->template->assign_var('S_DL_AUTH_GROUPS', $this->dlext_constants::DL_TRUE);
-
-						$sql = 'SELECT auth_view, auth_dl, auth_up, auth_mod FROM ' . $this->dlext_table_dl_auth . '
-							WHERE ' . $this->db->sql_in_set('cat_id', $s_presel_cats) . '
-								AND ' . $this->db->sql_in_set('group_id', $s_presel_groups) . '
-							GROUP BY auth_view, auth_dl, auth_up, auth_mod';
-						$result = $this->db->sql_query($sql);
-						$row = $this->db->sql_fetchrow($result);
-						$total_auths = $this->db->sql_affectedrows();
-						$this->db->sql_freeresult($result);
-
-						if ($total_auths == 1)
-						{
-							$this->template->assign_vars([
-								'DL_AUTH_VIEW'	=> $row['auth_view'],
-								'DL_AUTH_DL'	=> $row['auth_dl'],
-								'DL_AUTH_UP'	=> $row['auth_up'],
-								'DL_AUTH_MOD'	=> $row['auth_mod'],
-							]);
-						}
+						$this->template->assign_vars([
+							'DL_AUTH_VIEW'	=> $row['auth_view'],
+							'DL_AUTH_DL'	=> $row['auth_dl'],
+							'DL_AUTH_UP'	=> $row['auth_up'],
+							'DL_AUTH_MOD'	=> $row['auth_mod'],
+							'DL_AUTH_CREAD'	=> $row['auth_cread'],
+							'DL_AUTH_CPOST'	=> $row['auth_cpost'],
+						]);
 					}
 				}
 			}

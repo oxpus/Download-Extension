@@ -52,24 +52,24 @@
 <thead>
 <tr>
 	<th>{{ lang('DL_CAT_NAME') }}</th>
-	<th>{{ lang('DL_AUTH_VIEW') }}</th>
-	<th>{{ lang('DL_AUTH_DL') }}</th>
-	<th>{{ lang('DL_AUTH_UP') }}</th>
-    <th>{{ lang('DL_AUTH_MOD') }}</th>
-	<th>{{ lang('DL_AUTH_CREAD') }}</th>
-    <th>{{ lang('DL_AUTH_CPOST') }}</th>
+	<th class="dl-text-center">{{ lang('DL_AUTH_VIEW') }}</th>
+	<th class="dl-text-center">{{ lang('DL_AUTH_DL') }}</th>
+	<th class="dl-text-center">{{ lang('DL_AUTH_UP') }}</th>
+    <th class="dl-text-center">{{ lang('DL_AUTH_MOD') }}</th>
+	<th class="dl-text-center">{{ lang('DL_AUTH_CREAD') }}</th>
+    <th class="dl-text-center">{{ lang('DL_AUTH_CPOST') }}</th>
 </tr>
 </thead>
 <tbody>
 {% for dl_cat_row in loops.dl_cat_row %}
 <tr>
     <td>{{ dl_cat_row.DL_CAT_NAME }}</td>
-	<td>{% if dl_cat_row.DL_CAT_VIEW %}<strong class="dl-green">{{ lang('YES') }}</strong>{% else %}<span class="dl-red">{{ lang('NO') }}</span>{% endif %}</td>
-	<td>{% if dl_cat_row.DL_CAT_DL %}<strong class="dl-green">{{ lang('YES') }}</strong>{% else %}<span class="dl-red">{{ lang('NO') }}</span>{% endif %}</td>
-	<td>{% if dl_cat_row.DL_CAT_UP %}<strong class="dl-green">{{ lang('YES') }}</strong>{% else %}<span class="dl-red">{{ lang('NO') }}</span>{% endif %}</td>
-    <td>{% if dl_cat_row.DL_CAT_MOD %}<strong class="dl-green">{{ lang('YES') }}</strong>{% else %}<span class="dl-red">{{ lang('NO') }}</span>{% endif %}</td>
-	<td>{% if dl_cat_row.DL_CAT_CREAD %}<strong class="dl-green">{{ lang('YES') }}</strong>{% else %}<span class="dl-red">{{ lang('NO') }}</span>{% endif %}</td>
-    <td>{% if dl_cat_row.DL_CAT_CPOST %}<strong class="dl-green">{{ lang('YES') }}</strong>{% else %}<span class="dl-red">{{ lang('NO') }}</span>{% endif %}</td>
+	<td class="dl-text-center {% if dl_cat_row.DL_CAT_VIEW eq 1 %}dl-perm-yes{% else %}dl-perm-no{% endif %}">{% if dl_cat_row.DL_CAT_VIEW %}<strong>{{ lang('YES') }}</strong>{% else %}{{ lang('NO') }}{% endif %}</td>
+	<td class="dl-text-center {% if dl_cat_row.DL_CAT_DL eq 1 %}dl-perm-yes{% else %}dl-perm-no{% endif %}">{% if dl_cat_row.DL_CAT_DL %}<strong>{{ lang('YES') }}</strong>{% else %}{{ lang('NO') }}{% endif %}</td>
+	<td class="dl-text-center {% if dl_cat_row.DL_CAT_UP eq 1 %}dl-perm-yes{% else %}dl-perm-no{% endif %}">{% if dl_cat_row.DL_CAT_UP %}<strong>{{ lang('YES') }}</strong>{% else %}{{ lang('NO') }}{% endif %}</td>
+    <td class="dl-text-center {% if dl_cat_row.DL_CAT_MOD eq 1 %}dl-perm-yes{% else %}dl-perm-no{% endif %}">{% if dl_cat_row.DL_CAT_MOD %}<strong>{{ lang('YES') }}</strong>{% else %}{{ lang('NO') }}{% endif %}</td>
+	<td class="dl-text-center {% if dl_cat_row.DL_CAT_CREAD eq 1 %}dl-perm-yes{% else %}dl-perm-no{% endif %}">{% if dl_cat_row.DL_CAT_CREAD %}<strong>{{ lang('YES') }}</strong>{% else %}{{ lang('NO') }}{% endif %}</td>
+    <td class="dl-text-center {% if dl_cat_row.DL_CAT_CPOST eq 1 %}dl-perm-yes{% else %}dl-perm-no{% endif %}">{% if dl_cat_row.DL_CAT_CPOST %}<strong>{{ lang('YES') }}</strong>{% else %}{{ lang('NO') }}{% endif %}</td>
 </tr>
 {% endfor %}
 </tbody>

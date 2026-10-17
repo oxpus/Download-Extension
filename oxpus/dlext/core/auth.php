@@ -23,6 +23,10 @@ class auth implements auth_interface
 	protected $dlext_constants;
 
 	protected $cat_counts;
+	protected $dlext_yes;
+	protected $dlext_no;
+	protected $dlext_never;
+	protected $cat_auth_array;
 
 	protected $dlext_table_dl_auth;
 	protected $dlext_table_downloads;
@@ -61,78 +65,46 @@ class auth implements auth_interface
 		$this->dlext_cache				= $dlext_cache;
 		$this->dlext_constants			= $dlext_constants;
 
+		$this->dlext_yes				= $dlext_constants::DL_TRUE;
+		$this->dlext_no					= $dlext_constants::DL_FALSE;
+		$this->dlext_never				= $dlext_constants::DL_NEVER;
+
 		$this->dlext_table_dl_auth		= $dlext_table_dl_auth;
 		$this->dlext_table_downloads	= $dlext_table_downloads;
 		$this->dlext_table_dl_cat		= $dlext_table_dl_cat;
 	}
 
-	public function dl_auth()
+	public function dl_auth($user_id = 0, $reset_user_data = 0)
 	{
-		$dl_auth_perm = $this->dlext_cache->obtain_dl_auth();
+		if (!empty($this->cat_auth_array) && !$reset_user_data)
+		{
+			return $this->cat_auth_array;
+		}
 
-		$cat_auth_array = [];
+		$dl_auth_perm = $this->dlext_cache->obtain_dl_auth();
 
 		$auth_cat = (isset($dl_auth_perm['auth_cat'])) ? $dl_auth_perm['auth_cat'] : [];
 		$group_perm_ids = (isset($dl_auth_perm['group_perm_ids'])) ? $dl_auth_perm['group_perm_ids'] : [];
 		$auth_perm = (isset($dl_auth_perm['auth_perm'])) ? $dl_auth_perm['auth_perm'] : [];
 
-		$user_id = ($this->user->data['user_perm_from']) ? $this->user->data['user_perm_from'] : $this->user->data['user_id'];
+		if (!$user_id)
+		{
+			$user_id = ($this->user->data['user_perm_from']) ? $this->user->data['user_perm_from'] : $this->user->data['user_id'];
+		}
 
 		if (!empty($group_perm_ids))
 		{
-			$cat_auth_array = $this->dlext_cache->obtain_dl_access_groups($auth_cat, $user_id, $auth_perm, $group_perm_ids);
+			$this->cat_auth_array = $this->dlext_cache->obtain_dl_access_groups($auth_cat, $user_id, $auth_perm, $group_perm_ids);
 		}
 
-		return $cat_auth_array;
+		return $this->cat_auth_array;
 	}
 
 	public function dl_index()
 	{
 		$dl_index = $this->dlext_cache->obtain_dl_cats();
 
-		if (!empty($dl_index))
-		{
-			foreach (array_keys($dl_index) as $key)
-			{
-				// check the default cat permissions
-				if (isset($dl_index[$key]['auth_view']) && ($dl_index[$key]['auth_view'] == 1 || ($dl_index[$key]['auth_view'] == 2 && (!empty($this->user->data['is_registered']) && $this->user->data['is_registered']))))
-				{
-					$dl_index[$key]['auth_view'] = $this->dlext_constants::DL_TRUE;
-				}
-				else
-				{
-					$dl_index[$key]['auth_view'] = $this->dlext_constants::DL_FALSE;
-				}
-
-				if (isset($dl_index[$key]['auth_dl']) && ($dl_index[$key]['auth_dl'] == 1 || ($dl_index[$key]['auth_dl'] == 2 &&  (!empty($this->user->data['is_registered']) && $this->user->data['is_registered']))))
-				{
-					$dl_index[$key]['auth_dl'] = $this->dlext_constants::DL_TRUE;
-				}
-				else
-				{
-					$dl_index[$key]['auth_dl'] = $this->dlext_constants::DL_FALSE;
-				}
-
-				if (isset($dl_index[$key]['auth_up']) && ($dl_index[$key]['auth_up'] == 1 || ($dl_index[$key]['auth_up'] == 2 &&  (!empty($this->user->data['is_registered']) && $this->user->data['is_registered']))))
-				{
-					$dl_index[$key]['auth_up'] = $this->dlext_constants::DL_TRUE;
-				}
-				else
-				{
-					$dl_index[$key]['auth_up'] = $this->dlext_constants::DL_FALSE;
-				}
-
-				if (isset($dl_index[$key]['auth_mod']) && ($dl_index[$key]['auth_mod'] == 1 || ($dl_index[$key]['auth_mod'] == 2 &&  (!empty($this->user->data['is_registered']) && $this->user->data['is_registered']))))
-				{
-					$dl_index[$key]['auth_mod'] = $this->dlext_constants::DL_TRUE;
-				}
-				else
-				{
-					$dl_index[$key]['auth_mod'] = $this->dlext_constants::DL_FALSE;
-				}
-			}
-		}
-		else
+		if (empty($dl_index))
 		{
 			$dl_index = [];
 		}
@@ -152,23 +124,30 @@ class auth implements auth_interface
 
 	public function dl_cat_auth($cat_id)
 	{
-		$dl_auth = $this->dl_auth();
+		if (!empty($this->cat_auth_array))
+		{
+			$dl_auth = $this->cat_auth_array;
+		}
+		else
+		{
+			$dl_auth = $this->dl_auth();
+		}
 
 		$cat_perm = [];
 
-		$cat_perm['auth_view']	= (isset($dl_auth[$cat_id]['auth_view'])) ? intval($dl_auth[$cat_id]['auth_view']) : $this->dlext_constants::DL_FALSE;
-		$cat_perm['auth_dl']	= (isset($dl_auth[$cat_id]['auth_dl'])) ? intval($dl_auth[$cat_id]['auth_dl']) : $this->dlext_constants::DL_FALSE;
-		$cat_perm['auth_mod']	= (isset($dl_auth[$cat_id]['auth_mod'])) ? intval($dl_auth[$cat_id]['auth_mod']) : $this->dlext_constants::DL_FALSE;
-		$cat_perm['auth_up']	= (isset($dl_auth[$cat_id]['auth_up'])) ? intval($dl_auth[$cat_id]['auth_up']) : $this->dlext_constants::DL_FALSE;
-		$cat_perm['auth_cread']	= (isset($dl_auth[$cat_id]['auth_cread'])) ? intval($dl_auth[$cat_id]['auth_cread']) : $this->dlext_constants::DL_FALSE;
-		$cat_perm['auth_cpost']	= (isset($dl_auth[$cat_id]['auth_cpost'])) ? intval($dl_auth[$cat_id]['auth_cpost']) : $this->dlext_constants::DL_FALSE;
+		$cat_perm['auth_view']	= (isset($dl_auth[$cat_id]['auth_view'])) ? intval($dl_auth[$cat_id]['auth_view']) : $this->dlext_no;
+		$cat_perm['auth_dl']	= (isset($dl_auth[$cat_id]['auth_dl'])) ? intval($dl_auth[$cat_id]['auth_dl']) : $this->dlext_no;
+		$cat_perm['auth_mod']	= (isset($dl_auth[$cat_id]['auth_mod'])) ? intval($dl_auth[$cat_id]['auth_mod']) : $this->dlext_no;
+		$cat_perm['auth_up']	= (isset($dl_auth[$cat_id]['auth_up'])) ? intval($dl_auth[$cat_id]['auth_up']) : $this->dlext_no;
+		$cat_perm['auth_cread']	= (isset($dl_auth[$cat_id]['auth_cread'])) ? intval($dl_auth[$cat_id]['auth_cread']) : $this->dlext_no;
+		$cat_perm['auth_cpost']	= (isset($dl_auth[$cat_id]['auth_cpost'])) ? intval($dl_auth[$cat_id]['auth_cpost']) : $this->dlext_no;
 
 		return $cat_perm;
 	}
 
 	public function user_admin()
 	{
-		return ($this->auth->acl_get('a_') && !$this->user->data['user_perm_from']) ? $this->dlext_constants::DL_TRUE : $this->dlext_constants::DL_FALSE;
+		return ($this->auth->acl_get('a_') && !$this->user->data['user_perm_from']) ? $this->dlext_yes : $this->dlext_no;
 	}
 
 	public function get_ext_blacklist()
@@ -190,74 +169,56 @@ class auth implements auth_interface
 		return $ext_blacklist;
 	}
 
-	public function user_auth($cat_id, $perm)
+	public function user_auth($cat_id, $perm, $user_id = 0, $reset_user_data = 0)
 	{
-		$dl_index	= $this->dlext_cache->obtain_dl_cats();
-		$dl_auth	= $this->dl_auth();
-
-		if ((isset($dl_auth[$cat_id][$perm]) && $dl_auth[$cat_id][$perm]) || (isset($dl_index[$cat_id][$perm]) && $dl_index[$cat_id][$perm]) || $this->user_admin())
+		if (!empty($this->cat_auth_array) && $user_id == $this->user->data['user_id'] && !$reset_user_data)
 		{
-			return $this->dlext_constants::DL_TRUE;
+			$dl_auth = $this->cat_auth_array;
+		}
+		else
+		{
+			if (!$user_id)
+			{
+				$user_id = $this->user->data['user_id'];
+			}
+
+			$dl_auth = $this->dl_auth($user_id, $reset_user_data);
 		}
 
-		return $this->dlext_constants::DL_FALSE;
+		if ((isset($dl_auth[$cat_id][$perm]) && $dl_auth[$cat_id][$perm]))
+		{
+			return $this->dlext_yes;
+		}
+
+		return $this->dlext_no;
 	}
 
 	public function stats_perm()
 	{
-		$dl_index = $this->dlext_cache->obtain_dl_cats();
+		$dl_perm = $this->dlext_no;
 
-		return $this->_check_perm($dl_index, $this->config['dl_stats_perm']);
-	}
-
-	public function cat_auth_comment_read($cat_id)
-	{
-		$dl_index = $this->dlext_cache->obtain_dl_cats();
-
-		return $this->_check_perm($dl_index, $dl_index[$cat_id]['auth_cread'], $cat_id);
-	}
-
-	public function cat_auth_comment_post($cat_id)
-	{
-		$dl_index = $this->dlext_cache->obtain_dl_cats();
-
-		return $this->_check_perm($dl_index, $dl_index[$cat_id]['auth_cpost'], $cat_id);
-	}
-
-	private function _check_perm($dl_index, $perm_value, $cat_id = 0)
-	{
-		$dl_perm = $this->dlext_constants::DL_FALSE;
-
-		switch ($perm_value)
+		switch ($this->config['dl_stats_perm'])
 		{
 			case $this->dlext_constants::DL_PERM_ALL:
-				$dl_perm = $this->dlext_constants::DL_TRUE;
+				$dl_perm = $this->dlext_yes;
 				break;
 
 			case $this->dlext_constants::DL_PERM_USER:
 				if ($this->user->data['is_registered'])
 				{
-					$dl_perm = $this->dlext_constants::DL_TRUE;
+					$dl_perm = $this->dlext_yes;
 				}
 				break;
 
 			case $this->dlext_constants::DL_PERM_MOD:
-				if ($cat_id)
+				$dl_index = $this->dlext_cache->obtain_dl_cats();
+
+				foreach (array_keys($dl_index) as $key)
 				{
-					if ($this->user_auth($cat_id, 'auth_mod'))
+					if ($this->user_auth($dl_index[$key]['id'], 'auth_mod'))
 					{
-						$dl_perm = $this->dlext_constants::DL_TRUE;
-					}
-				}
-				else
-				{
-					foreach (array_keys($dl_index) as $key)
-					{
-						if ($this->user_auth($dl_index[$key]['id'], 'auth_mod'))
-						{
-							$dl_perm = $this->dlext_constants::DL_TRUE;
-							break;
-						}
+						$dl_perm = $this->dlext_yes;
+						break;
 					}
 				}
 				break;
@@ -265,7 +226,7 @@ class auth implements auth_interface
 			case $this->dlext_constants::DL_PERM_ADMIN:
 				if ($this->user_admin())
 				{
-					$dl_perm = $this->dlext_constants::DL_TRUE;
+					$dl_perm = $this->dlext_yes;
 				}
 				break;
 		}
@@ -273,59 +234,52 @@ class auth implements auth_interface
 		return $dl_perm;
 	}
 
+	public function cat_auth_comment_read($cat_id)
+	{
+		return $this->user_auth($cat_id, 'auth_cread');
+	}
+
+	public function cat_auth_comment_post($cat_id)
+	{
+		return $this->user_auth($cat_id, 'auth_cpost');
+	}
+
 	public function dl_auth_users($cat_id, $perm)
 	{
-		$dl_index = $this->dlext_cache->obtain_dl_cats();
 		$user_ids = [];
 
-		if (!is_array($dl_index) || empty($dl_index))
+		$sql = 'SELECT group_id FROM ' . $this->dlext_table_dl_auth . '
+			WHERE cat_id = ' . (int) $cat_id . '
+				AND ' . $this->db->sql_escape($perm) . ' = ' . $this->dlext_yes . '
+			GROUP BY group_id';
+		$result = $this->db->sql_query($sql);
+		$total_group_perms = $this->db->sql_affectedrows();
+
+		if (!$total_group_perms)
+		{
+			$this->db->sql_freeresult($result);
+			return $user_ids;
+		}
+
+		$group_ids = [];
+
+		while ($row = $this->db->sql_fetchrow($result))
+		{
+			$group_ids[] = $row['group_id'];
+		}
+
+		$this->db->sql_freeresult($result);
+
+		if (empty($group_ids))
 		{
 			return $user_ids;
 		}
 
-		if ($dl_index[$cat_id][$perm])
-		{
-			$sql = 'SELECT user_id FROM ' . USERS_TABLE . '
-				WHERE user_id <> ' . ANONYMOUS . '
-					AND user_type <> ' . USER_IGNORE . '
-					AND user_id <> ' . (int) $this->user->data['user_id'];
-			$result = $this->db->sql_query($sql);
-		}
-		else
-		{
-			$sql = 'SELECT group_id FROM ' . $this->dlext_table_dl_auth . '
-				WHERE cat_id = ' . (int) $cat_id . '
-					AND ' . $this->db->sql_escape($perm) . ' = ' . $this->dlext_constants::DL_TRUE . '
-				GROUP BY group_id';
-			$result = $this->db->sql_query($sql);
-			$total_group_perms = $this->db->sql_affectedrows();
-
-			if (!$total_group_perms)
-			{
-				$this->db->sql_freeresult($result);
-				return $user_ids;
-			}
-
-			$group_ids = [];
-
-			while ($row = $this->db->sql_fetchrow($result))
-			{
-				$group_ids[] = $row['group_id'];
-			}
-
-			$this->db->sql_freeresult($result);
-
-			if (empty($group_ids))
-			{
-				return $user_ids;
-			}
-
-			$sql = 'SELECT user_id FROM ' . USER_GROUP_TABLE . '
-				WHERE user_id <> ' . (int) $this->user->data['user_id'] . '
-					AND ' . $this->db->sql_in_set('group_id', array_map('intval', $group_ids)) . '
-					AND user_pending <> 1';
-			$result = $this->db->sql_query($sql);
-		}
+		$sql = 'SELECT user_id FROM ' . USER_GROUP_TABLE . '
+			WHERE user_id <> ' . (int) $this->user->data['user_id'] . '
+				AND ' . $this->db->sql_in_set('group_id', array_map('intval', $group_ids)) . '
+				AND user_pending <> 1';
+		$result = $this->db->sql_query($sql);
 
 		while ($row = $this->db->sql_fetchrow($result))
 		{
@@ -340,7 +294,7 @@ class auth implements auth_interface
 	public function bug_tracker()
 	{
 		$dl_index = $this->dlext_cache->obtain_dl_cats();
-		$bug_tracker = $this->dlext_constants::DL_FALSE;
+		$bug_tracker = $this->dlext_no;
 
 		if (!is_array($dl_index) || empty($dl_index))
 		{
@@ -351,7 +305,7 @@ class auth implements auth_interface
 		{
 			if (isset($dl_index[$cat_id]['bug_tracker']) && $dl_index[$cat_id]['bug_tracker'])
 			{
-				$bug_tracker = $this->dlext_constants::DL_TRUE;
+				$bug_tracker = $this->dlext_yes;
 				break;
 			}
 		}
@@ -368,7 +322,7 @@ class auth implements auth_interface
 
 			if ($total == 0)
 			{
-				$bug_tracker = $this->dlext_constants::DL_FALSE;
+				$bug_tracker = $this->dlext_no;
 			}
 		}
 
@@ -377,15 +331,15 @@ class auth implements auth_interface
 
 	public function get_captcha_status($captcha_config, $cat_id)
 	{
-		$user_is_guest		= $this->dlext_constants::DL_FALSE;
-		$user_is_mod		= $this->dlext_constants::DL_FALSE;
-		$captcha_active		= $this->dlext_constants::DL_FALSE;
-		$user_is_admin		= $this->dlext_constants::DL_FALSE;
-		$user_is_founder	= $this->dlext_constants::DL_FALSE;
+		$user_is_guest		= $this->dlext_no;
+		$user_is_mod		= $this->dlext_no;
+		$captcha_active		= $this->dlext_no;
+		$user_is_admin		= $this->dlext_no;
+		$user_is_founder	= $this->dlext_no;
 
 		if (!$this->user->data['is_registered'])
 		{
-			$user_is_guest = $this->dlext_constants::DL_TRUE;
+			$user_is_guest = $this->dlext_yes;
 		}
 		else
 		{
@@ -393,52 +347,52 @@ class auth implements auth_interface
 
 			if ($cat_auth_tmp['auth_mod'] || $this->user_admin())
 			{
-				$user_is_mod = $this->dlext_constants::DL_TRUE;
+				$user_is_mod = $this->dlext_yes;
 			}
 
 			if ($this->user_admin())
 			{
-				$user_is_admin = $this->dlext_constants::DL_TRUE;
+				$user_is_admin = $this->dlext_yes;
 			}
 
 			if ($this->user->data['user_type'] == USER_FOUNDER)
 			{
-				$user_is_founder = $this->dlext_constants::DL_TRUE;
+				$user_is_founder = $this->dlext_yes;
 			}
 		}
 
 		switch ($captcha_config)
 		{
 			case $this->dlext_constants::DL_CAPTCHA_PERM_OFF:
-				$captcha_active = $this->dlext_constants::DL_FALSE;
+				$captcha_active = $this->dlext_no;
 				break;
 			case $this->dlext_constants::DL_CAPTCHA_PERM_GUESTS:
 				if (!$user_is_guest)
 				{
-					$captcha_active = $this->dlext_constants::DL_FALSE;
+					$captcha_active = $this->dlext_no;
 				}
 				break;
 			case $this->dlext_constants::DL_CAPTCHA_PERM_USER:
 				if ($user_is_mod || $user_is_admin || $user_is_founder)
 				{
-					$captcha_active = $this->dlext_constants::DL_FALSE;
+					$captcha_active = $this->dlext_no;
 				}
 				break;
 			case $this->dlext_constants::DL_CAPTCHA_PERM_MODS:
 				if ($user_is_admin || $user_is_founder)
 				{
-					$captcha_active = $this->dlext_constants::DL_FALSE;
+					$captcha_active = $this->dlext_no;
 				}
 				break;
 			case $this->dlext_constants::DL_CAPTCHA_PERM_ADMINS:
 				if ($user_is_founder)
 				{
-					$captcha_active = $this->dlext_constants::DL_FALSE;
+					$captcha_active = $this->dlext_no;
 				}
 				break;
 			case $this->dlext_constants::DL_CAPTCHA_PERM_ALL:
 			default:
-				$captcha_active = $this->dlext_constants::DL_TRUE;
+				$captcha_active = $this->dlext_yes;
 				break;
 		}
 
