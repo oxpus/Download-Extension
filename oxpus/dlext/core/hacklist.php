@@ -50,7 +50,7 @@ class hacklist implements hacklist_interface
 
 		$tree_dl = [];
 
-		$sql = 'SELECT id, cat_name, auth_view FROM ' . $this->dlext_table_dl_cat . '
+		$sql = 'SELECT id, cat_name FROM ' . $this->dlext_table_dl_cat . '
 				ORDER BY parent, sort';
 		$result = $this->db->sql_query($sql);
 
@@ -58,7 +58,7 @@ class hacklist implements hacklist_interface
 		{
 			$cat_id = $row['id'];
 
-			if ($row['auth_view'] || (isset($dl_auth[$cat_id]['auth_view']) && $dl_auth[$cat_id]['auth_view']) || $this->dlext_auth->user_admin())
+			if ((isset($dl_auth[$cat_id]['auth_view']) && $dl_auth[$cat_id]['auth_view']) || $this->dlext_auth->user_admin())
 			{
 				$tree_dl[$cat_id] = $row['cat_name'];
 			}
