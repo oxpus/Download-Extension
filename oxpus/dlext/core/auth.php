@@ -185,7 +185,7 @@ class auth implements auth_interface
 			$dl_auth = $this->dl_auth($user_id, $reset_user_data);
 		}
 
-		if ((isset($dl_auth[$cat_id][$perm]) && $dl_auth[$cat_id][$perm]))
+		if ((isset($dl_auth[$cat_id][$perm]) && $dl_auth[$cat_id][$perm] == $this->dlext_yes))
 		{
 			return $this->dlext_yes;
 		}

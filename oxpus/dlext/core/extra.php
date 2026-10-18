@@ -81,8 +81,7 @@ class extra implements extra_interface
 
 	public function dl_dropdown($parent = 0, $level = 0, $select_cat = 0, $perm = 'auth_view', $rem_cat = 0, &$catlist = [])
 	{
-		$dl_index	= $this->dlext_main->full_index();
-		$dl_auth	= $this->dlext_auth->dl_auth();
+		$dl_index	= $this->dlext_auth->dl_index();
 
 		if (empty($dl_index))
 		{
@@ -93,7 +92,9 @@ class extra implements extra_interface
 		{
 			if (isset($dl_index[$cat_id]['parent']) && $dl_index[$cat_id]['parent'] == $parent)
 			{
-				if (isset($dl_index[$cat_id][$perm]) && $dl_index[$cat_id][$perm] || isset($dl_auth[$cat_id][$perm]) && $dl_auth[$cat_id][$perm] || $this->dlext_auth->user_admin())
+				$cat_perm = $this->dlext_auth->dl_cat_auth($cat_id);
+
+				if (isset($cat_perm[$perm]) && $cat_perm[$perm] || $this->dlext_auth->user_admin())
 				{
 					$cat_name = $dl_index[$cat_id]['cat_name'];
 
