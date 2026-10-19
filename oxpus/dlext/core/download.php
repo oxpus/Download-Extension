@@ -661,6 +661,10 @@ class download implements download_interface
 		{
 			$sql_array += ['todo' => $dl_file['todo']];
 		}
+		else
+		{
+			$sql_array += ['todo' => ''];
+		}
 
 		if ($df_id && (!$file_option || ($file_option == $this->dlext_constants::DL_VERSION_REPLACE && !$file_version)))
 		{
