@@ -657,7 +657,7 @@ class download implements download_interface
 		{
 			$sql_array += ['todo' => $todo];
 		}
-		else
+		else if (!empty($dl_file))
 		{
 			$sql_array += ['todo' => $dl_file['todo']];
 		}
