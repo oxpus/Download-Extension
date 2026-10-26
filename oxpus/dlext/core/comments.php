@@ -595,7 +595,7 @@ class comments implements comments_interface
 
 				$dl_ids[] = $dl_id;
 
-				if (($poster_id == $this->user->data['user_id'] || $cat_auth['auth_mod'] || $index[$cat_id]['auth_mod'] || $this->dlext_auth->user_admin()) && $this->user->data['is_registered'] && !$this->dl_deny_post)
+				if (($poster_id == $this->user->data['user_id'] || $cat_auth['auth_mod'] || $this->dlext_auth->user_admin()) && $this->user->data['is_registered'] && !$this->dl_deny_post)
 				{
 					$this->template->assign_block_vars('dl_comment_row.dl_action_button', []);
 				}
