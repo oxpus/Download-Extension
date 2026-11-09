@@ -102,7 +102,7 @@ class status implements status_interface
 		{
 			if ($cat_id == $parent && !$flag)
 			{
-				if ((isset($this->dl_index[$cat_id]['auth_view']) && $this->dl_index[$cat_id]['auth_view']) || (isset($this->dl_auth[$cat_id]['auth_view'])))
+				if (isset($this->dl_auth[$cat_id]['auth_view']))
 				{
 					if (isset($this->dl_index[$cat_id]['total']))
 					{
@@ -121,7 +121,7 @@ class status implements status_interface
 
 			if ((isset($this->dl_index[$cat_id]['parent']) && $this->dl_index[$cat_id]['parent'] == $parent) && $flag)
 			{
-				if ((isset($this->dl_index[$cat_id]['auth_view']) && $this->dl_index[$cat_id]['auth_view']) || (isset($this->dl_auth[$cat_id]['auth_view'])))
+				if (isset($this->dl_auth[$cat_id]['auth_view']))
 				{
 					if (isset($this->dl_index[$cat_id]['total']))
 					{

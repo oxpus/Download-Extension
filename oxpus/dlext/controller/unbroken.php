@@ -79,7 +79,7 @@ class unbroken
 		{
 			$cat_auth = $this->dlext_auth->dl_cat_auth($cat_id);
 
-			if (isset($index[$cat_id]['auth_mod']) && $index[$cat_id]['auth_mod'] || isset($cat_auth['auth_mod']) && $cat_auth['auth_mod'] || $this->dlext_auth->user_admin())
+			if (isset($cat_auth['auth_mod']) && $cat_auth['auth_mod'] || $this->dlext_auth->user_admin())
 			{
 				$sql = 'UPDATE ' . $this->dlext_table_downloads . ' SET ' . $this->db->sql_build_array('UPDATE', [
 					'broken' => 0

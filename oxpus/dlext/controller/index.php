@@ -184,7 +184,7 @@ class index
 
 			$index_auth = $this->dlext_main->full_index($cat);
 
-			if (!$cat_auth['auth_view'] && !$index_auth[$cat]['auth_view'] && !$this->dlext_auth->user_admin())
+			if (!$cat_auth['auth_view'] && !$this->dlext_auth->user_admin())
 			{
 				redirect($this->helper->route('oxpus_dlext_index'));
 			}

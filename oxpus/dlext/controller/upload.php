@@ -79,7 +79,7 @@ class upload
 			trigger_error('DL_BLUE_EXPLAIN');
 		}
 
-		if (($this->config['dl_stop_uploads'] && !$this->dlext_auth->user_admin()) || empty($index) || (!$cat_auth['auth_up'] && !$index[$cat_id]['auth_up'] && !$this->dlext_auth->user_admin()))
+		if (($this->config['dl_stop_uploads'] && !$this->dlext_auth->user_admin()) || empty($index) || (!$cat_auth['auth_up'] && !$this->dlext_auth->user_admin()))
 		{
 			trigger_error('DL_NO_PERMISSION');
 		}

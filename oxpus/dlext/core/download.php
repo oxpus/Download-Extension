@@ -518,7 +518,7 @@ class download implements download_interface
 			$current_user = $index[$cat_id]['dl_set_user'];
 		}
 
-		$approve = ($index[$cat_id]['must_approve'] && !$cat_auth['auth_mod'] && !$index[$cat_id]['auth_mod'] && !$this->dlext_auth->user_admin()) ? 0 : $approve;
+		$approve = ($index[$cat_id]['must_approve'] && !$cat_auth['auth_mod'] && !$this->dlext_auth->user_admin()) ? 0 : $approve;
 
 		$file_hash = '';
 
@@ -687,7 +687,7 @@ class download implements download_interface
 			];
 		}
 
-		if ($cat_auth['auth_mod'] || $index[$cat_id]['auth_mod'] || $index[$cat_id]['allow_mod_desc'] || $this->dlext_auth->user_admin())
+		if ($cat_auth['auth_mod'] || $index[$cat_id]['allow_mod_desc'] || $this->dlext_auth->user_admin())
 		{
 			$sql_array += [
 				'mod_list'			=> $mod_list,
@@ -1266,7 +1266,7 @@ class download implements download_interface
 			$s_upload_traffic = $this->dlext_constants::DL_TRUE;
 		}
 
-		if ($module == 'upload' && !$cat_auth['auth_mod'] && !$index[$cat_id]['auth_mod'] && !$this->dlext_auth->user_admin())
+		if ($module == 'upload' && !$cat_auth['auth_mod'] && !$this->dlext_auth->user_admin())
 		{
 			$approve = ($index[$cat_id]['must_approve']) ? $this->dlext_constants::DL_FALSE : $this->dlext_constants::DL_TRUE;
 			$s_hidden_fields += ['approve' => $approve];

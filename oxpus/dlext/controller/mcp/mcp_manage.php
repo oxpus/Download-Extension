@@ -399,7 +399,7 @@ class mcp_manage
 
 							$cat_auth = $this->dlext_auth->dl_cat_auth($cat_id);
 
-							if (!$this->dlext_auth->user_admin() && isset($index[$cat_id]['auth_mod']) && !$index[$cat_id]['auth_mod'] && !$cat_auth['auth_mod'])
+							if (!$this->dlext_auth->user_admin() && !$cat_auth['auth_mod'])
 							{
 								trigger_error($this->language->lang('DL_NO_PERMISSION'));
 							}

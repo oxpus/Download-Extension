@@ -293,7 +293,7 @@ class overall
 				$cat_id = $dl_files[$i]['cat'];
 				$cat_auth = $this->dlext_auth->dl_cat_auth($cat_id);
 
-				if (isset($cat_auth['auth_view']) && $cat_auth['auth_view'] || isset($index[$cat_id]['auth_view']) && $index[$cat_id]['auth_view'] || $this->dlext_auth->user_admin())
+				if (isset($cat_auth['auth_view']) && $cat_auth['auth_view'] || $this->dlext_auth->user_admin())
 				{
 					$cat_name		= $index[$cat_id]['cat_name_nav'];
 					$cat_view		= $index[$cat_id]['nav_path'];

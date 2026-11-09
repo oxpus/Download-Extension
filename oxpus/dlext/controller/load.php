@@ -259,7 +259,7 @@ class load
 			*/
 			if (!$dl_file['approve'])
 			{
-				if ((($cat_auth['auth_mod'] || $index[$cat_id]['auth_mod']) && !$this->dlext_auth->user_admin()) || $this->dlext_auth->user_admin())
+				if (($cat_auth['auth_mod'] && !$this->dlext_auth->user_admin()) || $this->dlext_auth->user_admin())
 				{
 					$check_status['file_auth'] = $this->dlext_constants::DL_TRUE;
 				}
