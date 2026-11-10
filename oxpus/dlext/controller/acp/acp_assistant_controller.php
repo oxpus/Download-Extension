@@ -136,13 +136,6 @@ class acp_assistant_controller implements acp_assistant_interface
 		$comments			= $this->request->variable('comments', $this->dlext_constants::DL_FALSE);
 		$approve_comments	= $this->request->variable('approve_comments', $this->dlext_constants::DL_FALSE);
 
-		$auth_view			= $this->request->variable('auth_view', $this->dlext_constants::DL_PERM_GENERAL_ALL);
-		$auth_dl			= $this->request->variable('auth_dl', $this->dlext_constants::DL_PERM_GENERAL_ALL);
-		$auth_up			= $this->request->variable('auth_up', $this->dlext_constants::DL_PERM_GENERAL_GROUPS);
-		$auth_mod			= $this->request->variable('auth_mod', $this->dlext_constants::DL_PERM_GENERAL_GROUPS);
-		$auth_cread			= $this->request->variable('auth_cread', $this->dlext_constants::DL_PERM_ALL);
-		$auth_cpost			= $this->request->variable('auth_cpost', $this->dlext_constants::DL_PERM_USER);
-
 		$index = $this->dlext_main->full_index();
 
 		if (empty($index) && $action != 'save_cat')
@@ -189,42 +182,6 @@ class acp_assistant_controller implements acp_assistant_interface
 				$error_msg[] = $this->language->lang('DL_ASSISTANT_NAME_MISSING');
 			}
 
-			if ($auth_view == -1)
-			{
-				$error = $this->dlext_constants::DL_TRUE;
-				$error_msg[] = $this->language->lang('DL_ASSISTANT_PERM_MISSING', $this->language->lang('DL_AUTH_VIEW'));
-			}
-
-			if ($auth_dl == -1)
-			{
-				$error = $this->dlext_constants::DL_TRUE;
-				$error_msg[] = $this->language->lang('DL_ASSISTANT_PERM_MISSING', $this->language->lang('DL_AUTH_DL'));
-			}
-
-			if ($auth_up == -1)
-			{
-				$error = $this->dlext_constants::DL_TRUE;
-				$error_msg[] = $this->language->lang('DL_ASSISTANT_PERM_MISSING', $this->language->lang('DL_AUTH_UP'));
-			}
-
-			if ($auth_mod == -1)
-			{
-				$error = $this->dlext_constants::DL_TRUE;
-				$error_msg[] = $this->language->lang('DL_ASSISTANT_PERM_MISSING', $this->language->lang('DL_AUTH_MOD'));
-			}
-
-			if ($auth_cread == -1)
-			{
-				$error = $this->dlext_constants::DL_TRUE;
-				$error_msg[] = $this->language->lang('DL_ASSISTANT_PERM_MISSING', $this->language->lang('DL_AUTH_CREAD'));
-			}
-
-			if ($auth_cpost == -1)
-			{
-				$error = $this->dlext_constants::DL_TRUE;
-				$error_msg[] = $this->language->lang('DL_ASSISTANT_PERM_MISSING', $this->language->lang('DL_AUTH_CPOST'));
-			}
-
 			if (!$error)
 			{
 				// Create new folder
@@ -258,12 +215,6 @@ class acp_assistant_controller implements acp_assistant_interface
 					'path'					=> $path,
 					'statistics'			=> $statistics,
 					'stats_prune'			=> 100000,
-					'auth_view'				=> $auth_view,
-					'auth_dl'				=> $auth_dl,
-					'auth_up'				=> $auth_up,
-					'auth_mod'				=> $auth_mod,
-					'auth_cread'			=> $auth_cread,
-					'auth_cpost'			=> $auth_cpost,
 					];
 
 				$sql = 'INSERT INTO ' . $this->dlext_table_dl_cat . ' ' . $this->db->sql_build_array('INSERT', $sql_cat_data);
@@ -370,44 +321,8 @@ class acp_assistant_controller implements acp_assistant_interface
 				'S_DL_ERROR'				=> $error,
 				'S_DL_HIDDEN_FIELDS'		=> build_hidden_fields($s_hidden_fields),
 
-				'S_DL_AUTH_VIEW'			=> $auth_view,
-				'S_DL_AUTH_DL'				=> $auth_dl,
-				'S_DL_AUTH_UP'				=> $auth_up,
-				'S_DL_AUTH_MOD'				=> $auth_mod,
-				'S_DL_AUTH_CREAD'			=> $auth_cread,
-				'S_DL_AUTH_CPOST'			=> $auth_cpost,
-
 				'U_DL_BACK'					=> $this->u_action,
 			]);
-
-			$s_auth_all = [];
-			$s_auth_all[] = ['value' => $this->dlext_constants::DL_PERM_GENERAL_NONE, 		'lang' => $this->language->lang('SELECT_OPTION')];
-			$s_auth_all[] = ['value' => $this->dlext_constants::DL_PERM_GENERAL_ALL, 		'lang' => $this->language->lang('DL_PERM_ALL')];
-			$s_auth_all[] = ['value' => $this->dlext_constants::DL_PERM_GENERAL_REG_USER,	'lang' => $this->language->lang('DL_PERM_REG')];
-			$s_auth_all[] = ['value' => $this->dlext_constants::DL_PERM_GENERAL_GROUPS, 	'lang' => $this->language->lang('DL_PERM_GRG')];
-
-			for ($i = 0; $i < count($s_auth_all); ++$i)
-			{
-				$this->template->assign_block_vars('dl_auth', [
-					'DL_VALUE'	=> $s_auth_all[$i]['value'],
-					'DL_NAME'	=> $s_auth_all[$i]['lang'],
-				]);
-			}
-
-			$s_auth_all = [];
-			$s_auth_all[] = ['value' => $this->dlext_constants::DL_PERM_GENERAL_NONE, 	'lang' => $this->language->lang('SELECT_OPTION')];
-			$s_auth_all[] = ['value' => $this->dlext_constants::DL_PERM_ALL, 			'lang' => $this->language->lang('DL_STAT_PERM_ALL')];
-			$s_auth_all[] = ['value' => $this->dlext_constants::DL_PERM_USER, 			'lang' => $this->language->lang('DL_STAT_PERM_USER')];
-			$s_auth_all[] = ['value' => $this->dlext_constants::DL_PERM_MOD, 			'lang' => $this->language->lang('DL_STAT_PERM_MOD')];
-			$s_auth_all[] = ['value' => $this->dlext_constants::DL_PERM_ADMIN, 			'lang' => $this->language->lang('DL_STAT_PERM_ADMIN')];
-
-			for ($i = 0; $i < count($s_auth_all); ++$i)
-			{
-				$this->template->assign_block_vars('dl_auth_comments', [
-					'DL_VALUE'	=> $s_auth_all[$i]['value'],
-					'DL_NAME'	=> $s_auth_all[$i]['lang'],
-				]);
-			}
 
 			if (!empty($s_cat_parent) && is_array($s_cat_parent))
 			{

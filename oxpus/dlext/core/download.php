@@ -971,7 +971,7 @@ class download implements download_interface
 		else
 		{
 			$approve_string = ($approve) ? '' : $this->language->lang('DL_MUST_BE_APPROVED') . '<br><br>';
-			$message		= $this->language->lang('DL_DOWNLOAD_ADDED') . $approve_string . $this->language->lang('CLICK_RETURN_DOWNLOADS', '<a href="' . $this->helper->route('oxpus_dlext_index', ['cat' => $cat_id]) . '">', '</a>');
+			$message		= $this->language->lang('DL_DOWNLOAD_ADDED') . '<br><br>' . $approve_string . $this->language->lang('CLICK_RETURN_DOWNLOADS', '<a href="' . $this->helper->route('oxpus_dlext_index', ['cat' => $cat_id]) . '">', '</a>');
 		}
 
 		$cat_auth = $this->dlext_auth->dl_cat_auth($cat_id);
