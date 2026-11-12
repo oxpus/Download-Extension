@@ -333,7 +333,7 @@ class auth implements auth_interface
 	{
 		$user_is_guest		= $this->dlext_no;
 		$user_is_mod		= $this->dlext_no;
-		$captcha_active		= $this->dlext_no;
+		$captcha_active		= $this->dlext_yes;
 		$user_is_admin		= $this->dlext_no;
 		$user_is_founder	= $this->dlext_no;
 
