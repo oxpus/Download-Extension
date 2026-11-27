@@ -28,6 +28,7 @@ if (empty($lang) || !is_array($lang))
 $lang = array_merge($lang, [
 	'DL_SEPERATOR_PREFIX'	=> '&nbsp;&nbsp;&nbsp;&nbsp;',
 	'DL_SEPERATOR_SUFFIX'	=> '&#8627;&nbsp;&nbsp;',
+	'DL_SEPERATOR_SUFFIX_F'	=> '&nbsp;&nbsp;&nbsp;',
 
 	'DL_LOG_CAT_PERM_DROP'	=> '<strong>Restablecer los permisos para las categorías</strong><br>&raquo; %1$s',
 
@@ -732,6 +733,8 @@ $lang = array_merge($lang, [
 	'DL_TODO_ENABLED_EXT'			=> 'Habilitar la gestión de tareas',
 	'DL_TODO_DISABLED'				=> 'Desactivar',
 	'DL_TODO_LINK'					=> 'Mostrar enlace para lista todo',
+	'DL_TODO_LIST'					=> 'Mostrar como texto',
+	'DL_TODO_TEXT'					=> 'Mostrar como lista',
 	'DL_TOPIC_DETAILS'				=> 'Más detalles',
 	'DL_TOPIC_DROP_MODE'			=> 'Temas de descarga existentes',
 	'DL_TOPIC_DROP_MODE_CLOSE'		=> 'Solo cierra',

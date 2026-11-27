@@ -64,8 +64,8 @@
 			{{ lang('DL_TODO_ADD') }}{{ lang('COLON') }}
 			<select name="df_id" class="select autowidth">
 				{% for dl_todo_select in loops.dl_todo_select %}
-				{% if dl_todo_select.DL_TYPE eq 'optgrp' %}<optgroup label="{{ dl_todo_select.DL_VALUE }}">{% endif %}
-				{% if dl_todo_select.DL_TYPE eq 'option' %}<option value="{{ dl_todo_select.DL_KEY }}">{{ dl_todo_select.DL_VALUE }}</option>{% endif %}
+				{% if dl_todo_select.DL_TYPE eq 'optgrp' %}<optgroup label="{{ dl_todo_select.DL_SEPERATOR }}{{ dl_todo_select.DL_VALUE }}">{% endif %}
+				{% if dl_todo_select.DL_TYPE eq 'option' %}<option value="{{ dl_todo_select.DL_KEY }}">{{ dl_todo_select.DL_SEPERATOR }}{{ dl_todo_select.DL_VALUE }}</option>{% endif %}
 				{% if dl_todo_select.DL_TYPE eq 'optend' %}</optgroup>{% endif %}
 				{% endfor %}
 			</select>

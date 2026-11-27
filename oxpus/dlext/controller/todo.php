@@ -29,6 +29,7 @@ class todo
 	protected $dlext_main;
 	protected $dlext_footer;
 	protected $dlext_constants;
+	protected $todo_access_ids;
 
 	protected $dlext_table_downloads;
 	protected $dlext_table_dl_cat;
@@ -244,68 +245,11 @@ class todo
 			}
 			else
 			{
-				$todo = '';
 				$hack_version = '';
 
-				$sql = 'SELECT c.cat_name, d.id, d.description, d.desc_uid, d.desc_flags, d.todo_uid, d.todo_flags FROM ' . $this->dlext_table_downloads . ' d, ' . $this->dlext_table_dl_cat . ' c
-					WHERE d.cat = c.id
-						AND ' . $this->db->sql_in_set('d.cat', $todo_access_ids) . "
-						AND (todo = '' OR todo IS NULL)
-					ORDER BY c.parent, c.sort, c.id, d.description";
-				$result = $this->db->sql_query($sql);
+				$total_possible_todo = $this->todo_access_ids = $this->dlext_main->full_index(0, 0, 0, $this->dlext_constants::DL_AUTH_CHECK_MOD);
 
-				$total_possible_todo = $this->db->sql_affectedrows();
-
-				if ($df_id)
-				{
-					$this->db->sql_freeresult($result);
-				}
-				else
-				{
-					$dl_select = [];
-
-					while ($row = $this->db->sql_fetchrow($result))
-					{
-						$dl_select[$row['cat_name']][] = $row;
-					}
-
-					$this->db->sql_freeresult($result);
-
-					$cur_cat = '';
-
-					foreach ($dl_select as $category => $row)
-					{
-						if ($cur_cat != $category)
-						{
-							$this->template->assign_block_vars('dl_todo_select', [
-								'DL_TYPE'	=> 'optgrp',
-								'DL_VALUE'	=> $category,
-							]);
-
-							foreach ($dl_select[$category] as $row)
-							{
-								$description	= $row['description'];
-								$desc_uid		= $row['desc_uid'];
-								$desc_flags		= $row['desc_flags'];
-
-								$text_ary		= generate_text_for_edit($description, $desc_uid, $desc_flags);
-								$description	= $text_ary['text'];
-
-								$this->template->assign_block_vars('dl_todo_select', [
-									'DL_TYPE'	=> 'option',
-									'DL_KEY'	=> $row['id'],
-									'DL_VALUE'	=> $description,
-								]);
-							}
-
-							$this->template->assign_block_vars('dl_todo_select', [
-								'DL_TYPE'	=> 'optend',
-							]);
-
-							$cur_cat = $category;
-						}
-					}
-				}
+				$this->select_dl_cat(0);
 
 				$s_hidden_fields = [
 					'view'		=> 'todo',
@@ -407,5 +351,72 @@ class todo
 		* generate page
 		*/
 		return $this->helper->render('@oxpus_dlext/dl_todo_body.html', $this->language->lang('DL_MOD_TODO'));
+	}
+
+	private function select_dl_cat($df_id)
+	{
+		$sql = 'SELECT cat, id, description, desc_uid, desc_flags, hack_version FROM ' . $this->dlext_table_downloads . '
+			WHERE ' . $this->db->sql_in_set('cat', $this->todo_access_ids) . '
+			ORDER BY cat, description';
+		$result = $this->db->sql_query($sql);
+		$total_possible_todo = $this->db->sql_affectedrows($result);
+
+		$dl_files = [];
+
+		while ($row = $this->db->sql_fetchrow($result))
+		{
+			$description	= $row['description'];
+			$desc_uid		= $row['desc_uid'];
+			$desc_flags		= $row['desc_flags'];
+			$hack_version	= $row['hack_version'];
+
+			$text_ary		= generate_text_for_edit($description, $desc_uid, $desc_flags);
+			$description	= $text_ary['text'];
+
+			$dl_files[$row['cat']][$row['id']] = $description . (($hack_version) ? ' ' : '') . $hack_version;
+		}
+
+		$this->db->sql_freeresult($result);
+
+		$dl_todo_dropdown = $this->dlext_extra->dl_todo_dropdown(0, 0, 'auto_view', 0, $dl_files);
+
+		$cur_cat = 0;
+		$dl_todo_files = [];
+
+		foreach ($dl_todo_dropdown as $cat_id => $value)
+		{
+			if ($cur_cat != $cat_id)
+			{
+				$this->template->assign_block_vars('dl_todo_select', [
+					'DL_TYPE'		=> 'optgrp',
+					'DL_VALUE'		=> $value['cat_name'],
+					'DL_SEPERATOR'	=> $value['seperator'],
+				]);
+			}
+
+			$dl_todo_files = $dl_todo_dropdown[$cat_id]['files'];
+
+			foreach ($dl_todo_files as $dl_id => $value)
+			{
+				$this->template->assign_block_vars('dl_todo_select', [
+					'DL_TYPE'		=> 'option',
+					'DL_KEY'		=> $dl_id,
+					'DL_VALUE'		=> $value['description'],
+					'DL_SEPERATOR'	=> $value['seperator'],
+					'DL_SELECT'		=> ($df_id == $dl_id) ? ' selected' : '',
+				]);
+			}
+
+			if ($cur_cat != $cat_id)
+			{
+				$this->template->assign_block_vars('dl_todo_select', [
+					'DL_TYPE'	=> 'optend',
+				]);
+
+				$cur_cat = $cat_id;
+			}
+		}
+
+		return $total_possible_todo;
 	}
 }

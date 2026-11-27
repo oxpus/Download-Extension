@@ -491,7 +491,6 @@ class comments implements comments_interface
 
 	public function display_comments($cat_id, $df_id, $start)
 	{
-		$index		= $this->dlext_main->full_index($cat_id);
 		$cat_auth	= $this->dlext_auth->dl_cat_auth($cat_id);
 
 		$this->set_auth_comments($cat_id);

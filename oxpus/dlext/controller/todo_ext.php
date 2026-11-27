@@ -124,6 +124,7 @@ class todo_ext
 		$todo_id		= $this->request->variable('todo_id', 0);
 		$todo_sort		= $this->request->variable('todo_sort', 0);
 		$todo_title		= $this->request->variable('todo_title', '');
+		$s_todo_display	= $this->request->variable('todo_display', 'list');
 
 		$index 			= $this->dlext_main->index();
 
@@ -202,6 +203,7 @@ class todo_ext
 					$s_hidden_fields = [
 						'view'			=> 'todo',
 						'action'		=> 'cat',
+						'todo_display'	=> $s_todo_display,
 						'todo_cat_id'	=> $todo_cat_id,
 						'submit'		=> $this->dlext_constants::DL_FALSE,
 						'delete'		=> $this->dlext_constants::DL_TRUE,
@@ -240,7 +242,7 @@ class todo_ext
 
 				$this->cat_resort();
 
-				$meta_url = $this->helper->route('oxpus_dlext_todo_ext', ['action' => 'cat']);
+				$meta_url = $this->helper->route('oxpus_dlext_todo_ext', ['action' => 'cat', 'todo_display' => $s_todo_display]);
 				$message .= '<br><br>' . $this->user->lang('CLICK_RETURN_TODO_EDIT', '<a href="' . $meta_url . '">', '</a>');
 
 				meta_refresh(3, $meta_url);
@@ -279,7 +281,7 @@ class todo_ext
 					'TODO_CAT_COLOR'	=> $todo_cat_data['todo_cat_color'],
 
 					'S_TODO_CAT_HIDDEN'	=> build_hidden_fields($s_hidden_fields),
-					'S_TODO_CAT_FORM'	=> $this->helper->route('oxpus_dlext_todo_ext', ['action' => 'cat']),
+					'S_TODO_CAT_FORM'	=> $this->helper->route('oxpus_dlext_todo_ext', ['action' => 'cat', 'todo_display' => $s_todo_display]),
 					'S_TODO_CAT_ACTION'	=> 'cat_edit',
 				]);
 			}
@@ -310,10 +312,10 @@ class todo_ext
 							'TODO_CATNAME'		=> $row['todo_catname'],
 							'TODO_CAT_COLOR'	=> $row['todo_cat_color'],
 
-							'U_CAT_SORT_UP'		=> $this->helper->route('oxpus_dlext_todo_ext', ['action' => 'cat', 'todo_cat_id' => $cat_id, 'sort' => -1]),
-							'U_CAT_SORT_DOWN'	=> $this->helper->route('oxpus_dlext_todo_ext', ['action' => 'cat', 'todo_cat_id' => $cat_id, 'sort' => 1]),
-							'U_CAT_EDIT'		=> $this->helper->route('oxpus_dlext_todo_ext', ['action' => 'cat', 'todo_cat_id' => $cat_id, 'edit' => 1]),
-							'U_CAT_DELETE'		=> ($row['anztodo'] == 0) ? $this->helper->route('oxpus_dlext_todo_ext', ['action' => 'cat', 'todo_cat_id' => $cat_id, 'delete' => 1]) : '',
+							'U_CAT_SORT_UP'		=> $this->helper->route('oxpus_dlext_todo_ext', ['action' => 'cat', 'todo_cat_id' => $cat_id, 'sort' => -1, 'todo_display' => $s_todo_display]),
+							'U_CAT_SORT_DOWN'	=> $this->helper->route('oxpus_dlext_todo_ext', ['action' => 'cat', 'todo_cat_id' => $cat_id, 'sort' => 1, 'todo_display' => $s_todo_display]),
+							'U_CAT_EDIT'		=> $this->helper->route('oxpus_dlext_todo_ext', ['action' => 'cat', 'todo_cat_id' => $cat_id, 'edit' => 1, 'todo_display' => $s_todo_display]),
+							'U_CAT_DELETE'		=> ($row['anztodo'] == 0) ? $this->helper->route('oxpus_dlext_todo_ext', ['action' => 'cat', 'todo_cat_id' => $cat_id, 'delete' => 1, 'todo_display' => $s_todo_display]) : '',
 						]);
 					}
 				}
@@ -328,8 +330,8 @@ class todo_ext
 
 				$this->template->assign_vars([
 					'DL_MOD_TODO_MODE'		=> $this->user->lang('DL_ACP_CATEGORIES_MANAGEMENT'),
-					'S_FORM_TODO_CAT_ADD'	=> $this->helper->route('oxpus_dlext_todo_ext', ['action' => 'cat', 'edit' => 1]),
-					'S_TODO_EDIT_ENTRY'		=> $this->helper->route('oxpus_dlext_todo_ext'),
+					'S_FORM_TODO_CAT_ADD'	=> $this->helper->route('oxpus_dlext_todo_ext', ['action' => 'cat', 'edit' => 1, 'todo_display' => $s_todo_display]),
+					'S_TODO_EDIT_ENTRY'		=> $this->helper->route('oxpus_dlext_todo_ext', ['todo_display' => $s_todo_display]),
 				]);
 			}
 		}
@@ -369,7 +371,7 @@ class todo_ext
 
 						$this->todo_resort($df_id);
 
-						$meta_url	= $this->helper->route('oxpus_dlext_todo_ext', ['df_id' => $df_id]);
+						$meta_url	= $this->helper->route('oxpus_dlext_todo_ext', ['df_id' => $df_id, 'todo_display' => $s_todo_display]);
 						$message = $this->language->lang('DL_DOWNLOAD_UPDATED') . '<br><br>' . $this->language->lang('CLICK_RETURN_TODO_EDIT', '<a href="' . $meta_url . '">', '</a>');
 
 						meta_refresh(3, $meta_url);
@@ -390,11 +392,12 @@ class todo_ext
 						else
 						{
 							$s_hidden_fields = [
-								'view'		=> 'todo',
-								'todo_id'	=> $todo_id,
-								'df_id'		=> $df_id,
-								'submit'	=> $this->dlext_constants::DL_TRUE,
-								'delete'	=> $this->dlext_constants::DL_TRUE,
+								'view'			=> 'todo',
+								'todo_id'		=> $todo_id,
+								'todo_display'	=> $s_todo_display,
+								'df_id'			=> $df_id,
+								'submit'		=> $this->dlext_constants::DL_TRUE,
+								'delete'		=> $this->dlext_constants::DL_TRUE,
 							];
 
 							confirm_box($this->dlext_constants::DL_FALSE, $this->language->lang('DELETE_POST'), build_hidden_fields($s_hidden_fields), '@oxpus_dlext/helpers/dl_confirm_body.html');
@@ -485,7 +488,7 @@ class todo_ext
 						'DL_HACK_VERSION'	=> $hack_version,
 						'DL_TODO_TITLE'		=> $todo['todo_title'],
 
-						'S_FORM_TODO_ADD'	=> $this->helper->route('oxpus_dlext_todo_ext', ['df_id' => $df_id, 'todo_id' => $todo_id, 'submit' => 1, 'save' => 1]),
+						'S_FORM_TODO_ADD'	=> $this->helper->route('oxpus_dlext_todo_ext', ['df_id' => $df_id, 'todo_id' => $todo_id, 'submit' => 1, 'save' => 1, 'todo_display' => $s_todo_display]),
 						'S_TODO_EDIT'		=> $this->dlext_constants::DL_TRUE,
 						'S_CAN_EDIT'		=> $can_edit,
 					]);
@@ -556,10 +559,10 @@ class todo_ext
 						$this->template->assign_block_vars('todolist_row.todolist_cat.todolist_entry', [
 							'TODO_TITLE'		=> $row['todo_title'],
 
-							'U_TODO_SORT_UP'	=> $this->helper->route('oxpus_dlext_todo_ext', ['sort' => -1, 'df_id' => $df_id, 'todo_id' => $todo_id]),
-							'U_TODO_SORT_DOWN'	=> $this->helper->route('oxpus_dlext_todo_ext', ['sort' => 1, 'df_id' => $df_id, 'todo_id' => $todo_id]),
-							'U_DL_TODO_EDIT'	=> $this->helper->route('oxpus_dlext_todo_ext', ['edit' => 1, 'df_id' => $df_id, 'todo_id' => $todo_id]),
-							'U_DL_TODO_DELETE'	=> $this->helper->route('oxpus_dlext_todo_ext', ['delete' => 1, 'submit' => 1, 'df_id' => $df_id, 'todo_id' => $todo_id]),
+							'U_TODO_SORT_UP'	=> $this->helper->route('oxpus_dlext_todo_ext', ['sort' => -1, 'df_id' => $df_id, 'todo_id' => $todo_id, 'todo_display' => $s_todo_display]),
+							'U_TODO_SORT_DOWN'	=> $this->helper->route('oxpus_dlext_todo_ext', ['sort' => 1, 'df_id' => $df_id, 'todo_id' => $todo_id, 'todo_display' => $s_todo_display]),
+							'U_DL_TODO_EDIT'	=> $this->helper->route('oxpus_dlext_todo_ext', ['edit' => 1, 'df_id' => $df_id, 'todo_id' => $todo_id, 'todo_display' => $s_todo_display]),
+							'U_DL_TODO_DELETE'	=> $this->helper->route('oxpus_dlext_todo_ext', ['delete' => 1, 'submit' => 1, 'df_id' => $df_id, 'todo_id' => $todo_id, 'todo_display' => $s_todo_display]),
 						]);
 					}
 
@@ -572,10 +575,13 @@ class todo_ext
 					add_form_key('dl_todo');
 
 					$this->template->assign_vars([
-						'S_FORM_TODO_ADD'	=> $this->helper->route('oxpus_dlext_todo_ext', ['save' => 1]),
+						'L_TODO_DISPLAY'	=> $this->language->lang('DL_TODO_' . strtoupper($s_todo_display)),
+						'S_FORM_TODO_ADD'	=> $this->helper->route('oxpus_dlext_todo_ext', ['save' => 1, 'todo_display' => $s_todo_display]),
 						'S_DL_NO_TODOLIST'	=> ($total_possible_todo) ? $this->dlext_constants::DL_FALSE : $this->dlext_constants::DL_TRUE,
-						'S_TODO_CATS'		=> ($this->auth->acl_get('a_')) ? $this->helper->route('oxpus_dlext_todo_ext', ['action' => 'cat']) : '',
+						'S_TODO_CATS'		=> ($this->auth->acl_get('a_')) ? $this->helper->route('oxpus_dlext_todo_ext', ['action' => 'cat', 'todo_display' => $s_todo_display]) : '',
 						'S_CAN_EDIT'		=> $can_edit,
+						'S_TODO_DISPLAY'	=> $s_todo_display,
+						'U_TODO_DISPLAY'	=> $this->helper->route('oxpus_dlext_todo_ext', ['todo_display' => (($s_todo_display == 'list') ? 'text' : 'list')]),
 					]);
 				}
 			}
@@ -681,54 +687,64 @@ class todo_ext
 
 	private function select_dl_cat($df_id)
 	{
-		$sql = 'SELECT c.cat_name, d.id, d.description, d.desc_uid, d.desc_flags FROM ' . $this->dlext_table_downloads . ' d, ' . $this->dlext_table_dl_cat . ' c
-			WHERE d.cat = c.id
-				AND ' . $this->db->sql_in_set('d.cat', $this->todo_access_ids) . "
-			ORDER BY c.parent, c.sort, d.description";
+		$sql = 'SELECT cat, id, description, desc_uid, desc_flags, hack_version FROM ' . $this->dlext_table_downloads . '
+			WHERE ' . $this->db->sql_in_set('cat', $this->todo_access_ids) . '
+			ORDER BY cat, description';
 		$result = $this->db->sql_query($sql);
 
-		$dl_select = [];
+		$dl_files = [];
 
 		while ($row = $this->db->sql_fetchrow($result))
 		{
-			$dl_select[$row['cat_name']][] = $row;
+			$description	= $row['description'];
+			$desc_uid		= $row['desc_uid'];
+			$desc_flags		= $row['desc_flags'];
+			$hack_version	= $row['hack_version'];
+
+			$text_ary		= generate_text_for_edit($description, $desc_uid, $desc_flags);
+			$description	= $text_ary['text'];
+
+			$dl_files[$row['cat']][$row['id']] = $description . (($hack_version) ? ' ' : '') . $hack_version;
 		}
 
 		$this->db->sql_freeresult($result);
 
-		$cur_cat = '';
+		$dl_todo_dropdown = $this->dlext_extra->dl_todo_dropdown(0, 0, 'auto_view', 0, $dl_files);
 
-		foreach ($dl_select as $category => $row)
+		$cur_cat = 0;
+		$dl_todo_files = [];
+
+		foreach ($dl_todo_dropdown as $cat_id => $value)
 		{
-			if ($cur_cat != $category)
+			if ($cur_cat != $cat_id)
 			{
 				$this->template->assign_block_vars('dl_todo_select', [
-					'DL_TYPE'	=> 'optgrp',
-					'DL_VALUE'	=> $category,
+					'DL_TYPE'		=> 'optgrp',
+					'DL_VALUE'		=> $value['cat_name'],
+					'DL_SEPERATOR'	=> $value['seperator'],
 				]);
+			}
 
-				foreach ($dl_select[$category] as $row)
-				{
-					$description	= $row['description'];
-					$desc_uid		= $row['desc_uid'];
-					$desc_flags		= $row['desc_flags'];
+			$dl_todo_files = $dl_todo_dropdown[$cat_id]['files'];
 
-					$text_ary		= generate_text_for_edit($description, $desc_uid, $desc_flags);
-					$description	= $text_ary['text'];
+			foreach ($dl_todo_files as $dl_id => $value)
+			{
+				$this->template->assign_block_vars('dl_todo_select', [
+					'DL_TYPE'		=> 'option',
+					'DL_KEY'		=> $dl_id,
+					'DL_VALUE'		=> $value['description'],
+					'DL_SEPERATOR'	=> $value['seperator'],
+					'DL_SELECT'		=> ($df_id == $dl_id) ? ' selected' : '',
+				]);
+			}
 
-					$this->template->assign_block_vars('dl_todo_select', [
-						'DL_TYPE'	=> 'option',
-						'DL_KEY'	=> $row['id'],
-						'DL_VALUE'	=> $description,
-						'DL_SELECT'	=> ($df_id == $row['id']) ? ' selected' : '',
-					]);
-				}
-
+			if ($cur_cat != $cat_id)
+			{
 				$this->template->assign_block_vars('dl_todo_select', [
 					'DL_TYPE'	=> 'optend',
 				]);
 
-				$cur_cat = $category;
+				$cur_cat = $cat_id;
 			}
 		}
 	}

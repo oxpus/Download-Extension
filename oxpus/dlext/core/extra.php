@@ -153,6 +153,75 @@ class extra implements extra_interface
 		return $catlist;
 	}
 
+	public function dl_todo_dropdown($parent = 0, $level = 0, $perm = 'auth_view', $rem_cat = 0, $dl_files = [], &$catlist = [])
+	{
+		$dl_index	= $this->dlext_auth->dl_index();
+
+		if (empty($dl_index) || empty($dl_files))
+		{
+			return '';
+		}
+
+		foreach (array_keys($dl_index) as $cat_id)
+		{
+			if (isset($dl_index[$cat_id]['parent']) && $dl_index[$cat_id]['parent'] == $parent)
+			{
+				$cat_perm = $this->dlext_auth->dl_cat_auth($cat_id);
+
+				if (isset($cat_perm[$perm]) && $cat_perm[$perm] || $this->dlext_auth->user_admin())
+				{
+					$cat_name = $dl_index[$cat_id]['cat_name'];
+
+					$seperator = '';
+					$seperator_f = '';
+
+					if ($dl_index[$cat_id]['parent'] != 0)
+					{
+						$catlist_sub = $this->dlext_constants::DL_TRUE;
+
+						for ($i = 0; $i < $level; ++$i)
+						{
+							$seperator .= $this->language->lang('DL_SEPERATOR_PREFIX');
+						}
+
+						$seperator .= $this->language->lang('DL_SEPERATOR_SUFFIX');
+						$seperator_f .= $this->language->lang('DL_SEPERATOR_SUFFIX_F');
+					}
+					else
+					{
+						$catlist_sub = $this->dlext_constants::DL_FALSE;
+					}
+
+					if ($rem_cat != $cat_id || $rem_cat == $this->dlext_constants::DL_FALSE)
+					{
+						$catlist[$cat_id] = [
+							'cat_id'	=> $cat_id,
+							'sub'		=> $catlist_sub,
+							'seperator'	=> $seperator,
+							'cat_name'	=> $cat_name,
+						];
+
+						$dl_file_data = $dl_files[$cat_id];
+
+						foreach ($dl_file_data as $dl_id => $description)
+						{
+							$catlist[$cat_id]['files'][$dl_id] = [
+								'seperator'		=> $seperator_f,
+								'description'	=> $description,
+							];
+						}
+					}
+				}
+
+				++$level;
+				$this->dl_todo_dropdown($cat_id, $level, $perm, $rem_cat, $dl_files, $catlist);
+				--$level;
+			}
+		}
+
+		return $catlist;
+	}
+
 	public function dl_user_switch($user_id = 0, $username = '', $update = false)
 	{
 		$value = '';

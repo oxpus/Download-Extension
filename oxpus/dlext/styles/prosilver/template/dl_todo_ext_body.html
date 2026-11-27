@@ -5,6 +5,7 @@
 <div class="dl-right">
 	{% if S_TODO_EDIT_ENTRY %}<a href="{{ S_TODO_EDIT_ENTRY }}" class="button2">{{ lang('DL_MOD_TODO') }}</a>{% endif %}
 	{% if S_TODO_CATS %}<a href="{{ S_TODO_CATS }}" class="button2">{{ lang('DL_ACP_CATEGORIES') }}</a>{% endif %}
+	{% if S_TODO_CATS %}<a href="{{ U_TODO_DISPLAY }}" class="button2">{{ L_TODO_DISPLAY }}</a>{% endif %}
 </div>
 
 <h2>{{ lang('DL_MOD_TODO') }} {% if DL_MOD_TODO_MODE %} :: {{ DL_MOD_TODO_MODE }}{% endif %}</h2>
@@ -109,12 +110,16 @@
 {% else %}
 
 {% for todolist_row in loops.todolist_row %}
-<div class="panel">
+<div class="navbar">
+	<h2><a href="{{ todolist_row.DL_FILE_LINK }}" class="forumtitle">{{ todolist_row.DL_FILENAME }} {{ todolist_row.DL_HACK_VERSION }}</a></h2>
+	<div><strong>{{ lang('DL_CAT_NAME') }}{{ lang('COLON') }}</strong> {{ todolist_row.DL_CAT_NAME }}</div>
+	<br>
+</div>
+
+{% if S_TODO_DISPLAY == 'list'%}
+<div class="panel" id="todolist">
 	<div class="inner">
 
-		<h2><a href="{{ todolist_row.DL_FILE_LINK }}" class="forumtitle">{{ todolist_row.DL_FILENAME }} {{ todolist_row.DL_HACK_VERSION }}</a></h2>
-		<div><strong>{{ lang('DL_CAT_NAME') }}{{ lang('COLON') }}</strong> {{ todolist_row.DL_CAT_NAME }}</div>
-		<br>
 		{% for todolist_cat in todolist_row.todolist_cat %}
 		<br>
 		<h3><strong{% if todolist_cat.TODO_CAT_COLOR %} style="color: #{{ todolist_cat.TODO_CAT_COLOR }}"{% endif %}>{{ todolist_cat.TODO_CATNAME }}</strong></h3>
@@ -155,6 +160,29 @@
 
 	</div>
 </div>
+{% else %}
+<div class="panel" id="todotext">
+	<div class="inner">
+
+		<div class="postbody">
+			<div class="content">
+			{% for todolist_cat in todolist_row.todolist_cat %}
+			<strong{% if todolist_cat.TODO_CAT_COLOR %} style="color: #{{ todolist_cat.TODO_CAT_COLOR }}"{% endif %}>{{ todolist_cat.TODO_CATNAME }}</strong>
+			<br>
+			{% for todolist_entry in todolist_cat.todolist_entry %}
+			{{ todolist_entry.TODO_TITLE }}
+			<br>
+			{% endfor %}
+			{% if not todolist_cat.S_LAST_ROW %}
+			<br>
+			{% endif %}
+			{% endfor %}
+			</div>
+		</div>
+
+	</div>
+</div>
+{% endif %}
 {% endfor %}
 
 {% endif %}
@@ -178,8 +206,8 @@
 				{% if not S_TODO_EDIT %}
 				<select name="df_id" class="select autowidth">
 					{% for dl_todo_select in loops.dl_todo_select %}
-					{% if dl_todo_select.DL_TYPE eq 'optgrp' %}<optgroup label="{{ dl_todo_select.DL_VALUE }}">{% endif %}
-					{% if dl_todo_select.DL_TYPE eq 'option' %}<option value="{{ dl_todo_select.DL_KEY }}"{{ dl_todo_select.DL_SELECT }}>{{ dl_todo_select.DL_VALUE }}</option>{% endif %}
+					{% if dl_todo_select.DL_TYPE eq 'optgrp' %}<optgroup label="{{ dl_todo_select.DL_SEPERATOR }}{{ dl_todo_select.DL_VALUE }}">{% endif %}
+					{% if dl_todo_select.DL_TYPE eq 'option' %}<option value="{{ dl_todo_select.DL_KEY }}"{{ dl_todo_select.DL_SELECT }}>{{ dl_todo_select.DL_SEPERATOR }}{{ dl_todo_select.DL_VALUE }}</option>{% endif %}
 					{% if dl_todo_select.DL_TYPE eq 'optend' %}</optgroup>{% endif %}
 					{% endfor %}
 				</select>

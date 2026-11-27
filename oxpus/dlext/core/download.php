@@ -814,7 +814,7 @@ class download implements download_interface
 				extract($this->dispatcher->trigger_event('oxpus.dlext.upload_sql_insert_after', compact($vars)));
 			}
 
-			$message = $this->language->lang('DL_DOWNLOAD_ADDED');
+			$message = $this->language->lang('DL_DOWNLOAD_ADDED') . '<br><br>';
 		}
 
 		$dl_t_id = ($df_id) ? $df_id : $next_id;

@@ -10,7 +10,7 @@
 
 <h2 class="dl-left">
 	{% INCLUDE '@oxpus_dlext/helpers/dl_filestatus.html' %}
-	{{ DL_DESCRIPTION }} {{ DL_HACK_VERSION }} 
+	{{ DL_DESCRIPTION }} {{ DL_HACK_VERSION }}
 	{% INCLUDE '@oxpus_dlext/helpers/dl_miniimg.html' %}
 </h2>
 
@@ -389,9 +389,9 @@
 				<strong{% if todolist_cat.TODO_CAT_COLOR %} style="color: #{{ todolist_cat.TODO_CAT_COLOR }}"{% endif %}>{{ todolist_cat.TODO_CATNAME }}</strong><br>
 				{% for todolist_entry in todolist_cat.todolist_entry %}
 				{{ todolist_entry.TODO_TITLE }}
+				<br>
 				{% endfor %}
 				{% if not todolist_entry.S_LAST_ROW %}
-				<br>
 				<br>
 				{% endif %}
 				{% endfor %}

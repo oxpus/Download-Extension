@@ -28,6 +28,7 @@ if (empty($lang) || !is_array($lang))
 $lang = array_merge($lang, [
 	'DL_SEPERATOR_PREFIX'	=> '&nbsp;&nbsp;&nbsp;&nbsp;',
 	'DL_SEPERATOR_SUFFIX'	=> '&#8627;&nbsp;&nbsp;',
+	'DL_SEPERATOR_SUFFIX_F'	=> '&nbsp;&nbsp;&nbsp;',
 
 	'DL_LOG_CAT_PERM_DROP'	=> '<strong>Permissions for categories have been reset</strong><br>&raquo; %1$s',
 
@@ -732,6 +733,8 @@ $lang = array_merge($lang, [
 	'DL_TODO_ENABLED_EXT'			=> 'Activate to-do management',
 	'DL_TODO_DISABLED'				=> 'Deactivate',
 	'DL_TODO_LINK'					=> 'Show link for to-do list',
+	'DL_TODO_LIST'					=> 'Show as text',
+	'DL_TODO_TEXT'					=> 'Show as list',
 	'DL_TOPIC_DETAILS'				=> 'More details',
 	'DL_TOPIC_DROP_MODE'			=> 'Existing download topics',
 	'DL_TOPIC_DROP_MODE_CLOSE'		=> 'Just close',

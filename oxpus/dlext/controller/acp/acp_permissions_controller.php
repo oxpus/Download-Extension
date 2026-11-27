@@ -225,7 +225,7 @@ class acp_permissions_controller implements acp_permissions_interface
 						$cur_cat = $cat_id;
 
 						$this->template->assign_block_vars('cat_perm_block', [
-							'DL_CAT_NAME'		=> $index[$cat_id]['cat_name'],
+							'DL_CAT_NAME'		=> $row['cat_name'],
 						]);
 					}
 

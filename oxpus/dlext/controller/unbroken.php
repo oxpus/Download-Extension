@@ -70,8 +70,6 @@ class unbroken
 		$df_id		= $this->request->variable('df_id', 0);
 		$cat_id		= $this->request->variable('cat_id', 0);
 
-		$index 		= ($cat) ? $this->dlext_main->index($cat) : $this->dlext_main->index();
-
 		/*
 		* reset reported broken download if allowed
 		*/
