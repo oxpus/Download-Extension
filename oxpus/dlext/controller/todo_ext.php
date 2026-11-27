@@ -123,7 +123,7 @@ class todo_ext
 		$todo_cat_sort	= $this->request->variable('todo_cat_sort', 0);
 		$todo_id		= $this->request->variable('todo_id', 0);
 		$todo_sort		= $this->request->variable('todo_sort', 0);
-		$todo_title		= $this->request->variable('todo_title', '');
+		$todo_title		= $this->request->variable('todo_title', '', true);
 		$s_todo_display	= $this->request->variable('todo_display', 'list');
 
 		$index 			= $this->dlext_main->index();
